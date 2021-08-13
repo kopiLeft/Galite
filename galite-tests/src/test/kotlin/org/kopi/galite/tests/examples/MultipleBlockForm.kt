@@ -20,7 +20,8 @@ import java.util.Locale
 
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.connectToDatabase
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
@@ -143,46 +144,46 @@ class MultipleBlockForm : DictionaryForm() {
 
     val unique = index(message = "ID should be unique")
 
-    val CenterId = hidden(domain = Domain<Int>(20)) {
+    val CenterId = hidden(domain = INT(20)) {
       label = "center id"
       help = "The Center id"
       columns(c.id) {
         index = unique
       }
     }
-    val trainingId = hidden(domain = Domain<Int>(20)) {
+    val trainingId = hidden(domain = INT(20)) {
       label = "training id"
       help = "The training id"
       columns(c.refTraining, t.id) {
         index = unique
       }
     }
-    val centerName = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    val centerName = visit(domain = STRING(20), position = at(1, 1)) {
       label = "center name"
       help = "center name"
       columns(c.centerName)
     }
-    val address = visit(domain = Domain<String>(20), position = at(1, 2)) {
+    val address = visit(domain = STRING(20), position = at(1, 2)) {
       label = "address"
       help = "address"
       columns(c.address)
     }
-    val mail = visit(domain = Domain<String>(20), position = at(1, 3)) {
+    val mail = visit(domain = STRING(20), position = at(1, 3)) {
       label = "mail"
       help = "mail"
       columns(c.mail)
     }
-    val country = visit(domain = Domain<String>(20), position = at(1, 4)) {
+    val country = visit(domain = STRING(20), position = at(1, 4)) {
       label = "country"
       help = "country"
       columns(c.country)
     }
-    val city = visit(domain = Domain<String>(20), position = at(1, 5)) {
+    val city = visit(domain = STRING(20), position = at(1, 5)) {
       label = "city"
       help = "city"
       columns(c.city)
     }
-    val zipCode = visit(domain = Domain<Int>(5), position = at(1, 6)) {
+    val zipCode = visit(domain = INT(5), position = at(1, 6)) {
       label = "zipCode"
       help = "zipCode"
       columns(c.zipCode)
@@ -194,11 +195,11 @@ class MultipleBlockForm : DictionaryForm() {
   }
 
   class SimpleBlock : FormBlock(1, 1, "Simple block") {
-    val contact = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    val contact = visit(domain = STRING(20), position = at(1, 1)) {
       label = "contact"
       help = "The contact"
     }
-    val name = visit(domain = Domain<String>(20), position = follow(contact)) {
+    val name = visit(domain = STRING(20), position = follow(contact)) {
 
     }
   }

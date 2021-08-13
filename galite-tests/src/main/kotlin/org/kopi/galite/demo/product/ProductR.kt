@@ -22,13 +22,12 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.Product
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
  * Product Report
@@ -127,13 +126,13 @@ class ProductReport : Report() {
     group = department
   }
 
-  val department = field(Domain<String>(20)) {
+  val department = field(STRING(20)) {
     label = "Department"
     help = "The product department"
     group = description
   }
 
-  val description = field(Domain<String>(50)) {
+  val description = field(STRING(50)) {
     label = "Description"
     help = "The product description"
     format {
@@ -145,17 +144,17 @@ class ProductReport : Report() {
     }
   }
 
-  val supplier = field(Domain<String>(20)) {
+  val supplier = field(STRING(20)) {
     label = "Supplier"
     help = "The supplier"
   }
 
-  val taxName = field(Domain<String>(10)) {
+  val taxName = field(STRING(10)) {
     label = "Tax"
     help = "The product tax name"
   }
 
-  val price = field(Domain<Decimal>(10, 5)) {
+  val price = field(DECIMAL(10, 5)) {
     label = "Price"
     help = "The product unit price excluding VAT"
   }

@@ -17,13 +17,17 @@
 
 package org.kopi.galite.tests.chart
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.chart.ChartDimension
 import org.kopi.galite.chart.ChartMeasure
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.MONTH
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Month
 import org.kopi.galite.visual.Color
-import java.time.Month
-import kotlin.test.assertEquals
 
 class DimensionTests {
 
@@ -33,23 +37,23 @@ class DimensionTests {
    */
   @Test
   fun monthDimensionTest() {
-    val monthDimension = ChartDimension(Domain<Month>())
-    val measure1 = ChartMeasure(Domain<Double>())
+    val monthDimension = ChartDimension(MONTH)
+    val measure1 = ChartMeasure(DECIMAL(20, 10))
     measure1.label = "measure 1"
     measure1.color = Color.RED
-    monthDimension.add(Month.JANUARY) {
-      this[measure1] = 10.01
+    monthDimension.add(Month(2021, 1)) {
+      this[measure1] = Decimal("10.01")
     }
-    monthDimension.add(Month.DECEMBER) {
-      this[measure1] = 22.22
+    monthDimension.add(Month(2021, 12)) {
+      this[measure1] = Decimal("22.22")
     }
 
-    assertEquals(monthDimension.values[1].measureList[measure1], 22.22)
+    assertEquals(Decimal("22.22"), monthDimension.values[1].measureList[measure1])
 
     assertEquals(monthDimension.values[0].getMeasureLabels(), listOf("measure 1"))
-    assertEquals(monthDimension.values[0].getMeasureValues(), listOf(10.01))
+    assertEquals(monthDimension.values[0].getMeasureValues(), listOf(Decimal("10.01")))
     assertEquals(monthDimension.values[1].getMeasureLabels(), listOf("measure 1"))
-    assertEquals(monthDimension.values[1].getMeasureValues(), listOf(22.22))
+    assertEquals(monthDimension.values[1].getMeasureValues(), listOf(Decimal("22.22")))
   }
 
   /**
@@ -58,9 +62,9 @@ class DimensionTests {
    */
   @Test
   fun intDimensionTest() {
-    val intDimension = ChartDimension(Domain<Int>())
-    val measure1 = ChartMeasure(Domain<Int>())
-    val measure2 = ChartMeasure(Domain<Int>())
+    val intDimension = ChartDimension(INT(10))
+    val measure1 = ChartMeasure(INT(10))
+    val measure2 = ChartMeasure(INT(10))
 
     intDimension.add((0..10).random()) {
       this[measure1] = 50

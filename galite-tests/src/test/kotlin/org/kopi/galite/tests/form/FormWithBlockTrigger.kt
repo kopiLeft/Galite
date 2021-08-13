@@ -20,7 +20,7 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -44,7 +44,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {
     }
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -61,7 +61,7 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
     }
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)

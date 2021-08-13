@@ -20,7 +20,8 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
@@ -62,7 +63,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
   inner class Trainee: FormBlock(1, 1, "Training") {
     val t = table(Training)
 
-    val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {
+    val trainingID = visit(domain = INT(25), position = at(1, 1)) {
       label = "training ID"
       help = "training ID"
       columns(t.id) {
@@ -88,37 +89,37 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
   inner class Centers : FormBlock(20, 20, "Centers") {
     val c = table(Center)
 
-    val centerId = hidden(domain = Domain<Int>(20)) {
+    val centerId = hidden(domain = INT(20)) {
       label = "center id"
       help = "The Center id"
       columns(c.id)
     }
-    val ts = hidden(domain = Domain<Int>(20)) {
+    val ts = hidden(domain = INT(20)) {
       label = "ts"
       value = 0
       columns(c.ts)
     }
-    val uc = hidden(domain = Domain<Int>(20)) {
+    val uc = hidden(domain = INT(20)) {
       label = "uc"
       value = 0
       columns(c.uc)
     }
-    val trainingId = visit(domain = Domain<Int>(20), position = at(1, 1)) {
+    val trainingId = visit(domain = INT(20), position = at(1, 1)) {
       label = "training id"
       help = "The training id"
       columns(c.refTraining)
     }
-    val centerName = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    val centerName = visit(domain = STRING(20), position = at(1, 1)) {
       label = "center name"
       help = "center name"
       columns(c.centerName)
     }
-    val address = visit(domain = Domain<String>(20), position = at(1, 2)) {
+    val address = visit(domain = STRING(20), position = at(1, 2)) {
       label = "address"
       help = "address"
       columns(c.address)
     }
-    val mail = visit(domain = Domain<String>(20), position = at(1, 3)) {
+    val mail = visit(domain = STRING(20), position = at(1, 3)) {
       label = "mail"
       help = "mail"
       columns(c.mail)

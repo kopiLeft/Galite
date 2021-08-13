@@ -20,7 +20,8 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -37,12 +38,12 @@ class BlockWithFields : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
-  val id = hidden(domain = Domain<Int>(20)) {
+  val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
     columns(u.id)
   }
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -50,7 +51,7 @@ class BlockWithFields : FormBlock(1, 1, "Test block") {
       "example"
     }
   }
-  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
+  val age = skipped(domain = INT(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     columns(u.age) {

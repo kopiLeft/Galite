@@ -18,17 +18,17 @@ package org.kopi.galite.demo.bill
 
 import java.util.Locale
 
-import org.joda.time.DateTime
-
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.Command
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DATETIME
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Decimal
 
 class BillForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -68,27 +68,27 @@ class BlockBill : FormBlock(1, 1, "Bills") {
   val u = table(Bill)
   val v = table(Command)
 
-  val numBill = hidden(domain = Domain<Int>(20)) {
+  val numBill = hidden(domain = INT(20)) {
     label = "Number"
     help = "The bill number"
     columns(u.numBill)
   }
-  val addressBill = mustFill(domain = Domain<String>(30), position = at(1, 1)) {
+  val addressBill = mustFill(domain = STRING(30), position = at(1, 1)) {
     label = "Address"
     help = "The bill address"
     columns(u.addressBill)
   }
-  val dateBill = mustFill(domain = Domain<DateTime>(25), position = at(2, 1)) {
+  val dateBill = mustFill(domain = DATETIME, position = at(2, 1)) {
     label = "Date"
     help = "The bill date"
     columns(u.dateBill)
   }
-  val amountWithTaxes = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
+  val amountWithTaxes = visit(domain = DECIMAL(20, 10), position = at(3, 1)) {
     label = "Amount to pay"
     help = "The bill amount to pay"
     columns(u.amountWithTaxes)
   }
-  val refCmd = visit(domain = Domain<Int>(20), position = at(4, 1)) {
+  val refCmd = visit(domain = INT(20), position = at(4, 1)) {
     label = "Command reference"
     help = "The command reference"
     columns(u.refCmd, v.numCmd)

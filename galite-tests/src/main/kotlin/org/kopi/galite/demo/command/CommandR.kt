@@ -20,12 +20,10 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.joda.time.DateTime
-
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DATETIME
+import org.kopi.galite.domain.INT
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -105,20 +103,20 @@ class CommandR : Report() {
     }
   }
 
-  val numCmd = field(Domain<Int>(25)) {
+  val numCmd = field(INT(25)) {
     label = "Command number"
     help = "The command number"
     align = FieldAlignment.LEFT
 
   }
 
-  val idClt = field(Domain<Int>(25)) {
+  val idClt = field(INT(25)) {
     label = "Client ID"
     help = "The command client ID"
     align = FieldAlignment.LEFT
 
   }
-  val dateCmd = field(Domain<DateTime>(50)) {
+  val dateCmd = field(DATETIME) {
     label = "Command date"
     help = "The command date"
     align = FieldAlignment.LEFT
