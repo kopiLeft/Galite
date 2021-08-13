@@ -22,11 +22,13 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.BOOL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
+import org.kopi.galite.domain.TIMESTAMP
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.type.Timestamp
 
 class FormWithList : DictionaryForm() {
   override val locale = Locale.UK
@@ -126,32 +128,32 @@ class FormWithList : DictionaryForm() {
         block.load()
       }
     }
-    val id = hidden(domain = Domain<Int>(20)) {
+    val id = hidden(domain = INT(20)) {
       label = "ID"
       help = "The user id"
       columns(u.id) {
         index = unique
       }
     }
-    val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
+    val uc = visit(domain = INT(20), position = at(1, 2)) {
       label = "UC"
       help = "uc"
       columns(u.uc)
     }
 
-    val ts = visit(domain = Domain<Int>(20), position = at(1, 3)) {
+    val ts = visit(domain = INT(20), position = at(1, 3)) {
       label = "TS"
       help = "ts"
       columns(u.ts)
     }
 
-    val shortName = visit(domain = Domain<String>(20), position = at(1, 4)) {
+    val shortName = visit(domain = STRING(20), position = at(1, 4)) {
       label = "Kurzname"
       help = "Kurzname"
       columns(u.shortName)
     }
 
-    val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
+    val name = visit(domain = STRING(20), position = at(2, 1)) {
       label = "name"
       help = "name"
       columns(u.name) {
@@ -159,31 +161,31 @@ class FormWithList : DictionaryForm() {
       }
     }
 
-    val character = visit(domain = Domain<String>(20), position = at(2, 2)) {
+    val character = visit(domain = STRING(20), position = at(2, 2)) {
       label = "character"
       help = "character"
       columns(u.character)
     }
 
-    val active = visit(domain = Domain<Boolean>(1), position = at(2, 3)) {
+    val active = visit(domain = BOOL, position = at(2, 3)) {
       label = "active"
       help = "active"
       columns(u.active)
     }
 
-    val createdOn = visit(domain = Domain<Timestamp>(20), position = at(2, 4)) {
+    val createdOn = visit(domain = TIMESTAMP, position = at(2, 4)) {
       label = "createdOn"
       help = "createdOn"
       columns(u.createdOn)
     }
 
-    val createdBy = visit(domain = Domain<Int>(10), position = at(2, 5)) {
+    val createdBy = visit(domain = INT(10), position = at(2, 5)) {
       label = "createdBy"
       help = "createdBy"
       columns(u.createdBy)
     }
 
-    val changedBy = visit(domain = Domain<Int>(10), position = at(2, 6)) {
+    val changedBy = visit(domain = INT(10), position = at(2, 6)) {
       label = "changedBy"
       help = "changedBy"
       columns(u.changedBy)
@@ -196,7 +198,7 @@ object BlockSample : FormBlock(1, 1, "Test block") {
   val m = table(Modules)
   val i = index(message = "ID should be unique")
 
-  val id = hidden(domain = Domain<Int>(20)) {
+  val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
     columns(u.id) {
@@ -204,7 +206,7 @@ object BlockSample : FormBlock(1, 1, "Test block") {
     }
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name) {
@@ -220,7 +222,7 @@ class BlockWithManyTables : FormBlock(20, 20, "Test block") {
   val r = table(UserRights)
   val unique = index(message = "ID should be unique")
 
-  val uid = hidden(domain = Domain<Int>(20)) {
+  val uid = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
     columns(u.id, r.user) {
@@ -228,19 +230,19 @@ class BlockWithManyTables : FormBlock(20, 20, "Test block") {
     }
   }
 
-  val mid = hidden(domain = Domain<Int>(20)) {
+  val mid = hidden(domain = INT(20)) {
     label = "id"
     help = "The module id"
     columns(m.id, r.module)
   }
 
-  val shortName = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val shortName = visit(domain = STRING(20), position = at(1, 1)) {
     label = "short name"
     help = "short name"
     columns(m.shortName)
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 2)) {
+  val name = visit(domain = STRING(20), position = at(1, 2)) {
     label = "name"
     help = "name"
     columns(u.name)

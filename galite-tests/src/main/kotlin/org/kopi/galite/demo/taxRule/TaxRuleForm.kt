@@ -20,7 +20,9 @@ import java.util.Locale
 
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.TaxRule
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.BOOL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -131,13 +133,13 @@ class TaxRuleForm : ReportSelectionForm() {
 class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   val u = table(TaxRule)
 
-  val idTaxe = hidden(domain = Domain<Int>(20)) {
+  val idTaxe = hidden(domain = INT(20)) {
     label = "ID"
     help = "The tax ID"
     columns(u.idTaxe)
   }
 
-  val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val taxName = mustFill(domain = STRING(20), position = at(1, 1)) {
     label = "Name"
     help = "The tax name"
     columns(u.taxName) {
@@ -145,7 +147,7 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     }
   }
 
-  val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
+  val rate = mustFill(domain = INT(25), position = at(2, 1)) {
     label = "Rate"
     help = "The tax rate in %"
     columns(u.rate) {
@@ -153,7 +155,7 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     }
   }
 
-  val informations = mustFill(domain = Domain<String?>(80, 50, 10), position = at(3, 1)) {
+  val informations = visit(domain = STRING(80, 50, 10, true), position = at(3, 1)) {
     label = "tax informations"
     help = "The tax informations"
     columns(u.informations) {
@@ -165,7 +167,7 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     blockVisibility(Access.VISIT, Modes.QUERY)
   }
 
-  val percent = visit(domain = Domain<Boolean>(25), position = at(2, 2)) {
+  val percent = visit(domain = BOOL, position = at(2, 2)) {
     label = "%"
     help = "The tax rate in %"
   }

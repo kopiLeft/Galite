@@ -22,7 +22,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.BillProduct
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -114,18 +115,18 @@ class BillProductR : Report() {
     }
   }
 
-  val quantity = field(Domain<Int>(25)) {
+  val quantity = field(INT(25)) {
     label = "Quantity"
     help = "The quantity"
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Decimal>(25)) {
+  val amount = field(DECIMAL(25, 10)) {
     label = "Amount before tax"
     help = "The amount before tax to pay"
 
   }
-  val amountWithTaxes = field(Domain<Decimal>(50)) {
+  val amountWithTaxes = field(DECIMAL(50, 10)) {
     label = "Amount all taxes included"
     help = "The amount all taxes included to pay"
     align = FieldAlignment.LEFT

@@ -22,10 +22,9 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.Client
-import org.kopi.galite.demo.command.BlockCommand
-import org.kopi.galite.demo.command.CommandForm
-import org.kopi.galite.demo.command.CommandR
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.BOOL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -143,7 +142,7 @@ class ClientR : Report() {
     }
   }
 
-  val firstName = field(Domain<String>(25)) {
+  val firstName = field(STRING(25)) {
     label = "First Name"
     help = "The client first name"
     align = FieldAlignment.LEFT
@@ -157,7 +156,7 @@ class ClientR : Report() {
     }
   }
 
-  val lastName = field(Domain<String>(25)) {
+  val lastName = field(STRING(25)) {
     label = "Last Name"
     help = "The client last name"
     align = FieldAlignment.LEFT
@@ -170,7 +169,7 @@ class ClientR : Report() {
     }
   }
 
-  val addressClt = field(Domain<String>(50)) {
+  val addressClt = field(STRING(50)) {
     label = "Address"
     help = "The client address"
     align = FieldAlignment.LEFT
@@ -183,31 +182,31 @@ class ClientR : Report() {
     }
   }
 
-  val ageClt = field(Domain<Int>(2)) {
+  val ageClt = field(INT(2)) {
     label = "Age"
     help = "The client age"
     align = FieldAlignment.LEFT
   }
 
-  val countryClt = field(Domain<String>(50)) {
+  val countryClt = field(STRING(50)) {
     label = "City"
     help = "The client country"
     align = FieldAlignment.LEFT
   }
 
-  val cityClt = field(Domain<String>(50)) {
+  val cityClt = field(STRING(50)) {
     label = "City"
     help = "The client city"
     align = FieldAlignment.LEFT
   }
 
-  val zipCodeClt = field(Domain<Int>(2)) {
+  val zipCodeClt = field(INT(2)) {
     label = "Zip code"
     help = "The client zip code"
     align = FieldAlignment.LEFT
   }
 
-  val activeClt = field(Domain<Boolean>()) {
+  val activeClt = field(BOOL) {
     label = "Status"
     help = "Is the client active?"
   }

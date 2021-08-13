@@ -19,7 +19,8 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
@@ -35,11 +36,11 @@ class FormAlignTest_ : Form() {
 
   val totalBlock = block(1, 1, "Total", "Total block") {
 
-    val totalQuantity = visit(Domain<Int>(3), position = at(1, 1)) {
+    val totalQuantity = visit(INT(3), position = at(1, 1)) {
       label = "Total"
       help = "Total"
     }
-    val totalPrice = visit(Domain<Int>(7), position = at(1, 2)) {}
+    val totalPrice = visit(INT(7), position = at(1, 2)) {}
 
     align(targetBlock, totalQuantity to targetBlock.quantity, totalPrice to targetBlock.price)
   }
@@ -51,19 +52,19 @@ class TestAlign : FormBlock(10, 8, "Test block") {
     options(BlockOption.NODETAIL)
   }
 
-  val description = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val description = visit(domain = STRING(20), position = at(1, 1)) {
     label = "Description"
     help = "The description of product"
   }
-  val reference = visit(domain = Domain<String>(20), position = at(2, 1)) {
+  val reference = visit(domain = STRING(20), position = at(2, 1)) {
     label = "Reference"
     help = "The reference of product"
   }
-  val quantity = visit(domain = Domain<Int>(3), position = at(3, 1)) {
+  val quantity = visit(domain = INT(3), position = at(3, 1)) {
     label = "quantity"
     help = "The quantity"
   }
-  val price = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val price = visit(domain = STRING(20), position = at(4, 1)) {
     label = "Price"
     help = "The price"
   }

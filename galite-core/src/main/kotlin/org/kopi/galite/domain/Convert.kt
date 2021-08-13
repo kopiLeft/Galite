@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,25 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
 
-package org.kopi.galite.tests.chart
+import org.kopi.galite.form.VConstants
 
-import org.junit.Test
-import org.kopi.galite.chart.ChartMeasure
-import org.kopi.galite.domain.INT
-import org.kopi.galite.visual.Color
-import kotlin.test.assertEquals
-
-class MeasureTests {
+/**
+ * The convert option used in order to modify the String's case.
+ */
+enum class Convert(val value: Int) {
 
   /**
-   * Test measure class
+   * Converts the first letter of each word to capital letter.
    */
-  @Test
-  fun testMeasure() {
-    val measure1 = ChartMeasure(INT(10))
-    measure1.label = "measure 1"
-    measure1.color = Color.RED
-    assertEquals(measure1.color.toString(), "RED")
-  }
+  NAME(VConstants.FDO_CONVERT_NAME),
+
+  /**
+   * Convert the whole text to capital letters.
+   */
+  UPPER(VConstants.FDO_CONVERT_UPPER),
+
+  /**
+   * Converts the whole text to normal letters.
+   */
+  LOWER(VConstants.FDO_CONVERT_NAME)
 }

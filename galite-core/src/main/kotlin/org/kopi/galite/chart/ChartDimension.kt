@@ -89,7 +89,7 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
         }
         else -> {
           when (domain.kClass) {
-            Int::class ->
+            Int::class, Long::class ->
               VIntegerDimension(ident, format)
             String::class ->
               VStringDimension(ident, format)

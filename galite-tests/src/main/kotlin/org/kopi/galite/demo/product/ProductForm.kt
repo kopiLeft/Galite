@@ -21,15 +21,16 @@ import java.util.Locale
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
 import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.IMAGE
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Image
 
 class ProductForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -69,17 +70,17 @@ class ProductForm : ReportSelectionForm() {
 class BlockProduct : FormBlock(1, 1, "Products") {
   val u = table(Product)
 
-  val idPdt = hidden(domain = Domain<Int>(20)) {
+  val idPdt = hidden(domain = INT(20)) {
     label = "ID"
     help = "The product ID"
     columns(u.idPdt)
   }
-  val description = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
+  val description = mustFill(domain = STRING(50), position = at(1, 1)) {
     label = "Description"
     help = "The product description"
     columns(u.description)
   }
-  val price = visit(domain = Domain<Decimal>(20), follow(description)) {
+  val price = visit(domain = DECIMAL(20, 10), follow(description)) {
     label = "Price"
     help = "The product unit price excluding VAT"
     columns(u.price)
@@ -94,7 +95,7 @@ class BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product tax name"
     columns(u.taxName)
   }
-  val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
+  val photo = visit(domain = IMAGE(width = 100, height = 100), position = at(5, 1)) {
     label = "Image"
     help = "The product image"
   }

@@ -116,27 +116,27 @@ class ClientForm : Form() {
 class Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
-  val idClt = visit(domain = Domain<Int>(30), position = at(1, 1..2)) {
+  val idClt = visit(domain = LONG(10), position = at(1, 1..2)) {
     label = "ID"
     help = "The client id"
     columns(u.idClt)
   }
-  val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
+  val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
     label = "First Name"
     help = "The client first name"
     columns(u.firstNameClt)
   }
-  val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
+  val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
     label = "Last name"
     help = "The client last name"
     columns(u.lastNameClt)
   }
-  val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
+  val ageClt = visit(domain = INT(3), position = at(3, 1)) {
     label = "Age"
     help = "The client age"
     columns(u.ageClt)
   }
-  val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
+  val active = visit(domain = BOOL, position = at(5, 1)) {
     label = "Active ?"
     help = "Is the use account active?"
   }
@@ -188,19 +188,19 @@ class ProductReport : Report() {
     }
   }
 
-  val category = field(Category) {
+  val category = field(domain = Category) {
     label = "Category"
     help = "The product category"
     group = department
   }
 
-  val department = field(Domain<String>(20)) {
+  val department = field(domain = STRING(20)) {
     label = "Department"
     help = "The product department"
     group = description
   }
 
-  val description = field(Domain<String>(50)) {
+  val description = field(domain = STRING(50)) {
     label = "Description"
     help = "The product description"
     format {
@@ -212,17 +212,17 @@ class ProductReport : Report() {
     }
   }
 
-  val supplier = field(Domain<String>(20)) {
+  val supplier = field(domain = STRING(20)) {
     label = "Supplier"
     help = "The supplier"
   }
 
-  val taxName = field(Domain<String>(10)) {
+  val taxName = field(domain = STRING(10)) {
     label = "Tax"
     help = "The product tax name"
   }
 
-  val price = field(Domain<Decimal>(10, 5)) {
+  val price = field(domain = DECIMAL(10, 5)) {
     label = "Price"
     help = "The product unit price excluding VAT"
   }
@@ -259,7 +259,7 @@ class ChartSample: Chart() {
 
   val action = menu("Action")
 
-  val area = measure(Domain<Decimal?>(width = 10, scale = 5)) {
+  val area = measure(DECIMAL(width = 10, scale = 5)) {
     label = "area (ha)"
 
     color {
@@ -267,11 +267,11 @@ class ChartSample: Chart() {
     }
   }
 
-  val population = measure(Domain<Int?>(10)) {
+  val population = measure(LONG(10)) {
     label = "population"
   }
 
-  val city = dimension(Domain<String>(10)) {
+  val city = dimension(STRING(10)) {
     label = "dimension"
 
     format {

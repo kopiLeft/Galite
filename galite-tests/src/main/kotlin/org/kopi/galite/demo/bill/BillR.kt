@@ -20,11 +20,11 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.joda.time.DateTime
-
 import org.kopi.galite.demo.Bill
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DATETIME
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -105,30 +105,30 @@ class BillR : Report() {
     }
   }
 
-  val numBill = field(Domain<Int>(25)) {
+  val numBill = field(INT(25)) {
     label = "Number"
     help = "The bill number"
     align = FieldAlignment.LEFT
   }
 
-  val addressBill = field(Domain<String>(25)) {
+  val addressBill = field(STRING(25)) {
     label = "Address"
     help = "The bill address"
     align = FieldAlignment.LEFT
   }
-  val dateBill = field(Domain<DateTime>(25)) {
+  val dateBill = field(DATETIME) {
     label = "Date"
     help = "The bill date"
     align = FieldAlignment.LEFT
   }
 
-  val amountWithTaxes = field(Domain<Decimal>(2)) {
+  val amountWithTaxes = field(DECIMAL(20, 10)) {
     label = "Amount to pay"
     help = "The amount including all taxes to pay"
     align = FieldAlignment.LEFT
   }
 
-  val refCmd = field(Domain<Int>(50)) {
+  val refCmd = field(INT(50)) {
     label = "Command reference"
     help = "The command reference"
     align = FieldAlignment.LEFT

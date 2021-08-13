@@ -22,7 +22,7 @@ import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Provider
 import org.kopi.galite.demo.Stock
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
@@ -68,17 +68,17 @@ class StockBlock : FormBlock(1, 1, "Stock") {
   val v = table(Product)
   val w = table(Provider)
 
-  val idStckPdt = hidden(domain = Domain<Int>(20)) {
+  val idStckPdt = hidden(domain = INT(20)) {
     label = "Product_ID"
     help = "The product ID"
     columns(u.idStckPdt, v.idPdt)
   }
-  val idStckProv = hidden(domain = Domain<Int>(20)) {
+  val idStckProv = hidden(domain = INT(20)) {
     label = "Provider_ID"
     help = "The provider id"
     columns(u.idStckProv, w.idProvider)
   }
-  val minAlert = mustFill(domain = Domain<Int>(20), position = at(1, 1)) {
+  val minAlert = mustFill(domain = INT(20), position = at(1, 1)) {
     label = "Min Alert"
     help = "The stock's min alert"
     // columns(u.idStckProv, w.idProvider)
