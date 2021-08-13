@@ -242,6 +242,16 @@ class ProductReport : Report() {
     }
   }
 }
+
+object Category : CodeDomain<Int>() {
+  init {
+    "shoes" keyOf 1
+    "shirts" keyOf 2
+    "glasses" keyOf 3
+    "pullovers" keyOf 4
+    "jeans" keyOf 5
+  }
+}
 ````
 ![docs/products_report.png](docs/products_report.png)
 

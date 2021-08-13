@@ -105,13 +105,13 @@ class BlockProduct : FormBlock(1, 1, "Products") {
   }
 }
 
-object Category : CodeDomain<String>() {
+object Category : CodeDomain<Int>() {
   init {
-    "shoes" keyOf "cat 1"
-    "shirts" keyOf "cat 2"
-    "glasses" keyOf "cat 3"
-    "pullovers" keyOf "cat 4"
-    "jeans" keyOf "cat 5"
+    "shoes" keyOf 1
+    "shirts" keyOf 2
+    "glasses" keyOf 3
+    "pullovers" keyOf 4
+    "jeans" keyOf 5
   }
 }
 
