@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.form
 
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement.block
 import kotlin.test.assertFailsWith
 import kotlin.test.assertEquals
 
@@ -323,7 +324,7 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun `save insert simple block scenario test`() {
+  fun `save insert scenario test`() {
     FormSample.model
 
     transaction {
@@ -348,11 +349,12 @@ class VBlockTests : JApplicationTestBase() {
        listInfoUser.add(it[User.job])
      }
       assertEquals(listInfoUser, listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value))
+
     }
   }
 
   @Test
-  fun `save update simple block scenario test`() {
+  fun `save update scenario test`() {
     FormSample.model
 
     transaction {
@@ -385,6 +387,7 @@ class VBlockTests : JApplicationTestBase() {
         listInfoUser.add(it[User.job])
       }
       assertEquals(listInfoUser, listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value))
+
     }
   }
 
@@ -419,6 +422,7 @@ class VBlockTests : JApplicationTestBase() {
       form.multipleBlock.address[1] = "adresse 2"
       form.multipleBlock.mail[1] = "center2@gmail.com"
 
+
       form.multipleBlock.vBlock.setMode(VConstants.MOD_INSERT)
       form.multipleBlock.vBlock.save()
 
@@ -443,6 +447,86 @@ class VBlockTests : JApplicationTestBase() {
                                           form.multipleBlock.address[1],
                                           form.multipleBlock.mail[1],
                                           )
+      )
+    }
+  }
+
+  @Test
+  fun `save update multiple block scenario test`() {
+    val form = FormToTestSaveMultipleBlock()
+
+    form.model
+    transaction {
+      SchemaUtils.create(Training)
+      SchemaUtils.create(Center)
+      SchemaUtils.createSequence(centerSequence)
+      Training.insert {
+        it[id] = 1
+        it[trainingName] = "trainingName"
+        it[type] = 1
+        it[price] = Decimal("1149.24").value
+        it[active] = true
+      }
+      Center.insert {
+        it[id] = 1
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 1"
+        it[address] = "adresse 1"
+        it[mail] = "center1@gmail.com"
+      }
+      Center.insert {
+        it[id] = 2
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 2"
+        it[address] = "adresse 2"
+        it[mail] = "center2@gmail.com"
+      }
+
+      form.multipleBlock.centerId[0] = 1
+      form.multipleBlock.ts[0] = 0
+      form.multipleBlock.uc[0] = 0
+      form.multipleBlock.trainingId[0] = 1
+      form.multipleBlock.centerName[0] = "center 111"
+      form.multipleBlock.address[0] = "adresse 111"
+      form.multipleBlock.mail[0] = "center111@gmail.com"
+
+      form.multipleBlock.centerId[1] = 2
+      form.multipleBlock.ts[1] = 0
+      form.multipleBlock.uc[1] = 0
+      form.multipleBlock.trainingId[1] = 1
+      form.multipleBlock.centerName[1] = "center 222"
+      form.multipleBlock.address[1] = "adresse 222"
+      form.multipleBlock.mail[1] = "center222@gmail.com"
+
+      form.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
+      form.multipleBlock.vBlock.setRecordFetched(0, true)
+       form.multipleBlock.vBlock.setRecordFetched(1, true)
+      form.multipleBlock.vBlock.save()
+
+      val listInfoCenter = mutableListOf<Any?>()
+
+      Center.selectAll().forEach {
+        listInfoCenter.add(it[Center.id])
+        listInfoCenter.add(it[Center.refTraining])
+        listInfoCenter.add(it[Center.centerName])
+        listInfoCenter.add(it[Center.address])
+        listInfoCenter.add(it[Center.mail])
+      }
+
+      assertEquals(listInfoCenter, listOf(1,
+                                          form.multipleBlock.trainingId[0],
+                                          form.multipleBlock.centerName[0],
+                                          form.multipleBlock.address[0],
+                                          form.multipleBlock.mail[0],
+                                          2,
+                                          form.multipleBlock.trainingId[1],
+                                          form.multipleBlock.centerName[1],
+                                          form.multipleBlock.address[1],
+                                          form.multipleBlock.mail[1])
       )
     }
   }
