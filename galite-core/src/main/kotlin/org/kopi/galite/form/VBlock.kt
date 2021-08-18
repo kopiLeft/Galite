@@ -1524,11 +1524,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (fetchCount >= bufferSize) {
         fetchCount += 1
       } else {
-        fields.forEachIndexed { index, field ->
-          if (field.getColumnCount() > 0) {
-            field.setQuery(fetchCount, result, columns[index])
+          var i = 0
+          var j = 0
+          while (i < fields.size) {
+            if (fields[i].getColumnCount() > 0) {
+              fields[i].setQuery(fetchCount, result,columns[j])
+              j += 1
+            }
+            i++
           }
-        }
 
         setRecordFetched(fetchCount, true)
         setRecordChanged(fetchCount, false)
@@ -1625,10 +1629,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       try {
         try {
-          transaction {
             fetchPosition = pos
             fetchRecord(fetchBuffer[pos])
-          }
           return
         } catch (e: VException) {
           throw e

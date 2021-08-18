@@ -24,9 +24,12 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VSkipRecordException
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
@@ -226,5 +229,91 @@ class VBlockTests : JApplicationTestBase() {
     val orderBys = FormWithList.block3.vBlock.getSearchOrder()
 
     assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
+  }
+
+  @Test
+  fun `fetchRecord valid scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+      }
+      FormSample.tb1.vBlock.fetchRecord(1)
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+    }
+  }
+
+  @Test
+  fun `fetchRecord no such element test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+
+      assertThrows(VSkipRecordException::class.java) {
+        FormSample.tb1.vBlock.fetchRecord(1)
+      }
+    }
+  }
+
+  @Test
+  fun `fetchRecord too many rows scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+      }
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+      }
+      val error = assertThrows(AssertionError::class.java) { FormSample.tb1.vBlock.fetchRecord(1) }
+
+      assertEquals("too many rows", error)
+    }
+  }
+
+  @Test
+  fun `fetchNextRecord valid scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[age] = 6
+      }
+      FormSample.tb1.vBlock.load()
+      FormSample.tb1.vBlock.fetchNextRecord(0)
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+    }
+  }
+
+  @Test
+  fun `fetchNextRecord multi block scenario test`() {
+    FormWithMultipleBlock.model
+    val error = assertThrows(AssertionError::class.java) { FormWithMultipleBlock.multipleBlock.vBlock.fetchNextRecord(0)}
+
+    assertEquals(FormWithMultipleBlock.multipleBlock.vBlock.name + " is a multi block", error.message)
+  }
+
+  @Test
+  fun `fetchNextRecord exec failed scenario test`() {
+    FormSample.model
+
+      assertThrows(VExecFailedException::class.java) {
+        FormSample.tb1.vBlock.fetchNextRecord(0)
+      }
   }
 }
