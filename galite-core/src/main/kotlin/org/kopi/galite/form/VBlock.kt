@@ -3017,18 +3017,20 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     if (condition.isNotEmpty()) {
-      try {
-        val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }.single()
 
-        if (result[idColumn] != id) {
-          form.setActiveBlock(this@VBlock)
-          activeRecord = recno
-          gotoFirstField()
-          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+        val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }
+        if (!result.empty()) {
+          try {
+            if (result.single()[idColumn] != id) {
+              form.setActiveBlock(this@VBlock)
+              activeRecord = recno
+              gotoFirstField()
+              throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+            }
+          } catch (illegalArgumentException: IllegalArgumentException) {
+            error("too many rows")
+          }
         }
-      } catch (illegalArgumentException: IllegalArgumentException) {
-        error("too many rows")
-      }
     }
   }
 
@@ -3090,7 +3092,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       table.insert { table ->
         result.forEach {
-          table[it.first] = it.second!!
+          if(it.second != null) {
+            table[it.first] = it.second!!
+          }
         }
       }
       setRecordFetched(recno, true)

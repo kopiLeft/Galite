@@ -30,7 +30,12 @@ import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VSkipRecordException
+import org.kopi.galite.tests.examples.Center
+import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
+import org.kopi.galite.tests.examples.Training
+import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 
@@ -315,5 +320,130 @@ class VBlockTests : JApplicationTestBase() {
       assertThrows(VExecFailedException::class.java) {
         FormSample.tb1.vBlock.fetchNextRecord(0)
       }
+  }
+
+  @Test
+  fun `save insert simple block scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      SchemaUtils.createSequence(userSequence)
+
+      FormSample.tb1.uc.value = 0
+      FormSample.tb1.ts.value = 0
+      FormSample.tb1.name.value = "Houssem"
+      FormSample.tb1.age.value = 26
+      FormSample.tb1.job.value = "job"
+
+      FormSample.tb1.vBlock.setMode(VConstants.MOD_INSERT)
+      FormSample.tb1.vBlock.save()
+
+      val listInfoUser = mutableListOf<Any?>()
+
+     User.selectAll().forEach {
+       listInfoUser.add(it[User.id])
+       listInfoUser.add(it[User.name])
+       listInfoUser.add(it[User.age])
+       listInfoUser.add(it[User.job])
+     }
+      assertEquals(listInfoUser, listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value))
+    }
+  }
+
+  @Test
+  fun `save update simple block scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 26
+        it[job] = "job"
+      }
+
+      FormSample.tb1.id.value = 1
+      FormSample.tb1.uc.value = 0
+      FormSample.tb1.ts.value = 0
+      FormSample.tb1.name.value = "HADDAD"
+      FormSample.tb1.age.value = 27
+      FormSample.tb1.job.value = "work"
+
+      FormSample.tb1.vBlock.setMode(VConstants.MOD_UPDATE)
+      FormSample.tb1.vBlock.save()
+
+      val listInfoUser = mutableListOf<Any?>()
+
+      User.selectAll().forEach {
+        listInfoUser.add(it[User.id])
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+      assertEquals(listInfoUser, listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value))
+    }
+  }
+
+  @Test
+  fun `save insert multiple block scenario test`() {
+    val form = FormToTestSaveMultipleBlock()
+
+    form.model
+    transaction {
+      SchemaUtils.create(Training)
+      SchemaUtils.create(Center)
+      SchemaUtils.createSequence(centerSequence)
+      Training.insert {
+        it[id] = 1
+        it[trainingName] = "trainingName"
+        it[type] = 1
+        it[price] = Decimal("1149.24").value
+        it[active] = true
+      }
+
+      form.multipleBlock.ts[0] = 0
+      form.multipleBlock.uc[0] = 0
+      form.multipleBlock.trainingId[0] = 1
+      form.multipleBlock.centerName[0] = "center 1"
+      form.multipleBlock.address[0] = "adresse 1"
+      form.multipleBlock.mail[0] = "center1@gmail.com"
+
+      form.multipleBlock.ts[1] = 0
+      form.multipleBlock.uc[1] = 0
+      form.multipleBlock.trainingId[1] = 1
+      form.multipleBlock.centerName[1] = "center 2"
+      form.multipleBlock.address[1] = "adresse 2"
+      form.multipleBlock.mail[1] = "center2@gmail.com"
+
+      form.multipleBlock.vBlock.setMode(VConstants.MOD_INSERT)
+      form.multipleBlock.vBlock.save()
+
+      val listInfoCenter = mutableListOf<Any?>()
+
+      Center.selectAll().forEach {
+        listInfoCenter.add(it[Center.id])
+        listInfoCenter.add(it[Center.refTraining])
+        listInfoCenter.add(it[Center.centerName])
+        listInfoCenter.add(it[Center.address])
+        listInfoCenter.add(it[Center.mail])
+      }
+
+      assertEquals(listInfoCenter, listOf(5,
+                                          form.multipleBlock.trainingId[0],
+                                          form.multipleBlock.centerName[0],
+                                          form.multipleBlock.address[0],
+                                          form.multipleBlock.mail[0],
+                                          6,
+                                          form.multipleBlock.trainingId[1],
+                                          form.multipleBlock.centerName[1],
+                                          form.multipleBlock.address[1],
+                                          form.multipleBlock.mail[1],
+                                          )
+      )
+    }
   }
 }

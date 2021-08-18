@@ -43,6 +43,8 @@ object User : Table() {
   val cv = varchar("CURRICULUM VITAE", 70).nullable()
 }
 
+val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
+
 val FormSample = FormSample_()
 class FormSample_ : Form() {
   override val locale = Locale.UK
