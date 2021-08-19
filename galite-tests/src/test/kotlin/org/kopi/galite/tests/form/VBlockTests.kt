@@ -16,13 +16,13 @@
  */
 package org.kopi.galite.tests.form
 
-import com.github.javaparser.printer.concretesyntaxmodel.CsmElement.block
 import kotlin.test.assertFailsWith
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThrows
@@ -50,7 +50,6 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.tb1.id.value = 1
 
     transaction {
-
       SchemaUtils.create(User)
       User.insert {
         it[id] = 1
@@ -81,8 +80,12 @@ class VBlockTests : JApplicationTestBase() {
         mutableListOf(it[User.name], it[User.age])
       }
 
-      assertCollectionsEquals(deleteRecordList, mutableListOf(mutableListOf("Fabienne BUGHIN", 25),
-                                                              mutableListOf("FABIENNE BUGHIN2", 23)))
+      assertCollectionsEquals(mutableListOf(
+          mutableListOf("Fabienne BUGHIN", 25),
+          mutableListOf("FABIENNE BUGHIN2", 23)
+        ), deleteRecordList
+      )
+      SchemaUtils.drop(User)
     }
   }
 
@@ -130,6 +133,7 @@ class VBlockTests : JApplicationTestBase() {
   fun getSearchConditionsTest1() {
     // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
     FormSample.model
+    FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
     FormSample.tb1.name.value = "myName"
@@ -138,8 +142,10 @@ class VBlockTests : JApplicationTestBase() {
 
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
     transaction {
-      assertEquals("(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
-                           "(\"USER\".AGE = 6) AND (\"USER\".JOB = 'jobValue')", blockSearchCondition.toString())
+      assertEquals(
+        "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
+                "(\"USER\".AGE = 6) AND (\"USER\".JOB = 'jobValue')", blockSearchCondition.toString()
+      )
     }
   }
 
@@ -151,7 +157,7 @@ class VBlockTests : JApplicationTestBase() {
       fields[5].setSearchOperator(1)
       fields[6].setSearchOperator(1)
     }
-
+    FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
     FormSample.tb1.name.value = "myName*"
@@ -160,8 +166,10 @@ class VBlockTests : JApplicationTestBase() {
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
 
     transaction {
-      assertEquals("(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'myName%') AND " +
-                           "(\"USER\".AGE < 8) AND (\"USER\".JOB < 'jobValue')", blockSearchCondition.toString())
+      assertEquals(
+        "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'myName%') AND " +
+                "(\"USER\".AGE < 8) AND (\"USER\".JOB < 'jobValue')", blockSearchCondition.toString()
+      )
     }
   }
 
@@ -173,6 +181,8 @@ class VBlockTests : JApplicationTestBase() {
       fields[5].setSearchOperator(2)
       fields[6].setSearchOperator(2)
     }
+
+    FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
     FormSample.tb1.name.value = "*myName"
@@ -181,8 +191,10 @@ class VBlockTests : JApplicationTestBase() {
 
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
     transaction {
-      assertEquals("(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
-                           "(\"USER\".AGE > 9) AND (\"USER\".JOB > 'jobValue')", blockSearchCondition.toString())
+      assertEquals(
+        "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
+                "(\"USER\".AGE > 9) AND (\"USER\".JOB > 'jobValue')", blockSearchCondition.toString()
+      )
     }
   }
 
@@ -195,6 +207,7 @@ class VBlockTests : JApplicationTestBase() {
       fields[5].setSearchOperator(3)
       fields[6].setSearchOperator(3)
     }
+    FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
     FormSample.tb1.name.value = "my*Name"
@@ -203,8 +216,10 @@ class VBlockTests : JApplicationTestBase() {
 
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
     transaction {
-      assertEquals("(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'my%Name') AND " +
-                           "(\"USER\".AGE <= 10) AND (\"USER\".JOB <= 'jobValue')", blockSearchCondition.toString())
+      assertEquals(
+        "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'my%Name') AND " +
+                "(\"USER\".AGE <= 10) AND (\"USER\".JOB <= 'jobValue')", blockSearchCondition.toString()
+      )
     }
   }
 
@@ -224,8 +239,10 @@ class VBlockTests : JApplicationTestBase() {
 
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
     transaction {
-      assertEquals("(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%') AND " +
-                           "(\"USER\".AGE >= 11) AND (\"USER\".JOB >= 'job')", blockSearchCondition.toString())
+      assertEquals(
+        "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%') AND " +
+                "(\"USER\".AGE >= 11) AND (\"USER\".JOB >= 'job')", blockSearchCondition.toString()
+      )
     }
   }
 
@@ -250,6 +267,7 @@ class VBlockTests : JApplicationTestBase() {
       }
       FormSample.tb1.vBlock.fetchRecord(1)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      SchemaUtils.drop(User)
     }
   }
 
@@ -263,6 +281,7 @@ class VBlockTests : JApplicationTestBase() {
       assertThrows(VSkipRecordException::class.java) {
         FormSample.tb1.vBlock.fetchRecord(1)
       }
+      SchemaUtils.drop(User)
     }
   }
 
@@ -284,7 +303,8 @@ class VBlockTests : JApplicationTestBase() {
       }
       val error = assertThrows(AssertionError::class.java) { FormSample.tb1.vBlock.fetchRecord(1) }
 
-      assertEquals("too many rows", error)
+      assertEquals("too many rows", error.message)
+      SchemaUtils.drop(User)
     }
   }
 
@@ -303,6 +323,7 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.load()
       FormSample.tb1.vBlock.fetchNextRecord(0)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      SchemaUtils.drop(User)
     }
   }
 
@@ -318,13 +339,13 @@ class VBlockTests : JApplicationTestBase() {
   fun `fetchNextRecord exec failed scenario test`() {
     FormSample.model
 
-      assertThrows(VExecFailedException::class.java) {
-        FormSample.tb1.vBlock.fetchNextRecord(0)
-      }
+    assertThrows(VExecFailedException::class.java) {
+      FormSample.tb1.vBlock.fetchNextRecord(5)
+    }
   }
 
   @Test
-  fun `save insert scenario test`() {
+  fun `save insert simple block scenario test`() {
     FormSample.model
 
     transaction {
@@ -342,19 +363,20 @@ class VBlockTests : JApplicationTestBase() {
 
       val listInfoUser = mutableListOf<Any?>()
 
-     User.selectAll().forEach {
-       listInfoUser.add(it[User.id])
-       listInfoUser.add(it[User.name])
-       listInfoUser.add(it[User.age])
-       listInfoUser.add(it[User.job])
-     }
-      assertEquals(listInfoUser, listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value))
-
+      User.selectAll().forEach {
+        listInfoUser.add(it[User.id])
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+      assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
+      SchemaUtils.drop(User)
+      SchemaUtils.dropSequence(userSequence)
     }
   }
 
   @Test
-  fun `save update scenario test`() {
+  fun `save update simple block scenario test`() {
     FormSample.model
 
     transaction {
@@ -386,8 +408,8 @@ class VBlockTests : JApplicationTestBase() {
         listInfoUser.add(it[User.age])
         listInfoUser.add(it[User.job])
       }
-      assertEquals(listInfoUser, listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value))
-
+      assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
+      SchemaUtils.drop(User)
     }
   }
 
@@ -436,18 +458,21 @@ class VBlockTests : JApplicationTestBase() {
         listInfoCenter.add(it[Center.mail])
       }
 
-      assertEquals(listInfoCenter, listOf(5,
-                                          form.multipleBlock.trainingId[0],
-                                          form.multipleBlock.centerName[0],
-                                          form.multipleBlock.address[0],
-                                          form.multipleBlock.mail[0],
-                                          6,
-                                          form.multipleBlock.trainingId[1],
-                                          form.multipleBlock.centerName[1],
-                                          form.multipleBlock.address[1],
-                                          form.multipleBlock.mail[1],
-                                          )
+      assertEquals(listOf(5,
+                          form.multipleBlock.trainingId[0],
+                          form.multipleBlock.centerName[0],
+                          form.multipleBlock.address[0],
+                          form.multipleBlock.mail[0],
+                          6,
+                          form.multipleBlock.trainingId[1],
+                          form.multipleBlock.centerName[1],
+                          form.multipleBlock.address[1],
+                          form.multipleBlock.mail[1],
+      ),
+                   listInfoCenter
       )
+      SchemaUtils.drop(Training, Center)
+      SchemaUtils.dropSequence(centerSequence)
     }
   }
 
@@ -504,7 +529,7 @@ class VBlockTests : JApplicationTestBase() {
 
       form.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
       form.multipleBlock.vBlock.setRecordFetched(0, true)
-       form.multipleBlock.vBlock.setRecordFetched(1, true)
+      form.multipleBlock.vBlock.setRecordFetched(1, true)
       form.multipleBlock.vBlock.save()
 
       val listInfoCenter = mutableListOf<Any?>()
@@ -517,17 +542,145 @@ class VBlockTests : JApplicationTestBase() {
         listInfoCenter.add(it[Center.mail])
       }
 
-      assertEquals(listInfoCenter, listOf(1,
-                                          form.multipleBlock.trainingId[0],
-                                          form.multipleBlock.centerName[0],
-                                          form.multipleBlock.address[0],
-                                          form.multipleBlock.mail[0],
-                                          2,
-                                          form.multipleBlock.trainingId[1],
-                                          form.multipleBlock.centerName[1],
-                                          form.multipleBlock.address[1],
-                                          form.multipleBlock.mail[1])
+      assertEquals(listOf(1,
+                          form.multipleBlock.trainingId[0],
+                          form.multipleBlock.centerName[0],
+                          form.multipleBlock.address[0],
+                          form.multipleBlock.mail[0],
+                          2,
+                          form.multipleBlock.trainingId[1],
+                          form.multipleBlock.centerName[1],
+                          form.multipleBlock.address[1],
+                          form.multipleBlock.mail[1]),
+                   listInfoCenter
       )
+      SchemaUtils.drop(Training, Center)
+      SchemaUtils.dropSequence(centerSequence)
     }
   }
+
+  @Test
+  fun `delete simple block scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 26
+        it[job] = "job"
+      }
+      var count = User.select { User.id eq 1 }.count()
+
+      assertEquals(1, count)
+
+      FormSample.tb1.id.value = 1
+      FormSample.tb1.uc.value = 0
+      FormSample.tb1.ts.value = 0
+      FormSample.tb1.name.value = "Houssem"
+      FormSample.tb1.age.value = 26
+      FormSample.tb1.job.value = "job"
+
+      FormSample.tb1.vBlock.setRecordFetched(0, true)
+      FormSample.tb1.vBlock.delete()
+
+      count = User.select { User.id eq 1 }.count()
+      assertEquals(0, count)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `delete multiple block scenario test`() {
+    val form = FormToTestSaveMultipleBlock()
+
+    form.model
+    transaction {
+      SchemaUtils.create(Training)
+      SchemaUtils.create(Center)
+      SchemaUtils.createSequence(centerSequence)
+      Training.insert {
+        it[id] = 1
+        it[trainingName] = "trainingName"
+        it[type] = 1
+        it[price] = Decimal("1149.24").value
+        it[active] = true
+      }
+      Center.insert {
+        it[id] = 1
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 1"
+        it[address] = "adresse 1"
+        it[mail] = "center1@gmail.com"
+      }
+      Center.insert {
+        it[id] = 2
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 2"
+        it[address] = "adresse 2"
+        it[mail] = "center2@gmail.com"
+      }
+      Center.insert {
+        it[id] = 3
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 3"
+        it[address] = "adresse 3"
+        it[mail] = "center3@gmail.com"
+      }
+      var count = Center.selectAll().count()
+
+      assertEquals(3, count)
+
+      form.multipleBlock.centerId[0] = 1
+      form.multipleBlock.ts[0] = 0
+      form.multipleBlock.uc[0] = 0
+      form.multipleBlock.trainingId[0] = 1
+      form.multipleBlock.centerName[0] = "center 111"
+      form.multipleBlock.address[0] = "adresse 111"
+      form.multipleBlock.mail[0] = "center111@gmail.com"
+
+      form.multipleBlock.centerId[1] = 2
+      form.multipleBlock.ts[1] = 0
+      form.multipleBlock.uc[1] = 0
+      form.multipleBlock.trainingId[1] = 1
+      form.multipleBlock.centerName[1] = "center 222"
+      form.multipleBlock.address[1] = "adresse 222"
+      form.multipleBlock.mail[1] = "center222@gmail.com"
+
+      form.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
+      form.multipleBlock.vBlock.setRecordFetched(0, true)
+      form.multipleBlock.vBlock.setRecordFetched(1, true)
+      form.multipleBlock.vBlock.delete()
+
+      count = Center.selectAll().count()
+      assertEquals(1, count)
+      SchemaUtils.drop(Training, Center)
+      SchemaUtils.dropSequence(centerSequence)
+    }
+  }
+
+  @Test
+  fun `getSearchColumns test`() {
+    FormSample.model
+
+    assertEquals(listOf(FormSample.tb1.id.columns?.getColumnsModels()?.get(0)?.column,
+                        FormSample.tb1.ts.columns?.getColumnsModels()?.get(0)?.column,
+                        FormSample.tb1.uc.columns?.getColumnsModels()?.get(0)?.column,
+                        FormSample.tb1.name.columns?.getColumnsModels()?.get(0)?.column,
+                        FormSample.tb1.age.columns?.getColumnsModels()?.get(0)?.column,
+                        FormSample.tb1.job.columns?.getColumnsModels()?.get(0)?.column,
+                        FormSample.tb1.cv.columns?.getColumnsModels()?.get(0)?.column),
+                 FormSample.tb1.vBlock.getSearchColumns()
+    )
+  }
+
 }
