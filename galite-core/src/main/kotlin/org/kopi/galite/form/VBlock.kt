@@ -28,7 +28,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.List
 import kotlin.collections.all
-import kotlin.collections.elementAt
 import kotlin.collections.filter
 import kotlin.collections.find
 import kotlin.collections.first
@@ -1376,7 +1375,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Sets visibility of block.
    */
   fun setAccess(value: Int) {
-    assert(this !== form.getActiveBlock() || activeField == null) { "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
+    assert(this !== form.getActiveBlock() || activeField == null) {
+      "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
     for (i in fields.indices) {
       fields[i].setAccess(value)
     }

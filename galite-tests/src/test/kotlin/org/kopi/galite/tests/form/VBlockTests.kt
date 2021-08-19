@@ -30,6 +30,7 @@ import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VQueryNoRowException
 import org.kopi.galite.form.VSkipRecordException
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
@@ -683,4 +684,190 @@ class VBlockTests : JApplicationTestBase() {
     )
   }
 
+  @Test
+  fun `load simple block scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 6
+        it[job] = "job"
+      }
+      FormSample.tb1.vBlock.load()
+
+      val listInfoUser = mutableListOf<Any?>()
+
+
+      User.selectAll().forEach {
+        listInfoUser.add(it[User.id])
+        listInfoUser.add(it[User.ts])
+        listInfoUser.add(it[User.uc])
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+      assertEquals(listOf(FormSample.tb1.id.value,
+                          FormSample.tb1.ts.value,
+                          FormSample.tb1.uc.value,
+                          FormSample.tb1.name.value,
+                          FormSample.tb1.age.value,
+                          FormSample.tb1.job.value),
+                   listInfoUser)
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `load with set id value simple block scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 6
+        it[job] = "job"
+      }
+      User.insert {
+        it[id] = 2
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Hichem"
+        it[age] = 27
+        it[job] = "work"
+      }
+
+      FormSample.tb1.vBlock.clear()
+      FormSample.tb1.id.value = 2
+      FormSample.tb1.age.value = 27
+      FormSample.tb1.vBlock.load()
+
+      val listInfoUser = mutableListOf<Any?>()
+
+      User.select { User.id eq 2 }.forEach {
+        listInfoUser.add(it[User.id])
+        listInfoUser.add(it[User.ts])
+        listInfoUser.add(it[User.uc])
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+
+      assertEquals(listOf(FormSample.tb1.id.value,
+                          FormSample.tb1.ts.value,
+                          FormSample.tb1.uc.value,
+                          FormSample.tb1.name.value,
+                          FormSample.tb1.age.value,
+                          FormSample.tb1.job.value),
+                   listInfoUser)
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `load no row exception scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      FormSample.tb1.id.value = 2
+      FormSample.tb1.age.value = 27
+
+      val error = assertThrows(VQueryNoRowException::class.java) { FormSample.tb1.vBlock.load() }
+
+      assertEquals("VIS-00022: No matching value found.", error.message)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `load multiple block scenario test`() {
+    val form = FormToTestSaveMultipleBlock()
+
+    form.model
+    transaction {
+      SchemaUtils.create(Training)
+      SchemaUtils.create(Center)
+      SchemaUtils.createSequence(centerSequence)
+      Training.insert {
+        it[id] = 1
+        it[trainingName] = "trainingName"
+        it[type] = 1
+        it[price] = Decimal("1149.24").value
+        it[active] = true
+      }
+      Center.insert {
+        it[id] = 1
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 1"
+        it[address] = "adresse 1"
+        it[mail] = "center1@gmail.com"
+      }
+      Center.insert {
+        it[id] = 2
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 2"
+        it[address] = "adresse 2"
+        it[mail] = "center2@gmail.com"
+      }
+      Center.insert {
+        it[id] = 3
+        it[uc] = 0
+        it[ts] = 0
+        it[refTraining] = 1
+        it[centerName] = "center 3"
+        it[address] = "adresse 3"
+        it[mail] = "center3@gmail.com"
+      }
+      form.multipleBlock.vBlock.clear()
+      form.multipleBlock.trainingId[0] = 1
+      form.multipleBlock.trainingId[1] = 1
+      form.multipleBlock.trainingId[2] = 1
+      form.multipleBlock.vBlock.load()
+
+      val listInfoCenter = mutableListOf<Any?>()
+
+      Center.selectAll().forEach {
+        listInfoCenter.add(it[Center.id])
+        listInfoCenter.add(it[Center.refTraining])
+        listInfoCenter.add(it[Center.centerName])
+        listInfoCenter.add(it[Center.address])
+        listInfoCenter.add(it[Center.mail])
+      }
+
+      assertEquals(listOf(form.multipleBlock.centerId[0],
+                          form.multipleBlock.trainingId[0],
+                          form.multipleBlock.centerName[0],
+                          form.multipleBlock.address[0],
+                          form.multipleBlock.mail[0],
+                          form.multipleBlock.centerId[1],
+                          form.multipleBlock.trainingId[1],
+                          form.multipleBlock.centerName[1],
+                          form.multipleBlock.address[1],
+                          form.multipleBlock.mail[1],
+                          form.multipleBlock.centerId[2],
+                          form.multipleBlock.trainingId[2],
+                          form.multipleBlock.centerName[2],
+                          form.multipleBlock.address[2],
+                          form.multipleBlock.mail[2]),
+                   listInfoCenter
+      )
+      SchemaUtils.drop(Training, Center)
+      SchemaUtils.dropSequence(centerSequence)
+    }
+  }
 }
