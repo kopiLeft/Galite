@@ -870,4 +870,110 @@ class VBlockTests : JApplicationTestBase() {
       SchemaUtils.dropSequence(centerSequence)
     }
   }
+
+  @Test
+  fun `fetchLookup valid scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 6
+        it[job] = "job"
+      }
+
+      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.tb1.id.value = 1
+      FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+
+      val listInfoUser = mutableListOf<Any?>()
+
+      User.selectAll().forEach {
+        listInfoUser.add(it[User.id])
+        listInfoUser.add(it[User.ts])
+        listInfoUser.add(it[User.uc])
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+
+      assertEquals(listOf(FormSample.tb1.id.value,
+                          FormSample.tb1.ts.value,
+                          FormSample.tb1.uc.value,
+                          FormSample.tb1.name.value,
+                          FormSample.tb1.age.value,
+                          FormSample.tb1.job.value),
+                   listInfoUser)
+    }
+  }
+
+  @Test
+  fun `fetchLookup no matching value exception scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+
+      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.tb1.id.value = 1
+
+      val vExecFailedException = assertThrows(VExecFailedException::class.java) {
+        FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+      }
+      assertEquals("VIS-00016: No matching value in User.", vExecFailedException.message)
+    }
+  }
+
+  @Test
+  fun `fetchLookup no table found exception scenario test`() {
+    FormSample.model
+
+    transaction {
+      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.tb1.id.value = 1
+
+      val vExecFailedException = assertThrows(VExecFailedException::class.java) {
+        FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+      }
+
+      assertEquals("XXXX !!!!org.h2.jdbc.JdbcSQLSyntaxErrorException: Table \"USER\" non trouvée",
+                   vExecFailedException.message!!.substring(0, vExecFailedException.message!!.indexOf("\n")))
+    }
+  }
+
+  @Test
+  fun `fetchLookup not unique value exception scenario test`() {
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 6
+        it[job] = "job"
+      }
+      User.insert {
+        it[id] = 1
+        it[ts] = 0
+        it[uc] = 0
+        it[name] = "Houssem"
+        it[age] = 6
+        it[job] = "job"
+      }
+      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.tb1.id.value = 1
+
+      val vExecFailedException = assertThrows(VExecFailedException::class.java) {
+        FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+      }
+      assertEquals("VIS-00020: The value in User is not unique.", vExecFailedException.message)
+    }
+  }
 }

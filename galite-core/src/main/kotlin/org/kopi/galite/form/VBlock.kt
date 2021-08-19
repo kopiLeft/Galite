@@ -2017,7 +2017,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       (name + " != "
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
-    val table: Int = fld!!.getColumn(0)!!.getTable()
+    val table = fld!!.getColumn(0)!!.getTable_()
 
     fetchLookup(table, fld)
   }
@@ -2033,32 +2033,32 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
     assert(fld!!.getColumnCount() == 1) { "column count: " + fld.getColumnCount() }
-    val table: Int = fld.getColumn(0)!!.getTable()
+    val table = fld.getColumn(0)!!.getTable_()
+
     fetchLookup(table, fld)
   }
 
-  protected fun fetchLookup(tableIndex: Int, currentField: VField) {
+  protected fun fetchLookup(table: Table, currentField: VField) {
     // clears all fields of lookup except the key(s)
     // the specified field is considered to be a key
-    val table = tables!![tableIndex]  // table to select from
     val columns = mutableListOf<Column<*>>()  // columns to select
     val conditions = mutableListOf<Op<Boolean>>()  // search conditions
 
     fields.forEach { field ->
-      if (field != currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
+      if (field != currentField && field.lookupColumn(table) != null && !field.isLookupKey(table)) {
         field.setNull(activeRecord)
       }
     }
 
     fields.forEach { field ->
-      val column : Column<*>? = field.lookupColumn(tables!![tableIndex])
+      val column : Column<*>? = field.lookupColumn(table)
 
       if (column != null) {
         // add column to select
         columns.add(column)
       }
 
-      if (field == currentField || field.isLookupKey(tableIndex)) {
+      if (field == currentField || field.isLookupKey(table)) {
         val condition = field.getSearchCondition(column!!)
 
         if (condition == null || condition !is EqOp) {
@@ -2068,34 +2068,25 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           return
         }
 
-        if (condition != null) {
-          conditions.add(condition)
-        }
+        conditions.add(condition)
+
       }
     }
 
     try {
-      transaction {
-        val condition: Op<Boolean> = conditions.compoundAnd()
-        val query = table.slice(columns).select(condition)
+      val result = table.slice(columns).select(conditions.compoundAnd()).single()
+      var j = 0
 
-        if (query.toList().isEmpty()) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(tables!![tableIndex])))
-
-        } else {
-          var j = 0
-
-          fields.forEach {
-            if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery(query.first(), it.getColumn(1 + j)!!.column)
-              j += 1
-            }
-          }
-          if (query.toList().isNotEmpty()) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(tables!![tableIndex])))
-          }
+      fields.forEach { field ->
+        if (field.lookupColumn(table) != null) {
+          field.setQuery(result, columns[j])
+          j++
         }
       }
+    } catch (noSuchElementException: NoSuchElementException) {
+      throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table.tableName)))
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(table.tableName)))
     } catch (e: SQLException) {
       throw VExecFailedException("XXXX !!!!" + e.message)
     }
