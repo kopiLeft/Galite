@@ -19,10 +19,6 @@ package org.kopi.galite.ui.vaadin.visual
 
 import java.io.File
 import java.io.Serializable
-import java.io.IOException
-import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.concurrent.ConcurrentLinkedQueue
 
 import org.kopi.galite.base.Utils
@@ -53,7 +49,6 @@ import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 
@@ -63,17 +58,8 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Anchor
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
-import com.vaadin.flow.server.InputStreamFactory
-import com.vaadin.flow.server.StreamResource
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -869,45 +855,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
 
   override fun fileProduced(file: File, name: String) {
     access(currentUI) {
-      val href = StreamResource(name, InputStreamFactory {
-        createFileInputStream(file.absolutePath)
-      })
-      val locale = application.defaultLocale.toString()
-      val download = Anchor(href, "")
-      val buttons = Div()
-      download.element.setAttribute("download", true)
+      val downloaderDialog = DownloaderDialog(file, name, application.defaultLocale.toString())
 
-      val downloadButton = Button(LocalizedProperties.getString(locale, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
-      val closeButton = Button(LocalizedProperties.getString(locale, "CLOSE"), Icon(VaadinIcon.CLOSE_CIRCLE))
-
-      downloadButton.isDisableOnClick = true
-      download.add(downloadButton)
-
-      val title = Div()
-      title.className ="download-file-title"
-
-      title.text = (LocalizedProperties.getString(locale, "downloadText") + ": $name")
-      buttons.add(download, closeButton)
-      buttons.className = "download-file-buttons"
-
-      val dialog = Dialog().also {
-        it.add(VerticalLayout(title, buttons))
-        it.open()
-      }
-
-      closeButton.addClickListener {
-        dialog.close()
-      }
-    }
-  }
-
-  private fun createFileInputStream(path: String): InputStream? {
-    return try {
-      Files.newInputStream(Paths.get(path))
-    } catch (e: IOException) {
-      throw RuntimeException(e)
-    } catch (e: InterruptedException) {
-      throw RuntimeException(e)
+      downloaderDialog.open()
     }
   }
 }

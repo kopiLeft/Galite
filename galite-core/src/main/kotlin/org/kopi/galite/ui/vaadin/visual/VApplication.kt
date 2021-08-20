@@ -90,7 +90,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   HasDynamicTitle {
 
   //---------------------------------------------------
-  // DATA MEMBEERS
+  // DATA MEMBERS
   //---------------------------------------------------
   internal var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
