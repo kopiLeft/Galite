@@ -21,6 +21,7 @@ import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -44,6 +45,75 @@ import org.kopi.galite.visual.VExecFailedException
 class VBlockTests : JApplicationTestBase() {
 
   val FormWithList = FormWithList()
+  val formMultiple = FormToTestSaveMultipleBlock()
+
+  fun initSampleFormTables() {
+    SchemaUtils.create(User)
+    User.insert {
+      it[id] = 1
+      it[name] = "AUDREY"
+      it[age] = 26
+      it[ts] = 0
+      it[uc] = 0
+      it[job] = "job"
+    }
+    User.insert {
+      it[id] = 3
+      it[name] = "Fabienne BUGHIN"
+      it[age] = 25
+      it[ts] = 0
+      it[uc] = 0
+      it[job] = "job"
+    }
+    User.insert {
+      it[id] = 4
+      it[name] = "FABIENNE BUGHIN2"
+      it[age] = 27
+      it[ts] = 0
+      it[uc] = 0
+      it[job] = "job"
+    }
+  }
+
+  fun initMultipleBlockFormTables() {
+    SchemaUtils.create(Training)
+    SchemaUtils.create(Center)
+    SchemaUtils.createSequence(centerSequence)
+    Training.insert {
+      it[id] = 1
+      it[trainingName] = "trainingName"
+      it[type] = 1
+      it[price] = Decimal("1149.24").value
+      it[active] = true
+    }
+    Center.insert {
+      it[id] = 1
+      it[uc] = 0
+      it[ts] = 0
+      it[refTraining] = 1
+      it[centerName] = "center 1"
+      it[address] = "adresse 1"
+      it[mail] = "center1@gmail.com"
+    }
+    Center.insert {
+      it[id] = 2
+      it[uc] = 0
+      it[ts] = 0
+      it[refTraining] = 1
+      it[centerName] = "center 2"
+      it[address] = "adresse 2"
+      it[mail] = "center2@gmail.com"
+    }
+    Center.insert {
+      it[id] = 3
+      it[uc] = 0
+      it[ts] = 0
+      it[refTraining] = 1
+      it[centerName] = "center 3"
+      it[address] = "adresse 3"
+      it[mail] = "center3@gmail.com"
+    }
+  }
 
   @Test
   fun deleteRecordTest() {
@@ -51,29 +121,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.tb1.id.value = 1
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[name] = "AUDREY"
-        it[age] = 23
-        it[ts] = 0
-        it[uc] = 0
-      }
-      User.insert {
-        it[id] = 3
-        it[name] = "Fabienne BUGHIN"
-        it[age] = 25
-        it[ts] = 0
-        it[uc] = 0
-      }
-      User.insert {
-        it[id] = 4
-        it[name] = "FABIENNE BUGHIN2"
-        it[age] = 23
-        it[ts] = 0
-        it[uc] = 0
-      }
-
+      initSampleFormTables()
       val query = User.slice(User.name, User.age).selectAll()
 
       FormSample.tb1.vBlock.deleteRecord(0)
@@ -83,7 +131,7 @@ class VBlockTests : JApplicationTestBase() {
 
       assertCollectionsEquals(mutableListOf(
           mutableListOf("Fabienne BUGHIN", 25),
-          mutableListOf("FABIENNE BUGHIN2", 23)
+          mutableListOf("FABIENNE BUGHIN2", 27)
         ), deleteRecordList
       )
       SchemaUtils.drop(User)
@@ -260,12 +308,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-      }
+      initSampleFormTables()
       FormSample.tb1.vBlock.fetchRecord(1)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
       SchemaUtils.drop(User)
@@ -292,11 +335,7 @@ class VBlockTests : JApplicationTestBase() {
 
     transaction {
       SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-      }
+      initSampleFormTables()
       User.insert {
         it[id] = 1
         it[ts] = 0
@@ -314,15 +353,20 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-        it[age] = 6
-      }
+      initSampleFormTables()
+      FormSample.tb1.name.value = "AUDREY"
+      FormSample.tb1.age.value = 26
       FormSample.tb1.vBlock.load()
       FormSample.tb1.vBlock.fetchNextRecord(0)
+      val listInfoUser = mutableListOf<Any?>()
+
+      User.select { User.name.eq("AUDREY") and User.age.eq(26) }.forEach {
+        listInfoUser.add(it[User.id])
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+      assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
       SchemaUtils.drop(User)
     }
@@ -382,14 +426,7 @@ class VBlockTests : JApplicationTestBase() {
 
     transaction {
       SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-        it[name] = "Houssem"
-        it[age] = 26
-        it[job] = "job"
-      }
+      initSampleFormTables()
 
       FormSample.tb1.id.value = 1
       FormSample.tb1.uc.value = 0
@@ -403,7 +440,7 @@ class VBlockTests : JApplicationTestBase() {
 
       val listInfoUser = mutableListOf<Any?>()
 
-      User.selectAll().forEach {
+      User.select { User.id eq 1 }.forEach {
         listInfoUser.add(it[User.id])
         listInfoUser.add(it[User.name])
         listInfoUser.add(it[User.age])
@@ -416,9 +453,7 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun `save insert multiple block scenario test`() {
-    val form = FormToTestSaveMultipleBlock()
-
-    form.model
+    formMultiple.model
     transaction {
       SchemaUtils.create(Training)
       SchemaUtils.create(Center)
@@ -431,23 +466,23 @@ class VBlockTests : JApplicationTestBase() {
         it[active] = true
       }
 
-      form.multipleBlock.ts[0] = 0
-      form.multipleBlock.uc[0] = 0
-      form.multipleBlock.trainingId[0] = 1
-      form.multipleBlock.centerName[0] = "center 1"
-      form.multipleBlock.address[0] = "adresse 1"
-      form.multipleBlock.mail[0] = "center1@gmail.com"
+      formMultiple.multipleBlock.ts[0] = 0
+      formMultiple.multipleBlock.uc[0] = 0
+      formMultiple.multipleBlock.trainingId[0] = 1
+      formMultiple.multipleBlock.centerName[0] = "center 1"
+      formMultiple.multipleBlock.address[0] = "adresse 1"
+      formMultiple.multipleBlock.mail[0] = "center1@gmail.com"
 
-      form.multipleBlock.ts[1] = 0
-      form.multipleBlock.uc[1] = 0
-      form.multipleBlock.trainingId[1] = 1
-      form.multipleBlock.centerName[1] = "center 2"
-      form.multipleBlock.address[1] = "adresse 2"
-      form.multipleBlock.mail[1] = "center2@gmail.com"
+      formMultiple.multipleBlock.ts[1] = 0
+      formMultiple.multipleBlock.uc[1] = 0
+      formMultiple.multipleBlock.trainingId[1] = 1
+      formMultiple.multipleBlock.centerName[1] = "center 2"
+      formMultiple.multipleBlock.address[1] = "adresse 2"
+      formMultiple.multipleBlock.mail[1] = "center2@gmail.com"
 
 
-      form.multipleBlock.vBlock.setMode(VConstants.MOD_INSERT)
-      form.multipleBlock.vBlock.save()
+      formMultiple.multipleBlock.vBlock.setMode(VConstants.MOD_INSERT)
+      formMultiple.multipleBlock.vBlock.save()
 
       val listInfoCenter = mutableListOf<Any?>()
 
@@ -459,16 +494,16 @@ class VBlockTests : JApplicationTestBase() {
         listInfoCenter.add(it[Center.mail])
       }
 
-      assertEquals(listOf(5,
-                          form.multipleBlock.trainingId[0],
-                          form.multipleBlock.centerName[0],
-                          form.multipleBlock.address[0],
-                          form.multipleBlock.mail[0],
-                          6,
-                          form.multipleBlock.trainingId[1],
-                          form.multipleBlock.centerName[1],
-                          form.multipleBlock.address[1],
-                          form.multipleBlock.mail[1],
+      assertEquals(listOf(formMultiple.multipleBlock.centerId[0],
+                          formMultiple.multipleBlock.trainingId[0],
+                          formMultiple.multipleBlock.centerName[0],
+                          formMultiple.multipleBlock.address[0],
+                          formMultiple.multipleBlock.mail[0],
+                          formMultiple.multipleBlock.centerId[1],
+                          formMultiple.multipleBlock.trainingId[1],
+                          formMultiple.multipleBlock.centerName[1],
+                          formMultiple.multipleBlock.address[1],
+                          formMultiple.multipleBlock.mail[1],
       ),
                    listInfoCenter
       )
@@ -479,59 +514,38 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun `save update multiple block scenario test`() {
-    val form = FormToTestSaveMultipleBlock()
-
-    form.model
+    formMultiple.model
     transaction {
-      SchemaUtils.create(Training)
-      SchemaUtils.create(Center)
-      SchemaUtils.createSequence(centerSequence)
-      Training.insert {
-        it[id] = 1
-        it[trainingName] = "trainingName"
-        it[type] = 1
-        it[price] = Decimal("1149.24").value
-        it[active] = true
-      }
-      Center.insert {
-        it[id] = 1
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 1"
-        it[address] = "adresse 1"
-        it[mail] = "center1@gmail.com"
-      }
-      Center.insert {
-        it[id] = 2
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 2"
-        it[address] = "adresse 2"
-        it[mail] = "center2@gmail.com"
-      }
+      initMultipleBlockFormTables()
+      formMultiple.multipleBlock.centerId[0] = 1
+      formMultiple.multipleBlock.ts[0] = 0
+      formMultiple.multipleBlock.uc[0] = 0
+      formMultiple.multipleBlock.trainingId[0] = 1
+      formMultiple.multipleBlock.centerName[0] = "center 111"
+      formMultiple.multipleBlock.address[0] = "adresse 111"
+      formMultiple.multipleBlock.mail[0] = "center111@gmail.com"
 
-      form.multipleBlock.centerId[0] = 1
-      form.multipleBlock.ts[0] = 0
-      form.multipleBlock.uc[0] = 0
-      form.multipleBlock.trainingId[0] = 1
-      form.multipleBlock.centerName[0] = "center 111"
-      form.multipleBlock.address[0] = "adresse 111"
-      form.multipleBlock.mail[0] = "center111@gmail.com"
+      formMultiple.multipleBlock.centerId[1] = 2
+      formMultiple.multipleBlock.ts[1] = 0
+      formMultiple.multipleBlock.uc[1] = 0
+      formMultiple.multipleBlock.trainingId[1] = 1
+      formMultiple.multipleBlock.centerName[1] = "center 222"
+      formMultiple.multipleBlock.address[1] = "adresse 222"
+      formMultiple.multipleBlock.mail[1] = "center222@gmail.com"
 
-      form.multipleBlock.centerId[1] = 2
-      form.multipleBlock.ts[1] = 0
-      form.multipleBlock.uc[1] = 0
-      form.multipleBlock.trainingId[1] = 1
-      form.multipleBlock.centerName[1] = "center 222"
-      form.multipleBlock.address[1] = "adresse 222"
-      form.multipleBlock.mail[1] = "center222@gmail.com"
+      formMultiple.multipleBlock.centerId[2] = 3
+      formMultiple.multipleBlock.ts[2] = 0
+      formMultiple.multipleBlock.uc[2] = 0
+      formMultiple.multipleBlock.trainingId[2] = 1
+      formMultiple.multipleBlock.centerName[2] = "center 333"
+      formMultiple.multipleBlock.address[2] = "adresse 333"
+      formMultiple.multipleBlock.mail[2] = "center333@gmail.com"
 
-      form.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
-      form.multipleBlock.vBlock.setRecordFetched(0, true)
-      form.multipleBlock.vBlock.setRecordFetched(1, true)
-      form.multipleBlock.vBlock.save()
+      formMultiple.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
+      formMultiple.multipleBlock.vBlock.setRecordFetched(0, true)
+      formMultiple.multipleBlock.vBlock.setRecordFetched(1, true)
+      formMultiple.multipleBlock.vBlock.setRecordFetched(2, true)
+      formMultiple.multipleBlock.vBlock.save()
 
       val listInfoCenter = mutableListOf<Any?>()
 
@@ -543,16 +557,21 @@ class VBlockTests : JApplicationTestBase() {
         listInfoCenter.add(it[Center.mail])
       }
 
-      assertEquals(listOf(1,
-                          form.multipleBlock.trainingId[0],
-                          form.multipleBlock.centerName[0],
-                          form.multipleBlock.address[0],
-                          form.multipleBlock.mail[0],
-                          2,
-                          form.multipleBlock.trainingId[1],
-                          form.multipleBlock.centerName[1],
-                          form.multipleBlock.address[1],
-                          form.multipleBlock.mail[1]),
+      assertEquals(listOf(formMultiple.multipleBlock.centerId[0],
+                          formMultiple.multipleBlock.trainingId[0],
+                          formMultiple.multipleBlock.centerName[0],
+                          formMultiple.multipleBlock.address[0],
+                          formMultiple.multipleBlock.mail[0],
+                          formMultiple.multipleBlock.centerId[1],
+                          formMultiple.multipleBlock.trainingId[1],
+                          formMultiple.multipleBlock.centerName[1],
+                          formMultiple.multipleBlock.address[1],
+                          formMultiple.multipleBlock.mail[1],
+                          formMultiple.multipleBlock.centerId[2],
+                          formMultiple.multipleBlock.trainingId[2],
+                          formMultiple.multipleBlock.centerName[2],
+                          formMultiple.multipleBlock.address[2],
+                          formMultiple.multipleBlock.mail[2]),
                    listInfoCenter
       )
       SchemaUtils.drop(Training, Center)
@@ -565,15 +584,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-        it[name] = "Houssem"
-        it[age] = 26
-        it[job] = "job"
-      }
+      initSampleFormTables()
       var count = User.select { User.id eq 1 }.count()
 
       assertEquals(1, count)
@@ -581,8 +592,8 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.id.value = 1
       FormSample.tb1.uc.value = 0
       FormSample.tb1.ts.value = 0
-      FormSample.tb1.name.value = "Houssem"
-      FormSample.tb1.age.value = 26
+      FormSample.tb1.name.value = "AUDREY"
+      FormSample.tb1.age.value = 23
       FormSample.tb1.job.value = "job"
 
       FormSample.tb1.vBlock.setRecordFetched(0, true)
@@ -596,71 +607,33 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun `delete multiple block scenario test`() {
-    val form = FormToTestSaveMultipleBlock()
-
-    form.model
+    formMultiple.model
     transaction {
-      SchemaUtils.create(Training)
-      SchemaUtils.create(Center)
-      SchemaUtils.createSequence(centerSequence)
-      Training.insert {
-        it[id] = 1
-        it[trainingName] = "trainingName"
-        it[type] = 1
-        it[price] = Decimal("1149.24").value
-        it[active] = true
-      }
-      Center.insert {
-        it[id] = 1
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 1"
-        it[address] = "adresse 1"
-        it[mail] = "center1@gmail.com"
-      }
-      Center.insert {
-        it[id] = 2
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 2"
-        it[address] = "adresse 2"
-        it[mail] = "center2@gmail.com"
-      }
-      Center.insert {
-        it[id] = 3
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 3"
-        it[address] = "adresse 3"
-        it[mail] = "center3@gmail.com"
-      }
+      initMultipleBlockFormTables()
       var count = Center.selectAll().count()
 
       assertEquals(3, count)
 
-      form.multipleBlock.centerId[0] = 1
-      form.multipleBlock.ts[0] = 0
-      form.multipleBlock.uc[0] = 0
-      form.multipleBlock.trainingId[0] = 1
-      form.multipleBlock.centerName[0] = "center 111"
-      form.multipleBlock.address[0] = "adresse 111"
-      form.multipleBlock.mail[0] = "center111@gmail.com"
+      formMultiple.multipleBlock.centerId[0] = 1
+      formMultiple.multipleBlock.ts[0] = 0
+      formMultiple.multipleBlock.uc[0] = 0
+      formMultiple.multipleBlock.trainingId[0] = 1
+      formMultiple.multipleBlock.centerName[0] = "center 111"
+      formMultiple.multipleBlock.address[0] = "adresse 111"
+      formMultiple.multipleBlock.mail[0] = "center111@gmail.com"
 
-      form.multipleBlock.centerId[1] = 2
-      form.multipleBlock.ts[1] = 0
-      form.multipleBlock.uc[1] = 0
-      form.multipleBlock.trainingId[1] = 1
-      form.multipleBlock.centerName[1] = "center 222"
-      form.multipleBlock.address[1] = "adresse 222"
-      form.multipleBlock.mail[1] = "center222@gmail.com"
+      formMultiple.multipleBlock.centerId[1] = 2
+      formMultiple.multipleBlock.ts[1] = 0
+      formMultiple.multipleBlock.uc[1] = 0
+      formMultiple.multipleBlock.trainingId[1] = 1
+      formMultiple.multipleBlock.centerName[1] = "center 222"
+      formMultiple.multipleBlock.address[1] = "adresse 222"
+      formMultiple.multipleBlock.mail[1] = "center222@gmail.com"
 
-      form.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
-      form.multipleBlock.vBlock.setRecordFetched(0, true)
-      form.multipleBlock.vBlock.setRecordFetched(1, true)
-      form.multipleBlock.vBlock.delete()
+      formMultiple.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
+      formMultiple.multipleBlock.vBlock.setRecordFetched(0, true)
+      formMultiple.multipleBlock.vBlock.setRecordFetched(1, true)
+      formMultiple.multipleBlock.vBlock.delete()
 
       count = Center.selectAll().count()
       assertEquals(1, count)
@@ -695,13 +668,13 @@ class VBlockTests : JApplicationTestBase() {
         it[ts] = 0
         it[uc] = 0
         it[name] = "Houssem"
-        it[age] = 6
+        it[age] = 26
         it[job] = "job"
       }
+      FormSample.tb1.vBlock.clear()
       FormSample.tb1.vBlock.load()
 
       val listInfoUser = mutableListOf<Any?>()
-
 
       User.selectAll().forEach {
         listInfoUser.add(it[User.id])
@@ -728,32 +701,16 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-        it[name] = "Houssem"
-        it[age] = 6
-        it[job] = "job"
-      }
-      User.insert {
-        it[id] = 2
-        it[ts] = 0
-        it[uc] = 0
-        it[name] = "Hichem"
-        it[age] = 27
-        it[job] = "work"
-      }
+      initSampleFormTables()
 
       FormSample.tb1.vBlock.clear()
-      FormSample.tb1.id.value = 2
-      FormSample.tb1.age.value = 27
+      FormSample.tb1.id.value = 3
+      FormSample.tb1.age.value = 25
       FormSample.tb1.vBlock.load()
 
       val listInfoUser = mutableListOf<Any?>()
 
-      User.select { User.id eq 2 }.forEach {
+      User.select { User.id eq 3 }.forEach {
         listInfoUser.add(it[User.id])
         listInfoUser.add(it[User.ts])
         listInfoUser.add(it[User.uc])
@@ -779,7 +736,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
+      initSampleFormTables()
       FormSample.tb1.id.value = 2
       FormSample.tb1.age.value = 27
 
@@ -792,52 +749,14 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun `load multiple block scenario test`() {
-    val form = FormToTestSaveMultipleBlock()
-
-    form.model
+    formMultiple.model
     transaction {
-      SchemaUtils.create(Training)
-      SchemaUtils.create(Center)
-      SchemaUtils.createSequence(centerSequence)
-      Training.insert {
-        it[id] = 1
-        it[trainingName] = "trainingName"
-        it[type] = 1
-        it[price] = Decimal("1149.24").value
-        it[active] = true
-      }
-      Center.insert {
-        it[id] = 1
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 1"
-        it[address] = "adresse 1"
-        it[mail] = "center1@gmail.com"
-      }
-      Center.insert {
-        it[id] = 2
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 2"
-        it[address] = "adresse 2"
-        it[mail] = "center2@gmail.com"
-      }
-      Center.insert {
-        it[id] = 3
-        it[uc] = 0
-        it[ts] = 0
-        it[refTraining] = 1
-        it[centerName] = "center 3"
-        it[address] = "adresse 3"
-        it[mail] = "center3@gmail.com"
-      }
-      form.multipleBlock.vBlock.clear()
-      form.multipleBlock.trainingId[0] = 1
-      form.multipleBlock.trainingId[1] = 1
-      form.multipleBlock.trainingId[2] = 1
-      form.multipleBlock.vBlock.load()
+      initMultipleBlockFormTables()
+      formMultiple.multipleBlock.vBlock.clear()
+      formMultiple.multipleBlock.trainingId[0] = 1
+      formMultiple.multipleBlock.trainingId[1] = 1
+      formMultiple.multipleBlock.trainingId[2] = 1
+      formMultiple.multipleBlock.vBlock.load()
 
       val listInfoCenter = mutableListOf<Any?>()
 
@@ -849,21 +768,21 @@ class VBlockTests : JApplicationTestBase() {
         listInfoCenter.add(it[Center.mail])
       }
 
-      assertEquals(listOf(form.multipleBlock.centerId[0],
-                          form.multipleBlock.trainingId[0],
-                          form.multipleBlock.centerName[0],
-                          form.multipleBlock.address[0],
-                          form.multipleBlock.mail[0],
-                          form.multipleBlock.centerId[1],
-                          form.multipleBlock.trainingId[1],
-                          form.multipleBlock.centerName[1],
-                          form.multipleBlock.address[1],
-                          form.multipleBlock.mail[1],
-                          form.multipleBlock.centerId[2],
-                          form.multipleBlock.trainingId[2],
-                          form.multipleBlock.centerName[2],
-                          form.multipleBlock.address[2],
-                          form.multipleBlock.mail[2]),
+      assertEquals(listOf(formMultiple.multipleBlock.centerId[0],
+                          formMultiple.multipleBlock.trainingId[0],
+                          formMultiple.multipleBlock.centerName[0],
+                          formMultiple.multipleBlock.address[0],
+                          formMultiple.multipleBlock.mail[0],
+                          formMultiple.multipleBlock.centerId[1],
+                          formMultiple.multipleBlock.trainingId[1],
+                          formMultiple.multipleBlock.centerName[1],
+                          formMultiple.multipleBlock.address[1],
+                          formMultiple.multipleBlock.mail[1],
+                          formMultiple.multipleBlock.centerId[2],
+                          formMultiple.multipleBlock.trainingId[2],
+                          formMultiple.multipleBlock.centerName[2],
+                          formMultiple.multipleBlock.address[2],
+                          formMultiple.multipleBlock.mail[2]),
                    listInfoCenter
       )
       SchemaUtils.drop(Training, Center)
@@ -876,15 +795,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-        it[name] = "Houssem"
-        it[age] = 6
-        it[job] = "job"
-      }
+      initSampleFormTables()
 
       FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
       FormSample.tb1.id.value = 1
@@ -892,7 +803,7 @@ class VBlockTests : JApplicationTestBase() {
 
       val listInfoUser = mutableListOf<Any?>()
 
-      User.selectAll().forEach {
+      User.select { User.name.eq("AUDREY") and User.age.eq(26) }.forEach {
         listInfoUser.add(it[User.id])
         listInfoUser.add(it[User.ts])
         listInfoUser.add(it[User.uc])
@@ -908,6 +819,7 @@ class VBlockTests : JApplicationTestBase() {
                           FormSample.tb1.age.value,
                           FormSample.tb1.job.value),
                    listInfoUser)
+      SchemaUtils.drop(User)
     }
   }
 
@@ -916,15 +828,16 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
+      initSampleFormTables()
 
       FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
-      FormSample.tb1.id.value = 1
+      FormSample.tb1.id.value = 2
 
       val vExecFailedException = assertThrows(VExecFailedException::class.java) {
         FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
       }
       assertEquals("VIS-00016: No matching value in User.", vExecFailedException.message)
+      SchemaUtils.drop(User)
     }
   }
 
@@ -950,15 +863,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[ts] = 0
-        it[uc] = 0
-        it[name] = "Houssem"
-        it[age] = 6
-        it[job] = "job"
-      }
+      initSampleFormTables()
       User.insert {
         it[id] = 1
         it[ts] = 0
@@ -974,6 +879,39 @@ class VBlockTests : JApplicationTestBase() {
         FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
       }
       assertEquals("VIS-00020: The value in User is not unique.", vExecFailedException.message)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `buildQueryDialog test`() {
+    FormSample.model
+
+    transaction {
+      initSampleFormTables()
+      FormSample.tb1.vBlock.clear()
+
+      val query = FormSample.tb1.vBlock.buildQueryDialog()!!
+      val listInfoUser = mutableListOf<Any?>()
+
+      User.selectAll().forEach {
+        listInfoUser.add(it[User.name])
+        listInfoUser.add(it[User.age])
+        listInfoUser.add(it[User.job])
+      }
+
+      assertEquals(listOf(query.data[0][0],
+                          query.data[1][0],
+                          query.data[2][0],
+                          query.data[0][2],
+                          query.data[1][2],
+                          query.data[2][2],
+                          query.data[0][1],
+                          query.data[1][1],
+                          query.data[2][1]
+                          ),
+                   listInfoUser)
+      SchemaUtils.drop(User)
     }
   }
 }

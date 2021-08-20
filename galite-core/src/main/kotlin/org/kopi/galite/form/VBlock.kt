@@ -2166,7 +2166,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * Warning, you should use this method inside a transaction
    */
-  fun Transaction.buildQueryDialog(): VListDialog? {
+  fun buildQueryDialog(): VListDialog? {
     val query_tab = arrayOfNulls<VField>(fields.size)
     var query_cnt = 0
 

@@ -139,7 +139,7 @@ class FormSample_ : Form() {
   }
 }
 
-class TestBlock : FormBlock(1, 1, "Test block") {
+class TestBlock : FormBlock(1, 5, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -163,7 +163,9 @@ class TestBlock : FormBlock(1, 1, "Test block") {
   val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
-    columns(u.name)
+    columns(u.name) {
+      priority = 1
+    }
   }
   val password = mustFill(domain = STRING(20), position = at(2, 1)) {
     label = "password"
@@ -184,7 +186,6 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     minValue = 0
     maxValue = 90
     columns(u.age) {
-      index = i
       priority = 1
     }
     trigger(POSTCHG) {
@@ -195,7 +196,9 @@ class TestBlock : FormBlock(1, 1, "Test block") {
   val job = visit(domain = STRING(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
-    columns(u.job)
+    columns(u.job) {
+      priority = 1
+    }
   }
   val cv = visit(domain = STRING(20), position = at(4, 1)) {
     label = "Cv"
