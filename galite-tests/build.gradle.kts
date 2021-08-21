@@ -16,6 +16,7 @@
  */
 
 import org.kopi.galite.gradle.Versions
+import org.kopi.galite.gradle.excludeWebJars
 
 plugins {
   kotlin("jvm") apply true
@@ -79,11 +80,4 @@ dependencyManagement {
   imports {
     mavenBom("com.vaadin:vaadin-bom:${Versions.VAADIN}")
   }
-}
-
-fun ExternalModuleDependency.excludeWebJars() {
-  listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-         "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-         "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-          .forEach { group -> exclude(group = group) }
 }

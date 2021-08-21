@@ -16,6 +16,7 @@
  */
 
 import org.kopi.galite.gradle.Versions
+import org.kopi.galite.gradle.excludeWebJars
 
 plugins {
   kotlin("jvm") apply true
@@ -30,10 +31,7 @@ dependencies {
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-           "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-           "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
+    excludeWebJars()
   }
 
   // Itext dependency
