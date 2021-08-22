@@ -70,7 +70,7 @@ open class DTextField(
     }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    field.field.addTextValueChangeListener {
+    field.inputField.addTextValueChangeListener {
       if(it.isFromClient) {
         valueChanged()
       }

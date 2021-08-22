@@ -69,7 +69,7 @@ object Purchase: Table("PURCHASE") {
 object Product : Table("PRODUCTS") {
   val idPdt = integer("ID").autoIncrement()
   val description = varchar("DESCRIPTION", 50)
-  val category = varchar("CATEGORY", 30)
+  val category = integer("CATEGORY")
   val department = varchar("DEPARTMENT", 10)
   val supplier = varchar("SUPPLIER", 20)
   val taxName = varchar("TAX", 20).references(TaxRule.taxName)
@@ -261,10 +261,10 @@ fun addClient(id: Int,
 }
 
 fun addProducts() {
-  addProduct(0, "description Product 0", "cat 1", "tax 1", "Men", "Supplier 0", Decimal("263").value)
-  addProduct(1, "description Product 1", "cat 2", "tax 2", "Men","Supplier 0", Decimal("314").value)
-  addProduct(2, "description Product 2", "cat 3", "tax 2", "Women","Supplier 0", Decimal("180").value)
-  addProduct(3, "description Product 3", "cat 1", "tax 3", "Children","Supplier 0", Decimal("65").value)
+  addProduct(0, "description Product 0", 1, "tax 1", "Men", "Supplier 0", Decimal("263").value)
+  addProduct(1, "description Product 1", 2, "tax 2", "Men","Supplier 0", Decimal("314").value)
+  addProduct(2, "description Product 2", 3, "tax 2", "Women","Supplier 0", Decimal("180").value)
+  addProduct(3, "description Product 3", 1, "tax 3", "Children","Supplier 0", Decimal("65").value)
 }
 
 fun addSales() {
@@ -274,7 +274,7 @@ fun addSales() {
   addSale(1, 3, 3)
 }
 
-fun addProduct(id: Int, description: String, category: String, taxName: String, department: String, supplier: String, price: BigDecimal) {
+fun addProduct(id: Int, description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
   Product.insert {
     it[idPdt] = id
     it[Product.description] = description

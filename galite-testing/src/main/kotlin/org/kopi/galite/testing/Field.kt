@@ -19,17 +19,23 @@ package org.kopi.galite.testing
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.dsl.FormField
+import org.kopi.galite.type.Timestamp
 import org.kopi.galite.ui.vaadin.form.DField
+import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTimestampField
 import org.kopi.galite.ui.vaadin.main.MainWindow
 
 import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._fireDomEvent
 import com.github.mvysny.kaributesting.v10._fireEvent
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.HasValueAndElement
 import com.vaadin.flow.component.grid.Grid
 
@@ -57,13 +63,46 @@ fun <T> FormField<T>.edit(value: T): UField {
     field.wrappedField
   }
 
+  if(editorField is GridEditorBooleanField) {
+    editorField._fireDomEvent("mouseover")
+  }
+
+  (editorField as ClickNotifier<*>)._clickAndWait(100)
+
   val oldValue = editorField._value
 
   editorField as HasValueAndElement<ComponentValueChangeEvent<*, Any?>, Any?>
-  editorField._value = value
+
+  when (editorField) {
+    is GridEditorTimestampField -> {
+      editorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
+    }
+    is GridEditorTextField -> {
+      editorField._value = value.toString()
+    }
+    else -> {
+      editorField._value = value
+    }
+  }
   editorField._fireEvent(ComponentValueChangeEvent<Component, Any?>(editorField, editorField, oldValue, true))
 
   return field
+}
+
+/**
+ * Finds the Vaadin field component of this form field.
+ */
+fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<*>, *> {
+  val mainWindow = _get<MainWindow>()
+
+  return if (block.vBlock.isMulti()) {
+    mainWindow
+      ._find<Grid.Column<*>>()
+      .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq vField }
+      .editorComponent as GridEditorField<*>
+  } else {
+    mainWindow._find<DField>().single { it.getModel() eq vField }.wrappedField
+  } as HasValue<HasValue.ValueChangeEvent<*>, *>
 }
 
 /**
@@ -88,7 +127,7 @@ fun <T> FormField<T>.click(): UField {
     field.wrappedField
   }
 
-  (editorField as ClickNotifier<*>)._clickAndWait()
+  (editorField as ClickNotifier<*>)._clickAndWait(50)
 
   return field
 }

@@ -25,8 +25,8 @@ import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Provider
 
 import org.kopi.galite.demo.Stock
-import org.kopi.galite.demo.bill.BillR
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -106,17 +106,17 @@ class StockR : Report() {
     }
   }
 
-  val description = field(Domain<String>(25)) {
+  val description = field(STRING(25)) {
     label = "Description"
     help = "The product description"
     align = FieldAlignment.LEFT
   }
-  val nameProvider = field(Domain<String>(25)) {
+  val nameProvider = field(STRING(25)) {
     label = "Provider name"
     help = "The provider name"
     align = FieldAlignment.LEFT
   }
-  val minAlert = field(Domain<Int>(25)) {
+  val minAlert = field(INT(25)) {
     label = "Min Alert"
     help = "The stock's min alert"
     align = FieldAlignment.LEFT

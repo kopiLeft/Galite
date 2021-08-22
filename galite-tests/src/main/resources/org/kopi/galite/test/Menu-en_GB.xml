@@ -7,6 +7,7 @@
     <!--Forms-->
     <module ident="2000" label="FORMS" />
     <module ident="2001" label="Form with list" />
-    <module ident="2002" label="Clients form" />
+    <module ident="2002" label="Form example" />
     <module ident="2003" label="Form to test multiple block" />
+    <module ident="2004" label="Form to test saving data of multiple block" />
 </modules>

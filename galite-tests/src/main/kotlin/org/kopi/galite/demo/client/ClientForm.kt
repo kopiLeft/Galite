@@ -18,22 +18,21 @@ package org.kopi.galite.demo.client
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Purchase
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.BOOL
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Decimal
-
 import org.kopi.galite.visual.VExecFailedException
-
-import org.jetbrains.exposed.sql.transactions.transaction
-
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -152,53 +151,53 @@ class ClientForm : ReportSelectionForm() {
   inner class Clients : FormBlock(1, 100, "Clients") {
     val c = table(Client)
 
-    val idClt = visit(domain = Domain<Int>(30), position = at(1, 1..2)) {
+    val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
       columns(c.idClt)
       value = 1
     }
-    val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
+    val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
       label = "First Name"
       help = "The client first name"
       columns(c.firstNameClt)
     }
-    val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
+    val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
       label = "Last name"
       help = "The client last name"
       columns(c.lastNameClt)
     }
-    val ageClt = visit(domain = Domain<Int>(3), position = at(2, 3)) {
+    val ageClt = visit(domain = INT(3), position = at(2, 3)) {
       label = "Age"
       help = "The client age"
       columns(c.ageClt)
     }
-    val email = visit(domain = Domain<String>(25), position = at(3, 1)) {
+    val email = visit(domain = STRING(25), position = at(3, 1)) {
       label = "Email"
       help = "The mail adress"
       columns(c.mail)
     }
-    val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
+    val addressClt = visit(domain = STRING(20), position = at(3, 2)) {
       label = "Address"
       help = "The client address"
       columns(c.addressClt)
     }
-    val countryClt = visit(domain = Domain<String>(12), position = at(4, 1)) {
+    val countryClt = visit(domain = STRING(12), position = at(4, 1)) {
       label = "Country"
       help = "The client country"
       columns(c.countryClt)
     }
-    val cityClt = visit(domain = Domain<String>(12), position = at(4, 2)) {
+    val cityClt = visit(domain = STRING(12), position = at(4, 2)) {
       label = "City"
       help = "The client city"
       columns(c.cityClt)
     }
-    val zipCodeClt = visit(domain = Domain<Int>(12), position = follow(cityClt)) {
+    val zipCodeClt = visit(domain = INT(12), position = follow(cityClt)) {
       label = "Zip code"
       help = "The client zip code"
       columns(c.zipCodeClt)
     }
-    val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
+    val active = visit(domain = BOOL, position = at(5, 1)) {
       label = "Active ?"
       help = "Is the user active?"
       columns(c.activeClt)
@@ -244,34 +243,34 @@ class ClientForm : ReportSelectionForm() {
     val S = table(Purchase)
     val P = table(Product)
 
-    val idClt = hidden(domain = Domain<Int>(5)) {
+    val idClt = hidden(domain = INT(5)) {
       label = "ID"
       help = "The client id"
       columns(C.idClt, S.idClt)
     }
 
-    val idPdt = hidden(domain = Domain<Int>(5)) {
+    val idPdt = hidden(domain = INT(5)) {
       label = "ID"
       help = "The product id"
       columns(P.idPdt, S.idPdt)
     }
 
-    val id = visit(domain = Domain<Int>(5), position = at(1, 1..2)) {
+    val id = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"
       columns(S.id)
     }
-    val description = visit(domain = Domain<String>(25), position = at(2, 1)) {
+    val description = visit(domain = STRING(25), position = at(2, 1)) {
       label = "Description"
       help = "The item description"
       columns(P.description)
     }
-    val quantity = visit(domain = Domain<Int>(7), position = at(2, 2)) {
+    val quantity = visit(domain = INT(7), position = at(2, 2)) {
       label = "Quantity"
       help = "The number of items"
       columns(S.quantity)
     }
-    val price = visit(domain = Domain<Decimal>(10, 5), position = at(2, 2)) {
+    val price = visit(domain = DECIMAL(10, 5), position = at(2, 2)) {
       label = "Price"
       help = "The item price"
       columns(P.price)

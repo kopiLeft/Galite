@@ -19,60 +19,92 @@ package org.kopi.galite.tests.ui.vaadin.block
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.form.UField
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.open
-import org.kopi.galite.tests.examples.form.ClientForm
+import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
-  val clientForm = ClientForm().also { it.model }
+  val formExample = FormExample().also { it.model }
+
+  @Before
+  fun `login to the App`() {
+    login()
+  }
 
   @Test
   fun `test multiple-block data is sent to model after going to next record`() {
-    // Login
-    login()
-
     // Open client form
-    clientForm.open()
+    formExample.open()
 
     // Enters the sales block
-    clientForm.salesBlock.enter()
+    formExample.salesBlock.enter()
 
     // Enters the id field editor
-    val field = clientForm.salesBlock.idClt.edit("100")
+    val fields = mutableListOf<UField>()
+    val now = Timestamp.now()
+    val date = Date.now()
+    val week = Week.now()
+    val month = Month.now()
+    val time = Time.now()
+    fields.add(formExample.salesBlock.idClt.edit(100))
+    fields.add(formExample.salesBlock.description.edit("description"))
+    fields.add(formExample.salesBlock.price.edit(Decimal.valueOf("100.2")))
+    fields.add(formExample.salesBlock.active.edit(true))
+    fields.add(formExample.salesBlock.date.edit(date))
+    fields.add(formExample.salesBlock.month.edit(month))
+    fields.add(formExample.salesBlock.timestamp.edit(now))
+    fields.add(formExample.salesBlock.time.edit(time))
+    fields.add(formExample.salesBlock.week.edit(week))
 
     // Go to the next record
-    clientForm.salesBlock.editRecord(1)
+    formExample.salesBlock.editRecord(1)
 
     // Check that values are sent to the model
-    assertEquals("100", field.getModel().getString(0))
+    val values = listOf(100,
+                        "description",
+                        Decimal.valueOf("100.20000"),
+                        true,
+                        date,
+                        month,
+                        Timestamp.parse(now.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"),
+                        time,
+                        week)
+    fields.forEachIndexed { i, it ->
+      assertEquals(values[i].toString(), it.getModel().getObject(0).toString())
+    }
   }
 
   @Test
   fun `test multiple-block data is sent to model after going to next field`() {
-    // Login
-    login()
-
     // Open client form
-    clientForm.open()
+    formExample.open()
 
     // Enters the sales block
-    clientForm.salesBlock.enter()
+    formExample.salesBlock.enter()
 
     // Enters the id field editor
-    val field = clientForm.salesBlock.idClt.edit("100")
+    val field = formExample.salesBlock.idClt.edit(100)
 
     // Go to the next field
-    clientForm.salesBlock.description.click()
+    formExample.salesBlock.description.click()
 
     // Check that values are sent to the model
-    assertEquals("100", field.getModel().getString(0))
+    assertEquals(100, field.getModel().getInt(0))
   }
 
   companion object {

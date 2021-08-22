@@ -20,6 +20,7 @@ import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.type.Decimal
@@ -38,6 +39,8 @@ object Training : Table("TRAINING") {
 
 object Center : Table("Center") {
   val id = integer("ID")
+  val uc = integer("UC").default(0)
+  val ts = integer("TS").default(0)
   val centerName = varchar("centerName", 25)
   val address = varchar("ADDRESS", 50)
   val mail = varchar("EMAIL", 25)
@@ -49,10 +52,13 @@ object Center : Table("Center") {
   override val primaryKey = PrimaryKey(id, name = "PK_CENTER_ID")
 }
 
+val centerSequence = Sequence("CENTERID", startWith = 5)
+
 fun initData() {
   transaction {
     SchemaUtils.create(Training)
     SchemaUtils.create(Center)
+    SchemaUtils.createSequence(centerSequence)
     addTrainings()
     addCenters()
   }

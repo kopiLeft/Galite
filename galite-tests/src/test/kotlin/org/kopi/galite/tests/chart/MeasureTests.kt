@@ -19,7 +19,7 @@ package org.kopi.galite.tests.chart
 
 import org.junit.Test
 import org.kopi.galite.chart.ChartMeasure
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
 import org.kopi.galite.visual.Color
 import kotlin.test.assertEquals
 
@@ -30,7 +30,7 @@ class MeasureTests {
    */
   @Test
   fun testMeasure() {
-    val measure1 = ChartMeasure(Domain<Int>())
+    val measure1 = ChartMeasure(INT(10))
     measure1.label = "measure 1"
     measure1.color = Color.RED
     assertEquals(measure1.color.toString(), "RED")

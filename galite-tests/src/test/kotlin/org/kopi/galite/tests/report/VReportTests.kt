@@ -31,7 +31,9 @@ import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
 import org.kopi.galite.base.Utils
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.PConfig
@@ -235,22 +237,22 @@ class VReportTests: JApplicationTestBase() {
 
     override val title = "SimpleReport"
 
-    val id = field(Domain<Int>(20)) {
+    val id = field(INT(20)) {
       label = "id"
       help = "The user id"
     }
 
-    val name = field(Domain<String>(20)) {
+    val name = field(STRING(20)) {
       label = "name"
       help = "The user name"
     }
 
-    val age = field(Domain<Int>(3)) {
+    val age = field(INT(3)) {
       label = "age"
       help = "The user age"
     }
 
-    val salary = field(Domain<Decimal>(width = 10, scale = 5)) {
+    val salary = field(DECIMAL(width = 10, scale = 5)) {
       label = "salary"
       help = "The user salary"
       align = FieldAlignment.LEFT

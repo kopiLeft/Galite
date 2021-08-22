@@ -21,7 +21,8 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.BlockOption
@@ -98,7 +99,7 @@ class FormSample_ : Form() {
 
   val testBlock2 = block(1, 1, "Test2", "Test block2") {
 
-    val totalAge = visit(Domain<Int>(3), position = at(1, 1)) {
+    val totalAge = visit(INT(3), position = at(1, 1)) {
       label = "Total"
       help = "total user age"
     }
@@ -140,29 +141,29 @@ class TestBlock : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
-  val id = hidden(domain = Domain<Int>(20)) {
+  val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
     columns(u.id)
   }
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     label = "ts"
     help = "The user ts"
     value = 0
     columns(u.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     label = "uc"
     help = "The user uc"
     value = 0
     columns(u.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
   }
-  val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
+  val password = mustFill(domain = STRING(20), position = at(2, 1)) {
     label = "password"
     help = "The user password"
 
@@ -175,7 +176,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       }
     }
   }
-  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
+  val age = visit(domain = INT(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     minValue = 0
@@ -189,12 +190,12 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       name.value = "Sami"
     }
   }
-  val job = visit(domain = Domain<String>(20), position = at(3, 1)) {
+  val job = visit(domain = STRING(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
     columns(u.job)
   }
-  val cv = visit(domain = Domain<String?>(20), position = at(4, 1)) {
+  val cv = visit(domain = STRING(20), position = at(4, 1)) {
     label = "Cv"
     help = "The user curriculum vitae"
     columns(u.cv)

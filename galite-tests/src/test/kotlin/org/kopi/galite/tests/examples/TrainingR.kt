@@ -20,15 +20,16 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.BOOL
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.WindowController
 
 /**
@@ -140,7 +141,7 @@ class TrainingR : Report() {
     }
   }
 
-  val type = field(Domain<Int>(25)) {
+  val type = field(INT(25)) {
     label = "training type"
     help = "The training type"
     align = FieldAlignment.LEFT
@@ -154,7 +155,7 @@ class TrainingR : Report() {
     }
   }
 
-  val trainingName = field(Domain<String>(25)) {
+  val trainingName = field(STRING(25)) {
     label = "training Name"
     help = "The training name"
     align = FieldAlignment.LEFT
@@ -167,12 +168,12 @@ class TrainingR : Report() {
     }
   }
 
-  val price = field(Domain<Decimal>(50)) {
+  val price = field(DECIMAL(50, 20)) {
     label = "price"
     help = "The price"
     align = FieldAlignment.LEFT
   }
-  val disponibility = field(Domain<Boolean>(2)) {
+  val disponibility = field(BOOL) {
     label = "disponibility"
     help = "disponibility"
     align = FieldAlignment.LEFT

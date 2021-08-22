@@ -15,41 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
+
+import org.kopi.galite.form.VConstants
 
 /**
- * Report style
+ * The convert option used in order to modify the String's case.
  */
-::part(cell header-cell) {
-    background: #f2f2f2;
-    color: #505050;
-}
+enum class Convert(val value: Int) {
 
-::part(cell) {
-    min-height: 16px;
-}
+  /**
+   * Converts the first letter of each word to capital letter.
+   */
+  NAME(VConstants.FDO_CONVERT_NAME),
 
-vaadin-grid > vaadin-grid-cell-content {
-    height: 100%;
-    padding: var(--lumo-size-xxs);
-}
+  /**
+   * Convert the whole text to capital letters.
+   */
+  UPPER(VConstants.FDO_CONVERT_UPPER),
 
-#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
-}
-
-::part(resize-handle) {
-    display: block;
-    float: right;
-    background: #aaa;
-    cursor: e-resize;
-    cursor: col-resize;
-    width: 1px;
-    overflow: hidden;
-}
-
-vaadin-grid.report > vaadin-grid-cell-content {
-    cursor: pointer;
+  /**
+   * Converts the whole text to normal letters.
+   */
+  LOWER(VConstants.FDO_CONVERT_NAME)
 }

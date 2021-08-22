@@ -24,7 +24,9 @@ import kotlin.test.assertEquals
 import org.jdom2.input.SAXBuilder
 
 import org.junit.Test
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -216,7 +218,7 @@ class SimpleReport : Report() {
     }
   }
 
-  val name = field(Domain<String>(20)) {
+  val name = field(STRING(20)) {
     label = "name"
     help = "The user name"
     align = FieldAlignment.LEFT
@@ -230,7 +232,7 @@ class SimpleReport : Report() {
     }
   }
 
-  val age = field(Domain<Int>(3)) {
+  val age = field(INT(3)) {
     label = "age"
     help = "The user age"
     align = FieldAlignment.LEFT
@@ -240,12 +242,12 @@ class SimpleReport : Report() {
     }
   }
 
-  val profession = field(Domain<String>(20)) {
+  val profession = field(STRING(20)) {
     label = "profession"
     help = "The user profession"
   }
 
-  val salary = field(Domain<Decimal>(width = 10, scale = 5)) {
+  val salary = field(DECIMAL(width = 10, scale = 5)) {
     label = "salary"
     help = "The user salary"
     align = FieldAlignment.LEFT

@@ -19,7 +19,8 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -31,12 +32,12 @@ object FormWithMultipleBlock : Form() {
 }
 
 object MultipleBlock : FormBlock(100, 100, "Test block") {
-  val id = hidden(domain = Domain<Int>(20)) {
+  val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
   }

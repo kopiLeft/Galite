@@ -184,7 +184,7 @@ abstract class Report : Window() {
       }
 
       when (it.domain.kClass) {
-        Int::class ->
+        Int::class, Long::class ->
           VIntegerColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         String::class ->
           VStringColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,

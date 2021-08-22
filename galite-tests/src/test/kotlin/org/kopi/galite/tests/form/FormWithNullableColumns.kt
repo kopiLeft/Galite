@@ -22,9 +22,9 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.connectToDatabase
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -274,19 +274,19 @@ class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test"
   val c = table(Clients)
   val o = table(Order)
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(1, 1)) {
     columns(c.id, o.client_id)
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
+  val name = visit(domain = STRING(20), position = at(2, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(2, 2)) {
+  val mail = visit(domain = STRING(20), position = at(2, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(3, 1)) {
+  val quantity = visit(domain = INT(10), position = at(3, 1)) {
     columns(o.quantity)
   }
 }
@@ -295,19 +295,19 @@ class FormWithTwoTablesLeftJoin :  FormBlock(1, 1, "Left Join Two Tables Test") 
   val c = table(Clients)
   val o = table(Order)
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.client_id, nullable(c.id))
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
+  val name = visit(domain = STRING(20), position = at(2, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(2, 2)) {
+  val mail = visit(domain = STRING(20), position = at(2, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(3, 1)) {
+  val quantity = visit(domain = INT(10), position = at(3, 1)) {
     columns(o.quantity)
   }
 }
@@ -317,35 +317,35 @@ class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test
   val c = table(Clients)
   val p = table(Products)
 
-  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_order = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.id)
   }
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(2, 1)) {
     columns(c.id, nullable(o.client_id))
   }
-  val id_product = skipped(domain = Domain<Int>(20), position = at(3, 1)) {
+  val id_product = skipped(domain = INT(20), position = at(3, 1)) {
     columns(p.id, nullable(o.product_id))
   }
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     columns(c.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     columns(c.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
+  val productName = visit(domain = STRING(20), position = at(6, 1)) {
     columns(p.description)
   }
 }
@@ -355,35 +355,35 @@ class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Te
   val c = table(Clients)
   val p = table(Products)
 
-  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_order = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.id)
   }
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(2, 1)) {
     columns(c.id, o.client_id)
   }
-  val id_product = skipped(domain = Domain<Int>(20), position = at(3, 1)) {
+  val id_product = skipped(domain = INT(20), position = at(3, 1)) {
     columns(p.id, o.product_id)
   }
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     columns(c.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     columns(c.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
+  val productName = visit(domain = STRING(20), position = at(6, 1)) {
     columns(p.description)
   }
 }
@@ -393,37 +393,37 @@ class FormWithThreeTablesInnerJoinInField : FormBlock(1, 1, "Inner Join three Ta
   val c = table(Clients)
   val a = table(Adress)
 
-  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_order = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.id)
   }
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(2, 1)) {
     columns(c.id, o.client_id, a.client_id)
   }
 
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     columns(c.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     columns(c.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val country = visit(domain = Domain<String>(20), position = at(6, 1)) {
+  val country = visit(domain = STRING(20), position = at(6, 1)) {
     columns(a.country)
   }
 
-  val zipCode = visit(domain = Domain<String>(20), position = at(6, 2)) {
+  val zipCode = visit(domain = STRING(20), position = at(6, 2)) {
     columns(a.zip)
   }
 }
@@ -433,37 +433,37 @@ class FormWithThreeTablesLeftJoinInField : FormBlock(1, 1, "Left Join three Tabl
   val c = table(Clients)
   val a = table(Adress)
 
-  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_order = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.id)
   }
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(2, 1)) {
     columns(c.id, nullable(o.client_id), nullable(a.client_id))
   }
 
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     columns(c.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     columns(c.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val country = visit(domain = Domain<String>(20), position = at(6, 1)) {
+  val country = visit(domain = STRING(20), position = at(6, 1)) {
     columns(a.country)
   }
 
-  val zipCode = visit(domain = Domain<String>(20), position = at(6, 2)) {
+  val zipCode = visit(domain = STRING(20), position = at(6, 2)) {
     columns(a.zip)
   }
 }
@@ -473,37 +473,37 @@ class FormThreeTablesMiddleLeftJoinInField : FormBlock(1, 1, "Left Join in middl
   val c = table(Clients)
   val a = table(Adress)
 
-  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_order = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.id)
   }
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(2, 1)) {
     columns(c.id, nullable(o.client_id), a.client_id)
   }
 
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     columns(c.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     columns(c.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val country = visit(domain = Domain<String>(20), position = at(6, 1)) {
+  val country = visit(domain = STRING(20), position = at(6, 1)) {
     columns(a.country)
   }
 
-  val zipCode = visit(domain = Domain<String>(20), position = at(6, 2)) {
+  val zipCode = visit(domain = STRING(20), position = at(6, 2)) {
     columns(a.zip)
   }
 }
@@ -513,37 +513,37 @@ class FormThreeTablesEndLeftJoinInField : FormBlock(1, 1, "Left Join in the end 
   val c = table(Clients)
   val a = table(Adress)
 
-  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+  val id_order = skipped(domain = INT(20), position = at(1, 1)) {
     columns(o.id)
   }
 
-  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+  val id_user = skipped(domain = INT(20), position = at(2, 1)) {
     columns(c.id, a.client_id, nullable(o.client_id))
   }
 
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     columns(c.ts)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     columns(c.uc)
   }
-  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val country = visit(domain = Domain<String>(20), position = at(6, 1)) {
+  val country = visit(domain = STRING(20), position = at(6, 1)) {
     columns(a.country)
   }
 
-  val zipCode = visit(domain = Domain<String>(20), position = at(6, 2)) {
+  val zipCode = visit(domain = STRING(20), position = at(6, 2)) {
     columns(a.zip)
   }
 }

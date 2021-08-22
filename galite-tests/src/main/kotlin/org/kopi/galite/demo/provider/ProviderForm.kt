@@ -20,12 +20,13 @@ import java.util.Locale
 
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Provider
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.IMAGE
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Image
 
 class ProviderForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -64,37 +65,37 @@ class ProviderForm : ReportSelectionForm() {
 class BlockProvider : FormBlock(1, 1, "Providers") {
   val u = table(Provider)
 
-  val idProvider = hidden(domain = Domain<Int>(20)) {
+  val idProvider = hidden(domain = INT(20)) {
     label = "ID"
     help = "The provider ID"
     columns(u.idProvider)
   }
-  val nameProvider = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
+  val nameProvider = mustFill(domain = STRING(50), position = at(1, 1)) {
     label = "Name"
     help = "The provider name"
     columns(u.nameProvider)
   }
-  val tel = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
+  val tel = mustFill(domain = INT(25), position = at(2, 1)) {
     label = "Phone number"
     help = "The provider phone number"
     columns(u.tel)
   }
-  val description = visit(domain = Domain<String>(50), position = at(3, 1)) {
+  val description = visit(domain = STRING(50), position = at(3, 1)) {
     label = "Description"
     help = "The provider description"
     columns(u.description)
   }
-  val address = visit(domain = Domain<String>(50), position = at(4, 1)) {
+  val address = visit(domain = STRING(50), position = at(4, 1)) {
     label = "Address"
     help = "The provider address"
     columns(u.address)
   }
-  val zipCode = visit(domain = Domain<Int>(30), position = at(5, 1)) {
+  val zipCode = visit(domain = INT(30), position = at(5, 1)) {
     label = "Zip code"
     help = "The provider zip code"
     columns(u.zipCode)
   }
-  val logo = visit(domain = Domain<Image>(100, 100), position = at(6, 1)) {
+  val logo = visit(domain = IMAGE(100, 100), position = at(6, 1)) {
     label = "Provider company logo"
     help = "The provider company logo"
     columns(u.logo)

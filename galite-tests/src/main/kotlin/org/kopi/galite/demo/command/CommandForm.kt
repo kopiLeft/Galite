@@ -22,7 +22,7 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
 import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -132,13 +132,13 @@ class BlockCommand : FormBlock(1, 10, "Commands") {
   val u = table(Command)
   val v = table(Client)
 
-  val numCmd = hidden(domain = Domain<Int>(20)) {
+  val numCmd = hidden(domain = INT(20)) {
     label = "Number"
     help = "The command number"
     columns(u.numCmd)
   }
 
-  val idClt = mustFill(domain = Domain<Int>(25), position = at(1, 1)) {
+  val idClt = mustFill(domain = INT(25), position = at(1, 1)) {
     label = "Client ID"
     help = "The client ID"
     columns(u.idClt, v.idClt) {
