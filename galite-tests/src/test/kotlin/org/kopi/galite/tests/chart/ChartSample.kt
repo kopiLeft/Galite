@@ -21,7 +21,9 @@ import java.util.Locale
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.VChartType
 import org.kopi.galite.chart.VColumnFormat
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VColor
@@ -49,7 +51,7 @@ class ChartSample: Chart() {
     }
   }
 
-  val area = measure(Domain<Decimal?>(width = 10, scale = 5)) {
+  val area = measure(DECIMAL(width = 10, scale = 5)) {
     label = "area (ha)"
 
     color {
@@ -57,11 +59,11 @@ class ChartSample: Chart() {
     }
   }
 
-  val population = measure(Domain<Int?>(10)) {
+  val population = measure(INT(10)) {
     label = "population"
   }
 
-  val city = dimension(Domain<String>(10)) {
+  val city = dimension(STRING(10)) {
     label = "dimension"
 
     format {

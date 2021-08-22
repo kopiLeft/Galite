@@ -150,8 +150,8 @@ class DActor(private var model: VActor)
         // fires text change event for grid editors
         when (lasFocusedField) {
           is TextField -> {
-            valueChanged = { lasFocusedField.field.fieldConnector.valueChanged() }
-            lasFocusedField.field
+            valueChanged = { lasFocusedField.inputField.fieldConnector.valueChanged() }
+            lasFocusedField.inputField
           }
           is DGridEditorField<*> -> {
             valueChanged = { lasFocusedField.valueChanged(lasFocusedField.editor.value?.toString()) }

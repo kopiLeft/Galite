@@ -26,13 +26,17 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.IMAGE
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.MONTH
+import org.kopi.galite.domain.STRING
+import org.kopi.galite.domain.TIMESTAMP
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Timestamp
 
@@ -98,47 +102,47 @@ class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
   val p = table(Product)
   val i = index(message = "ID should be unique")
 
-  val id = hidden(domain = Domain<Int>(20)) {
+  val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
     columns(p.id)
   }
-  val uc = hidden(domain = Domain<Int>(20)) {
+  val uc = hidden(domain = INT(20)) {
     label = "uc"
     columns(p.uc)
   }
 
-  val ts = hidden(domain = Domain<Int>(20)) {
+  val ts = hidden(domain = INT(20)) {
     label = "ts"
     columns(p.ts)
   }
 
-  val price = visit(domain = Domain<Decimal>(width = 10, scale = 5), position = at(1, 1)) {
+  val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
     label = "price"
     help = "The price"
     minValue = Decimal.valueOf("1.9")
     columns(p.price)
   }
 
-  val name = visit(domain = Domain<String>(width = 10), position = at(1, 2)) {
+  val name = visit(domain = STRING(width = 10), position = at(1, 2)) {
     label = "name"
     help = "The product name"
     columns(p.name)
   }
 
-  val image = visit(domain = Domain<Image>(width = 100, height = 100), position = at(1, 3)) {
+  val image = visit(domain = IMAGE(width = 100, height = 100), position = at(1, 3)) {
     label = "image"
     help = "The product image"
     columns(p.image)
   }
 
-  val date = mustFill(domain = Domain<Timestamp>(), position = at(2, 1)) {
+  val date = mustFill(domain = TIMESTAMP, position = at(2, 1)) {
     label = "Date"
     help = "The date of manufacturing"
     columns(p.date)
   }
 
-  val expiration = visit(domain = Domain<Month>(), position = at(3, 1)) {
+  val expiration = visit(domain = MONTH, position = at(3, 1)) {
     label = "Expiration"
     help = "The expiration month"
     columns(p.month)

@@ -15,26 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.domain
 
-import com.vaadin.flow.component.textfield.TextField
+import org.kopi.galite.form.VConstants
 
 /**
- * An integer field.
+ * The convert option used in order to modify the String's case.
  */
-class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
+enum class Convert(val value: Int) {
 
-  init {
-    internalField.pattern = "[0-9]*"
-    internalField.isPreventInvalidInput = true
-    internalField.element.setProperty("min", minval)
-    internalField.element.setProperty("max", maxval)
-    this.width = width.toString()
-  }
+  /**
+   * Converts the first letter of each word to capital letter.
+   */
+  NAME(VConstants.FDO_CONVERT_NAME),
 
-  override fun setMaxLength(maxLength: Int) {
-    internalField.maxLength = maxLength
-  }
+  /**
+   * Convert the whole text to capital letters.
+   */
+  UPPER(VConstants.FDO_CONVERT_UPPER),
 
-  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
+  /**
+   * Converts the whole text to normal letters.
+   */
+  LOWER(VConstants.FDO_CONVERT_NAME)
 }

@@ -35,6 +35,7 @@ import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.HasValueAndElement
 import com.vaadin.flow.component.grid.Grid
 
@@ -94,6 +95,22 @@ fun <T> FormField<T>.edit(value: T): UField {
  * @param value the value to set to this field.
  */
 fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
+
+/**
+ * Finds the Vaadin field component of this form field.
+ */
+fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<*>, *> {
+  val mainWindow = _get<MainWindow>()
+
+  return if (block.vBlock.isMulti()) {
+    mainWindow
+      ._find<Grid.Column<*>>()
+      .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq vField }
+      .editorComponent as GridEditorField<*>
+  } else {
+    mainWindow._find<DField>().single { it.getModel() eq vField }.wrappedField
+  } as HasValue<HasValue.ValueChangeEvent<*>, *>
+}
 
 /**
  * Click on a field.

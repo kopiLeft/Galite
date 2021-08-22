@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,26 +14,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.gradle
 
-import com.vaadin.flow.component.textfield.TextField
+import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.kotlin.dsl.exclude
 
-/**
- * An integer field.
- */
-class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
-
-  init {
-    internalField.pattern = "[0-9]*"
-    internalField.isPreventInvalidInput = true
-    internalField.element.setProperty("min", minval)
-    internalField.element.setProperty("max", maxval)
-    this.width = width.toString()
-  }
-
-  override fun setMaxLength(maxLength: Int) {
-    internalField.maxLength = maxLength
-  }
-
-  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
+fun ExternalModuleDependency.excludeWebJars() {
+  listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+         "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+         "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+    .forEach { group -> exclude(group = group) }
 }

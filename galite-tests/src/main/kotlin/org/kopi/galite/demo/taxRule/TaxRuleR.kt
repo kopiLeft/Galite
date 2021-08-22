@@ -22,7 +22,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.TaxRule
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -102,13 +103,13 @@ class TaxRuleR : Report() {
     }
   }
 
-  val taxName = field(Domain<String>(50)) {
+  val taxName = field(STRING(50)) {
     label = "Name"
     help = "The tax name"
     align = FieldAlignment.LEFT
   }
 
-  val rate = field(Domain<Int>(25)) {
+  val rate = field(INT(25)) {
     label = "Rate in %"
     help = "The tax rate in %"
     align = FieldAlignment.LEFT

@@ -52,7 +52,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
 
     // set field value
     codeField._value = "123"
-    val inputField = codeField.field.content as AbstractField<*, String?>
+    val inputField = codeField.inputField.content as AbstractField<*, String?>
     inputField._fireEvent(AbstractField.ComponentValueChangeEvent(inputField, inputField, "123", true))
 
     // Focus on another field

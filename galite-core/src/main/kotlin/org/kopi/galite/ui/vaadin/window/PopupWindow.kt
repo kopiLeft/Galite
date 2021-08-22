@@ -41,6 +41,7 @@ class PopupWindow(val mainWindow: MainWindow?) : EnhancedDialog(), HasStyle {
     isDraggable = true
     isResizable = true
     isCloseOnOutsideClick = false
+    isCloseOnEsc = false
     addToHeader(caption)
   }
   //---------------------------------------------------

@@ -64,7 +64,7 @@ class TextField(val model: VField,
 )
   : AbstractField<Any?>(), HasStyle {
 
-  val field: InputTextField<*>
+  val inputField: InputTextField<*>
 
   /**
    * The column number.
@@ -159,23 +159,23 @@ class TextField(val model: VField,
     hasAutocomplete = model.hasAutocomplete()
     setFieldType()
 
-    field = createTextField()
-    field.isEnabled = enabled
-    add(field)
+    inputField = createTextField()
+    inputField.isEnabled = enabled
+    add(inputField)
     if (hasAutofill) {
       autofill = IronIcons.ARROW_DROP_DOWN.create()
       autofill!!.style["cursor"] = "pointer" // TODO: move to css
       autofill!!.addClickListener {
         fireAutofill()
       }
-      field.suffixComponent = autofill
+      inputField.suffixComponent = autofill
       autofill!!.isVisible = false
-      field.addFocusListener {
+      inputField.addFocusListener {
         if (autofill != null) {
           autofill!!.isVisible = true
         }
       }
-      field.addBlurListener {
+      inputField.addBlurListener {
         if (autofill != null) {
           autofill!!.isVisible = false
         }
@@ -345,17 +345,7 @@ class TextField(val model: VField,
         Type.TIME -> VTimeField()
         Type.TIMESTAMP -> VTimeStampField()
         Type.DATE -> VDateField()
-        else -> {
-          val textField = TextField()
-
-          InputTextField(textField).also {
-            if (type == Type.WEEK) {
-              it.setInputType("week")
-            } else if (type == Type.MONTH) {
-              it.setInputType("month")
-            }
-          }
-        }
+        else -> InputTextField(TextField())
       }
     } else {
       VInputButtonField(size)
@@ -427,14 +417,14 @@ class TextField(val model: VField,
    * Returns if he field is read only.
    */
   override fun isReadOnly(): Boolean {
-    return field.isReadOnly
+    return inputField.isReadOnly
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
-    field.value = newPresentationValue.toString()
+    inputField.value = newPresentationValue.toString()
   }
 
-  override fun generateModelValue(): Any? = field.value
+  override fun generateModelValue(): Any? = inputField.value
 
   /**
    * Communicates the widget text to server side.
@@ -513,12 +503,12 @@ class TextField(val model: VField,
   }
 
   override fun focus() {
-    field.parentWindow?.lasFocusedField = this
+    inputField.parentWindow?.lasFocusedField = this
     super.focus()
   }
 
   override fun addFocusListener(function: () -> Unit) {
-    field.addFocusListener {
+    inputField.addFocusListener {
       function()
     }
   }
@@ -529,14 +519,14 @@ class TextField(val model: VField,
    * @param background The background color.
    */
   fun setColor(foreground: String?, background: String?) {
-    field.setColor(foreground, background)
+    inputField.setColor(foreground, background)
   }
 
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
    */
-  override val isNull get(): Boolean = this.field.isNull
+  override val isNull get(): Boolean = this.inputField.isNull
 
   /**
    * Checks the value of this text field.
@@ -544,11 +534,11 @@ class TextField(val model: VField,
    * @throws CheckTypeException When field content is not valid
    */
   override fun checkValue(rec: Int) {
-    field.checkValue(rec)
+    inputField.checkValue(rec)
   }
 
   override fun getValue(): String? {
-    return field.value
+    return inputField.value
   }
 
   //---------------------------------------------------

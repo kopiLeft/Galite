@@ -34,7 +34,7 @@ import com.vaadin.flow.component.dependency.CssImport
 class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String>>(ComboBox<String>()), KeyNotifier {
 
   init {
-    field.setItems(Arrays.stream(enumerations))
+    internalField.setItems(Arrays.stream(enumerations))
     element.themeList.add("galite-combobox")
   }
 
@@ -44,6 +44,6 @@ class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String
   }
 
   override fun initContent(): ComboBox<String> {
-    return field // FIXME
+    return internalField // FIXME
   }
 }

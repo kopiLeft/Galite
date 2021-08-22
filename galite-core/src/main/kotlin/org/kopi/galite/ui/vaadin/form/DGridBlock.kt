@@ -32,6 +32,7 @@ import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
@@ -46,6 +47,8 @@ import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.flow.function.SerializableConsumer
+import com.vaadin.flow.internal.ExecutionContext
 
 /**
  * Grid based chart block implementation.
@@ -120,9 +123,28 @@ open class DGridBlock(parent: DForm, model: VBlock)
     grid = object : Grid<DGridBlockContainer.GridBlockItem>() {
       override fun createEditor(): Editor<DGridBlockContainer.GridBlockItem> {
         return object : EditorImpl<DGridBlockContainer.GridBlockItem>(this, propertySet) {
+          private var itemToEdit: DGridBlockContainer.GridBlockItem? = null
+          private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
+
           override fun closeEditor() {
             if(!doNotCancelEditor) {
               super.closeEditor()
+            }
+          }
+
+          // Workaround for https://github.com/vaadin/flow-components/issues/1997
+          override fun editItem(item: DGridBlockContainer.GridBlockItem) {
+            itemToEdit = item
+
+            if(editItemRequest == null) {
+              editItemRequest = SerializableConsumer {
+                super.editItem(itemToEdit)
+                editItemRequest = null
+              }
+              grid.element.node.runWhenAttached { ui: UI ->
+                ui.internals.stateTree
+                  .beforeClientResponse(grid.element.node, editItemRequest)
+              }
             }
           }
         }

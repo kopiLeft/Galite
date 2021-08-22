@@ -19,7 +19,8 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -35,21 +36,21 @@ class ManyPagesForm : DictionaryForm() {
   val detailsBlock = insertBlock(Details(), detailsPage)
 
   inner class Clients : FormBlock(1, 100, "Clients") {
-    val idClt = visit(domain = Domain<Int>(30), position = at(1, 1)) {
+    val idClt = visit(domain = INT(30), position = at(1, 1)) {
       label = "ID"
       help = "The client id"
     }
   }
 
   inner class Contacts : FormBlock(1, 100, "Contacts") {
-    val contact = visit(domain = Domain<String>(30 ), position = at(1, 1)) {
+    val contact = visit(domain = STRING(30 ), position = at(1, 1)) {
       label = "contact"
       help = "The contact"
     }
   }
 
   inner class Details : FormBlock(1, 100, "Details") {
-    val detail = visit(domain = Domain<String>(30, 30), position = at(1, 1)) {
+    val detail = visit(domain = STRING(30, 30, 30, true), position = at(1, 1)) {
       label = "detail"
       help = "The detail"
     }

@@ -22,7 +22,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.Provider
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
@@ -103,7 +104,7 @@ class ProviderR : Report() {
     }
   }
 
-  val nameProvider = field(Domain<String>(50)) {
+  val nameProvider = field(STRING(50)) {
     label = "Name"
     help = "The provider name"
     align = FieldAlignment.LEFT
@@ -116,13 +117,13 @@ class ProviderR : Report() {
     }
   }
 
-  val tel = field(Domain<Int>(25)) {
+  val tel = field(INT(25)) {
     label = "Phone number"
     help = "The provider phone number"
     align = FieldAlignment.LEFT
   }
 
-  val description = field(Domain<String>(255)) {
+  val description = field(STRING(255)) {
     label = "Description"
     help = "The provider description"
     align = FieldAlignment.LEFT
@@ -135,13 +136,13 @@ class ProviderR : Report() {
     }
   }
 
-  val address = field(Domain<String>(70)) {
+  val address = field(STRING(70)) {
     label = "Address"
     help = "The provider address"
     align = FieldAlignment.LEFT
   }
 
-  val zipCode = field(Domain<Int>(50)) {
+  val zipCode = field(INT(50)) {
     label = "Zip code"
     help = "The provider zip code"
     align = FieldAlignment.LEFT

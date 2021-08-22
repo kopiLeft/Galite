@@ -31,8 +31,8 @@ import com.vaadin.flow.component.dependency.CssImport
 class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
 
   init {
-    field.isClearButtonVisible = true
-    field.isAutoOpen = false
+    internalField.isClearButtonVisible = true
+    internalField.isAutoOpen = false
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

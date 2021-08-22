@@ -25,13 +25,15 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.BOOL
+import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.ListDomain
+import org.kopi.galite.domain.STRING
+import org.kopi.galite.domain.TIMESTAMP
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.type.Timestamp
 import org.kopi.galite.visual.FileHandler
 
 class FormWithListDomains: Form() {
@@ -58,7 +60,7 @@ class FormWithListDomains: Form() {
   override val title = "form to test list domains"
   val userListBlock = insertBlock(UsersListBlock()) {
 
-    val file = visit(domain = Domain<String>(25), position = at(3, 1)) {
+    val file = visit(domain = STRING(25), position = at(3, 1)) {
       label = "test"
       help = "The test"
       command(item = autoFill) {
@@ -189,32 +191,32 @@ class SomeDictionnaryForm : DictionaryForm() {
     val u = table(Users)
     val unique = index(message = "ID should be unique")
 
-    val id = hidden(domain = Domain<Int>(20)) {
+    val id = hidden(domain = INT(20)) {
       label = "ID"
       help = "The user id"
       columns(u.id) {
         index = unique
       }
     }
-    val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
+    val uc = visit(domain = INT(20), position = at(1, 2)) {
       label = "UC"
       help = "uc"
       columns(u.uc)
     }
 
-    val ts = visit(domain = Domain<Int>(20), position = at(1, 3)) {
+    val ts = visit(domain = INT(20), position = at(1, 3)) {
       label = "TS"
       help = "ts"
       columns(u.ts)
     }
 
-    val shortName = visit(domain = Domain<String>(20), position = at(1, 4)) {
+    val shortName = visit(domain = STRING(20), position = at(1, 4)) {
       label = "Kurzname"
       help = "Kurzname"
       columns(u.shortName)
     }
 
-    val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
+    val name = visit(domain = STRING(20), position = at(2, 1)) {
       label = "name"
       help = "name"
       columns(u.name) {
@@ -222,31 +224,31 @@ class SomeDictionnaryForm : DictionaryForm() {
       }
     }
 
-    val character = visit(domain = Domain<String>(20), position = at(2, 2)) {
+    val character = visit(domain = STRING(20), position = at(2, 2)) {
       label = "character"
       help = "character"
       columns(u.character)
     }
 
-    val active = visit(domain = Domain<Boolean>(1), position = at(2, 3)) {
+    val active = visit(domain = BOOL, position = at(2, 3)) {
       label = "active"
       help = "active"
       columns(u.active)
     }
 
-    val createdOn = visit(domain = Domain<Timestamp>(20), position = at(2, 4)) {
+    val createdOn = visit(domain = TIMESTAMP, position = at(2, 4)) {
       label = "createdOn"
       help = "createdOn"
       columns(u.createdOn)
     }
 
-    val createdBy = visit(domain = Domain<Int>(10), position = at(2, 5)) {
+    val createdBy = visit(domain = INT(10), position = at(2, 5)) {
       label = "createdBy"
       help = "createdBy"
       columns(u.createdBy)
     }
 
-    val changedBy = visit(domain = Domain<Int>(10), position = at(2, 6)) {
+    val changedBy = visit(domain = INT(10), position = at(2, 6)) {
       label = "changedBy"
       help = "changedBy"
       columns(u.changedBy)
