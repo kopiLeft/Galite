@@ -245,7 +245,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the field value of given record as a week value.
    */
-  override fun getWeek(r: Int): Week = getObject() as Week
+  override fun getWeek(r: Int): Week = getObject(r) as Week
 
   /**
    * Returns the field value of the current record as an object

@@ -33,6 +33,8 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.data.binder.Binder
+import com.vaadin.flow.data.converter.Converter
 
 /**
  * A grid editor field implementation.
@@ -146,6 +148,14 @@ abstract class GridEditorField<T> protected constructor() : AbstractCompositeFie
    * @param blink The blink state.
    */
   abstract fun setBlink(blink: Boolean)
+
+  fun setConverter(converter: Converter<T, Any?>) {
+    val binder = Binder(String::class.java)
+
+    binder.forField(this)
+      .withConverter(converter)
+      .bind({ it }, { _, _ -> })
+  }
 
   /**
    * Returns the parent window of this text editor.

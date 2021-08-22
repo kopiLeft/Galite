@@ -78,8 +78,10 @@ class Traineeship : FormBlock(1, 10, "Training") {
 
 object Type : CodeDomain<Int>() {
   init {
-    "JAVA" keyOf 1
-    "PYTHON" keyOf 2
-    "HTML" keyOf 3
+    "Galite" keyOf 1
+    "Kotlin" keyOf 2
+    "Java" keyOf 3
+    "Python" keyOf 4
+    "Html" keyOf 5
   }
 }

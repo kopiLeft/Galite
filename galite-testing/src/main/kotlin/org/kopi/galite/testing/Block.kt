@@ -85,6 +85,12 @@ fun FormBlock.findBlock(): DBlock {
   }
 }
 
+/**
+ * Finds the Vaadin block component of this multiple-block.
+ */
+fun FormBlock.findMultipleBlock(): DGridBlock =
+        (findBlock() as? DGridBlock) ?: throw Exception("$ident is not a multiple block")
+
 // TODO: Remove this when using karibu-testing 1.3.1 as it will be added when this version will be released.
 fun <T : Any> Grid<T>.clickItem(rowIndex: Int,
                                 column: Grid.Column<*>,

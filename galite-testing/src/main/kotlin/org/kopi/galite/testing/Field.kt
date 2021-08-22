@@ -90,6 +90,13 @@ fun <T> FormField<T>.edit(value: T): UField {
 }
 
 /**
+ * Edit a form field.
+ *
+ * @param value the value to set to this field.
+ */
+fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
+
+/**
  * Finds the Vaadin field component of this form field.
  */
 fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<*>, *> {

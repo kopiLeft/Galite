@@ -106,12 +106,7 @@ class DGridEditorBooleanField(
 
       override fun convertToModel(value: Boolean?, context: ValueContext?): Result<Any?>? = Result.ok(value)
 
-      override fun convertToPresentation(value: Any?, context: ValueContext?): Boolean? = value as Boolean
-
-      val modelType: Class<Any>
-        get() = Any::class.java
-      val presentationType: Class<Boolean>
-        get() = Boolean::class.java
+      override fun convertToPresentation(value: Any?, context: ValueContext?): Boolean? = value as? Boolean
     }
   }
 

@@ -22,11 +22,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.form.UField
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
+import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
+import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -36,6 +37,8 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
+
+import com.github.mvysny.kaributesting.v10.expectRow
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
@@ -55,38 +58,36 @@ class MultipleBlockTests: GaliteVUITestBase() {
     formExample.salesBlock.enter()
 
     // Enters the id field editor
-    val fields = mutableListOf<UField>()
-    val now = Timestamp.now()
-    val date = Date.now()
-    val week = Week.now()
-    val month = Month.now()
-    val time = Time.now()
-    fields.add(formExample.salesBlock.idClt.edit(100))
-    fields.add(formExample.salesBlock.description.edit("description"))
-    fields.add(formExample.salesBlock.price.edit(Decimal.valueOf("100.2")))
-    fields.add(formExample.salesBlock.active.edit(true))
-    fields.add(formExample.salesBlock.date.edit(date))
-    fields.add(formExample.salesBlock.month.edit(month))
-    fields.add(formExample.salesBlock.timestamp.edit(now))
-    fields.add(formExample.salesBlock.time.edit(time))
-    fields.add(formExample.salesBlock.week.edit(week))
+    val currentTimestamp   = Timestamp.now()
+    val currentDate        = Date.now()
+    val currentWeek        = Week.now()
+    val currentMonth       = Month.now()
+    val currentTime        = Time.now()
+    val idClt       = formExample.salesBlock.idClt.edit(100)
+    val description = formExample.salesBlock.description.edit("description")
+    val price       = formExample.salesBlock.price.edit(Decimal.valueOf("100.2"))
+    val active      = formExample.salesBlock.active.edit(true)
+    val date        = formExample.salesBlock.date.edit(currentDate)
+    val month       = formExample.salesBlock.month.edit(currentMonth)
+    val timestamp   = formExample.salesBlock.timestamp.edit(currentTimestamp)
+    val time        = formExample.salesBlock.time.edit(currentTime)
+    val week        = formExample.salesBlock.week.edit(currentWeek)
+    val codeDomain  = formExample.salesBlock.codeDomain.editText("Galite")
 
     // Go to the next record
     formExample.salesBlock.editRecord(1)
 
     // Check that values are sent to the model
-    val values = listOf(100,
-                        "description",
-                        Decimal.valueOf("100.20000"),
-                        true,
-                        date,
-                        month,
-                        Timestamp.parse(now.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"),
-                        time,
-                        week)
-    fields.forEachIndexed { i, it ->
-      assertEquals(values[i].toString(), it.getModel().getObject(0).toString())
-    }
+    assertEquals(100, idClt.getModel().getInt(0))
+    assertEquals("description", description.getModel().getString(0))
+    assertEquals(Decimal.valueOf("100.20000"), price.getModel().getDecimal(0))
+    assertEquals(true, active.getModel().getBoolean(0))
+    assertEquals(currentDate, date.getModel().getDate(0))
+    assertEquals(currentMonth, month.getModel().getMonth(0))
+    assertEquals(Timestamp.parse(currentTimestamp.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"), timestamp.getModel().getTimestamp(0))
+    assertEquals(currentTime.toString(), time.getModel().getTime(0).toString())
+    assertEquals(currentWeek, week.getModel().getWeek(0))
+    assertEquals(1, codeDomain.getModel().getObject(0))
   }
 
   @Test
@@ -105,6 +106,24 @@ class MultipleBlockTests: GaliteVUITestBase() {
 
     // Check that values are sent to the model
     assertEquals(100, field.getModel().getInt(0))
+  }
+
+  @Test
+  fun `test displayed value of code-domain field in a multiple-block`() {
+    // Open client form
+    formExample.open()
+
+    // Enters the sales block
+    formExample.salesBlock.enter()
+
+    // Set the value of the code-domain field
+    formExample.salesBlock.codeDomain.editText("Kotlin")
+
+    // Go to the next record
+    formExample.salesBlock.editRecord(1)
+
+    val block = formExample.salesBlock.findMultipleBlock()
+    block.grid.expectRow(0, "", "", "", "", "", "", "", "", "", "Kotlin")
   }
 
   companion object {
