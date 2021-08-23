@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.common
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.data.binder.HasItems
@@ -25,7 +26,7 @@ import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
 
 @Tag(Tag.SELECT)
-class VSelect : Component(), HasSize, HasItems<String> {
+class VSelect : Component(), HasSize, HasItems<String>, HasEnabled {
   override fun setItems(items: MutableCollection<String>) {
     this.items = items.toMutableList()
 
