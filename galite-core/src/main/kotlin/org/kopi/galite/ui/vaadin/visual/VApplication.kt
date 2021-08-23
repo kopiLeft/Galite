@@ -30,6 +30,7 @@ import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -544,8 +545,20 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // TODO
   }
 
-  override val userIP: String get() = VaadinSession.getCurrent().browser.address
+  override val userIP: String get() {
+    var userIP = ""
+    val currentSession = VaadinSession.getCurrent()
 
+    if(currentSession != null) {
+      return currentSession.browser.address
+    } else {
+      accessAndAwait(currentUI) {
+        userIP = VaadinSession.getCurrent().browser.address
+      }
+    }
+
+    return userIP
+  }
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------
