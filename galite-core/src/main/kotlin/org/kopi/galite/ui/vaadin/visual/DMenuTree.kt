@@ -27,8 +27,10 @@ import org.kopi.galite.visual.UMenuTree
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.ItemClickEvent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.selection.SelectionEvent
 import com.vaadin.flow.data.selection.SelectionListener
@@ -66,7 +68,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       tree = Tree(model.root!!, model.isSuperUser)
       val content = VerticalLayout(tree)
       //tree.addActionHandler(this)
-      tree.addSelectionListener(ItemSelectionHandler())
+      tree.addItemClickListener(ItemClickHandler())
+      //tree.addSelectionListener(ItemSelectionHandler()) TODO
       /*tree.dataProvider.addDataProviderListener { TODO
         val itemId: Any = event.getProperty().getValue() ?: return
         // tree.restoreLastModifiedItem();
@@ -308,6 +311,20 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // --------------------------------------------------
   // LISTENERS
   // --------------------------------------------------
+  /**
+   * The `ItemClickHandler` is the menu tree implementation
+   * of the item click listener.
+   */
+  inner class ItemClickHandler : ComponentEventListener<ItemClickEvent<TreeNode>> {
+      override fun onComponentEvent(event: ItemClickEvent<TreeNode>) {
+        if (event.clickCount == 2) {
+          callSelectedForm()
+        } else {
+          setMenu()
+        }
+      }
+  }
+
   /**
    * The `ItemSelectionHandler` is the menu tree implementation
    * of the item selection listener.
