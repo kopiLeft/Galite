@@ -148,7 +148,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   override fun launchSelectedForm() {
     val module = getSelectedModule()
     if (module != null) {
-      if (!getModel().isSuperUser) {
+      if (getModel().isSuperUser) {
         if (tree.dataCommunicator.getParentItem(tree.selectedItem) != null) {
           module.accessibility = (module.accessibility + 1) % 3
           tree.getNodeComponent(module.id)?.setIcon(module.accessibility, module.objectName != null)
