@@ -545,20 +545,22 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // TODO
   }
 
-  override val userIP: String get() {
-    var userIP = ""
-    val currentSession = VaadinSession.getCurrent()
+  override val userIP: String
+    get() {
+      var userIP = ""
+      val currentSession = VaadinSession.getCurrent()
 
-    if(currentSession != null) {
-      return currentSession.browser.address
-    } else {
-      accessAndAwait(currentUI) {
-        userIP = VaadinSession.getCurrent().browser.address
+      if (currentSession != null) {
+        return currentSession.browser.address
+      } else {
+        accessAndAwait(currentUI) {
+          userIP = VaadinSession.getCurrent().browser.address
+        }
       }
+
+      return userIP
     }
 
-    return userIP
-  }
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------

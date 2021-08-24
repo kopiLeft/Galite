@@ -315,12 +315,12 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * of the item click listener.
    */
   inner class ItemClickHandler : ComponentEventListener<ItemClickEvent<TreeNode>> {
-      override fun onComponentEvent(event: ItemClickEvent<TreeNode>) {
-        if (event.clickCount == 2) {
-          callSelectedForm()
-        } else {
-          setMenu()
-        }
+    override fun onComponentEvent(event: ItemClickEvent<TreeNode>) {
+      if (event.clickCount == 2) {
+        callSelectedForm()
+      } else {
+        setMenu()
       }
+    }
   }
 }
