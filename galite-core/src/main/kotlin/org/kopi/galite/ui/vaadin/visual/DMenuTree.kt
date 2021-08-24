@@ -27,8 +27,10 @@ import org.kopi.galite.visual.UMenuTree
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.ItemClickEvent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.selection.SelectionEvent
 import com.vaadin.flow.data.selection.SelectionListener
@@ -66,7 +68,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       tree = Tree(model.root!!, model.isSuperUser)
       val content = VerticalLayout(tree)
       //tree.addActionHandler(this)
-      tree.addSelectionListener(ItemSelectionHandler())
+      tree.addItemClickListener(ItemClickHandler())
       /*tree.dataProvider.addDataProviderListener { TODO
         val itemId: Any = event.getProperty().getValue() ?: return
         // tree.restoreLastModifiedItem();
@@ -146,7 +148,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   override fun launchSelectedForm() {
     val module = getSelectedModule()
     if (module != null) {
-      if (!getModel().isSuperUser) {
+      if (getModel().isSuperUser) {
         if (tree.dataCommunicator.getParentItem(tree.selectedItem) != null) {
           module.accessibility = (module.accessibility + 1) % 3
           tree.getNodeComponent(module.id)?.setIcon(module.accessibility, module.objectName != null)
@@ -309,13 +311,16 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // LISTENERS
   // --------------------------------------------------
   /**
-   * The `ItemSelectionHandler` is the menu tree implementation
-   * of the item selection listener.
+   * The `ItemClickHandler` is the menu tree implementation
+   * of the item click listener.
    */
-  private inner class ItemSelectionHandler : SelectionListener<Grid<TreeNode>, TreeNode> {
-
-    override fun selectionChange(event: SelectionEvent<Grid<TreeNode>, TreeNode>?) {
-      callSelectedForm()
+  inner class ItemClickHandler : ComponentEventListener<ItemClickEvent<TreeNode>> {
+    override fun onComponentEvent(event: ItemClickEvent<TreeNode>) {
+      if (event.clickCount == 2) {
+        callSelectedForm()
+      } else {
+        setMenu()
+      }
     }
   }
 }
