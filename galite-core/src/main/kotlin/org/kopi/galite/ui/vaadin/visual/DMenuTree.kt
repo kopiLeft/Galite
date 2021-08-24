@@ -69,7 +69,6 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       val content = VerticalLayout(tree)
       //tree.addActionHandler(this)
       tree.addItemClickListener(ItemClickHandler())
-      //tree.addSelectionListener(ItemSelectionHandler()) TODO
       /*tree.dataProvider.addDataProviderListener { TODO
         val itemId: Any = event.getProperty().getValue() ?: return
         // tree.restoreLastModifiedItem();
@@ -323,16 +322,5 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
           setMenu()
         }
       }
-  }
-
-  /**
-   * The `ItemSelectionHandler` is the menu tree implementation
-   * of the item selection listener.
-   */
-  private inner class ItemSelectionHandler : SelectionListener<Grid<TreeNode>, TreeNode> {
-
-    override fun selectionChange(event: SelectionEvent<Grid<TreeNode>, TreeNode>?) {
-      callSelectedForm()
-    }
   }
 }
