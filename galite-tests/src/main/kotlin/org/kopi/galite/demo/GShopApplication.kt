@@ -17,18 +17,16 @@
 package org.kopi.galite.demo
 
 import java.math.BigDecimal
+import java.time.LocalDate
 
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.jodatime.CurrentDateTime
-import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.joda.time.DateTime
 
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
@@ -113,7 +111,7 @@ object BillProduct : Table("BILL_PRODUCT") {
 object Command : Table("COMMANDS") {
   val numCmd = integer("ID").autoIncrement()
   val idClt = integer("CLIENT_ID").references(Client.idClt)
-  val dateCmd = datetime("COMMAND_DATE").defaultExpression(CurrentDateTime())
+  val dateCmd = date("COMMAND_DATE")
   val paymentMethod = varchar("PAYMENT_METHOD", 50)
   val statusCmd = varchar("COMMAND_STATUS", 30)
 
@@ -123,7 +121,7 @@ object Command : Table("COMMANDS") {
 object Bill : Table("BILLS") {
   val numBill = integer("BILL_NUMBER").autoIncrement()
   val addressBill = varchar("BILL_ADDRESS", 50)
-  val dateBill = datetime("BILL_DATE").defaultExpression(CurrentDateTime())
+  val dateBill = date("BILL_DATE")
   val amountWithTaxes = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountWithTaxes)
   val refCmd = integer("COMMAND_REFERENCE").references(Command.numCmd)
 
@@ -332,13 +330,13 @@ fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null)
 }
 
 fun addBills() {
-  addBill(0, "Bill address 0", DateTime.parse("2018-09-13"), Decimal("3129.7").value, 0)
-  addBill(1, "Bill address 1", DateTime.parse("2020-02-16"), Decimal("1149.24").value, 1)
-  addBill(2, "Bill address 2", DateTime.parse("2019-05-13"), Decimal("219.6").value, 2)
-  addBill(3, "Bill address 3", DateTime.parse("2019-01-12"), Decimal("146.9").value, 3)
+  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), Decimal("3129.7").value, 0)
+  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), Decimal("1149.24").value, 1)
+  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), Decimal("219.6").value, 2)
+  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), Decimal("146.9").value, 3)
 }
 
-fun addBill(num: Int, address: String, date: DateTime, amount: BigDecimal, ref: Int) {
+fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int) {
   Bill.insert {
     it[numBill] = num
     it[addressBill] = address
@@ -364,13 +362,13 @@ fun addStock(id: Int, idStck: Int, minAlerte: Int) {
 }
 
 fun addCmds() {
-  addCmd(0, 1, DateTime.parse("2020-01-03"), "check", "in preparation")
-  addCmd(1, 1, DateTime.parse("2020-01-01"), "check", "available")
-  addCmd(2, 2, DateTime.parse("2021-05-03"), "bank card", "delivered")
-  addCmd(3, 3, DateTime.parse("2021-05-13"), "cash", "canceled")
+  addCmd(0, 1, LocalDate.parse("2020-01-03"), "check", "in preparation")
+  addCmd(1, 1, LocalDate.parse("2020-01-01"), "check", "available")
+  addCmd(2, 2, LocalDate.parse("2021-05-03"), "bank card", "delivered")
+  addCmd(3, 3, LocalDate.parse("2021-05-13"), "cash", "canceled")
 }
 
-fun addCmd(num: Int, client: Int, date: DateTime, payment: String, status: String) {
+fun addCmd(num: Int, client: Int, date: LocalDate, payment: String, status: String) {
   Command.insert {
     it[numCmd] = num
     it[idClt] = client

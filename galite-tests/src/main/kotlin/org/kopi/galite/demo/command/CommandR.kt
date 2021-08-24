@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.DATETIME
+import org.kopi.galite.domain.DATE
 import org.kopi.galite.domain.INT
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -116,7 +116,7 @@ class CommandR : Report() {
     align = FieldAlignment.LEFT
 
   }
-  val dateCmd = field(DATETIME) {
+  val dateCmd = field(DATE) {
     label = "Command date"
     help = "The command date"
     align = FieldAlignment.LEFT
