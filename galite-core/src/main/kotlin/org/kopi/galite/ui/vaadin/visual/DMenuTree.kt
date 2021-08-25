@@ -120,8 +120,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   /**
    * Remove favorite from database.
    */
-  protected fun removeShortcutsFromDatabase(id: Int) {
-    TODO()
+  private fun removeShortcutsFromDatabase(id: Int) {
+    getModel().removeShortcutsFromDatabase(id)
   }
 
   /**

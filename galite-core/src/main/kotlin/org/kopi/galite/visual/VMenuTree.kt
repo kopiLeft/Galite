@@ -577,6 +577,30 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   }
 
   /**
+   * Remove favorite from database.
+   */
+  internal fun removeShortcutsFromDatabase(id: Int) {
+    try {
+      transaction {
+        if (menuTreeUser != null) {
+          val idSubQuery = Users.slice(Users.id)
+            .select { Users.shortName eq menuTreeUser.orEmpty() }
+            .alias("userid")[Users.id]
+          Favorites.deleteWhere {
+            (Favorites.user eq idSubQuery) and (Favorites.module eq id)
+          }
+        } else {
+          Favorites.deleteWhere {
+            (Favorites.user eq getUserID()) and (Favorites.module eq id)
+          }
+        }
+      }
+    } catch (e: SQLException) {
+      e.printStackTrace()
+    }
+  }
+
+  /**
    * Adds the default logout module
    */
   protected fun addLogoutModule(localModules: MutableList<Module>) {
