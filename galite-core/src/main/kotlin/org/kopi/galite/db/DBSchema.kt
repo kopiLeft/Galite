@@ -17,6 +17,7 @@
 
 package org.kopi.galite.db
 
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 
@@ -129,6 +130,12 @@ object References : Table("REFERENZEN") {
 
   override val primaryKey = PrimaryKey(table, column)
 }
+
+object Dummy : Table("DUMMY") {
+  val table = char("dummy", 1)
+}
+
+val FAVORITENId = Sequence("FAVORITENId")
 
 val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
                             Favorites, Users, Groups, References)

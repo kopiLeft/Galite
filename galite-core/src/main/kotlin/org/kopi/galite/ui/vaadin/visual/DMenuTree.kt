@@ -29,11 +29,8 @@ import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.ItemClickEvent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.data.selection.SelectionEvent
-import com.vaadin.flow.data.selection.SelectionListener
 
 /**
  * The `DMenuTree` is the vaadin implementation of the
@@ -43,8 +40,6 @@ import com.vaadin.flow.data.selection.SelectionListener
  * The implementation is based on [DWindow]
  *
  * @param model The menu tree model.
- *
- * TODO Externalize favorites handling.
  */
 class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
 
@@ -118,8 +113,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   /**
    * Add a favorite into database.
    */
-  protected fun addShortcutsInDatabase(id: Int) {
-    TODO()
+  private fun addShortcutsInDatabase(id: Int) {
+    getModel().addShortcutsInDatabase(id)
   }
 
   /**

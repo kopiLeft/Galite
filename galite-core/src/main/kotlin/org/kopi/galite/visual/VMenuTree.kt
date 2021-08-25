@@ -19,6 +19,7 @@
 package org.kopi.galite.visual
 
 import java.awt.event.KeyEvent
+import java.sql.SQLException
 import java.util.Locale
 
 import javax.swing.tree.DefaultMutableTreeNode
@@ -28,14 +29,19 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.innerJoin
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.FAVORITENId
 import org.kopi.galite.db.Favorites
 import org.kopi.galite.db.GroupParties
 import org.kopi.galite.db.GroupRights
@@ -540,6 +546,34 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
     localModules.sort()
     moduleArray = localModules.toTypedArray()
     return moduleArray
+  }
+
+  /**
+   * Add a favorite into database.
+   */
+  internal fun addShortcutsInDatabase(id: Int) {
+    try {
+      transaction {
+        if (menuTreeUser != null) {
+          Favorites.insert {
+            it[this.id] = FAVORITENId.nextIntVal()
+            it[ts] = (System.currentTimeMillis() / 1000).toInt()
+            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }
+              .alias("id")[Users.id]
+            it[module] = id
+          }
+        } else {
+          Favorites.insert {
+            it[this.id] = FAVORITENId.nextIntVal()
+            it[ts] = (System.currentTimeMillis() / 1000).toInt()
+            it[user] = getUserID()
+            it[module] = id
+          }
+        }
+      }
+    } catch (e: SQLException) {
+      e.printStackTrace()
+    }
   }
 
   /**
