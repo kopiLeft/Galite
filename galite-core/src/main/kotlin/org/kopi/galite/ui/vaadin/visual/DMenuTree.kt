@@ -95,7 +95,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   fun addShortcut(module: Module) {
     if (!getModel().getShortcutsID().contains(module.id)) {
       getModel().getShortcutsID().add(module.id)
-      addShortcutsInDatabase(module.id)
+      getModel().addShortcutsInDatabase(module.id)
     }
   }
 
@@ -106,22 +106,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   fun removeShortcut(module: Module) {
     if (getModel().getShortcutsID().contains(module.id)) {
       getModel().getShortcutsID().remove(module.id)
-      removeShortcutsFromDatabase(module.id)
+      getModel().removeShortcutsFromDatabase(module.id)
     }
-  }
-
-  /**
-   * Add a favorite into database.
-   */
-  private fun addShortcutsInDatabase(id: Int) {
-    getModel().addShortcutsInDatabase(id)
-  }
-
-  /**
-   * Remove favorite from database.
-   */
-  private fun removeShortcutsFromDatabase(id: Int) {
-    getModel().removeShortcutsFromDatabase(id)
   }
 
   /**
