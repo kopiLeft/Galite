@@ -120,13 +120,6 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   fun getModule(itemId: TreeNode?): Module? =
       if(itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as Module
 
-  /**
-   * Emits the value change event. The value contained in the field is validated before the event is created.
-   */
-  fun valueChanged() {
-    dataProvider.refreshAll()
-  }
-
   val selectedItem: TreeNode? get() = asSingleSelect().value
 
   fun getNodeComponent(id: Int): TreeNodeComponent? = itemsIds[id]

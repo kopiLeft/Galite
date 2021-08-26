@@ -255,6 +255,26 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   }*/
 
   /**
+   * Refreshes all data. Emits the value change event.
+   * It also refreshes the tree menu which enables and disables the menu actors according to the selected tree node.
+   */
+  fun valueChanged() {
+    tree.dataProvider.refreshAll()
+    setMenu()
+  }
+
+  /**
+   * Refreshes a specific item. Emits the value change event.
+   * It also refreshes the tree menu which enables and disables the menu actors according to the selected tree node.
+   *
+   * @param item the item to refresh
+   */
+  fun valueChanged(item: TreeNode) {
+    tree.dataProvider.refreshItem(item)
+    setMenu()
+  }
+
+  /**
    * Returns the module having the given ID.
    * @param id The module ID.
    * @return The module object.
@@ -317,7 +337,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   inner class CollapseHandler : ComponentEventListener<CollapseEvent<TreeNode, TreeGrid<TreeNode>>> {
 
     override fun onComponentEvent(event: CollapseEvent<TreeNode, TreeGrid<TreeNode>>) {
-      tree.dataCommunicator.refresh(event.items.first())
+      valueChanged(event.items.first())
     }
   }
 
@@ -328,7 +348,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   inner class ExpandHandler : ComponentEventListener<ExpandEvent<TreeNode, TreeGrid<TreeNode>>> {
 
     override fun onComponentEvent(event: ExpandEvent<TreeNode, TreeGrid<TreeNode>>) {
-      tree.dataCommunicator.refresh(event.items.first())
+      valueChanged(event.items.first())
     }
   }
 }
