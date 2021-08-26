@@ -31,6 +31,9 @@ import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.ItemClickEvent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.treegrid.CollapseEvent
+import com.vaadin.flow.component.treegrid.ExpandEvent
+import com.vaadin.flow.component.treegrid.TreeGrid
 
 /**
  * The `DMenuTree` is the vaadin implementation of the
@@ -63,6 +66,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       tree = Tree(model.root!!, model.isSuperUser)
       val content = VerticalLayout(tree)
       //tree.addActionHandler(this)
+      tree.addCollapseListener(CollapseHandler())
+      tree.addExpandListener(ExpandHandler())
       tree.addItemClickListener(ItemClickHandler())
       /*tree.dataProvider.addDataProviderListener { TODO
         val itemId: Any = event.getProperty().getValue() ?: return
@@ -302,6 +307,28 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       } else {
         setMenu()
       }
+    }
+  }
+
+  /**
+   * The `CollapseHandler` is the menu tree implementation
+   * of the collapse event listener.
+   */
+  inner class CollapseHandler : ComponentEventListener<CollapseEvent<TreeNode, TreeGrid<TreeNode>>> {
+
+    override fun onComponentEvent(event: CollapseEvent<TreeNode, TreeGrid<TreeNode>>) {
+      tree.dataCommunicator.refresh(event.items.first())
+    }
+  }
+
+  /**
+   * The `ExpandHandler` is the menu tree implementation
+   * of the expand event listener.
+   */
+  inner class ExpandHandler : ComponentEventListener<ExpandEvent<TreeNode, TreeGrid<TreeNode>>> {
+
+    override fun onComponentEvent(event: ExpandEvent<TreeNode, TreeGrid<TreeNode>>) {
+      tree.dataCommunicator.refresh(event.items.first())
     }
   }
 }
