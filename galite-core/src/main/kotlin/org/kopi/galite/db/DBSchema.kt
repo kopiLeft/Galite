@@ -39,7 +39,7 @@ object UserRights : Table("BENUTZERRECHTE") {
   val id = integer("ID").autoIncrement()
   val ts = integer("TS")
   val user = integer("BENUTZER")
-  val module = integer("MODUL")
+  val module = integer("MODUL").references(Modules.id)
   val access = bool("ZUGRIFF")
 
   init {
