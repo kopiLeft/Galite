@@ -24,15 +24,15 @@ export class RichText extends WysiwygE {
   connectedCallback() {
     if (!this._pasteHandler) {
       this._pasteHandler = function (event) {
-      	event.preventDefault();
-      	var data = event.clipboardData.getData('text/html');
-      	if (!data.length) {
-      	  // If paste does not contain HTML, fall back to plain text
-      	  data = event.clipboardData.getData('text');
-      	  document.execCommand('insertText', false, data);
-      	} else {
-      	  document.execCommand('insertHTML', false, data);
-      	}
+        event.preventDefault();
+        var data = event.clipboardData.getData('text/html');
+        if (!data.length) {
+          // insert plain text if the paste data doesn't contain HTML
+          data = event.clipboardData.getData('text');
+          document.execCommand('insertText', false, data);
+        } else {
+          document.execCommand('insertHTML', false, data);
+        }
       }.bind(this);
     }
 
