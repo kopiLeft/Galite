@@ -27,7 +27,7 @@ export class RichText extends WysiwygE {
         event.preventDefault();
         var data = event.clipboardData.getData('text/html');
         if (!data.length) {
-          // insert plain text if the paste data doesn't contain HTML
+          // Insert plain text if the clipboard data doesn't contain HTML.
           data = event.clipboardData.getData('text');
           document.execCommand('insertText', false, data);
         } else {
