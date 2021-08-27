@@ -17,11 +17,15 @@
  */
 
 :host {
-  pointer-events: none;
+    pointer-events: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 [part="toggle"] {
-  pointer-events: auto;
+    pointer-events: auto;
 }
 
 .tree-node-caption {

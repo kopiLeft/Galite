@@ -86,7 +86,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       setMenu()
       // allow scrolling when an overflow is detected
       content.setWidth(455f, Unit.PIXELS)
-      content.setHeight(600f, Unit.PIXELS)
+      content.height = "calc(100vh - 210px)"
       setContent(content)
     }
   }
@@ -349,6 +349,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
 
     override fun onComponentEvent(event: ExpandEvent<TreeNode, TreeGrid<TreeNode>>) {
       valueChanged(event.items.first())
+      tree.recalculateColumnWidths()
     }
   }
 }

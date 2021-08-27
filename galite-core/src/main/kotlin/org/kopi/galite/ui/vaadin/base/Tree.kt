@@ -66,12 +66,13 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
    */
   private fun buildTreeItems() {
     setItems(getRootItems(), ::getChildItemProvider)
-    addComponentHierarchyColumn {
+    val column  = addComponentHierarchyColumn {
       val nodeComponent = addItemComponent(it)
 
       nodeComponent.setIcon(it.isLeaf, it.parent == null, nodeComponent.module!!.accessibility)
       nodeComponent
     }
+    column.isAutoWidth = true
   }
 
   private fun getRootItems(): List<TreeNode> {
