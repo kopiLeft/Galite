@@ -28,6 +28,8 @@ import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.dependency.JsModule
 
 /**
  * A rich text field implementation based on wysiwyg-e
@@ -262,6 +264,8 @@ class RichTextField(
      */
     fun onGotoNextEmptyMustfill()
   }
-
-  inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
 }
+
+@Tag("wysiwyg-e-rich-text")
+@JsModule("./src/wysiwyg-e-rich-text.js")
+class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
