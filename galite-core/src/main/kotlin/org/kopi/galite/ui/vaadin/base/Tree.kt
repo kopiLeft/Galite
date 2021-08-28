@@ -22,6 +22,8 @@ import javax.swing.tree.TreeNode
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -38,6 +40,10 @@ import org.kopi.galite.visual.UMenuTree.UTree
  * @param root The root tree item.
  * @param isSuperUser Is it a super user ?
  */
+@CssImport.Container(value = [
+  CssImport("./styles/galite/menutree.css"),
+  CssImport(value = "./styles/galite/menutree.css", themeFor = "vaadin-grid-tree-toggle")
+])
 class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<TreeNode>(), UTree {
 
   //---------------------------------------------------
@@ -60,12 +66,13 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
    */
   private fun buildTreeItems() {
     setItems(getRootItems(), ::getChildItemProvider)
-    addComponentHierarchyColumn {
+    val column  = addComponentHierarchyColumn {
       val nodeComponent = addItemComponent(it)
 
       nodeComponent.setIcon(it.isLeaf, it.parent == null, nodeComponent.module!!.accessibility)
       nodeComponent
     }
+    column.isAutoWidth = true
   }
 
   private fun getRootItems(): List<TreeNode> {
@@ -114,13 +121,6 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   fun getModule(itemId: TreeNode?): Module? =
       if(itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as Module
 
-  /**
-   * Emits the value change event. The value contained in the field is validated before the event is created.
-   */
-  fun valueChanged() {
-    dataProvider.refreshAll()
-  }
-
   val selectedItem: TreeNode? get() = asSingleSelect().value
 
   fun getNodeComponent(id: Int): TreeNodeComponent? = itemsIds[id]
@@ -157,12 +157,16 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
 
   inner class TreeNodeComponent(val item: TreeNode, val module: Module?): HorizontalLayout() {
 
+    private val nodeCaption = Div()
     private val text = Span(module?.description)
     private val icon = Image()
 
     init {
+      nodeCaption.className = "tree-node-caption"
+      icon.className = "icon"
       element.setProperty("title", module?.help.orEmpty())
-      add(text, icon)
+      nodeCaption.add(icon, text)
+      add(nodeCaption)
     }
 
     /**

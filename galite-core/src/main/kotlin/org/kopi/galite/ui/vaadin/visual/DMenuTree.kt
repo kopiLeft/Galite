@@ -29,11 +29,11 @@ import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.ItemClickEvent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.data.selection.SelectionEvent
-import com.vaadin.flow.data.selection.SelectionListener
+import com.vaadin.flow.component.treegrid.CollapseEvent
+import com.vaadin.flow.component.treegrid.ExpandEvent
+import com.vaadin.flow.component.treegrid.TreeGrid
 
 /**
  * The `DMenuTree` is the vaadin implementation of the
@@ -43,8 +43,6 @@ import com.vaadin.flow.data.selection.SelectionListener
  * The implementation is based on [DWindow]
  *
  * @param model The menu tree model.
- *
- * TODO Externalize favorites handling.
  */
 class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
 
@@ -68,6 +66,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       tree = Tree(model.root!!, model.isSuperUser)
       val content = VerticalLayout(tree)
       //tree.addActionHandler(this)
+      tree.addCollapseListener(CollapseHandler())
+      tree.addExpandListener(ExpandHandler())
       tree.addItemClickListener(ItemClickHandler())
       /*tree.dataProvider.addDataProviderListener { TODO
         val itemId: Any = event.getProperty().getValue() ?: return
@@ -86,7 +86,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       setMenu()
       // allow scrolling when an overflow is detected
       content.setWidth(455f, Unit.PIXELS)
-      content.setHeight(600f, Unit.PIXELS)
+      content.height = "calc(100vh - 210px)"
       setContent(content)
     }
   }
@@ -100,7 +100,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   fun addShortcut(module: Module) {
     if (!getModel().getShortcutsID().contains(module.id)) {
       getModel().getShortcutsID().add(module.id)
-      addShortcutsInDatabase(module.id)
+      getModel().addShortcutsInDatabase(module.id)
     }
   }
 
@@ -111,22 +111,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   fun removeShortcut(module: Module) {
     if (getModel().getShortcutsID().contains(module.id)) {
       getModel().getShortcutsID().remove(module.id)
-      removeShortcutsFromDatabase(module.id)
+      getModel().removeShortcutsFromDatabase(module.id)
     }
-  }
-
-  /**
-   * Add a favorite into database.
-   */
-  protected fun addShortcutsInDatabase(id: Int) {
-    TODO()
-  }
-
-  /**
-   * Remove favorite from database.
-   */
-  protected fun removeShortcutsFromDatabase(id: Int) {
-    TODO()
   }
 
   /**
@@ -269,6 +255,26 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   }*/
 
   /**
+   * Refreshes all data. Emits the value change event.
+   * It also refreshes the tree menu which enables and disables the menu actors according to the selected tree node.
+   */
+  fun valueChanged() {
+    tree.dataProvider.refreshAll()
+    setMenu()
+  }
+
+  /**
+   * Refreshes a specific item. Emits the value change event.
+   * It also refreshes the tree menu which enables and disables the menu actors according to the selected tree node.
+   *
+   * @param item the item to refresh
+   */
+  fun valueChanged(item: TreeNode) {
+    tree.dataProvider.refreshItem(item)
+    setMenu()
+  }
+
+  /**
    * Returns the module having the given ID.
    * @param id The module ID.
    * @return The module object.
@@ -321,6 +327,27 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       } else {
         setMenu()
       }
+    }
+  }
+
+  /**
+   * The `CollapseHandler` is the menu tree implementation
+   * of the collapse event listener.
+   */
+  inner class CollapseHandler : ComponentEventListener<CollapseEvent<TreeNode, TreeGrid<TreeNode>>> {
+    override fun onComponentEvent(event: CollapseEvent<TreeNode, TreeGrid<TreeNode>>) {
+      valueChanged(event.items.first())
+    }
+  }
+
+  /**
+   * The `ExpandHandler` is the menu tree implementation
+   * of the expand event listener.
+   */
+  inner class ExpandHandler : ComponentEventListener<ExpandEvent<TreeNode, TreeGrid<TreeNode>>> {
+    override fun onComponentEvent(event: ExpandEvent<TreeNode, TreeGrid<TreeNode>>) {
+      valueChanged(event.items.first())
+      tree.recalculateColumnWidths()
     }
   }
 }

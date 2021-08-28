@@ -50,7 +50,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   private var extraTitle: String? = null
   private var display: UWindow? = null
   open var actors: Array<VActor?> = arrayOf()
-  protected lateinit var windowTitle: String
+  protected var windowTitle: String? = null
   var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
@@ -257,7 +257,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * change the title of this form
    */
-  open fun setTitle(title: String) {
+  open fun setTitle(title: String?) {
     this.windowTitle = title
     display?.setTitle(getTitle())
   }

@@ -40,7 +40,7 @@ fun Actor.triggerCommand(duration: Long = 300) {
     it.getModel() == this.model
   }
 
-  actor._clickAndWait(100)
+  actor._clickAndWait(200)
 
   // Wait after completing the view creation.
   // VWindowController.doNotModal() is crating the view synchronously.
