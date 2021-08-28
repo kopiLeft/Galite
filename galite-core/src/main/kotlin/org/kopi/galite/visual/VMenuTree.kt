@@ -80,12 +80,10 @@ class VMenuTree constructor(ctxt: DBContext?,
    * @param userName the user name
    * @param loadFavorites should load favorites ?
    */
-  constructor(
-    ctxt: DBContext?,
-    isSuperUser: Boolean,
-    userName: String?,
-    loadFavorites: Boolean
-  ) : this(ctxt, isSuperUser, userName, null, loadFavorites)
+  constructor(ctxt: DBContext?,
+              isSuperUser: Boolean,
+              userName: String?,
+              loadFavorites: Boolean) : this(ctxt, isSuperUser, userName, null, loadFavorites)
 
   companion object {
 

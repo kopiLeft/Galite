@@ -335,7 +335,6 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * of the collapse event listener.
    */
   inner class CollapseHandler : ComponentEventListener<CollapseEvent<TreeNode, TreeGrid<TreeNode>>> {
-
     override fun onComponentEvent(event: CollapseEvent<TreeNode, TreeGrid<TreeNode>>) {
       valueChanged(event.items.first())
     }
@@ -346,7 +345,6 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * of the expand event listener.
    */
   inner class ExpandHandler : ComponentEventListener<ExpandEvent<TreeNode, TreeGrid<TreeNode>>> {
-
     override fun onComponentEvent(event: ExpandEvent<TreeNode, TreeGrid<TreeNode>>) {
       valueChanged(event.items.first())
       tree.recalculateColumnWidths()
