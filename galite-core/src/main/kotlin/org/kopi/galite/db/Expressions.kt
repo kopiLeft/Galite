@@ -16,20 +16,8 @@
  */
 package org.kopi.galite.db
 
-import org.jetbrains.exposed.sql.AbstractQuery
-import org.jetbrains.exposed.sql.ComplexExpression
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.QueryBuilder
+import org.jetbrains.exposed.sql.wrapAsExpression
 
-fun <T> Query.subQuery(): QueryExpression<T> = QueryExpression(this)
-
-class QueryExpression<T>(
-  val query: AbstractQuery<*>
-) : Expression<T>(), ComplexExpression {
-  override fun toQueryBuilder(queryBuilder: QueryBuilder): Unit = queryBuilder {
-    append("(")
-    query.prepareSQL(this)
-    +")"
-  }
-}
+fun <T: Any> Query.subQuery(): Expression<T> = wrapAsExpression<T>(this) as Expression<T>
