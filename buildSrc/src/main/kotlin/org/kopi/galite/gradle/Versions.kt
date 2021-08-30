@@ -31,6 +31,8 @@ object Versions {
 
   const val VAADIN = "18.0.3"
 
+  const val SLF4J = "1.7.30"
+
   const val KARIBU_TESTING = "1.2.12"
   const val ENHANCED_DIALOG = "1.0.4"
   const val APEX_CHARTS = "2.0.0.beta10"

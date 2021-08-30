@@ -2119,7 +2119,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     try {
       try {
         dialog = transaction {
-          addLogger(StdOutSqlLogger) // TODO
           callProtectedTrigger(VConstants.TRG_PREQRY)
           buildQueryDialog()
         }
