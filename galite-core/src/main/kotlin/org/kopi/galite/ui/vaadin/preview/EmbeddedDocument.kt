@@ -22,10 +22,14 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
 import com.vaadin.flow.server.StreamResource
 
-class EmbeddedDocument(type: Type = Type.OBJECT) : Component(Element(type.tag)), HasSize {
+class EmbeddedDocument(val type: Type = Type.OBJECT) : Component(Element(type.tag)), HasSize {
 
   init {
     setSizeFull()
+    if(type == Type.BROWSER) {
+      element.setAttribute("allowTransparency", "true")
+      element.setAttribute("frameborder", "0")
+    }
   }
 
   constructor(resource: StreamResource) : this() {
@@ -39,7 +43,11 @@ class EmbeddedDocument(type: Type = Type.OBJECT) : Component(Element(type.tag)),
   var resource: StreamResource? = null
     set(value) {
       field = value
-      element.setAttribute("data", resource)
+      if (type == Type.OBJECT) {
+        element.setAttribute("data", resource)
+      } else {
+        element.setAttribute("src", resource)
+      }
     }
 
   var mimeType: String
