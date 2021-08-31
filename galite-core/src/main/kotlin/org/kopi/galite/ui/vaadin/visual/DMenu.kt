@@ -187,6 +187,10 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
+    // Force the current UI in case the thread is started before attaching the menu to the UI.
+    if (currentUI == null) {
+      currentUI = BackgroundThreadHandler.locateUI()
+    }
     Thread {
       BackgroundThreadHandler.setUI(currentUI)
       try {
