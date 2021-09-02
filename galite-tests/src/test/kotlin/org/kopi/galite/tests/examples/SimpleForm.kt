@@ -22,6 +22,7 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.BOOL
 import org.kopi.galite.domain.DATETIME
 import org.kopi.galite.domain.DECIMAL
+import org.kopi.galite.domain.Fixed
 import org.kopi.galite.domain.IMAGE
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.MONTH
@@ -102,7 +103,7 @@ class TraineeshipWithAllFieldTypes : FormBlock(1, 1, "Training") {
     help = "photo"
     columns(t.photo)
   }
-  val informations = visit(domain = STRING(80, 50, 10, true), position = at(10, 1)) {
+  val informations = visit(domain = STRING(80, 50, 10, Fixed.ON), position = at(10, 1)) {
     label = "training informations"
     help = "The training informations"
     columns(t.informations) {
