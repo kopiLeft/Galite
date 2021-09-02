@@ -55,6 +55,8 @@ open class Domain<T>(val width: Int? = null,
 
   protected var isFraction = false
   protected var styled: Boolean = false
+  protected var fixed: Fixed = Fixed.UNDEFINED
+  protected var convert: Convert = Convert.NONE
   val ident: String = this::class.java.simpleName
 
   /**
@@ -72,12 +74,25 @@ open class Domain<T>(val width: Int? = null,
                                                  width ?: 0,
                                                  min as? Int ?: Int.MIN_VALUE,
                                                  max as? Int ?: Int.MAX_VALUE)
-        String::class -> VStringField(block.buffer,
-                                      width ?: 0,
-                                      height ?: 1,
-                                      visibleHeight ?: 1,
-                                      0,  // TODO
-                                      styled)
+        String::class -> {
+          if(visibleHeight != height) {
+            VStringField(block.buffer,
+                         width ?: 0,
+                         height ?: 1,
+                         visibleHeight ?: 0,
+                         (fixed.value or convert.value) and
+                                 (VConstants.FDO_CONVERT_MASK or VConstants.FDO_DYNAMIC_NL),
+                         styled)
+          } else {
+            VStringField(block.buffer,
+                         width ?: 0,
+                         height ?: 1,
+                         (fixed.value or convert.value) and
+                                 VConstants.FDO_CONVERT_MASK or
+                                 VConstants.FDO_DYNAMIC_NL,
+                         styled)
+          }
+        }
         Decimal::class -> VFixnumField(block.buffer,
                                        width!!,
                                        height ?: 6,
