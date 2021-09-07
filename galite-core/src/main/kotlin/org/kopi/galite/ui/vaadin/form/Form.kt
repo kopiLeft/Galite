@@ -219,7 +219,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {
-      if (pageCount != 0) {
+      pages[i] = if (pageCount != 0) {
         if (titles[i].endsWith("<CENTER>")) {
           Page(HorizontalLayout())
         } else {
