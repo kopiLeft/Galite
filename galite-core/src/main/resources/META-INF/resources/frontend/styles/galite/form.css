@@ -161,7 +161,7 @@
 /**
  * scrollbar style
  */
-.k-form-page {
+.k-window .k-form {
     overflow: auto;
     height: calc(100vh - 210px);
     max-width: calc(100vw - 50px);
