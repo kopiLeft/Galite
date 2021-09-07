@@ -126,8 +126,9 @@
 /**
  * Form content styles
  */
-.k-form .k-form-tab .k-form-page-content {
+.k-form .k-form-page-content {
     width: 100%;
+    padding: 0;
 }
 
 /**

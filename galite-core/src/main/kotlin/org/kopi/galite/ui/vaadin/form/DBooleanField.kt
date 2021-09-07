@@ -44,7 +44,7 @@ class DBooleanField(
         detail: Boolean
 ) : DObjectField(model, label, align, options, detail),
         UTextField,
-        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<CustomField<Boolean>, Boolean>> {
+        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<org.kopi.galite.ui.vaadin.field.AbstractField<Boolean>, Boolean>> {
 
   // --------------------------------------------------
   // DATA MEMBERS
@@ -93,7 +93,7 @@ class DBooleanField(
   }
 
 
-  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean>, Boolean>?) {
+  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<org.kopi.galite.ui.vaadin.field.AbstractField<Boolean>, Boolean>?) {
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
       getModel().block!!.activeField = getModel()

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import com.vaadin.flow.component.Component
 import org.kopi.galite.ui.vaadin.common.VImage
 
 import com.vaadin.flow.component.Unit
@@ -91,8 +92,6 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
     }
   }
 
-  override fun generateModelValue(): Any? = value
-
   override fun checkValue(rec: Int) {
     // nothing to perform
   }
@@ -104,4 +103,6 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
       function()
     }
   }
+
+  override fun getContent(): Component = image
 }

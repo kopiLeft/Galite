@@ -32,7 +32,7 @@
 	padding: 0;
 }
 
-.enhanced-dialog-content .k-window div, .enhanced-dialog-content .k-window div table {
+.enhanced-dialog-content .k-window > div, .enhanced-dialog-content .k-window div table {
 	width: 100%;
 }
 

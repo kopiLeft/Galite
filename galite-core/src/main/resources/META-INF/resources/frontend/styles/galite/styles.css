@@ -42,11 +42,14 @@ summary, time, mark, audio, video {
     color: #000000;
 	font-weight: 500 !important;
 	font-style: normal !important;
-	border-bottom: #dadada 1px solid;
 	line-height: 1.2em;
-	padding: 0px 3px 3px 3px !important;
 	transition: 0.4s;
 	position: relative;
+}
+
+.k-block .simple ::part(input-field) {
+	border-bottom: #dadada 1px solid;
+    border-radius: unset;
 }
 
 .textarea::part(input-field) {
@@ -64,7 +67,7 @@ summary, time, mark, audio, video {
     background: none;
 }
 
-.k-block .simple ::part(value):focus, .kopi .k-textareainput:focus {
+.k-block .simple ::part(input-field):focus-within, .kopi .k-textareainput:focus {
 	background: none;
 	border-bottom: #009bd4 1px solid;
 }
@@ -108,11 +111,11 @@ a, a:hover {
 }
 
 .k-block .simple ::part(value) {
-    min-height: 5px;
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
+    padding: 0;
 }
 
 /**

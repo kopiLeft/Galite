@@ -20,10 +20,10 @@ package org.kopi.galite.ui.vaadin.field
 import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.BlurNotifier
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
-import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
@@ -43,11 +43,11 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    */
   var mandatory = false
 
-  private var content: HorizontalLayout = HorizontalLayout()
+  private val content: HorizontalLayout = HorizontalLayout()
 
-  private var yes: Checkbox = Checkbox()
+  private val yes: Checkbox = Checkbox()
 
-  private var no: Checkbox = Checkbox()
+  private val no: Checkbox = Checkbox()
 
   private var forceHiddenVisibility = false
 
@@ -110,14 +110,14 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  override fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {
+  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean>>?) {
     super.onBlur(event)
     if (value == null) {
       isVisible = false
     }
   }
 
-  override fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {
+  override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean>>) {
     super.onFocus(event)
     isVisible = true
   }
@@ -178,8 +178,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     value = newPresentationValue
   }
 
-  override fun generateModelValue(): Boolean? = value
-
   override fun addFocusListener(function: () -> Unit) {
     yes.addFocusListener {
       function()
@@ -188,6 +186,8 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
       function()
     }
   }
+
+  override fun getContent(): Component = content
 
   override fun setEnabled(enabled: Boolean) {
     super.setEnabled(enabled)
