@@ -71,7 +71,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
 
     content.element.addEventListener("mouseout") {
-      if(value == null) {
+      if (value == null) {
         isVisible = false
       }
     }
@@ -91,7 +91,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * @param focus The field focus
    */
   fun setFocus(focus: Boolean) {
-    if(focus) {
+    if (focus) {
       focus()
     } else {
       blur()
@@ -209,21 +209,23 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   override fun checkValue(rec: Int) {}
 
   private fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    //FIXME
-    if (event.value) {
-      no.value = false
-    } else if (mandatory && !no.value) {
-      yes.value = true
+    if (event.isFromClient) {
+      if (event.value) {
+        no.value = false
+      } else if (mandatory && !no.value) {
+        yes.value = true
+      }
     }
     handleComponentVisiblity()
   }
 
   private fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    //FIXME
-    if (event.value) {
-      yes.value = false
-    } else if (mandatory && !yes.value) {
-      no.value = true
+    if (event.isFromClient) {
+      if (event.value) {
+        yes.value = false
+      } else if (mandatory && !yes.value) {
+        no.value = true
+      }
     }
     handleComponentVisiblity()
   }
