@@ -415,6 +415,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
+
+    // Set the locale for the current UI.
+    UI.getCurrent().locale = defaultLocale
   }
 
   /**
