@@ -22,7 +22,6 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.dialog.GeneratedVaadinDialog
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -35,17 +34,17 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var image = Div()
-  private var text = Span()
+  private var image = WaitSpinner()
+  private var text = Span("loading")
   private var popup = Dialog()
 
   init {
-    image.className = Styles.WAIT_WINDOW_IMAGE
     text.className = Styles.WAIT_WINDOW_TEXT
     add(image)
     add(text)
     defaultHorizontalComponentAlignment = FlexComponent.Alignment.CENTER
     isSpacing = false
+    isPadding = false
     popup.isCloseOnOutsideClick = false
     popup.isCloseOnEsc = false
     popup.addOpenedChangeListener(this)
