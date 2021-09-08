@@ -103,7 +103,7 @@ abstract class ApplicationContext {
      * Returns the application [DBContext].
      * @return The application [DBContext].
      */
-    fun getDBContext(): DBContext? = applicationContext.getApplication().dbContext
+    fun getDBContext(): DBContext? = applicationContext.getApplication().dBContext
 
     /**
      * Returns `true` if the [Application] should only generate help.

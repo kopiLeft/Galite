@@ -87,7 +87,7 @@ open class JApplicationTestBase : ApplicationTestBase() {
       }
     }
 
-    override val dbContext: DBContext? = null
+    override val dBContext: DBContext? = null
     override var isGeneratingHelp: Boolean = false
     override val isNoBugReport: Boolean
       get() = true

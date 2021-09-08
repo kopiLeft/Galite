@@ -49,7 +49,7 @@
     font-size: 14px !important;
 }
 
-.false {
+.k-boolean-field-content vaadin-checkbox.false {
     margin-left: 0;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .k-boolean-field-content {
-    display: inline;
+    display: table;
     border-bottom: 1px solid #dadada;
 }
 
