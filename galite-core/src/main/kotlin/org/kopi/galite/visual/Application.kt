@@ -89,7 +89,7 @@ interface Application : MessageListener {
   /**
    * The [DBContext] containing user connection information.
    */
-  val dBContext: DBContext?
+  val dbContext: DBContext?
 
   /**
    * The connected user name.

@@ -49,6 +49,10 @@
     font-size: 14px !important;
 }
 
+.false {
+    margin-left: 0;
+}
+
 ::part(checkbox)::after {
     border-width: 0.3em 0 0 0.3em;
     transform-origin: -1px -0.5px

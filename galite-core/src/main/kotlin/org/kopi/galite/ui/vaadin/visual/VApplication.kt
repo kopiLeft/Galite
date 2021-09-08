@@ -239,7 +239,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun startApplication() {
-    menu = VMenuTree(dBContext!!)
+    menu = VMenuTree(dBContext)
     menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref, this)
     mainWindow!!.addMainWindowListener(this)

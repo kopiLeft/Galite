@@ -1985,8 +1985,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // build the order by query
     val orderBy = mutableListOf<Pair<Column<*>, SortOrder>>()
     var size = 0
-    // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
-    // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
+    // val maxCharacters: Int = form.dbContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
+    // val maxColumns: Int = form.dbContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
 
     for (i in 0 until elems) {
 
@@ -2229,8 +2229,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     /* ... and now their order */
     var orderSize = 0
-    //val maxCharacters: Int = form.getDBContext().getDefaultConnection().getMaximumCharactersCountInOrderBy() TODO
-    //val maxColumns: Int = form.getDBContext().getDefaultConnection().getMaximumColumnsInOrderBy() TODO
+    //val maxCharacters: Int = form.getDbContext().getDefaultConnection().getMaximumCharactersCountInOrderBy() TODO
+    //val maxColumns: Int = form.getDbContext().getDefaultConnection().getMaximumColumnsInOrderBy() TODO
 
     val orderBys = mutableListOf<Pair<Column<*>, SortOrder>>()
 
