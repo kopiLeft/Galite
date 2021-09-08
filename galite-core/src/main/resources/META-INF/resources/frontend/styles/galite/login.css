@@ -257,7 +257,12 @@ vaadin-password-field {
     cursor: pointer;
 }
 
+.k-loginBoxShadow {
+    position: relative;
+}
+
 .login-progress-bar {
     margin: 20px 0px 0px 0px;
-    width: 80%;
+    position: absolute;
+    bottom: 0;
 }

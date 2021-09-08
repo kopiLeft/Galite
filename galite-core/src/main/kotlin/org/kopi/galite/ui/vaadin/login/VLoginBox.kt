@@ -36,7 +36,6 @@ import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.progressbar.ProgressBar
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
@@ -175,12 +174,12 @@ class VLoginBox : Div() {
     table.focus()
   }
 
-  fun setWaitInfo() {
-    table.setWaitInfo()
+  fun disableLoginButton() {
+    table.disableLoginButton()
   }
 
-  fun unsetWaitInfo() {
-    table.unsetWaitInfo()
+  fun enableLoginButton() {
+    table.enableLoginButton()
   }
 
   //---------------------------------------------------
@@ -321,12 +320,12 @@ class VLoginBox : Div() {
       content.focus();
     }
 
-    fun setWaitInfo() {
-      content.setWaitInfo()
+    fun disableLoginButton() {
+      content.disableLoginButton()
     }
 
-    fun unsetWaitInfo() {
-      content.unsetWaitInfo()
+    fun enableLoginButton() {
+      content.enableLoginButton()
     }
 
     //---------------------------------------
@@ -391,7 +390,7 @@ class VLoginBox : Div() {
      */
     fun removeError() {
       if (errorIndicator.text != null
-              && errorIndicator.text.length > 0) {
+        && errorIndicator.text.length > 0) {
         errorIndicator.text = ""
       }
     }
@@ -493,13 +492,11 @@ class VLoginBox : Div() {
       username.focus()
     }
 
-    fun setWaitInfo() {
+    fun disableLoginButton() {
       login.isEnabled = false
-      progress.isVisible = true
     }
 
-    fun unsetWaitInfo() {
-      progress.isVisible = false
+    fun enableLoginButton() {
       login.isEnabled = true
     }
 
@@ -516,7 +513,6 @@ class VLoginBox : Div() {
     private val languageLabel: VInputLabel
     private val language: VSelect
     private val login: VInputButton
-    private val progress = ProgressBar()
 
     /**
      * Creates the login panel
@@ -525,9 +521,6 @@ class VLoginBox : Div() {
       className = Styles.LOGIN_BOX_PANE
       element.setAttribute("hideFocus", "true")
       element.style["outline"] = "0px"
-      progress.className = "login-progress-bar"
-      progress.isIndeterminate = true
-      progress.isVisible = false
       table = VSimpleTable()
       errorIndicator = Span()
       errorIndicator.setId("post_error")
@@ -593,11 +586,11 @@ class VLoginBox : Div() {
       table.setTdHeight("15px")
       table.setTdWidth("250px")
       setFieldsToEagerMode()
-      add(table, progress)
+      add(table)
       Shortcuts.addShortcutListener(this,
                                     { keyDownEvent: ShortcutEvent? -> onEnterEvent(keyDownEvent) },
                                     Key.ENTER)
-              .listenOn(this)
+        .listenOn(this)
     }
 
     // Issue: https://github.com/vaadin/flow/issues/5959
