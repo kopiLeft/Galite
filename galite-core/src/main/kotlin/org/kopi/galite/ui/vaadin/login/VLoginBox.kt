@@ -26,7 +26,6 @@ import org.kopi.galite.ui.vaadin.base.VInputText
 import org.kopi.galite.ui.vaadin.common.VSelect
 import org.kopi.galite.ui.vaadin.common.VSimpleTable
 
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.Key
