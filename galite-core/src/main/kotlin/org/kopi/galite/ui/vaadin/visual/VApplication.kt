@@ -249,9 +249,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
-    mainWindow!!.addDetachListener {
-      closeConnection()
-    }
+  }
+
+  fun remove(mainWindow: MainWindow?) {
+    super.remove(mainWindow)
+    closeConnection()
   }
 
   override fun allowQuit(): Boolean =
@@ -486,21 +488,23 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       localizationManager = null
       isGeneratingHelp = false
     }
-    welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
-    welcomeView!!.setSizeFull() // important to get the full screen size.
-    welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
-      welcomeView!!.setWaitInfo()
-      Thread {
-        accessAndPush(currentUI) {
-          try {
-            onLogin(event)
-          } finally {
-            welcomeView?.unsetWaitInfo()
+    if (welcomeView == null) {
+      welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
+      welcomeView!!.setSizeFull() // important to get the full screen size.
+      welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
+        welcomeView!!.setWaitInfo()
+        Thread {
+          accessAndPush(currentUI) {
+            try {
+              onLogin(event)
+            } finally {
+              welcomeView?.unsetWaitInfo()
+            }
           }
-        }
-      }.start()
+        }.start()
+      }
+      add(welcomeView)
     }
-    add(welcomeView)
   }
 
   /**
