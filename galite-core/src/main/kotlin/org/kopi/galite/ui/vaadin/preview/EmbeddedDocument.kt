@@ -26,7 +26,7 @@ class EmbeddedDocument(val type: Type = Type.OBJECT) : Component(Element(type.ta
 
   init {
     setSizeFull()
-    if(type == Type.BROWSER) {
+    if (type == Type.BROWSER) {
       element.setAttribute("allowTransparency", "true")
       element.setAttribute("frameborder", "0")
     }
