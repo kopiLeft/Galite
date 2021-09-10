@@ -57,7 +57,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     // Enters the sales block
     formExample.salesBlock.enter()
 
-    // Enters the id field editor
+    // Enters values to fields
     val currentTimestamp   = Timestamp.now()
     val currentDate        = Date.now()
     val currentWeek        = Week.now()

@@ -18,49 +18,72 @@ package org.kopi.galite.tests.ui.vaadin.block
 
 import kotlin.test.assertEquals
 
-import com.github.mvysny.kaributesting.v10._find
-import com.github.mvysny.kaributesting.v10._fireEvent
-
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
-import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.testing.open
+import org.kopi.galite.testing.click
+import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editText
+import org.kopi.galite.testing.enter
+import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.field.TextField
-
-import com.github.mvysny.kaributesting.v10._value
-import com.vaadin.flow.component.AbstractField
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 
 class SimpleBlockTests: GaliteVUITestBase() {
 
-  val clientForm = ClientForm()
+  val formExample = FormExample().also { it.model }
+
+  @Before
+  fun `login to the App`() {
+    login()
+  }
 
   @Test
-  fun `test field value is sent to model`() {
-    // Login
-    login()
+  fun `test field's values in simple-block are sent to the model`() {
+    // Open the form
+    formExample.open()
 
-    // Open client form
-    clientForm.open()
+    // Enter sales block
+    formExample.salesSimpleBlock.enter()
 
-    // Find fields
-    val fields = _find<TextField> { classes = Styles.TEXT_FIELD }
-    val codeField = fields[0]
-    val firstNameField = fields[1]
+    // Enters values to fields
+    val currentTimestamp   = Timestamp.now()
+    val currentDate        = Date.now()
+    val currentWeek        = Week.now()
+    val currentMonth       = Month.now()
+    val currentTime        = Time.now()
+    val idClt       = formExample.salesSimpleBlock.idClt.edit(100)
+    val description = formExample.salesSimpleBlock.description.edit("description")
+    val price       = formExample.salesSimpleBlock.price.edit(Decimal.valueOf("100.2"))
+    val active      = formExample.salesSimpleBlock.active.edit(true)
+    val date        = formExample.salesSimpleBlock.date.edit(currentDate)
+    val month       = formExample.salesSimpleBlock.month.edit(currentMonth)
+    val timestamp   = formExample.salesSimpleBlock.timestamp.edit(currentTimestamp)
+    val time        = formExample.salesSimpleBlock.time.edit(currentTime)
+    val week        = formExample.salesSimpleBlock.week.edit(currentWeek)
+    val codeDomain  = formExample.salesSimpleBlock.codeDomain.editText("Galite")
 
-    // set field value
-    codeField._value = "123"
-    val inputField = codeField.inputField.content as AbstractField<*, String?>
-    inputField._fireEvent(AbstractField.ComponentValueChangeEvent(inputField, inputField, "123", true))
+    // Go to the first field
+    formExample.salesSimpleBlock.idClt.click()
 
-    // Focus on another field
-    firstNameField._clickAndWait(100)
-
-    // Assert the value is sent to the model
-    val value = codeField.model.getInt()?.toString()
-    assertEquals("123", value)
+    // Check that values are sent to the model
+    assertEquals(100, idClt.getModel().getInt(0))
+    assertEquals("description", description.getModel().getString(0))
+    assertEquals(Decimal.valueOf("100.20000"), price.getModel().getDecimal(0))
+    assertEquals(true, active.getModel().getBoolean(0))
+    assertEquals(currentDate, date.getModel().getDate(0))
+    assertEquals(currentMonth, month.getModel().getMonth(0))
+    assertEquals(Timestamp.parse(currentTimestamp.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"), timestamp.getModel().getTimestamp(0))
+    assertEquals(currentTime.toString(), time.getModel().getTime(0).toString())
+    assertEquals(currentWeek, week.getModel().getWeek(0))
+    assertEquals(1, codeDomain.getModel().getObject(0))
   }
 
   companion object {
@@ -71,7 +94,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.demo.initModules()
+        org.kopi.galite.tests.examples.initModules()
       }
     }
   }

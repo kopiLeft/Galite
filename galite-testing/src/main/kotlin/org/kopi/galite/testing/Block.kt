@@ -72,16 +72,6 @@ fun FormBlock.editRecord(record: Int, duration: Long = 50) {
   MockVaadin.runUIQueue()
 }
 
-/*fun DBlock.goToRecord(record: Int) {
-  while (activeRecord != -1 || activeRecord != record) {
-    if (activeRecord < record) {
-      gotoNextRecord()
-    } else if (activeRecord > record) {
-      gotoPrevRecord()
-    }
-  }
-}*/
-
 /**
  * Finds the Vaadin block component of this form block.
  */
