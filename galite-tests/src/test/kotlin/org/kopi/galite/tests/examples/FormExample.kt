@@ -55,7 +55,7 @@ class FormExample : DictionaryForm() {
 
   inner class Sales : FormBlock(10, 10, "Sales") {
 
-    val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
+    val idClient = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"
     }

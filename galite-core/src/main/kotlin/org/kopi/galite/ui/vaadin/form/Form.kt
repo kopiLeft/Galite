@@ -230,7 +230,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
       }
       pages[i]!!.isVisible = false
 
-      if(pageCount == 0) {
+      if (pageCount == 0) {
         pages[i]!!.style["max-height"] = "calc(100vh - 210px)"
       } else {
         pages[i]!!.style["max-height"] = "calc(100vh - 260px)"

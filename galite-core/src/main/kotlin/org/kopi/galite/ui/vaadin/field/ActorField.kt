@@ -125,8 +125,4 @@ class ActorField : ObjectField<Any?>() {
   override fun setPresentationValue(newPresentationValue: Any?) {
     // Do nothing
   }
-
-  /*override fun generateModelValue(): Any? {
-    return null
-  }*/
 }

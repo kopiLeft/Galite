@@ -200,8 +200,6 @@ class RichTextField(
     editor.value = value
   }
 
-  //override fun generateModelValue() : String = editor.value
-
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.

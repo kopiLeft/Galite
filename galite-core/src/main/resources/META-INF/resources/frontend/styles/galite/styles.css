@@ -48,7 +48,7 @@ summary, time, mark, audio, video {
 }
 
 .k-block .simple ::part(input-field) {
-	border-bottom: #dadada 1px solid;
+    border-bottom: #dadada 1px solid;
     border-radius: unset;
 }
 

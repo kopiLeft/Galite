@@ -65,7 +65,7 @@
  * Styles for grid, remove border
  */
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-      border: none;
+    border: none;
 }
 
 /**
