@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.common.VSpan
 
 import com.vaadin.flow.component.Component
@@ -39,17 +40,28 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) : Div(), HasSize {
 
   //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val scroller = Scroller()
+  private val details = FocusableDetails(LocalizedProperties.getString(locale, "showErrorDetails"), scroller)
+  private val message = VSpan()
+
+  init {
+    createContent()
+    setMessage(message)
+    add(details)
+  }
+
+  //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-
   /**
    * Creates the window content.
    */
   protected fun createContent() {
     scroller.className = "error-details"
     scroller.height = "200px"
-    message = VSpan()
-    message!!.className = "details-message"
+    message.className = "details-message"
     scroller.content = message
   }
 
@@ -58,7 +70,7 @@ class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) 
    * @param message The error message.
    */
   fun setMessage(message: String?) {
-    this.message!!.setHtml(message)
+    this.message.setHtml(message)
   }
 
   fun setPixelSize(width: Int, height: Int) {
@@ -68,24 +80,6 @@ class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) 
 
   fun focus() {
     details.focus()
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var details: FocusableDetails
-  private var message: VSpan? = null
-  private val scroller = Scroller()
-
-  //---------------------------------------------------
-  // CONSTRUCTORS
-  //---------------------------------------------------
-  init {
-    createContent()
-    setMessage(message)
-    // TODO: Add localized message
-    details = FocusableDetails("Afficher les détails", scroller)
-    add(details)
   }
 
   class FocusableDetails(message: String?,

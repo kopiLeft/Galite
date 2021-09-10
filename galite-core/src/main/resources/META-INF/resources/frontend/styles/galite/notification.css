@@ -81,3 +81,9 @@
 :host([theme~="notification"]) [part="dialog-content"] {
     overflow-x: auto;
 }
+
+.error-details {
+    height: 200px;
+    white-space: nowrap;
+    border: 2px solid #dadada;
+}

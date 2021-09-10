@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 
@@ -67,7 +68,11 @@ class ErrorNotification(title: String?,
     buttons.add(close)
 
     if(application?.windowError != null) {
-      details = ErrorMessageDetails(application.windowError!!.toString(), locale, this)
+      val stacktrace = ExceptionUtils.getStackTrace(application.windowError)
+      val htmlStacktrace = stacktrace.replace(System.lineSeparator(), "<br/>\n")
+                                     .replace("\t", "&emsp;")
+
+      details = ErrorMessageDetails(htmlStacktrace, locale, this)
       details!!.element.setAttribute("aria-label", "Click me") // FIXME : do we need this?
       footer.add(details)
     }

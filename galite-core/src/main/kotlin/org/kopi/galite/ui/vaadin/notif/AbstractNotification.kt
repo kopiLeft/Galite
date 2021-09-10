@@ -30,6 +30,8 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * An abstract implementation of notification components such as
@@ -56,7 +58,7 @@ abstract class AbstractNotification(title: String?,
   private var listeners = mutableListOf<NotificationListener>()
   private val icon = Icon(iconName)
   private val title = H3(title)
-  private var content = Div()
+  private var content = HorizontalLayout()
   private var message = VSpan()
   protected var buttons = Div()
   internal var yesIsDefault = false
@@ -75,6 +77,7 @@ abstract class AbstractNotification(title: String?,
     buttons.className = Styles.NOTIFICATION_BUTTONS
     this.title.className = "k-notification-title"
     this.content.className = "k-notification-content"
+    content.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
 
     setHeader(this.title)
     setNotificationMessage(message)
