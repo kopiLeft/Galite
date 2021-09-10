@@ -211,6 +211,11 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
   }
 
+  @JvmName("setAnyValue")
+  fun setValue(text: Any?) {
+    value = format(text)
+  }
+
   override fun setValue(text: String?) {
     var text = text
 

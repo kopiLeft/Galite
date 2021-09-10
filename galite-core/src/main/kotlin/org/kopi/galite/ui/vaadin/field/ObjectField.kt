@@ -138,7 +138,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
     columnView!!.setAsActiveField()
   }
 
-  open fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<T>>?) {
+  open fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<T>>) {
     columnView!!.unsetAsActiveField()
   }
 

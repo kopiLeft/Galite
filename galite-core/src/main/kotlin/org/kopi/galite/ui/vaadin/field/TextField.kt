@@ -424,9 +424,13 @@ class TextField(val model: VField,
     inputField.value = newPresentationValue.toString()
   }
 
-  /*override fun setModelValue(newModelValue: Any?, fromClient: Boolean) {
-    super.setModelValue(inputField.value, fromClient)
-  }*/
+  override fun getValue(): String? {
+    return inputField.value
+  }
+
+  override fun setValue(value: Any?) {
+    inputField.setValue(value)
+  }
 
   /**
    * Communicates the widget text to server side.
@@ -539,10 +543,6 @@ class TextField(val model: VField,
    */
   override fun checkValue(rec: Int) {
     inputField.checkValue(rec)
-  }
-
-  override fun getValue(): String? {
-    return inputField.value
   }
 
   //---------------------------------------------------

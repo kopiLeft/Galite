@@ -34,7 +34,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param falseRepresentation The representation of the false false
  */
 @CssImport("./styles/galite/checkbox.css")
-class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean>() {
+class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean?>() {
 
   /**
    * Sets the boolean field to be mandatory
@@ -110,14 +110,14 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean>>?) {
+  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
     super.onBlur(event)
     if (value == null) {
       isVisible = false
     }
   }
 
-  override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean>>) {
+  override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
     super.onFocus(event)
     isVisible = true
   }
@@ -215,6 +215,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     } else if (mandatory && !no.value) {
       yes.value = true
     }
+    setModelValue(value, event.isFromClient)
     handleComponentVisiblity()
   }
 
@@ -225,6 +226,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     } else if (mandatory && !yes.value) {
       no.value = true
     }
+    setModelValue(value, event.isFromClient)
     handleComponentVisiblity()
   }
 

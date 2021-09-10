@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.testing
 
+import com.github.mvysny.kaributesting.v10._checkClickable
+import com.github.mvysny.kaributesting.v10._click
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.dsl.FormField
@@ -30,14 +32,22 @@ import org.kopi.galite.ui.vaadin.main.MainWindow
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._fireDomEvent
 import com.github.mvysny.kaributesting.v10._fireEvent
+import com.github.mvysny.kaributesting.v10._fireValueChange
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
+import com.github.mvysny.kaributesting.v10.click
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
+import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.HasValueAndElement
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
+import org.kopi.galite.ui.vaadin.field.BooleanField
+import org.kopi.galite.ui.vaadin.field.InputTextField
+import org.kopi.galite.ui.vaadin.field.TextField
+import org.kopi.galite.ui.vaadin.field.VTimeStampField
 
 /**
  * Edit a form field.
@@ -66,6 +76,9 @@ fun <T> FormField<T>.edit(value: T): UField {
   if(editorField is GridEditorBooleanField) {
     editorField._fireDomEvent("mouseover")
   }
+  if(editorField is BooleanField) {
+    editorField.getContent()._fireDomEvent("mouseover")
+  }
 
   (editorField as ClickNotifier<*>)._clickAndWait(100)
 
@@ -73,20 +86,44 @@ fun <T> FormField<T>.edit(value: T): UField {
 
   editorField as HasValueAndElement<ComponentValueChangeEvent<*, Any?>, Any?>
 
-  when (editorField) {
-    is GridEditorTimestampField -> {
+  when {
+    editorField is GridEditorTimestampField || (editorField as? TextField)?.getContent() is VTimeStampField -> {
       editorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
     }
-    is GridEditorTextField -> {
+    editorField is GridEditorTextField -> {
       editorField._value = value.toString()
+    }
+    editorField is BooleanField -> {
+      val checkbox: Checkbox  = if (value == true) {
+        editorField._get { classes = "true" }
+      } else {
+        editorField._get { classes = "false" }
+      }
+      editorField._value = true
     }
     else -> {
       editorField._value = value
     }
   }
-  editorField._fireEvent(ComponentValueChangeEvent<Component, Any?>(editorField, editorField, oldValue, true))
+
+  if (editorField is TextField) {
+    val content = (editorField.getContent() as InputTextField<*>).content
+    content as HasValueAndElement<ComponentValueChangeEvent<*, Any?>, Any?>
+    content._fireEvent(ComponentValueChangeEvent<Component, Any?>(content, content, oldValue, true))
+  } else if (editorField !is BooleanField) {
+    editorField._fireEvent(ComponentValueChangeEvent<Component, Any?>(editorField, editorField, oldValue, true))
+  }
+
 
   return field
+}
+
+fun <T: ClickNotifier<*>> T.clickInClient() {
+  _checkClickable()
+  (this as Component)._fireEvent(
+    ClickEvent<Component>(this, true, 0, 0, 0, 0,
+                          0, 0, false, false, false, false)
+  )
 }
 
 /**

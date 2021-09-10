@@ -43,7 +43,7 @@ fun FormBlock.enter(duration: Long = 50) {
   if(block is DGridBlock) {
     block.grid.clickItem(0, block.grid.columns.first())
   } else {
-    block._get<Field>().focus()
+    block._find<Field>().first().focus()
   }
 
   // Wait for async updates in transferFocus
@@ -71,6 +71,16 @@ fun FormBlock.editRecord(record: Int, duration: Long = 50) {
   Thread.sleep(duration)
   MockVaadin.runUIQueue()
 }
+
+/*fun DBlock.goToRecord(record: Int) {
+  while (activeRecord != -1 || activeRecord != record) {
+    if (activeRecord < record) {
+      gotoNextRecord()
+    } else if (activeRecord > record) {
+      gotoPrevRecord()
+    }
+  }
+}*/
 
 /**
  * Finds the Vaadin block component of this form block.
@@ -108,6 +118,8 @@ fun <T : Any> Grid<T>.clickItem(rowIndex: Int,
 
 infix fun VBlock.eq(block: VBlock): Boolean {
   return this.title == block.title
-          && this.form.getTitle() == block.form.getTitle()
+          && this.form eq block.form
           && this.name == block.name
+          && this.bufferSize == block.bufferSize
+          && this.displaySize == block.displaySize
 }

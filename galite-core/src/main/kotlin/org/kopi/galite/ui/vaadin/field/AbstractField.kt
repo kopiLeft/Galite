@@ -36,6 +36,10 @@ abstract class AbstractField<T>: com.vaadin.flow.component.AbstractField<Abstrac
 
   abstract fun getContent(): Component
 
+  abstract override fun getValue(): T
+
+  abstract override fun setValue(value: T)
+
   override fun focus() {
     val content = getContent()
 

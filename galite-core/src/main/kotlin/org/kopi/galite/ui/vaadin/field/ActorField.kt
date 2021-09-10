@@ -77,7 +77,7 @@ class ActorField : ObjectField<Any?>() {
     button.icon = icon
   }
 
-  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Any?>>?) {}
+  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Any?>>) {}
 
   override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Any?>>) {}
   override val isNull: Boolean = true
