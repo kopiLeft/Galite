@@ -239,7 +239,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun startApplication() {
-    menu = VMenuTree(dBContext!!)
+    menu = VMenuTree(dBContext)
     menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref, this)
     mainWindow!!.addMainWindowListener(this)
@@ -249,9 +249,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
-    mainWindow!!.addDetachListener {
-      closeConnection()
-    }
+  }
+
+  fun remove(mainWindow: MainWindow?) {
+    super.remove(mainWindow)
+    closeConnection()
   }
 
   override fun allowQuit(): Boolean =
@@ -415,6 +417,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
+
+    // Set the locale for the current UI.
+    UI.getCurrent()?.locale = defaultLocale
   }
 
   /**
@@ -483,21 +488,23 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       localizationManager = null
       isGeneratingHelp = false
     }
-    welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
-    welcomeView!!.setSizeFull() // important to get the full screen size.
-    welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
-      welcomeView!!.setWaitInfo()
-      Thread {
-        accessAndPush(currentUI) {
-          try {
-            onLogin(event)
-          } finally {
-            welcomeView?.unsetWaitInfo()
+    if (welcomeView == null) {
+      welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
+      welcomeView!!.setSizeFull() // important to get the full screen size.
+      welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
+        welcomeView!!.setWaitInfo()
+        Thread {
+          accessAndPush(currentUI) {
+            try {
+              onLogin(event)
+            } finally {
+              welcomeView?.unsetWaitInfo()
+            }
           }
-        }
-      }.start()
+        }.start()
+      }
+      add(welcomeView)
     }
-    add(welcomeView)
   }
 
   /**

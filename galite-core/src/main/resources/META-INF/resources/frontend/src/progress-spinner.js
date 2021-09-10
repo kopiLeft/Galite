@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,31 +14,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+import {LitElement, html} from 'lit-element';
+import '@vaadin-component-factory/vcf-progress-spinner';
 
-.k-popup-window~::part(dialog-content) {
-    padding: 0;
+class ProgressSpinner extends LitElement {
+
+    render() {
+        return html`
+        <vcf-progress-spinner></vcf-progress-spinner>`;
+    }
 }
 
-.k-popup-window .enhanced-dialog-content .k-window {
-    padding: 0;
-}
-
-.k-popup-window #overlay {
---_enhanced-dialog-content-padding: 0;
-}
-
-.enhanced-dialog-content .k-window {
-	padding: 0;
-}
-
-.enhanced-dialog-content .k-window > div, .enhanced-dialog-content .k-window div table {
-    width: 100%;
-}
-
-#resizerContainer {
-	overflow: hidden;
-}
-
-.k-popup-window~::part(dialog-content) {
-	overflow: hidden;
-}
+customElements.define('progress-spinner', ProgressSpinner);

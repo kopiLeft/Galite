@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,31 +14,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.wait
 
-.k-popup-window~::part(dialog-content) {
-    padding: 0;
-}
+import com.vaadin.flow.component.html.Div
+import org.kopi.galite.ui.vaadin.base.Styles
 
-.k-popup-window .enhanced-dialog-content .k-window {
-    padding: 0;
-}
-
-.k-popup-window #overlay {
---_enhanced-dialog-content-padding: 0;
-}
-
-.enhanced-dialog-content .k-window {
-	padding: 0;
-}
-
-.enhanced-dialog-content .k-window > div, .enhanced-dialog-content .k-window div table {
-    width: 100%;
-}
-
-#resizerContainer {
-	overflow: hidden;
-}
-
-.k-popup-window~::part(dialog-content) {
-	overflow: hidden;
+@Deprecated("Use WaitSpinner instead", replaceWith = ReplaceWith("WaitSpinner"))
+class WaitImage : Div() {
+  init {
+    className = Styles.WAIT_WINDOW_IMAGE
+  }
 }

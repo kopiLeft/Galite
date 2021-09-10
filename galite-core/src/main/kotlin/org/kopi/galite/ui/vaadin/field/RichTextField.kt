@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import com.vaadin.flow.component.Component
 import java.io.Serializable
 import java.util.Locale
 
@@ -199,8 +200,6 @@ class RichTextField(
     editor.value = value
   }
 
-  override fun generateModelValue() : String = editor.value
-
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
@@ -219,6 +218,8 @@ class RichTextField(
       function()
     }
   }
+
+  override fun getContent(): Component = editor
 
   /**
    * The grid editor field navigation listener
