@@ -193,7 +193,7 @@ class VBlockTests : JApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
-                "(\"USER\".AGE = 6) AND (\"USER\".JOB = 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE = 6) AND (UPPER(\"USER\".JOB) = 'jobValue')", blockSearchCondition.toString()
       )
     }
   }
@@ -204,20 +204,20 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
     with(FormSample.tb1.vBlock) {
       fields[5].setSearchOperator(1)
-      fields[6].setSearchOperator(1)
+      fields[6].setSearchOperator(5)
     }
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
     FormSample.tb1.name.value = "myName*"
     FormSample.tb1.age.value = 8
-    FormSample.tb1.job.value = "jobValue"
+    FormSample.tb1.job.value = "jobValue*"
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
 
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'myName%') AND " +
-                "(\"USER\".AGE < 8) AND (\"USER\".JOB < 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE < 8) AND (UPPER(\"USER\".JOB) NOT LIKE UPPER('jobValue%'))", blockSearchCondition.toString()
       )
     }
   }
@@ -228,7 +228,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
     with(FormSample.tb1.vBlock) {
       fields[5].setSearchOperator(2)
-      fields[6].setSearchOperator(2)
+      fields[6].setSearchOperator(0)
     }
 
     FormSample.tb1.id.value = null
@@ -242,7 +242,7 @@ class VBlockTests : JApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
-                "(\"USER\".AGE > 9) AND (\"USER\".JOB > 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE > 9) AND (UPPER(\"USER\".JOB) = 'jobValue')", blockSearchCondition.toString()
       )
     }
   }
@@ -254,20 +254,20 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
     with(FormSample.tb1.vBlock) {
       fields[5].setSearchOperator(3)
-      fields[6].setSearchOperator(3)
+      fields[6].setSearchOperator(0)
     }
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
     FormSample.tb1.name.value = "my*Name"
     FormSample.tb1.age.value = 10
-    FormSample.tb1.job.value = "jobValue"
+    FormSample.tb1.job.value = "*jobValue"
 
     val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'my%Name') AND " +
-                "(\"USER\".AGE <= 10) AND (\"USER\".JOB <= 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE <= 10) AND (UPPER(\"USER\".JOB) LIKE UPPER('%jobValue'))", blockSearchCondition.toString()
       )
     }
   }
@@ -278,7 +278,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
     with(FormSample.tb1.vBlock) {
       fields[5].setSearchOperator(4)
-      fields[6].setSearchOperator(4)
+      fields[6].setSearchOperator(0)
     }
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
@@ -290,7 +290,7 @@ class VBlockTests : JApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%') AND " +
-                "(\"USER\".AGE >= 11) AND (\"USER\".JOB >= 'job')", blockSearchCondition.toString()
+                "(\"USER\".AGE >= 11) AND (UPPER(\"USER\".JOB) LIKE UPPER('job%Value'))", blockSearchCondition.toString()
       )
     }
   }

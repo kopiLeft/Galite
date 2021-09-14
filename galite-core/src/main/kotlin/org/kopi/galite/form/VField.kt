@@ -1817,7 +1817,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   @Suppress("UNCHECKED_CAST")
-  internal fun selectFromList(gotoNextField: Boolean) {
+  /*internal*/ fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<Column<*>>()
 
     list!!.columns.forEach {
@@ -1866,7 +1866,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
-  internal open fun enumerateValue(desc: Boolean) {
+  /*internal*/ open fun enumerateValue(desc: Boolean) {
     var value: Any? = null
     val table = evalListTable()
     val column = list!!.getColumn(0).column

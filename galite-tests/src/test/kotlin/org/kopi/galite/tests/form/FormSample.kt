@@ -196,6 +196,7 @@ class TestBlock : FormBlock(1, 5, "Test block") {
   val job = visit(domain = STRING(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
+    options(FieldOption.QUERY_UPPER)
     columns(u.job) {
       priority = 1
     }
@@ -203,6 +204,7 @@ class TestBlock : FormBlock(1, 5, "Test block") {
   val cv = visit(domain = STRING(20), position = at(4, 1)) {
     label = "Cv"
     help = "The user curriculum vitae"
+    options(FieldOption.QUERY_LOWER)
     columns(u.cv)
     droppable("pdf")
     trigger(ACTION) {

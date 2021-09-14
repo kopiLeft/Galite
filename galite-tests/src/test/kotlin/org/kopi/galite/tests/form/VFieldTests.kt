@@ -31,6 +31,10 @@ import org.kopi.galite.list.VList
 import org.kopi.galite.list.VStringColumn
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.MessageCode
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.select
+import org.junit.Assert
+import org.kopi.galite.visual.VExecFailedException
 
 class VFieldTests : JApplicationTestBase() {
   @Test
@@ -78,9 +82,9 @@ class VFieldTests : JApplicationTestBase() {
         it[uc] = 0
       }
       listID = FormSample.tb1.name.vField.getListID()
+      assertEquals(1, listID)
+      SchemaUtils.drop(User)
     }
-
-    assertEquals(1, listID)
   }
 
   @Test
@@ -164,6 +168,403 @@ class VFieldTests : JApplicationTestBase() {
         SchemaUtils.create(User)
         FormSample.tb1.vBlock.fields[5].validate()
       }
+    }
+  }
+
+  @Test
+  fun `getSearchCondition string field equal to value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.name.value = "name"
+    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".\"NAME\" = 'name'", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition string field equal to null scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("null", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition string field like value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.name.value = "*name"
+    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".\"NAME\" LIKE '%name'", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition string field not like value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.name.vField.setSearchOperator(5)
+    FormSample.tb1.name.value = "*name"
+    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".\"NAME\" NOT LIKE '%name'", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition upper string field not like value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.job.vField.setSearchOperator(5)
+    FormSample.tb1.job.value = "*job"
+    val column : Column<*>? = FormSample.tb1.job.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.job.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".JOB NOT LIKE UPPER('%job')", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition lower string field not like value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.cv.vField.setSearchOperator(5)
+    FormSample.tb1.cv.value = "*cv"
+    val column : Column<*>? = FormSample.tb1.cv.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.cv.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".\"CURRICULUM VITAE\" NOT LIKE LOWER('%cv')", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition int field equal to value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.id.value = 1
+    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".ID = 1", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition int field less than value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.id.vField.setSearchOperator(1)
+    FormSample.tb1.id.value = 1
+    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".ID < 1", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition int field greater than value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.id.vField.setSearchOperator(2)
+    FormSample.tb1.id.value = 1
+    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".ID > 1", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition int field less than or equal to value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.id.vField.setSearchOperator(3)
+    FormSample.tb1.id.value = 1
+    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".ID <= 1", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition int field greater than or equal to value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.id.vField.setSearchOperator(4)
+    FormSample.tb1.id.value = 1
+    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".ID >= 1", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `getSearchCondition int not equal to value scenario test`() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.id.vField.setSearchOperator(5)
+    FormSample.tb1.id.value = 1
+    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
+
+    transaction {
+      assertEquals("\"USER\".ID <> 1", fieldSearchCondition.toString())
+    }
+  }
+
+  @Test
+  fun `selectFromList valid scenario test`() {
+
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    val vListColumn = VList("test",
+                            "apps/common/Global",
+                            arrayOf(VStringColumn("test", User.name, 2, 50, true)),
+                            User,
+                            null,
+                            0,
+                            0,
+                            null,
+                            false)
+
+    FormSample.tb1.name.vField.setInfo("name",
+                                       1,
+                                       -1,
+                                       0,
+                                       intArrayOf(4, 4, 4),
+                                       vListColumn,
+                                       arrayOf(VColumn(0, "NAME", false, false, User.name)),
+                                       0,
+                                       0,
+                                       null,
+                                       VPosition(1, 1, 2, 2, -1),
+                                       2,
+                                       null)
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[name] = "AUDREY"
+        it[age] = 26
+        it[ts] = 0
+        it[uc] = 0
+        it[job] = "job"
+      }
+      FormSample.tb1.name.vField.selectFromList(false)
+
+      var userName: String? = null
+
+      User.select { User.id eq 1 }.forEach {
+        userName = it[User.name]
+      }
+      assertEquals(userName, FormSample.tb1.name.value)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `selectFromList scenario with exception test`() {
+
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    val vListColumn = VList("test",
+                            "apps/common/Global",
+                            arrayOf(VStringColumn("test", User.name, 2, 50, true)),
+                            User,
+                            null,
+                            0,
+                            0,
+                            null,
+                            false)
+
+    FormSample.tb1.name.vField.setInfo("name",
+                                       1,
+                                       -1,
+                                       0,
+                                       intArrayOf(4, 4, 4),
+                                       vListColumn,
+                                       arrayOf(VColumn(0, "NAME", false, false, User.name)),
+                                       0,
+                                       0,
+                                       null,
+                                       VPosition(1, 1, 2, 2, -1),
+                                       2,
+                                       null)
+    transaction {
+      SchemaUtils.create(User)
+      val error = Assert.assertThrows(VFieldException::class.java) { FormSample.tb1.name.vField.selectFromList(false) }
+
+      assertEquals("VIS-00001: Data entry error: No matching value.", error.message)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `enumerateValue valid less than value scenario test`() {
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    val vListColumn = VList("test",
+                            "apps/common/Global",
+                            arrayOf(VIntegerColumn("test", User.age, 2, 50, true)),
+                            User,
+                            null,
+                            0,
+                            0,
+                            null,
+                            false)
+
+    FormSample.tb1.age.vField.setInfo("age",
+                                       1,
+                                       -1,
+                                       0,
+                                       intArrayOf(4, 4, 4),
+                                       vListColumn,
+                                       arrayOf(VColumn(0, "AGE", false, false, User.age)),
+                                       0,
+                                       0,
+                                       null,
+                                       VPosition(1, 1, 2, 2, -1),
+                                       2,
+                                       null)
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[name] = "AUDREY"
+        it[age] = 26
+        it[ts] = 0
+        it[uc] = 0
+        it[job] = "job"
+      }
+
+      FormSample.tb1.age.value = 30
+      FormSample.tb1.age.vField.enumerateValue(false)
+      var userAge: Int? = null
+
+      User.select { User.id eq 1 }.forEach {
+        userAge = it[User.age]
+      }
+      assertEquals(userAge, FormSample.tb1.age.value)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `enumerateValue valid greater than value scenario test`() {
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    val vListColumn = VList("test",
+                            "apps/common/Global",
+                            arrayOf(VIntegerColumn("test", User.age, 2, 50, true)),
+                            User,
+                            null,
+                            0,
+                            0,
+                            null,
+                            false)
+
+    FormSample.tb1.age.vField.setInfo("age",
+                                      1,
+                                      -1,
+                                      0,
+                                      intArrayOf(4, 4, 4),
+                                      vListColumn,
+                                      arrayOf(VColumn(0, "AGE", false, false, User.age)),
+                                      0,
+                                      0,
+                                      null,
+                                      VPosition(1, 1, 2, 2, -1),
+                                      2,
+                                      null)
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[name] = "AUDREY"
+        it[age] = 26
+        it[ts] = 0
+        it[uc] = 0
+        it[job] = "job"
+      }
+
+      FormSample.tb1.age.value = 20
+      FormSample.tb1.age.vField.enumerateValue(true)
+      var userAge: Int? = null
+
+      User.select { User.id eq 1 }.forEach {
+        userAge = it[User.age]
+      }
+      assertEquals(userAge, FormSample.tb1.age.value)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `enumerateValue scenario with exception test`() {
+    FormSample.model
+    FormSample.tb1.vBlock.clear()
+    val vListColumn = VList("test",
+                            "apps/common/Global",
+                            arrayOf(VIntegerColumn("test", User.age, 2, 50, true)),
+                            User,
+                            null,
+                            0,
+                            0,
+                            null,
+                            false)
+
+   FormSample.tb1.age.vField.setInfo("age",
+                                      1,
+                                      -1,
+                                      0,
+                                      intArrayOf(4, 4, 4),
+                                      vListColumn,
+                                      arrayOf(VColumn(0, "AGE", false, false, User.age)),
+                                      0,
+                                      0,
+                                      null,
+                                      VPosition(1, 1, 2, 2, -1),
+                                      2,
+                                      null)
+    transaction {
+      SchemaUtils.create(User)
+      FormSample.tb1.age.value = 20
+      Assert.assertThrows(VExecFailedException::class.java) { FormSample.tb1.age.vField.enumerateValue(true) }
+      SchemaUtils.drop(User)
     }
   }
 }
