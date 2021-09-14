@@ -36,7 +36,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * of the the [VHelpViewer] model.
  *
  */
-class DHelpViewer(model: VHelpViewer) : DWindow(model), Focusable<Window> {
+class DHelpViewer(model: VHelpViewer) : DWindow(model) {
 
   private val html = Html(model.url!!.openStream())
 

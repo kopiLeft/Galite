@@ -624,6 +624,14 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
   }
 
+  override fun focus() {
+    if(internalField is Focusable<*>) {
+      internalField.focus()
+    } else {
+      super.focus()
+    }
+  }
+
   /**
    * Fires a goto next field event.
    */
