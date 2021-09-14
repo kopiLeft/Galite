@@ -71,7 +71,7 @@ abstract class DGridEditorField<T>(
    * Creates a new instance of the grid editor field.
    */
   init {
-    // editor.setConverter(createConverter()) TODO
+    editor.setConverter(createConverter())
     // editor.addNavigationListener(this) TODO
     // editor.addAutofillListener(this) TODO
     setLabelAlignment()

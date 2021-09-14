@@ -1160,7 +1160,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getWeek(): Week = getWeek(block!!.currentRecord)
+  fun getWeek(): Week? = getWeek(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a timestamp value.
@@ -1271,7 +1271,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getWeek(r: Int): Week {
+  open fun getWeek(r: Int): Week? {
     throw InconsistencyException()
   }
 

@@ -16,27 +16,12 @@
  */
 package org.kopi.galite.gradle
 
-object Versions {
+import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.kotlin.dsl.exclude
 
-  const val EXPOSED = "0.33.1"
-  const val H2 = "1.4.199"
-  const val  POSTGRES_NG = "0.8.6"
-
-  const val ITEXT = "2.1.5"
-  const val  GRAPH_BUILDER = "1.02"
-  const val HYLAFAX = "1.0.0"
-  const val GETOPT = "1.0.13"
-  const val JDOM = "2.0.5"
-  const val APACHE_POI = "4.1.2"
-
-  const val VAADIN = "18.0.3"
-
-  const val KARIBU_TESTING = "1.2.12"
-  const val ENHANCED_DIALOG = "1.0.4"
-  const val APEX_CHARTS = "2.0.0.beta10"
-  const val IRON_ICONS = "2.0.1"
-  const val JAVAX_SERVLET_API = "4.0.1"
-
-  const val JFREE_CHART = "1.0.19"
-  const val WYSIWYG_EJAVA = "2.0.1"
+fun ExternalModuleDependency.excludeWebJars() {
+  listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+         "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+         "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+    .forEach { group -> exclude(group = group) }
 }

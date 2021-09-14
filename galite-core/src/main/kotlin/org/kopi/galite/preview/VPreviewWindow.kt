@@ -285,7 +285,7 @@ open class VPreviewWindow : VWindow() {
   }
 
   override fun getTitle(): String {
-    return windowTitle
+    return windowTitle.orEmpty()
   }
 
   // ---------------------------------------------------------------------

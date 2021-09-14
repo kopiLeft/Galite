@@ -134,11 +134,11 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
     }
   }
 
-  open fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {
+  open fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<T>>) {
     columnView!!.setAsActiveField()
   }
 
-  open fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {
+  open fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<T>>) {
     columnView!!.unsetAsActiveField()
   }
 

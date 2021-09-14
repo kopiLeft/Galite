@@ -21,7 +21,7 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Bill
-import org.kopi.galite.domain.DATETIME
+import org.kopi.galite.domain.DATE
 import org.kopi.galite.domain.DECIMAL
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
@@ -116,7 +116,7 @@ class BillR : Report() {
     help = "The bill address"
     align = FieldAlignment.LEFT
   }
-  val dateBill = field(DATETIME) {
+  val dateBill = field(DATE) {
     label = "Date"
     help = "The bill date"
     align = FieldAlignment.LEFT

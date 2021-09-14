@@ -19,6 +19,7 @@
 package org.kopi.galite.visual
 
 import java.awt.event.KeyEvent
+import java.sql.SQLException
 import java.util.Locale
 
 import javax.swing.tree.DefaultMutableTreeNode
@@ -28,14 +29,19 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.innerJoin
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.FAVORITENId
 import org.kopi.galite.db.Favorites
 import org.kopi.galite.db.GroupParties
 import org.kopi.galite.db.GroupRights
@@ -44,6 +50,7 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Symbols
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
+import org.kopi.galite.db.subQuery
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -56,11 +63,28 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
-class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
-                                          var isSuperUser: Boolean = false,
-                                          val menuTreeUser: String? = null,
-                                          private val groupName: String? = null,
-                                          loadFavorites: Boolean = true) : VWindow(ctxt) {
+class VMenuTree constructor(ctxt: DBContext?,
+                            var isSuperUser: Boolean,
+                            val menuTreeUser: String?,
+                            private val groupName: String?,
+                            loadFavorites: Boolean) : VWindow(ctxt) {
+  /**
+   * Constructs a new instance of VMenuTree.
+   * @param ctxt the context where to look for application
+   */
+  constructor(ctxt: DBContext?) : this(ctxt, false, null, true)
+
+  /**
+   * Constructs a new instance of VMenuTree.
+   * @param ctxt the context where to look for application
+   * @param isSuperUser is it a super user ?
+   * @param userName the user name
+   * @param loadFavorites should load favorites ?
+   */
+  constructor(ctxt: DBContext?,
+              isSuperUser: Boolean,
+              userName: String?,
+              loadFavorites: Boolean) : this(ctxt, isSuperUser, userName, null, loadFavorites)
 
   companion object {
 
@@ -543,6 +567,55 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   }
 
   /**
+   * Add a favorite into database.
+   */
+  internal fun addShortcutsInDatabase(id: Int) {
+    try {
+      transaction {
+        if (menuTreeUser != null) {
+          Favorites.insert {
+            it[this.id] = FAVORITENId.nextIntVal()
+            it[ts] = (System.currentTimeMillis() / 1000).toInt()
+            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }.subQuery()
+            it[module] = id
+          }
+        } else {
+          Favorites.insert {
+            it[this.id] = FAVORITENId.nextIntVal()
+            it[ts] = (System.currentTimeMillis() / 1000).toInt()
+            it[user] = getUserID()
+            it[module] = id
+          }
+        }
+      }
+    } catch (e: SQLException) {
+      e.printStackTrace()
+    }
+  }
+
+  /**
+   * Remove favorite from database.
+   */
+  internal fun removeShortcutsFromDatabase(id: Int) {
+    try {
+      transaction {
+        if (menuTreeUser != null) {
+          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.orEmpty() }
+          Favorites.deleteWhere {
+            (Favorites.user eqSubQuery idSubQuery) and (Favorites.module eq id)
+          }
+        } else {
+          Favorites.deleteWhere {
+            (Favorites.user eq getUserID()) and (Favorites.module eq id)
+          }
+        }
+      }
+    } catch (e: SQLException) {
+      e.printStackTrace()
+    }
+  }
+
+  /**
    * Adds the default logout module
    */
   protected fun addLogoutModule(localModules: MutableList<Module>) {
@@ -560,7 +633,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Sets the title of the frame
    */
-  override fun setTitle(title: String) {
+  override fun setTitle(title: String?) {
     if (title != null) {
       if (title.contains(VlibProperties.getString("program_menu"))) {
         super.setTitle(title)

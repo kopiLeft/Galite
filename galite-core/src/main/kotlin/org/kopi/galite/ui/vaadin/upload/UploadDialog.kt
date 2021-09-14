@@ -47,6 +47,8 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
     buttons.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
     isCloseOnOutsideClick = false
     buttons.className = "k-upload-buttons"
+    ok.style["cursor"] = "pointer"
+    cancel.style["cursor"] = "pointer"
     setHeader(title)
     setFooter(buttons)
     add(upload)
@@ -109,6 +111,9 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
     }
     cancel.addClickListener {
       receiver.receiveUpload(null, null)
+      releaseLockOnUpload()
+    }
+    addDialogCloseActionListener {
       releaseLockOnUpload()
     }
   }

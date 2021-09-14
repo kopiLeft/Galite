@@ -21,7 +21,7 @@ import java.util.Locale
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.Command
-import org.kopi.galite.domain.DATETIME
+import org.kopi.galite.domain.DATE
 import org.kopi.galite.domain.DECIMAL
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
@@ -78,7 +78,7 @@ class BlockBill : FormBlock(1, 1, "Bills") {
     help = "The bill address"
     columns(u.addressBill)
   }
-  val dateBill = mustFill(domain = DATETIME, position = at(2, 1)) {
+  val dateBill = mustFill(domain = DATE, position = at(2, 1)) {
     label = "Date"
     help = "The bill date"
     columns(u.dateBill)

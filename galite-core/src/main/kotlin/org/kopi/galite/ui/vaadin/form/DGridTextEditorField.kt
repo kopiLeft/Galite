@@ -162,11 +162,6 @@ class DGridTextEditorField(
 
   override fun createConverter(): Converter<String, Any?> {
     return object : Converter<String, Any?> {
-      val presentationType: Class<String>
-        get() = String::class.java
-      val modelType: Class<Any>
-        get() = Any::class.java
-
       override fun convertToPresentation(value: Any?, context: ValueContext?): String? {
         return transformer.toGui(getModel().toText(value))
       }
@@ -175,8 +170,7 @@ class DGridTextEditorField(
         return try {
           Result.ok(getModel().toObject(transformer.toModel(value)!!))
         } catch (e: VException) {
-          //throw ConversionException(e)
-          TODO()
+          Result.error(e.message)
         }
       }
     }
@@ -185,6 +179,8 @@ class DGridTextEditorField(
   override fun createRenderer(): Renderer<String> {
     return TextRenderer()
   }
+
+  override fun format(input: Any?): Any? = transformer.toGui(getModel().toText(input))
 
   /**
    * Creates an editor field according to the field model.
@@ -600,5 +596,4 @@ class DGridTextEditorField(
               }
     }
   }
-
 }

@@ -20,9 +20,9 @@ package org.kopi.galite.ui.vaadin.wait
 import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.dialog.GeneratedVaadinDialog
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -30,22 +30,27 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 /**
  * A Wait panel component.
  */
+@CssImport.Container(value = [
+  CssImport("./styles/galite/wait.css"),
+  CssImport("./styles/galite/wait.css" , themeFor = "vaadin-dialog-overlay")
+])
 class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialog.OpenedChangeEvent<Dialog>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var image = Div()
+  private var image = WaitSpinner()
   private var text = Span()
   private var popup = Dialog()
 
   init {
-    image.className = Styles.WAIT_WINDOW_IMAGE
     text.className = Styles.WAIT_WINDOW_TEXT
     add(image)
     add(text)
     defaultHorizontalComponentAlignment = FlexComponent.Alignment.CENTER
     isSpacing = false
+    isPadding = false
+    popup.element.themeList.add("k-wait-dialog")
     popup.isCloseOnOutsideClick = false
     popup.isCloseOnEsc = false
     popup.addOpenedChangeListener(this)
