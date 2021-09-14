@@ -58,9 +58,6 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
-  // EnhancedDialog dependency
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
-
   // ApexCharts dependency
   implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
 

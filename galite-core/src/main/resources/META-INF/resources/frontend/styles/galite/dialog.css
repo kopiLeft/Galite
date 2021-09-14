@@ -43,3 +43,7 @@
 .k-popup-window~::part(dialog-content) {
 	overflow: hidden;
 }
+
+#v-dialog~::part(content) {
+    padding: 0;
+}

@@ -16,7 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-:host([theme~="k-windowsMenu"]) [part="header"] {
+#k-windowsMenu-header {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    border-bottom: 1px solid var(--lumo-shade-10pct);
 	position: relative;
 	color: #009bd4;
 	font-style: normal !important;

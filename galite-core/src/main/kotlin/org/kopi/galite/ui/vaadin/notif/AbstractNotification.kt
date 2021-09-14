@@ -21,8 +21,8 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.common.VSpan
 import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.ui.vaadin.common.VDialog
 
-import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.dependency.CssImport
@@ -48,7 +48,7 @@ abstract class AbstractNotification(title: String?,
                                     message: String?,
                                     protected val locale: String,
                                     val parent: Component?)
-  : EnhancedDialog(), Focusable<AbstractNotification> {
+  : VDialog(), Focusable<AbstractNotification> {
 
   //-------------------------------------------------
   // DATA MEMBERS
@@ -65,6 +65,7 @@ abstract class AbstractNotification(title: String?,
   init {
     element.classList.add("notification")
     element.themeList.add("notification")
+    footerContainer.setId("notification-footer")
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
     isDraggable = true

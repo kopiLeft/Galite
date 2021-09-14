@@ -81,3 +81,23 @@ vaadin-grid-cell-content, .k-listdialog {
 :host([theme="k-listdialog-container"]) [part="dialog-content"] {
     padding: 0;
 }
+
+#k-upload-header {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    border-bottom: 1px solid var(--lumo-shade-10pct);
+}
+
+#k-upload-footer, #k-listdialog-footer {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    background-color: var(--lumo-primary-color-10pct);
+}
+
+#k-upload-content {
+    position: relative;
+    box-sizing: border-box;
+    padding: var(--lumo-space-l);
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}

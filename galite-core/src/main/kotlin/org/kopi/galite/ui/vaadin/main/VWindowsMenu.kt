@@ -17,8 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.componentfactory.EnhancedDialog
-import com.vaadin.componentfactory.theme.EnhancedDialogVariant
+import org.kopi.galite.ui.vaadin.common.VDialog
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
@@ -36,7 +36,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
   CssImport("./styles/galite/windows.css", themeFor = "vcf-enhanced-dialog-overlay"),
   CssImport("./styles/galite/windows.css")
 ])
-class VWindowsMenu : EnhancedDialog(), HasStyle {
+class VWindowsMenu : VDialog(), HasStyle {
 
   private val items = VerticalLayout()
   private val windowsItemsMap = mutableMapOf<Component, VWindowsMenuItem>()
@@ -50,8 +50,9 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     val header = HorizontalLayout()
     val switch = HorizontalLayout(headerText, switchWindowIcon)
 
-    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    minWidth = "650px"
     element.themeList.add("k-windowsMenu")
+    headerContainer.setId("k-windowsMenu-header")
     header.className = "window-items-title"
     closeIcon.className = "close-icon"
 

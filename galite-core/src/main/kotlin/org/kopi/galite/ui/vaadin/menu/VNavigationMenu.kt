@@ -26,7 +26,6 @@ import com.vaadin.flow.component.dialog.Dialog
 class VNavigationMenu(private val rootNavigationItem: VActorsRootNavigationItem) : Dialog(), HasStyle {
 
   init {
-    //this.setThemeVariants(EnhancedDialogVariant.SIZE_MEDIUM)
     isResizable = false
     isDraggable = true
     isCloseOnEsc = true
