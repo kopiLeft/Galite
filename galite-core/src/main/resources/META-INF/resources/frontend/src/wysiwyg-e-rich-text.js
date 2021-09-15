@@ -47,7 +47,9 @@ export class RichText extends WysiwygE {
      this.target.focus();
 
      if(savedSel == null) {
-		var charIndex = 0, range = this.target.ownerDocument.createRange(), target = this.target;
+		var charIndex = 0;
+		var range = this.target.ownerDocument.createRange()
+		var target = this.target;
 		var startNodeOffset = this._getNodeAndOffsetAt(target, this.value.length);
 		var endNodeOffset = this._getNodeAndOffsetAt(target, this.value.length);
 		range.setStart(startNodeOffset.node, startNodeOffset.offset);
