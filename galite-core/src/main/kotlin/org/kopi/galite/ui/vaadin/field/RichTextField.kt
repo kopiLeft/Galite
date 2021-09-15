@@ -214,6 +214,10 @@ class RichTextField(
     }
   }
 
+  override fun focus() {
+    editor.focus()
+  }
+
   override fun getContent(): Component = editor
 
   /**
