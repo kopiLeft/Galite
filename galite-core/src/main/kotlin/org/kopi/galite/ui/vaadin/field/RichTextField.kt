@@ -33,6 +33,7 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
+import com.vaadin.flow.dom.Element
 
 /**
  * A rich text field implementation based on wysiwyg-e
@@ -230,11 +231,11 @@ class RichTextField(
     addKeyNavigator(Key.PAGE_UP, KeyModifier.of("Shift")) { parent.gotoPrevRecord() }
     addKeyNavigator(Key.HOME, KeyModifier.of("Shift")) { parent.gotoFirstRecord() }
     addKeyNavigator(Key.END, KeyModifier.of("Shift")) { parent.gotoLastRecord() }
-    addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { parent.gotoPrevField() }
+    //addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { parent.gotoPrevField() } // FIXME: WysiwygE defines already this shortcut
     addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { parent.gotoPrevField() }
-    // addKeyNavigator(Key.TAB) { parent.gotoNextField() } FIXME: WysiwygE defines already a tab shortcut
+    addKeyNavigator(Key.TAB) { parent.gotoNextField() }
     addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Shift")) { parent.gotoPrevField() }
-    addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { parent.gotoNextField() }
+    //addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { parent.gotoNextField() } // FIXME: WysiwygE defines already this shortcut
     addKeyNavigator(Key.ARROW_DOWN, KeyModifier.of("Shift")) { parent.gotoNextField() }
   }
 
@@ -274,4 +275,19 @@ class RichTextField(
 
 @Tag("wysiwyg-e-rich-text")
 @JsModule("./src/wysiwyg-e-rich-text.js")
-class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
+class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE> {
+  init {
+    // Ident and outdent tools not working and they define shortcuts which doesn't
+    // allow to define a custom shortcut in server side.
+    getTool(Tool.INDENT)?.removeFromParent()
+    getTool(Tool.OUTDENT)?.removeFromParent()
+  }
+
+  fun getTool(tool: Tool): Element? {
+    val tag = tool.name.toLowerCase()
+
+    return element.children.filter { element: Element ->
+      element.tag.endsWith(tag)
+    }.findAny().orElseGet(null)
+  }
+}

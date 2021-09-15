@@ -42,7 +42,22 @@ export class RichText extends WysiwygE {
   }
 
    focus() {
+     var savedSel = this.states[this.activeState].selection;
+
      this.target.focus();
+
+     if(savedSel == null) {
+		var charIndex = 0, range = this.target.ownerDocument.createRange(), target = this.target;
+		var startNodeOffset = this._getNodeAndOffsetAt(target, this.value.length);
+		var endNodeOffset = this._getNodeAndOffsetAt(target, this.value.length);
+		range.setStart(startNodeOffset.node, startNodeOffset.offset);
+		range.setEnd(endNodeOffset.node, endNodeOffset.offset);
+		var sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+     } else {
+       this.restoreSelection();
+     }
    }
 }
 
