@@ -24,11 +24,14 @@ import kotlin.collections.ArrayList
 
 import org.vaadin.pekka.WysiwygE
 
-import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
 
 /**
@@ -199,8 +202,6 @@ class RichTextField(
     editor.value = value
   }
 
-  override fun generateModelValue() : String = editor.value
-
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
@@ -223,6 +224,8 @@ class RichTextField(
   override fun focus() {
     editor.focus()
   }
+
+  override fun getContent(): Component = editor
 
   /**
    * The grid editor field navigation listener
@@ -268,6 +271,8 @@ class RichTextField(
      */
     fun onGotoNextEmptyMustfill()
   }
+
+  inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
 }
 
 @Tag("wysiwyg-e-rich-text")

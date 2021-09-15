@@ -21,6 +21,25 @@ import { WysiwygE } from 'wysiwyg-e-fork/wysiwyg-e.js';
  * This text editor class extends WysiwygE component.
  */
 export class RichText extends WysiwygE {
+  connectedCallback() {
+    if (!this._pasteHandler) {
+      this._pasteHandler = function (event) {
+        event.preventDefault();
+        var data = event.clipboardData.getData('text/html');
+        if (!data.length) {
+          // Insert plain text if the clipboard data doesn't contain HTML.
+          data = event.clipboardData.getData('text');
+          document.execCommand('insertText', false, data);
+        } else {
+          document.execCommand('insertHTML', false, data);
+        }
+      }.bind(this);
+    }
+
+    this.addEventListener('paste', this._pasteHandler);
+
+    super.connectedCallback();
+  }
 
    focus() {
      this.target.focus();

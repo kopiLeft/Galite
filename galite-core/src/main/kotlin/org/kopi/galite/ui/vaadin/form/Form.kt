@@ -219,16 +219,22 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {
-      if (pageCount != 0) {
+      pages[i] = if (pageCount != 0) {
         if (titles[i].endsWith("<CENTER>")) {
-          pages[i] = Page(HorizontalLayout())
+          Page(HorizontalLayout())
         } else {
-          pages[i] = Page(VerticalLayout())
+          Page(VerticalLayout())
         }
       } else {
-        pages[i] = Page(VerticalLayout())
+        Page(VerticalLayout())
       }
       pages[i]!!.isVisible = false
+
+      if (pageCount == 0) {
+        pages[i]!!.style["max-height"] = "calc(100vh - 210px)"
+      } else {
+        pages[i]!!.style["max-height"] = "calc(100vh - 260px)"
+      }
     }
     // setPages content.
     setContent(pageCount, titles)
