@@ -17,19 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.Component
-import java.io.Serializable
 import java.util.Locale
 
-import kotlin.collections.ArrayList
-
+import org.kopi.galite.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.ui.vaadin.base.runAfterGetValue
+import org.kopi.galite.ui.vaadin.form.DRichTextEditor
 import org.vaadin.pekka.WysiwygE
 
-import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
 
 /**
@@ -42,7 +44,8 @@ class RichTextField(
         var rows: Int,
         visibleRows: Int,
         var noEdit: Boolean,
-        locale: Locale
+        locale: Locale, // TODO
+        val parent: DRichTextEditor
 ) : AbstractField<String?>() {
 
   //---------------------------------------------------
@@ -50,7 +53,6 @@ class RichTextField(
   //---------------------------------------------------
 
   private val editor = FocusableWysiwygE(true)
-  private val navigationListeners = ArrayList<NavigationListener>()
 
   /**
    * Minimal field width to see the toolbar in 56 px height (2 lines)
@@ -71,7 +73,7 @@ class RichTextField(
     } else {
       editor.setWidth((8 * col).toFloat(), Unit.PIXELS)
     }
-    //registerRpc(NavigationHandler())
+    createNavigatorKeys()
   }
 
   /**
@@ -182,13 +184,6 @@ class RichTextField(
   //---------------------------------------------------
   // NAVGATION
   //---------------------------------------------------
-  /**
-   * Registers a navigation listener on this rich text.
-   * @param l The listener to be registered.
-   */
-  fun addNavigationListener(l: NavigationListener) {
-    navigationListeners.add(l)
-  }
 
   override fun setPresentationValue(newPresentationValue: String?) {
     editor.value = newPresentationValue
@@ -222,48 +217,54 @@ class RichTextField(
   override fun getContent(): Component = editor
 
   /**
-   * The grid editor field navigation listener
+   * Creates the navigation actions.
    */
-  interface NavigationListener : Serializable {
-    /**
-     * Fired when a goto next field event is called by the user.
-     */
-    fun onGotoNextField()
+  fun createNavigatorKeys() {
+    addKeyNavigator(Key.ENTER, KeyModifier.of("Control")) { parent.gotoNextEmptyMustfill() }
+    addKeyNavigator(Key.ENTER, KeyModifier.of("Shift")) { parent.onGotoNextBlock() }
+    addKeyNavigator(Key.PAGE_DOWN, KeyModifier.of("Shift")) { parent.gotoNextRecord() }
+    addKeyNavigator(Key.PAGE_UP, KeyModifier.of("Shift")) { parent.gotoPrevRecord() }
+    addKeyNavigator(Key.HOME, KeyModifier.of("Shift")) { parent.gotoFirstRecord() }
+    addKeyNavigator(Key.END, KeyModifier.of("Shift")) { parent.gotoLastRecord() }
+    addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { parent.gotoPrevField() }
+    addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { parent.gotoPrevField() }
+    // addKeyNavigator(Key.TAB) { parent.gotoNextField() } FIXME: WysiwygE defines already a tab shortcut
+    addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Shift")) { parent.gotoPrevField() }
+    addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { parent.gotoNextField() }
+    addKeyNavigator(Key.ARROW_DOWN, KeyModifier.of("Shift")) { parent.gotoNextField() }
+  }
 
-    /**
-     * Fired when a goto previous field event is called by the user.
-     */
-    fun onGotoPrevField()
+  /**
+   * Adds a key navigator action to this handler.
+   * @param key The key code.
+   * @param modifiers The modifiers.
+   * @param navigationAction lambda representing the action to perform
+   */
+  private fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> kotlin.Unit) {
+    NavigationAction(this, key, modifiers, navigationAction)
+      .registerShortcut()
+  }
 
-    /**
-     * Fired when a goto next block event is called by the user.
-     */
-    fun onGotoNextBlock()
+  /**
+   * A navigation action
+   */
+  inner class NavigationAction(
+    field: RichTextField,
+    key: Key,
+    modifiers: Array<out KeyModifier>,
+    navigationAction: () -> kotlin.Unit
+  ) : ShortcutAction<RichTextField>(field, key, modifiers, navigationAction) {
 
-    /**
-     * Fired when a goto previous record event is called by the user.
-     */
-    fun onGotoPrevRecord()
-
-    /**
-     * Fired when a goto next field event is called by the user.
-     */
-    fun onGotoNextRecord()
-
-    /**
-     * Fired when a goto first record event is called by the user.
-     */
-    fun onGotoFirstRecord()
-
-    /**
-     * Fired when a goto last record event is called by the user.
-     */
-    fun onGotoLastRecord()
-
-    /**
-     * Fired when a goto next empty mandatory field event is called by the user.
-     */
-    fun onGotoNextEmptyMustfill()
+    //---------------------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------------------
+    override fun performAction() {
+      editor.runAfterGetValue {
+        // first sends the text value to model if changed
+        parent.valueChanged()
+        navigationAction()
+      }
+    }
   }
 }
 
