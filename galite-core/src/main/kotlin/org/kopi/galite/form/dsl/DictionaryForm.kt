@@ -53,13 +53,15 @@ abstract class DictionaryForm : VDictionary, Form() {
     VDynamicReport.createDynamicReport(this.vBlock)
   }
 
-  /** Form model */
-  override val model: VDictionaryForm by lazy {
-    object : VDictionaryForm() {
-      override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
-      override fun init() {
-        initialize()
-      }
+  // ----------------------------------------------------------------------
+  // DICTIONARY FORM MODEL
+  // ----------------------------------------------------------------------
+  override val model: VDictionaryForm by lazy { DictionaryFormModel() }
+
+  inner class DictionaryFormModel: VDictionaryForm() {
+    override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
+    override fun init() {
+      initialize()
     }
   }
 }

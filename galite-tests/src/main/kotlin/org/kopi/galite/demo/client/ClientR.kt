@@ -29,7 +29,6 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.UReport
-import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.visual.WindowController
 
@@ -147,12 +146,8 @@ class ClientR : Report() {
     help = "The client first name"
     align = FieldAlignment.LEFT
     group = ageClt
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toUpperCase()
     }
   }
 
@@ -160,12 +155,8 @@ class ClientR : Report() {
     label = "Last Name"
     help = "The client last name"
     align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toUpperCase()
     }
   }
 
@@ -173,12 +164,8 @@ class ClientR : Report() {
     label = "Address"
     help = "The client address"
     align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toLowerCase()
     }
   }
 

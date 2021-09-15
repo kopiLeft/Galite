@@ -205,80 +205,82 @@ abstract class Chart : Window() {
       model.setType(value)
     }
 
-  override val model: VChart by lazy {
+  // ----------------------------------------------------------------------
+  // CHART MODEL
+  // ----------------------------------------------------------------------
+  override val model: VChart by lazy { ChartModel() }
 
-    object : VChart() {
-      override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
+  inner class ChartModel: VChart() {
+    override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
 
-      /**
-       * Handling triggers
-       */
-      fun handleTriggers(triggers: MutableList<Trigger>) {
-        // CHART TRIGGERS
-        triggers.forEach { trigger ->
-          val chartTriggerArray = IntArray(CConstants.TRG_TYPES.size)
-          for (i in VConstants.TRG_TYPES.indices) {
-            if (trigger.events shr i and 1 > 0) {
-              chartTriggerArray[i] = i
-              super.triggers[i] = trigger
-            }
+    /**
+     * Handling triggers
+     */
+    fun handleTriggers(triggers: MutableList<Trigger>) {
+      // CHART TRIGGERS
+      triggers.forEach { trigger ->
+        val chartTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+        for (i in VConstants.TRG_TYPES.indices) {
+          if (trigger.events shr i and 1 > 0) {
+            chartTriggerArray[i] = i
+            super.triggers[i] = trigger
           }
-          super.VKT_Triggers[0] = chartTriggerArray
         }
-
-        // DIMENSION TRIGGERS
-        this@Chart.dimension.also {
-          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
-
-          if(it.formatTrigger != null) {
-            fieldTriggerArray[CConstants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
-          }
-          // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
-
-        // MEASURE TRIGGERS
-        this@Chart.measures.forEach {
-          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
-
-          if(it.colorTrigger != null) {
-            fieldTriggerArray[CConstants.TRG_COLOR] = it.colorTrigger!!.events.toInt()
-          }
-          // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
-
-        // COMMANDS TRIGGERS
-        commands?.forEach {
-          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
-          // TODO : Add commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
+        super.VKT_Triggers[0] = chartTriggerArray
       }
 
-      override fun init() {
-        setTitle(title)
-        help = this@Chart.help
-        this.addActors(this@Chart.actors.map { actor ->
-          actor.buildModel(sourceFile)
-        }.toTypedArray())
-        this.commands = this@Chart.commands.map { command ->
-          command.buildModel(this, actors)
-        }.toTypedArray()
+      // DIMENSION TRIGGERS
+      this@Chart.dimension.also {
+        val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
 
-        source = sourceFile
-
-        super.dimensions = listOf(this@Chart.dimension).map { it.model }.toTypedArray()
-        super.measures = this@Chart.measures.map { it.model }.toTypedArray()
-
-        addChartLines()
-
-        handleTriggers(this@Chart.triggers)
+        if(it.formatTrigger != null) {
+          fieldTriggerArray[CConstants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+        }
+        // TODO : Add field triggers here
+        super.VKT_Triggers.add(fieldTriggerArray)
       }
 
-      override fun add() {
-        // TODO
+      // MEASURE TRIGGERS
+      this@Chart.measures.forEach {
+        val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+        if(it.colorTrigger != null) {
+          fieldTriggerArray[CConstants.TRG_COLOR] = it.colorTrigger!!.events.toInt()
+        }
+        // TODO : Add field triggers here
+        super.VKT_Triggers.add(fieldTriggerArray)
       }
+
+      // COMMANDS TRIGGERS
+      commands?.forEach {
+        val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+        // TODO : Add commands triggers here
+        super.VKT_Triggers.add(fieldTriggerArray)
+      }
+    }
+
+    override fun init() {
+      setTitle(title)
+      help = this@Chart.help
+      this.addActors(this@Chart.actors.map { actor ->
+        actor.buildModel(sourceFile)
+      }.toTypedArray())
+      this.commands = this@Chart.commands.map { command ->
+        command.buildModel(this, actors)
+      }.toTypedArray()
+
+      source = sourceFile
+
+      super.dimensions = listOf(this@Chart.dimension).map { it.model }.toTypedArray()
+      super.measures = this@Chart.measures.map { it.model }.toTypedArray()
+
+      addChartLines()
+
+      handleTriggers(this@Chart.triggers)
+    }
+
+    override fun add() {
+      // TODO
     }
   }
 }

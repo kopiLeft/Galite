@@ -264,18 +264,20 @@ abstract class Form : Window() {
             .genForm(title, formBlocks.map { it.ownDomains }.flatten(), menus, actors, pages, formBlocks)
   }
 
-  /** Form model */
-  override val model: VForm by lazy {
-    object : VForm() {
-      override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale()
+  // ----------------------------------------------------------------------
+  // FORM MODEL
+  // ----------------------------------------------------------------------
+  override val model: VForm by lazy { FormModel() }
 
-      override fun init() {
-        initialize()
-      }
+  inner class FormModel: VForm() {
+    override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale()
+
+    override fun init() {
+      initialize()
     }
   }
 
-  fun VForm.initialize() {
+  protected fun VForm.initialize() {
     source = sourceFile
     setTitle(title)
     pages = this@Form.pages.map {

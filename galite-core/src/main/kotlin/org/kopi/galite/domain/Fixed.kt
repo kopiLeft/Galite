@@ -19,28 +19,11 @@ package org.kopi.galite.domain
 
 import org.kopi.galite.form.VConstants
 
-/**
- * The convert option used in order to modify the String's case.
- */
-enum class Convert(val value: Int) {
+enum class Fixed(val value: Int) {
 
-  /**
-   * Converts the first letter of each word to capital letter.
-   */
-  NAME(VConstants.FDO_CONVERT_NAME),
+  ON(VConstants.FDO_FIX_NL),
 
-  /**
-   * Convert the whole text to capital letters.
-   */
-  UPPER(VConstants.FDO_CONVERT_UPPER),
+  OFF(VConstants.FDO_DYNAMIC_NL),
 
-  /**
-   * Converts the whole text to normal letters.
-   */
-  LOWER(VConstants.FDO_CONVERT_NAME),
-
-  /**
-   * No conversion.
-   */
-  NONE(VConstants.FDO_CONVERT_NONE)
+  UNDEFINED(0)
 }
