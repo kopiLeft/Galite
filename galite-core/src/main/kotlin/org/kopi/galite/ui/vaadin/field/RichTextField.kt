@@ -271,8 +271,6 @@ class RichTextField(
      */
     fun onGotoNextEmptyMustfill()
   }
-
-  inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
 }
 
 @Tag("wysiwyg-e-rich-text")
