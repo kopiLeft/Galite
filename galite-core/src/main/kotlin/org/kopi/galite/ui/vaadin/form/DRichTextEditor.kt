@@ -53,7 +53,8 @@ class DRichTextEditor(
                            getModel().height,
                            if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
                            model.model.isNoEdit(),
-                           ApplicationContext.getDefaultLocale())
+                           ApplicationContext.getDefaultLocale(),
+                           this)
     editor.addTextValueChangeListener {
       valueChanged()
     }

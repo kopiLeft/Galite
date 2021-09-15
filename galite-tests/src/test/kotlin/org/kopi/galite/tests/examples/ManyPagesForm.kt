@@ -19,6 +19,7 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
+import org.kopi.galite.domain.Fixed
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.DictionaryForm
@@ -50,7 +51,7 @@ class ManyPagesForm : DictionaryForm() {
   }
 
   inner class Details : FormBlock(1, 100, "Details") {
-    val detail = visit(domain = STRING(30, 30, 30, true), position = at(1, 1)) {
+    val detail = visit(domain = STRING(30, 30, 30, Fixed.ON), position = at(1, 1)) {
       label = "detail"
       help = "The detail"
     }
