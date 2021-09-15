@@ -31,17 +31,23 @@
  * Styles to be applied to a simple block layout table cell.
  */
 .simple td {
-    padding-bottom: 1px;
+    padding-bottom: 2px;
     height: 20px;
     padding-right: 8px;
     display: table-cell;
     vertical-align: top;
 }
 
+.info-content > * {
+     padding-bottom: 2px;
+     padding-right: 8px;
+     vertical-align: top;
+ }
+
 /**
  * Specific styles for a field cell
  */
-.simple .k-textinput {
+.simple td.field-cell {
     padding-right: 24px;
 }
 
@@ -59,7 +65,7 @@
  * Styles for grid, remove border
  */
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-      border: none;
+    border: none;
 }
 
 /**
@@ -99,10 +105,6 @@
     display: -webkit-box;
 }
 
-.info-content .k-textfield, .info-content .k-textinput {
-    --lumo-text-field-size: none;
-}
-
 .info-content .k-textinput {
     line-height: normal;
 }
@@ -136,7 +138,6 @@
     height: 100%;
     --lumo-text-field-size: var(--lumo-size-xxs);
 }
-
 
 .editor-field::part(input-field) {
     height: 100%;

@@ -20,6 +20,10 @@ import org.kopi.galite.form.UField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.dsl.FormField
 import org.kopi.galite.type.Timestamp
+import org.kopi.galite.ui.vaadin.field.BooleanField
+import org.kopi.galite.ui.vaadin.field.InputTextField
+import org.kopi.galite.ui.vaadin.field.TextField
+import org.kopi.galite.ui.vaadin.field.VTimeStampField
 import org.kopi.galite.ui.vaadin.form.DField
 import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
@@ -36,7 +40,7 @@ import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.HasValueAndElement
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 
 /**
@@ -48,43 +52,89 @@ fun <T> FormField<T>.edit(value: T): UField {
   val mainWindow = _get<MainWindow>()
   lateinit var field: UField
 
-  val editorField  = if (this.block.vBlock.isMulti()) {
-    val column = mainWindow
-      ._find<Grid.Column<*>>()
-      .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }
-    val gridEditorField = (column.editorComponent as GridEditorField<*>)
-
-    field = gridEditorField.dGridEditorField
-    gridEditorField
+  return if (this.block.vBlock.isMulti()) {
+    editInMultipleBlock(value, mainWindow)
   } else {
-    val fields = mainWindow._find<DField>()
+    editInSimpleBlock(value, mainWindow)
+  }
+}
 
-    field = fields.single { it.getModel() eq this.vField }
-    field.wrappedField
+private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindow): UField {
+  val column = mainWindow
+    ._find<Grid.Column<*>>()
+    .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }
+  val gridEditorField = (column.editorComponent as GridEditorField<*>)
+
+  if(gridEditorField is GridEditorBooleanField) {
+    gridEditorField._fireDomEvent("mouseover")
   }
 
-  if(editorField is GridEditorBooleanField) {
-    editorField._fireDomEvent("mouseover")
+  (gridEditorField as ClickNotifier<*>)._clickAndWait(100)
+  val oldValue = gridEditorField._value
+  gridEditorField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
+
+  when {
+    gridEditorField is GridEditorTimestampField -> {
+      gridEditorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
+    }
+    gridEditorField is GridEditorTextField -> {
+      gridEditorField._value = value.toString()
+    }
+    else -> {
+      gridEditorField._value = value
+    }
+  }
+
+  gridEditorField._fireEvent(ComponentValueChangeEvent<Component, Any?>(gridEditorField, gridEditorField, oldValue, true))
+
+  return gridEditorField.dGridEditorField
+}
+
+private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow): UField {
+  val fields = mainWindow._find<DField>()
+  val field =  fields.single { it.getModel() eq this.vField }
+  val editorField = field.wrappedField
+
+  if(editorField is BooleanField) {
+    editorField.getContent()._fireDomEvent("mouseover")
   }
 
   (editorField as ClickNotifier<*>)._clickAndWait(100)
-
   val oldValue = editorField._value
 
-  editorField as HasValueAndElement<ComponentValueChangeEvent<*, Any?>, Any?>
-
-  when (editorField) {
-    is GridEditorTimestampField -> {
+  when {
+    (editorField as? TextField)?.getContent() is VTimeStampField -> {
       editorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
     }
-    is GridEditorTextField -> {
-      editorField._value = value.toString()
+    editorField is BooleanField -> {
+      val checkbox: Checkbox  = if (value == true) {
+        editorField._get { classes = "true" }
+      } else {
+        editorField._get { classes = "false" }
+      }
+      checkbox._value = true
     }
     else -> {
       editorField._value = value
     }
   }
-  editorField._fireEvent(ComponentValueChangeEvent<Component, Any?>(editorField, editorField, oldValue, true))
+
+  val inputField = when (editorField) {
+    is TextField -> {
+      (editorField.getContent() as InputTextField<*>).content
+    }
+    is BooleanField -> {
+      null
+    }
+    else -> {
+      editorField
+    }
+  }
+
+  if (inputField != null) {
+    inputField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
+    inputField._fireEvent(ComponentValueChangeEvent<Component, Any?>(inputField, inputField, oldValue, true))
+  }
 
   return field
 }

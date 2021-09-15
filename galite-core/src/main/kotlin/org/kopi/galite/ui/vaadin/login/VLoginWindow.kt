@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.login
 
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.progressbar.ProgressBar
 import com.vaadin.flow.dom.DomEvent
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -147,21 +148,24 @@ class VLoginWindow : Div() {
   }
 
   fun setWaitInfo() {
-    loginBox.setWaitInfo()
+    loginBox.disableLoginButton()
+    progress.isVisible = true
   }
 
   fun unsetWaitInfo() {
-    loginBox.unsetWaitInfo()
+    loginBox.enableLoginButton()
+    progress.isVisible = false
   }
 
   //---------------------------------------------------
-// DATA MEMBERS
-//---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
   private val loginBox: VLoginBox
   private val listeners: MutableList<LoginWindowListener>
+  private val progress = ProgressBar()
   //---------------------------------------------------
-// CONSTRUCTOR
-//---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
   /**
    * Creates the login window box.
    */
@@ -169,7 +173,11 @@ class VLoginWindow : Div() {
     className = Styles.LOGIN_WINDOW
     listeners = ArrayList()
     loginBox = VLoginBox()
+    progress.className = "login-progress-bar"
+    progress.isIndeterminate = true
+    progress.isVisible = false
     add(loginBox)
+    add(progress)
     loginBox.addClickHandler { onClick() }
     loginBox.addChangeHandler(::handleSelectionChange)
     width = "400px"

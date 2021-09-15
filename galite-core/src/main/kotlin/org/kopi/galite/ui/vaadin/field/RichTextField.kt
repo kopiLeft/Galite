@@ -24,12 +24,15 @@ import org.kopi.galite.ui.vaadin.base.runAfterGetValue
 import org.kopi.galite.ui.vaadin.form.DRichTextEditor
 import org.vaadin.pekka.WysiwygE
 
-import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dependency.JsModule
 
 /**
  * A rich text field implementation based on wysiwyg-e
@@ -192,8 +195,6 @@ class RichTextField(
     editor.value = value
   }
 
-  override fun generateModelValue() : String = editor.value
-
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
@@ -212,6 +213,8 @@ class RichTextField(
       function()
     }
   }
+
+  override fun getContent(): Component = editor
 
   /**
    * Creates the navigation actions.
@@ -263,6 +266,8 @@ class RichTextField(
       }
     }
   }
-
-  inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
 }
+
+@Tag("wysiwyg-e-rich-text")
+@JsModule("./src/wysiwyg-e-rich-text.js")
+class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
