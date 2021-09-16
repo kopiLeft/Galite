@@ -63,6 +63,7 @@ import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.Push
@@ -252,7 +253,22 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   fun remove(mainWindow: MainWindow?) {
+    // Remove main window from parent
     super.remove(mainWindow)
+
+    // Close opened popups
+    parent.ifPresent { body ->
+      body.children
+        .filter { component -> component is Dialog }
+        .forEach {
+          val dialog = (it as Dialog)
+          if(dialog.isOpened) {
+            dialog.close()
+          }
+        }
+    }
+
+    // Close database connection
     closeConnection()
   }
 

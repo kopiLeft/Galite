@@ -118,11 +118,11 @@ abstract class AbstractNotification(title: String?,
   protected fun fireOnClose(action: Boolean?) {
     val lastActiveWindow = parent?.findMainWindow()?.currentWindow as? Window
 
+    close()
+
     for (l in listeners) {
       l.onClose(action)
     }
-
-    close()
 
     lastActiveWindow?.goBackToLastFocusedTextField()
   }
