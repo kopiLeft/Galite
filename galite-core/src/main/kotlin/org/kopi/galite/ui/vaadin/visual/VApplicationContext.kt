@@ -18,7 +18,9 @@
 
 package org.kopi.galite.ui.vaadin.visual
 
+import org.kopi.galite.monitoring.UserData
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.ui.vaadin.base.SessionManager
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.PreviewRunner
@@ -52,6 +54,8 @@ class VApplicationContext : ApplicationContext() {
   override fun isWebApplicationContext(): Boolean {
     return true
   }
+
+  override fun getActiveUsers(): List<UserData> = SessionManager.activeUsers
 
   //---------------------------------------------------
   // DATA MEMBEERS

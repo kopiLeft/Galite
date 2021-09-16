@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual
 
+import kotlin.jvm.Throws
+
 import java.io.CharArrayWriter
 import java.io.StringWriter
 import java.io.PrintWriter
@@ -33,6 +35,7 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.base.Utils
 import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.monitoring.UserData
 import org.kopi.galite.util.mailer.Mailer
 
 /**
@@ -63,6 +66,13 @@ abstract class ApplicationContext {
    * @return `true` if we are in a web application context.
    */
   abstract fun isWebApplicationContext(): Boolean
+
+  /**
+   * Returns the list of the connected users to the application.
+   * @return The list of the connected users to the application.
+   */
+  @Throws(java.lang.Exception::class)
+  abstract fun getActiveUsers(): List<UserData>
 
   companion object {
 

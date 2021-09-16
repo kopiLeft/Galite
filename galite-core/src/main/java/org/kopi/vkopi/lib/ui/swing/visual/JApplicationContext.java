@@ -19,6 +19,9 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
+import java.util.List;
+
+import org.kopi.galite.monitoring.UserData;
 import org.kopi.galite.visual.Application;
 import org.kopi.galite.visual.ApplicationContext;
 import org.kopi.galite.visual.PreviewRunner;
@@ -49,6 +52,11 @@ public class JApplicationContext extends ApplicationContext {
    */
   public boolean isWebApplicationContext() {
     return false;
+  }
+
+  @Override
+  public List<UserData> getActiveUsers() throws Exception {
+    throw new Exception("Not implemented for swing applications");
   }
   
   //--------------------------------------------------

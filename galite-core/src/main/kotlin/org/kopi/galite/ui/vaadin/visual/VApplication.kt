@@ -32,6 +32,7 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.ui.vaadin.base.FontMetrics
+import org.kopi.galite.ui.vaadin.base.SessionManager
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
@@ -69,6 +70,10 @@ import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.ServiceInitEvent
+import com.vaadin.flow.server.SessionDestroyEvent
+import com.vaadin.flow.server.SessionDestroyListener
+import com.vaadin.flow.server.SessionInitEvent
+import com.vaadin.flow.server.SessionInitListener
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
@@ -232,6 +237,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
           closeConnection()
           // show welcome screen
           gotoWelcomeView()
+          // Logout user from the session manager
+          SessionManager.logout()
         }
       }
     })
@@ -249,6 +256,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
+    // Login user in the session manager
+    SessionManager.login()
   }
 
   fun remove(mainWindow: MainWindow?) {
@@ -558,10 +567,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       val currentSession = VaadinSession.getCurrent()
 
       if (currentSession != null) {
-        return currentSession.browser.address
+        return currentSession.browser.address.orEmpty()
       } else {
         accessAndAwait(currentUI) {
-          userIP = VaadinSession.getCurrent().browser.address
+          userIP = VaadinSession.getCurrent().browser.address.orEmpty()
         }
       }
 
@@ -664,11 +673,21 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 }
 
-class ApplicationServiceInitListener: VaadinServiceInitListener {
+class ApplicationServiceInitListener: VaadinServiceInitListener, SessionInitListener, SessionDestroyListener {
   override fun serviceInit(event: ServiceInitEvent) {
+    event.source.addSessionInitListener(this)
+    event.source.addSessionDestroyListener(this)
     event.source.addUIInitListener { uiInitEvent ->
       val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
       loadingIndicatorConfiguration.firstDelay = 500
     }
+  }
+
+  override fun sessionInit(event: SessionInitEvent) {
+    SessionManager.register(event.session)
+  }
+
+  override fun sessionDestroy(event: SessionDestroyEvent) {
+    SessionManager.unregister(event.session)
   }
 }
