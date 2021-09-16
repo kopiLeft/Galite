@@ -40,6 +40,8 @@ import org.kopi.galite.visual.ImageHandler
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.WindowController
 
+import com.vaadin.flow.router.Route
+
 /**
  * TestBase class for all tests.
  */
@@ -70,13 +72,13 @@ open class VApplicationTestBase : ApplicationTestBase() {
     val uiFactory = VUIFactory()
   }
 
+  @Route("")
   class GaliteApplication : VApplication(GaliteRegistry()) {
     override val sologanImage get() = "slogan.png"
     override val logoImage get() = "logo_kopi.png"
     override val logoHref get() = "http://"
     override val alternateLocale get() = Locale.UK
     override val title get() = "Galite demo"
-    override val favIcon get() = "ui/vaadin/window.gif"
     override val supportedLocales
       get() =
         arrayOf(Locale.FRANCE,

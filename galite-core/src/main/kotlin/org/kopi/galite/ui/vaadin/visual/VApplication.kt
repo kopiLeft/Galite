@@ -64,10 +64,12 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
-import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.AppShellRegistry
+import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.ServiceInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
@@ -79,13 +81,11 @@ import com.vaadin.flow.shared.communication.PushMode
  *
  * @param registry The [Registry] object.
  */
-@Route("")
-@Push(PushMode.MANUAL)
+@PreserveOnRefresh
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
   CssImport("./styles/galite/common.css")
 ])
-@PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
   HasDynamicTitle {
@@ -629,11 +629,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   open val title: String? = null
 
-  /**
-   * The page icon
-   */
-  open val favIcon: String? = null
-
   override fun getPageTitle(): String? {
     return pageTitle
   }
@@ -664,8 +659,26 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 }
 
+@Push(PushMode.MANUAL)
+class GaliteAppShellConfigurator: AppShellConfigurator {
+
+  override fun configurePage(settings: AppShellSettings) {
+    settings.addFavIcon("icon", "favicon.png", "192x192")
+  }
+}
+
 class ApplicationServiceInitListener: VaadinServiceInitListener {
   override fun serviceInit(event: ServiceInitEvent) {
+    val context  = event.source.context
+    val appShellRegistry = AppShellRegistry.getInstance(context)
+
+    // AppShellConfigurator is not discovered automatically by spring boot based applications
+    // Because it's not located in the same package of the class annotated by @SpringBootApplication
+    // This is a workaround to discover manually the AppShellConfigurator implementation.
+    if(appShellRegistry.shell == null) {
+      appShellRegistry.shell = GaliteAppShellConfigurator::class.java
+    }
+
     event.source.addUIInitListener { uiInitEvent ->
       val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
       loadingIndicatorConfiguration.firstDelay = 500
