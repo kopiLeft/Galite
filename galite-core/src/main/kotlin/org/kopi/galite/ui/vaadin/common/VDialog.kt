@@ -34,9 +34,7 @@ open class VDialog(withHeader: Boolean, withFooter: Boolean) : Dialog() {
 
   init {
     setId("v-dialog")
-   // element.classList.add("draggable")
     super.getElement().setAttribute("theme", "v-dialog")
-    super.getElement().setAttribute("class", "draggable")
 
     if(withHeader) {
       super.add(dialogHeader)
