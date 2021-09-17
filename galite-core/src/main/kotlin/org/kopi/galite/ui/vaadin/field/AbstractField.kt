@@ -18,13 +18,33 @@
 package org.kopi.galite.ui.vaadin.field
 
 import com.vaadin.flow.component.ClickNotifier
-import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.Tag
 
-abstract class AbstractField<T>: CustomField<T>(), ClickNotifier<AbstractField<T>> {
+@Tag(Tag.DIV)
+abstract class AbstractField<T>: com.vaadin.flow.component.AbstractField<AbstractField<T>, T>(null),
+  HasComponents, ClickNotifier<AbstractField<T>>, Focusable<AbstractField<T>>, HasSize {
 
   abstract fun addFocusListener(function: () -> Unit)
 
   internal abstract val isNull: Boolean
 
   internal abstract fun checkValue(rec: Int)
+
+  abstract fun getContent(): Component
+
+  abstract override fun getValue(): T
+
+  abstract override fun setValue(value: T)
+
+  override fun focus() {
+    val content = getContent()
+
+    if (content is Focusable<*>) {
+      content.focus()
+    }
+  }
 }

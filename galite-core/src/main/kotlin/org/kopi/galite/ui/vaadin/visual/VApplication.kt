@@ -63,11 +63,14 @@ import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
-import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.AppShellRegistry
+import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.ServiceInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
@@ -79,13 +82,11 @@ import com.vaadin.flow.shared.communication.PushMode
  *
  * @param registry The [Registry] object.
  */
-@Route("")
-@Push(PushMode.MANUAL)
+@PreserveOnRefresh
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
   CssImport("./styles/galite/common.css")
 ])
-@PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
   HasDynamicTitle {
@@ -239,7 +240,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun startApplication() {
-    menu = VMenuTree(dBContext!!)
+    menu = VMenuTree(dBContext)
     menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref, this)
     mainWindow!!.addMainWindowListener(this)
@@ -249,9 +250,26 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
-    mainWindow!!.addDetachListener {
-      closeConnection()
+  }
+
+  fun remove(mainWindow: MainWindow?) {
+    // Remove main window from parent
+    super.remove(mainWindow)
+
+    // Close opened popups
+    parent.ifPresent { body ->
+      body.children
+        .filter { component -> component is Dialog }
+        .forEach {
+          val dialog = (it as Dialog)
+          if(dialog.isOpened) {
+            dialog.close()
+          }
+        }
     }
+
+    // Close database connection
+    closeConnection()
   }
 
   override fun allowQuit(): Boolean =
@@ -415,6 +433,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
+
+    // Set the locale for the current UI.
+    UI.getCurrent()?.locale = defaultLocale
   }
 
   /**
@@ -483,21 +504,23 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       localizationManager = null
       isGeneratingHelp = false
     }
-    welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
-    welcomeView!!.setSizeFull() // important to get the full screen size.
-    welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
-      welcomeView!!.setWaitInfo()
-      Thread {
-        accessAndPush(currentUI) {
-          try {
-            onLogin(event)
-          } finally {
-            welcomeView?.unsetWaitInfo()
+    if (welcomeView == null) {
+      welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
+      welcomeView!!.setSizeFull() // important to get the full screen size.
+      welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
+        welcomeView!!.setWaitInfo()
+        Thread {
+          accessAndPush(currentUI) {
+            try {
+              onLogin(event)
+            } finally {
+              welcomeView?.unsetWaitInfo()
+            }
           }
-        }
-      }.start()
+        }.start()
+      }
+      add(welcomeView)
     }
-    add(welcomeView)
   }
 
   /**
@@ -622,11 +645,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   open val title: String? = null
 
-  /**
-   * The page icon
-   */
-  open val favIcon: String? = null
-
   override fun getPageTitle(): String? {
     return pageTitle
   }
@@ -657,8 +675,26 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 }
 
+@Push(PushMode.MANUAL)
+class GaliteAppShellConfigurator: AppShellConfigurator {
+
+  override fun configurePage(settings: AppShellSettings) {
+    settings.addFavIcon("icon", "favicon.png", "192x192")
+  }
+}
+
 class ApplicationServiceInitListener: VaadinServiceInitListener {
   override fun serviceInit(event: ServiceInitEvent) {
+    val context  = event.source.context
+    val appShellRegistry = AppShellRegistry.getInstance(context)
+
+    // AppShellConfigurator is not discovered automatically by spring boot based applications
+    // Because it's not located in the same package of the class annotated by @SpringBootApplication
+    // This is a workaround to discover manually the AppShellConfigurator implementation.
+    if(appShellRegistry.shell == null) {
+      appShellRegistry.shell = GaliteAppShellConfigurator::class.java
+    }
+
     event.source.addUIInitListener { uiInitEvent ->
       val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
       loadingIndicatorConfiguration.firstDelay = 500

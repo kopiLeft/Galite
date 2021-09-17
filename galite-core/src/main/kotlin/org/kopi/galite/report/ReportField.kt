@@ -108,8 +108,13 @@ class ReportField<T>(override val domain: Domain<T>,
    *
    * @param method    The method to execute when compute trigger is executed.
    */
-  fun format(method: () -> VCellFormat): ReportTrigger {
-    val fieldAction = Action(null, method)
+  fun format(method: (value: Any?) -> String): ReportTrigger {
+    val formatMethod = {
+      object : VCellFormat() {
+        override fun format(value: Any?): String = method(value)
+      }
+    }
+    val fieldAction = Action(null, formatMethod)
     return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it
     }

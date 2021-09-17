@@ -40,6 +40,10 @@ export class RichText extends WysiwygE {
 
     super.connectedCallback();
   }
+
+   focus() {
+     this.target.focus();
+   }
 }
 
 customElements.define('wysiwyg-e-rich-text', RichText);
