@@ -47,6 +47,10 @@ open class VDialog(withHeader: Boolean, withFooter: Boolean) : Dialog() {
       super.add(dialogFooter)
       dialogFooter.setId("v-dialog-footer")
     }
+
+    addAttachListener {
+      dialogContent.element.parent.classList.remove("draggable-leaf-only")
+    }
   }
 
   /**
@@ -120,13 +124,7 @@ open class VDialog(withHeader: Boolean, withFooter: Boolean) : Dialog() {
    * @param components  components to remove from the content
    */
   override fun remove(vararg components: Component) {
-    for (component in components) {
-      if (dialogContent.element == component.element.parent) {
-        dialogContent.element.removeChild(component.element)
-      } else {
-        throw IllegalArgumentException("The given component ($component) is not a child of this component")
-      }
-    }
+    super.remove(*components)
   }
 
   /**

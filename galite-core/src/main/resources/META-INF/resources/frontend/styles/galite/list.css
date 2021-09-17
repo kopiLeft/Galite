@@ -73,6 +73,15 @@ vaadin-grid-cell-content, .k-listdialog {
     --lumo-text-field-size: none;
 }
 
+:host([theme="k-listdialog-container"]) [part="header"] {
+    padding: 0;
+    border-bottom: 0;
+}
+
+:host([theme="k-listdialog-container"]) [part="dialog-content"] {
+    padding: 0;
+}
+
 #k-upload-content {
     position: relative;
     box-sizing: border-box;

@@ -26,9 +26,8 @@
 	font-size: 1.1em !important;
 }
 
-#k-notification-header {
+.k-notification-title {
     background: #f2f2f2;
-    padding: 0 !important;
 }
 
 .k-notification-content {
@@ -70,6 +69,24 @@
 	min-width: 128px;
 }
 
+:host([theme~="notification"]) [part="header"] {
+    padding: 0;
+}
+
+:host([theme~="notification"]) [part="footer"] {
+    background: transparent;
+    padding-bottom: 25px;
+}
+
+:host([theme~="notification"]) [part="dialog-content"] {
+    overflow-x: auto;
+}
+
 #k-notification-footer {
     padding-bottom: 25px;
+}
+
+#k-notification-header {
+    background: #f2f2f2;
+    padding: 0 !important;
 }

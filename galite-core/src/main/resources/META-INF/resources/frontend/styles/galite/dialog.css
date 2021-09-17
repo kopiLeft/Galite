@@ -48,13 +48,8 @@
     padding: 0;
 }
 
-#k-popup-window-content {
-    display: grid;
-}
-
 #k-popup-window-content .k-window {
     padding: 0;
-    overflow: hidden;
 }
 
 #v-dialog-header, #v-dialog-footer {

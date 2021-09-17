@@ -20,8 +20,8 @@ package org.kopi.galite.ui.vaadin.window
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VSpan
 import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.common.VDialog
 
+import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 
@@ -30,14 +30,13 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 
 @CssImport("./styles/galite/dialog.css")
-class PopupWindow(val mainWindow: MainWindow?) : VDialog(true, false), HasStyle {
+class PopupWindow(val mainWindow: MainWindow?) : EnhancedDialog(), HasStyle {
 
   private var caption = VSpan()
 
   init {
     className = Styles.POPUP_WINDOW
     caption.className = Styles.POPUP_WINDOW_CAPTION
-    dialogContent.setId("k-popup-window-content")
     isDraggable = true
     isResizable = false
     isCloseOnOutsideClick = false
