@@ -90,3 +90,9 @@
     background: #f2f2f2;
     padding: 0 !important;
 }
+
+.error-details {
+    height: 200px;
+    white-space: nowrap;
+    border: 2px solid #dadada;
+}
