@@ -853,8 +853,9 @@ class VBlockTests : JApplicationTestBase() {
         FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
       }
 
-      assertEquals("XXXX !!!!org.h2.jdbc.JdbcSQLSyntaxErrorException: Table \"USER\" non trouvée",
-                   vExecFailedException.message!!.substring(0, vExecFailedException.message!!.indexOf("\n")))
+      assertEquals("Table \"USER\" not found; SQL statement:\n" +
+                           "SELECT \"USER\".ID, \"USER\".TS, \"USER\".UC, \"USER\".\"NAME\", \"USER\".AGE, \"USER\".JOB, \"USER\".\"CURRICULUM VITAE\" FROM \"USER\" WHERE \"USER\".ID = ?",
+                   vExecFailedException.message!!.substring(vExecFailedException.message!!.indexOf("\n") + 1, vExecFailedException.message!!.indexOf("?") + 1))
     }
   }
 

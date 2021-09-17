@@ -1629,8 +1629,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       try {
         try {
+          transaction {
             fetchPosition = pos
             fetchRecord(fetchBuffer[pos])
+          }
           return
         } catch (e: VException) {
           throw e
@@ -2067,9 +2069,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // end processing - non-key fields have already been cleared
           return
         }
-
         conditions.add(condition)
-
       }
     }
 
