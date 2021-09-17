@@ -81,3 +81,12 @@
 :host([theme~="notification"]) [part="dialog-content"] {
     overflow-x: auto;
 }
+
+#k-notification-footer {
+    padding-bottom: 25px;
+}
+
+#k-notification-header {
+    background: #f2f2f2;
+    padding: 0 !important;
+}
