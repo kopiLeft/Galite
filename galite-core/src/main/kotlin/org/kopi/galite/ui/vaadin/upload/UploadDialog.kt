@@ -21,8 +21,8 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.ui.vaadin.common.VDialog
 
-import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.upload.Receiver
 import com.vaadin.flow.component.upload.Upload
@@ -33,7 +33,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 /**
  * A dialog showing an upload component.
  */
-class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
+class UploadDialog(val receiver: Receiver) : VDialog(true, true), HasStyle {
 
   private val title = VSpan()
   private val ok = VInputButton()
@@ -47,6 +47,7 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
     buttons.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
     isCloseOnOutsideClick = false
     buttons.className = "k-upload-buttons"
+    dialogContent.setId("k-upload-content")
     ok.style["cursor"] = "pointer"
     cancel.style["cursor"] = "pointer"
     setHeader(title)

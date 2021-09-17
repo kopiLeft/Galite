@@ -43,3 +43,28 @@
 .k-popup-window~::part(dialog-content) {
 	overflow: hidden;
 }
+
+:host([theme~="v-dialog"]) [part="content"] {
+    padding: 0;
+}
+
+#k-popup-window-content {
+    display: grid;
+}
+
+#k-popup-window-content .k-window {
+    padding: 0;
+    overflow: hidden;
+}
+
+#v-dialog-header, #v-dialog-footer {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+}
+
+#v-dialog-header {
+    border-bottom: 1px solid var(--lumo-shade-10pct);
+}
+
+#v-dialog-footer {
+    background-color: #d9f0f8;
+}

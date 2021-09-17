@@ -17,8 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.componentfactory.EnhancedDialog
-import com.vaadin.componentfactory.theme.EnhancedDialogVariant
+import org.kopi.galite.ui.vaadin.common.VDialog
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
@@ -32,11 +32,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * The menu aims to show the opened windows by the user.
  * From this menu, the user can switch to another window.
  */
-@CssImport.Container(value = [
-  CssImport("./styles/galite/windows.css", themeFor = "vcf-enhanced-dialog-overlay"),
-  CssImport("./styles/galite/windows.css")
-])
-class VWindowsMenu : EnhancedDialog(), HasStyle {
+@CssImport("./styles/galite/windows.css")
+class VWindowsMenu : VDialog(true, false), HasStyle {
 
   private val items = VerticalLayout()
   private val windowsItemsMap = mutableMapOf<Component, VWindowsMenuItem>()
@@ -50,8 +47,9 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     val header = HorizontalLayout()
     val switch = HorizontalLayout(headerText, switchWindowIcon)
 
-    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
     element.themeList.add("k-windowsMenu")
+    dialogHeader.setId("k-windowsMenu-header")
+    dialogContent.setId("k-windowsMenu-content")
     header.className = "window-items-title"
     closeIcon.className = "close-icon"
 

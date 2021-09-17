@@ -24,8 +24,8 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.ui.vaadin.common.VDialog
 
-import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.KeyNotifier
@@ -43,9 +43,8 @@ import com.vaadin.flow.component.progressbar.ProgressBar
 @CssImport.Container(value = [
   CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid"),
   CssImport("./styles/galite/list.css" , themeFor = "vaadin-grid"),
-  CssImport("./styles/galite/list.css" , themeFor = "vcf-enhanced-dialog-overlay")
 ])
-open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
+open class GridListDialog : VDialog(false, true), HasEnabled, KeyNotifier, HasStyle {
 
   private var scrollBarAdded = false
   private var windowResized = false

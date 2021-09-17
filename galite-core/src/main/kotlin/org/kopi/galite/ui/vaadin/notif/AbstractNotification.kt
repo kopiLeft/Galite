@@ -21,8 +21,8 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.common.VSpan
 import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.ui.vaadin.common.VDialog
 
-import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.dependency.CssImport
@@ -40,15 +40,12 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param locale  the notification locale
  */
 
-@CssImport.Container(value = [
-  CssImport("./styles/galite/notification.css"),
-  CssImport("./styles/galite/notification.css" , themeFor = "vcf-enhanced-dialog-overlay")
-])
+@CssImport("./styles/galite/notification.css")
 abstract class AbstractNotification(title: String?,
                                     message: String?,
                                     protected val locale: String,
                                     val parent: Component?)
-  : EnhancedDialog(), Focusable<AbstractNotification> {
+  : VDialog(true, true), Focusable<AbstractNotification> {
 
   //-------------------------------------------------
   // DATA MEMBERS
@@ -65,6 +62,8 @@ abstract class AbstractNotification(title: String?,
   init {
     element.classList.add("notification")
     element.themeList.add("notification")
+    dialogFooter.setId("k-notification-footer")
+    dialogHeader.setId("k-notification-header")
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
     isDraggable = true
