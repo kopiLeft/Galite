@@ -50,6 +50,6 @@ class FormWithListDomainsTests: JApplicationTestBase() {
     assertEquals(1, FormWithListDomains.userListBlock.user.value)
 
     model.setValueID(0)
-    assertEquals(null, FormWithListDomains.userListBlock.user.value)
+    assertEquals(null as Int?, FormWithListDomains.userListBlock.user.value)
   }
 }
