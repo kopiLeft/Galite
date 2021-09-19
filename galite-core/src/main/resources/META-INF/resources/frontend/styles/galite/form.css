@@ -126,8 +126,9 @@
 /**
  * Form content styles
  */
-.k-form .k-form-tab .k-form-page-content {
+.k-form .k-form-page-content {
     width: 100%;
+    padding: 0;
 }
 
 /**
@@ -140,27 +141,9 @@
 }
 
 /**
- * Spinner style
- */
-
-.k-wait-window-image {
-    border: 10px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 10px solid #3498db;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-}
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-/**
  * scrollbar style
  */
-.k-form-page {
+.k-window .k-form-page {
     overflow: auto;
     max-height: calc(100vh - 210px);
     max-width: calc(100vw - 50px);

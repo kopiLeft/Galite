@@ -57,3 +57,14 @@
 .window-items-container .item:last-child {
     border-bottom: none;
 }
+
+#k-windowsMenu-header {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    border-bottom: 1px solid var(--lumo-shade-10pct);
+    background: #f2f2f2;
+    min-width: 410px;
+}
+
+#k-windowsMenu-content {
+    padding: var(--lumo-space-l);
+}

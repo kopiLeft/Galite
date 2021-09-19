@@ -87,6 +87,7 @@ object LocalizedProperties {
       properties["Warning"] = "Attention"
       properties["Notice"] = "Information"
       properties["Question"] = "Question"
+      properties["showErrorDetails"] = "Afficher les détails"
       // modifiers
       properties["alt"] = "Alt"
       properties["control"] = "Ctrl"
@@ -138,6 +139,7 @@ object LocalizedProperties {
       properties["Warning"] = "Warning"
       properties["Notice"] = "Notice"
       properties["Question"] = "Question"
+      properties["showErrorDetails"] = "Show details"
       // modifiers
       properties["alt"] = "Alt"
       properties["control"] = "Ctrl"
@@ -189,6 +191,7 @@ object LocalizedProperties {
       properties["Warning"] = "Warnung"
       properties["Notice"] = "Achtung"
       properties["Question"] = "Frage"
+      properties["showErrorDetails"] = "Zeige details"
       // modifiers
       properties["alt"] = "Alt"
       properties["control"] = "Strg"
@@ -240,6 +243,7 @@ object LocalizedProperties {
       properties["Warning"] = "انتباه"
       properties["Notice"] = "معلومة"
       properties["Question"] = "سؤال"
+      properties["showErrorDetails"] = "عرض التفاصيل"
       //!!! not translated
       // modifiers
       properties["alt"] = "Alt"

@@ -33,6 +33,7 @@ import org.kopi.galite.ui.vaadin.form.DTextField
 import org.kopi.galite.ui.vaadin.form.KeyNavigator
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
@@ -61,8 +62,7 @@ class TextField(val model: VField,
                 val align: Int,
                 val hasAutofill: Boolean,
                 val fieldParent: DTextField
-)
-  : AbstractField<Any?>(), HasStyle {
+) : AbstractField<Any?>(), HasStyle {
 
   val inputField: InputTextField<*>
 
@@ -424,7 +424,13 @@ class TextField(val model: VField,
     inputField.value = newPresentationValue.toString()
   }
 
-  override fun generateModelValue(): Any? = inputField.value
+  override fun getValue(): String? {
+    return inputField.value
+  }
+
+  override fun setValue(value: Any?) {
+    inputField.setValue(value)
+  }
 
   /**
    * Communicates the widget text to server side.
@@ -513,6 +519,8 @@ class TextField(val model: VField,
     }
   }
 
+  override fun getContent(): Component = inputField
+
   /**
    * Sets the field color properties.
    * @param foreground The foreground color.
@@ -535,10 +543,6 @@ class TextField(val model: VField,
    */
   override fun checkValue(rec: Int) {
     inputField.checkValue(rec)
-  }
-
-  override fun getValue(): String? {
-    return inputField.value
   }
 
   //---------------------------------------------------

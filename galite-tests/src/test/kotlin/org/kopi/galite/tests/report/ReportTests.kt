@@ -31,7 +31,6 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.Triggers
-import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.type.Decimal
@@ -223,12 +222,8 @@ class SimpleReport : Report() {
     help = "The user name"
     align = FieldAlignment.LEFT
     group = age
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toUpperCase()
     }
   }
 

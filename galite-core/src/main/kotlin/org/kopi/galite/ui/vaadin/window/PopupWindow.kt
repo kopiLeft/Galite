@@ -32,14 +32,13 @@ import com.vaadin.flow.component.dependency.CssImport
 @CssImport("./styles/galite/dialog.css")
 class PopupWindow(val mainWindow: MainWindow?) : EnhancedDialog(), HasStyle {
 
-  private val listeners = mutableListOf<CloseListener>()
   private var caption = VSpan()
 
   init {
     className = Styles.POPUP_WINDOW
     caption.className = Styles.POPUP_WINDOW_CAPTION
     isDraggable = true
-    isResizable = true
+    isResizable = false
     isCloseOnOutsideClick = false
     isCloseOnEsc = false
     addToHeader(caption)

@@ -15,51 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
 
-.k-popup-window~::part(dialog-content) {
-    padding: 0;
-}
+import org.kopi.galite.form.VConstants
 
-.k-popup-window .enhanced-dialog-content .k-window {
-    padding: 0;
-}
+enum class Fixed(val value: Int) {
 
-.k-popup-window #overlay {
---_enhanced-dialog-content-padding: 0;
-}
+  ON(VConstants.FDO_FIX_NL),
 
-.enhanced-dialog-content .k-window {
-	padding: 0;
-}
+  OFF(VConstants.FDO_DYNAMIC_NL),
 
-.enhanced-dialog-content .k-window > div, .enhanced-dialog-content .k-window div table {
-    width: 100%;
-}
-
-#resizerContainer {
-	overflow: hidden;
-}
-
-.k-popup-window~::part(dialog-content) {
-	overflow: hidden;
-}
-
-:host([theme~="v-dialog"]) [part="content"] {
-    padding: 0;
-}
-
-#k-popup-window-content .k-window {
-    padding: 0;
-}
-
-#v-dialog-header, #v-dialog-footer {
-    padding: var(--lumo-space-s) var(--lumo-space-l);
-}
-
-#v-dialog-header {
-    border-bottom: 1px solid var(--lumo-shade-10pct);
-}
-
-#v-dialog-footer {
-    background-color: #d9f0f8;
+  UNDEFINED(0)
 }

@@ -29,7 +29,9 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 @CssImport.Container(value = [
   CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-text-field"),
-  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-text-field")
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-text-field"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-picker"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-picker")
 ])
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
