@@ -29,7 +29,7 @@ object Versions {
   const val JDOM = "2.0.5"
   const val APACHE_POI = "4.1.2"
 
-  const val VAADIN = "18.0.3"
+  const val VAADIN = "21.0.1"
 
   const val KARIBU_TESTING = "1.2.12"
   const val ENHANCED_DIALOG = "1.0.4"
