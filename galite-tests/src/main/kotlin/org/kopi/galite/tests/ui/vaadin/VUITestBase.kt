@@ -17,21 +17,17 @@
 
 package org.kopi.galite.tests.ui.vaadin
 
-import kotlin.streams.toList
-
 import org.junit.Before
 import org.junit.BeforeClass
-import org.kopi.galite.testing.waitAndRunUIQueue
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
 import com.github.mvysny.kaributesting.v10.TestingLifecycleHook
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10.testingLifecycleHook
+import org.kopi.galite.testing.waitAndRunUIQueue
 import com.vaadin.flow.component.ClickNotifier
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.contextmenu.MenuItemBase
 import com.vaadin.flow.shared.communication.PushMode
 
 /**
@@ -77,15 +73,6 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
   protected fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
     _click()
     waitAndRunUIQueue(duration)
-  }
-
-  // TODO: Remove this method when using Karibu-Testing 1.3.1
-  override fun getAllChildren(component: Component): List<Component> {
-    return if (component is MenuItemBase<*, *, *>) {
-      (component.children.toList() + component.subMenu.items).distinct()
-    } else {
-      super.getAllChildren(component)
-    }
   }
 
   companion object {
