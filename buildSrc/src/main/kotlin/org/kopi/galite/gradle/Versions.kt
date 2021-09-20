@@ -29,9 +29,9 @@ object Versions {
   const val JDOM = "2.0.5"
   const val APACHE_POI = "4.1.2"
 
-  const val VAADIN = "18.0.3"
+  const val VAADIN = "21.0.1"
 
-  const val KARIBU_TESTING = "1.2.12"
+  const val KARIBU_TESTING = "1.3.3"
   const val ENHANCED_DIALOG = "21.0.0"
   const val APEX_CHARTS = "2.0.0.beta10"
   const val IRON_ICONS = "2.0.1"
