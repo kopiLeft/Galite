@@ -33,6 +33,15 @@ dependencies {
   implementation("com.vaadin", "vaadin-core") {
     excludeWebJars()
   }
+  // Vaadin addons
+  // Wysiwyg-e Rich Text Editor component for Java
+  implementation("org.vaadin.pekka", "wysiwyg_e-java", Versions.WYSIWYG_EJAVA)
+  // EnhancedDialog
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
+  // Apex charts
+  implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
+  // Iron Icons
+  implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
 
   // Itext dependency
   implementation("com.lowagie", "itext", Versions.ITEXT)
@@ -58,20 +67,11 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
-  // EnhancedDialog dependency
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
-
-  // ApexCharts dependency
-  implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
-
-  // Iron Icons dependency
-  implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
-
-  //Wysiwyg-e Rich Text Editor component for Java dependency
-  implementation("org.vaadin.pekka", "wysiwyg_e-java", Versions.WYSIWYG_EJAVA)
-
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
+
+  // Javax activation
+  implementation("javax.activation", "activation", "1.1.1")
 }
 
 dependencyManagement {
