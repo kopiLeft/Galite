@@ -34,7 +34,10 @@ import org.kopi.galite.visual.MessageCode
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.select
 import org.junit.Assert
+import org.junit.Ignore
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.form.VStringCodeField
+import org.kopi.galite.util.base.InconsistencyException
 
 class VFieldTests : JApplicationTestBase() {
   @Test
@@ -350,30 +353,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `selectFromList valid scenario test`() {
 
     FormSample.model
-    FormSample.tb1.vBlock.clear()
-    val vListColumn = VList("test",
-                            "apps/common/Global",
-                            arrayOf(VStringColumn("test", User.name, 2, 50, true)),
-                            User,
-                            null,
-                            0,
-                            0,
-                            null,
-                            false)
 
-    FormSample.tb1.name.vField.setInfo("name",
-                                       1,
-                                       -1,
-                                       0,
-                                       intArrayOf(4, 4, 4),
-                                       vListColumn,
-                                       arrayOf(VColumn(0, "NAME", false, false, User.name)),
-                                       0,
-                                       0,
-                                       null,
-                                       VPosition(1, 1, 2, 2, -1),
-                                       2,
-                                       null)
     transaction {
       SchemaUtils.create(User)
       User.insert {
@@ -384,14 +364,43 @@ class VFieldTests : JApplicationTestBase() {
         it[uc] = 0
         it[job] = "job"
       }
-      FormSample.tb1.name.vField.selectFromList(false)
+
+      FormSample.tb4ToTestListDomain.listNames.vField.selectFromList(false)
 
       var userName: String? = null
 
       User.select { User.id eq 1 }.forEach {
         userName = it[User.name]
       }
-      assertEquals(userName, FormSample.tb1.name.value)
+      assertEquals(userName, FormSample.tb4ToTestListDomain.listNames.value)
+      SchemaUtils.drop(User)
+    }
+  }
+  @Ignore
+  @Test
+  fun `selectFromList valid scenario test with query entry`() {
+
+    FormSample.model
+
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[name] = "AUDREY"
+        it[age] = 26
+        it[ts] = 0
+        it[uc] = 0
+        it[job] = "job"
+      }
+
+      FormSample.tb4ToTestListDomain.listAges.vField.selectFromList(false)
+
+      var userAge: Int? = null
+
+      User.select { User.id eq 1 }.forEach {
+        userAge = it[User.age]
+      }
+      assertEquals(userAge, FormSample.tb4ToTestListDomain.listAges.value)
       SchemaUtils.drop(User)
     }
   }
@@ -400,33 +409,9 @@ class VFieldTests : JApplicationTestBase() {
   fun `selectFromList scenario with exception test`() {
 
     FormSample.model
-    FormSample.tb1.vBlock.clear()
-    val vListColumn = VList("test",
-                            "apps/common/Global",
-                            arrayOf(VStringColumn("test", User.name, 2, 50, true)),
-                            User,
-                            null,
-                            0,
-                            0,
-                            null,
-                            false)
-
-    FormSample.tb1.name.vField.setInfo("name",
-                                       1,
-                                       -1,
-                                       0,
-                                       intArrayOf(4, 4, 4),
-                                       vListColumn,
-                                       arrayOf(VColumn(0, "NAME", false, false, User.name)),
-                                       0,
-                                       0,
-                                       null,
-                                       VPosition(1, 1, 2, 2, -1),
-                                       2,
-                                       null)
     transaction {
       SchemaUtils.create(User)
-      val error = Assert.assertThrows(VFieldException::class.java) { FormSample.tb1.name.vField.selectFromList(false) }
+      val error = Assert.assertThrows(VFieldException::class.java) { FormSample.tb4ToTestListDomain.listNames.vField.selectFromList(false) }
 
       assertEquals("VIS-00001: Data entry error: No matching value.", error.message)
       SchemaUtils.drop(User)
@@ -434,137 +419,10 @@ class VFieldTests : JApplicationTestBase() {
   }
 
   @Test
-  fun `enumerateValue valid less than value scenario test`() {
+  fun `enumerateValue valid scenario test`() {
     FormSample.model
-    FormSample.tb1.vBlock.clear()
-    val vListColumn = VList("test",
-                            "apps/common/Global",
-                            arrayOf(VIntegerColumn("test", User.age, 2, 50, true)),
-                            User,
-                            null,
-                            0,
-                            0,
-                            null,
-                            false)
+    FormSample.tb4ToTestListDomain.age.vField.enumerateValue(true)
 
-    FormSample.tb1.age.vField.setInfo("age",
-                                       1,
-                                       -1,
-                                       0,
-                                       intArrayOf(4, 4, 4),
-                                       vListColumn,
-                                       arrayOf(VColumn(0, "AGE", false, false, User.age)),
-                                       0,
-                                       0,
-                                       null,
-                                       VPosition(1, 1, 2, 2, -1),
-                                       2,
-                                       null)
-    transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[name] = "AUDREY"
-        it[age] = 26
-        it[ts] = 0
-        it[uc] = 0
-        it[job] = "job"
-      }
-
-      FormSample.tb1.age.value = 30
-      FormSample.tb1.age.vField.enumerateValue(false)
-      var userAge: Int? = null
-
-      User.select { User.id eq 1 }.forEach {
-        userAge = it[User.age]
-      }
-      assertEquals(userAge, FormSample.tb1.age.value)
-      SchemaUtils.drop(User)
-    }
-  }
-
-  @Test
-  fun `enumerateValue valid greater than value scenario test`() {
-    FormSample.model
-    FormSample.tb1.vBlock.clear()
-    val vListColumn = VList("test",
-                            "apps/common/Global",
-                            arrayOf(VIntegerColumn("test", User.age, 2, 50, true)),
-                            User,
-                            null,
-                            0,
-                            0,
-                            null,
-                            false)
-
-    FormSample.tb1.age.vField.setInfo("age",
-                                      1,
-                                      -1,
-                                      0,
-                                      intArrayOf(4, 4, 4),
-                                      vListColumn,
-                                      arrayOf(VColumn(0, "AGE", false, false, User.age)),
-                                      0,
-                                      0,
-                                      null,
-                                      VPosition(1, 1, 2, 2, -1),
-                                      2,
-                                      null)
-    transaction {
-      SchemaUtils.create(User)
-      User.insert {
-        it[id] = 1
-        it[name] = "AUDREY"
-        it[age] = 26
-        it[ts] = 0
-        it[uc] = 0
-        it[job] = "job"
-      }
-
-      FormSample.tb1.age.value = 20
-      FormSample.tb1.age.vField.enumerateValue(true)
-      var userAge: Int? = null
-
-      User.select { User.id eq 1 }.forEach {
-        userAge = it[User.age]
-      }
-      assertEquals(userAge, FormSample.tb1.age.value)
-      SchemaUtils.drop(User)
-    }
-  }
-
-  @Test
-  fun `enumerateValue scenario with exception test`() {
-    FormSample.model
-    FormSample.tb1.vBlock.clear()
-    val vListColumn = VList("test",
-                            "apps/common/Global",
-                            arrayOf(VIntegerColumn("test", User.age, 2, 50, true)),
-                            User,
-                            null,
-                            0,
-                            0,
-                            null,
-                            false)
-
-   FormSample.tb1.age.vField.setInfo("age",
-                                      1,
-                                      -1,
-                                      0,
-                                      intArrayOf(4, 4, 4),
-                                      vListColumn,
-                                      arrayOf(VColumn(0, "AGE", false, false, User.age)),
-                                      0,
-                                      0,
-                                      null,
-                                      VPosition(1, 1, 2, 2, -1),
-                                      2,
-                                      null)
-    transaction {
-      SchemaUtils.create(User)
-      FormSample.tb1.age.value = 20
-      Assert.assertThrows(VExecFailedException::class.java) { FormSample.tb1.age.vField.enumerateValue(true) }
-      SchemaUtils.drop(User)
-    }
+    assertEquals(20, FormSample.tb4ToTestListDomain.age.value)
   }
 }

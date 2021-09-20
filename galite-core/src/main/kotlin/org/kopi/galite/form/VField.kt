@@ -1742,7 +1742,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     SHOW_SINGLE_ENTRY = newForm != null
     try {
-      try {
         transaction {
           lineCount = 0
           for (result in query) {
@@ -1761,8 +1760,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             lineCount += 1
           }
         }
-      } catch (e: SQLException) {
-      }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
     }

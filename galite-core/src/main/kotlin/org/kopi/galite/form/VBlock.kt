@@ -2074,13 +2074,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     try {
-      val result = table.slice(columns).select(conditions.compoundAnd()).single()
-      var j = 0
+      transaction {
+        val result = table.slice(columns).select(conditions.compoundAnd()).single()
+        var j = 0
 
-      fields.forEach { field ->
-        if (field.lookupColumn(table) != null) {
-          field.setQuery(result, columns[j])
-          j++
+        fields.forEach { field ->
+          if (field.lookupColumn(table) != null) {
+            field.setQuery(result, columns[j])
+            j++
+          }
         }
       }
     } catch (noSuchElementException: NoSuchElementException) {
@@ -3063,11 +3065,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       }
 
-      val result = mutableListOf<Pair<Column<Any>, Any?>>()
+      val result = mutableListOf<Pair<Column<Any?>, Any?>>()
 
       for (field in fields) {
         @Suppress("UNCHECKED_CAST")
-        val column = field.lookupColumn(0) as? Column<Any>
+        val column = field.lookupColumn(0) as? Column<Any?>
 
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
@@ -3083,9 +3085,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       table.insert { table ->
         result.forEach {
-          if(it.second != null) {
-            table[it.first] = it.second!!
-          }
+            table[it.first] = it.second
         }
       }
       setRecordFetched(recno, true)

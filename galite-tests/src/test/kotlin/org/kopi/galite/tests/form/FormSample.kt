@@ -20,8 +20,11 @@ import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.INT
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Access
@@ -31,6 +34,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.Modes
+import org.kopi.galite.type.Date
 import org.kopi.galite.visual.FileHandler
 
 object User : Table() {
@@ -125,6 +129,8 @@ class FormSample_ : Form() {
     blockVisibility(Access.SKIPPED, Modes.QUERY, Modes.INSERT)
   }
 
+  val tb4ToTestListDomain = insertBlock(ListDomainTest(), p1)
+
   val preform = trigger(INIT) {
     println("init form trigger works")
   }
@@ -218,6 +224,54 @@ class TestBlock : FormBlock(1, 5, "Test block") {
           get() = "PDF"
       })
     }
+  }
+}
+
+class ListDomainTest : FormBlock(1, 1, "Test block") {
+  val u = table(User)
+  val listNames = visit(domain = ListNames, position = at(1, 1)) {
+    label = "list names"
+    columns(u.name) {
+      priority = 1
+    }
+  }
+
+  val listAges = visit(domain = ListAges, position = at(2, 1)) {
+    label = "list ages"
+    columns(u.age) {
+      priority = 1
+    }
+  }
+
+  val age = visit(domain = Ages, position = at(3, 1)) {
+    label = "list ages"
+    columns(u.age) {
+      priority = 1
+    }
+  }
+}
+
+object ListNames : ListDomain<String>(30) {
+  override val table =  User
+
+  init {
+    "name" keyOf User.name
+  }
+}
+
+object ListAges : ListDomain<Int>(3) {
+  override val table =  query(User.selectAll())
+
+  init {
+    "age" keyOf User.age
+  }
+}
+
+object Ages : CodeDomain<Int>() {
+  init {
+    "cde1" keyOf 20
+    "cde2" keyOf 30
+    "cde3" keyOf 40
   }
 }
 
