@@ -2077,11 +2077,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       transaction {
         val condition: Op<Boolean> = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
+        val result = query.single()
         var j = 0
 
         fields.forEach { field ->
           if (field.lookupColumn(table) != null) {
-            field.setQuery(query.single(), columns[j])
+            field.setQuery(result, columns[j])
             j++
           }
         }

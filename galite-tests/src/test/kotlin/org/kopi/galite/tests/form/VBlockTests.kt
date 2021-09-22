@@ -359,13 +359,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.age.value = 26
       FormSample.tb1.vBlock.load()
       FormSample.tb1.vBlock.fetchNextRecord(0)
-      val listInfoUser = mutableListOf<Any?>()
+      var listInfoUser : List<Any?> = mutableListOf()
 
       User.select { User.name.eq("AUDREY") and User.age.eq(26) }.forEach {
-        listInfoUser.add(it[User.id])
-        listInfoUser.add(it[User.name])
-        listInfoUser.add(it[User.age])
-        listInfoUser.add(it[User.job])
+        listInfoUser = listOf(it[User.id], it[User.name], it[User.age], it[User.job])
       }
       assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
@@ -407,13 +404,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.setMode(VConstants.MOD_INSERT)
       FormSample.tb1.vBlock.save()
 
-      val listInfoUser = mutableListOf<Any?>()
+      var listInfoUser : List<Any?> = mutableListOf()
 
       User.selectAll().forEach {
-        listInfoUser.add(it[User.id])
-        listInfoUser.add(it[User.name])
-        listInfoUser.add(it[User.age])
-        listInfoUser.add(it[User.job])
+        listInfoUser = listOf(it[User.id], it[User.name], it[User.age], it[User.job])
       }
       assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       SchemaUtils.drop(User)
@@ -439,13 +433,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.setMode(VConstants.MOD_UPDATE)
       FormSample.tb1.vBlock.save()
 
-      val listInfoUser = mutableListOf<Any?>()
+      var listInfoUser : List<Any?> = mutableListOf()
 
       User.select { User.id eq 1 }.forEach {
-        listInfoUser.add(it[User.id])
-        listInfoUser.add(it[User.name])
-        listInfoUser.add(it[User.age])
-        listInfoUser.add(it[User.job])
+        listInfoUser = listOf(it[User.id], it[User.name], it[User.age], it[User.job])
       }
       assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       SchemaUtils.drop(User)
@@ -504,8 +495,7 @@ class VBlockTests : JApplicationTestBase() {
                           formMultiple.multipleBlock.trainingId[1],
                           formMultiple.multipleBlock.centerName[1],
                           formMultiple.multipleBlock.address[1],
-                          formMultiple.multipleBlock.mail[1],
-      ),
+                          formMultiple.multipleBlock.mail[1]) as List<Any?>,
                    listInfoCenter
       )
       SchemaUtils.drop(Training, Center)
@@ -572,7 +562,7 @@ class VBlockTests : JApplicationTestBase() {
                           formMultiple.multipleBlock.trainingId[2],
                           formMultiple.multipleBlock.centerName[2],
                           formMultiple.multipleBlock.address[2],
-                          formMultiple.multipleBlock.mail[2]),
+                          formMultiple.multipleBlock.mail[2]) as List<Any?>,
                    listInfoCenter
       )
       SchemaUtils.drop(Training, Center)
@@ -675,15 +665,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.clear()
       FormSample.tb1.vBlock.load()
 
-      val listInfoUser = mutableListOf<Any?>()
+      var listInfoUser: List<Any?> = mutableListOf()
 
       User.selectAll().forEach {
-        listInfoUser.add(it[User.id])
-        listInfoUser.add(it[User.ts])
-        listInfoUser.add(it[User.uc])
-        listInfoUser.add(it[User.name])
-        listInfoUser.add(it[User.age])
-        listInfoUser.add(it[User.job])
+        listInfoUser = listOf(it[User.id], it[User.ts], it[User.uc], it[User.name], it[User.age], it[User.job])
       }
       assertEquals(listOf(FormSample.tb1.id.value,
                           FormSample.tb1.ts.value,
@@ -709,15 +694,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.age.value = 25
       FormSample.tb1.vBlock.load()
 
-      val listInfoUser = mutableListOf<Any?>()
+      var listInfoUser: List<Any?> = mutableListOf()
 
       User.select { User.id eq 3 }.forEach {
-        listInfoUser.add(it[User.id])
-        listInfoUser.add(it[User.ts])
-        listInfoUser.add(it[User.uc])
-        listInfoUser.add(it[User.name])
-        listInfoUser.add(it[User.age])
-        listInfoUser.add(it[User.job])
+        listInfoUser = listOf(it[User.id], it[User.ts], it[User.uc], it[User.name], it[User.age], it[User.job])
       }
 
       assertEquals(listOf(FormSample.tb1.id.value,
@@ -783,7 +763,7 @@ class VBlockTests : JApplicationTestBase() {
                           formMultiple.multipleBlock.trainingId[2],
                           formMultiple.multipleBlock.centerName[2],
                           formMultiple.multipleBlock.address[2],
-                          formMultiple.multipleBlock.mail[2]),
+                          formMultiple.multipleBlock.mail[2]) as List<Any?>,
                    listInfoCenter
       )
       SchemaUtils.drop(Training, Center)
@@ -802,15 +782,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.id.value = 1
       FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
 
-      val listInfoUser = mutableListOf<Any?>()
+      var listInfoUser: List<Any?> = mutableListOf()
 
       User.select { User.name.eq("AUDREY") and User.age.eq(26) }.forEach {
-        listInfoUser.add(it[User.id])
-        listInfoUser.add(it[User.ts])
-        listInfoUser.add(it[User.uc])
-        listInfoUser.add(it[User.name])
-        listInfoUser.add(it[User.age])
-        listInfoUser.add(it[User.job])
+        listInfoUser = listOf(it[User.id], it[User.ts], it[User.uc], it[User.name], it[User.age], it[User.job])
       }
 
       assertEquals(listOf(FormSample.tb1.id.value,
