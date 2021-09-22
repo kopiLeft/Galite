@@ -30,7 +30,7 @@ object Training : Table("TRAINING") {
   val trainingName = varchar("Name", 25)
   val type = integer("type")
   val price = decimal("UNIT_PRICE", 9, 3)
-  val active = bool("ACTIVE",)
+  val active = bool("ACTIVE")
   val photo = blob("PHOTO").nullable()
   val informations = varchar("INFORMATION", 200).nullable()
 

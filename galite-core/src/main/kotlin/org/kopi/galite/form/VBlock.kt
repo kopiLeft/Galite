@@ -28,7 +28,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.List
 import kotlin.collections.all
-import kotlin.collections.elementAt
 import kotlin.collections.filter
 import kotlin.collections.find
 import kotlin.collections.first
@@ -1376,7 +1375,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Sets visibility of block.
    */
   fun setAccess(value: Int) {
-    assert(this !== form.getActiveBlock() || activeField == null) { "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
+    assert(this !== form.getActiveBlock() || activeField == null) {
+      "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
     for (i in fields.indices) {
       fields[i].setAccess(value)
     }
@@ -1524,11 +1524,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (fetchCount >= bufferSize) {
         fetchCount += 1
       } else {
-        fields.forEachIndexed { index, field ->
-          if (field.getColumnCount() > 0) {
-            field.setQuery(fetchCount, result, columns[index])
+          var i = 0
+          var j = 0
+          while (i < fields.size) {
+            if (fields[i].getColumnCount() > 0) {
+              fields[i].setQuery(fetchCount, result,columns[j])
+              j += 1
+            }
+            i++
           }
-        }
 
         setRecordFetched(fetchCount, true)
         setRecordChanged(fetchCount, false)
@@ -2015,7 +2019,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       (name + " != "
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
-    val table: Int = fld!!.getColumn(0)!!.getTable()
+    val table = fld!!.getColumn(0)!!.getTable_()
 
     fetchLookup(table, fld)
   }
@@ -2031,32 +2035,32 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
     assert(fld!!.getColumnCount() == 1) { "column count: " + fld.getColumnCount() }
-    val table: Int = fld.getColumn(0)!!.getTable()
+    val table = fld.getColumn(0)!!.getTable_()
+
     fetchLookup(table, fld)
   }
 
-  protected fun fetchLookup(tableIndex: Int, currentField: VField) {
+  protected fun fetchLookup(table: Table, currentField: VField) {
     // clears all fields of lookup except the key(s)
     // the specified field is considered to be a key
-    val table = tables!![tableIndex]  // table to select from
     val columns = mutableListOf<Column<*>>()  // columns to select
     val conditions = mutableListOf<Op<Boolean>>()  // search conditions
 
     fields.forEach { field ->
-      if (field != currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
+      if (field != currentField && field.lookupColumn(table) != null && !field.isLookupKey(table)) {
         field.setNull(activeRecord)
       }
     }
 
     fields.forEach { field ->
-      val column : Column<*>? = field.lookupColumn(tables!![tableIndex])
+      val column : Column<*>? = field.lookupColumn(table)
 
       if (column != null) {
         // add column to select
         columns.add(column)
       }
 
-      if (field == currentField || field.isLookupKey(tableIndex)) {
+      if (field == currentField || field.isLookupKey(table)) {
         val condition = field.getSearchCondition(column!!)
 
         if (condition == null || condition !is EqOp) {
@@ -2065,10 +2069,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // end processing - non-key fields have already been cleared
           return
         }
-
-        if (condition != null) {
-          conditions.add(condition)
-        }
+        conditions.add(condition)
       }
     }
 
@@ -2076,24 +2077,20 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       transaction {
         val condition: Op<Boolean> = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
+        val result = query.single()
+        var j = 0
 
-        if (query.toList().isEmpty()) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(tables!![tableIndex])))
-
-        } else {
-          var j = 0
-
-          fields.forEach {
-            if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery(query.first(), it.getColumn(1 + j)!!.column)
-              j += 1
-            }
-          }
-          if (query.toList().isNotEmpty()) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(tables!![tableIndex])))
+        fields.forEach { field ->
+          if (field.lookupColumn(table) != null) {
+            field.setQuery(result, columns[j])
+            j++
           }
         }
       }
+    } catch (noSuchElementException: NoSuchElementException) {
+      throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table.tableName)))
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(table.tableName)))
     } catch (e: SQLException) {
       throw VExecFailedException("XXXX !!!!" + e.message)
     }
@@ -2173,7 +2170,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * Warning, you should use this method inside a transaction
    */
-  fun Transaction.buildQueryDialog(): VListDialog? {
+  fun buildQueryDialog(): VListDialog? {
     val query_tab = arrayOfNulls<VField>(fields.size)
     var query_cnt = 0
 
@@ -3015,18 +3012,20 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     if (condition.isNotEmpty()) {
-      try {
-        val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }.single()
 
-        if (result[idColumn] != id) {
-          form.setActiveBlock(this@VBlock)
-          activeRecord = recno
-          gotoFirstField()
-          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+        val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }
+        if (!result.empty()) {
+          try {
+            if (result.single()[idColumn] != id) {
+              form.setActiveBlock(this@VBlock)
+              activeRecord = recno
+              gotoFirstField()
+              throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+            }
+          } catch (illegalArgumentException: IllegalArgumentException) {
+            error("too many rows")
+          }
         }
-      } catch (illegalArgumentException: IllegalArgumentException) {
-        error("too many rows")
-      }
     }
   }
 
@@ -3068,11 +3067,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       }
 
-      val result = mutableListOf<Pair<Column<Any>, Any?>>()
+      val result = mutableListOf<Pair<Column<Any?>, Any?>>()
 
       for (field in fields) {
         @Suppress("UNCHECKED_CAST")
-        val column = field.lookupColumn(0) as? Column<Any>
+        val column = field.lookupColumn(0) as? Column<Any?>
 
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
@@ -3088,7 +3087,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       table.insert { table ->
         result.forEach {
-          table[it.first] = it.second!!
+          table[it.first] = it.second
         }
       }
       setRecordFetched(recno, true)

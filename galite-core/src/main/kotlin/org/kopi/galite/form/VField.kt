@@ -667,7 +667,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
+  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable_() }?.key ?: false
 
   /**
    * Is the field part of given index ?
@@ -1742,7 +1742,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     SHOW_SINGLE_ENTRY = newForm != null
     try {
-      try {
         transaction {
           lineCount = 0
           for (result in query) {
@@ -1761,8 +1760,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             lineCount += 1
           }
         }
-      } catch (e: SQLException) {
-      }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
     }
@@ -1817,7 +1814,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   @Suppress("UNCHECKED_CAST")
-  internal fun selectFromList(gotoNextField: Boolean) {
+  /*internal*/ fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<Column<*>>()
 
     list!!.columns.forEach {
@@ -1866,7 +1863,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
-  internal open fun enumerateValue(desc: Boolean) {
+  /*internal*/ open fun enumerateValue(desc: Boolean) {
     var value: Any? = null
     val table = evalListTable()
     val column = list!!.getColumn(0).column
