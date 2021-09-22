@@ -1,0 +1,535 @@
+
+=== Visual Galite Charts
+
+Visual Galite allows you to create charts. These are files with the ".kt" extension that have a very simple structure, in fact, all you have to do to create such charts
+is to define the dimensions you need and their measures, then you will have to load data into these fields in the init section.
+With Galite Charts, you will also be able to print or export the created chart to different file formats.
+
+The Visual Galite Charts are generated from Visual Galite form files with the ".kt" extension by different methods that we will see in this chapter, along with the process of making a
+visual charts.
+
+==== Creating Charts dimensions and measures
+
+As we said in the introduction, the chart structure is based on chart dimensions and measures.
+To create a dimension field you need to use dimension function and specify the type of the field, the field have the following syntax :
+
+*Syntax*
+[source,java]
+----val city = dimension(STRING(10)) {
+        label = "dimension"
+
+        format {
+          object : VColumnFormat() {
+            override fun format(value: Any?): String {
+              return (value as String).toUpperCase()
+            }
+          }
+        }
+      }
+
+ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
+----
+Use the measure function to create an  measure field, this field have the following syntax :
+
+*Syntax*
+[source,java]
+----
+ChartDimensionDef: "measure(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
+----
+
+=====  Chart "dimension / measure" Label
+
+The label is the name that will be shown in the chart, you can define a label by setting the label value.
+
+*Example*
+[source,java]
+----
+val Name = dimension(STRING(10)) {
+    label = "Person Name"
+    ...
+}
+
+val ID = dimension(STRING(10)) {
+    label = ""
+    ...
+}
+---- 
+
+===== Chart "dimension / measure" Help Text
+
+Help variable  is used to insert an explanation text for the application user . This Help text will then be displayed when the user places the mouse on the chart measure or dimension.
+
+*Example*
+[source,java]
+----
+val Name = dimension(STRING(10)) {
+    label = "Person Name"
+    help = "The Person's First Name"
+}
+----
+
+===== Chart dimension Type
+
+The dimension type is a required entry, you may enter a predefined dimension type :
+
+*Example*
+[source,java]
+----
+val Name = dimension(STRING(10)) {
+    label = "Person Name"
+    help = "The Person's First Name"
+}
+
+val Month = dimension(MONTH) {
+    label = "Month"
+}
+----
+
+You can also use self defined field types that you have previously defined in the type definition section of your chart.
+
+*Example*
+[source,java]
+----
+val objectList = dimension(Objects) {
+    label = "objects"
+}
+----
+
+In this example, Objects is a type you should have defined previously in type definition section of the chart using standard types, CODE types nd SELECT command ...
+
+===== Chart measure Type
+
+The dimension type is a required entry but it is restricted to number types. This means that for a measure you can use only INT and DECIMAL as types. The measure type is checked at the compilation step.
+If you use not a numeric type for a measure, the following compiler error will be revealed :
+
+Measure "Measure name" is not numeric.
+
+The measure type can be defined with different ways :
+
+*Example*
+[source,java]
+----
+val Name = measure(INT(5)) {
+    label = "Name"
+}
+
+val Name = measure(Price) {
+    label = "Name"
+}
+----
+
+In the last example, the price type should be a numeric type otherwise it would not be accepted.
+
+===== Chart "dimension / measure" Command
+
+In chart dimensions or measures, you can call commands with one of the following syntaxes :
+
+
+[source,java]
+----
+"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }
+----
+
+===== Chart "dimension / measure" Triggers
+
+Chart dimensions or measures triggers are special events that you can catch to execute other actions.
+
+*Syntax*
+[source,java]
+----
+Trigger      : TrigerAction : EventList
+
+EventList    : Event [,EventList]*
+
+TrigerAction : color | format { KOTLIN code }
+----
+
+Here is the two triggers available for chart fields (dimensions & measures) :
+
+ * FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.chart.VColumnFormat instance. This trigger is not available for measures.
+ * COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.VColor instance. This trigger is not available for dimensions.
+
+*Example*
+[source,java]
+----
+val city = dimension(STRING(10)) {
+    label = "dimension"
+    help = "test"
+
+    format {
+      object : VColumnFormat() {
+        override fun format(value: Any?): String {
+          return (value as String).toUpperCase()
+        }
+      }
+    }
+}
+----
+
+==== Creating Charts
+
+Visual Galite charts have a unique structure, you need to create new class that extend from Chart class as described by the following syntax :
+
+*Syntax*
+[source,java]
+----
+ChartDefinition   :"class" ChartClass ":" QualifiedName [,QualifiedName]*] {
+                                             [CharttLocalization]
+                                             ChartTitle
+                                             [ContextHeader] [CharttHelp] [ChartDefinitions]
+                                             [ChartCommands] [ChartTriggers] (ChartFields)
+                                             [ContextFooter]
+                                           }
+
+ChartTitle        : "title =" Title : String
+
+ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
+                    [CommandDefinition]
+                    [InsertDefinition]
+----
+
+===== Chart Localization
+
+This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.
+
+*Example:*
+[source,java]
+----
+override val locale = Locale.UK
+-----
+
+===== Chart Title
+
+To set you chart title you need to override the title variable of Chart class.
+
+*Example*
+ 	
+[source,java]
+----  
+class ChartSample: Chart() {
+  override val locale = Locale.UK
+  override val title = "Area/population per city"
+  ...
+}
+----
+
+===== Chart Superclass And Interfaces
+
+ * *Superclass:*
+
+*Syntax:*
+ 	
+[source,java]
+----  
+SuperClass:   ":" QualifiedName
+----
+Every Chart is a class that may extend another Kotlin class by using the optional keyword ":". Otherwise, Galite will automatically take over the java.lang.Object QualifiedName.
+
+*Example:*
+ 	
+[source,java]
+----
+class Earnings: Chart() {
+  override val locale = Locale.UK
+  override val title = "Earnings"
+  ...
+}
+----
+In other words, the class declaration you have just made specifies the direct superclass of the current class.
+
+ * *Interfaces:*
+
+You can also specify interfaces which the chart may implement by using the keyword ":".
+
+*Syntax*
+
+[source,java]
+----
+":" QualifiedName [,QualifiedName]*
+----
+
+*Example:*
+ 	
+[source,java]
+----
+class Earnings: Chart(), IChart() {
+  override val locale = Locale.UK
+  override val title = "Earnings"
+  ...
+}
+----
+
+===== Chart Help Text
+
+You can enter a help text for the chart using the following syntax:
+
+*Syntax*
+[source,java]
+----
+override val help = helpText :String
+----
+Actually every chart has a help menu that tries to describe the structure of the chart by giving information about its commands and fields in a document, the help text will be on the top of this help menu document.
+
+*Example*
+[source,java]
+----
+class OrderedChart: Chart() {
+  override val locale = Locale.UK
+  override val title = "Ordered quantities per month"
+  override val help = "TThis chart lists the ordered quantities per month"
+  ...
+}
+----
+
+===== Chart Menus Definition
+
+Defining a menu means adding an entry to the menu bar in the top of the chart, you can add actors to this menu later by specifying the menu name in the actor definition. In the menu definition, the LABEL is optional.
+
+*Syntax:*
+ 	
+[source,java]
+----  
+MenuDefinition: val SimpleName = "menu (" label : String ")"
+----
+
+*Example*
+ 	
+[source,java]
+----
+class OrderedChart: Chart() {
+  override val locale = Locale.UK
+  override val title = "Ordered quantities per month"
+
+  val newMenu = menu("newMenu")
+  ...
+}
+----
+
+===== Chart Actors Definition
+
+An Actor is an item to be linked with a command, if its ICON is specified, it will appear in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar.
+ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign to the actor.
+
+
+*Syntax:*
+ 	
+[source,java]
+----  
+ActorDefinition:  "actor("
+                         "ident =" SimpleName,
+                         "menu =" SimpleName,
+                         "label =" label : String,
+                         "help" = helpText : String,
+                       ) {
+                         [key = key  : String]
+                         [icon = icon : String]
+                       }
+----
+
+*Example*
+ 	
+[source,java]
+----
+class OrderedChart: Chart() {
+  override val locale = Locale.UK
+  override val title = "Ordered quantities per month"
+
+  val newMenu = menu("newMenu")
+
+   val printChart = actor(
+            ident = "Print",
+            menu = newMenu,
+            label = "Print",
+            help = "Print the chart",
+    ) {
+      key = Key.F9         // key is optional here
+      icon = "printerIcon"  // icon is optional here
+    }
+    ...
+}
+----
+
+===== Chart Types Definition
+
+After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use the LIST and SELECT commands
+to customize these new types. 
+
+*Syntax:*
+----
+TypeDefinition:  "object" SimplName":" CodeDomain<FieldType>() {[TypeList] } | "object" SimplName":" ListDomain<FieldType>() {[TypeList] }
+----
+
+*Example*
+ 	
+[source,java]
+----
+class OrderedChart : Chart() {
+
+    object Days: CodeDomain<Int>() {
+      init {
+        "Sunday" keyOf 1
+        "Monday" keyOf 2
+        "Tuesday" keyOf 3
+        "Wednesday" keyOf 4
+        "Thursday" keyOf 5
+        "Friday" keyOf 6
+        "Saturday" keyOf 7
+      }
+    }
+
+    object CurrentDegree : ListDomain<String>(20) {
+      override val table = query(Degree.selectAll())
+
+      init {
+        "Symbol" keyOf Degree.Symbol
+        "Description" keyOf Degree.Description
+      }
+    }
+}
+----
+
+===== Chart Commands Definition
+
+In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the chart.
+every command have an effective ray of action (VDimension | VMeasure, VChart)
+
+ * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VColumn or VChart. 
+ 
+*Syntax*
+[source,java]
+----
+cmdDef: "command (" SimpleItemName  ")" { commandBody }
+
+cmdBody: { KOTLIN statements }
+----
+
+*Example*
+
+Calling a local action :
+
+[source,java]
+----
+val print = command(item = printActor) {
+  action = {
+    // KOTLIN code
+  }
+}
+----
+
+===== Chart Triggers Declaration
+
+Chart Triggers are special events that once switched on you can execute a set of actions defined by the following syntax :
+
+*Syntax*
+----
+ChartTrigger  :    TriggerAction : ChartEventList
+ChartEventList:    ChartEvent*
+----
+
+Kopi actually defines 4 chart Triggers or chart Events : 
+
+ * PRECHART  : executed before the chart is displayed.
+ * INIT      : executed at chart initialization.
+ * CHARTTYPE : executed after the chart initialization. This trigger should return org.kopi.vkopi.lib.chart.VChartType and will a fixed type for the chart.
+ * POSTCHART : executed after the chart is closed.
+
+*Example*
+[source, java]
+----
+class OrderedChart: Chart() {
+  override val locale = Locale.UK
+  override val title = "Ordered quantities per month"
+
+   val init = trigger(INITCHART) {
+      chartType = VChartType.BAR
+    }
+
+    // This is the type that will be taken because CHARTTYPE is executed after INIT
+    val type = trigger(CHARTTYPE) {
+      VChartType.BAR
+    }
+}
+----
+
+===== Chart Fields Declaration 
+
+As you already know, a chart is based on field that will be shown as chart series, in this section you have to write at least on dimension and one measure definition or more following 
+the definition and the structure we saw in the previous chapter.
+
+===== Chart Context init:
+
+This section should follow the chart fields (dimensions and measures) declaration and have to be placed between curly braces of init function, here you may define all the functions, data, classes you need in your chart, written in KOTLIN code.
+But most important, you need to define the constructor of you chart, this constructor will be responsible of filling the chart's lines or rows.
+All you need to do is importing your data (a List or vector parameter, database query cursors ...) , declaring a row in the chart then add the add(); statement to add the row to the chart.
+For example here we have added three dimension and for each dimension we have to specify 2 measures
+
+*Example*
+[source,java]
+----
+init {
+    city.add("Tunis") {
+      this[area] = Decimal("34600")
+      this[population] = 1056247
+    }
+
+    city.add("Kasserine") {
+      this[area] = Decimal("806600")
+      this[population] = 439243
+    }
+
+    city.add("Bizerte") {
+      this[area] = Decimal("568219")
+      this[population] = 368500
+    }
+  }
+----
+
+==== Chart types
+
+Kopi offers five predefined chart types :
+
+  * Pie charts
+  * Bar charts
+  * Column charts
+  * Line charts
+  * Area charts
+  
+The chart type can be defined by calling the setType(VChartType) method. The VChartType class contains the five definitions described above :
+
+  * VChartType.PIE
+  * VChartType.BAR
+  * VChartType.COLUMN
+  * VChartType.LINE
+  * VChartType.AREA
+  
+If no type is defined, the chart type will be set to the default type which is the VChartType.DEFAULT = VChartType.COLUMN.
+The chart type can be set at INIT trigger or can be fixed using the CHARTTYPE trigger.
+
+If you want to define a new type, you need to subclass the VChartType object and define the data series by overriding the createDataSeries(VChart).
+The view implementations should also be provided by implementing the UChartType component. The new chart type should be mentioned in the ChartTypeFactory class
+which is responsible for creating views for every chart type.
+
+You should note that calling setType will create the data series and refresh the chart view. So it can be called whenever you want to change the chart type. 
+
+==== Calling charts
+
+A chart is always called from a form, if the caller form extends from the VDictionaryForm class you have to do the following steps :
+
+ * Change VDictionaryForm to VChartSelectionForm
+ * Add the CreateChart command to the caller form
+ * Use showChart method :
+
+*Example*
+[source,java]
+----
+override fun createChart() {
+   return ChartSample()
+}
+----
+
+Otherwise you can create a normal form or block command that executes the following code :
+
+[source,java]
+----
+showChart(ChartSample())
+----

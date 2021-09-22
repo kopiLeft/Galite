@@ -1,0 +1,587 @@
+
+=== Visual Galite Reports
+
+Visual Galite allows you to create dynamic reports. These are  files with the ".kt" extension that have a very simple structure, in fact, all you have to do to create such reports
+is to list the definitions of all the fields you need, then you will that will load data into these fields in the init method by creating a query with Exposed syntax.
+The so created reports will have dynamic functions such as sorting and group making, you will also be able to print it or export to different file formats.You can even add other fields
+to the report after it's generated, do more calculus, customize the report columns...
+The Visual Galite Reports are generated from Visual Galite form files with the ".kt" extension by different methods that we will see in this chapter, along with the process of making a
+dynamic report.
+
+==== Creating Report Fields
+
+As we said in the introduction, the report structure is based on report fields, these fields are declared based on field function and have the following syntax :
+
+*Syntax*
+[source,java]
+----
+ReportFieldDef: "field(" FieldType ")" {
+                    [FieldLabel] [HelpText]  [FieldAlign] [FieldOptions]
+                    [GroupCommand] [FieldCommands] [FieldTriggers]
+                    }
+
+GroupCommands : "group =" SimpleName
+----
+
+*Example*
+[source,java]
+----
+val name = field(STRING(20)) {
+  label = "name"
+  help = "The user name"
+  align = FieldAlignment.LEFT
+  group = age
+  format {
+    object : VCellFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
+      }
+    }
+  }
+}
+
+val age = field(INT(3)) {
+  label = "age"
+  help = "The user age"
+  align = FieldAlignment.LEFT
+  compute {
+    // Computes the average of ages
+    Triggers.avgInteger(this)
+  }
+}
+----
+
+=====  Report Field Label
+
+The field label is the name that will be shown in the dynamic report, you can define a label by setting the label variable using String value.
+
+*Example*
+[source,java]
+----
+val name = field(STRING(20)) {
+  label = "Person Name"
+  ...
+}
+
+val age = field(INT(3)) {
+    label = "age"
+    ...
+}
+
+val ID = field(INT(3)) {
+    label = ""
+    ...
+}
+---- 
+
+===== Report Field Help Text
+
+Help variable is used to insert an explanation text for the application user. This Help text will then be displayed when the user places the mouse on the report field.
+
+*Example*
+[source,java]
+----
+val name = field(STRING(20)) {
+  label = "Person Name"
+  help = "The Person's First Name"
+  ...
+}
+----
+
+===== Report Field Type
+
+The field type is a required entry, you may enter a predefined field type as parameter for the field function :
+
+*Example*
+[source,java]
+----
+val name = field(STRING(20)) {
+  label = "Person Name"
+  ...
+}
+
+val age = field(INT(3)) {
+    label = "age"
+    ...
+}
+----
+
+You can also use self defined field types that you have previously defined in the type definition section of your report.
+
+*Example*
+[source,java]
+----
+val objectList = field(Objects) {
+    label = "age"
+    ...
+}
+----
+
+In this example, Objects is a type you should have defined previously in type definition section of the report using standard types, CODE types and SELECT command ...
+
+===== Report Field Alignment
+
+This command is used to define the localization of the field's content inside the field. There are three types of alignment.
+
+* ALIGN RIGHT the value is displayed at the right inside the field
+* ALIGN LEFT the value is displayed at the left inside the field
+* ALIGN CENTER the value is centered in the field
+
+*Example*
+[source,java]
+----
+val Name = field(STRING(10)) {
+    label = "name"
+    align = FieldAlignment.CENTER
+}
+----
+
+===== Report Field Options
+
+There is actually only one option for the dynamic report fields in Galite: the HIDDEN OPTION , if this option is used on a field, he will not be visible the the report.
+This options have to be used on the last visible field of the report to avoid rendering bugs.
+
+*Example*
+[source,java]
+----
+val Name = field(STRING(10)) {
+    label = "name"
+    hidden
+}
+----
+
+The field Name will not be visible on the report.
+
+===== Report Field Group
+
+You can create clickable groups in your report by using the keyword GROUP in you field followed by the field you want to be grouped by the actual field.
+
+*Example*
+[source,java]
+----
+val Customers = field(STRING(5)) {
+    label = "Customers"
+}
+
+val Articles = field(STRING(10)) {
+    label = "Articles"
+}
+
+val Articles = field(STRING(10)) {
+    label = "Articles"
+}
+
+val Articles = field(STRING(10)) {
+    label = "Articles"
+}
+
+val InvoiceNum = field(STRING(10)) {
+    label = "InvoiceNum"
+    group = Articles
+    group = Customers
+}
+----
+
+In this report, you can click on the InvoiceNum field to group customers and articles.
+
+===== Report Field Command
+
+In report Fields, you can call commands with this syntaxe :
+
+[source,java]
+----
+"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }
+----
+
+===== Report Field Triggers
+
+Report field triggers are special events that you can catch to execute other actions. In the field body call compute or format function and inside this function specify your code.
+
+*Syntax*
+[source,java]
+----
+Trigger      : TrigerAction : EventList
+
+EventList    : Event [,EventList]*
+
+TrigerAction : compute | format { KOTLIN code }
+----
+
+Here is the two triggers available for report fields :
+
+ * FORMAT  : applay style on the field content example change it to uppercase.
+ * COMPUTE : executed when the report is displayed and can be used to compute expressions on the report columns and show the result.
+
+*Example*
+[source,java]
+----
+val salary = field(DECIMAL(width = 10, scale = 5)) {
+  label = "salary"
+  help = "The user salary"
+  align = FieldAlignment.LEFT
+  compute {
+    // Computes the average of ages
+    Triggers.avgDecimal(this)
+  }
+}
+
+val name = field(STRING(20)) {
+  label = "name"
+  help = "The user name"
+  align = FieldAlignment.LEFT
+  group = age
+  format {
+    object : VCellFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
+      }
+    }
+  }
+}
+----
+
+==== Creating Reports
+
+Visual Galite Dynamic reports have a unique structure, you need to create new class that extend from Report class as described by the following syntax :
+
+*Syntax*
+[source,java]
+----
+ReportDefinition  : "class" ReportClass ":" QualifiedName [,QualifiedName]*] {
+                      [ReportLocalization]
+                      ReportTitle
+                      [ContextHeader] [ReportHelp] [ReportDefinitions]
+                      [ReportCommands] [ReportTriggers] (ReportFields)
+                      [ContextFooter]
+                    }
+
+ReportTitle       : "title =" Title : String
+
+ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
+                    [CommandDefinition]
+                    [InsertDefinition]
+----
+
+===== Report Localization
+
+This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.
+
+*Example:*
+[source,java]
+----
+override val locale = Locale.UK
+-----
+
+===== Report Title
+
+To set you report title you need to override the title variable of Report class.
+
+*Example*
+ 	
+[source,java]
+----  
+class ClientR : Report() {
+    override val locale = Locale.UK
+
+    override val title = "Clients_Report"
+    ...
+}
+----
+
+===== Report Superclass And Interfaces
+
+ * *Superclass:*
+
+*Syntax:*
+ 	
+[source,java]
+----  
+SuperClass:   ":" QualifiedName
+----
+Every Report is a class that may extend another Kotlin class by using the optional keyword ":". Otherwise,  Galite will automatically take over the java.lang.Object QualifiedName.
+
+*Example:*
+ 	
+[source,java]
+----
+class OrdersReport : Report() {
+    override val title = "Orders Report"
+    ...
+
+}
+----
+In other words, the class declaration you have just made specifies the direct superclass of the current class.
+
+ * *Interfaces:*
+
+You can also specify interfaces which the report may implement by using the keyword ":".
+
+*Syntax*
+
+[source,java]
+----
+":" QualifiedName [,QualifiedName]*
+----
+
+*Example:*
+ 	
+[source,java]
+----
+class OrdersReport : Report(), UReport() {
+    override val title = "Orders Report"
+    ...
+
+}
+----
+
+===== Report Help Text
+
+You can enter a help text for the report using the following syntax:
+
+*Syntax*
+[source,java]
+----
+override val help = helpText :String
+----
+Actually every report has a help menu that tries to describe the structure of the report by giving information about its commands and fields in a document, the help text will be on the top of this help menu document.
+
+*Example*
+[source,java]
+----
+class OrdersReport : Report() {
+  override val locale = Locale.UK
+  override val title = "Orders Report"
+
+  override val help = "This report lists purchase orders"
+}
+----
+
+
+===== Report Menus Definition
+
+Defining a menu means adding an entry to the menu bar in the top of the report, you can add actors to this menu later by specifying the menu name in the actor definition.
+
+*Syntax:*
+ 	
+[source,java]
+----
+MenuDefinition: val SimpleName = "menu (" label : String ")"
+----
+
+*Example*
+ 	
+[source,java]
+----
+
+class ListLecturersR : Report() {
+  override val locale = Locale.UK
+  override val title = "List of the Lecturers"
+
+  val newMenu = menu("newMenu")
+}
+----
+
+===== Report Actors Definition
+
+An Actor is an item to be linked with a command, if its ICON is specified, it will appear in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar.
+ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the actor.
+
+
+*Syntax:*
+ 	
+[source,java]
+----  
+ActorDefinition:  "actor("
+                           "ident =" SimpleName,
+                           "menu =" SimpleName,
+                           "label =" label : String,
+                           "help" = helpText : String,
+                         ) {
+                           [key = key  : String]
+                           [icon = icon : String]
+                         }
+----
+
+*Example*
+ 	
+[source,java]
+----
+
+class ListLecturersR : Report() {
+ override val locale = Locale.UK
+ override val title = "List of the Lecturers"
+ override val help = "Clients_Report"
+
+ val newMenu = menu("newMenu")
+
+  val printReport = actor(
+          ident = "Print",
+          menu = newMenu,
+          label = "Print",
+          help = "Print the report",
+  ) {
+    key = Key.F9         // key is optional here
+    icon = "printerIcon"  // icon is optional here
+  }
+  ...
+}
+----
+
+===== Report Types Definition
+
+After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use the LIST and SELECT commands
+to customize these new types. 
+
+*Syntax:*
+----
+TypeDefinition:  "object" SimplName":" CodeDomain<FieldType>() {[TypeList] } | "object" SimplName":" ListDomain<FieldType>() {[TypeList] }
+----
+
+*Example*
+ 	
+[source,java]
+----
+class LisLecturersR : Report() {
+
+    object Days: CodeDomain<Int>() {
+      init {
+        "Sunday" keyOf 1
+        "Monday" keyOf 2
+        "Tuesday" keyOf 3
+        "Wednesday" keyOf 4
+        "Thursday" keyOf 5
+        "Friday" keyOf 6
+        "Saturday" keyOf 7
+      }
+    }
+
+    object CurrentDegree : ListDomain<String>(20) {
+      override val table = query(Degree.selectAll())
+
+      init {
+        "Symbol" keyOf Degree.Symbol
+        "Description" keyOf Degree.Description
+      }
+    }
+}
+----
+
+===== Report Commands Definition
+
+In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
+every command have an effective ray of action (VRField, VReport)
+
+ * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VRField or VReport. 
+ 
+*Syntax*
+[source,java]
+----
+cmdDef  : "command (" SimpleItemName  ")" { commandBody }
+
+commandBody: { KOTLIN statements }
+----
+
+*Example*
+Writing the action's body :
+
+[source,java]
+----
+val PrintReport = command(item = PrintReport) {
+  action = {
+    // KOTLIN code
+  }
+}
+----
+
+===== Report Triggers Declaration
+
+Report Triggers are special events that once switched on you can execute a set of actions defined by the following syntax :
+
+*Syntax*
+----
+ReportTrigger  :  "trigger(" TriggerAction : ReportEventList ")"
+ReportEventList:  ReportEvent [,FormEvent]*
+----
+
+Galite actually defines 2 report Triggers or report Events :
+
+ * PREREPORT  : executed before the report is displayed.
+ * POSTREPORT : executed after the report is closed.
+
+*Example*
+[source, java]
+----
+class SimpleReport : Report() {
+  override val locale = Locale.UK
+
+  override val title = "SimpleReport"
+
+  val preReport = trigger(PREREPORT) {
+    println("---------PREREPORT TRIGGER-------------")
+  }
+
+  val postReport = trigger(POSTREPORT) {
+    println("---------POSTREPORT TRIGGER-------------")
+  }
+  ...
+}
+----
+
+===== Report Fields Declaration 
+
+As you already know, a dynamic report is based on field that will be shown as report columns, in this section you have to write at least on field definition or more following 
+the definition and the structure we saw in the previous chapter.
+
+===== Report Context init:
+
+This section should follow the report fields declaration and have to be placed between curly braces of init function, here you may define all the functions, data, classes you need in your report, written in KOTLIN code.
+But most important, you need to d fill the report's lines or rows.
+ALL you need that you use EXPOSED Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields
+
+For example here is  a dynamic report, we will retrieve data from the Client table on the database. Then affect the query result to our report to create rows.
+
+*Example*
+[source,java]
+----
+val clients = Client.selectAll()
+
+init {
+  transaction {
+    clients.forEach { result ->
+      add {
+        this[firstName] = result[Client.firstNameClt]
+        this[lastName] = result[Client.lastNameClt]
+        this[addressClt] = result[Client.addressClt]
+        this[ageClt] = result[Client.ageClt]
+        this[countryClt] = result[Client.countryClt]
+        this[cityClt] = result[Client.cityClt]
+        this[zipCodeClt] = result[Client.zipCodeClt]
+        this[activeClt] = result[Client.activeClt]
+      }
+    }
+  }
+}
+----
+
+==== Calling reports
+
+A report is always called from a form, if the caller form extends from the VDictionaryForm class you have to do the following steps :
+
+ * Change VDictionaryForm to VReportSelectionForm
+ * Add the CreateReport command to the caller form
+ * Implement the createReport abstract method :
+
+*Example*
+[source,java]
+----
+override fun createReport(): Report {
+   return ClientR()
+}
+----
+
+Otherwise you can create a normal form or block command that executes the following code :
+
+[source,java]
+----
+   WindowController.getWindowController().doNotModal(new UserList(this));
+----

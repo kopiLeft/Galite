@@ -1,0 +1,112 @@
+= Galite Application Generator :  User guide
+
+:doctype: book
+
+[preface]
+Preface
+-------
+The Galite Project is the framework of kopiLeft with an expressive elegant syntax based on Kotlin DSL for developing business applications using KOTLIN, EXPOSED and VAADIN.
+
+Galite contains a DSL part which offers an easy syntax to the user in order to develop an application, a model part and a UI part which is currently implemented with vaadin and which may have other implementation in the future.
+
+The Galite Project use Exposed Framework to manage the database. Exposed is a lightweight SQL library on top of JDBC driver for Kotlin language and it support different database dialects.
+
+The last tool provided by kopiLeft is Visual Galite. Visual Galite is an application framework which lets you create database applications in a high level specification language using Kotlin DSL.
+
+*Organization of This Document*
+
+This documentation includes two main Chapters: +
+
+* CHAPTER 1 : Getting Started
+This chapter is intended to show how to run the application in a first part, and how to customize the application in a second part.
+
+* CHAPTER 2 : The Visual Galite application Framework+
+Visual Galite is an application framework using VAADIN which lets you create database applications in a high level specification language. In this chapter, we will explore the capabilities of this framework.
+
+
+*Source code*
+
+The source code of the Galite framework project is available on GitHub : https://github.com/kopiLeft/Galite.
+
+
+== Getting Started
+
+This chapter allow you to know how to run our demo application to discover the final result of an application developed with Galite framework.
+Then in the second part we will show you how you can customize and play with this test application.
+
+=== Running the demo application
+
+Before running the app make sure that you have Java 8 (or higher) JDK installed.
+
+To quickly start the app, type this into your terminal:
+
+[source,java]
+----
+git clone https://github.com/kopiLeft/Galite.git
+cd Galite
+./gradlew clean run
+----
+
+The app will be running on http://localhost:8080
+
+When the app is started, the login page is displayed. For demo purposes, a user is inserted into the database with the following parameters:
+
+[source,java]
+----
+login = admin
+password = admin
+----
+
+=== Customize and configure your App
+
+To define your application customizations (logo, locales, .etc) you need to implement the VApplication class.
+
+Exemple:
+
+[source,java]
+----
+class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
+
+  override val sologanImage get() = "galite-slogan.png"
+
+  override val logoImage get() = "galite-logo.png"
+
+  override val logoHref get() = "http://[mywebsite]"
+
+  override val alternateLocale get() = Locale("de", "AT")
+
+  override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
+
+  init {
+    ApplicationConfiguration.setConfiguration(
+      object : ApplicationConfiguration() {
+        override val version get(): String = "1.0"
+        override val applicationName get(): String = "MyApp"
+        override val informationText get(): String = "info"
+        override val logFile get(): String = "log.txt"
+        override val debugMailRecipient get(): String = "mail@adress"
+        override fun getSMTPServer(): String = "smtp.server"
+        override val faxServer get(): String = "fax.server"
+        override fun mailErrors(): Boolean = false
+        override fun logErrors(): Boolean = true
+        override fun debugMessageInTransaction(): Boolean = true
+
+        /** And many other configurations. See ApplicationConfiguration.kt */
+      }
+    )
+  }
+}
+----
+
+== The Visual Galite application Framework
+
+The visual Galite Framework is an application framework based using the Kotlin DSL in order to create database applications easily.
+In this chapter we will se how to create Galite powered forms, reports and charts.
+
+ 
+include::general.adoc[]
+include::form.adoc[]
+include::report.adoc[]
+include::chart.adoc[]
+include::print.adoc[]
+include::conclusion.adoc[]
