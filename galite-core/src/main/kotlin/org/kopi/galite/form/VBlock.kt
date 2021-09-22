@@ -2075,12 +2075,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     try {
       transaction {
-        val result = table.slice(columns).select(conditions.compoundAnd()).single()
+        val condition: Op<Boolean> = conditions.compoundAnd()
+        val query = table.slice(columns).select(condition)
         var j = 0
 
         fields.forEach { field ->
           if (field.lookupColumn(table) != null) {
-            field.setQuery(result, columns[j])
+            field.setQuery(query.single(), columns[j])
             j++
           }
         }
@@ -3085,7 +3086,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       table.insert { table ->
         result.forEach {
-            table[it.first] = it.second
+          table[it.first] = it.second
         }
       }
       setRecordFetched(recno, true)
