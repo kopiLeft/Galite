@@ -96,28 +96,6 @@ open class FormField<T>(val block: FormBlock,
   internal var max : T? = null
 
   /**
-   * Sets the minimum value of an Int field.
-   */
-  var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
-    get() {
-      return min
-    }
-    set(value) {
-      min = value
-    }
-
-  /**
-   * Sets the maximum value of an Int field.
-   */
-  var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
-    get() {
-      return max
-    }
-    set(value) {
-      max = value
-    }
-
-  /**
    * Returns the field value of the current record number [record]
    *
    * FIXME temporary workaround
@@ -566,3 +544,25 @@ open class FormField<T>(val block: FormBlock,
     return -1
   }
 }
+
+/**
+ * Sets the minimum value of a number field.
+ */
+var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
+  get() {
+    return min
+  }
+  set(value) {
+    min = value
+  }
+
+/**
+ * Sets the maximum value of a number field.
+ */
+var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
+  get() {
+    return max
+  }
+  set(value) {
+    max = value
+  }

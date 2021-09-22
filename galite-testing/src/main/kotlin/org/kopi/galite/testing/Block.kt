@@ -24,13 +24,9 @@ import org.kopi.galite.ui.vaadin.form.DGridBlock
 import org.kopi.galite.ui.vaadin.main.MainWindow
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10._clickItem
 import com.github.mvysny.kaributesting.v10._find
-import com.github.mvysny.kaributesting.v10._fireEvent
 import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._internalId
-import com.github.mvysny.kaributesting.v10.checkEditableByUser
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.grid.ItemClickEvent
 
 /**
  * Enters a block.
@@ -41,7 +37,7 @@ fun FormBlock.enter(duration: Long = 50) {
   val block = findBlock()
 
   if(block is DGridBlock) {
-    block.grid.clickItem(0, block.grid.columns.first())
+    block.grid._clickItem(0, block.grid.columns.first())
   } else {
     block._find<Field>().first().focus()
   }
@@ -61,7 +57,7 @@ fun FormBlock.editRecord(record: Int, duration: Long = 50) {
   val block = findBlock()
 
   if(block is DGridBlock) {
-    block.grid.clickItem(record, block.grid.columns.first())
+    block.grid._clickItem(record, block.grid.columns.first())
   } else {
     TODO("Edit record for simple block not implemented yet.")
   }
@@ -90,21 +86,6 @@ fun FormBlock.findBlock(): DBlock {
  */
 fun FormBlock.findMultipleBlock(): DGridBlock =
         (findBlock() as? DGridBlock) ?: throw Exception("$ident is not a multiple block")
-
-// TODO: Remove this when using karibu-testing 1.3.1 as it will be added when this version will be released.
-fun <T : Any> Grid<T>.clickItem(rowIndex: Int,
-                                column: Grid.Column<*>,
-                                button: Int = 1,
-                                ctrlKey: Boolean = false,
-                                shiftKey: Boolean = false,
-                                altKey: Boolean = false,
-                                metaKey: Boolean = false) {
-  checkEditableByUser()
-  val itemKey: String = dataCommunicator.keyMapper.key(_get(rowIndex))
-  val internalId: String = column._internalId
-  val event = ItemClickEvent(this, true, itemKey, internalId, -1, -1, -1, -1, 1, button, ctrlKey, shiftKey, altKey, metaKey)
-  _fireEvent(event)
-}
 
 infix fun VBlock.eq(block: VBlock): Boolean {
   return this.title == block.title

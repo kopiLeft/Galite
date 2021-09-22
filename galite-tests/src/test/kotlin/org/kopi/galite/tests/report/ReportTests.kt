@@ -31,7 +31,6 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.Triggers
-import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.type.Decimal
@@ -58,25 +57,25 @@ class ReportTests: VApplicationTestBase() {
     assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami",
-                       SimpleReport.age to 22,
-                       SimpleReport.profession to "Journalist",
-                       SimpleReport.salary to Decimal("2000")),
-                 firstRow)
+    assertMapsEquals(mapOf(SimpleReport.name to "Sami",
+                           SimpleReport.age to 22,
+                           SimpleReport.profession to "Journalist",
+                           SimpleReport.salary to Decimal("2000")),
+                     firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia",
-                       SimpleReport.age to 23,
-                       SimpleReport.profession to "Dentist",
-                       SimpleReport.salary to Decimal("2000.55")),
-                 secondRow)
+    assertMapsEquals(mapOf(SimpleReport.name to "Sofia",
+                           SimpleReport.age to 23,
+                           SimpleReport.profession to "Dentist",
+                           SimpleReport.salary to Decimal("2000.55")),
+                     secondRow)
 
     val thirdRow = SimpleReport.getRow(2)
-    assertEquals(mapOf(SimpleReport.name to "Sofia",
-                       SimpleReport.age to 25,
-                       SimpleReport.profession to "Baker",
-                       SimpleReport.salary to Decimal("2000.55")),
-                 thirdRow)
+    assertMapsEquals(mapOf(SimpleReport.name to "Sofia",
+                           SimpleReport.age to 25,
+                           SimpleReport.profession to "Baker",
+                           SimpleReport.salary to Decimal("2000.55")),
+                     thirdRow)
   }
 
   /**
@@ -223,12 +222,8 @@ class SimpleReport : Report() {
     help = "The user name"
     align = FieldAlignment.LEFT
     group = age
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toUpperCase()
     }
   }
 

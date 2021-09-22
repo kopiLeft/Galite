@@ -146,12 +146,8 @@ class TrainingR : Report() {
     help = "The training type"
     align = FieldAlignment.LEFT
     group = trainingName
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toUpperCase()
     }
   }
 
@@ -159,12 +155,8 @@ class TrainingR : Report() {
     label = "training Name"
     help = "The training name"
     align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      (value as String).toUpperCase()
     }
   }
 
