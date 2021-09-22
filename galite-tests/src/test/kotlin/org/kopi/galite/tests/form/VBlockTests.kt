@@ -123,6 +123,7 @@ class VBlockTests : JApplicationTestBase() {
 
     transaction {
       initSampleFormTables()
+      FormSample.tb1.vBlock.load()
       val query = User.slice(User.name, User.age).selectAll()
 
       FormSample.tb1.vBlock.deleteRecord(0)
@@ -181,7 +182,6 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest1() {
-    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
     FormSample.model
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
@@ -201,11 +201,10 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest2() {
-    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
     FormSample.model
     with(FormSample.tb1.vBlock) {
-      fields[5].setSearchOperator(1)
-      fields[6].setSearchOperator(5)
+      fields[5].setSearchOperator(VConstants.SOP_LT)
+      fields[6].setSearchOperator(VConstants.SOP_NE)
     }
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
@@ -225,11 +224,10 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest3() {
-    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
     FormSample.model
     with(FormSample.tb1.vBlock) {
-      fields[5].setSearchOperator(2)
-      fields[6].setSearchOperator(0)
+      fields[5].setSearchOperator(VConstants.SOP_GT)
+      fields[6].setSearchOperator(VConstants.SOP_EQ)
     }
 
     FormSample.tb1.id.value = null
@@ -250,12 +248,10 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest4() {
-
-    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
     FormSample.model
     with(FormSample.tb1.vBlock) {
-      fields[5].setSearchOperator(3)
-      fields[6].setSearchOperator(0)
+      fields[5].setSearchOperator(VConstants.SOP_LE)
+      fields[6].setSearchOperator(VConstants.SOP_EQ)
     }
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
@@ -275,11 +271,10 @@ class VBlockTests : JApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest5() {
-    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
     FormSample.model
     with(FormSample.tb1.vBlock) {
-      fields[5].setSearchOperator(4)
-      fields[6].setSearchOperator(0)
+      fields[5].setSearchOperator(VConstants.SOP_GE)
+      fields[6].setSearchOperator(VConstants.SOP_EQ)
     }
     FormSample.tb1.uc.value = 0
     FormSample.tb1.ts.value = 0
@@ -305,11 +300,12 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun `fetchRecord valid scenario test`() {
+  fun `fetchRecord with existing ID scenario test`() {
     FormSample.model
 
     transaction {
       initSampleFormTables()
+      //fetch record search with id 1 and there is no exception
       FormSample.tb1.vBlock.fetchRecord(1)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
       SchemaUtils.drop(User)
@@ -359,11 +355,10 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.age.value = 26
       FormSample.tb1.vBlock.load()
       FormSample.tb1.vBlock.fetchNextRecord(0)
-      var listInfoUser : List<Any?> = mutableListOf()
 
-      User.select { User.name.eq("AUDREY") and User.age.eq(26) }.forEach {
-        listInfoUser = listOf(it[User.id], it[User.name], it[User.age], it[User.job])
-      }
+      val query = User.select { User.name.eq("AUDREY") and User.age.eq(26) }.single()
+      val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
+
       assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
       SchemaUtils.drop(User)
@@ -383,7 +378,7 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.model
 
     assertThrows(VExecFailedException::class.java) {
-      FormSample.tb1.vBlock.fetchNextRecord(5)
+      FormSample.tb1.vBlock.fetchNextRecord(3)
     }
   }
 
@@ -404,11 +399,9 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.setMode(VConstants.MOD_INSERT)
       FormSample.tb1.vBlock.save()
 
-      var listInfoUser : List<Any?> = mutableListOf()
+      val query = User.selectAll().single()
+      val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
 
-      User.selectAll().forEach {
-        listInfoUser = listOf(it[User.id], it[User.name], it[User.age], it[User.job])
-      }
       assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       SchemaUtils.drop(User)
       SchemaUtils.dropSequence(userSequence)
@@ -433,11 +426,9 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.setMode(VConstants.MOD_UPDATE)
       FormSample.tb1.vBlock.save()
 
-      var listInfoUser : List<Any?> = mutableListOf()
+      val query = User.select { User.id eq 1 }.single()
+      val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
 
-      User.select { User.id eq 1 }.forEach {
-        listInfoUser = listOf(it[User.id], it[User.name], it[User.age], it[User.job])
-      }
       assertEquals(listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value), listInfoUser)
       SchemaUtils.drop(User)
     }
@@ -665,11 +656,9 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.vBlock.clear()
       FormSample.tb1.vBlock.load()
 
-      var listInfoUser: List<Any?> = mutableListOf()
+      val query = User.selectAll().single()
+      val listInfoUser = listOf(query[User.id],  query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
 
-      User.selectAll().forEach {
-        listInfoUser = listOf(it[User.id], it[User.ts], it[User.uc], it[User.name], it[User.age], it[User.job])
-      }
       assertEquals(listOf(FormSample.tb1.id.value,
                           FormSample.tb1.ts.value,
                           FormSample.tb1.uc.value,
@@ -694,11 +683,8 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.age.value = 25
       FormSample.tb1.vBlock.load()
 
-      var listInfoUser: List<Any?> = mutableListOf()
-
-      User.select { User.id eq 3 }.forEach {
-        listInfoUser = listOf(it[User.id], it[User.ts], it[User.uc], it[User.name], it[User.age], it[User.job])
-      }
+      val query = User.select { User.id eq 3 }.single()
+      val listInfoUser = listOf(query[User.id],  query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
 
       assertEquals(listOf(FormSample.tb1.id.value,
                           FormSample.tb1.ts.value,
@@ -782,11 +768,8 @@ class VBlockTests : JApplicationTestBase() {
       FormSample.tb1.id.value = 1
       FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
 
-      var listInfoUser: List<Any?> = mutableListOf()
-
-      User.select { User.name.eq("AUDREY") and User.age.eq(26) }.forEach {
-        listInfoUser = listOf(it[User.id], it[User.ts], it[User.uc], it[User.name], it[User.age], it[User.job])
-      }
+      val query = User.select { User.name.eq("AUDREY") and User.age.eq(26) }.single()
+      val listInfoUser = listOf(query[User.id], query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
 
       assertEquals(listOf(FormSample.tb1.id.value,
                           FormSample.tb1.ts.value,
