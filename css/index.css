@@ -1,0 +1,108 @@
+/*
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+/*
+ * index style
+ */
+body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#galite-logo {
+    width: 300px;
+    height: 100px;
+}
+#container {
+    padding: 3rem 1rem;
+    background: rgb(17,118,200);
+    background: linear-gradient(90deg, rgba(17,118,200,1) 0%, rgba(40,175,206,1) 56%, rgba(123,156,161,1) 100%);
+    color: white;
+    border-radius: 10px 100px / 120px;
+}
+
+#title {
+    font-size: 3.25rem;
+}
+
+#description {
+    font-size: 1.75rem;
+}
+
+#list-inline {
+    margin-top: 3em;
+    padding-left: 0;
+    list-style: none;
+}
+
+.list-inline-item {
+    display: inline-block;
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.link {
+    display: inline-block;
+    padding: .5rem 1rem;
+    font-size: 1.33rem;
+    line-height: 1.5;
+    border-radius: .3rem;
+    color: #fff;
+    background-color: #155195;
+    border-color: #336791;
+    text-decoration: none;
+    color: white;
+}
+
+#text {
+    font-family: "Open Sans, Helvetica Neue ,sans-serif";
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+#content {
+    margin: 0 auto;
+    max-width: 62.5em;
+}
+
+@media screen and (max-width: 42em) {
+    .list-inline-item {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .link {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+    .list-inline-item {
+        padding: .5rem .1rem;
+        font-size: 0.9rem;
+    }
+}
+
+#section {
+    color: #466e71;
+}
