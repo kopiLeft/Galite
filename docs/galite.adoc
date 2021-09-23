@@ -1,0 +1,125 @@
+= Galite Application Framework :  User guide
+:toc: left
+:toclevels: 4
+:doctype: book
+:source-highlighter: highlightjs
+
+[preface]
+Preface
+-------
+The Galite Project is the framework of kopiLeft for creating business applications. It's the successor of the Kopi project. Kopi is a Java software project from DMS which provides a framework for developing database applications using Java, JDBC and SWING.
+
+Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.
+
+image::./docs/galite-architecture.png[650,650]
+:Galite architecture!:
+
+The basic architecture of Visual Galite is made of a three strongly independent layers:
+
+- DSL: The DSL is the Kotlin functions provided for the user to develop his application.
+- Model: The model layer is a set of model classes responsible for structuring and processing data. Also it contains a hight specification interfaces that any UI implementation should respect.
+- UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin.
+
+*Organization of This Document*
+
+This documentation includes two main Chapters: +
+
+* CHAPTER 1 : Getting Started
+
+This chapter is intended to show how to configure the application and essential features to query the database.
+
+* CHAPTER 2 : The Visual Galite application Framework
+
+Visual Galite is an application framework using VAADIN which lets you create database applications in a high level specification language. In this chapter, we will explore the capabilities of this framework.
+
+== Getting Started
+
+=== Entry point
+
+Galite provides an entry point to the application that should be implemented to customize the application.
+
+If you are creating a Vaadin application, you should implement the class `VApplication` and specify your application configurations by overriding the class properties:
+
+[source,kotlin]
+----
+@Route("")
+class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
+
+  override val sologanImage get() = "galite-slogan.png"
+
+  override val logoImage get() = "galite-logo.png"
+
+  override val logoHref get() = "http://[mywebsite]"
+
+  override val alternateLocale get() = Locale("de", "AT")
+
+  override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
+
+  init {
+    ApplicationConfiguration.setConfiguration(
+      object : ApplicationConfiguration() {
+        override val version get(): String = "1.0"
+        override val applicationName get(): String = "MyApp"
+        override val informationText get(): String = "info"
+        override val logFile get(): String = "log.txt"
+        override val debugMailRecipient get(): String = "mail@adress"
+        override fun getSMTPServer(): String = "smtp.server"
+        override val faxServer get(): String = "fax.server"
+        override fun mailErrors(): Boolean = false
+        override fun logErrors(): Boolean = true
+        override fun debugMessageInTransaction(): Boolean = true
+
+        // And many other configurations. See ApplicationConfiguration.kt
+      }
+    )
+  }
+}
+----
+
+The `Route` annotation allows you to define the navigation URL of your web application.
+
+=== Galite standard tables
+
+There are some standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.
+
+The definition of these tables is in the file `DBSchema`. You can use Exposed to create these tables using `SchemaUtils.create(table)`.
+
+This is the role of every table:
+
+//.......................................................................
+
+=== Transactions
+
+Every SQL statements should be executed within transaction. This allows to re-execute statements interrupted by deadlock (after asking the user if he wants to) or abort a whole transaction if something is wrong (like if a Java exception is thrown). The syntax is:
+
+[source,kotlin]
+----
+transaction("an optional message") {
+  ...
+  ... // a list of Exposed queries
+  ...
+}
+----
+
+In a visual context, the optional message allows to inform the user that the transaction is being processed. For example: Showing a dialog containing a spinner with the message (For example: "Inserting the record..." or "Loading...", etc..).
+
+=== The new Types
+
+Galite introduces 6 types to the basic types available in the java language :
+
+ * Date      : date values.
+ * Month     : Years months values.
+ * Week      : Years weeks values.
+ * Time      : this type can be used to contain time values (hh:mm:ss).
+ * Timestamp : can contain timestamp values.
+
+== Galite application framework
+
+The visual Galite Framework is an application framework based using the Kotlin DSL in order to create database applications easily.
+In this chapter we will se how to create Galite powered forms, reports and charts.
+
+include::general.adoc[]
+include::form.adoc[]
+include::report.adoc[]
+include::chart.adoc[]
+include::conclusion.adoc[]

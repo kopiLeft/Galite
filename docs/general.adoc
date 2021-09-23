@@ -1,0 +1,386 @@
+
+=== Generalities
+
+In this section we will provide the definitions you may need in order to fully understand the syntax explanations in the rest of the chapter.
+We will also provide the standard types used in the visual Galite framework.
+
+==== Syntax terms
+
+During this chapter, you will have many *Syntax* sections containing different keywords and special characters :
+
+
+ * *'SimpleName and QualifiedName'*
+
+When setting up your own application, you will often have to enter a name in order to define either a field, a block, a page or a form. You will then have to make use of either a simple or a qualified name.
+
+A SimpleName consists of a character row in which neither spaces nor points are permitted.
+
+*Example*
+[source,kotlin]
+-----------------
+StudentGroup2
+-----------------
+
+A QualifiedName is a row of characters in which points are allowed.
+
+*Example*
+[source,kotlin]
+------------------
+StudentGroup2.ViennaUniversity
+------------------
+
+* *'Parameters'*
+
+You can also find parameters with types in the syntax blocks;
+
+*Example*
+[source,kotlin]
+----
+x : Int
+name : String
+----
+
+* *'Special Characters'*
+
+These characters may be found ins syntax block and defines the rules of the syntax:
+
+[ ]  : if an element in put between [ ] that means it's optional. +
+*    : if an element or expression is followed by *, then it can be inserted zero or more times +
++    : if an element or expression is followed by +, then this element need to be inserted at least one time, or more +
+|    : means Or +
+" "  : if and element or expression is put between " ", then it's a keyword of the language.
+
+*Example*
+----
+ItemDefinition  : "class" String formTitle [":" QualifiedName]
+                  [":" QualfiedName [,QualifiedName]* ]
+----
+
+==== Predefined Field Types
+
+Every form or report field In visual Galite have field type that can be one of the 12 ready to use predefined types :
+
+[source,kotlin]
+----
+- DECIMAL(x, y)                 // used to insert decimal values, with x and y are ints that present the width and the scale
+- IMAGE(x, y)                   // used to insert images, with x and y are ints that present the width and the height
+- INT(x)                        // used to insert integer values, with x is an int that present the width of the field
+- STRING(x)                     // used to insert string values, with x is an int that present the width of the field
+- STRING(x, y, z, f, s, b)      // used to insert text values, with x, y and z are ints that present the width and the height, f1 is FixOption, s is StringFormat and b present boolean for styled field.                         // used to insert a date value
+- DATETIME                      // used to insert a datetime value
+- BOOL                          // used to insert a true or false value
+- MONTH                         // used to insert years months value
+- TIME                          // used to insert a hours:minutes time value
+- TIMESTAMP                     // used to insert a timestamp value
+- WEEK                          // used to insert years weeks  value
+----
+
+===== The STRING Field Type
+
+A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given. Moreover, you can optionaly indicate how many rows it will contain and how many will finally be displayed on the form. If these optional arguments are used, you have to indicate the carraige return method by specifying either the FIXED ON or the FIXED OFF option to avoid compilation errors. +
+There are also three other options you can use in order to modify the String's case :
+
+- Convert.NAME  (Converts the first letter of each word to capital letter)
+- Convert.UPPER (Convert the whole text to capital letters)
+- Convert.LOWER (Converts the whole text to normal letters)
+
+*Syntax:*
+
+[source,kotlin]
+----
+
+StringType   : "STRING" (width: Int, height: Int, visibleHeight: Int,
+                         [FixOption: Fixed,]
+                         [StringFormat: Convert,]
+                         [styled: Boolean]
+                        )
+
+FixOption    : "Fixed.ON"
+               "Fixed.OFF"
+
+StringFormat : "Convert.UPPER"
+               "Convert.LOWER"
+               "Convert.NAME"
+
+styled      :  "true"   // present rich text
+               "false"  // present text area
+----
+
+*Example*
+
+[source,kotlin]
+----
+val name = visit(domain = STRING(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+  }
+----
+
+In this example, the text inserted will contain up to 20 characters.
+
+===== The RICHTEXT Field Type
+
+A RichText allow user to change the style of his text for example, he can make the text bold or underlined, apply different fonts to individual words or characters, and change text colors.
+
+*Example*
+
+[source,kotlin]
+----
+val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, Convert.UPPER, styled = true), position = at(3, 1)) {
+    label = "tax informations"
+    help = "The tax informations"
+  }
+----
+
+In this example, the text inserted will contain up to 80 characters and up to 50 rows. However, only the first 10 rows will be displayed on the form. Moreover, All the letters in the text will be converted to capital letters, and we will create an rich text field by setting the option styled as true.
+
+===== The IMAGE Field Type
+
+This field type is used to insert an illustration or a picture. When introducing an IMAGE, you have to determine its width and height. These values have to be integers and are measured in pixel. In this case, the two attributes are compulsory.The field will look like a file chooser that lets you choose and image file to show in the field.
+
+*Syntax:*
+
+[source,kotlin]
+----
+ImageType : "IMAGE" (width: Int, height: Int)
+----
+
+*Example:*
+
+[source,kotlin]
+----
+val image = visit(domain = IMAGE(width = 20, height = 10), position = at(1, 3)) {
+    label = "image"
+    help = "The product image"
+  }
+----
+In this field, the image will have a width of 20 pixel and a height of 10 pixel.
+
+===== The DECIMAL Field Type
+
+A DECIMAL is used to insert numbers, integers, fixed point numbers.
+The maximal width has to be determined for all them. In case of a fixed point number, the maximal scale i.e the number of characters standing after the comma has also to be defined.
+Also the comma has to be counted as a character.
+You can also set the minimum and the maximum values for the DECIMAL field with the optional parameters minValue and maxValue.
+
+*Syntax:*
+
+[source,kotlin]
+----
+DecimalType   : "DECIMAL" (width: Int, scale: Int)
+                 ["minValue = minVal : Decimal"]
+                 ["maxValue = maxVal : Decimal"]
+----
+
+*Example:*
+
+[source,kotlin]
+----
+val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
+    label = "price"
+    help = "The price"
+    minValue = Decimal.valueOf("1.9")
+    maxValue = Decimal.valueOf("5.9")
+
+  }
+----
+
+===== The INTEGER Field Type
+
+Integer field type is INT is used to insert integers. Only the text width is to be defined. The minValue and maxValue options are also available for this type.
+
+*Syntax:*
+
+[source,kotlin]
+----
+IntegerType:   "INT" (width: Int)
+                ["minValue = minVal : Int"]
+                ["maxValue = maxVal : Int"]
+----
+
+*Example*
+
+[source,kotlin]
+----
+val age = visit(domain = INT(3), position = follow(name)) {
+    label = "age"
+    help = "The user age"
+    minValue = 1
+    maxValue = 130
+  }
+----
+
+==== Code Field Types
+
+In addition to the predefined field types already available in visual Galite, you can define more specific types like CODE type. Unlike the predefined field types, these types have to be set in the Type definition type of the form before you can use them in the fields.
+
+===== The CODE types
+
+The code Filed can be defined with many type like Boolean, Int, Decimal, etc... These types enable you to have a list of item-value pairs, the items will be displayed in the field and the values will be assigned instead.
+
+*  *The Type CODE BOOL*
+
+In a CODE BOOL or BOOLEAN you have to assign a Boolean value to the item you have entered. Boolean values are values like "True" or "False" and "Yes" or "No".
+
+*Syntax:*
+
+[source,kotlin]
+----
+CodeBooleanType : "object" "NameToUse" ":" "CodeDomain<Boolean>() {"
+                    "init {"
+                        CodeBooleanList
+                    "}"
+                  "}"
+
+CodeBooleanList : CodeBoolean  [CodeBooleanList]
+
+CodeBoolean     : code : String "keyOf" value : Boolean
+----
+
+*Example*
+
+[source,kotlin]
+----
+object Situation: CodeDomain<Boolean>() {
+  init {
+    "married" keyOf true
+    "single" keyOf false
+  }
+}
+
+----
+
+* *The Type CODE INT*
+
+In a CODE INT, you assign to each String item you have entered a INT value.
+
+*Syntax:*
+
+[source,kotlin]
+----
+CodeIntegerType : "object" "NameToUse" ":" "CodeDomain<Int>() {"
+                    "init {"
+                        CodeIntegerList
+                    "}"
+                  "}"
+
+CodeIntegerList : CodeInteger  [CodeIntegerList]
+
+CodeInteger     : code : String "keyOf" value : Int
+----
+
+*Example*
+
+[source,kotlin]
+----
+object Days: CodeDomain<Int>() {
+  init {
+    "Sunday" keyOf 1
+    "Monday" keyOf 2
+    "Tuesday" keyOf 3
+    "Wednesday" keyOf 4
+    "Thursday" keyOf 5
+    "Friday" keyOf 6
+    "Saturday" keyOf 7
+  }
+}
+----
+
+* *The Type CODE DECIMAL*
+
+In a CODE DECIMAL, each item you have entered will get a DECIMAL value, i.e integers, fixed point numbers and fraction numbers.
+
+*Syntax:*
+
+[source,kotlin]
+----
+CodeFixedType : "object" "NameToUse" ":" "CodeDomain<Decimal>() {"
+                    "init {"
+                        CodeFixedList
+                    "}"
+                  "}"
+
+CodeFixedList : CodeFixed  [CodeFixedList]
+
+CodeFixed     : code : String "keyOf" value : Decimal
+----
+*Example*
+
+[source,kotlin]
+----
+object Accounting: CodeDomain<Decimal>() {
+  init {
+    "piece" keyOf Decimal.valueOf("1.00")
+    "per cent" keyOf Decimal.valueOf("0.01")
+  }
+}
+----
+
+* *The Type CODE STRING*
+
+In a CODE STRING, each item you have entered will get a STRING value, this can be useful for shortcut of long strings for example.
+
+*Syntax:*
+
+[source,kotlin]
+----
+CodeStringType : "object" "NameToUse" ":" "CodeDomain<String>() {"
+                    "init {"
+                        CodeStringType
+                    "}"
+                  "}"
+
+CodeStringType : CodeString  [CodeStringType]
+
+CodeString     : code : String "keyOf" value : String
+----
+*Example*
+
+[source,kotlin]
+----
+object ProgrammingLanguage: CodeDomain<String>() {
+  init {
+    "JDK" keyOf "Java Development Kit"
+    "JRE" keyOf "Java Runtime Environment"
+  }
+}
+----
+
+===== The SELECT command
+
+As you had the possibility to call up a list or a table from the database with the option LIST, you now can make Galite sort out information from a whole list or a table which the option SELECT and this, according to criteria you have to define. Let’s say you want to view the degrees which can be achieved in a certain year. For this, you have to use the SELECT command as you see in the following rows:
+
+*Syntax:*
+
+[source,kotlin]
+----
+List        : "class" "ListName" ":" "ListDomain<String>(20) {"
+                 "override val table = TableName"
+
+                 "init {"
+                    ListColumns
+                 "}"
+               "}"
+
+ListColumns : ListColumn  [ListColumns]
+
+ListColumn  : SimpleName "keyOf" TableName.columnName
+----
+
+*Example*
+
+[source,kotlin]
+----
+class CurrentDegree : ListDomain<String>(20) {
+      override val table = query(Degree.selectAll())
+
+      init {
+        "Symbol" keyOf Degree.Symbol
+        "Description" keyOf Degree.Description
+      }
+    }
+----
+"Degree" is the database table to which we have to access in order to select the information. The command SELECT is used in order to enter the columns in which Galite has to make its research.
+In this example, we have used Exposed syntax to select all data from the Degree table, then we have created a list that contains two columns Symbol and Description those columns receive data from the result of the query?
+
+As a result of your selection, you will then have a table with two columns which will contain the different sorts of degrees achievable in the year you have entered.
