@@ -81,3 +81,13 @@ vaadin-grid-cell-content, .k-listdialog {
 :host([theme="k-listdialog-container"]) [part="dialog-content"] {
     padding: 0;
 }
+
+#k-upload-content {
+    position: relative;
+    box-sizing: border-box;
+    padding: var(--lumo-space-l);
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}

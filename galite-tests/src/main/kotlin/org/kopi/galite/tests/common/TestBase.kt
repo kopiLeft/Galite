@@ -100,6 +100,10 @@ open class TestBase {
     }
   }
 
+  fun <K, V> assertMapsEquals(expected: Map<K, V>, actual: Map<K, V>) {
+    assertEquals(expected, actual)
+  }
+
   fun <T> assertArraysEquals(expected: Array<T>, actual: Array<T>) {
     assertEquals(expected.size, actual.size, "Size mismatch between the arrays")
 
