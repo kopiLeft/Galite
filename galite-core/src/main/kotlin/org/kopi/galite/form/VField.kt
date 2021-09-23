@@ -1565,37 +1565,46 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var exists = false
 
       try {
-        try {
-          val table = evalListTable()
-          val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<Any?>
+        while (true) {
+          try {
+            val table = evalListTable()
+            val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<Any?>
 
-          val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord) }
+            val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord) }
 
-          val transaction = TransactionManager.currentOrNull()
-          if (transaction != null) {
-            exists = !query.empty()
-          } else {
-            transaction {
+            if (alreadyProtected) {
               exists = !query.empty()
+            } else {
+              transaction {
+                exists = !query.empty()
+              }
             }
-          }
 
-        } catch (e: SQLException) {
-          if (alreadyProtected) {
-            throw e
-          }
-        } catch (error: Error) {
-          if (alreadyProtected) {
-            throw error
-          }
-        } catch (rte: RuntimeException) {
-          if (alreadyProtected) {
-            throw rte
+            break
+          } catch (e: SQLException) {
+            if (!alreadyProtected) {
+              getForm().handleAborted(e)
+            } else {
+              throw e
+            }
+          } catch (error: Error) {
+            if (!alreadyProtected) {
+              getForm().handleAborted(error)
+            } else {
+              throw error
+            }
+          } catch (rte: RuntimeException) {
+            if (!alreadyProtected) {
+              getForm().handleAborted(rte)
+            } else {
+              throw rte
+            }
           }
         }
       } catch (e: Throwable) {
         throw VExecFailedException(e)
       }
+
       if (!exists) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
       }
@@ -1609,40 +1618,51 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         return
       }
       try {
-        try {
-          val column = list!!.getColumn(0).column as Column<String>
-          val query = evalListTable().slice(column).select {
-            column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
-          }.orderBy(column)
+        while (true) {
+          try {
+            val column = list!!.getColumn(0).column as Column<String>
+            val query = evalListTable().slice(column).select {
+              column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
+            }.orderBy(column)
 
-          val transaction = TransactionManager.currentOrNull()
-          if (transaction != null) {
-            count = query.count().toInt()
-            if (count > 0) result = query.first()[column]
-            if (count > 2) count = 2
-          } else {
-            transaction {
+            val transaction = TransactionManager.currentOrNull()
+            if (transaction != null) {
               count = query.count().toInt()
               if (count > 0) result = query.first()[column]
               if (count > 2) count = 2
+            } else {
+              transaction {
+                count = query.count().toInt()
+                if (count > 0) result = query.first()[column]
+                if (count > 2) count = 2
+              }
             }
-          }
-        } catch (e: SQLException) {
-          if (alreadyProtected) {
-            throw e
-          }
-        } catch (error: Error) {
-          if (alreadyProtected) {
-            throw error
-          }
-        } catch (rte: RuntimeException) {
-          if (alreadyProtected) {
-            throw rte
+
+            break
+          } catch (e: SQLException) {
+            if (!alreadyProtected) {
+              getForm().handleAborted(e)
+            } else {
+              throw e
+            }
+          } catch (error: Error) {
+            if (!alreadyProtected) {
+              getForm().handleAborted(error)
+            } else {
+              throw error
+            }
+          } catch (rte: RuntimeException) {
+            if (!alreadyProtected) {
+              getForm().handleAborted(rte)
+            } else {
+              throw rte
+            }
           }
         }
       } catch (e: Throwable) {
         throw VExecFailedException(e)
       }
+
       when (count) {
         0 -> throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
         1 -> {
@@ -1696,15 +1716,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     var id = -1
 
     try {
-      try {
-        transaction {
-          val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord) }
+      while (true) {
+        try {
+          transaction {
+            val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord) }
 
-          if (!query.empty()) {
-            id = query.first()[idColumn]
+            if (!query.empty()) {
+              id = query.first()[idColumn]
+            }
           }
+          break
+        } catch (e: SQLException) {
+          getForm().handleAborted(e);
+        } catch (error: Error) {
+          getForm().handleAborted(error);
+        } catch (rte: RuntimeException) {
+          getForm().handleAborted(rte);
         }
-      } catch (e: SQLException) {
       }
     } catch (e: Throwable) {
       throw VExecFailedException(e)
@@ -1742,24 +1770,35 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     SHOW_SINGLE_ENTRY = newForm != null
     try {
-        transaction {
-          lineCount = 0
-          for (result in query) {
-            if (lineCount >= MAX_LINE_COUNT - 1) {
-              break
-            }
-            if (result[columnsList[0]!!] == null) {
-              continue
-            }
-            var i = 0
+      while (true) {
+        try {
+          transaction {
+            lineCount = 0
+            for (result in query) {
+              if (lineCount >= MAX_LINE_COUNT - 1) {
+                break
+              }
+              if (result[columnsList[0]!!] == null) {
+                continue
+              }
+              var i = 0
 
-            while (i < lines.size) {
-              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 1 else 0]!!]
-              i += 1
+              while (i < lines.size) {
+                lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 1 else 0]!!]
+                i += 1
+              }
+              lineCount += 1
             }
-            lineCount += 1
           }
+          break
+        } catch (e: SQLException) {
+          getForm().handleAborted(e)
+        } catch (error: Error) {
+          getForm().handleAborted(error);
+        } catch (rte: RuntimeException) {
+          getForm().handleAborted(rte);
         }
+      }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
     }
@@ -1788,17 +1827,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         var result: Any?
 
         try {
-          result = try {
-            transaction {
-              val table = evalListTable()
-              val column = list!!.getColumn(0).column!!
-              val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
+          while (true) {
+            try {
+              result = transaction {
+                val table = evalListTable()
+                val column = list!!.getColumn(0).column!!
+                val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
-              table.slice(column).select { idColumn eq selected }.first()[column]
+                table.slice(column).select { idColumn eq selected }.first()[column]
+              }
+              break
+            } catch (e: SQLException) {
+              getForm().handleAborted(e)
+            } catch (error: java.lang.Error) {
+              getForm().handleAborted(error)
+            } catch (rte: RuntimeException) {
+              getForm().handleAborted(rte)
             }
-          } catch (e: SQLException) {
-          } catch (error: java.lang.Error) {
-          } catch (rte: RuntimeException) {
           }
         } catch (e: Throwable) {
           throw VRuntimeException(e)
@@ -1884,7 +1929,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     while (true) {
       try {
-
         transaction {
           query.forEach {
             if (value == null) {
@@ -1895,16 +1939,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         break
       } catch (e: SQLException) {
         try {
+          getForm().handleAborted(e)
         } catch (abortEx: SQLException) {
           throw VExecFailedException(abortEx)
         }
       } catch (error: Error) {
         try {
+          getForm().handleAborted(error)
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (rte: RuntimeException) {
         try {
+          getForm().handleAborted(rte)
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)
         }
@@ -1966,16 +2013,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           break
         } catch (e: SQLException) {
           try {
+            getForm().handleAborted(e)
           } catch (abortEx: SQLException) {
             throw VExecFailedException(abortEx)
           }
         } catch (error: Error) {
           try {
+            getForm().handleAborted(error)
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (rte: RuntimeException) {
           try {
+            getForm().handleAborted(rte)
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
           }
@@ -2027,15 +2077,28 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   @Suppress("UNCHECKED_CAST")
   fun setValueID(id: Int) {
-    val result = try {
-      transaction {
-        val table = evalListTable()
-        val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
-        val firstRecord = table.slice(table.resolveColumn(list!!.getColumn(0).column!!)).select {
-          idColumn eq id
-        }.firstOrNull()
+    var result: Any?
 
-        firstRecord?.get(idColumn)
+    try {
+      while (true) {
+        try {
+          result = transaction {
+            val table = evalListTable()
+            val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
+            val firstRecord = table.slice(table.resolveColumn(list!!.getColumn(0).column!!)).select {
+              idColumn eq id
+            }.firstOrNull()
+
+            firstRecord?.get(idColumn)
+          }
+          break
+        } catch (e: SQLException) {
+          getForm().handleAborted(e);
+        } catch (error: Error) {
+          getForm().handleAborted(error);
+        } catch (rte: RuntimeException) {
+          getForm().handleAborted(rte);
+        }
       }
     } catch (e: Throwable) {
       throw VRuntimeException(e)

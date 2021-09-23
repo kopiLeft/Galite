@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual
 
+import kotlin.jvm.Throws
+
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
@@ -25,6 +27,7 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.kopi.galite.base.Image
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -32,7 +35,6 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
-import kotlin.jvm.Throws
 
 /**
  * Creates a window
@@ -471,7 +473,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * return whether this object handle a transaction at this time
    */
-  override fun inTransaction(): Boolean = isProtected
+  override fun inTransaction(): Boolean = TransactionManager.currentOrNull() != null
 
   /**
    * Returns the current user name

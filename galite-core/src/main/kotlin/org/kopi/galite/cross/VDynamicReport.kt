@@ -18,6 +18,7 @@
 package org.kopi.galite.cross
 
 import java.awt.event.KeyEvent
+import java.sql.SQLException
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
@@ -285,46 +286,79 @@ class VDynamicReport(block: VBlock) : VReport() {
         }
       }
     } else {
+      val alreadyProtected: Boolean = block.form.inTransaction()
       try {
-        transaction {
-          if (block.isMulti()) {
-            block.activeRecord = 0
-          }
-          val searchCondition = block.getSearchConditions()
-          val searchColumns = block.getReportSearchColumns()
-          val searchTables = block.getSearchTables()
-          if (block.isMulti()) {
-            block.activeRecord = -1
-            block.activeField = null
-          }
-          val query  = if(searchCondition == null) {
-            searchTables!!.slice(searchColumns!!.toList()).selectAll()
-          } else {
-            searchTables!!.slice(searchColumns!!.toList()).select(searchCondition)
-          }
-          val iterator = query.iterator()
-
-          if (iterator.hasNext()) {
-            val it = iterator.next()
-
-            // don't  add a line when ID equals 0.
-            if (it[searchColumns[0]] != 0) {
-              val result: MutableList<Any> = ArrayList()
-
-              for (i in fields.indices) {
-                result.add(it[searchColumns[i]]!!)
+        while (true) {
+          try {
+            val transactionFunction = {
+              if (block.isMulti()) {
+                block.activeRecord = 0
               }
-              model.addLine(result.toTypedArray())
-            }
-          }
+              val searchCondition = block.getSearchConditions()
+              val searchColumns = block.getReportSearchColumns()
+              val searchTables = block.getSearchTables()
+              if (block.isMulti()) {
+                block.activeRecord = -1
+                block.activeField = null
+              }
+              val query = if (searchCondition == null) {
+                searchTables!!.slice(searchColumns.toList()).selectAll()
+              } else {
+                searchTables!!.slice(searchColumns.toList()).select(searchCondition)
+              }
+              val iterator = query.iterator()
 
-          iterator.forEachRemaining {
-            val result: MutableList<Any> = ArrayList()
+              if (iterator.hasNext()) {
+                val it = iterator.next()
 
-            for (i in fields.indices) {
-              result.add(it[searchColumns[i]]!!)
+                // don't  add a line when ID equals 0.
+                if (it[searchColumns[0]] != 0) {
+                  val result: MutableList<Any?> = ArrayList()
+
+                  for (i in fields.indices) {
+                    result.add(it[searchColumns[i]])
+                  }
+                  model.addLine(result.toTypedArray())
+                }
+              }
+
+              iterator.forEachRemaining {
+                val result: MutableList<Any?> = ArrayList()
+
+                for (i in fields.indices) {
+                  result.add(it[searchColumns[i]])
+                }
+                model.addLine(result.toTypedArray())
+              }
             }
-            model.addLine(result.toTypedArray())
+
+            if (!alreadyProtected) {
+              transaction {
+                transactionFunction()
+              }
+            } else {
+              transactionFunction()
+            }
+
+            break
+          } catch (e: SQLException) {
+            if (!alreadyProtected) {
+              block.form.handleAborted(e);
+            } else {
+              throw e;
+            }
+          } catch (error: Error) {
+            if (!alreadyProtected) {
+              block.form.handleAborted(error);
+            } else {
+              throw error;
+            }
+          } catch (rte: RuntimeException) {
+            if (!alreadyProtected) {
+              block.form.handleAborted(rte);
+            } else {
+              throw rte;
+            }
           }
         }
       } catch (e: Throwable) {
