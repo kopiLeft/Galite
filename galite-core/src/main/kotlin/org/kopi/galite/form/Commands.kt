@@ -19,10 +19,10 @@ package org.kopi.galite.form
 
 import java.sql.SQLException
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBInterruptionException
+import org.kopi.galite.db.transaction
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
@@ -125,7 +125,7 @@ object Commands : VConstants {
 
     if (id != -1) {
       try {
-        transaction {
+        form.transaction(Message.getMessage("loading_record")) {
           b.fetchRecord(id)
         }
         gotoFieldIfNoActive(b)
@@ -177,7 +177,7 @@ object Commands : VConstants {
 
     if (id != -1) {
       try {
-        transaction {
+        form.transaction(Message.getMessage("loading_record")) {
           // fetches data to active record
           b.fetchRecord(id)
         }
@@ -213,7 +213,7 @@ object Commands : VConstants {
     if (id != -1) {
       try {
         try {
-          transaction {
+          form.transaction(Message.getMessage("loading_record")) {
             b.fetchRecord(id)
           }
         } catch (e: VException) {
@@ -270,7 +270,7 @@ object Commands : VConstants {
     Utils.freeMemory()
     try {
       try {
-        transaction {
+        form.transaction(Message.getMessage("searching_database")) {
           try {
             b.load()
             gotoFieldIfNoActive(b)
@@ -357,7 +357,7 @@ object Commands : VConstants {
     }
     try {
       try {
-        transaction {
+        form.transaction(Message.getMessage("saving_record")) {
           b.save()
         }
       } catch (e: VException) {
@@ -460,7 +460,7 @@ object Commands : VConstants {
     }
     try {
       try {
-        transaction {
+        form.transaction(Message.getMessage("deleting_record")) {
           b.delete()
         }
       } catch (e: VException) {

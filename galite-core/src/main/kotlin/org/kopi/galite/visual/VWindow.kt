@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual
 
+import kotlin.jvm.Throws
+
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
@@ -25,6 +27,7 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.kopi.galite.base.Image
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -32,7 +35,6 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
-import kotlin.jvm.Throws
 
 /**
  * Creates a window
@@ -395,7 +397,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * setWaitInfo
    */
-  fun setWaitInfo(message: String) {
+  fun setWaitInfo(message: String?) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == WaitInfoListener::class.java) {
@@ -471,7 +473,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * return whether this object handle a transaction at this time
    */
-  override fun inTransaction(): Boolean = isProtected
+  override fun inTransaction(): Boolean = TransactionManager.currentOrNull() != null
 
   /**
    * Returns the current user name
@@ -517,6 +519,17 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * Try to handle an exception
    */
   fun fatalError(data: Any?, line: String, reason: Throwable) {
+    try {
+      TransactionManager.currentOrNull()?.rollback()
+    } catch (e: java.lang.Exception) {
+      ApplicationContext.reportTrouble(
+        "VWindow can not abort transaction",
+        line,
+        data?.toString() ?: "<no info about>",
+        e
+      )
+      e.printStackTrace()
+    }
     if (ApplicationContext.getDefaults().isDebugModeEnabled) {
       error("FATAL ERROR: " + reason.message)
       reason.printStackTrace(System.err)
