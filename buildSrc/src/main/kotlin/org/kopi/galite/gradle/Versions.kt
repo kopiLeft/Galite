@@ -18,7 +18,7 @@ package org.kopi.galite.gradle
 
 object Versions {
 
-  const val EXPOSED = "0.33.1"
+  const val EXPOSED = "0.35.1"
   const val H2 = "1.4.199"
   const val  POSTGRES_NG = "0.8.6"
 
