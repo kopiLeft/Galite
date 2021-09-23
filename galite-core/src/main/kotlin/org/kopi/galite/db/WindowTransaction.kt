@@ -34,7 +34,7 @@ import org.kopi.galite.visual.VWindow
  * @param       db              the database to execute the statement.
  * @param       statement       the transaction statement.
  */
-fun <T> Window.transaction(message: String,
+fun <T> Window.transaction(message: String? = null,
                            db: Database? = null,
                            statement: Transaction.() -> T): T =
         model.transaction(message, db, statement)
@@ -49,7 +49,7 @@ fun <T> Window.transaction(message: String,
  * @param       db                      the database to execute the statement.
  * @param       statement               the transaction statement.
  */
-fun <T> Window.transaction(message: String,
+fun <T> Window.transaction(message: String? = null,
                            transactionIsolation: Int,
                            repetitionAttempts: Int,
                            db: Database? = null,
@@ -63,7 +63,7 @@ fun <T> Window.transaction(message: String,
  * @param       db              the database to execute the statement.
  * @param       statement       the transaction statement.
  */
-internal fun <T> VWindow.transaction(message: String,
+internal fun <T> VWindow.transaction(message: String? = null,
                                      db: Database? = null,
                                      statement: Transaction.() -> T): T =
         doAndWait(message) {
@@ -80,7 +80,7 @@ internal fun <T> VWindow.transaction(message: String,
  * @param       db                      the database to execute the statement.
  * @param       statement               the transaction statement.
  */
-internal fun <T> VWindow.transaction(message: String,
+internal fun <T> VWindow.transaction(message: String? = null,
                                      transactionIsolation: Int,
                                      repetitionAttempts: Int,
                                      db: Database? = null,
@@ -100,7 +100,7 @@ internal fun <T> VWindow.transaction(message: String,
  * @param message the waiting message.
  * @param task    the task to execute.
  */
-fun <T> VWindow.doAndWait(message: String, task: () -> T): T {
+fun <T> VWindow.doAndWait(message: String?, task: () -> T): T {
   var finished = false
 
   doAfter(10) {

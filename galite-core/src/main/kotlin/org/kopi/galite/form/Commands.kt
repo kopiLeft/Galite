@@ -357,7 +357,7 @@ object Commands : VConstants {
     }
     try {
       try {
-        form.transaction(Message.getMessage("confirm_save_unchanged")) {
+        form.transaction(Message.getMessage("saving_record")) {
           b.save()
         }
       } catch (e: VException) {
@@ -460,7 +460,7 @@ object Commands : VConstants {
     }
     try {
       try {
-        form.transaction(Message.getMessage("confirm_delete")) {
+        form.transaction(Message.getMessage("deleting_record")) {
           b.delete()
         }
       } catch (e: VException) {

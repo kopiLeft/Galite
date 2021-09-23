@@ -72,6 +72,7 @@ import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.db.Utils
+import org.kopi.galite.db.transaction
 import org.kopi.galite.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
@@ -1625,7 +1626,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       try {
         try {
-          transaction {
+          form.transaction(Message.getMessage("loading_record")) {
             fetchPosition = pos
             fetchRecord(fetchBuffer[pos])
           }
@@ -2077,7 +2078,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val condition: Op<Boolean> = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
 
-        if (query.toList().isEmpty()) {
+        if (query.empty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(tables!![tableIndex])))
 
         } else {
@@ -2089,7 +2090,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
               j += 1
             }
           }
-          if (query.toList().isNotEmpty()) {
+          if (query.empty()) {
             throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(tables!![tableIndex])))
           }
         }
@@ -2118,7 +2119,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     try {
       try {
-        dialog = transaction {
+        dialog = form.transaction(Message.getMessage("searching_database")) {
           addLogger(StdOutSqlLogger) // TODO
           callProtectedTrigger(VConstants.TRG_PREQRY)
           buildQueryDialog()
