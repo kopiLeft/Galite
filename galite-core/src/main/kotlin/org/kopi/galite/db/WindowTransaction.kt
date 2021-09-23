@@ -25,6 +25,7 @@ import java.util.TimerTask
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.kopi.galite.common.Window
+import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VWindow
 
 /**
@@ -67,7 +68,10 @@ internal fun <T> VWindow.transaction(message: String? = null,
                                      db: Database? = null,
                                      statement: Transaction.() -> T): T =
         doAndWait(message) {
-          org.jetbrains.exposed.sql.transactions.transaction(db, statement)
+          val value = org.jetbrains.exposed.sql.transactions.transaction(db, statement)
+
+          if (this is VForm) commitTrail()
+          value
         }
 
 /**
@@ -86,12 +90,15 @@ internal fun <T> VWindow.transaction(message: String? = null,
                                      db: Database? = null,
                                      statement: Transaction.() -> T): T =
         doAndWait(message) {
-          org.jetbrains.exposed.sql.transactions.transaction(
+          val value = org.jetbrains.exposed.sql.transactions.transaction(
             transactionIsolation,
             repetitionAttempts,
             db,
             statement
           )
+
+          if (this is VForm) commitTrail()
+          value
         }
 
 /**
