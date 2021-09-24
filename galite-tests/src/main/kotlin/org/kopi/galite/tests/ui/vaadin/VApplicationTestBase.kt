@@ -22,6 +22,7 @@ import java.util.Locale
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.demo.vaadin.ConfigurationManager
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
@@ -32,6 +33,7 @@ import org.kopi.galite.ui.vaadin.visual.VApplicationContext
 import org.kopi.galite.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.ui.vaadin.visual.VUIFactory
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
@@ -102,5 +104,9 @@ open class VApplicationTestBase : ApplicationTestBase() {
 
     override val isNoBugReport: Boolean
       get() = true
+
+    init {
+      ApplicationConfiguration.setConfiguration(ConfigurationManager)
+    }
   }
 }

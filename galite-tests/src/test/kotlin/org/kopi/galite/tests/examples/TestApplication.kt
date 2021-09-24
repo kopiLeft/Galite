@@ -21,9 +21,11 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.demo.connectToDatabase
+import org.kopi.galite.demo.vaadin.ConfigurationManager
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -81,4 +83,8 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
 
   override val isNoBugReport: Boolean
     get() = true
+
+  init {
+    ApplicationConfiguration.setConfiguration(ConfigurationManager)
+  }
 }
