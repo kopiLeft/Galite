@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,10 +19,10 @@ package org.kopi.galite.form
 
 import java.sql.SQLException
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBInterruptionException
+import org.kopi.galite.db.transaction
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
@@ -126,7 +126,7 @@ object Commands : VConstants {
     if (id != -1) {
       while (true) {
         try {
-          transaction {
+          form.transaction(Message.getMessage("loading_record")) {
             b.fetchRecord(id)
           }
           gotoFieldIfNoActive(b)
@@ -181,7 +181,7 @@ object Commands : VConstants {
     if (id != -1) {
       while (true) {
         try {
-          transaction {
+          form.transaction(Message.getMessage("loading_record")) {
             // fetches data to active record
             b.fetchRecord(id)
           }
@@ -238,7 +238,7 @@ object Commands : VConstants {
       try {
         while (true) {
           try {
-            transaction {
+            form.transaction(Message.getMessage("loading_record")) {
               b.fetchRecord(id)
             }
             break
@@ -298,7 +298,7 @@ object Commands : VConstants {
     try {
       while (true) {
         try {
-          transaction {
+          form.transaction(Message.getMessage("searching_database")) {
             try {
               b.load()
               gotoFieldIfNoActive(b)
@@ -388,7 +388,7 @@ object Commands : VConstants {
     try {
       while (true) {
         try {
-          transaction {
+          form.transaction(Message.getMessage("saving_record")) {
             b.save()
           }
           break
@@ -494,7 +494,7 @@ object Commands : VConstants {
     try {
       while (true) {
         try {
-          transaction {
+          form.transaction(Message.getMessage("deleting_record")) {
             b.delete()
           }
           break

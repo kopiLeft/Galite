@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,7 +39,6 @@ import kotlin.collections.map
 import kotlin.collections.mutableListOf
 import kotlin.collections.mutableMapOf
 import kotlin.collections.single
-import kotlin.collections.toList
 import kotlin.collections.toTypedArray
 import kotlin.math.abs
 
@@ -71,6 +70,7 @@ import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.db.Utils
+import org.kopi.galite.db.transaction
 import org.kopi.galite.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
@@ -1376,7 +1376,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun setAccess(value: Int) {
     assert(this !== form.getActiveBlock() || activeField == null) {
-      "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
+      "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField
+    }
     for (i in fields.indices) {
       fields[i].setAccess(value)
     }
@@ -1630,7 +1631,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       try {
         while (true) {
           try {
-            transaction {
+            form.transaction(Message.getMessage("loading_record")) {
               fetchPosition = pos
               fetchRecord(fetchBuffer[pos])
             }
@@ -2118,7 +2119,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     try {
       while (true) {
         try {
-          dialog = transaction {
+          dialog = form.transaction(Message.getMessage("searching_database")) {
             addLogger(StdOutSqlLogger) // TODO
             callProtectedTrigger(VConstants.TRG_PREQRY)
             buildQueryDialog()
@@ -3017,20 +3018,20 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     if (condition.isNotEmpty()) {
+      val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }
+      val resultCount = result.count()
 
-        val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }
-        if (!result.empty()) {
-          try {
-            if (result.single()[idColumn] != id) {
-              form.setActiveBlock(this@VBlock)
-              activeRecord = recno
-              gotoFirstField()
-              throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
-            }
-          } catch (illegalArgumentException: IllegalArgumentException) {
-            error("too many rows")
-          }
+      if (resultCount > 0) {
+        if (result.first()[idColumn] != id) {
+          form.setActiveBlock(this@VBlock)
+          activeRecord = recno
+          gotoFirstField()
+          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
         }
+        assert(resultCount == 1L) {
+          error("too many rows")
+        }
+      }
     }
   }
 

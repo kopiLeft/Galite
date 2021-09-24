@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -397,7 +397,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * setWaitInfo
    */
-  fun setWaitInfo(message: String) {
+  fun setWaitInfo(message: String?) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == WaitInfoListener::class.java) {
@@ -519,6 +519,17 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * Try to handle an exception
    */
   fun fatalError(data: Any?, line: String, reason: Throwable) {
+    try {
+      TransactionManager.currentOrNull()?.rollback()
+    } catch (e: java.lang.Exception) {
+      ApplicationContext.reportTrouble(
+        "VWindow can not abort transaction",
+        line,
+        data?.toString() ?: "<no info about>",
+        e
+      )
+      e.printStackTrace()
+    }
     if (ApplicationContext.getDefaults().isDebugModeEnabled) {
       error("FATAL ERROR: " + reason.message)
       reason.printStackTrace(System.err)
