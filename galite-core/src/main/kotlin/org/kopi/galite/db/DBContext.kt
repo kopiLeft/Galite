@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,10 +17,6 @@
  */
 
 package org.kopi.galite.db
-
-import org.jetbrains.exposed.sql.SqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * The database context
@@ -68,12 +64,6 @@ class DBContext {
                                  lookupUserId = lookupUserId,
                                  schema = schema)
     return this.connection
-  }
-
-  fun setLogger(logger: SqlLogger) {
-    transaction(connection.dbConnection) {
-      addLogger(logger)
-    }
   }
 
   /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ object Training : Table("TRAINING") {
   val trainingName = varchar("Name", 25)
   val type = integer("type")
   val price = decimal("UNIT_PRICE", 9, 3)
-  val active = bool("ACTIVE",)
+  val active = bool("ACTIVE")
   val photo = blob("PHOTO").nullable()
   val informations = varchar("INFORMATION", 200).nullable()
 

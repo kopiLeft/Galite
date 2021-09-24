@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,25 +57,25 @@ class ReportTests: VApplicationTestBase() {
     assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami",
-                       SimpleReport.age to 22,
-                       SimpleReport.profession to "Journalist",
-                       SimpleReport.salary to Decimal("2000")),
-                 firstRow)
+    assertMapsEquals(mapOf(SimpleReport.name to "Sami",
+                           SimpleReport.age to 22,
+                           SimpleReport.profession to "Journalist",
+                           SimpleReport.salary to Decimal("2000")),
+                     firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia",
-                       SimpleReport.age to 23,
-                       SimpleReport.profession to "Dentist",
-                       SimpleReport.salary to Decimal("2000.55")),
-                 secondRow)
+    assertMapsEquals(mapOf(SimpleReport.name to "Sofia",
+                           SimpleReport.age to 23,
+                           SimpleReport.profession to "Dentist",
+                           SimpleReport.salary to Decimal("2000.55")),
+                     secondRow)
 
     val thirdRow = SimpleReport.getRow(2)
-    assertEquals(mapOf(SimpleReport.name to "Sofia",
-                       SimpleReport.age to 25,
-                       SimpleReport.profession to "Baker",
-                       SimpleReport.salary to Decimal("2000.55")),
-                 thirdRow)
+    assertMapsEquals(mapOf(SimpleReport.name to "Sofia",
+                           SimpleReport.age to 25,
+                           SimpleReport.profession to "Baker",
+                           SimpleReport.salary to Decimal("2000.55")),
+                     thirdRow)
   }
 
   /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -138,4 +138,6 @@ object Dummy : Table("DUMMY") {
 val FAVORITENId = Sequence("FAVORITENId")
 
 val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
-                            Favorites, Users, Groups, References)
+                            Favorites, Users, Groups, References, Dummy)
+
+val sequencesList = listOf(FAVORITENId)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,7 +44,7 @@ class ListTests: GaliteVUITestBase() {
     login()
 
     // Opens a form that contain a list command
-    formWithList.open()
+    formWithList.open(700)
 
     // Trigger the report command
     formWithList.list.triggerCommand()

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,19 +20,20 @@ package org.kopi.galite.ui.vaadin.base
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.UItemTree.UTreeComponent
+import org.kopi.galite.visual.UMenuTree.UTree
+
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.grid.AbstractGridSingleSelectionModel
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.treegrid.TreeGrid
-
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.Module
-import org.kopi.galite.visual.UItemTree.UTreeComponent
-import org.kopi.galite.visual.UMenuTree.UTree
 
 /**
  * The vaadin implementation of an [UTreeComponent].
@@ -55,6 +56,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   init {
     setSizeFull()
     setSelectionMode(SelectionMode.SINGLE)
+    (selectionModel as AbstractGridSingleSelectionModel).isDeselectAllowed = false
     buildTreeItems()
   }
   //----------------------------------------------------------

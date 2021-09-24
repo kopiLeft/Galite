@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -187,6 +187,10 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
+    // Force the current UI in case the thread is started before attaching the menu to the UI.
+    if (currentUI == null) {
+      currentUI = BackgroundThreadHandler.locateUI()
+    }
     Thread {
       BackgroundThreadHandler.setUI(currentUI)
       try {
