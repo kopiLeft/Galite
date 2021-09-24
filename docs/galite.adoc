@@ -86,7 +86,255 @@ The definition of these tables is in the file `DBSchema`. You can use Exposed to
 
 This is the role of every table:
 
-//.......................................................................
+==== MODULE
+This table contains the modules of our application. Example in our Menu bar we have Client Menu that contains the client form also we have Bill menu that contain two forms bill and bill product,
+so in this case we need to insert 5 lines in our Module table.
+
+|===
+|ID
+|integer
+|Table identifier
+
+|UC
+|integer
+|Number of changes applied on column in the database.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|KURZNAME
+|varchar(25)
+|The short name of this module.
+
+|VATER
+|integer
+|The ID of the parent of this module, if our module is a form we put here the menu id of this form.
+
+|QUELLE
+|varchar(255)
+|The source name of the module.
+
+|PRIORITAET
+|integer
+|The priority of the module compared to another module. Example module with priority 10 is placed before the module of priority 20 in the same menu.
+
+|OBJEKT
+|varchar(255)
+|The object name or the class name that contains the code of this module.
+
+|SYMBOL
+|integer
+|The icon of this module.
+|===
+
+==== BENUTZERRECHTE
+The table `User Rights` displays the modules that each user is allowed to use
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|BENUTZER
+|integer
+|The user id
+
+|MODUL
+|integer
+|The module id.
+
+|ZUGRIFF
+|bool
+|The access value.
+|===
+
+==== GRUPPENRECHTE
+This table displays the modules that each group of users is allowed to use
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|GRUPPE
+|integer
+|The group id.
+
+|MODUL
+|integer
+|The module id.
+
+|ZUGRIFF
+|bool
+|The access value.
+|===
+
+==== GRUPPENZUGEHOERIGKEITEN
+This table contains the groups that each user belongs to. Each user can belong to many groups
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|BENUTZER
+|integer
+|The user id.
+
+|MODUL
+|integer
+|The module id.
+
+|ZUGRIFF
+|bool
+|The access value.
+|===
+
+==== SYMBOLE
+This table store the icons for each module
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|KURZNAME
+|varchar(20)
+|The short name of this icon.
+
+|BEZEICHNUNG
+|varchar(50)
+|The description of this icon.
+
+|OBJEKT
+|varchar(50)
+|This column present the icon of the module.
+|===
+
+==== FAVORITEN
+This table contains favorized modules for each user
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|BENUTZER
+|integer
+|The user id.
+
+|MODUL
+|integer
+|The module id.
+|===
+
+==== KOPI_USERS
+This table contains information about the users who use this application
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|UC
+|integer
+|Number of changes applied on column in the database.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|KURZNAME
+|varchar(10)
+|The short name of the user.
+
+|NAME
+|varchar(50)
+|The name of the user.
+
+|ZEICHEN
+|varchar(10)
+|The type of the user.
+
+|TELEFON
+|varchar(20)
+|The phone number of the user.
+
+|EMAIL
+|varchar(40)
+|The email of the user.
+
+|AKTIV
+|bool
+|is this user active?
+
+|ERSTELLTVON
+|timestamp
+|Creation date of this user.
+
+|ERSTELLTAM
+|integer
+|Created by.
+
+|GEAENDERTAM
+|timestamp
+|The date of the change for this user.
+
+|ERSTELLTAM
+|integer
+|Changed by.
+|===
+
+==== GRUPPEN
+This table contains the names of the groups
+
+|===
+|ID
+|integer
+|Table identifier.
+
+|TS
+|integer
+|Time stamp of last changes on column.
+
+|KURZNAME
+|varchar(10)
+|The short name of the group.
+
+|BEZEICHNUNG
+|varchar(40)
+|The short description of the group.
+|===
+
+==== DUMMY
+This table is for database sequences
+
+|===
+|dummy
+|char(1)
+|Table identifier.
+|===
 
 === Transactions
 
