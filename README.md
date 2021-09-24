@@ -58,23 +58,25 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
   
   override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
 
-  init {
-    ApplicationConfiguration.setConfiguration(
-      object : ApplicationConfiguration() {
-        override val version get(): String = "1.0"
-        override val applicationName get(): String = "MyApp"
-        override val informationText get(): String = "info"
-        override val logFile get(): String = "log.txt"
-        override val debugMailRecipient get(): String = "mail@adress"
-        override fun getSMTPServer(): String = "smtp.server"
-        override val faxServer get(): String = "fax.server"
-        override fun mailErrors(): Boolean = false
-        override fun logErrors(): Boolean = true
-        override fun debugMessageInTransaction(): Boolean = true
-        
-        /** And many other configurations. See ApplicationConfiguration.kt */
-      }
-    )
+  companion object {
+    init {
+      ApplicationConfiguration.setConfiguration(ConfigurationManager)
+    }
+  }
+
+  object ConfigurationManager : ApplicationConfiguration() {
+    override val version get(): String = "1.0"
+    override val applicationName get(): String = "MyApp"
+    override val informationText get(): String = "info"
+    override val logFile get(): String = "log.txt"
+    override val debugMailRecipient get(): String = "mail@adress"
+    override fun getSMTPServer(): String = "smtp.server"
+    override val faxServer get(): String = "fax.server"
+    override fun mailErrors(): Boolean = false
+    override fun logErrors(): Boolean = true
+    override fun debugMessageInTransaction(): Boolean = true
+
+    /** And many other configurations. See ApplicationConfiguration.kt */
   }
 }
 ````

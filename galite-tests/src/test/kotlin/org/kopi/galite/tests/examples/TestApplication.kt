@@ -24,8 +24,6 @@ import org.kopi.galite.demo.connectToDatabase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.util.Rexec
-import org.kopi.galite.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -83,36 +81,4 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
 
   override val isNoBugReport: Boolean
     get() = true
-
-  init {
-    ApplicationConfiguration.setConfiguration(
-      object : ApplicationConfiguration() {
-        override val isDebugModeEnabled: Boolean = true
-        override val version get(): String = "1.0"
-        override val applicationName get(): String = "MyApp"
-        override val informationText get(): String = "info"
-        override val logFile get(): String = ""
-        override val debugMailRecipient get(): String = ""
-        override fun getSMTPServer(): String = ""
-        override val faxServer get(): String = ""
-        override val dictionaryServer get(): String = ""
-        override fun mailErrors(): Boolean = false
-        override fun logErrors(): Boolean = true
-        override fun debugMessageInTransaction(): Boolean = true
-        override val RExec get(): Rexec = TODO()
-        override fun getStringFor(var1: String): String = TODO()
-        override fun getIntFor(var1: String): Int {
-          val var2 = this.getStringFor(var1)
-          return var2.toInt()
-        }
-
-        override fun getBooleanFor(var1: String): Boolean {
-          return java.lang.Boolean.valueOf(this.getStringFor(var1))
-        }
-
-        override fun isUnicodeDatabase(): Boolean = false
-        override fun useAcroread(): Boolean = TODO()
-      }
-    )
-  }
 }
