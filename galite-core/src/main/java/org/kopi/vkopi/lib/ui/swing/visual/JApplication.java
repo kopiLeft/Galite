@@ -26,7 +26,6 @@ import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
-import org.jetbrains.exposed.sql.StdOutSqlLogger;
 import org.kopi.galite.base.UComponent;
 import org.kopi.galite.l10n.LocalizationManager;
 import org.kopi.galite.print.PrintManager;
@@ -359,10 +358,6 @@ public abstract class JApplication implements Application {
               options.password,
               options.schema);
       displaySplashScreen();
-    }
-
-    if (context != null) {
-      context.setLogger(StdOutSqlLogger.INSTANCE);
     }
 
     return context != null;

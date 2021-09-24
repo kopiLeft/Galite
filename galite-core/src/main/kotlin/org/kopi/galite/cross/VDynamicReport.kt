@@ -333,7 +333,7 @@ class VDynamicReport(block: VBlock) : VReport() {
             }
 
             if (!alreadyProtected) {
-              block.form.transaction.transaction {
+              block.form.transaction {
                 transactionFunction()
               }
             } else {

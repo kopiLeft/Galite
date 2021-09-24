@@ -18,10 +18,6 @@
 
 package org.kopi.galite.db
 
-import org.jetbrains.exposed.sql.SqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
-
 /**
  * The database context
  */
@@ -68,12 +64,6 @@ class DBContext {
                                  lookupUserId = lookupUserId,
                                  schema = schema)
     return this.connection
-  }
-
-  fun setLogger(logger: SqlLogger) {
-    transaction(connection.dbConnection) {
-      addLogger(logger)
-    }
   }
 
   /**
