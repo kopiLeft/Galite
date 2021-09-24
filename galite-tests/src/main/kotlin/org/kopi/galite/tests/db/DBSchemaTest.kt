@@ -33,6 +33,7 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
 import org.kopi.galite.db.list_Of_Tables
+import org.kopi.galite.db.sequencesList
 
 /**
  * Creates a connection and initializes the database. Useful if your test/demo needs a connection, the initial
@@ -80,6 +81,9 @@ open class DBSchemaTest : TestBase() {
       list_Of_Tables.forEach { table ->
         SchemaUtils.create(table)
       }
+      sequencesList.forEach { sequence ->
+        SchemaUtils.createSequence(sequence)
+      }
     }
 
     /**
@@ -88,6 +92,9 @@ open class DBSchemaTest : TestBase() {
     fun dropDBSchemaTables() {
       list_Of_Tables.forEach { table ->
         SchemaUtils.drop(table)
+      }
+      sequencesList.forEach { sequence ->
+        SchemaUtils.dropSequence(sequence)
       }
     }
 
