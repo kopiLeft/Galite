@@ -481,12 +481,6 @@ abstract class VForm : VWindow, VConstants {
     return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
-  open fun commitTrail() {
-    for (i in blocks.indices) {
-      blocks[i].commitTrail()
-    }
-  }
-
   // ----------------------------------------------------------------------
   // TRAILING
   // ----------------------------------------------------------------------
