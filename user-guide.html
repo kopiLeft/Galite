@@ -438,6 +438,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #toc  a:hover {
+          color:black;
+        }
+
+#toc .active-menu{color:#000;}
+    </style>
+</head>
+
+<script>
+    $("a[href^='#']").click(function(event) {
+    event.preventDefault();
+    $('ul li a').removeClass( 'active-menu' );
+    $(this).addClass( 'active-menu' );
+    var $this = $(this),
+      target = this.hash,
+      $target = $(target);
+
+    $(scrollElement).stop().animate({
+      'scrollTop': $target.offset().top
+    }, 1000, 'swing', function() {
+      window.location.hash = target;
+    });
+});
+</script>
+</html>
+
+
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -684,23 +715,25 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 
   override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
 
-  init {
-    ApplicationConfiguration.setConfiguration(
-      object : ApplicationConfiguration() {
-        override val version get(): String = "1.0"
-        override val applicationName get(): String = "MyApp"
-        override val informationText get(): String = "info"
-        override val logFile get(): String = "log.txt"
-        override val debugMailRecipient get(): String = "mail@adress"
-        override fun getSMTPServer(): String = "smtp.server"
-        override val faxServer get(): String = "fax.server"
-        override fun mailErrors(): Boolean = false
-        override fun logErrors(): Boolean = true
-        override fun debugMessageInTransaction(): Boolean = true
+  companion object {
+    init {
+      ApplicationConfiguration.setConfiguration(ConfigurationManager)
+    }
+  }
 
-        // And many other configurations. See ApplicationConfiguration.kt
-      }
-    )
+  object ConfigurationManager : ApplicationConfiguration() {
+    override val version get(): String = "1.0"
+    override val applicationName get(): String = "MyApp"
+    override val informationText get(): String = "info"
+    override val logFile get(): String = "log.txt"
+    override val debugMailRecipient get(): String = "mail@adress"
+    override fun getSMTPServer(): String = "smtp.server"
+    override val faxServer get(): String = "fax.server"
+    override fun mailErrors(): Boolean = false
+    override fun logErrors(): Boolean = true
+    override fun debugMessageInTransaction(): Boolean = true
+
+    // And many other configurations. See ApplicationConfiguration.kt
   }
 }</code></pre>
 </div>
@@ -5101,7 +5134,7 @@ Vaadin, uses java as programming language to create web content and web componen
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-24 10:10:02 +0100
+Last updated 2021-09-24 15:27:00 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
