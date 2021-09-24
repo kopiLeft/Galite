@@ -54,10 +54,41 @@ class STRING(width: Int,
               styled: Boolean = false) :
           this(width, 1, 0, Fixed.UNDEFINED, convert, styled)
 
+  constructor(width: Int,
+              height: Int,
+              fixed: Fixed,
+              convert: Convert = Convert.NONE,
+              styled: Boolean = false) :
+          this(width, height, 0, fixed, convert, styled)
+
   init {
     this.styled = styled
     this.fixed = fixed
     this.convert = convert
+  }
+}
+
+/**
+ * A Text and a [STRING] are similar apart from the fact that in a text,
+ * two parameters have always to be given: namely the width and the height of the field
+ * whereas you only need to determine the width in a string.
+ */
+class TEXT(width: Int,
+           height: Int,
+           visibleHeight: Int,
+           fixed: Fixed = Fixed.UNDEFINED,
+           styled: Boolean = false) :
+  Domain<String>(width, height, visibleHeight) {
+
+  constructor(width: Int,
+              height: Int,
+              fixed: Fixed = Fixed.UNDEFINED,
+              styled: Boolean = false) :
+          this(width, height, 0, fixed, styled)
+
+  init {
+    this.styled = styled
+    this.fixed = fixed
   }
 }
 
