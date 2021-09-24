@@ -58,15 +58,15 @@ ItemDefinition  : "class" String formTitle [":" QualifiedName]
 
 ==== Predefined Field Types
 
-Every form or report field In visual Galite have field type that can be one of the 12 ready to use predefined types :
+Every form or report field in visual Galite have field type that can be one of the 11 ready to use predefined types :
 
 [source,kotlin]
 ----
-- DECIMAL(x, y)                 // used to insert decimal values, with x and y are ints that present the width and the scale
-- IMAGE(x, y)                   // used to insert images, with x and y are ints that present the width and the height
-- INT(x)                        // used to insert integer values, with x is an int that present the width of the field
-- STRING(x)                     // used to insert string values, with x is an int that present the width of the field
-- STRING(x, y, z, f, s, b)      // used to insert text values, with x, y and z are ints that present the width and the height, f1 is FixOption, s is StringFormat and b present boolean for styled field.                         // used to insert a date value
+- DECIMAL                       // used to insert decimal values
+- IMAGE                         // used to insert images
+- INT                           // used to insert integer values
+- TEXT                          // used to insert text values
+- STRING                        // used to insert string values
 - DATETIME                      // used to insert a datetime value
 - BOOL                          // used to insert a true or false value
 - MONTH                         // used to insert years months value
@@ -77,7 +77,7 @@ Every form or report field In visual Galite have field type that can be one of t
 
 ===== The STRING Field Type
 
-A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given. Moreover, you can optionaly indicate how many rows it will contain and how many will finally be displayed on the form. If these optional arguments are used, you have to indicate the carraige return method by specifying either the FIXED ON or the FIXED OFF option to avoid compilation errors. +
+A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given. Moreover, you can optionally indicate how many rows it will contain and how many will finally be displayed on the form. If these optional arguments are used, you have to indicate the carriage return method by specifying either the FIXED ON or the FIXED OFF option. +
 There are also three other options you can use in order to modify the String's case :
 
 - Convert.NAME  (Converts the first letter of each word to capital letter)
@@ -110,29 +110,46 @@ styled      :  "true"   // present rich text
 
 [source,kotlin]
 ----
-val name = visit(domain = STRING(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
-  }
+val name = visit(domain = STRING(40, 10, 4, Fixed.ON, Convert.UPPER), position = at(1, 1)) {
+    label = "Description"
+    help = "A description"
+}
+
+// For better readability it's recommended to specify the parameters names:
+STRING(width = 40, height = 10, visibleHeight = 4, fixed = Fixed.ON, convert = Convert.UPPER)
 ----
 
-In this example, the text inserted will contain up to 20 characters.
+In this example, the text inserted will contain up to 40 characters and up to 10 rows. However, only the first 4 rows will be displayed on the form. Moreover, All the letters in the text will be converted to capital letters.
 
-===== The RICHTEXT Field Type
+===== The TEXT Field Type
 
-A RichText allow user to change the style of his text for example, he can make the text bold or underlined, apply different fonts to individual words or characters, and change text colors.
+A Text and a String are similar apart from the fact that in a text, two parameters have always to be given: namely the width and the height of the field whereas you only need to determine the width in a string. +
+For example, you can write `STRING(40, 10, 4)` or `STRING(40)` but you have to write `TEXT(40, 10)` or `TEXT(40, 10, 4)`.
+
+
+*Syntax:*
+
+[source,java]
+----
+TextType      : "TEXT" (width: Integer ,height: Integer ,visible: Integer)
+                [FixOption]
+
+[FixOption]   : "FIXED.ON"
+                "FIXED.OFF"
+----
 
 *Example*
 
 [source,kotlin]
 ----
-val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, Convert.UPPER, styled = true), position = at(3, 1)) {
-    label = "tax informations"
-    help = "The tax informations"
+val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
+    label = "Richtext"
+    help = "A Richtext editor"
   }
 ----
 
-In this example, the text inserted will contain up to 80 characters and up to 50 rows. However, only the first 10 rows will be displayed on the form. Moreover, All the letters in the text will be converted to capital letters, and we will create an rich text field by setting the option styled as true.
+In this example, the text inserted will contain up to 80 characters and up to 50 rows. However, only the first 10 rows. +
+The field is a richtext editor beacause the option `styled` is set to true.
 
 ===== The IMAGE Field Type
 
@@ -158,8 +175,9 @@ In this field, the image will have a width of 20 pixel and a height of 10 pixel.
 
 ===== The DECIMAL Field Type
 
-A DECIMAL is used to insert numbers, integers, fixed point numbers.
-The maximal width has to be determined for all them. In case of a fixed point number, the maximal scale i.e the number of characters standing after the comma has also to be defined.
+A DECIMAL is used to insert numbers, integers, decimal numbers.
+The maximal width has to be determined for all them.
+The maximal scale i.e the number of characters standing after the comma has also to be defined.
 Also the comma has to be counted as a character.
 You can also set the minimum and the maximum values for the DECIMAL field with the optional parameters minValue and maxValue.
 
@@ -202,9 +220,9 @@ IntegerType:   "INT" (width: Int)
 
 [source,kotlin]
 ----
-val age = visit(domain = INT(3), position = follow(name)) {
-    label = "age"
-    help = "The user age"
+val count = visit(domain = INT(3), position = follow(name)) {
+    label = "Cars"
+    help = "The number of cars"
     minValue = 1
     maxValue = 130
   }

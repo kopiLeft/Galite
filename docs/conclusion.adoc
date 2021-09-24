@@ -1,5 +1,5 @@
 == The Galite Project Future
 
-After reading this document, you should be able to create efficient database applications using the Galite framework, you can also create dynamic reports and print pages.
-Actually, the project owners are working on a web version of the Galite framework called "GALITE WEB", this version features the same capabilities of the SWING based version and is based on the Vaadin framework which is an open source web application framework for rich Internet applications
-Vaadin, uses java as programming language to create web content and Google web toolkit to render the resulting web page.
+After reading this document, you should be able to create efficient database applications using the Galite framework, you can also create dynamic reports and charts.
+Actually, the project owners are working on a web version of the Galite framework. This version features many capabilities and is based on the Vaadin framework which is an open source web application framework for rich Internet applications
+Vaadin, uses java as programming language to create web content and web components to render the resulting web page.

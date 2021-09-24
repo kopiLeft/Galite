@@ -1,3 +1,4 @@
+
 === Visual Galite Forms
 
 The aim of Galite is to enable you to create applications. An application is made up of forms. A *form* is a set of *pages* consisting of *blocks*. A *block* is nothing else than a table which is divided into columns (vertical) and rows (horizontal). A row is made up of *fields*, and each *field* contains a data value at the intersection of a row and a column that can be of different *Types*.

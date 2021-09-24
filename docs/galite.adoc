@@ -3,11 +3,12 @@
 :toclevels: 4
 :doctype: book
 :source-highlighter: highlightjs
+:favicon: ./docs/favicon.png
 
 [preface]
 Preface
 -------
-The Galite Project is the framework of kopiLeft for creating business applications. It's the successor of the Kopi project. Kopi is a Java software project from DMS which provides a framework for developing database applications using Java, JDBC and SWING.
+The Galite Project is the framework of kopiLeft for creating business applications. It's the successor of the Kopi project which is a framework from the company DMS that allows to development of database applications using Java, JDBC, SWING and Vaadin 7.
 
 Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.
 
@@ -18,7 +19,7 @@ The basic architecture of Visual Galite is made of a three strongly independent 
 
 - DSL: The DSL is the Kotlin functions provided for the user to develop his application.
 - Model: The model layer is a set of model classes responsible for structuring and processing data. Also it contains a hight specification interfaces that any UI implementation should respect.
-- UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin.
+- UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).
 
 *Organization of This Document*
 
@@ -80,28 +81,34 @@ The `Route` annotation allows you to define the navigation URL of your web appli
 
 === Galite standard tables
 
-There are some standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.
+There is a list of standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.
 
 The definition of these tables is in the file `DBSchema`. You can use Exposed to create these tables using `SchemaUtils.create(table)`.
 
 This is the role of every table:
 
-==== MODULE
-This table contains the modules of our application. Example in our Menu bar we have Client Menu that contains the client form also we have Bill menu that contain two forms bill and bill product,
-so in this case we need to insert 5 lines in our Module table.
+- *MODULE*: This table contains the modules of our application. Example in our Menu bar we have `Client` Menu that contains the client form also we have `Bill` menu that contain two forms bill and bill product,
+so in this case we need to insert 5 lines in our `Module` table.
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier
 
 |UC
 |integer
-|Number of changes applied on column in the database.
+|Number of changes applied on the current row.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |KURZNAME
 |varchar(25)
@@ -128,17 +135,23 @@ so in this case we need to insert 5 lines in our Module table.
 |The icon of this module.
 |===
 
-==== BENUTZERRECHTE
-The table `User Rights` displays the modules that each user is allowed to use
+- *BENUTZERRECHTE*: The table `User Rights` displays the modules that each user is allowed to use.
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |BENUTZER
 |integer
@@ -153,17 +166,23 @@ The table `User Rights` displays the modules that each user is allowed to use
 |The access value.
 |===
 
-==== GRUPPENRECHTE
-This table displays the modules that each group of users is allowed to use
+- *GRUPPENRECHTE*: This table displays the modules that each group of users is allowed to use.
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |GRUPPE
 |integer
@@ -178,17 +197,23 @@ This table displays the modules that each group of users is allowed to use
 |The access value.
 |===
 
-==== GRUPPENZUGEHOERIGKEITEN
-This table contains the groups that each user belongs to. Each user can belong to many groups
+- *GRUPPENZUGEHOERIGKEITEN*: This table contains the groups that each user belongs to. Each user can belong to many groups.
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |BENUTZER
 |integer
@@ -203,17 +228,23 @@ This table contains the groups that each user belongs to. Each user can belong t
 |The access value.
 |===
 
-==== SYMBOLE
-This table store the icons for each module
+- *SYMBOLE*: This table store the icons for each module.
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |KURZNAME
 |varchar(20)
@@ -228,17 +259,23 @@ This table store the icons for each module
 |This column present the icon of the module.
 |===
 
-==== FAVORITEN
-This table contains favorized modules for each user
+- *FAVORITEN*: This table contains favorite modules for each user.
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |BENUTZER
 |integer
@@ -249,21 +286,27 @@ This table contains favorized modules for each user
 |The module id.
 |===
 
-==== KOPI_USERS
-This table contains information about the users who use this application
+- *KOPI_USERS*: This table contains information about the users who use this application
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |UC
 |integer
-|Number of changes applied on column in the database.
+|Number of changes applied on the current row.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |KURZNAME
 |varchar(10)
@@ -306,17 +349,23 @@ This table contains information about the users who use this application
 |Changed by.
 |===
 
-==== GRUPPEN
-This table contains the names of the groups
+- *GRUPPEN*: This table contains the names of the groups
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |ID
 |integer
 |Table identifier.
 
 |TS
 |integer
-|Time stamp of last changes on column.
+|Timestamp of last changes on the current row.
 
 |KURZNAME
 |varchar(10)
@@ -327,10 +376,16 @@ This table contains the names of the groups
 |The short description of the group.
 |===
 
-==== DUMMY
-This table is for database sequences
+- *DUMMY*: This table is for database sequences
 
+[cols="3*"]
+[%header]
+[%autowidth]
 |===
+|Column
+|Type
+|Description
+
 |dummy
 |char(1)
 |Table identifier.

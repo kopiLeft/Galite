@@ -30,7 +30,7 @@ val city = dimension(STRING(10)) {
 
 ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
 ----
-Use the measure function to create an  measure field, this field have the following syntax :
+Use the measure function to create a measure field, this field have the following syntax :
 
 *Syntax*
 [source,kotlin]

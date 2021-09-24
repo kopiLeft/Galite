@@ -26,18 +26,20 @@ body {
 
 #galite-logo {
     width: 300px;
-    height: 100px;
 }
+
 #container {
     padding: 3rem 1rem;
     background: rgb(17,118,200);
     background: linear-gradient(90deg, rgba(17,118,200,1) 0%, rgba(40,175,206,1) 56%, rgba(123,156,161,1) 100%);
     color: white;
-    border-radius: 10px 100px / 120px;
+    border-radius: 30px;
 }
 
 #title {
     font-size: 3.25rem;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.75em;
 }
 
 #description {
@@ -73,7 +75,7 @@ body {
 
 #text {
     font-family: "Open Sans, Helvetica Neue ,sans-serif";
-    font-size: 25px;
+    font-size: 22px;
     font-weight: 400;
     line-height: 1.5;
 }

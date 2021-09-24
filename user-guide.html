@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
+<link rel="icon" type="image/png" href="./docs/favicon.png">
 <title>Galite Application Framework :  User guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -461,7 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_predefined_field_types">Predefined Field Types</a>
 <ul class="sectlevel4">
 <li><a href="#_the_string_field_type">The STRING Field Type</a></li>
-<li><a href="#_the_richtext_field_type">The RICHTEXT Field Type</a></li>
+<li><a href="#_the_text_field_type">The TEXT Field Type</a></li>
 <li><a href="#_the_image_field_type">The IMAGE Field Type</a></li>
 <li><a href="#_the_decimal_field_type">The DECIMAL Field Type</a></li>
 <li><a href="#_the_integer_field_type">The INTEGER Field Type</a></li>
@@ -473,6 +474,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_the_select_command">The SELECT command</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#_visual_galite_forms">Visual Galite Forms</a>
+<ul class="sectlevel3">
 <li><a href="#_creating_form_fields">Creating Form Fields</a>
 <ul class="sectlevel4">
 <li><a href="#_field_access_modifiers">Field Access Modifiers</a></li>
@@ -599,7 +604,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_preface">Preface</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Galite Project is the framework of kopiLeft for creating business applications. It&#8217;s the successor of the Kopi project. Kopi is a Java software project from DMS which provides a framework for developing database applications using Java, JDBC and SWING.</p>
+<p>The Galite Project is the framework of kopiLeft for creating business applications. It&#8217;s the successor of the Kopi project which is a framework from the company DMS that allows to development of database applications using Java, JDBC, SWING and Vaadin 7.</p>
 </div>
 <div class="paragraph">
 <p>Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.</p>
@@ -621,7 +626,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Model: The model layer is a set of model classes responsible for structuring and processing data. Also it contains a hight specification interfaces that any UI implementation should respect.</p>
 </li>
 <li>
-<p>UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin.</p>
+<p>UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).</p>
 </li>
 </ul>
 </div>
@@ -707,7 +712,7 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 <div class="sect2">
 <h3 id="_galite_standard_tables">Galite standard tables</h3>
 <div class="paragraph">
-<p>There are some standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.</p>
+<p>There is a list of standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.</p>
 </div>
 <div class="paragraph">
 <p>The definition of these tables is in the file <code>DBSchema</code>. You can use Exposed to create these tables using <code>SchemaUtils.create(table)</code>.</p>
@@ -715,6 +720,469 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 <div class="paragraph">
 <p>This is the role of every table:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>MODULE</strong>: This table contains the modules of our application. Example in our Menu bar we have <code>Client</code> Menu that contains the client form also we have <code>Bill</code> menu that contain two forms bill and bill product,
+so in this case we need to insert 5 lines in our <code>Module</code> table.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of changes applied on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(25)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of this module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VATER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the parent of this module, if our module is a form we put here the menu id of this form.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QUELLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(255)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The source name of the module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PRIORITAET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The priority of the module compared to another module. Example module with priority 10 is placed before the module of priority 20 in the same menu.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OBJEKT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(255)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The object name or the class name that contains the code of this module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SYMBOL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The icon of this module.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>BENUTZERRECHTE</strong>: The table <code>User Rights</code> displays the modules that each user is allowed to use.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BENUTZER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZUGRIFF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The access value.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GRUPPENRECHTE</strong>: This table displays the modules that each group of users is allowed to use.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GRUPPE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The group id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZUGRIFF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The access value.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GRUPPENZUGEHOERIGKEITEN</strong>: This table contains the groups that each user belongs to. Each user can belong to many groups.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BENUTZER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZUGRIFF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The access value.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>SYMBOLE</strong>: This table store the icons for each module.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(20)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of this icon.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BEZEICHNUNG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(50)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The description of this icon.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OBJEKT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(50)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This column present the icon of the module.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>FAVORITEN</strong>: This table contains favorite modules for each user.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BENUTZER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>KOPI_USERS</strong>: This table contains information about the users who use this application</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of changes applied on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(10)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(50)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZEICHEN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(10)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TELEFON</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(20)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The phone number of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EMAIL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(40)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The email of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AKTIV</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">is this user active?</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERSTELLTVON</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Creation date of this user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERSTELLTAM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Created by.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GEAENDERTAM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The date of the change for this user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERSTELLTAM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Changed by.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GRUPPEN</strong>: This table contains the names of the groups</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(10)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of the group.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BEZEICHNUNG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(40)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short description of the group.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>DUMMY</strong>: This table is for database sequences</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dummy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">char(1)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_transactions">Transactions</h3>
@@ -860,15 +1328,15 @@ name : String</code></pre>
 <div class="sect3">
 <h4 id="_predefined_field_types">Predefined Field Types</h4>
 <div class="paragraph">
-<p>Every form or report field In visual Galite have field type that can be one of the 12 ready to use predefined types :</p>
+<p>Every form or report field in visual Galite have field type that can be one of the 11 ready to use predefined types :</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">- DECIMAL(x, y)                 // used to insert decimal values, with x and y are ints that present the width and the scale
-- IMAGE(x, y)                   // used to insert images, with x and y are ints that present the width and the height
-- INT(x)                        // used to insert integer values, with x is an int that present the width of the field
-- STRING(x)                     // used to insert string values, with x is an int that present the width of the field
-- STRING(x, y, z, f, s, b)      // used to insert text values, with x, y and z are ints that present the width and the height, f1 is FixOption, s is StringFormat and b present boolean for styled field.                         // used to insert a date value
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">- DECIMAL                       // used to insert decimal values
+- IMAGE                         // used to insert images
+- INT                           // used to insert integer values
+- TEXT                          // used to insert text values
+- STRING                        // used to insert string values
 - DATETIME                      // used to insert a datetime value
 - BOOL                          // used to insert a true or false value
 - MONTH                         // used to insert years months value
@@ -880,7 +1348,7 @@ name : String</code></pre>
 <div class="sect4">
 <h5 id="_the_string_field_type">The STRING Field Type</h5>
 <div class="paragraph">
-<p>A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given. Moreover, you can optionaly indicate how many rows it will contain and how many will finally be displayed on the form. If these optional arguments are used, you have to indicate the carraige return method by specifying either the FIXED ON or the FIXED OFF option to avoid compilation errors.<br>
+<p>A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given. Moreover, you can optionally indicate how many rows it will contain and how many will finally be displayed on the form. If these optional arguments are used, you have to indicate the carriage return method by specifying either the FIXED ON or the FIXED OFF option.<br>
 There are also three other options you can use in order to modify the String&#8217;s case :</p>
 </div>
 <div class="ulist">
@@ -923,34 +1391,51 @@ styled      :  "true"   // present rich text
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
-  }</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(40, 10, 4, Fixed.ON, Convert.UPPER), position = at(1, 1)) {
+    label = "Description"
+    help = "A description"
+}
+
+// For better readability it's recommended to specify the parameters names:
+STRING(width = 40, height = 10, visibleHeight = 4, fixed = Fixed.ON, convert = Convert.UPPER)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, the text inserted will contain up to 20 characters.</p>
+<p>In this example, the text inserted will contain up to 40 characters and up to 10 rows. However, only the first 4 rows will be displayed on the form. Moreover, All the letters in the text will be converted to capital letters.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_the_richtext_field_type">The RICHTEXT Field Type</h5>
+<h5 id="_the_text_field_type">The TEXT Field Type</h5>
 <div class="paragraph">
-<p>A RichText allow user to change the style of his text for example, he can make the text bold or underlined, apply different fonts to individual words or characters, and change text colors.</p>
+<p>A Text and a String are similar apart from the fact that in a text, two parameters have always to be given: namely the width and the height of the field whereas you only need to determine the width in a string.<br>
+For example, you can write <code>STRING(40, 10, 4)</code> or <code>STRING(40)</code> but you have to write <code>TEXT(40, 10)</code> or <code>TEXT(40, 10, 4)</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">TextType      : "TEXT" (width: Integer ,height: Integer ,visible: Integer)
+                [FixOption]
+
+[FixOption]   : "FIXED.ON"
+                "FIXED.OFF"</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, Convert.UPPER, styled = true), position = at(3, 1)) {
-    label = "tax informations"
-    help = "The tax informations"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
+    label = "Richtext"
+    help = "A Richtext editor"
   }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, the text inserted will contain up to 80 characters and up to 50 rows. However, only the first 10 rows will be displayed on the form. Moreover, All the letters in the text will be converted to capital letters, and we will create an rich text field by setting the option styled as true.</p>
+<p>In this example, the text inserted will contain up to 80 characters and up to 50 rows. However, only the first 10 rows.<br>
+The field is a richtext editor beacause the option <code>styled</code> is set to true.</p>
 </div>
 </div>
 <div class="sect4">
@@ -984,8 +1469,9 @@ styled      :  "true"   // present rich text
 <div class="sect4">
 <h5 id="_the_decimal_field_type">The DECIMAL Field Type</h5>
 <div class="paragraph">
-<p>A DECIMAL is used to insert numbers, integers, fixed point numbers.
-The maximal width has to be determined for all them. In case of a fixed point number, the maximal scale i.e the number of characters standing after the comma has also to be defined.
+<p>A DECIMAL is used to insert numbers, integers, decimal numbers.
+The maximal width has to be determined for all them.
+The maximal scale i.e the number of characters standing after the comma has also to be defined.
 Also the comma has to be counted as a character.
 You can also set the minimum and the maximum values for the DECIMAL field with the optional parameters minValue and maxValue.</p>
 </div>
@@ -1034,9 +1520,9 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val age = visit(domain = INT(3), position = follow(name)) {
-    label = "age"
-    help = "The user age"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val count = visit(domain = INT(3), position = follow(name)) {
+    label = "Cars"
+    help = "The number of cars"
     minValue = 1
     maxValue = 130
   }</code></pre>
@@ -1259,14 +1745,16 @@ ListColumn  : SimpleName "keyOf" TableName.columnName</code></pre>
 In this example, we have used Exposed syntax to select all data from the Degree table, then we have created a list that contains two columns Symbol and Description those columns receive data from the result of the query?</p>
 </div>
 <div class="paragraph">
-<p>As a result of your selection, you will then have a table with two columns which will contain the different sorts of degrees achievable in the year you have entered.
-=== Visual Galite Forms</p>
+<p>As a result of your selection, you will then have a table with two columns which will contain the different sorts of degrees achievable in the year you have entered.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_visual_galite_forms">Visual Galite Forms</h3>
 <div class="paragraph">
 <p>The aim of Galite is to enable you to create applications. An application is made up of forms. A <strong>form</strong> is a set of <strong>pages</strong> consisting of <strong>blocks</strong>. A <strong>block</strong> is nothing else than a table which is divided into columns (vertical) and rows (horizontal). A row is made up of <strong>fields</strong>, and each <strong>field</strong> contains a data value at the intersection of a row and a column that can be of different <strong>Types</strong>.
 By the end of this chapter, you will learn how to create a form, but before, you need to learn how to create a field and how to form blocks.</p>
-</div>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_creating_form_fields">Creating Form Fields</h4>
@@ -3917,7 +4405,7 @@ ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] D
 </div>
 </div>
 <div class="paragraph">
-<p>Use the measure function to create an  measure field, this field have the following syntax :</p>
+<p>Use the measure function to create a measure field, this field have the following syntax :</p>
 </div>
 <div class="paragraph">
 <p><strong>Syntax</strong></p>
@@ -4604,16 +5092,16 @@ which is responsible for creating views for every chart type.</p>
 <h2 id="_the_galite_project_future">The Galite Project Future</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After reading this document, you should be able to create efficient database applications using the Galite framework, you can also create dynamic reports and print pages.
-Actually, the project owners are working on a web version of the Galite framework called "GALITE WEB", this version features the same capabilities of the SWING based version and is based on the Vaadin framework which is an open source web application framework for rich Internet applications
-Vaadin, uses java as programming language to create web content and Google web toolkit to render the resulting web page.</p>
+<p>After reading this document, you should be able to create efficient database applications using the Galite framework, you can also create dynamic reports and charts.
+Actually, the project owners are working on a web version of the Galite framework. This version features many capabilities and is based on the Vaadin framework which is an open source web application framework for rich Internet applications
+Vaadin, uses java as programming language to create web content and web components to render the resulting web page.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-23 00:26:12 +0100
+Last updated 2021-09-24 10:10:02 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
