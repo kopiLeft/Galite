@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,5 +37,10 @@ enum class Convert(val value: Int) {
   /**
    * Converts the whole text to normal letters.
    */
-  LOWER(VConstants.FDO_CONVERT_NAME)
+  LOWER(VConstants.FDO_CONVERT_NAME),
+
+  /**
+   * No conversion.
+   */
+  NONE(VConstants.FDO_CONVERT_NONE)
 }

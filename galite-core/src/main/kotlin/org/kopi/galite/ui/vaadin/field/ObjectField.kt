@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -134,11 +134,11 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
     }
   }
 
-  open fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {
+  open fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<T>>) {
     columnView!!.setAsActiveField()
   }
 
-  open fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {
+  open fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<T>>) {
     columnView!!.unsetAsActiveField()
   }
 

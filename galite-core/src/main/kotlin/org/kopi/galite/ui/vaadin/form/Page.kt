@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,15 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -36,15 +33,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  */
 class Page<T>(private var content: T) : Div()  where T: Component, T: FlexComponent {
 
-  private var scrollPanel: VScrollablePanel?
+  private var scrollPanel: VScrollablePanel = VScrollablePanel(content)
   private var last: Block? = null
   private var width = 0.0
 
   init {
-    this.content.className = Styles.FORM_PAGE_CONTENT
-    scrollPanel = VScrollablePanel(this.content)
-    add(scrollPanel)
     className = Styles.FORM_PAGE
+    content.className = Styles.FORM_PAGE_CONTENT
+    add(scrollPanel)
   }
 
   //---------------------------------------------------

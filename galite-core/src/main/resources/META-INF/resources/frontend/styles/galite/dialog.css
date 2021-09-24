@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,8 +32,8 @@
 	padding: 0;
 }
 
-.enhanced-dialog-content .k-window div, .enhanced-dialog-content .k-window div table {
-	width: 100%;
+.enhanced-dialog-content .k-window > div, .enhanced-dialog-content .k-window div table {
+    width: 100%;
 }
 
 #resizerContainer {
@@ -42,4 +42,24 @@
 
 .k-popup-window~::part(dialog-content) {
 	overflow: hidden;
+}
+
+:host([theme~="v-dialog"]) [part="content"] {
+    padding: 0;
+}
+
+#k-popup-window-content .k-window {
+    padding: 0;
+}
+
+#v-dialog-header, #v-dialog-footer {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+}
+
+#v-dialog-header {
+    border-bottom: 1px solid var(--lumo-shade-10pct);
+}
+
+#v-dialog-footer {
+    background-color: #d9f0f8;
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -209,6 +209,11 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
         fieldConnector.markAsDirty(record)
       }
     }
+  }
+
+  @JvmName("setAnyValue")
+  fun setValue(text: Any?) {
+    value = format(text)
   }
 
   override fun setValue(text: String?) {

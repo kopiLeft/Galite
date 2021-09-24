@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,13 +57,13 @@ class MultipleBlockTests: GaliteVUITestBase() {
     // Enters the sales block
     formExample.salesBlock.enter()
 
-    // Enters the id field editor
+    // Enters values to fields
     val currentTimestamp   = Timestamp.now()
     val currentDate        = Date.now()
     val currentWeek        = Week.now()
     val currentMonth       = Month.now()
     val currentTime        = Time.now()
-    val idClt       = formExample.salesBlock.idClt.edit(100)
+    val idClt       = formExample.salesBlock.idClient.edit(100)
     val description = formExample.salesBlock.description.edit("description")
     val price       = formExample.salesBlock.price.edit(Decimal.valueOf("100.2"))
     val active      = formExample.salesBlock.active.edit(true)
@@ -99,7 +99,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     formExample.salesBlock.enter()
 
     // Enters the id field editor
-    val field = formExample.salesBlock.idClt.edit(100)
+    val field = formExample.salesBlock.idClient.edit(100)
 
     // Go to the next field
     formExample.salesBlock.description.click()

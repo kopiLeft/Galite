@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.db.transaction
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
@@ -286,7 +286,7 @@ class VDynamicReport(block: VBlock) : VReport() {
       }
     } else {
       try {
-        transaction {
+        block.form.transaction {
           if (block.isMulti()) {
             block.activeRecord = 0
           }

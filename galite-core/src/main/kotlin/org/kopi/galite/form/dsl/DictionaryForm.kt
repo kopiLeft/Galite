@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -53,13 +53,15 @@ abstract class DictionaryForm : VDictionary, Form() {
     VDynamicReport.createDynamicReport(this.vBlock)
   }
 
-  /** Form model */
-  override val model: VDictionaryForm by lazy {
-    object : VDictionaryForm() {
-      override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
-      override fun init() {
-        initialize()
-      }
+  // ----------------------------------------------------------------------
+  // DICTIONARY FORM MODEL
+  // ----------------------------------------------------------------------
+  override val model: VDictionaryForm by lazy { DictionaryFormModel() }
+
+  inner class DictionaryFormModel: VDictionaryForm() {
+    override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
+    override fun init() {
+      initialize()
     }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -54,54 +54,54 @@ class ProductForm : ReportSelectionForm() {
     icon = "report"  // icon is optional here
   }
 
-  val block = insertBlock(BlockProduct(), page) {
-    command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
-    }
-  }
+  val block = insertBlock(BlockProduct(), page)
 
   override fun createReport(): Report {
     return ProductReport()
   }
-}
 
-class BlockProduct : FormBlock(1, 1, "Products") {
-  val u = table(Product)
+  inner class BlockProduct : FormBlock(1, 1, "Products") {
+    val u = table(Product)
 
-  val idPdt = hidden(domain = INT(20)) {
-    label = "ID"
-    help = "The product ID"
-    columns(u.idPdt)
-  }
-  val description = mustFill(domain = STRING(50), position = at(1, 1)) {
-    label = "Description"
-    help = "The product description"
-    columns(u.description)
-  }
-  val price = visit(domain = DECIMAL(20, 10), follow(description)) {
-    label = "Price"
-    help = "The product unit price excluding VAT"
-    columns(u.price)
-  }
-  val category = mustFill(domain = Category, position = at(2, 1)) {
-    label = "Category"
-    help = "The product category"
-    columns(u.category)
-  }
-  val taxName = mustFill(domain = Tax, position = at(3, 1)) {
-    label = "Tax"
-    help = "The product tax name"
-    columns(u.taxName)
-  }
-  val photo = visit(domain = IMAGE(width = 100, height = 100), position = at(5, 1)) {
-    label = "Image"
-    help = "The product image"
-  }
+    val idPdt = hidden(domain = INT(20)) {
+      label = "ID"
+      help = "The product ID"
+      columns(u.idPdt)
+    }
+    val description = mustFill(domain = STRING(50), position = at(1, 1)) {
+      label = "Description"
+      help = "The product description"
+      columns(u.description)
+    }
+    val price = visit(domain = DECIMAL(20, 10), follow(description)) {
+      label = "Price"
+      help = "The product unit price excluding VAT"
+      columns(u.price)
+    }
+    val category = mustFill(domain = Category, position = at(2, 1)) {
+      label = "Category"
+      help = "The product category"
+      columns(u.category)
+    }
+    val taxName = mustFill(domain = Tax, position = at(3, 1)) {
+      label = "Tax"
+      help = "The product tax name"
+      columns(u.taxName)
+    }
+    val photo = visit(domain = IMAGE(width = 100, height = 100), position = at(5, 1)) {
+      label = "Image"
+      help = "The product image"
+    }
 
-  init {
-    blockVisibility(Access.VISIT, Modes.QUERY)
+    init {
+      blockVisibility(Access.VISIT, Modes.QUERY)
+
+      command(item = report) {
+        action = {
+          createReport(this@BlockProduct)
+        }
+      }
+    }
   }
 }
 

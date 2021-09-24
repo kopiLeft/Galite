@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -94,28 +94,6 @@ open class FormField<T>(val block: FormBlock,
 
   /** the maximum value that cannot exceed  */
   internal var max : T? = null
-
-  /**
-   * Sets the minimum value of an Int field.
-   */
-  var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
-    get() {
-      return min
-    }
-    set(value) {
-      min = value
-    }
-
-  /**
-   * Sets the maximum value of an Int field.
-   */
-  var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
-    get() {
-      return max
-    }
-    set(value) {
-      max = value
-    }
 
   /**
    * Returns the field value of the current record number [record]
@@ -566,3 +544,25 @@ open class FormField<T>(val block: FormBlock,
     return -1
   }
 }
+
+/**
+ * Sets the minimum value of a number field.
+ */
+var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
+  get() {
+    return min
+  }
+  set(value) {
+    min = value
+  }
+
+/**
+ * Sets the maximum value of a number field.
+ */
+var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
+  get() {
+    return max
+  }
+  set(value) {
+    max = value
+  }

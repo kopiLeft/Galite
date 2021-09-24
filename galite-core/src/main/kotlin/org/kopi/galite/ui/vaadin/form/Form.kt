@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -219,16 +219,22 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {
-      if (pageCount != 0) {
+      pages[i] = if (pageCount != 0) {
         if (titles[i].endsWith("<CENTER>")) {
-          pages[i] = Page(HorizontalLayout())
+          Page(HorizontalLayout())
         } else {
-          pages[i] = Page(VerticalLayout())
+          Page(VerticalLayout())
         }
       } else {
-        pages[i] = Page(VerticalLayout())
+        Page(VerticalLayout())
       }
       pages[i]!!.isVisible = false
+
+      if (pageCount == 0) {
+        pages[i]!!.style["max-height"] = "calc(100vh - 210px)"
+      } else {
+        pages[i]!!.style["max-height"] = "calc(100vh - 260px)"
+      }
     }
     // setPages content.
     setContent(pageCount, titles)

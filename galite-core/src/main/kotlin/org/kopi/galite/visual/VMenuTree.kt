@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,6 +50,7 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Symbols
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
+import org.kopi.galite.db.subQuery
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -575,8 +576,7 @@ class VMenuTree constructor(ctxt: DBContext?,
           Favorites.insert {
             it[this.id] = FAVORITENId.nextIntVal()
             it[ts] = (System.currentTimeMillis() / 1000).toInt()
-            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }
-              .alias("id")[Users.id]
+            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }.subQuery()
             it[module] = id
           }
         } else {
@@ -600,11 +600,9 @@ class VMenuTree constructor(ctxt: DBContext?,
     try {
       transaction {
         if (menuTreeUser != null) {
-          val idSubQuery = Users.slice(Users.id)
-            .select { Users.shortName eq menuTreeUser.orEmpty() }
-            .alias("userid")[Users.id]
+          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.orEmpty() }
           Favorites.deleteWhere {
-            (Favorites.user eq idSubQuery) and (Favorites.module eq id)
+            (Favorites.user eqSubQuery idSubQuery) and (Favorites.module eq id)
           }
         } else {
           Favorites.deleteWhere {

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,10 +21,10 @@ import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.shared.Registration
 
@@ -77,10 +77,9 @@ class ActorField : ObjectField<Any?>() {
     button.icon = icon
   }
 
-  override fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {}
+  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Any?>>) {}
 
-  override fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {}
-
+  override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Any?>>) {}
   override val isNull: Boolean = true
 
   override fun setValue(o: Any?) {
@@ -92,6 +91,8 @@ class ActorField : ObjectField<Any?>() {
       function()
     }
   }
+
+  override fun getContent(): Component = button
 
   /**
    * Sets the field foreground and background colors
@@ -123,9 +124,5 @@ class ActorField : ObjectField<Any?>() {
 
   override fun setPresentationValue(newPresentationValue: Any?) {
     // Do nothing
-  }
-
-  override fun generateModelValue(): Any? {
-    return null
   }
 }

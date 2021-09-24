@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,10 @@
     font-size: 14px !important;
 }
 
+.k-boolean-field-content vaadin-checkbox.false {
+    margin-left: 0;
+}
+
 ::part(checkbox)::after {
     border-width: 0.3em 0 0 0.3em;
     transform-origin: -1px -0.5px
@@ -86,7 +90,7 @@
 }
 
 .k-boolean-field-content {
-    display: inline;
+    display: table;
     border-bottom: 1px solid #dadada;
 }
 

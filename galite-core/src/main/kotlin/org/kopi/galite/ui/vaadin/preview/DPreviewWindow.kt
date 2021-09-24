@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,15 +17,70 @@
  */
 package org.kopi.galite.ui.vaadin.preview
 
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+
 import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.visual.DWindow
+
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.server.InputStreamFactory
+import com.vaadin.flow.server.StreamResource
 
 /**
  * The `DPreviewWindow` is the ui implementation of the [VPreviewWindow].
+ *
+ * @param model The preview window model.
  */
-class DPreviewWindow(val model: VPreviewWindow) : DWindow(model) {
-  // TODO
+open class DPreviewWindow(val model: VPreviewWindow) : DWindow(model) {
+
+  private var embedded: EmbeddedDocument = EmbeddedDocument(EmbeddedDocument.Type.BROWSER)
+
+  init {
+    setSizeUndefined()
+    embedded.setSizeFull()
+    UI.getCurrent().page.retrieveExtendedClientDetails {
+      embedded.setHeight(it.windowInnerHeight - 100f, Unit.PIXELS)
+    }
+    setContent(embedded)
+  }
+
+  /**
+   * Customized initializations.
+   */
+  open fun init() {
+    // to be overridden in children classes.
+  }
+
   override fun run() {
-    TODO()
+    try {
+      model.setActorEnabled(VPreviewWindow.CMD_QUIT, true) // force to enable the quit actor
+      access(currentUI) {
+        setEmbeddedContent(model.printJob!!.dataFile)
+      }
+    } catch (e: IOException) {
+      e.printStackTrace(System.err)
+    }
+  }
+
+  /**
+   * Sets the embedded content.
+   * @param file The file content.
+   */
+  private fun setEmbeddedContent(file: File) {
+    val resource = StreamResource(file.name, InputStreamFactory {
+      try {
+        FileInputStream(file.absolutePath)
+      } catch (e: IOException) {
+        throw RuntimeException(e)
+      } catch (e: InterruptedException) {
+        throw RuntimeException(e)
+      }
+    })
+    embedded.resource = resource
+    embedded.mimeType = "application/pdf"
   }
 }

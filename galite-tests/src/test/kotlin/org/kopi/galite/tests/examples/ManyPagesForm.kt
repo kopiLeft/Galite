@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
+import org.kopi.galite.domain.Fixed
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.dsl.DictionaryForm
@@ -50,7 +51,7 @@ class ManyPagesForm : DictionaryForm() {
   }
 
   inner class Details : FormBlock(1, 100, "Details") {
-    val detail = visit(domain = STRING(30, 30, 30, true), position = at(1, 1)) {
+    val detail = visit(domain = STRING(30, 30, 30, Fixed.ON), position = at(1, 1)) {
       label = "detail"
       help = "The detail"
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -230,80 +230,83 @@ abstract class Report : Window() {
     }
   }
 
-  /** Report model*/
+  // ----------------------------------------------------------------------
+  // REPORT MODEL
+  // ----------------------------------------------------------------------
   override val model: VReport by lazy {
     initFields()
+    ReportModel()
+  }
 
-    object : VReport() {
-      override val locale: Locale get() = this@Report.locale ?: ApplicationContext.getDefaultLocale()
+  inner class ReportModel: VReport() {
+    override val locale: Locale get() = this@Report.locale ?: ApplicationContext.getDefaultLocale()
 
-      /**
-       * Handling triggers
-       */
-      fun handleTriggers(triggers: MutableList<Trigger>) {
-        // REPORT TRIGGERS
-        super.VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
-        triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
-          for (i in VConstants.TRG_TYPES.indices) {
-            if (trigger.events shr i and 1 > 0) {
-              blockTriggerArray[i] = i
-              super.triggers[i] = trigger
-            }
+    /**
+     * Handling triggers
+     */
+    fun handleTriggers(triggers: MutableList<Trigger>) {
+      // REPORT TRIGGERS
+      super.VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
+      triggers.forEach { trigger ->
+        val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+        for (i in VConstants.TRG_TYPES.indices) {
+          if (trigger.events shr i and 1 > 0) {
+            blockTriggerArray[i] = i
+            super.triggers[i] = trigger
           }
-          super.VKT_Triggers!![0] = blockTriggerArray
         }
-
-        // FIELD TRIGGERS
-        fields.forEach {
-          val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
-          if (it.computeTrigger != null) {
-            fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
-          }
-          if (it.formatTrigger != null) {
-            fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
-          }
-          // TODO : Add field triggers here
-          super.VKT_Triggers!!.add(fieldTriggerArray)
-        }
-
-        // TODO: for separator column
-        super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
-
-        // COMMANDS TRIGGERS
-        commands?.forEach {
-          val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
-          // TODO : Add commands triggers here
-          super.VKT_Triggers!!.add(fieldTriggerArray)
-        }
+        super.VKT_Triggers!![0] = blockTriggerArray
       }
 
-      override fun init() {
-        setTitle(title)
-        super.setPageTitle(title)
-        help = this@Report.help
-        this.addActors(this@Report.actors.map { actor ->
-          actor.buildModel(sourceFile)
-        }.toTypedArray())
-        this.commands = this@Report.commands.map { command ->
-          command.buildModel(this, actors)
-        }.toTypedArray()
-
-        source = sourceFile
-
-        if (reportCommands) {
-          addDefaultReportCommands()
+      // FIELD TRIGGERS
+      fields.forEach {
+        val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+        if (it.computeTrigger != null) {
+          fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
         }
-
-        super.model.addReportColumns()
-        super.model.addReportLines()
-
-        handleTriggers(this@Report.triggers)
+        if (it.formatTrigger != null) {
+          fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+        }
+        // TODO : Add field triggers here
+        super.VKT_Triggers!!.add(fieldTriggerArray)
       }
 
-      override fun add() {
-        // TODO
+      // TODO: for separator column
+      super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
+
+      // COMMANDS TRIGGERS
+      commands?.forEach {
+        val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+        // TODO : Add commands triggers here
+        super.VKT_Triggers!!.add(fieldTriggerArray)
       }
+    }
+
+    override fun init() {
+      setTitle(title)
+      super.setPageTitle(title)
+      help = this@Report.help
+      this.addActors(this@Report.actors.map { actor ->
+        actor.buildModel(sourceFile)
+      }.toTypedArray())
+      this.commands = this@Report.commands.map { command ->
+        command.buildModel(this, actors)
+      }.toTypedArray()
+
+      source = sourceFile
+
+      if (reportCommands) {
+        addDefaultReportCommands()
+      }
+
+      super.model.addReportColumns()
+      super.model.addReportLines()
+
+      handleTriggers(this@Report.triggers)
+    }
+
+    override fun add() {
+      // TODO
     }
   }
 }

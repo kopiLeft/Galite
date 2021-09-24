@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -108,8 +108,13 @@ class ReportField<T>(override val domain: Domain<T>,
    *
    * @param method    The method to execute when compute trigger is executed.
    */
-  fun format(method: () -> VCellFormat): ReportTrigger {
-    val fieldAction = Action(null, method)
+  fun format(method: (value: Any?) -> String): ReportTrigger {
+    val formatMethod = {
+      object : VCellFormat() {
+        override fun format(value: Any?): String = method(value)
+      }
+    }
+    val fieldAction = Action(null, formatMethod)
     return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it
     }

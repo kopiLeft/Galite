@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,18 +38,20 @@ abstract class ReportSelectionForm : DictionaryForm() {
     model.createReport(formBlock.vBlock)
   }
 
-  /** Form model */
-  override val model: VReportSelectionForm by lazy {
-    object : VReportSelectionForm() {
-      override val locale get() = this@ReportSelectionForm.locale ?: ApplicationContext.getDefaultLocale()
+  // ----------------------------------------------------------------------
+  // REPORT MODEL
+  // ----------------------------------------------------------------------
+  override val model: VReportSelectionForm by lazy { ReportSelectionFormModel() }
 
-      override fun init() {
-        initialize()
-      }
+  inner class ReportSelectionFormModel: VReportSelectionForm() {
+    override val locale get() = this@ReportSelectionForm.locale ?: ApplicationContext.getDefaultLocale()
 
-      override fun createReport(): VReport {
-        return this@ReportSelectionForm.createReport().model
-      }
+    override fun init() {
+      initialize()
+    }
+
+    override fun createReport(): VReport {
+      return this@ReportSelectionForm.createReport().model
     }
   }
 }

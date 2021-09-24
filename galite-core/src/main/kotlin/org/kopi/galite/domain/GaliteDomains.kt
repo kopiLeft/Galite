@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,26 +34,30 @@ class LONG(width: Int) : Domain<Long>(width)
 class INT(width: Int) : Domain<Int>(width)
 
 /**
- * A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given.
- * Moreover, you can optionaly indicate how many rows it will contain and how many will finally be displayed on the form.
+ * A STRING is used to enter characters which can be either letters, numbers or both.
+ * The width has always to be given.
+ * Moreover, you can optionaly indicate how many rows it will contain and how many will finally be displayed
+ * on the form.
  * If these optional arguments are used, you have to indicate the carriage return method by specifying either
  * the FIXED ON or the FIXED OFF option.
  */
 class STRING(width: Int,
              height: Int,
              visibleHeight: Int,
-             fixed: Boolean?,
-             convert: Convert? = null,
+             fixed: Fixed,
+             convert: Convert = Convert.NONE,
              styled: Boolean = false) :
   Domain<String>(width, height, visibleHeight) {
 
   constructor(width: Int,
-              convert: Convert? = null,
+              convert: Convert = Convert.NONE,
               styled: Boolean = false) :
-          this(width, 1, 0, null, convert, styled)
+          this(width, 1, 0, Fixed.UNDEFINED, convert, styled)
 
   init {
     this.styled = styled
+    this.fixed = fixed
+    this.convert = convert
   }
 }
 

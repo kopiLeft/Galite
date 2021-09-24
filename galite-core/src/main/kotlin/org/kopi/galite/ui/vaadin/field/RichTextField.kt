@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,17 +17,22 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.io.Serializable
 import java.util.Locale
 
-import kotlin.collections.ArrayList
-
+import org.kopi.galite.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.ui.vaadin.base.runAfterGetValue
+import org.kopi.galite.ui.vaadin.form.DRichTextEditor
 import org.vaadin.pekka.WysiwygE
 
-import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dependency.JsModule
 
 /**
  * A rich text field implementation based on wysiwyg-e
@@ -39,7 +44,8 @@ class RichTextField(
         var rows: Int,
         visibleRows: Int,
         var noEdit: Boolean,
-        locale: Locale
+        locale: Locale, // TODO
+        val parent: DRichTextEditor
 ) : AbstractField<String?>() {
 
   //---------------------------------------------------
@@ -47,7 +53,6 @@ class RichTextField(
   //---------------------------------------------------
 
   private val editor = FocusableWysiwygE(true)
-  private val navigationListeners = ArrayList<NavigationListener>()
 
   /**
    * Minimal field width to see the toolbar in 56 px height (2 lines)
@@ -68,7 +73,7 @@ class RichTextField(
     } else {
       editor.setWidth((8 * col).toFloat(), Unit.PIXELS)
     }
-    //registerRpc(NavigationHandler())
+    createNavigatorKeys()
   }
 
   /**
@@ -179,13 +184,6 @@ class RichTextField(
   //---------------------------------------------------
   // NAVGATION
   //---------------------------------------------------
-  /**
-   * Registers a navigation listener on this rich text.
-   * @param l The listener to be registered.
-   */
-  fun addNavigationListener(l: NavigationListener) {
-    navigationListeners.add(l)
-  }
 
   override fun setPresentationValue(newPresentationValue: String?) {
     editor.value = newPresentationValue
@@ -196,8 +194,6 @@ class RichTextField(
   override fun setValue(value: String?) {
     editor.value = value
   }
-
-  override fun generateModelValue() : String = editor.value
 
   /**
    * Checks if the content of this field is empty.
@@ -218,50 +214,64 @@ class RichTextField(
     }
   }
 
-  /**
-   * The grid editor field navigation listener
-   */
-  interface NavigationListener : Serializable {
-    /**
-     * Fired when a goto next field event is called by the user.
-     */
-    fun onGotoNextField()
-
-    /**
-     * Fired when a goto previous field event is called by the user.
-     */
-    fun onGotoPrevField()
-
-    /**
-     * Fired when a goto next block event is called by the user.
-     */
-    fun onGotoNextBlock()
-
-    /**
-     * Fired when a goto previous record event is called by the user.
-     */
-    fun onGotoPrevRecord()
-
-    /**
-     * Fired when a goto next field event is called by the user.
-     */
-    fun onGotoNextRecord()
-
-    /**
-     * Fired when a goto first record event is called by the user.
-     */
-    fun onGotoFirstRecord()
-
-    /**
-     * Fired when a goto last record event is called by the user.
-     */
-    fun onGotoLastRecord()
-
-    /**
-     * Fired when a goto next empty mandatory field event is called by the user.
-     */
-    fun onGotoNextEmptyMustfill()
+  override fun focus() {
+    editor.focus()
   }
 
-  inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
+  override fun getContent(): Component = editor
+
+  /**
+   * Creates the navigation actions.
+   */
+  fun createNavigatorKeys() {
+    addKeyNavigator(Key.ENTER, KeyModifier.of("Control")) { parent.gotoNextEmptyMustfill() }
+    addKeyNavigator(Key.ENTER, KeyModifier.of("Shift")) { parent.onGotoNextBlock() }
+    addKeyNavigator(Key.PAGE_DOWN, KeyModifier.of("Shift")) { parent.gotoNextRecord() }
+    addKeyNavigator(Key.PAGE_UP, KeyModifier.of("Shift")) { parent.gotoPrevRecord() }
+    addKeyNavigator(Key.HOME, KeyModifier.of("Shift")) { parent.gotoFirstRecord() }
+    addKeyNavigator(Key.END, KeyModifier.of("Shift")) { parent.gotoLastRecord() }
+    addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { parent.gotoPrevField() }
+    addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { parent.gotoPrevField() }
+    // addKeyNavigator(Key.TAB) { parent.gotoNextField() } FIXME: WysiwygE defines already a tab shortcut
+    addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Shift")) { parent.gotoPrevField() }
+    addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { parent.gotoNextField() }
+    addKeyNavigator(Key.ARROW_DOWN, KeyModifier.of("Shift")) { parent.gotoNextField() }
+  }
+
+  /**
+   * Adds a key navigator action to this handler.
+   * @param key The key code.
+   * @param modifiers The modifiers.
+   * @param navigationAction lambda representing the action to perform
+   */
+  private fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> kotlin.Unit) {
+    NavigationAction(this, key, modifiers, navigationAction)
+      .registerShortcut()
+  }
+
+  /**
+   * A navigation action
+   */
+  inner class NavigationAction(
+    field: RichTextField,
+    key: Key,
+    modifiers: Array<out KeyModifier>,
+    navigationAction: () -> kotlin.Unit
+  ) : ShortcutAction<RichTextField>(field, key, modifiers, navigationAction) {
+
+    //---------------------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------------------
+    override fun performAction() {
+      editor.runAfterGetValue {
+        // first sends the text value to model if changed
+        parent.valueChanged()
+        navigationAction()
+      }
+    }
+  }
 }
+
+@Tag("wysiwyg-e-rich-text")
+@JsModule("./src/wysiwyg-e-rich-text.js")
+class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>

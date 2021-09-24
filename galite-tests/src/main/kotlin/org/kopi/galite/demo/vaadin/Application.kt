@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,18 +24,15 @@ import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.AppShellSettings
-import com.vaadin.flow.server.PWA
+import com.vaadin.flow.router.Route
 
-@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
-class GaliteApplication : VApplication(GaliteRegistry()), AppShellConfigurator {
+@Route("")
+class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
   override val alternateLocale get() = Locale.UK
   override val title get() = "Galite demo"
-  override val favIcon get() = "ui/vaadin/window.gif"
   override val supportedLocales
     get() =
       arrayOf(Locale.UK,
@@ -92,15 +89,5 @@ class GaliteApplication : VApplication(GaliteRegistry()), AppShellConfigurator {
               override fun useAcroread(): Boolean = TODO()
             }
     )
-  }
-
-  override fun configurePage(settings: AppShellSettings) {
-    pageTitle?.let {
-      settings.setPageTitle(it)
-    }
-    favIcon.let {
-      settings.addLink("shortcut icon", it)
-      settings.addFavIcon("icon", it, "192x192")
-    }
   }
 }

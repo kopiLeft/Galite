@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,9 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 @CssImport.Container(value = [
   CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-text-field"),
-  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-text-field")
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-text-field"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-picker"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-picker")
 ])
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 

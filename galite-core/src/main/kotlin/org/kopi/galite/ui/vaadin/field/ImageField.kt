@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import com.vaadin.flow.component.Component
 import org.kopi.galite.ui.vaadin.common.VImage
 
 import com.vaadin.flow.component.Unit
@@ -91,8 +92,6 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
     }
   }
 
-  override fun generateModelValue(): Any? = value
-
   override fun checkValue(rec: Int) {
     // nothing to perform
   }
@@ -104,4 +103,6 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
       function()
     }
   }
+
+  override fun getContent(): Component = image
 }

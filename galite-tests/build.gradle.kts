@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@ plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.4.0"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "0.17.0.1"
+  id("com.vaadin") version "21.0.1"
   application
 }
 

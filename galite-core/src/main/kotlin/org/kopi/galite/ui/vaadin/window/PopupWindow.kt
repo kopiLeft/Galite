@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,14 +32,13 @@ import com.vaadin.flow.component.dependency.CssImport
 @CssImport("./styles/galite/dialog.css")
 class PopupWindow(val mainWindow: MainWindow?) : EnhancedDialog(), HasStyle {
 
-  private val listeners = mutableListOf<CloseListener>()
   private var caption = VSpan()
 
   init {
     className = Styles.POPUP_WINDOW
     caption.className = Styles.POPUP_WINDOW_CAPTION
     isDraggable = true
-    isResizable = true
+    isResizable = false
     isCloseOnOutsideClick = false
     isCloseOnEsc = false
     addToHeader(caption)

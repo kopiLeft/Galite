@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,6 @@ import org.kopi.galite.ui.vaadin.field.BooleanField
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * Boolean field.
@@ -44,7 +43,7 @@ class DBooleanField(
         detail: Boolean
 ) : DObjectField(model, label, align, options, detail),
         UTextField,
-        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<CustomField<Boolean>, Boolean>> {
+        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<org.kopi.galite.ui.vaadin.field.AbstractField<Boolean?>, Boolean?>> {
 
   // --------------------------------------------------
   // DATA MEMBERS
@@ -93,12 +92,12 @@ class DBooleanField(
   }
 
 
-  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean>, Boolean>?) {
+  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<org.kopi.galite.ui.vaadin.field.AbstractField<Boolean?>, Boolean?>) {
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
       getModel().block!!.activeField = getModel()
     }
-    val text = getModel().toText(event!!.value)
+    val text = getModel().toText(event.value)
 
     if (getModel().checkText(text!!)) {
       getModel().isChangedUI = true

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -87,6 +87,7 @@ object LocalizedProperties {
       properties["Warning"] = "Attention"
       properties["Notice"] = "Information"
       properties["Question"] = "Question"
+      properties["showErrorDetails"] = "Afficher les détails"
       // modifiers
       properties["alt"] = "Alt"
       properties["control"] = "Ctrl"
@@ -138,6 +139,7 @@ object LocalizedProperties {
       properties["Warning"] = "Warning"
       properties["Notice"] = "Notice"
       properties["Question"] = "Question"
+      properties["showErrorDetails"] = "Show details"
       // modifiers
       properties["alt"] = "Alt"
       properties["control"] = "Ctrl"
@@ -189,6 +191,7 @@ object LocalizedProperties {
       properties["Warning"] = "Warnung"
       properties["Notice"] = "Achtung"
       properties["Question"] = "Frage"
+      properties["showErrorDetails"] = "Zeige details"
       // modifiers
       properties["alt"] = "Alt"
       properties["control"] = "Strg"
@@ -240,6 +243,7 @@ object LocalizedProperties {
       properties["Warning"] = "انتباه"
       properties["Notice"] = "معلومة"
       properties["Question"] = "سؤال"
+      properties["showErrorDetails"] = "عرض التفاصيل"
       //!!! not translated
       // modifiers
       properties["alt"] = "Alt"
