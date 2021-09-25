@@ -19,10 +19,10 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.FormBlock
 
 object FormWithMultipleBlock : Form() {
   override val locale = Locale.UK

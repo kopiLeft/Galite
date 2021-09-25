@@ -20,8 +20,8 @@ package org.kopi.galite.tests.l10n
 import org.jdom2.Document
 import org.jdom2.Element
 import org.junit.Test
-import org.kopi.galite.l10n.PropertyLocalizer
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.l10n.PropertyLocalizer
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

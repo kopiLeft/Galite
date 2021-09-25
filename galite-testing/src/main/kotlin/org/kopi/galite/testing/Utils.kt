@@ -16,9 +16,9 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.window.Window
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.ApplicationContext
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10._blur

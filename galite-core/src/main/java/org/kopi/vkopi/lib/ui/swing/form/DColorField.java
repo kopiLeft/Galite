@@ -34,8 +34,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import org.kopi.galite.form.VColorField;
-import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.visual.form.VColorField;
+import org.kopi.galite.visual.form.VFieldUI;
 
 /**
  * DColorField is a panel composed in a color field and a label behind

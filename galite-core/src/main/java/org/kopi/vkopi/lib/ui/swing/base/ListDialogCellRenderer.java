@@ -33,7 +33,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
 
-import org.kopi.galite.list.ObjectFormatter;
+import org.kopi.galite.visual.list.ObjectFormatter;
 
 public class ListDialogCellRenderer implements TableCellRenderer {
 

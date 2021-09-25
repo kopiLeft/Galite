@@ -23,16 +23,16 @@ import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Purchase
-import org.kopi.galite.domain.BOOL
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.ReportSelectionForm
+import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.visual.VExecFailedException
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK

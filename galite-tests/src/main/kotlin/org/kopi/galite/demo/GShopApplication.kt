@@ -36,9 +36,9 @@ import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
-import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.type.Decimal
+import org.kopi.galite.visual.type.Decimal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

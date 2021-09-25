@@ -22,12 +22,12 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.BillProduct
 import org.kopi.galite.demo.Product
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.ReportSelectionForm
+import org.kopi.galite.visual.report.Report
 
 class BillProductForm : ReportSelectionForm() {
   override val locale = Locale.UK

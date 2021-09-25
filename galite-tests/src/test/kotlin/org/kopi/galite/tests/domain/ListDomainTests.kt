@@ -20,7 +20,7 @@ package org.kopi.galite.tests.domain
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
-import org.kopi.galite.domain.ListDomain
+import org.kopi.galite.visual.domain.ListDomain
 import kotlin.test.assertEquals
 
 /**

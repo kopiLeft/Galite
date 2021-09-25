@@ -22,11 +22,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.base.VInputText
-import org.kopi.galite.ui.vaadin.common.VSelect
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.welcome.WelcomeView
+import org.kopi.galite.visual.ui.vaadin.base.VInputButton
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
+import org.kopi.galite.visual.ui.vaadin.common.VSelect
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
 
 import com.github.mvysny.kaributesting.v10._expect
 import com.github.mvysny.kaributesting.v10._expectNone

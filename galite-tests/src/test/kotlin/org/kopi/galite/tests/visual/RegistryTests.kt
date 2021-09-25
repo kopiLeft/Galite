@@ -18,7 +18,7 @@
 package org.kopi.galite.tests.visual
 
 import org.junit.Test
-import org.kopi.galite.visual.Registry
+import org.kopi.galite.visual.visual.Registry
 import kotlin.test.assertEquals
 
 class RegistryTests {

@@ -19,9 +19,9 @@ package org.kopi.galite.demo.common
 
 import java.util.Locale
 
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.Key
 
 class FormDefault(block: FormBlock) : Form() {
 

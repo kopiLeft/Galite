@@ -21,8 +21,8 @@ import org.junit.Test
 
 import kotlin.test.assertEquals
 
-import org.kopi.galite.db.Users
-import org.kopi.galite.list.VColumn
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.list.VColumn
 
 class VColumnTests {
   @Test

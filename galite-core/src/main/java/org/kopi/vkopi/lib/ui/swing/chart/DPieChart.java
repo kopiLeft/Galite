@@ -27,9 +27,9 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.TableOrder;
-import org.kopi.galite.chart.VDataSeries;
-import org.kopi.galite.chart.VMeasureData;
-import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VMeasureData;
+import org.kopi.galite.visual.visual.ApplicationContext;
 
 import java.awt.*;
 

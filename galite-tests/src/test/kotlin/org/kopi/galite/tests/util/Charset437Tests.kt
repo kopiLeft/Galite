@@ -18,8 +18,8 @@
 package org.kopi.galite.tests.util
 
 import org.junit.Test
-import org.kopi.galite.util.Charset437
-import org.kopi.galite.util.Encoder437
+import org.kopi.galite.visual.util.Charset437
+import org.kopi.galite.visual.util.Encoder437
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
 import java.nio.charset.Charset

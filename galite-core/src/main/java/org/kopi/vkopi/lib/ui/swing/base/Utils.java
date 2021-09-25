@@ -35,7 +35,7 @@ import javax.swing.ImageIcon;
  *  Utils.getApplicationImage("name");
  *
  */
-public class Utils extends org.kopi.galite.base.Utils {
+public class Utils extends org.kopi.galite.visual.base.Utils {
 
   /**
    * return image from classpath or jar file
@@ -110,5 +110,5 @@ public class Utils extends org.kopi.galite.base.Utils {
 
   public static final String    APPLICATION_DIR = "resources";
   public static final ImageIcon UKN_IMAGE = new ImageIcon("unknown");
-  public static final String	RESOURCE_DIR	= "org/kopi/galite";
+  public static final String	RESOURCE_DIR	= "org/kopi/galite/visual";
 }

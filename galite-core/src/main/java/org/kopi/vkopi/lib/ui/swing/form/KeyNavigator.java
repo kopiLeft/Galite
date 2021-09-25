@@ -20,21 +20,18 @@
 package org.kopi.vkopi.lib.ui.swing.form;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
-import org.kopi.galite.form.VField;
+import org.kopi.galite.visual.form.VField;
 import org.kopi.vkopi.lib.ui.swing.base.Stateful;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.util.PrintException;
-import org.kopi.galite.util.PrintJob;
-import org.kopi.galite.visual.Action;
-import org.kopi.galite.visual.PrinterManager;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VExecFailedException;
+import org.kopi.galite.visual.util.PrintJob;
+import org.kopi.galite.visual.visual.Action;
+import org.kopi.galite.visual.visual.PrinterManager;
+import org.kopi.galite.visual.visual.VException;
 
 public class KeyNavigator extends AbstractAction {
 

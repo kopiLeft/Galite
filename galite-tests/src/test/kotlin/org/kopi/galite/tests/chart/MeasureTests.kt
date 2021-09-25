@@ -18,9 +18,9 @@
 package org.kopi.galite.tests.chart
 
 import org.junit.Test
-import org.kopi.galite.chart.ChartMeasure
-import org.kopi.galite.domain.INT
-import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.chart.ChartMeasure
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.visual.Color
 import kotlin.test.assertEquals
 
 class MeasureTests {

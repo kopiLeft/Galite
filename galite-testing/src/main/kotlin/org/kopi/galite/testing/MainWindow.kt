@@ -20,11 +20,11 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.Modules
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
+import org.kopi.galite.visual.visual.ApplicationContext
 
 import com.github.mvysny.kaributesting.v10._get
 import com.vaadin.flow.component.menubar.MenuBar

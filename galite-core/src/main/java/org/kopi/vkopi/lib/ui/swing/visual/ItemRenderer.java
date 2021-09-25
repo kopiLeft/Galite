@@ -30,7 +30,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.galite.visual.Item;
+import org.kopi.galite.visual.visual.Item;
 
 class ItemRenderer extends JLabel implements TreeCellRenderer {
 

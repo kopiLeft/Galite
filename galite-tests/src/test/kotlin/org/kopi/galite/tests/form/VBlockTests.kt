@@ -29,19 +29,19 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThrows
 import org.junit.Ignore
 import org.junit.Test
-import org.kopi.galite.db.Users
+import org.kopi.galite.visual.db.Users
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VQueryNoRowException
-import org.kopi.galite.form.VSkipRecordException
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VQueryNoRowException
+import org.kopi.galite.visual.form.VSkipRecordException
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
 

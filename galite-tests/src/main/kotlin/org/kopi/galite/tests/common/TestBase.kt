@@ -20,14 +20,14 @@ package org.kopi.galite.tests.common
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.chart.Chart
-import org.kopi.galite.chart.UChart
-import org.kopi.galite.chart.VChart
-import org.kopi.galite.report.MReport
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.UReport
-import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.chart.Chart
+import org.kopi.galite.visual.chart.UChart
+import org.kopi.galite.visual.chart.VChart
+import org.kopi.galite.visual.report.MReport
+import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.report.VReport
 
 /**
  * TestBase class for all tests.

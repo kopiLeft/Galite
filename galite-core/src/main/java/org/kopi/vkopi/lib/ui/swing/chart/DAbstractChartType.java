@@ -35,13 +35,13 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.ResourceBundleWrapper;
 
-import org.kopi.galite.chart.UChartType;
-import org.kopi.galite.chart.VDataSeries;
-import org.kopi.galite.chart.VDimensionData;
-import org.kopi.galite.chart.VPrintOptions;
-import org.kopi.galite.chart.VMeasureData;
-import org.kopi.galite.util.PPaperType;
-import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.chart.UChartType;
+import org.kopi.galite.visual.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VDimensionData;
+import org.kopi.galite.visual.chart.VPrintOptions;
+import org.kopi.galite.visual.chart.VMeasureData;
+import org.kopi.galite.visual.util.PPaperType;
+import org.kopi.galite.visual.visual.ApplicationContext;
 
 import java.awt.Dimension;
 import java.awt.Color;

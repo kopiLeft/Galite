@@ -25,12 +25,12 @@ import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Provider
 
 import org.kopi.galite.demo.Stock
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.report.FieldAlignment
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.report.FieldAlignment
+import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.report.VReport
 
 /**
  * Stock Report

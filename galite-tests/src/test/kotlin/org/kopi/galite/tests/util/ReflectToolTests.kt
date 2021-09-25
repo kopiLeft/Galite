@@ -18,7 +18,7 @@ package org.kopi.galite.tests.util
 
 import org.junit.Test
 import org.kopi.galite.tests.form.FormSample
-import org.kopi.galite.util.ReflectTool
+import org.kopi.galite.visual.util.ReflectTool
 import org.kopi.galite.tests.form.TestBlock
 
 import kotlin.test.assertEquals

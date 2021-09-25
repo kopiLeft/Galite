@@ -23,7 +23,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.type.Decimal
+import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
   val id = integer("ID")

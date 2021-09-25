@@ -17,7 +17,7 @@
 package org.kopi.galite.tests.report
 
 import org.junit.Test
-import org.kopi.galite.report.Point
+import org.kopi.galite.visual.report.Point
 import kotlin.test.assertEquals
 
 class PointTests {

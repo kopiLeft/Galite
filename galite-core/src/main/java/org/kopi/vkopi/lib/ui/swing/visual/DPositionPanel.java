@@ -20,7 +20,7 @@
 package org.kopi.vkopi.lib.ui.swing.visual;
 
 
-import org.kopi.galite.visual.DPositionPanelListener;
+import org.kopi.galite.visual.visual.DPositionPanelListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;

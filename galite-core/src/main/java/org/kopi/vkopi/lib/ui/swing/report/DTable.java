@@ -21,7 +21,7 @@ package org.kopi.vkopi.lib.ui.swing.report;
 
 import javax.swing.JTable;
 
-import org.kopi.galite.report.UReport.UTable;
+import org.kopi.galite.visual.report.UReport.UTable;
 
 /**
  * {@code DTable} is swing implementation of {@link UTable}

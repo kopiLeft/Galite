@@ -18,7 +18,7 @@
 package org.kopi.galite.tests.list
 
 import org.junit.Test
-import org.kopi.galite.list.VImageColumn
+import org.kopi.galite.visual.list.VImageColumn
 
 import kotlin.test.assertEquals
 

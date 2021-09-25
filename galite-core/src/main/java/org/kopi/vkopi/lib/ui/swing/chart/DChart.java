@@ -19,14 +19,14 @@
 
 package org.kopi.vkopi.lib.ui.swing.chart;
 
-import org.kopi.galite.chart.ChartTypeFactory;
-import org.kopi.galite.chart.UChart;
-import org.kopi.galite.chart.UChartType;
-import org.kopi.galite.chart.VChart;
+import org.kopi.galite.visual.chart.ChartTypeFactory;
+import org.kopi.galite.visual.chart.UChart;
+import org.kopi.galite.visual.chart.UChartType;
+import org.kopi.galite.visual.chart.VChart;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VWindow;
 
 import java.awt.*;
 
@@ -93,7 +93,7 @@ public class DChart extends DWindow implements UChart {
 
   /**
    * start a block and enter in the good field (rec)
-   * @exception	org.kopi.galite.visual.VException	may be raised by triggers
+   * @exception VException  may be raised by triggers
    */
   public void run(final boolean visible) throws VException {
     ((VChart)getModel()).initChart();

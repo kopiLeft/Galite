@@ -21,14 +21,14 @@ import java.util.Locale
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.Command
-import org.kopi.galite.domain.DATE
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
+import org.kopi.galite.visual.domain.DATE
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.ReportSelectionForm
+import org.kopi.galite.visual.report.Report
 
 class BillForm : ReportSelectionForm() {
   override val locale = Locale.UK

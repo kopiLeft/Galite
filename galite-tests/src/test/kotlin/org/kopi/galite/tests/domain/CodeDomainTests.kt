@@ -18,7 +18,7 @@
 package org.kopi.galite.tests.domain
 
 import org.junit.Test
-import org.kopi.galite.domain.CodeDomain
+import org.kopi.galite.visual.domain.CodeDomain
 
 import kotlin.test.assertEquals
 

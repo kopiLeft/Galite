@@ -25,10 +25,10 @@ import org.jetbrains.exposed.sql.targetTables
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.UserRights
-import org.kopi.galite.db.Users
-import org.kopi.galite.form.VBlockDefaultOuterJoin
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {

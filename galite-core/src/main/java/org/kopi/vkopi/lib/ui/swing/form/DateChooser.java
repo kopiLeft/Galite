@@ -53,11 +53,11 @@ import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import org.kopi.galite.type.Month;
+import org.kopi.galite.visual.type.Month;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.galite.visual.VlibProperties;
-import org.kopi.galite.type.Date;
-import org.kopi.galite.type.Week;
+import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.type.Date;
+import org.kopi.galite.visual.type.Week;
 
 /**
  * This class represents a date chooser. The chooser allows an arbitrary date

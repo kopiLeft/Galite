@@ -22,10 +22,10 @@ import java.util.Locale
 import org.jdom2.Document
 import org.jdom2.Element
 import org.junit.Test
-import org.kopi.galite.l10n.ChartLocalizer
-import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.l10n.ChartLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
