@@ -24,10 +24,10 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
+import kotlin.jvm.Throws
+
 import org.apache.poi.ss.formula.functions.T
-
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
-
 import org.kopi.galite.visual.common.Trigger
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContextHandler
@@ -53,7 +53,6 @@ import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.WindowBuilder
 import org.kopi.galite.visual.visual.WindowController
-import kotlin.jvm.Throws
 
 /**
  * Represents a report model.

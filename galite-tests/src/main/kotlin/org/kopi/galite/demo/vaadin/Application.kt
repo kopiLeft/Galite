@@ -18,8 +18,8 @@ package org.kopi.galite.demo.vaadin
 
 import java.util.Locale
 
-import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.tests.common.GaliteRegistry
+import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration

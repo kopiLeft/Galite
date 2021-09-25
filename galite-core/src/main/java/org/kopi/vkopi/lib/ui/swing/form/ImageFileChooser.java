@@ -19,8 +19,6 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -35,6 +33,8 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 public class ImageFileChooser {
 

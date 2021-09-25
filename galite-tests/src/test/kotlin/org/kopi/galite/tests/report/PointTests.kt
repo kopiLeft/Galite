@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests.report
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.visual.report.Point
-import kotlin.test.assertEquals
 
 class PointTests {
   val origin = Point()

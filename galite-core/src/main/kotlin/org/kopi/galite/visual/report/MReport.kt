@@ -24,14 +24,14 @@ import javax.swing.event.EventListenerList
 
 import kotlin.math.max
 
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VExecFailedException
+
 import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
-
-import org.kopi.galite.visual.type.Decimal
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VExecFailedException
 
 class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {

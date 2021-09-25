@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.util.PPaperType
-
 import java.io.Serializable
+
+import org.kopi.galite.visual.util.PPaperType
 
 /**
  * PConfig Class that allows to set the configuration parameters

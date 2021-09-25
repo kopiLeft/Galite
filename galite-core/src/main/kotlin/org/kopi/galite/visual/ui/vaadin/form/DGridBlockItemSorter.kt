@@ -17,11 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import com.vaadin.flow.data.binder.PropertyDefinition
-import com.vaadin.flow.function.ValueProvider
-import org.kopi.galite.visual.form.VBlock
 import java.io.Serializable
 import java.util.*
+
+import org.kopi.galite.visual.form.VBlock
+
+import com.vaadin.flow.data.binder.PropertyDefinition
+import com.vaadin.flow.function.ValueProvider
 
 /**
  * An item sorter implementation for the grid block. Constructs a DefaultItemSorter using the default `Comparator`

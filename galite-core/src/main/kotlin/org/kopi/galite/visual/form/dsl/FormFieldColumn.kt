@@ -17,9 +17,8 @@
  */
 package org.kopi.galite.visual.form.dsl
 
-import org.kopi.galite.visual.list.VColumn
-
 import org.jetbrains.exposed.sql.Column
+import org.kopi.galite.visual.list.VColumn
 
 /**
  * A binding to database

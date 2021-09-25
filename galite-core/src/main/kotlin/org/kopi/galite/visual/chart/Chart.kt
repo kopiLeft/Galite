@@ -18,7 +18,6 @@
 package org.kopi.galite.visual.chart
 
 import java.io.IOException
-
 import java.util.Locale
 
 import org.kopi.galite.visual.common.Action

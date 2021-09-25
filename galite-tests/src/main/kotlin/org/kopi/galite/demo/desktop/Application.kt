@@ -22,9 +22,9 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
-import org.kopi.galite.visual.form.dsl.Form
-import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.form.dsl.Form
 
 val testLocale: Locale = Locale.FRANCE
 

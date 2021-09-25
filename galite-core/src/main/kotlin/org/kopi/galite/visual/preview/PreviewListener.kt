@@ -19,7 +19,6 @@
 package org.kopi.galite.visual.preview
 
 import java.io.Serializable
-
 import java.util.EventListener
 
 import org.kopi.galite.visual.visual.UserConfiguration

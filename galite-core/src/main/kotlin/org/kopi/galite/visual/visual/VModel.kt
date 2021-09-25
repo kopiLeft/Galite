@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.visual
 
-import org.kopi.galite.visual.base.UComponent
-
 import java.io.Serializable
+
+import org.kopi.galite.visual.base.UComponent
 
 /**
  * `VModel` is the top level interface that all model classes should implement.

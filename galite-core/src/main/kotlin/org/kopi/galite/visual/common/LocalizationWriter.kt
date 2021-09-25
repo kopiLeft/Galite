@@ -17,10 +17,10 @@
  */
 package org.kopi.galite.visual.common
 
-import java.util.Locale
-import java.util.Stack
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Locale
+import java.util.Stack
 
 import org.jdom2.Document
 import org.jdom2.Element

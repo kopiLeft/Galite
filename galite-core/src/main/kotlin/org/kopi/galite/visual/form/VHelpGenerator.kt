@@ -27,8 +27,8 @@ import java.io.Serializable
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.VHelpGenerator
+import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  * This class implements a pretty printer

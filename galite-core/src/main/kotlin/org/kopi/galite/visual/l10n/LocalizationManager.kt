@@ -18,8 +18,8 @@
 
 package org.kopi.galite.visual.l10n
 
-import java.util.Locale
 import java.util.Hashtable
+import java.util.Locale
 
 import org.jdom2.Document
 import org.jdom2.input.SAXBuilder

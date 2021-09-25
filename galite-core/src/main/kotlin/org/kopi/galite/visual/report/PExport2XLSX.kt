@@ -24,7 +24,6 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-
 import org.kopi.galite.visual.report.UReport.UTable
 
 class PExport2XLSX(table: UTable,

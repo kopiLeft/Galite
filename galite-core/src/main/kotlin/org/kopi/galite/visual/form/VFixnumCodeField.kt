@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual.form
 
+import java.math.BigDecimal
+
 import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.db.Query
@@ -25,7 +27,6 @@ import org.kopi.galite.visual.list.VFixnumCodeColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
-import java.math.BigDecimal
 
 /**
  * Constructor

@@ -18,14 +18,14 @@
 
 package org.kopi.galite.visual.visual
 
-import kotlin.jvm.Throws
-
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
 import java.util.Locale
 
 import javax.swing.event.EventListenerList
+
+import kotlin.jvm.Throws
 
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.kopi.galite.visual.base.Image

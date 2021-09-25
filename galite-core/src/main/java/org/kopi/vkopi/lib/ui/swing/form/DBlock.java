@@ -27,7 +27,6 @@ import java.awt.dnd.DropTarget;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.base.UComponent;
 import org.kopi.galite.visual.form.Alignment;
 import org.kopi.galite.visual.form.LayoutManager;
@@ -38,10 +37,11 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.ViewBlockAlignment;
-import org.kopi.vkopi.lib.ui.swing.base.KopiTitledBorder;
-import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VExecFailedException;
+import org.kopi.vkopi.lib.ui.swing.base.KopiTitledBorder;
+import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 
 public class DBlock extends JPanel implements UBlock {
 

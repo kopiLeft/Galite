@@ -27,8 +27,6 @@ import java.util.Locale
 
 import kotlin.collections.ArrayList
 
-import com.lowagie.text.Rectangle
-
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.common.Trigger
 import org.kopi.galite.visual.db.DBContextHandler
@@ -38,21 +36,23 @@ import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.WindowController
-import org.kopi.galite.visual.visual.Constants
-import org.kopi.galite.visual.visual.WindowBuilder
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VHelpViewer
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.FileHandler
 import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VHelpViewer
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.visual.WindowBuilder
+import org.kopi.galite.visual.visual.WindowController
+
+import com.lowagie.text.Rectangle
 
 /**
  * Creates a new chart model.

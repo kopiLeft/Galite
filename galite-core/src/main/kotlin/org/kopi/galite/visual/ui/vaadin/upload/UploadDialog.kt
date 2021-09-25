@@ -24,11 +24,11 @@ import org.kopi.galite.visual.ui.vaadin.common.VSpan
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.upload.Receiver
-import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.html.NativeButton
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.upload.Receiver
+import com.vaadin.flow.component.upload.Upload
 
 /**
  * A dialog showing an upload component.

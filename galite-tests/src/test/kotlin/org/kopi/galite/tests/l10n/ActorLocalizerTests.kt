@@ -17,17 +17,15 @@
 
 package org.kopi.galite.tests.l10n
 
-import org.jdom2.Document
-import org.jdom2.Element
-
-import org.junit.Test
-
-import org.kopi.galite.visual.l10n.ActorLocalizer
-import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.visual.util.base.InconsistencyException
-
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+
+import org.jdom2.Document
+import org.jdom2.Element
+import org.junit.Test
+import org.kopi.galite.tests.common.TestBase
+import org.kopi.galite.visual.l10n.ActorLocalizer
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class ActorLocalizerTests : TestBase() {
 

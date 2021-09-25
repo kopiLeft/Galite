@@ -16,8 +16,9 @@
  */
 package org.kopi.galite.visual.type
 
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import java.util.Locale
+
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 
 /**
  * This class represents image types

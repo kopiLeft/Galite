@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.login
 
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.progressbar.ProgressBar
-import com.vaadin.flow.dom.DomEvent
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.event.LoginWindowListener
+
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.progressbar.ProgressBar
+import com.vaadin.flow.dom.DomEvent
 
 /**
  * The login window box used for identification of the user.

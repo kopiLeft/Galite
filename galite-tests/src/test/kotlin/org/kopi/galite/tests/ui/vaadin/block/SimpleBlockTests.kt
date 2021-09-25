@@ -19,14 +19,14 @@ package org.kopi.galite.tests.ui.vaadin.block
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.BeforeClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.testing.open
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
+import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Date

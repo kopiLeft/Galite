@@ -17,9 +17,9 @@
 
 package org.kopi.galite.visual.exceptions
 
-import org.kopi.galite.visual.chart.ChartMeasure
-
 import java.lang.IllegalArgumentException
+
+import org.kopi.galite.visual.chart.ChartMeasure
 
 /**
  * Thrown to indicate that a [ChartMeasure] value has not been provided to a dimension.

@@ -25,7 +25,6 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.form.dsl.DictionaryForm
 import org.kopi.galite.visual.form.dsl.FormBlock
 
-
 class ManyPagesForm : DictionaryForm() {
   override val locale = Locale.UK
   override val title = "Clients"

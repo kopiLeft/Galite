@@ -19,16 +19,16 @@
 
 package org.kopi.vkopi.lib.ui.swing.chart;
 
+import java.awt.*;
+
 import org.kopi.galite.visual.chart.ChartTypeFactory;
 import org.kopi.galite.visual.chart.UChart;
 import org.kopi.galite.visual.chart.UChartType;
 import org.kopi.galite.visual.chart.VChart;
-import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
-import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VWindow;
-
-import java.awt.*;
+import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
+import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 
 @SuppressWarnings("serial")
 public class DChart extends DWindow implements UChart {

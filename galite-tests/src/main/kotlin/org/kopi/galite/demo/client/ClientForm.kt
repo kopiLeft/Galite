@@ -19,8 +19,8 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Application
+import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Purchase
 import org.kopi.galite.visual.domain.BOOL

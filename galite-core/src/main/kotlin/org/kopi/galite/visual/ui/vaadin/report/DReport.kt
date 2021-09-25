@@ -33,14 +33,13 @@ import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
+import com.vaadin.flow.component.ClientCallable
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.ClientCallable
-import com.vaadin.flow.component.UI
-
 
 /**
  * The `DReport` is the visual part of the [VReport] model.

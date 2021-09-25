@@ -30,7 +30,6 @@ import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
-
 class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true

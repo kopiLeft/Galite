@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.form
 
+import java.sql.Date
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -30,7 +31,6 @@ import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
-import java.sql.Date
 
 class VMonthField(val bufferSize: Int) : VField(7, 1) {
 

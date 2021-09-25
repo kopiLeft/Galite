@@ -18,11 +18,11 @@
 
 package org.kopi.galite.visual.form
 
+import kotlin.jvm.Throws
+
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VException
-
-import kotlin.jvm.Throws
 
 /**
  * `UForm` is the top-level interface that must be implemented

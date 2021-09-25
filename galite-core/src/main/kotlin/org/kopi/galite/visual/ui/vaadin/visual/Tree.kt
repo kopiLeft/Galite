@@ -20,8 +20,8 @@ package org.kopi.galite.visual.ui.vaadin.visual
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.visual.Item
 import org.kopi.galite.visual.visual.UItemTree.UTreeComponent
 

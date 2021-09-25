@@ -23,17 +23,17 @@ import java.awt.event.KeyEvent
 import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.actor.VActorNavigationItem
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
-import org.kopi.galite.visual.visual.UActor
-import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.base.runAfterGetValue
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.UActor
+import org.kopi.galite.visual.visual.VActor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent

@@ -29,9 +29,9 @@ import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.Constants
-import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.UIFactory
 import org.kopi.galite.visual.visual.UWindow

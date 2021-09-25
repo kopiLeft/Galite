@@ -17,10 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.common.VCaption
+import org.kopi.galite.visual.ui.vaadin.common.VTable
 import org.kopi.galite.visual.ui.vaadin.event.PositionPanelListener
-import org.kopi.galite.visual.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dependency.CssImport
@@ -30,7 +31,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.Tabs
-import org.kopi.galite.visual.ui.vaadin.common.VTable
 
 /**
  * The form component.

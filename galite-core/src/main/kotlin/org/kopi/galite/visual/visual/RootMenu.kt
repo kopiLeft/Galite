@@ -18,9 +18,10 @@
 
 package org.kopi.galite.visual.visual
 
-import org.kopi.galite.visual.l10n.LocalizationManager
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
+
+import org.kopi.galite.visual.l10n.LocalizationManager
 
 /**
  * A root menu must provide its ID and name. The root tree node

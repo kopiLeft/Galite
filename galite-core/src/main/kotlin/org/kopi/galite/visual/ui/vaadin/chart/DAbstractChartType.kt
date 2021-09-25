@@ -28,17 +28,17 @@ import kotlin.collections.HashSet
 
 import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VDataSeries
-import org.kopi.galite.visual.chart.VPrintOptions
 import org.kopi.galite.visual.chart.VDimensionData
+import org.kopi.galite.visual.chart.VPrintOptions
 
-import com.github.appreciated.apexcharts.config.chart.Type
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
-import com.github.appreciated.apexcharts.helper.Series
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.github.appreciated.apexcharts.ApexCharts
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder
 import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder
 import com.github.appreciated.apexcharts.config.builder.XAxisBuilder
+import com.github.appreciated.apexcharts.config.chart.Type
+import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
+import com.github.appreciated.apexcharts.helper.Series
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.

@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.login
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.visual.ui.vaadin.common.VSimpleTable
+
+import com.vaadin.flow.component.Component
 
 /**
  * The login view containing the login panel box.

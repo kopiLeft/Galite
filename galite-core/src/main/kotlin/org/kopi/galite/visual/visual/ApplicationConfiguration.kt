@@ -18,10 +18,11 @@
 
 package org.kopi.galite.visual.visual
 
-import org.kopi.galite.visual.util.Rexec
-
 import java.io.File
+
 import kotlin.jvm.Throws
+
+import org.kopi.galite.visual.util.Rexec
 
 /**
  * Manages Application configuration data

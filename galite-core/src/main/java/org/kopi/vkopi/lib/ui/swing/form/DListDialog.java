@@ -54,22 +54,22 @@ import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
-import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.form.UField;
 import org.kopi.galite.visual.form.UListDialog;
 import org.kopi.galite.visual.form.VDictionary;
 import org.kopi.galite.visual.form.VForm;
 import org.kopi.galite.visual.form.VListDialog;
-import org.kopi.vkopi.lib.ui.swing.base.ListDialogCellRenderer;
-import org.kopi.vkopi.lib.ui.swing.visual.DObject;
-import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
-import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
-import org.kopi.vkopi.lib.ui.swing.visual.Utils;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.visual.MessageCode;
 import org.kopi.galite.visual.visual.UWindow;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VRuntimeException;
 import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.vkopi.lib.ui.swing.base.ListDialogCellRenderer;
+import org.kopi.vkopi.lib.ui.swing.visual.DObject;
+import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
+import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
+import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 
 public class DListDialog extends JPanel implements UListDialog {
 

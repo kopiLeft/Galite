@@ -22,8 +22,8 @@ import java.io.Serializable
 
 import org.kopi.galite.visual.form.VBlock.OrderModel
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.ActionHandler
 import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ActionHandler
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VCommand
 import org.kopi.galite.visual.visual.VException

@@ -17,15 +17,16 @@
  */
 package org.kopi.galite.visual.ui.swing.visual
 
-import javax.swing.JLabel
-import javax.swing.tree.TreeCellRenderer
-import javax.swing.JTree
-import javax.swing.tree.DefaultMutableTreeNode
 import java.awt.Color
 import java.awt.Component
 import java.awt.Image
+
 import javax.swing.ImageIcon
+import javax.swing.JLabel
+import javax.swing.JTree
 import javax.swing.UIManager
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeCellRenderer
 
 import org.kopi.galite.visual.visual.Module
 import org.kopi.vkopi.lib.ui.swing.base.Utils

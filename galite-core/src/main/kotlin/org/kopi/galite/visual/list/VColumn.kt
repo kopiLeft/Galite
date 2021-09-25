@@ -18,9 +18,10 @@
 
 package org.kopi.galite.visual.list
 
+import java.io.Serializable
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import java.io.Serializable
 
 /**
  * Represents a column

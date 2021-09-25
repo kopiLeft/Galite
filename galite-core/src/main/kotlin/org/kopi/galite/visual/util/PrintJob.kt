@@ -18,18 +18,18 @@
 
 package org.kopi.galite.visual.util
 
-import java.io.InputStream
-import java.io.File
 import java.io.ByteArrayInputStream
-import java.io.OutputStream
-import java.io.FileOutputStream
-import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+
+import org.kopi.galite.visual.base.Utils
 
 import com.lowagie.text.PageSize
 import com.lowagie.text.Rectangle
-
-import org.kopi.galite.visual.base.Utils
 
 /**
  * PPage/Report creates a PrintJob

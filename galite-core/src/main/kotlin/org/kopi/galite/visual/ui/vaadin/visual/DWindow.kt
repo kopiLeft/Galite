@@ -22,10 +22,13 @@ import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
 import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
@@ -35,6 +38,8 @@ import org.kopi.galite.visual.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.MessageCode
@@ -46,11 +51,6 @@ import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.WaitInfoListener
-import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component

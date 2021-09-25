@@ -20,7 +20,6 @@ package org.kopi.galite.visual.l10n
 
 import org.jdom2.Document
 import org.jdom2.Element
-
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**

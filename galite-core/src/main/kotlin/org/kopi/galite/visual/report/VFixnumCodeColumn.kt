@@ -18,8 +18,8 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class VFixnumCodeColumn(ident: String?,
                         type: String?,

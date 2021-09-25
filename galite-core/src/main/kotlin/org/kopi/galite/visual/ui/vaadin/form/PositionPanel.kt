@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.visual.ui.vaadin.event.PositionPanelListener
+import org.kopi.galite.visual.ui.vaadin.label.Label
+
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
@@ -24,8 +27,6 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
-import org.kopi.galite.visual.ui.vaadin.event.PositionPanelListener
-import org.kopi.galite.visual.ui.vaadin.label.Label
 
 /**
  * A position panel widget used to fetch a form records.

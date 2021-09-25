@@ -18,11 +18,13 @@
 
 package org.kopi.galite.visual.util.ipp
 
-import org.kopi.galite.visual.util.base.InconsistencyException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
+
 import kotlin.experimental.or
+
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class IPPInputStream(private val inputStream: InputStream) {
 

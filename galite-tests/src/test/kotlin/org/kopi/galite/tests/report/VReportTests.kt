@@ -17,10 +17,10 @@
 package org.kopi.galite.tests.report
 
 import java.awt.event.KeyEvent
-import java.io.FileInputStream
 import java.io.File
-import java.util.Scanner
+import java.io.FileInputStream
 import java.util.Locale
+import java.util.Scanner
 
 import kotlin.test.assertEquals
 
@@ -30,6 +30,7 @@ import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -43,7 +44,6 @@ import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
-import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VActor
 

@@ -19,11 +19,11 @@
 
 package org.kopi.vkopi.lib.ui.swing.chart;
 
-import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.chart.CConstants;
 import org.kopi.galite.visual.chart.ChartTypeFactory;
 import org.kopi.galite.visual.chart.UChartType;
 import org.kopi.galite.visual.chart.VChartType;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 
 /**
  * Swing implementation of the chart type factory.

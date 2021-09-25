@@ -45,12 +45,12 @@ import org.kopi.galite.visual.ui.vaadin.grid.GridEditorWeekField
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.data.renderer.TextRenderer
-import com.vaadin.flow.component.AbstractField
 
 /**
  * A grid text editor based on custom components.

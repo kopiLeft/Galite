@@ -16,8 +16,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.wait
 
-import com.vaadin.flow.component.html.Div
 import org.kopi.galite.visual.ui.vaadin.base.Styles
+
+import com.vaadin.flow.component.html.Div
 
 @Deprecated("Use WaitSpinner instead", replaceWith = ReplaceWith("WaitSpinner"))
 class WaitImage : Div() {

@@ -18,14 +18,14 @@
 
 package org.kopi.galite.visual.form
 
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.jetbrains.exposed.sql.Op
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.Arrays
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
 import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VImageColumn
 import org.kopi.galite.visual.list.VListColumn

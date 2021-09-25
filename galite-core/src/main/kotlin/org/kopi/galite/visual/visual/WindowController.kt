@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.visual
 
-import org.kopi.galite.visual.common.Window
 import java.io.Serializable
 
+import org.kopi.galite.visual.common.Window
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**

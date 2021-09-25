@@ -33,8 +33,8 @@ import org.kopi.galite.visual.visual.Module
 import org.kopi.galite.visual.visual.RootMenu
 import org.kopi.galite.visual.visual.UMenuTree
 import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI

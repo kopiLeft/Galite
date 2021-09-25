@@ -17,10 +17,10 @@
  */
 package org.kopi.galite.visual.common
 
-import org.jetbrains.exposed.sql.AutoIncColumnType
-import org.jetbrains.exposed.sql.BooleanColumnType
 import java.lang.RuntimeException
 
+import org.jetbrains.exposed.sql.AutoIncColumnType
+import org.jetbrains.exposed.sql.BooleanColumnType
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.IDateColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType

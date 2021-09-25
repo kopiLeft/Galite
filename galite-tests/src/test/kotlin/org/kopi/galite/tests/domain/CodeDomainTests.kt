@@ -17,10 +17,10 @@
 
 package org.kopi.galite.tests.domain
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.visual.domain.CodeDomain
-
-import kotlin.test.assertEquals
 
 /**
  * Contains tests of code-domain creation and manipulation

@@ -24,7 +24,6 @@ import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE

@@ -18,8 +18,9 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.util.PPaperType
 import java.io.Serializable
+
+import org.kopi.galite.visual.util.PPaperType
 
 /**
  * Print options

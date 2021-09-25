@@ -20,6 +20,7 @@ package org.kopi.galite.visual.ui.vaadin.chart
 import org.kopi.galite.visual.chart.VDataSeries
 
 import com.github.appreciated.apexcharts.config.chart.Type
+
 /**
  * Creates a new area chart from a given data series model.
  * @param title The chart title.

@@ -37,7 +37,6 @@ import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.FAVORITENId

@@ -21,11 +21,11 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTextColumn
+import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.db.Query
 
 /**
  * This class implements multi-line text fields.

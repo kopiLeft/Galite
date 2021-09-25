@@ -17,8 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import java.util.Locale
 import java.util.Date
+import java.util.Locale
 
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.base.InconsistencyException

@@ -18,11 +18,11 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.visual.Constants
-
 import java.awt.Color
 import java.awt.Font
 import java.io.Serializable
+
+import org.kopi.galite.visual.visual.Constants
 
 /**
  * Parameters class .

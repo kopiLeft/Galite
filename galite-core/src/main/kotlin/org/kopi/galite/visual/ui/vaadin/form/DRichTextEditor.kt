@@ -20,10 +20,10 @@ package org.kopi.galite.visual.ui.vaadin.form
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.RichTextField
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 
 /**
 * Rich text editor implementation based on CK editor for vaadin.

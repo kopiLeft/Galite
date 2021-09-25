@@ -26,6 +26,15 @@ import java.io.OutputStream
 
 import kotlin.math.max
 
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.report.UReport.UTable
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.util.PPaperType
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VlibProperties
+
 import com.lowagie.text.Chunk
 import com.lowagie.text.Document
 import com.lowagie.text.Element
@@ -39,15 +48,6 @@ import com.lowagie.text.pdf.PdfPageEventHelper
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.PdfStamper
 import com.lowagie.text.pdf.PdfWriter
-
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.util.PPaperType
-import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.visual.VlibProperties
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Time
 
 class PExport2PDF(
         table: UTable,

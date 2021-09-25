@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.util
 
-import org.kopi.galite.visual.util.base.InconsistencyException
-
 import java.util.Vector
+
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Local printer

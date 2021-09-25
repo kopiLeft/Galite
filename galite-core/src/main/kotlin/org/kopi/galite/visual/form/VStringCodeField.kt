@@ -20,10 +20,10 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringCodeColumn
-import org.kopi.galite.visual.db.Query
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  *

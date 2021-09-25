@@ -63,10 +63,10 @@ import org.kopi.galite.visual.report.VIntegerColumn;
 import org.kopi.galite.visual.report.VReport;
 import org.kopi.galite.visual.report.VReportColumn;
 import org.kopi.galite.visual.report.VSeparatorColumn;
-import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
-import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
+import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 
 /**
  * This is the display class of a report.

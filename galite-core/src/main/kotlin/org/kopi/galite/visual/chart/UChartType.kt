@@ -18,10 +18,11 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.base.UComponent
 import java.io.IOException
 import java.io.OutputStream
 import java.io.Serializable
+
+import org.kopi.galite.visual.base.UComponent
 
 /**
  * The Chart type view representation.

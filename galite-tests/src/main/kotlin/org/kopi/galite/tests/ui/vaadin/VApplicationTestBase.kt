@@ -19,12 +19,12 @@ package org.kopi.galite.tests.ui.vaadin
 
 import java.util.Locale
 
+import org.kopi.galite.tests.common.ApplicationTestBase
+import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.tests.common.ApplicationTestBase
-import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication

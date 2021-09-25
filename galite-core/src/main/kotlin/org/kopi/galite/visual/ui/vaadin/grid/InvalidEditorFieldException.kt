@@ -17,10 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
+import java.lang.Exception
+
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.notif.NotificationListener
 import org.kopi.galite.visual.ui.vaadin.notif.NotificationUtils
-import java.lang.Exception
 
 /**
  * Thrown when the field content is checked against its validation

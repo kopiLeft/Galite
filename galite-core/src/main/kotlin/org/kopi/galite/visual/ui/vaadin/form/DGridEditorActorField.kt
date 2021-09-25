@@ -17,13 +17,14 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.grid.ActorRenderer
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorActorField
+
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.grid.ActorRenderer
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorActorField
 
 /**
  * The grid editor actor field.

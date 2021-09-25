@@ -17,9 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.visual.ui.vaadin.common.VImage
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div

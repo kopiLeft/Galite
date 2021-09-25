@@ -29,9 +29,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.KeyStroke;
 
-import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
 import org.kopi.galite.visual.visual.UActor;
 import org.kopi.galite.visual.visual.VActor;
+import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
 
 @SuppressWarnings("serial")
 public class DActor implements UActor {

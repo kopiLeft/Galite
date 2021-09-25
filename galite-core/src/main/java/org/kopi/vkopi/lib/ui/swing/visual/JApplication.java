@@ -27,14 +27,15 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
 import org.kopi.galite.visual.base.UComponent;
+import org.kopi.galite.visual.db.DBContext;
 import org.kopi.galite.visual.l10n.LocalizationManager;
 import org.kopi.galite.visual.print.PrintManager;
 import org.kopi.galite.visual.visual.Application;
 import org.kopi.galite.visual.visual.ApplicationConfiguration;
 import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.Executable;
 import org.kopi.galite.visual.visual.FileHandler;
 import org.kopi.galite.visual.visual.ImageHandler;
-import org.kopi.galite.visual.visual.Executable;
 import org.kopi.galite.visual.visual.Module;
 import org.kopi.galite.visual.visual.PrinterManager;
 import org.kopi.galite.visual.visual.PropertyException;
@@ -45,7 +46,6 @@ import org.kopi.galite.visual.visual.VMenuTree;
 import org.kopi.galite.visual.visual.VWindow;
 import org.kopi.galite.visual.visual.VerifyConfiguration;
 import org.kopi.galite.visual.visual.WindowController;
-import org.kopi.galite.visual.db.DBContext;
 
 /**
  * {@code JApplication} is a swing implementation of a kopi application.

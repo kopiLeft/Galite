@@ -18,9 +18,10 @@
 
 package org.kopi.galite.visual.visual
 
+import java.io.IOException
+
 import org.kopi.galite.visual.util.PrintException
 import org.kopi.galite.visual.util.PrintJob
-import java.io.IOException
 
 interface PreviewRunner {
   /**

@@ -41,8 +41,8 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.kopi.galite.visual.util.base.Utils;
-import org.kopi.galite.visual.visual.Item;
 import org.kopi.galite.visual.visual.Action;
+import org.kopi.galite.visual.visual.Item;
 import org.kopi.galite.visual.visual.MessageCode;
 import org.kopi.galite.visual.visual.UItemTree;
 import org.kopi.galite.visual.visual.VException;

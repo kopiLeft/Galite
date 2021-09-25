@@ -28,6 +28,8 @@ import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 
+import com.vaadin.flow.component.AbstractCompositeField
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.DetachEvent
 import com.vaadin.flow.component.FocusNotifier
@@ -41,8 +43,6 @@ import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
-import com.vaadin.flow.component.AbstractCompositeField
-import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
 import com.vaadin.flow.dom.DomEvent

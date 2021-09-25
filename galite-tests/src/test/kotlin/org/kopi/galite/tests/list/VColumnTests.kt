@@ -17,10 +17,9 @@
 
 package org.kopi.galite.tests.list
 
-import org.junit.Test
-
 import kotlin.test.assertEquals
 
+import org.junit.Test
 import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.list.VColumn
 

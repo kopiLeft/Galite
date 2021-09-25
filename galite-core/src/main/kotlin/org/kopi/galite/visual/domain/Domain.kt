@@ -17,9 +17,9 @@
 
 package org.kopi.galite.visual.domain
 
-import org.joda.time.DateTime
 import kotlin.reflect.KClass
 
+import org.joda.time.DateTime
 import org.kopi.galite.visual.common.LocalizationWriter
 import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VConstants

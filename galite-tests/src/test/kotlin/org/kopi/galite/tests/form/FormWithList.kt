@@ -18,10 +18,10 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.UserRights
 import org.kopi.galite.visual.db.Users
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING

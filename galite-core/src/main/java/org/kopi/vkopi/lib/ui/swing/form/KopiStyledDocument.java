@@ -29,10 +29,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.form.ModelTransformer;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFixnumField;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.visual.ApplicationContext;
 
 public class KopiStyledDocument extends HTMLDocument implements KopiDocument {

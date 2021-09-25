@@ -18,13 +18,12 @@
 package org.kopi.galite.visual.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VWindow
 
 abstract class VDictionaryForm : VForm, VDictionary {
 

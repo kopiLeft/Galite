@@ -38,12 +38,12 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VForm;
+import org.kopi.galite.visual.visual.Action;
+import org.kopi.galite.visual.visual.VColor;
 import org.kopi.vkopi.lib.ui.swing.base.FieldStates;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldButton;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
-import org.kopi.galite.visual.visual.Action;
-import org.kopi.galite.visual.visual.VColor;
 
 /**
  * DField is a panel composed in a text field and an information panel

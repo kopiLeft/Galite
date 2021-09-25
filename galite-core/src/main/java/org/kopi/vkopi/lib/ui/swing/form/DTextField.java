@@ -56,16 +56,16 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VStringField;
+import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
+import org.kopi.galite.visual.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.base.JHtmlTextArea;
 import org.kopi.vkopi.lib.ui.swing.base.TextSelecter;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellChecker;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellException;
-import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.visual.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.visual.ApplicationContext;
-import org.kopi.galite.visual.visual.VlibProperties;
 
 /**
  * DTextField is a panel composed in a text field and an information panel

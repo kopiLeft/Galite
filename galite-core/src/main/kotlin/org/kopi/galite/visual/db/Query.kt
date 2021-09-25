@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.db
 
-import org.kopi.galite.visual.type.Date
 import java.sql.Blob
 
+import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time

@@ -18,10 +18,10 @@
 
 package org.kopi.galite.visual.util.lpr
 
+import org.kopi.galite.visual.util.base.Options
+
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
-
-import org.kopi.galite.visual.util.base.Options
 
 open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options(name) {
 

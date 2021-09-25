@@ -19,7 +19,6 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.form.FieldHandler;
 import org.kopi.galite.visual.form.UBlock;
 import org.kopi.galite.visual.form.UChartLabel;
@@ -30,6 +29,7 @@ import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VImageField;
 import org.kopi.galite.visual.form.VTextField;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 
 /**

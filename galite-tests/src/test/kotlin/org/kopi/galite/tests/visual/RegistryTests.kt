@@ -17,9 +17,10 @@
 
 package org.kopi.galite.tests.visual
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.visual.visual.Registry
-import kotlin.test.assertEquals
 
 class RegistryTests {
   val registry1 = Registry("firstDomaineName", null)

@@ -67,9 +67,6 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
-import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
-import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
 import org.kopi.galite.visual.util.LineBreaker;
 import org.kopi.galite.visual.visual.ApplicationContext;
 import org.kopi.galite.visual.visual.MessageCode;
@@ -82,7 +79,9 @@ import org.kopi.galite.visual.visual.VRuntimeException;
 import org.kopi.galite.visual.visual.VWindow;
 import org.kopi.galite.visual.visual.VlibProperties;
 import org.kopi.galite.visual.visual.WaitInfoListener;
-
+import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
+import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 /**
  * This class displays a window with a menu, a tool bar, a content panel

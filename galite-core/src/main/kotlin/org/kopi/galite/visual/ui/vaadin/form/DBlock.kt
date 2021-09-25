@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import com.vaadin.flow.component.AttachEvent
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.form.Alignment
 import org.kopi.galite.visual.form.UBlock
@@ -33,6 +32,7 @@ import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport

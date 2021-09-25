@@ -16,6 +16,11 @@
  */
 package org.kopi.galite.visual.util
 
+import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.jvmErasure
+
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.common.Actor
 import org.kopi.galite.visual.common.Menu
@@ -23,10 +28,6 @@ import org.kopi.galite.visual.form.dsl.Form
 import org.kopi.galite.visual.form.dsl.FormBlock
 import org.kopi.galite.visual.form.dsl.FormBlockIndex
 import org.kopi.galite.visual.form.dsl.FormField
-import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.jvmErasure
 
 /**
  * Class of reflection tools. It contains methods which access

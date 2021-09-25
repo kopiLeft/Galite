@@ -17,9 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.html.Div
 import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.block.Block
@@ -27,6 +24,10 @@ import org.kopi.galite.visual.ui.vaadin.block.ColumnView
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.window.Window
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.html.Div
 
 /**
  * The field component. Contains one text input field or other component
