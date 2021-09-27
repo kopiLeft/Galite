@@ -26,7 +26,7 @@ import org.kopi.galite.visual.common.LocalizationWriter
  * @param ident                the identifier of the page
  * @param title                the page title in default locale
  */
-class FormPage(val pageNumber: Int, val ident: String, val title: String) {
+class FormPage(internal val pageNumber: Int, val ident: String, val title: String, val form: Form) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

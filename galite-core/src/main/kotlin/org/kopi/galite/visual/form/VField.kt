@@ -122,10 +122,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     this.indices = indices
     this.priority = priority
-    this.align = align
     if (this is VFixnumField || this is VIntegerField) {
-      // move it to compiler !!!
       this.align = VConstants.ALG_RIGHT
+    } else {
+      this.align = align
     }
     position = pos
     command = commands

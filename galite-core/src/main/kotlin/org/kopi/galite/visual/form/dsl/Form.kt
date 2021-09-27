@@ -79,6 +79,7 @@ abstract class Form : Window() {
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
+  @Deprecated("Use FormPage.insertBlock(block)")
   fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
@@ -90,6 +91,14 @@ abstract class Form : Window() {
     formBlocks.add(block)
     return block
   }
+
+  /**
+   * Adds a new block to this form.
+   *
+   * @param        block                 the block to insert
+   * @param        formPage              the page containing the block
+   */
+  fun <T : FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
 
   /**
    * Adds triggers to this form
@@ -124,7 +133,7 @@ abstract class Form : Window() {
    * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String): FormPage {
-    val page = FormPage(pages.size, "Id\$${pages.size}", title)
+    val page = FormPage(pages.size, "Id\$${pages.size}", title, this)
     pages.add(page)
     return page
   }
@@ -138,7 +147,7 @@ abstract class Form : Window() {
    * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage(pages.size, "Id\$${pages.size}", title)
+    val page = FormPage(pages.size, "Id\$${pages.size}", title, this)
     page.init()
     pages.add(page)
     return page
@@ -332,3 +341,12 @@ abstract class Form : Window() {
     }
   }
 }
+
+/**
+ * Adds a new block to this form.
+ *
+ * @param        block                 the block to insert
+ * @receiver                           the page containing the block
+ */
+fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
+  this.form.insertBlock(block, this, init)
