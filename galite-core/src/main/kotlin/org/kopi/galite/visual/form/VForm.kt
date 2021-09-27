@@ -18,7 +18,9 @@
 package org.kopi.galite.visual.form
 
 import java.io.File
+import java.lang.Error
 import java.net.MalformedURLException
+import java.sql.SQLException
 import java.util.Locale
 
 import javax.swing.event.EventListenerList
@@ -479,10 +481,62 @@ abstract class VForm : VWindow, VConstants {
     return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
+  // ----------------------------------------------------------------------
+  // TRAILING
+  // ----------------------------------------------------------------------
+  /**
+   * Sets form untrailed (commits changes).
+   */
   open fun commitTrail() {
     for (i in blocks.indices) {
       blocks[i].commitTrail()
     }
+  }
+
+  /**
+   * Restore trailed information.
+   */
+  open fun abortTrail() {
+    for (i in blocks.indices) {
+      blocks[i].abortTrail()
+    }
+  }
+
+  /**
+   * Handles transaction failure
+   */
+  fun handleAborted() {
+    abortTrail()
+  }
+
+  /**
+   * Handles transaction failure
+   * @param        reason                the reason for the failure.
+   * @exception        SQLException        an exception may be raised by DB
+   */
+  open fun handleAborted(reason: SQLException) {
+    try {
+      abortTrail()
+    } finally {
+      if (!retryableAbort(reason) || !retryProtected()) {
+        throw reason
+      }
+    }
+  }
+
+  open fun handleAborted(reason: Error) {
+    abortTrail()
+    throw reason
+  }
+
+  open fun handleAborted(reason: java.lang.RuntimeException) {
+    abortTrail()
+    throw reason
+  }
+
+  open fun handleAborted(reason: VException) {
+    abortTrail()
+    throw reason
   }
 
   // ----------------------------------------------------------------------

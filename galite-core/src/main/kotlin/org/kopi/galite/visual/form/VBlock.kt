@@ -1626,39 +1626,41 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         continue
       }
       try {
-        try {
-          form.transaction(Message.getMessage("loading_record")) {
-            fetchPosition = pos
-            fetchRecord(fetchBuffer[pos])
-          }
-          return
-        } catch (e: VException) {
-          throw e
+        while (true) {
           try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          throw e
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          throw e
-          try {
-          } catch (abortEx: Error) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          throw e
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw VExecFailedException(abortEx)
+            form.transaction(Message.getMessage("loading_record")) {
+              fetchPosition = pos
+              fetchRecord(fetchBuffer[pos])
+            }
+            return
+          } catch (e: VException) {
+            try {
+              form.handleAborted(e)
+            } catch (abortEx: VException) {
+              throw abortEx
+            }
+          } catch (e: SQLException) {
+            try {
+              form.handleAborted(e)
+            } catch (abortEx: DBDeadLockException) {
+              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+            } catch (abortEx: DBInterruptionException) {
+              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+            } catch (abortEx: SQLException) {
+              throw VExecFailedException(abortEx)
+            }
+          } catch (e: Error) {
+            try {
+              form.handleAborted(e)
+            } catch (abortEx: Error) {
+              throw VExecFailedException(abortEx)
+            }
+          } catch (e: RuntimeException) {
+            try {
+              form.handleAborted(e)
+            } catch (abortEx: RuntimeException) {
+              throw VExecFailedException(abortEx)
+            }
           }
         }
       } catch (e: VException) {
@@ -1840,7 +1842,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the database columns of block.
    */
-  fun getReportSearchColumns(): MutableList<Column<*>>? {
+  fun getReportSearchColumns(): MutableList<Column<*>> {
     val result = mutableListOf<Column<*>>()
 
     // take all visible fields with database access
@@ -2112,38 +2114,41 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var dialog: VListDialog? = null
 
     try {
-      try {
-        dialog = form.transaction(Message.getMessage("searching_database")) {
-          callProtectedTrigger(VConstants.TRG_PREQRY)
-          buildQueryDialog()
-        }
-      } catch (e: VException) {
-        throw e
+      while (true) {
         try {
-        } catch (abortEx: VException) {
-          throw abortEx
-        }
-      } catch (e: SQLException) {
-        throw e
-        try {
-        } catch (abortEx: DBDeadLockException) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-        } catch (abortEx: DBInterruptionException) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-        } catch (abortEx: SQLException) {
-          throw VExecFailedException(abortEx)
-        }
-      } catch (e: Error) {
-        throw e
-        try {
-        } catch (abortEx: Error) {
-          throw VExecFailedException(abortEx)
-        }
-      } catch (e: RuntimeException) {
-        throw e
-        try {
-        } catch (abortEx: RuntimeException) {
-          throw VExecFailedException(abortEx)
+          dialog = form.transaction(Message.getMessage("searching_database")) {
+            callProtectedTrigger(VConstants.TRG_PREQRY)
+            buildQueryDialog()
+          }
+          break
+        } catch (e: VException) {
+          try {
+            form.handleAborted(e)
+          } catch (abortEx: VException) {
+            throw abortEx
+          }
+        } catch (e: SQLException) {
+          try {
+            form.handleAborted(e)
+          } catch (abortEx: DBDeadLockException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: DBInterruptionException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+            form.handleAborted(e)
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+            form.handleAborted(e)
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
+          }
         }
       }
     } catch (e: Exception) {

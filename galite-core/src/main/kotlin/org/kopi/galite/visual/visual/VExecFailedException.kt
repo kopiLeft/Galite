@@ -28,7 +28,7 @@ open class VExecFailedException : VException {
    * @param        message                the associated message
    * @param        origin                the exception that generated this one
    */
-  constructor(message: String, origin: Throwable) : super(message, origin)
+  constructor(message: String?, origin: Throwable) : super(message, origin)
 
   /**
    * Constructs an exception with a message.
