@@ -30,12 +30,14 @@ import org.kopi.galite.visual.visual.ApplicationConfiguration
 /**
  * This class implements multi-line text fields.
  */
-class VTextField(width: Int,
+class VTextField(bufferSize: Int,
+                 width: Int,
                  height: Int,
                  visibleHeight: Int,
                  convert: Int,
                  styled: Boolean)
-  : VStringField(width,
+  : VStringField(bufferSize,
+                 width,
                  height,
                  visibleHeight,
                  convert,

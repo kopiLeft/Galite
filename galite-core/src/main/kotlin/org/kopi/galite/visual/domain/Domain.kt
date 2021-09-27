@@ -106,7 +106,18 @@ open class Domain<T>(val width: Int? = null,
         Time::class -> VTimeField(block.buffer)
         Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
         Image::class -> VImageField(block.buffer, width!!, height!!)
-        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+        else -> {
+          if(this@Domain is TEXT) {
+            VTextField(block.buffer,
+                       width ?: 0,
+                       height ?: 1,
+                       visibleHeight ?: 0,
+                       if (fixed != Fixed.UNDEFINED) fixed.value else VConstants.FDO_CONVERT_NONE,
+                       styled)
+          }
+
+          throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+        }
       }
     }
   }
