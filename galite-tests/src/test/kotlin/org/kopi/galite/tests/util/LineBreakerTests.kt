@@ -17,10 +17,11 @@
 
 package org.kopi.galite.tests.util
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.util.LineBreaker
-import kotlin.test.assertEquals
+import org.kopi.galite.visual.util.LineBreaker
 
 class LineBreakerTests : TestBase() {
   val source = "This text contains\ncarriage\nreturn."

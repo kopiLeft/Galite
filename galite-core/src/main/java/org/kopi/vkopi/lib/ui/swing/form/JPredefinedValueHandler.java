@@ -27,13 +27,13 @@ import java.io.FileInputStream;
 
 import javax.swing.JColorChooser;
 
-import org.kopi.galite.form.AbstractPredefinedValueHandler;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.form.VForm;
-import org.kopi.galite.visual.Message;
-import org.kopi.galite.visual.VExecFailedException;
-import org.kopi.galite.type.Date;
+import org.kopi.galite.visual.form.AbstractPredefinedValueHandler;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.form.VForm;
+import org.kopi.galite.visual.type.Date;
+import org.kopi.galite.visual.visual.Message;
+import org.kopi.galite.visual.visual.VExecFailedException;
 
 @SuppressWarnings("serial")
 public class JPredefinedValueHandler extends AbstractPredefinedValueHandler {

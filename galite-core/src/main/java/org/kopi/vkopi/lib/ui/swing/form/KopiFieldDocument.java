@@ -27,11 +27,11 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.ModelTransformer;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFixnumField;
-import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.form.ModelTransformer;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFixnumField;
+import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.visual.visual.ApplicationContext;
 
 /**
  * !!! NEED COMMENTS

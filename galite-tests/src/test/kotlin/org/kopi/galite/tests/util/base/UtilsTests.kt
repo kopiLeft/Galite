@@ -17,13 +17,13 @@
 
 package org.kopi.galite.tests.util.base
 
-import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.util.base.Utils
-
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+
+import org.kopi.galite.tests.common.TestBase
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.Utils
 
 class UtilsTests: TestBase() {
   /**

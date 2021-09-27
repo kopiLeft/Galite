@@ -20,13 +20,13 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.DictionaryForm
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.dsl.DictionaryForm
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm() {
   override val locale = Locale.UK

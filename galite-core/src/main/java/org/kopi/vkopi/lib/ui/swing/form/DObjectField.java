@@ -28,10 +28,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.visual.Action;
-import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.visual.Action;
 
 /**
  * DImageField is a panel composed in a Image field and a label behind

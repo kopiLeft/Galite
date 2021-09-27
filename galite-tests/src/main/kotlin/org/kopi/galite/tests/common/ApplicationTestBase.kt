@@ -18,7 +18,7 @@
 package org.kopi.galite.tests.common
 
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.ui.vaadin.visual.VWindowController
+import org.kopi.galite.visual.ui.vaadin.visual.VWindowController
 
 /**
  * TestBase class for all application tests.

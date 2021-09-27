@@ -24,8 +24,8 @@ import java.awt.Toolkit;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
-import org.kopi.galite.form.ModelTransformer;
-import org.kopi.galite.form.VField;
+import org.kopi.galite.visual.form.ModelTransformer;
+import org.kopi.galite.visual.form.VField;
 
 /**
  * !!! NEED COMMENTS

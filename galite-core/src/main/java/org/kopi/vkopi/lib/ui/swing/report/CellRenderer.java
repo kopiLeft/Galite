@@ -28,7 +28,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JComponent;
 
-import org.kopi.galite.report.Constants;
+import org.kopi.galite.visual.report.Constants;
 
 /**
  * @version 1.0 11/09/98

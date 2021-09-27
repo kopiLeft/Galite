@@ -19,12 +19,11 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.Fixed
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.DictionaryForm
-import org.kopi.galite.form.dsl.FormBlock
-
+import org.kopi.galite.visual.domain.Fixed
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.DictionaryForm
+import org.kopi.galite.visual.form.dsl.FormBlock
 
 class ManyPagesForm : DictionaryForm() {
   override val locale = Locale.UK

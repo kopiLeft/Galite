@@ -29,11 +29,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.UserRights
-import org.kopi.galite.db.Users
-import org.kopi.galite.db.list_Of_Tables
-import org.kopi.galite.db.sequencesList
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.db.list_Of_Tables
+import org.kopi.galite.visual.db.sequencesList
 
 /**
  * Creates a connection and initializes the database. Useful if your test/demo needs a connection, the initial
