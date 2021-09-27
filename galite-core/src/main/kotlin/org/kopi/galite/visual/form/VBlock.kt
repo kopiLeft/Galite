@@ -2117,7 +2117,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       while (true) {
         try {
           dialog = form.transaction(Message.getMessage("searching_database")) {
-            addLogger(StdOutSqlLogger) // TODO
             callProtectedTrigger(VConstants.TRG_PREQRY)
             buildQueryDialog()
           }
