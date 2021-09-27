@@ -38,10 +38,11 @@ import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.visual.MessageCode
 
 class VFieldTests : JApplicationTestBase() {
+
+  val FormSample = FormSample().also { it.model }
+
   @Test
   fun getListIDTest() {
-    FormSample.model
-
     val vListColumn = VList("test",
                             "apps/common/Global",
                             arrayOf(VStringColumn("test", User.name, 2, 50, true)),
@@ -90,8 +91,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun checkListVStringFieldTest() {
-    FormSample.model
-
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
             VStringColumn("test", User.name, 2, 50, true)),
@@ -132,8 +131,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun checkListVIntegerFieldTest() {
-    FormSample.model
-
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
             VIntegerColumn("test", User.age, 2, 50, true)),
@@ -174,7 +171,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field equal to value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.name.value = "name"
     val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
@@ -187,7 +183,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field equal to null scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
@@ -199,7 +194,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field like value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.name.value = "*name"
     val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
@@ -212,7 +206,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field not like value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.name.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.name.value = "*name"
@@ -226,7 +219,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition upper string field not like value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.job.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.job.value = "*job"
@@ -240,7 +232,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition lower string field not like value scenario test`() {
-    FormSample.model
     FormSample.tb1.cv.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.cv.value = "*cv"
     val column : Column<*>? = FormSample.tb1.cv.vField.lookupColumn(User)
@@ -253,7 +244,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field equal to value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.value = 1
     val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
@@ -266,7 +256,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field less than value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_LT)
     FormSample.tb1.id.value = 1
@@ -280,7 +269,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field greater than value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_GT)
     FormSample.tb1.id.value = 1
@@ -294,7 +282,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field less than or equal to value scenario test`() {
-    FormSample.model
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_LE)
     FormSample.tb1.id.value = 1
@@ -308,7 +295,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field greater than or equal to value scenario test`() {
-    FormSample.model
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_GE)
     FormSample.tb1.id.value = 1
     val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
@@ -321,7 +307,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int not equal to value scenario test`() {
-    FormSample.model
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.id.value = 1
     val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
@@ -334,8 +319,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `selectFromList valid scenario test`() {
-    FormSample.model
-
     transaction {
       SchemaUtils.create(User)
       User.insert {
@@ -358,8 +341,6 @@ class VFieldTests : JApplicationTestBase() {
   @Ignore
   @Test
   fun `selectFromList valid scenario test with query entry`() {
-    FormSample.model
-
     transaction {
       SchemaUtils.create(User)
       User.insert {
@@ -382,8 +363,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `selectFromList scenario with exception test`() {
-    FormSample.model
-
     transaction {
       SchemaUtils.create(User)
       val error = Assert.assertThrows(VFieldException::class.java) { FormSample.tb4ToTestListDomain.listNames.vField.selectFromList(false) }
@@ -395,7 +374,6 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `enumerateValue valid scenario test`() {
-    FormSample.model
     FormSample.tb4ToTestListDomain.age.vField.enumerateValue(true)
 
     assertEquals(20, FormSample.tb4ToTestListDomain.age.value)

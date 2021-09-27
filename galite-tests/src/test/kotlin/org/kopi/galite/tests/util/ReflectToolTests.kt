@@ -43,7 +43,7 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolFormTest() {
-    assertEquals("autoFill", ReflectTool.formActorAt(FormSample, 0))
-    assertEquals("action", ReflectTool.formMenuAt(FormSample, 0))
+    assertEquals("autoFill", ReflectTool.formActorAt(FormSample(), 0))
+    assertEquals("action", ReflectTool.formMenuAt(FormSample(), 0))
   }
 }
