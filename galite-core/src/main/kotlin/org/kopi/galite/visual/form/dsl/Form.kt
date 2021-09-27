@@ -18,6 +18,7 @@ package org.kopi.galite.visual.form.dsl
 
 import java.io.IOException
 
+import org.kopi.galite.visual.chart.Chart
 import org.kopi.galite.visual.common.Action
 import org.kopi.galite.visual.common.FormTrigger
 import org.kopi.galite.visual.common.LocalizationWriter
@@ -29,6 +30,7 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Represents a form.
@@ -182,6 +184,10 @@ abstract class Form : Window() {
    */
   fun gotoBlock(target: VBlock) {
     model.gotoBlock(target)
+  }
+
+  fun showChart(chart: Chart) {
+    WindowController.windowController.doNotModal(chart)
   }
 
   ///////////////////////////////////////////////////////////////////////////

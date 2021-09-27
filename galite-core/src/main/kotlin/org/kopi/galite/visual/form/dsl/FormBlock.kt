@@ -706,10 +706,6 @@ open class FormBlock(var buffer: Int,
     (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
-  fun showChart(chart: Chart) {
-    WindowController.windowController.doNotModal(chart)
-  }
-
   /** The block model */
   lateinit var vBlock: VBlock
 

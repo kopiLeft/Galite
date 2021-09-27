@@ -21,6 +21,7 @@ import java.util.Locale
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.form.dsl.FieldAlignment
@@ -63,6 +64,16 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.block.idClt.help, model.toolTip)
     assertEquals(block, model.block)
     assertEquals(FieldAlignment.RIGHT.value, model.align)
+  }
+
+  @Test
+  fun `test form with aligned block`() {
+    val form = FormWithAlignedBlock()
+    val targetBlockModel = form.model.blocks.single { it == form.targetBlock.vBlock }
+    val totalBlockModel = form.model.blocks.single { it == form.totalBlock.vBlock }
+
+    assertEquals(targetBlockModel, totalBlockModel.alignment!!.block)
+    assertArraysEquals(arrayOf(2, 3), totalBlockModel.alignment!!.targets.toTypedArray())
   }
 }
 
