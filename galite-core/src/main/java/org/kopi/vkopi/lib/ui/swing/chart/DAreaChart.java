@@ -24,7 +24,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
-import org.kopi.galite.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VDataSeries;
 
 @SuppressWarnings("serial")
 public class DAreaChart extends DAbstractChartType {

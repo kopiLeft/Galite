@@ -20,7 +20,7 @@
 package org.kopi.vkopi.lib.ui.swing.chart;
 
 import org.jfree.chart.plot.PlotOrientation;
-import org.kopi.galite.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VDataSeries;
 
 @SuppressWarnings("serial")
 public class DBarChart extends DColumnChart {

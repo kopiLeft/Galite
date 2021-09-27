@@ -19,13 +19,13 @@ package org.kopi.galite.tests.ui.vaadin
 
 import org.junit.Before
 import org.junit.BeforeClass
+import org.kopi.galite.testing.waitAndRunUIQueue
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
 import com.github.mvysny.kaributesting.v10.TestingLifecycleHook
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10.testingLifecycleHook
-import org.kopi.galite.testing.waitAndRunUIQueue
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.shared.communication.PushMode

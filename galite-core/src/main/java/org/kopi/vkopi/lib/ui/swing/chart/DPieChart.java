@@ -19,6 +19,8 @@
 
 package org.kopi.vkopi.lib.ui.swing.chart;
 
+import java.awt.*;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.MultiplePiePlot;
@@ -27,11 +29,9 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.TableOrder;
-import org.kopi.galite.chart.VDataSeries;
-import org.kopi.galite.chart.VMeasureData;
-import org.kopi.galite.visual.ApplicationContext;
-
-import java.awt.*;
+import org.kopi.galite.visual.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VMeasureData;
+import org.kopi.galite.visual.visual.ApplicationContext;
 
 @SuppressWarnings("serial")
 public class DPieChart extends DAbstractChartType {

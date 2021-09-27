@@ -1,0 +1,146 @@
+/*
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package org.kopi.galite.visual.ui.vaadin.notif
+
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedMessages
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
+
+import com.vaadin.flow.component.Component
+
+/**
+ * Utilities to show notifications in the client side.
+ */
+object NotificationUtils {
+
+  /**
+   * Shows an error completely in the client side.
+   *
+   * @param callback The notification callback listener.
+   * @param parent The error notification parent.
+   * @param locale The error locale.
+   * @param messageKey The message key to be displayed.
+   */
+  fun showError(callback: NotificationListener?,
+                parent: Component?,
+                locale: String,
+                messageKey: String) {
+    showError(callback, parent, locale, messageKey, null)
+  }
+
+  /**
+   * Shows an error completely in the client side.
+   *
+   * @param callback The notification callback listener.
+   * @param parent The error notification parent.
+   * @param locale The error locale.
+   * @param messageKey The message key to be displayed.
+   * @param params The message parameters.
+   */
+  fun showError(callback: NotificationListener?,
+                parent: Component?,
+                locale: String,
+                messageKey: String,
+                vararg params: Any?) {
+    val error = ErrorNotification(LocalizedProperties.getString(locale, "Error"),
+                                  LocalizedMessages.getMessage(locale, messageKey, params),
+                                  locale,
+                                  parent)
+    if (callback != null) {
+      error.addNotificationListener(callback)
+    }
+    error.show()
+  }
+
+  /**
+   * Shows a warning completely in the client side.
+   *
+   * @param callback The notification callback listener.
+   * @param parent The error notification parent.
+   * @param locale The error locale.
+   * @param messageKey The message key to be displayed.
+   */
+  fun showWarning(callback: NotificationListener?,
+                  parent: Component?,
+                  locale: String,
+                  messageKey: String) {
+    showWarning(callback, parent, locale, messageKey, null)
+  }
+
+  /**
+   * Shows a warning completely in the client side.
+   *
+   * @param callback The notification callback listener.
+   * @param parent The error notification parent.
+   * @param locale The error locale.
+   * @param messageKey The message key to be displayed.
+   * @param params The message parameters.
+   */
+  fun showWarning(callback: NotificationListener?,
+                  parent: Component?,
+                  locale: String,
+                  messageKey: String,
+                  vararg params: Any?) {
+    val warning = WarningNotification(LocalizedProperties.getString(locale, "Warning"),
+                                      LocalizedMessages.getMessage(locale, messageKey, params),
+                                      locale,
+                                      parent)
+    if (callback != null) {
+      warning.addNotificationListener(callback)
+    }
+    warning.show()
+  }
+
+  /**
+   * Shows an information completely in the client side.
+   *
+   * @param callback The notification callback listener.
+   * @param parent The error notification parent.
+   * @param locale The error locale.
+   * @param messageKey The message key to be displayed.
+   */
+  fun showInformation(callback: NotificationListener?,
+                      parent: Component?,
+                      locale: String,
+                      messageKey: String) {
+    showInformation(callback, parent, locale, messageKey, null)
+  }
+
+  /**
+   * Shows an information completely in the client side.
+   *
+   * @param callback The notification callback listener.
+   * @param parent The error notification parent.
+   * @param locale The error locale.
+   * @param messageKey The message key to be displayed.
+   * @param params The message parameters.
+   */
+  fun showInformation(callback: NotificationListener?,
+                      parent: Component?,
+                      locale: String,
+                      messageKey: String,
+                      vararg params: Any?) {
+    val information = InformationNotification(LocalizedProperties.getString(locale, "Notice"),
+                                              LocalizedMessages.getMessage(locale, messageKey, params),
+                                              locale,
+                                              parent)
+    if (callback != null) {
+      information.addNotificationListener(callback)
+    }
+    information.show()
+  }
+}

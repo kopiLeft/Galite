@@ -21,20 +21,20 @@ import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.AutoComplete
-import org.kopi.galite.domain.BOOL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.ListDomain
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.domain.TIMESTAMP
-import org.kopi.galite.form.dsl.DictionaryForm
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.domain.AutoComplete
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.form.dsl.DictionaryForm
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.visual.FileHandler
 
 class FormWithListDomains: Form() {
   val edit = menu("Edit")

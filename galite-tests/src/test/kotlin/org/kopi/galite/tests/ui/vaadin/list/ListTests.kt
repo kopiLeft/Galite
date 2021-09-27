@@ -26,7 +26,7 @@ import org.kopi.galite.demo.createGShopApplicationTables
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.form.DListDialog
+import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get

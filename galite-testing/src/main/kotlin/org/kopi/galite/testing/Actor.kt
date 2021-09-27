@@ -16,10 +16,10 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.common.Actor
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.visual.DActor
-import org.kopi.galite.ui.vaadin.window.VActorPanel
+import org.kopi.galite.visual.common.Actor
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.visual.DActor
+import org.kopi.galite.visual.ui.vaadin.window.VActorPanel
 
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get

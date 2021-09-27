@@ -23,8 +23,8 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-import org.kopi.galite.base.Image;
-import org.kopi.galite.visual.ImageHandler;
+import org.kopi.galite.visual.base.Image;
+import org.kopi.galite.visual.visual.ImageHandler;
 
 public class JImageHandler extends ImageHandler {
 

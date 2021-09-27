@@ -21,7 +21,7 @@ package org.kopi.galite.tests.list
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.list.VStringColumn
+import org.kopi.galite.visual.list.VStringColumn
 
 class VStringColumnTests {
 

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-
 public class Suggestions {
   public Suggestions(String line) {
     if(line == null || line.length() <= 0) {

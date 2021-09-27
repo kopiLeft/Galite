@@ -42,7 +42,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
 import javax.swing.plaf.metal.MetalButtonUI;
 
-import org.kopi.galite.base.Utils;
+import org.kopi.galite.visual.base.Utils;
 import org.kopi.vkopi.lib.ui.swing.base.JActorFieldButton;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldButton;
 import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;

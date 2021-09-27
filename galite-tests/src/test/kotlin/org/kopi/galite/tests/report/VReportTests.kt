@@ -17,10 +17,10 @@
 package org.kopi.galite.tests.report
 
 import java.awt.event.KeyEvent
-import java.io.FileInputStream
 import java.io.File
-import java.util.Scanner
+import java.io.FileInputStream
 import java.util.Locale
+import java.util.Scanner
 
 import kotlin.test.assertEquals
 
@@ -30,22 +30,22 @@ import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
-import org.kopi.galite.base.Utils
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.report.Constants
-import org.kopi.galite.report.FieldAlignment
-import org.kopi.galite.report.PConfig
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.Triggers
-import org.kopi.galite.report.VReport
-import org.kopi.galite.report.VReport.Companion.TYP_CSV
-import org.kopi.galite.report.VReport.Companion.TYP_XLS
-import org.kopi.galite.report.VReport.Companion.TYP_XLSX
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.report.Constants
+import org.kopi.galite.visual.report.FieldAlignment
+import org.kopi.galite.visual.report.PConfig
+import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.report.Triggers
+import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
+import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
+import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.VActor
 
 /**
  *
@@ -171,9 +171,9 @@ class VReportTests: JApplicationTestBase() {
   fun reportVActorTest() {
     withReport(SimpleReport()) {
       val f12 = VActor("File",
-                       "org/kopi/galite/Window",
+                       "org/kopi/galite/visual/Window",
                        "GotoShortcuts",
-                       "org/kopi/galite/Window",
+                       "org/kopi/galite/visual/Window",
                        null,
                        KeyEvent.VK_F12,
                        0)

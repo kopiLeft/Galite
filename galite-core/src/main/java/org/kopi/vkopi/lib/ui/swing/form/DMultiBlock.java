@@ -31,14 +31,14 @@ import javax.swing.border.EmptyBorder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.kopi.galite.base.UComponent;
-import org.kopi.galite.form.Alignment;
-import org.kopi.galite.form.LayoutManager;
-import org.kopi.galite.form.UMultiBlock;
-import org.kopi.galite.form.VBlock;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.ViewBlockAlignment;
-import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.base.UComponent;
+import org.kopi.galite.visual.form.Alignment;
+import org.kopi.galite.visual.form.LayoutManager;
+import org.kopi.galite.visual.form.UMultiBlock;
+import org.kopi.galite.visual.form.VBlock;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.ViewBlockAlignment;
+import org.kopi.galite.visual.visual.VRuntimeException;
 
 public class DMultiBlock extends DChartBlock implements UMultiBlock {
 
