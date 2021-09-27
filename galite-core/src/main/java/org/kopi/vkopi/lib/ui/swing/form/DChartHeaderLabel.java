@@ -26,8 +26,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.UIManager;
 
-import org.kopi.galite.form.UChartLabel;
-import org.kopi.galite.form.VBlock;
+import org.kopi.galite.visual.form.UChartLabel;
+import org.kopi.galite.visual.form.VBlock;
 
 public class DChartHeaderLabel extends DLabel implements UChartLabel {
 

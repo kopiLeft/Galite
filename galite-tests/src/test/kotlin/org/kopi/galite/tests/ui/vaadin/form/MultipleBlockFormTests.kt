@@ -30,7 +30,7 @@ import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.form.DGridBlock
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 
 import com.github.mvysny.kaributesting.v10.expectRow
 

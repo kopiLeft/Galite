@@ -30,9 +30,9 @@ import java.awt.Toolkit;
 import javax.swing.JScrollBar;
 import javax.swing.UIManager;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.Alignment;
-import org.kopi.galite.form.LayoutManager;
+import org.kopi.galite.visual.form.Alignment;
+import org.kopi.galite.visual.form.LayoutManager;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 
 /**
  *

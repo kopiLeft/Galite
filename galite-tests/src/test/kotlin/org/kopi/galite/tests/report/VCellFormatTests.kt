@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests.report
 
-import org.junit.Test
-import org.kopi.galite.report.VCellFormat
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.report.VCellFormat
 
 class VCellFormatTests {
   @Test

@@ -36,7 +36,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.visual.MessageCode;
 
 /**
  * This class displays a window with a menu, a tool bar, a content panel

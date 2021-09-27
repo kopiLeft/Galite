@@ -19,10 +19,10 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
 import org.kopi.galite.tests.report.SimpleReport
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.ReportSelectionForm
+import org.kopi.galite.visual.report.Report
 
 class FormWithReport : ReportSelectionForm() {
   override val locale = Locale.UK

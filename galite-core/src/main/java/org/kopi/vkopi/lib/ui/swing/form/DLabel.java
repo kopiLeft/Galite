@@ -25,9 +25,9 @@ import java.awt.Font;
 import javax.swing.JToolTip;
 import javax.swing.UIManager;
 
-import org.kopi.galite.form.ULabel;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VField;
+import org.kopi.galite.visual.form.ULabel;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VField;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldLabel;
 import org.kopi.vkopi.lib.ui.swing.base.MultiLineToolTip;
 

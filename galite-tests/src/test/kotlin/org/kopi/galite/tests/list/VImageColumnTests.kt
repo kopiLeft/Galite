@@ -17,10 +17,10 @@
 
 package org.kopi.galite.tests.list
 
-import org.junit.Test
-import org.kopi.galite.list.VImageColumn
-
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.list.VImageColumn
 
 class VImageColumnTests {
   @Test

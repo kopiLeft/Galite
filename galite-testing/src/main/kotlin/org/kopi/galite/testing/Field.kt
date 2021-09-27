@@ -16,20 +16,20 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.form.UField
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.dsl.FormField
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.ui.vaadin.field.BooleanField
-import org.kopi.galite.ui.vaadin.field.InputTextField
-import org.kopi.galite.ui.vaadin.field.TextField
-import org.kopi.galite.ui.vaadin.field.VTimeStampField
-import org.kopi.galite.ui.vaadin.form.DField
-import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTimestampField
-import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.dsl.FormField
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.ui.vaadin.field.BooleanField
+import org.kopi.galite.visual.ui.vaadin.field.InputTextField
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
+import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorBooleanField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimestampField
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._fireDomEvent

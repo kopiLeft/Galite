@@ -21,13 +21,13 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Command
-import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.DATE
-import org.kopi.galite.domain.INT
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.report.FieldAlignment
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.domain.DATE
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.report.FieldAlignment
+import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.report.VReport
 
 /**
  * Command Report

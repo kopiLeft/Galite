@@ -18,19 +18,19 @@ package org.kopi.galite.tests.ui.swing
 
 import java.util.Locale
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.chart.VChart
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.util.Rexec
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.ImageHandler
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.chart.VChart
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.util.Rexec
+import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.visual.ImageHandler
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.WindowController
 import org.kopi.vkopi.lib.ui.swing.chart.DChart
 import org.kopi.vkopi.lib.ui.swing.report.DReport
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
