@@ -25,7 +25,7 @@ open class Registry(val domain: String, private var parents: Array<Registry>?) {
   var dependencies = Hashtable<String, String>()
 
   init {
-    dependencies[VISUAL_DOMAIN] = "org.kopi.galite.visual.visual" + ".Messages"
+    dependencies[VISUAL_DOMAIN] = "org.kopi.galite.visual" + ".Messages"
   }
 
   /**
