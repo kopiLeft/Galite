@@ -15,18 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.FieldHandler
-import org.kopi.galite.form.UBlock
-import org.kopi.galite.form.UChartLabel
-import org.kopi.galite.form.UField
-import org.kopi.galite.form.ULabel
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VBooleanField
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VImageField
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
+import org.kopi.galite.visual.form.FieldHandler
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UChartLabel
+import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.ULabel
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 
 /**
  * A row controller for the grid block implementation

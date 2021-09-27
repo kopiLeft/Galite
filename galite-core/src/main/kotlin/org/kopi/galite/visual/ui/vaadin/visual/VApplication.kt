@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.sql.SQLException
 import java.util.Date
@@ -23,41 +23,41 @@ import java.util.Locale
 import java.util.MissingResourceException
 import java.util.ResourceBundle
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.print.PrintManager
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
-import org.kopi.galite.ui.vaadin.base.FontMetrics
-import org.kopi.galite.ui.vaadin.base.StylesInjector
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.main.MainWindowListener
-import org.kopi.galite.ui.vaadin.notif.NotificationListener
-import org.kopi.galite.ui.vaadin.notif.AbstractNotification
-import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.ui.vaadin.notif.InformationNotification
-import org.kopi.galite.ui.vaadin.notif.WarningNotification
-import org.kopi.galite.ui.vaadin.welcome.WelcomeView
-import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
-import org.kopi.galite.ui.vaadin.window.Window
-import org.kopi.galite.visual.Application
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.ImageHandler
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.MessageListener
-import org.kopi.galite.visual.PrinterManager
-import org.kopi.galite.visual.Registry
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.print.PrintManager
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.FontMetrics
+import org.kopi.galite.visual.ui.vaadin.base.StylesInjector
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.main.MainWindowListener
+import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.visual.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.visual.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.visual.ui.vaadin.notif.WarningNotification
+import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
+import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeViewEvent
+import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.Application
+import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.visual.ImageHandler
+import org.kopi.galite.visual.visual.Message
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.MessageListener
+import org.kopi.galite.visual.visual.PrinterManager
+import org.kopi.galite.visual.visual.Registry
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.visual.WindowController
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component

@@ -15,19 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.util.ArrayList
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VField
-import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.base.Utils
 
-import com.vaadin.flow.data.binder.HasItemComponents
 import com.vaadin.flow.data.provider.InMemoryDataProvider
-import com.vaadin.flow.dom.Element
 
 /**
  * Data source container for grid block

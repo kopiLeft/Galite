@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VlibProperties
 
 class VDefaultChartActor(menuIdent: String,
                          actorIdent: String,

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.awt.event.KeyEvent
 import java.io.File
@@ -24,36 +24,35 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
-import org.apache.poi.ss.formula.functions.T
-
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
-
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.cross.VDynamicReport
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VField
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.print.Printable
-import org.kopi.galite.print.Printable.Companion.DOC_UNKNOWN
-import org.kopi.galite.type.Date
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
 import kotlin.jvm.Throws
+
+import org.apache.poi.ss.formula.functions.T
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.cross.VDynamicReport
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.print.Printable
+import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.visual.Message
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VHelpViewer
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.visual.WindowBuilder
+import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Represents a report model.
@@ -69,17 +68,19 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
     const val TYP_XLSX = 4
 
     init {
-      WindowController.windowController.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT,
-                                                              object : WindowBuilder {
-                                                                override fun createWindow(model: VWindow): UWindow {
-                                                                  return UIFactory.uiFactory.createView(
-                                                                          model) as UReport
-                                                                }
-                                                              })
+      WindowController.windowController.registerWindowBuilder(
+        org.kopi.galite.visual.visual.Constants.MDL_REPORT,
+        object : WindowBuilder {
+          override fun createWindow(model: VWindow): UWindow {
+            return UIFactory.uiFactory.createView(
+              model) as UReport
+          }
+        }
+      )
     }
   }
 
-  override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
+  override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_REPORT
 
   /**
    * Redisplay the report after change in formatting
@@ -194,7 +195,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
 
     if (enable) {
       // we need to check if VKT_Triggers is initialized
-      // ex : org.kopi.galite.cross.VDynamicReport
+      // ex : org.kopi.galite.visual.cross.VDynamicReport
       if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
 
         val active: Boolean = try {

@@ -15,9 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.visual.ui.vaadin.menu
 
-import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon

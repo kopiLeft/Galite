@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.io.Serializable
 
@@ -24,14 +24,14 @@ import javax.swing.event.EventListenerList
 
 import kotlin.math.max
 
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VExecFailedException
+
 import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
-
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
 
 class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
@@ -191,9 +191,10 @@ class MReport : Constants, Serializable {
             functions[i] = SUM
           }
           else -> {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00061",
-                                                              "${params[i]}\n",
-                                                              "Cx, maxCx, minCx, ovrCx, sumCx"))
+            throw VExecFailedException(
+              MessageCode.getMessage("VIS-00061",
+                                     "${params[i]}\n",
+                                     "Cx, maxCx, minCx, ovrCx, sumCx"))
           }
         }
       } catch (e: NumberFormatException) {

@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
-
-import org.kopi.galite.util.PPaperType
+package org.kopi.galite.visual.report
 
 import java.io.Serializable
+
+import org.kopi.galite.visual.util.PPaperType
 
 /**
  * PConfig Class that allows to set the configuration parameters

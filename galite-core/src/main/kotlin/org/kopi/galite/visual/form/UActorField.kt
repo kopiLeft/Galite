@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 /**
  * This is a marker interface to handle actor fields differently in

@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.swing.visual
+package org.kopi.galite.visual.ui.swing.visual
 
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
@@ -24,6 +24,7 @@ import java.awt.event.KeyEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.sql.SQLException
+
 import javax.swing.AbstractAction
 import javax.swing.ImageIcon
 import javax.swing.JOptionPane
@@ -40,16 +41,16 @@ import javax.swing.tree.TreePath
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.Favorites
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.Message.getMessage
-import org.kopi.galite.visual.Module
-import org.kopi.galite.visual.UMenuTree
-import org.kopi.galite.visual.UMenuTree.UBookmarkPanel
-import org.kopi.galite.visual.UMenuTree.UTree
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VlibProperties.getString
+import org.kopi.galite.visual.db.Favorites
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.Message.getMessage
+import org.kopi.galite.visual.visual.Module
+import org.kopi.galite.visual.visual.UMenuTree
+import org.kopi.galite.visual.visual.UMenuTree.UBookmarkPanel
+import org.kopi.galite.visual.visual.UMenuTree.UTree
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.visual.VlibProperties.getString
 import org.kopi.vkopi.lib.ui.swing.base.Utils
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication

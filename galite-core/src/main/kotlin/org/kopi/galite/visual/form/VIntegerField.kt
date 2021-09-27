@@ -16,17 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KClass
 
-import org.kopi.galite.db.Query
-import org.kopi.galite.list.VIntegerColumn
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.db.Query
+import org.kopi.galite.visual.list.VIntegerColumn
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  * @param     width

@@ -15,22 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.form.Alignment
-import org.kopi.galite.form.VActorField
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VBooleanField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.block.BlockLayout
-import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.form.Alignment
+import org.kopi.galite.visual.form.VActorField
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.ColumnResizeEvent

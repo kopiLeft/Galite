@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.visual.form.dsl
 
 import org.jetbrains.exposed.sql.Column
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.type.Type0
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.type.Type0
 
 /**
  * This class represents a must-fill form field.

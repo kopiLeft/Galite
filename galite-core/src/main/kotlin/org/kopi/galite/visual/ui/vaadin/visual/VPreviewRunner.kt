@@ -15,14 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.preview.VPreviewWindow
-import org.kopi.galite.print.PSPrintException
-import org.kopi.galite.util.AbstractPrinter
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.visual.PreviewRunner
-import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.preview.VPreviewWindow
+import org.kopi.galite.visual.print.PSPrintException
+import org.kopi.galite.visual.util.AbstractPrinter
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.visual.PreviewRunner
+import org.kopi.galite.visual.visual.VException
 
 /**
  * The `VPreviewRunner` is the vaadin implementation of the

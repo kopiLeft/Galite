@@ -47,32 +47,31 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.DefaultEditorKit;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.BlockListener;
-import org.kopi.galite.form.BlockRecordListener;
-import org.kopi.galite.form.UBlock;
-import org.kopi.galite.form.UForm;
-import org.kopi.galite.form.VBlock;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldException;
-import org.kopi.galite.form.VForm;
+import org.kopi.galite.visual.form.BlockListener;
+import org.kopi.galite.visual.form.BlockRecordListener;
+import org.kopi.galite.visual.form.UBlock;
+import org.kopi.galite.visual.form.UForm;
+import org.kopi.galite.visual.form.VBlock;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldException;
+import org.kopi.galite.visual.form.VForm;
+import org.kopi.galite.visual.type.Date;
+import org.kopi.galite.visual.type.Time;
+import org.kopi.galite.visual.util.AWTToPS;
+import org.kopi.galite.visual.util.PrintJob;
+import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.visual.visual.Action;
+import org.kopi.galite.visual.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.visual.DPositionPanelListener;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VExecFailedException;
+import org.kopi.galite.visual.visual.VRuntimeException;
+import org.kopi.galite.visual.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.visual.DPositionPanel;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.util.AWTToPS;
-import org.kopi.galite.util.PrintJob;
-import org.kopi.galite.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.DPositionPanelListener;
-import org.kopi.galite.visual.Action;
-import org.kopi.galite.visual.PropertyException;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VExecFailedException;
-import org.kopi.galite.visual.VRuntimeException;
-import org.kopi.galite.visual.VlibProperties;
-import org.kopi.galite.type.Date;
-import org.kopi.galite.type.Time;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -290,7 +289,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
     /**
      * start a block and enter in the good field (rec)
      *
-     * @exception org.kopi.galite.visual.VException    an exception may be raised by triggers
+     * @exception VException    an exception may be raised by triggers
      */
     @SuppressWarnings("deprecation")
     public void run() throws VException {
@@ -704,7 +703,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
         File file;
 
         try {
-            file = org.kopi.galite.base.Utils.Companion.getTempFile("kopi", "srn");
+            file = org.kopi.galite.visual.base.Utils.Companion.getTempFile("kopi", "srn");
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 

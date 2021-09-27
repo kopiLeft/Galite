@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.l10n
+package org.kopi.galite.visual.l10n
 
 class LocalizationCheckerOptions {
 

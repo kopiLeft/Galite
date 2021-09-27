@@ -15,17 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
+package org.kopi.galite.visual.cross
 
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VDictionaryForm
-import org.kopi.galite.form.VForm
-import org.kopi.galite.report.VNoRowException
-import org.kopi.galite.report.VReport
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VDictionaryForm
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.report.VNoRowException
+import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.visual.Message
+import org.kopi.galite.visual.visual.MessageCode
 
 abstract class VReportSelectionForm : VDictionaryForm {
   protected constructor()

@@ -15,9 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.common
+package org.kopi.galite.visual.ui.vaadin.common
 
-import org.kopi.galite.ui.vaadin.label.Label
+import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasSize

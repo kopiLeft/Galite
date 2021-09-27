@@ -15,21 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.sql.SQLException
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.db.DBDeadLockException
-import org.kopi.galite.db.DBInterruptionException
-import org.kopi.galite.db.transaction
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.db.DBDeadLockException
+import org.kopi.galite.visual.db.DBInterruptionException
+import org.kopi.galite.visual.db.transaction
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Message
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  * This class implements predefined commands
@@ -548,13 +548,14 @@ object Commands : VConstants {
     val f = b.activeField
 
     if (f != null) {
-      val v: Int = VListDialog(VlibProperties.getString("search_operator"), arrayOf(
-              VlibProperties.getString("operator_eq"),
-              VlibProperties.getString("operator_lt"),
-              VlibProperties.getString("operator_gt"),
-              VlibProperties.getString("operator_le"),
-              VlibProperties.getString("operator_ge"),
-              VlibProperties.getString("operator_ne")
+      val v: Int = VListDialog(
+        VlibProperties.getString("search_operator"), arrayOf(
+          VlibProperties.getString("operator_eq"),
+          VlibProperties.getString("operator_lt"),
+          VlibProperties.getString("operator_gt"),
+          VlibProperties.getString("operator_le"),
+          VlibProperties.getString("operator_ge"),
+          VlibProperties.getString("operator_ne")
       )).selectFromDialog(b.form, f)
       if (v != -1) {
         f.setSearchOperator(v)
@@ -590,9 +591,10 @@ object Commands : VConstants {
     val sel: Int = when (otherBlocks) {
       0 -> -1
       1 -> 0
-      else -> VListDialog(VlibProperties.getString("pick_in_list"),
-                          titleTable,
-                          otherBlocks).selectFromDialog(b.form, null, null)
+      else -> VListDialog(
+        VlibProperties.getString("pick_in_list"),
+        titleTable,
+        otherBlocks).selectFromDialog(b.form, null, null)
     }
     if (sel < 0) {
       b.form.gotoBlock(b)

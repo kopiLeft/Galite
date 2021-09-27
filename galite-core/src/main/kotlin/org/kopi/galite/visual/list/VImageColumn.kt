@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.visual.list
 
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.visual.ImageHandler
 
 class VImageColumn(title: String, column: Column<*>?, sortAscending: Boolean)
   : VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {

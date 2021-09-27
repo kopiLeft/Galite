@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VScrollablePanel
-import org.kopi.galite.ui.vaadin.block.Block
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
+import org.kopi.galite.visual.ui.vaadin.block.Block
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle

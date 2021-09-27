@@ -19,7 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.visual.form.VFieldUI;
 
 /**
  * DField is a panel composed in a text field and an information panel

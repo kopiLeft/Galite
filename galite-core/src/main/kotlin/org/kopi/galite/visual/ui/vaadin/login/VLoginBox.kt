@@ -15,16 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.login
+package org.kopi.galite.visual.ui.vaadin.login
 
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VHiddenSeparator
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.base.VInputLabel
-import org.kopi.galite.ui.vaadin.base.VInputPassword
-import org.kopi.galite.ui.vaadin.base.VInputText
-import org.kopi.galite.ui.vaadin.common.VSelect
-import org.kopi.galite.ui.vaadin.common.VSimpleTable
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.VHiddenSeparator
+import org.kopi.galite.visual.ui.vaadin.base.VInputButton
+import org.kopi.galite.visual.ui.vaadin.base.VInputLabel
+import org.kopi.galite.visual.ui.vaadin.base.VInputPassword
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
+import org.kopi.galite.visual.ui.vaadin.common.VSelect
+import org.kopi.galite.visual.ui.vaadin.common.VSimpleTable
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable

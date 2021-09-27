@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.chart
+package org.kopi.galite.visual.ui.vaadin.chart
 
 import java.awt.Color
 import java.io.OutputStream
@@ -26,19 +26,19 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
-import org.kopi.galite.chart.UChartType
-import org.kopi.galite.chart.VDataSeries
-import org.kopi.galite.chart.VPrintOptions
-import org.kopi.galite.chart.VDimensionData
+import org.kopi.galite.visual.chart.UChartType
+import org.kopi.galite.visual.chart.VDataSeries
+import org.kopi.galite.visual.chart.VDimensionData
+import org.kopi.galite.visual.chart.VPrintOptions
 
-import com.github.appreciated.apexcharts.config.chart.Type
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
-import com.github.appreciated.apexcharts.helper.Series
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.github.appreciated.apexcharts.ApexCharts
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder
 import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder
 import com.github.appreciated.apexcharts.config.builder.XAxisBuilder
+import com.github.appreciated.apexcharts.config.chart.Type
+import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
+import com.github.appreciated.apexcharts.helper.Series
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.

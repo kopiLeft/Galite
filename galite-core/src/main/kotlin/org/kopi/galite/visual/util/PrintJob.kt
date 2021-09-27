@@ -16,20 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
-import java.io.InputStream
-import java.io.File
 import java.io.ByteArrayInputStream
-import java.io.OutputStream
-import java.io.FileOutputStream
-import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+
+import org.kopi.galite.visual.base.Utils
 
 import com.lowagie.text.PageSize
 import com.lowagie.text.Rectangle
-
-import org.kopi.galite.base.Utils
 
 /**
  * PPage/Report creates a PrintJob

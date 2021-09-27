@@ -15,13 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.chart
+package org.kopi.galite.visual.ui.vaadin.chart
 
-import org.kopi.galite.chart.CConstants
-import org.kopi.galite.chart.ChartTypeFactory
-import org.kopi.galite.chart.UChartType
-import org.kopi.galite.chart.VChartType
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.chart.CConstants
+import org.kopi.galite.visual.chart.ChartTypeFactory
+import org.kopi.galite.visual.chart.UChartType
+import org.kopi.galite.visual.chart.VChartType
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class VChartTypeFactory : ChartTypeFactory() {
   override fun createTypeView(title: String, model: VChartType): UChartType {

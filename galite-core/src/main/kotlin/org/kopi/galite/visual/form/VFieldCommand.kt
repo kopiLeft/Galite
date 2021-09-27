@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.io.Serializable
 
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpGenerator
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ActionHandler
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VHelpGenerator
 
 class VFieldCommand(private val form: VForm,
                     type: Int)

@@ -15,16 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.form.VConstants.Companion.MOD_UPDATE
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VWindow
 
 abstract class VDictionaryForm : VForm, VDictionary {
 

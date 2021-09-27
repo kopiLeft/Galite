@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.lpr
+package org.kopi.galite.visual.util.lpr
 
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
@@ -124,7 +124,7 @@ class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(n
   }
 
   override fun usage() {
-    System.err.println("usage: org.kopi.galite.util.lpr.LpR.Main [options] <files>")
+    System.err.println("usage: org.kopi.galite.visual.util.lpr.LpR.Main [options] <files>")
   }
 
   override val longOptions: Array<LongOpt?>

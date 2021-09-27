@@ -15,13 +15,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
 import java.io.Serializable
 
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.Field
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.field.Field
 
 /**
  * A chart column.

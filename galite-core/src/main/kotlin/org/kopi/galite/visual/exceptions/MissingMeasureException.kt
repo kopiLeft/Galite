@@ -15,11 +15,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.exceptions
-
-import org.kopi.galite.chart.ChartMeasure
+package org.kopi.galite.visual.exceptions
 
 import java.lang.IllegalArgumentException
+
+import org.kopi.galite.visual.chart.ChartMeasure
 
 /**
  * Thrown to indicate that a [ChartMeasure] value has not been provided to a dimension.

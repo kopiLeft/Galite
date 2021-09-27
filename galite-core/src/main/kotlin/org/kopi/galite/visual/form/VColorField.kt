@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.awt.Color
 import java.io.ByteArrayInputStream
@@ -24,11 +24,11 @@ import java.io.InputStream
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.db.Query
-import org.kopi.galite.list.VColorColumn
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.db.Query
+import org.kopi.galite.visual.list.VColorColumn
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VlibProperties
 
 class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 

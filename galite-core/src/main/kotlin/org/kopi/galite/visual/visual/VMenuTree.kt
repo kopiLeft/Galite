@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.awt.event.KeyEvent
 import java.sql.SQLException
@@ -29,7 +29,6 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.innerJoin
@@ -38,21 +37,20 @@ import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.kopi.galite.base.Utils
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.FAVORITENId
-import org.kopi.galite.db.Favorites
-import org.kopi.galite.db.GroupParties
-import org.kopi.galite.db.GroupRights
-import org.kopi.galite.db.Groups
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.Symbols
-import org.kopi.galite.db.UserRights
-import org.kopi.galite.db.Users
-import org.kopi.galite.db.subQuery
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.FAVORITENId
+import org.kopi.galite.visual.db.Favorites
+import org.kopi.galite.visual.db.GroupParties
+import org.kopi.galite.visual.db.GroupRights
+import org.kopi.galite.visual.db.Groups
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.Symbols
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.db.subQuery
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents a menu tree model.
@@ -113,10 +111,11 @@ class VMenuTree constructor(ctxt: DBContext?,
     const val ADMIN_MENU = -3
     const val BOOKMARK_MENU = -4
     private val ROOT_MENUS = arrayOf(
-            RootMenu(MAIN_MENU, "forms"),
-            RootMenu(USER_MENU, "user"),
-            RootMenu(ADMIN_MENU, "admin"))
-    private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/Menu"
+      RootMenu(MAIN_MENU, "forms"),
+      RootMenu(USER_MENU, "user"),
+      RootMenu(ADMIN_MENU, "admin")
+    )
+    private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/Menu"
 
     init {
       WindowController.windowController.registerWindowBuilder(Constants.MDL_MENU_TREE, object : WindowBuilder {
@@ -173,10 +172,12 @@ class VMenuTree constructor(ctxt: DBContext?,
     try {
       super.localizeActors(manager) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
-      ApplicationContext.reportTrouble("MenuTree Actor localization",
-                                       "MenuTreeModel.localize",
-                                       e.message,
-                                       e)
+      ApplicationContext.reportTrouble(
+        "MenuTree Actor localization",
+        "MenuTreeModel.localize",
+        e.message,
+        e
+      )
       exitProcess(1)
     }
     manager = null
@@ -327,14 +328,16 @@ class VMenuTree constructor(ctxt: DBContext?,
    * This is used to keep compatibility with swing implementation
    */
   private fun createTopLevelTree() {
-    root = DefaultMutableTreeNode(Module(0,
-                                         0,
-                                         VlibProperties.getString("PROGRAM"),
-                                         VlibProperties.getString("program"),
-                                         null,
-                                         Module.ACS_PARENT,
-                                         Int.MAX_VALUE,
-                                         null))
+    root = DefaultMutableTreeNode(
+      Module(0,
+             0,
+             VlibProperties.getString("PROGRAM"),
+             VlibProperties.getString("program"),
+             null,
+             Module.ACS_PARENT,
+             Int.MAX_VALUE,
+             null)
+    )
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
         (root as DefaultMutableTreeNode).add(menu.root as DefaultMutableTreeNode)

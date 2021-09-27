@@ -15,18 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.awt.event.KeyEvent
 
-import org.kopi.galite.form.UChartLabel
-import org.kopi.galite.form.ULabel
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.ui.vaadin.grid.GridEditorLabel
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.form.UChartLabel
+import org.kopi.galite.visual.form.ULabel
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorLabel
+import org.kopi.galite.visual.visual.VActor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI

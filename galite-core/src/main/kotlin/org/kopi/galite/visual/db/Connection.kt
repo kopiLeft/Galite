@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.db
+package org.kopi.galite.visual.db
 
 import java.sql.Connection
 import java.sql.SQLException
@@ -31,7 +31,7 @@ import org.jetbrains.exposed.sql.statements.StatementContext
 import org.jetbrains.exposed.sql.statements.expandArgs
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * A connection maintain information about current context, underlying

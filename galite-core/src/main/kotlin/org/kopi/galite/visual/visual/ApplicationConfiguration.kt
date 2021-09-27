@@ -16,12 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import org.kopi.galite.util.Rexec
+package org.kopi.galite.visual.visual
 
 import java.io.File
+
 import kotlin.jvm.Throws
+
+import org.kopi.galite.visual.util.Rexec
 
 /**
  * Manages Application configuration data

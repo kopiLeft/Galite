@@ -15,13 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.main
+package org.kopi.galite.visual.ui.vaadin.main
 
-import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.ui.vaadin.common.VCaption
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.common.VCaption
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
 /**

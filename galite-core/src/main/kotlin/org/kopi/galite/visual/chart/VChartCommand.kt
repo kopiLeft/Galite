@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpGenerator
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ActionHandler
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VHelpGenerator
 
 class VChartCommand(private val chart: VChart, actor: VActor)
   : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {

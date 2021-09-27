@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.login
+package org.kopi.galite.visual.ui.vaadin.login
+
+import org.kopi.galite.visual.ui.vaadin.common.VSimpleTable
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.dependency.CssImport
-import org.kopi.galite.ui.vaadin.common.VSimpleTable
 
 /**
  * The login view containing the login panel box.

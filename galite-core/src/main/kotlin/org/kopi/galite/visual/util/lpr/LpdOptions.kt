@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.lpr
+package org.kopi.galite.visual.util.lpr
+
+import org.kopi.galite.visual.util.base.Options
 
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
-
-import org.kopi.galite.util.base.Options
 
 open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options(name) {
 
@@ -102,7 +102,7 @@ open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options
   }
 
   override fun usage() {
-    System.err.println("usage: org.kopi.galite.lpd.Dummy")
+    System.err.println("usage: org.kopi.galite.visual.lpd.Dummy")
   }
 
   override val longOptions: Array<LongOpt?>

@@ -21,7 +21,7 @@ package org.kopi.vkopi.lib.ui.swing.report;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.kopi.galite.report.MReport;
+import org.kopi.galite.visual.report.MReport;
 
 public class VTable extends AbstractTableModel {
 

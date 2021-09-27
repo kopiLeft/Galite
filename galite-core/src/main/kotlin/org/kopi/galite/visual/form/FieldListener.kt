@@ -15,11 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.VException
 import java.io.Serializable
 import java.util.EventListener
+
+import org.kopi.galite.visual.visual.VException
 
 interface FieldListener : EventListener, Serializable {
 

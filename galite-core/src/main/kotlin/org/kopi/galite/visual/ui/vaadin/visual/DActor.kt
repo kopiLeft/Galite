@@ -15,25 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.awt.Event
 import java.awt.event.KeyEvent
 
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
-import org.kopi.galite.visual.UActor
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.ui.vaadin.base.runAfterGetValue
-import org.kopi.galite.ui.vaadin.field.TextField
-import org.kopi.galite.ui.vaadin.form.DGridEditorField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
-import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.visual.ui.vaadin.actor.Actor
+import org.kopi.galite.visual.ui.vaadin.actor.VActorNavigationItem
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.base.runAfterGetValue
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
+import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.UActor
+import org.kopi.galite.visual.visual.VActor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent
@@ -64,7 +64,7 @@ class DActor(private var model: VActor)
           Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
-          UActor,
+  UActor,
           ComponentEventListener<ClickEvent<Button>> {
 
   var item: VActorNavigationItem? = null

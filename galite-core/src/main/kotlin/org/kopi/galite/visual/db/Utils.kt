@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.db
+package org.kopi.galite.visual.db
 
 import java.lang.RuntimeException
 
@@ -24,11 +24,11 @@ import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.selectAll
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
 
 class Utils {
   companion object {

@@ -15,26 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.io.File
 
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.menu.ModuleItem
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.wait.WaitWindow
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Module
-import org.kopi.galite.visual.RootMenu
-import org.kopi.galite.visual.UMenuTree
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
+import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.Module
+import org.kopi.galite.visual.visual.RootMenu
+import org.kopi.galite.visual.visual.UMenuTree
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI

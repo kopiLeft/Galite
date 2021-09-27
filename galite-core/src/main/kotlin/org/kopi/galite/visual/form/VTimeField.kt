@@ -16,17 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.db.Query
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.list.VTimeColumn
-import org.kopi.galite.type.Time
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.db.Query
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VTimeColumn
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VlibProperties
 
 class VTimeField(val bufferSize: Int) : VField(5, 1) {
 

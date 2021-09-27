@@ -16,10 +16,12 @@
  */
 package org.kopi.galite.tests.report
 
-import org.junit.Test
-import org.kopi.galite.report.ColumnStyle
 import java.awt.Color
+
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.report.ColumnStyle
 
 class ColumnStyleTests {
 

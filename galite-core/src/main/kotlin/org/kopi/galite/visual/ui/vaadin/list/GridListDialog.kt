@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.list
+package org.kopi.galite.visual.ui.vaadin.list
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.ui.vaadin.window.Window
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.base.VInputButton
+import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.ApplicationContext
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled

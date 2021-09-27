@@ -15,20 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.visual.common
 
-import java.util.Locale
-import java.util.Stack
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Locale
+import java.util.Stack
 
 import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
 import org.jetbrains.exposed.sql.Column
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Constructs a localization writer unit

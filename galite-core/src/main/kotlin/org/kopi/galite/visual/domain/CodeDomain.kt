@@ -15,17 +15,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain
+package org.kopi.galite.visual.domain
 
-import org.kopi.galite.common.CodeDescription
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.form.VBooleanCodeField
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFixnumCodeField
-import org.kopi.galite.form.VIntegerCodeField
-import org.kopi.galite.form.VStringCodeField
-import org.kopi.galite.form.dsl.FormField
-import org.kopi.galite.type.Decimal
+import org.kopi.galite.visual.common.CodeDescription
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.form.VBooleanCodeField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFixnumCodeField
+import org.kopi.galite.visual.form.VIntegerCodeField
+import org.kopi.galite.visual.form.VStringCodeField
+import org.kopi.galite.visual.form.dsl.FormField
+import org.kopi.galite.visual.type.Decimal
 
 /**
  * Represents a code domain.

@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.list.VBooleanColumn
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VBooleanColumn
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.visual.VlibProperties
 
 class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
                                                          "boolean",
@@ -57,7 +57,7 @@ class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
     * ----------------------------------------------------------------------
     */
 
-    private const val GENERAL_LOCALIZATION_RESOURCE = "org/kopi/galite/General"
+    private const val GENERAL_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/General"
     private val booleanNames = arrayOf("true", "false")
     private val booleanCodes = arrayOf(java.lang.Boolean.TRUE, java.lang.Boolean.FALSE)
   }

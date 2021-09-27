@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.chart
+package org.kopi.galite.visual.ui.vaadin.chart
 
-import org.kopi.galite.chart.ChartTypeFactory
-import org.kopi.galite.chart.UChart
-import org.kopi.galite.chart.UChartType
-import org.kopi.galite.chart.VChart
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.chart.ChartTypeFactory
+import org.kopi.galite.visual.chart.UChart
+import org.kopi.galite.visual.chart.UChartType
+import org.kopi.galite.visual.chart.VChart
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.visual.VWindow
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout

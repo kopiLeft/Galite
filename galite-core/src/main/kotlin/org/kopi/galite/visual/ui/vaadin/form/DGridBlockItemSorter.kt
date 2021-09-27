@@ -15,13 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
+
+import java.io.Serializable
+import java.util.*
+
+import org.kopi.galite.visual.form.VBlock
 
 import com.vaadin.flow.data.binder.PropertyDefinition
 import com.vaadin.flow.function.ValueProvider
-import org.kopi.galite.form.VBlock
-import java.io.Serializable
-import java.util.*
 
 /**
  * An item sorter implementation for the grid block. Constructs a DefaultItemSorter using the default `Comparator`

@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.visual.base
 
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.DataInputStream
 import java.io.File
 import java.io.FileInputStream
-import java.io.InputStream
-import java.io.ByteArrayInputStream
-import java.io.PrintWriter
 import java.io.FileWriter
 import java.io.IOException
+import java.io.InputStream
+import java.io.PrintWriter
 import java.io.UnsupportedEncodingException
-import java.io.DataInputStream
 import java.net.URL
 import java.nio.charset.Charset
 import java.util.ArrayList
@@ -35,20 +35,20 @@ import java.util.Date
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * loading of image
  * usage:
  * To load image first in Application directory, then in default directory:
  * Utils.getImage("name")
- * To load default images (that appear in resources/org/kopi/galite)
+ * To load default images (that appear in resources/org/kopi/galite/visual)
  * Utils.getDefaultImage("name")
  * To load Application images (that appear in resources)
  * Utils.getApplicationImage("name")
  *
  */
-open class Utils : org.kopi.galite.util.base.Utils() {
+open class Utils : org.kopi.galite.visual.util.base.Utils() {
   companion object {
     /**
      * Compress a file in a byte[]
@@ -236,7 +236,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
     // ----------------------------------------------------------------------
 
     const val APPLICATION_DIR = "resources"
-    const val RESOURCE_DIR = "org/kopi/galite"
+    const val RESOURCE_DIR = "org/kopi/galite/visual"
     private val DEFAULT_VERSION = arrayOf(
             "No version information available.",
             "Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN. All rights reserved.",

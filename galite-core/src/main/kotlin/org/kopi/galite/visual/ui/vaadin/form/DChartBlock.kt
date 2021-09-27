@@ -15,20 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.form.Alignment
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.block.BlockLayout
-import org.kopi.galite.ui.vaadin.block.BlockListener
-import org.kopi.galite.ui.vaadin.block.ChartBlockLayout
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.form.Alignment
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.ui.vaadin.block.BlockListener
+import org.kopi.galite.visual.ui.vaadin.block.ChartBlockLayout
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
 
 import com.vaadin.flow.component.Component
 

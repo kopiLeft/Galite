@@ -20,8 +20,8 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.logout
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.welcome.WelcomeView
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne

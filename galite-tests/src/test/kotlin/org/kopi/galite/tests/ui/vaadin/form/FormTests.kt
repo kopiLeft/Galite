@@ -38,9 +38,9 @@ import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.common.VCaption
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.main.VWindowContainer
+import org.kopi.galite.visual.ui.vaadin.common.VCaption
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get

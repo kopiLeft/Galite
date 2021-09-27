@@ -20,13 +20,12 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
 import org.kopi.galite.demo.Product
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.report.VReport
 
 /**
  * Product Report

@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
-import org.kopi.galite.base.UComponent
+import org.kopi.galite.visual.base.UComponent
 
 /**
  * `UWindow` is the top-level interface that must be implemented
  * by all windows. It is the visual component of the [VWindow] model.
  */
 interface UWindow : UComponent, VActionListener, ModelCloseListener, WaitDialogListener,
-        WaitInfoListener, ProgressDialogListener, FileProductionListener {
+  WaitInfoListener, ProgressDialogListener, FileProductionListener {
   /**
    * Starts the window view
    */

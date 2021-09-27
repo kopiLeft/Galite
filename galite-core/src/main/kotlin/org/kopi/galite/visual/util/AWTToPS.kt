@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
 import java.awt.Color
 import java.awt.Font
@@ -35,8 +35,8 @@ import java.text.AttributedCharacterIterator
 
 import kotlin.experimental.or
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.util.base.NotImplementedException
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.NotImplementedException
 
 /**
  * A class to paint in a postscript file instead of screen
@@ -574,7 +574,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   override fun drawString(iterator: AttributedCharacterIterator,
                           x: Int,
                           y: Int) {
-    System.err.println("the function drawString in kopi/galite/report/AWTToPS")
+    System.err.println("the function drawString in kopi/galite/visual/report/AWTToPS")
   }
 
   /**

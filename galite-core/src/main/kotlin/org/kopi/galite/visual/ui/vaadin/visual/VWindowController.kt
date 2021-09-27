@@ -15,22 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.common.Window
-import org.kopi.galite.preview.VPreviewWindow
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
-import org.kopi.galite.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.preview.VPreviewWindow
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VHelpViewer
+import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.WindowController
 
 /**
  * The `VWindowController` is the vaadin implementation
@@ -72,7 +71,8 @@ class VWindowController : WindowController() {
         if (application != null) {
           if (model is VPreviewWindow
             || model is VHelpViewer
-            || model is VMenuTree) {
+            || model is VMenuTree
+          ) {
             showNotModalPopupWindow(view, model.getTitle())
           } else {
             application.addWindow(view, model.getTitle())

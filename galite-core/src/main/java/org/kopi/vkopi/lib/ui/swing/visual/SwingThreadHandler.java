@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.kopi.galite.visual.ApplicationContext;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VRuntimeException;
 
 /**
  * Helps to run code in the Event dispatch Thread. Subclass it

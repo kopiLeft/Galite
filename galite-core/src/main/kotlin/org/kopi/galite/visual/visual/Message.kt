@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.util.Locale
 
-import org.kopi.galite.base.ExtendedMessageFormat
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.base.ExtendedMessageFormat
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * This class handles localized messages
@@ -83,5 +83,5 @@ object Message {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private const val VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE = "org/kopi/galite/VKMessages"
+  private const val VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/VKMessages"
 }

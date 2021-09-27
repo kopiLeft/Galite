@@ -15,32 +15,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain
+package org.kopi.galite.visual.domain
 
-import org.joda.time.DateTime
 import kotlin.reflect.KClass
 
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.form.VBooleanField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VDateField
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFixnumField
-import org.kopi.galite.form.VImageField
-import org.kopi.galite.form.VIntegerField
-import org.kopi.galite.form.VMonthField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTimeField
-import org.kopi.galite.form.VTimestampField
-import org.kopi.galite.form.VWeekField
-import org.kopi.galite.form.dsl.FormField
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Image
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.joda.time.DateTime
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VDateField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.form.VIntegerField
+import org.kopi.galite.visual.form.VMonthField
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.form.VTimeField
+import org.kopi.galite.visual.form.VTimestampField
+import org.kopi.galite.visual.form.VWeekField
+import org.kopi.galite.visual.form.dsl.FormField
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Image
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
 
 /**
  * A domain is a data type with predefined list of allowed values.

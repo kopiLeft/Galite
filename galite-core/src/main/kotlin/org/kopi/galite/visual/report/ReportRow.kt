@@ -15,9 +15,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
-import org.kopi.galite.type.Type0
+import org.kopi.galite.visual.type.Type0
 
 /**
  * Represents a data row of a [Report].

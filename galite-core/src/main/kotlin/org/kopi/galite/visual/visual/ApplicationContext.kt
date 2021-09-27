@@ -16,24 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.io.CharArrayWriter
-import java.io.StringWriter
-import java.io.PrintWriter
-import java.io.InputStreamReader
 import java.io.FileWriter
 import java.io.IOException
+import java.io.InputStreamReader
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.net.NetworkInterface
 import java.net.SocketException
-import java.util.Locale
 import java.util.Date
+import java.util.Locale
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.base.Utils
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.mailer.Mailer
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.mailer.Mailer
 
 /**
  * `ApplicationContext` is an application context that contains the

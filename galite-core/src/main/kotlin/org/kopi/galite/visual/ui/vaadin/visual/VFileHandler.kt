@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-import org.kopi.galite.ui.vaadin.upload.FileUploader
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.visual.UWindow
 
 class VFileHandler : FileHandler() {
 

@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.awt.Color
 import java.io.Serializable
 
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Date
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.visual.VExecFailedException
 
 interface PredefinedValueHandler : Serializable {
 

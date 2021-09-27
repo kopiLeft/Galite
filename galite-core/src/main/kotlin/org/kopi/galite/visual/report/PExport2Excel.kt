@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.awt.Color
 import java.io.OutputStream
@@ -25,24 +25,23 @@ import java.util.GregorianCalendar
 
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.DataFormat
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.PrintSetup
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Workbook
-import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
-
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.report.UReport.UTable
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.visual.report.UReport.UTable
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VlibProperties
 
 abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig, title: String)
   : PExport(table, model, printConfig, title), Constants {

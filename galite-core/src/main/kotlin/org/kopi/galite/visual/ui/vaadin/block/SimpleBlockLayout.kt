@@ -15,14 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.block
+package org.kopi.galite.visual.ui.vaadin.block
 
-import org.kopi.galite.form.VField
-import org.kopi.galite.ui.vaadin.form.DActorField
-import org.kopi.galite.ui.vaadin.form.DBlock
-import org.kopi.galite.ui.vaadin.form.DField
-import org.kopi.galite.ui.vaadin.form.DGridMultiBlock
-import org.kopi.galite.ui.vaadin.label.Label
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.form.DActorField
+import org.kopi.galite.visual.ui.vaadin.form.DBlock
+import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.form.DGridMultiBlock
+import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout.FormItem

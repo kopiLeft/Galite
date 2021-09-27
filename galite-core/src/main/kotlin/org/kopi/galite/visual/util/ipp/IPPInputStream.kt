@@ -16,13 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.ipp
+package org.kopi.galite.visual.util.ipp
 
-import org.kopi.galite.util.base.InconsistencyException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
+
 import kotlin.experimental.or
+
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class IPPInputStream(private val inputStream: InputStream) {
 

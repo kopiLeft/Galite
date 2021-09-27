@@ -15,14 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.login
+package org.kopi.galite.visual.ui.vaadin.login
+
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.event.LoginWindowListener
 
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.progressbar.ProgressBar
 import com.vaadin.flow.dom.DomEvent
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.event.LoginWindowListener
 
 /**
  * The login window box used for identification of the user.

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 interface Constants {
   companion object {
@@ -58,6 +58,6 @@ interface Constants {
     // ---------------------------------------------------------------------
     // Resource Dir
     // ---------------------------------------------------------------------
-    const val RESOURCE_DIR = "org/kopi/galite/util"
+    const val RESOURCE_DIR = "org/kopi/galite/visual/util"
   }
 }

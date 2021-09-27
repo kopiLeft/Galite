@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
-
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VException
+package org.kopi.galite.visual.form
 
 import kotlin.jvm.Throws
+
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.visual.VException
 
 /**
  * `UForm` is the top-level interface that must be implemented

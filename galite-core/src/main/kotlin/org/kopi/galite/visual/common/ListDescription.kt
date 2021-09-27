@@ -15,23 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.visual.common
+
+import java.lang.RuntimeException
 
 import org.jetbrains.exposed.sql.AutoIncColumnType
 import org.jetbrains.exposed.sql.BooleanColumnType
-import java.lang.RuntimeException
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.IDateColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.LongColumnType
 import org.jetbrains.exposed.sql.StringColumnType
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.list.VBooleanColumn
-import org.kopi.galite.list.VDateColumn
-import org.kopi.galite.list.VIntegerColumn
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.list.VStringColumn
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.list.VBooleanColumn
+import org.kopi.galite.visual.list.VDateColumn
+import org.kopi.galite.visual.list.VIntegerColumn
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VStringColumn
 
 /**
  * The description of a list element

@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.visual.Constants
 
 interface Constants : Constants {
   companion object {

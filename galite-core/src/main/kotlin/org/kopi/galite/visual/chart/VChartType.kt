@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
 import java.io.Serializable
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.visual.VModel
 
 /**
  * Supported chart types.

@@ -15,12 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.visual.common
 
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.visual.ActionHandler
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VCommand
 
 /**
  * This class represent a command, ie a link between an actor and

@@ -15,10 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
-import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleListMenu
+import org.kopi.galite.visual.visual.VMenuTree
 
 /**
  * The main application menu. Creates the module menu from a menu tree model.

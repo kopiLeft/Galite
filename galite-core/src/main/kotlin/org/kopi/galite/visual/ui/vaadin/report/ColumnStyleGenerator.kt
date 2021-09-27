@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.visual.ui.vaadin.report
 
-import org.kopi.galite.report.MReport
-import org.kopi.galite.report.VReportColumn
-import org.kopi.galite.report.VSeparatorColumn
+import org.kopi.galite.visual.report.MReport
+import org.kopi.galite.visual.report.VReportColumn
+import org.kopi.galite.visual.report.VSeparatorColumn
 
 import com.vaadin.flow.function.SerializableFunction
 

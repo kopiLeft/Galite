@@ -15,24 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.Item
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UItemTree
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VItemTree
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.visual.Item
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.UItemTree
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VItemTree
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button

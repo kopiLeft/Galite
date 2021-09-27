@@ -15,20 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.main
+package org.kopi.galite.visual.ui.vaadin.main
 
 import java.util.Locale
 
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.common.VContent
-import org.kopi.galite.ui.vaadin.common.VHeader
-import org.kopi.galite.ui.vaadin.common.VMain
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.visual.DUserMenu
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.ui.vaadin.window.PopupWindow
-import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.common.VContent
+import org.kopi.galite.visual.ui.vaadin.common.VHeader
+import org.kopi.galite.visual.ui.vaadin.common.VMain
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
+import org.kopi.galite.visual.ui.vaadin.visual.DUserMenu
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component

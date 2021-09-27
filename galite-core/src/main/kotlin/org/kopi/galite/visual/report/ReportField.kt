@@ -15,16 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
-import org.kopi.galite.common.Action
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.ReportTrigger
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.Field
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.common.Action
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.common.ReportTrigger
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.VCommand
 
 /**
  * This class represents the definition of a report field

@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.awt.Color
 import java.awt.Font
 import java.io.Serializable
 
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class ColumnStyle : Serializable {
 
@@ -80,7 +80,7 @@ class ColumnStyle : Serializable {
    */
   fun getFont(): Font {
     val font = when (fontName) {
-      0 -> org.kopi.galite.visual.Constants.FNT_FIXED_WIDTH
+      0 -> org.kopi.galite.visual.visual.Constants.FNT_FIXED_WIDTH
       1 -> "Helvetica"
       2 -> "Geneva"
       3 -> "Courier"

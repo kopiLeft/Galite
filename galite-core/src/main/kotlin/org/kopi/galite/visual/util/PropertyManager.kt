@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
-import java.util.ResourceBundle
-import java.util.MissingResourceException
-import java.util.StringTokenizer
 import java.util.Hashtable
+import java.util.MissingResourceException
+import java.util.ResourceBundle
+import java.util.StringTokenizer
 
 /**
  * This class is used to set a hierarchical structure for handling properties:

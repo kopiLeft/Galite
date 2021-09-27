@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -27,11 +27,11 @@ import java.io.OutputStream
 
 import javax.activation.MimetypesFileTypeMap
 
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VImageField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dnd.DragSource

@@ -15,32 +15,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.visual.ui.vaadin.report
 
 import java.awt.Color
 
-import org.kopi.galite.report.MReport
-import org.kopi.galite.report.Parameters
-import org.kopi.galite.report.Point
-import org.kopi.galite.report.UReport
-import org.kopi.galite.report.VReport
-import org.kopi.galite.report.VReportRow
-import org.kopi.galite.report.VSeparatorColumn
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.report.MReport
+import org.kopi.galite.visual.report.Parameters
+import org.kopi.galite.visual.report.Point
+import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.VReportRow
+import org.kopi.galite.visual.report.VSeparatorColumn
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VlibProperties
 
+import com.vaadin.flow.component.ClientCallable
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.ClientCallable
-import com.vaadin.flow.component.UI
-
 
 /**
  * The `DReport` is the visual part of the [VReport] model.

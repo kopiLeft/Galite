@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.base.Image
-import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.base.Image
+import org.kopi.galite.visual.visual.ImageHandler
 
 class VImageHandler : ImageHandler() {
   override fun getImage(image: String): Image? =  null

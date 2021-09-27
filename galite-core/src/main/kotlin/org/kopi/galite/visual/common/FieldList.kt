@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.visual.common
 
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.form.VDictionary
-import org.kopi.galite.list.VList
+import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.list.VList
 
 /**
  * This class represent a list of data from the database

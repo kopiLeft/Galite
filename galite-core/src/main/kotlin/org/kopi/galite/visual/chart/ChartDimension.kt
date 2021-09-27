@@ -15,21 +15,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
 import java.lang.RuntimeException
 
-import org.kopi.galite.common.Action
-import org.kopi.galite.common.ChartTrigger
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.domain.ListDomain
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.visual.common.Action
+import org.kopi.galite.visual.common.ChartTrigger
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
 
 /**
  * Represents a one dimension that contains measures [values] to use in chart.

@@ -15,9 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.block
+package org.kopi.galite.visual.ui.vaadin.block
 
-import org.kopi.galite.ui.vaadin.form.DGridBlock
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 
 import com.vaadin.flow.component.Component
 

@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.visual.VActor
 
 abstract class VImportedBlock(form: VForm) : VBlock(form) {
 

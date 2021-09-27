@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.list.VListColumn
+import org.kopi.galite.visual.list.VListColumn
 
 abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
                                               protected val form: VForm,

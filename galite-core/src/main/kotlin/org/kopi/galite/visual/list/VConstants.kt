@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.visual.list
 
 import javax.swing.SwingConstants
 
-import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.visual.Constants
 
 interface VConstants : Constants {
   companion object {

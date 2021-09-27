@@ -14,14 +14,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.visual.form.dsl
 
-import org.kopi.galite.cross.VDynamicReport
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.form.VDictionary
-import org.kopi.galite.form.VDictionaryForm
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.cross.VDynamicReport
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.form.VDictionaryForm
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.VWindow
 
 /**
  * Represents a dictionary form.

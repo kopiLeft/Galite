@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.io.File
 import java.net.MalformedURLException
@@ -23,27 +23,27 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Constants
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VDefaultActor
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VDefaultActor
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VHelpViewer
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.WindowBuilder
+import org.kopi.galite.visual.visual.WindowController
 
 abstract class VForm : VWindow, VConstants {
   companion object {

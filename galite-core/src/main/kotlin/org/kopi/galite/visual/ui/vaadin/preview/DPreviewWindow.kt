@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.preview
+package org.kopi.galite.visual.ui.vaadin.preview
 
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 
-import org.kopi.galite.preview.VPreviewWindow
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.preview.VPreviewWindow
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.Unit

@@ -16,10 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.Constants
 import javax.swing.SwingConstants
+
+import org.kopi.galite.visual.visual.Constants
 
 interface VConstants : Constants {
   companion object {
@@ -191,7 +192,7 @@ interface VConstants : Constants {
     //
     // ---------------------------------------------------------------------
     const val EMPTY_TEXT = ""
-    const val RESOURCE_DIR = "org/kopi/galite/util"
+    const val RESOURCE_DIR = "org/kopi/galite/visual/util"
 
     // ---------------------------------------------------------------------
     // IMAGE DOCUMENT EXTENSIONS

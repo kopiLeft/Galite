@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain
+package org.kopi.galite.visual.domain
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
@@ -23,11 +23,11 @@ import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
-import org.kopi.galite.common.FieldList
-import org.kopi.galite.common.ListDescription
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.form.VDictionary
-import org.kopi.galite.list.VList
+import org.kopi.galite.visual.common.FieldList
+import org.kopi.galite.visual.common.ListDescription
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.list.VList
 
 /**
  * Represents a list domain.

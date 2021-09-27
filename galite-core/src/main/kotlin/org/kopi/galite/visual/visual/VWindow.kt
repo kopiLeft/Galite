@@ -16,9 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import kotlin.jvm.Throws
+package org.kopi.galite.visual.visual
 
 import java.awt.Frame
 import java.awt.event.KeyEvent
@@ -27,14 +25,16 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
+import kotlin.jvm.Throws
+
 import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.kopi.galite.base.Image
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.db.DBDeadLockException
-import org.kopi.galite.db.XInterruptProtectedException
-import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.base.Image
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.db.DBDeadLockException
+import org.kopi.galite.visual.db.XInterruptProtectedException
+import org.kopi.galite.visual.l10n.LocalizationManager
 
 /**
  * Creates a window
@@ -628,6 +628,6 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
     const val CDE_QUIT = 0
     const val CDE_ESCAPED = 1
     const val CDE_VALIDATE = 2
-    const val WINDOW_LOCALIZATION_RESOURCE = "org/kopi/galite/Window"
+    const val WINDOW_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/Window"
   }
 }

@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
-import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.FieldLocalizer
 
 /**
  * Creates a chart code column.

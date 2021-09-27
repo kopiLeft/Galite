@@ -14,19 +14,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
-import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.Actor
-import org.kopi.galite.common.Menu
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.FormBlockIndex
-import org.kopi.galite.form.dsl.FormField
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
+
+import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.visual.common.Actor
+import org.kopi.galite.visual.common.Menu
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.FormBlockIndex
+import org.kopi.galite.visual.form.dsl.FormField
 
 /**
  * Class of reflection tools. It contains methods which access

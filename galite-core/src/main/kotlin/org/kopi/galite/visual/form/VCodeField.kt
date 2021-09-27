@@ -16,15 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.l10n.FieldLocalizer
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.list.VList
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.list.VList
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  *
@@ -282,7 +282,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
-  override fun getDecimal(r: Int): org.kopi.galite.type.Decimal {
+  override fun getDecimal(r: Int): org.kopi.galite.visual.type.Decimal {
     throw InconsistencyException()
   }
 
@@ -368,7 +368,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  protected open fun formatDecimal(value: org.kopi.galite.type.Decimal): String {
+  protected open fun formatDecimal(value: org.kopi.galite.visual.type.Decimal): String {
     throw InconsistencyException()
   }
 

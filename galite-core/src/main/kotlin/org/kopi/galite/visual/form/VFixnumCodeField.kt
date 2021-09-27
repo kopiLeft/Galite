@@ -16,16 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
+
+import java.math.BigDecimal
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.db.Query
-import org.kopi.galite.list.VFixnumCodeColumn
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.util.base.InconsistencyException
-import java.math.BigDecimal
+import org.kopi.galite.visual.db.Query
+import org.kopi.galite.visual.list.VFixnumCodeColumn
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Constructor

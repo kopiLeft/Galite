@@ -15,26 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.visual.form.dsl
 
 import kotlin.reflect.KProperty
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.Action
-import org.kopi.galite.common.Actor
-import org.kopi.galite.common.Command
-import org.kopi.galite.common.FormTrigger
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.domain.ListDomain
-import org.kopi.galite.field.Field
-import org.kopi.galite.form.VCodeField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.common.Action
+import org.kopi.galite.visual.common.Actor
+import org.kopi.galite.visual.common.Command
+import org.kopi.galite.visual.common.FormTrigger
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.form.VCodeField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VForm
 
 /**
  * This class represents a form field. It represents an editable element of a block

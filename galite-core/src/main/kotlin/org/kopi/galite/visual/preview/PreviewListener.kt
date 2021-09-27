@@ -16,13 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.preview
+package org.kopi.galite.visual.preview
 
 import java.io.Serializable
-
 import java.util.EventListener
 
-import org.kopi.galite.visual.UserConfiguration
+import org.kopi.galite.visual.visual.UserConfiguration
 
 interface PreviewListener : EventListener, Serializable {
   fun pageChanged(current: Int)

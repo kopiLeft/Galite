@@ -15,21 +15,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
 import java.io.IOException
-
 import java.util.Locale
 
-import org.kopi.galite.common.Action
-import org.kopi.galite.common.FormTrigger
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.common.Window
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.common.Action
+import org.kopi.galite.visual.common.FormTrigger
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].

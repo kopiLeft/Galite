@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.type
+package org.kopi.galite.visual.type
 
-import java.util.Locale
-import java.util.GregorianCalendar
 import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.Locale
 
 /**
  * This class represents the week types

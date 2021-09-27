@@ -15,12 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import org.jdom2.Element
-import org.kopi.galite.common.Actor
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Menu
+import org.kopi.galite.visual.common.Actor
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.common.Menu
 
 /**
  * This class implements an  XML localization file generator

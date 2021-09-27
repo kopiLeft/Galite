@@ -15,26 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.UField
-import org.kopi.galite.form.UListDialog
-import org.kopi.galite.form.VDictionary
-import org.kopi.galite.form.VForm
-import org.kopi.galite.form.VListDialog
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
-import org.kopi.galite.ui.vaadin.list.GridListDialog
-import org.kopi.galite.ui.vaadin.list.ListTable
-import org.kopi.galite.ui.vaadin.notif.InformationNotification
-import org.kopi.galite.ui.vaadin.notif.NotificationListener
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.UListDialog
+import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.form.VListDialog
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.list.GridListDialog
+import org.kopi.galite.visual.ui.vaadin.list.ListTable
+import org.kopi.galite.visual.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.visual.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key
@@ -374,10 +374,11 @@ class DListDialog(
   protected fun handleTooManyRows() {
     val lock = Object()
     val application = application
-    val notice = InformationNotification(VlibProperties.getString("Notice"),
-                                         MessageCode.getMessage("VIS-00028"),
-                                         application.defaultLocale.toString(),
-                                         application.mainWindow)
+    val notice = InformationNotification(
+      VlibProperties.getString("Notice"),
+      MessageCode.getMessage("VIS-00028"),
+      application.defaultLocale.toString(),
+      application.mainWindow)
 
     notice.addNotificationListener(object : NotificationListener {
       override fun onClose(action: Boolean?) {

@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
-import org.kopi.galite.base.UComponent
+import org.kopi.galite.visual.base.UComponent
 
 /**
  * `UIFactory` is visual components factory for model classes.

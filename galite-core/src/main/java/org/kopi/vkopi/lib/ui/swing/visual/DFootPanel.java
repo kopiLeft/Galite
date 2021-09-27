@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.kopi.vkopi.lib.ui.swing.plaf.KopiLookAndFeel;
+
 /**
  * An information panel displayed at the foot of every window.
  */

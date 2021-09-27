@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.util.Locale
 import java.util.regex.Pattern
 
-import org.kopi.galite.base.ExtendedMessageFormat
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.base.ExtendedMessageFormat
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * This class handles localized messages.
@@ -75,10 +75,12 @@ object MessageCode {
       val messageFormat = ExtendedMessageFormat(format, ApplicationContext.getDefaultLocale())
       (if (withKey) "$key: " else "") + messageFormat.formatMessage(params)
     } catch (e: InconsistencyException) {
-      ApplicationContext.reportTrouble("localize MessageCode",
-                                       "org.kopi.galite.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
-                                       e.message,
-                                       e)
+      ApplicationContext.reportTrouble(
+        "localize MessageCode",
+        "org.kopi.galite.visual.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
+        e.message,
+        e
+      )
       System.err.println("ERROR: " + e.message)
       "$key: message for !$key! not found!"
     }

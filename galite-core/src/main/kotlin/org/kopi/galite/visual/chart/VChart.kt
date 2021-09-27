@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
 import java.io.File
 import java.io.FileOutputStream
@@ -27,32 +27,32 @@ import java.util.Locale
 
 import kotlin.collections.ArrayList
 
-import com.lowagie.text.Rectangle
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.l10n.ChartLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.print.Printable
+import org.kopi.galite.visual.util.PPaperType
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VHelpViewer
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.visual.WindowBuilder
+import org.kopi.galite.visual.visual.WindowController
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.l10n.ChartLocalizer
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.print.Printable
-import org.kopi.galite.util.PPaperType
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowController
-import org.kopi.galite.visual.Constants
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VCommand
+import com.lowagie.text.Rectangle
 
 /**
  * Creates a new chart model.
@@ -395,7 +395,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
 
     if (enable) {
       // we need to check if VKT_Triggers is initialized
-      // ex : org.kopi.galite.cross.VDynamicReport
+      // ex : org.kopi.galite.visual.cross.VDynamicReport
       if (VKT_Triggers != null && hasTrigger(CConstants.TRG_CMDACCESS, index)) {
 
         val active = try {

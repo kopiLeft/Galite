@@ -15,22 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.visual.ui.vaadin.field
 
-import org.kopi.galite.form.VCodeField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VDateField
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFixnumField
-import org.kopi.galite.form.VMonthField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTimeField
-import org.kopi.galite.form.VTimestampField
-import org.kopi.galite.form.VWeekField
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.event.TextFieldListener
-import org.kopi.galite.ui.vaadin.form.DTextField
-import org.kopi.galite.ui.vaadin.form.KeyNavigator
+import org.kopi.galite.visual.form.VCodeField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VDateField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VMonthField
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.form.VTimeField
+import org.kopi.galite.visual.form.VTimestampField
+import org.kopi.galite.visual.form.VWeekField
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
+import org.kopi.galite.visual.ui.vaadin.form.DTextField
+import org.kopi.galite.visual.ui.vaadin.form.KeyNavigator
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
@@ -193,7 +193,7 @@ class TextField(val model: VField,
         type = Type.STRING
         convertType = _getConvertType()
       }
-      is org.kopi.galite.form.VIntegerField -> {
+      is org.kopi.galite.visual.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
         if (model.minValue != null) {

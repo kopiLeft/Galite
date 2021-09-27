@@ -15,17 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.form.VImageField
-import org.kopi.galite.type.Date
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.field.ImageField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.field.ImageField
 
 import com.vaadin.flow.component.upload.FailedEvent
 import com.vaadin.flow.component.upload.SucceededEvent

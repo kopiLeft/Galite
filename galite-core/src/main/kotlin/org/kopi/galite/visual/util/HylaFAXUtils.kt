@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
 import java.io.IOException
 import java.net.ConnectException
 import java.util.ArrayList
 import java.util.StringTokenizer
 
+import org.kopi.galite.visual.base.Utils
+
 import gnu.hylafax.HylaFAXClient
 import gnu.hylafax.HylaFAXClientProtocol
 import gnu.inet.ftp.ServerResponseException
-
-import org.kopi.galite.base.Utils
 
 object HylaFAXUtils {
 

@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
 import java.text.BreakIterator
 
-import org.kopi.galite.util.base.Utils
+import org.kopi.galite.visual.util.base.Utils
 
 class LineBreaker : Utils() {
   companion object {

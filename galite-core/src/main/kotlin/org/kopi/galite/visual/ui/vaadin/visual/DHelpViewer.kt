@@ -15,13 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.io.IOException
 
-import org.kopi.galite.ui.vaadin.window.Window
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VHelpViewer
 
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.Html

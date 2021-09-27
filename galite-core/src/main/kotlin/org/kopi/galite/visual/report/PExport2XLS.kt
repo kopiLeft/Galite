@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.awt.Color
 import java.util.Hashtable
@@ -25,7 +25,7 @@ import org.apache.poi.hssf.usermodel.HSSFPalette
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.hssf.util.HSSFColor
 import org.apache.poi.ss.usermodel.Workbook
-import org.kopi.galite.report.UReport.UTable
+import org.kopi.galite.visual.report.UReport.UTable
 
 class PExport2XLS(table: UTable,
                   model: MReport,

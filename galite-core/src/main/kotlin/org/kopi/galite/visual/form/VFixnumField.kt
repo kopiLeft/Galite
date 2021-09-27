@@ -16,20 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.math.BigDecimal
 
 import kotlin.math.max
 import kotlin.reflect.KClass
 
-import org.kopi.galite.db.Query
-import org.kopi.galite.list.VFixnumColumn
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.db.Query
+import org.kopi.galite.visual.list.VFixnumColumn
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  *
@@ -556,9 +556,11 @@ class VFixnumField(val bufferSize: Int,
     set(scale) {
       // dynamic maxScale mustn't exceed the maxScale defined in the field declaration (fieldMaxScale).
       if (scale > fieldMaxScale) {
-        throw InconsistencyException(MessageCode.getMessage("VIS-00060",
-                                                            scale,
-                                                            fieldMaxScale.toString()))
+        throw InconsistencyException(
+          MessageCode.getMessage("VIS-00060",
+                                 scale,
+                                 fieldMaxScale.toString())
+        )
       }
       field = scale
 

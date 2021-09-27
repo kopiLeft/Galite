@@ -15,10 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.visual.ui.vaadin.menu
 
 import com.vaadin.flow.component.menubar.MenuBar
-import com.vaadin.flow.component.menubar.MenuBarVariant
 
 /**
  * The module list menu bar.

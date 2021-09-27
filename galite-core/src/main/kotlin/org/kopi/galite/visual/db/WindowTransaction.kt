@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.db
+package org.kopi.galite.visual.db
 
 import java.sql.Connection
 import java.sql.SQLException
@@ -24,9 +24,9 @@ import java.util.TimerTask
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
-import org.kopi.galite.common.Window
-import org.kopi.galite.form.VForm
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.visual.VWindow
 
 /**
  * Starts a protected transaction.

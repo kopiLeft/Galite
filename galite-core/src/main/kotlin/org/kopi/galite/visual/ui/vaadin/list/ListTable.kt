@@ -15,19 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.list
+package org.kopi.galite.visual.ui.vaadin.list
 
-import org.kopi.galite.form.VListDialog
+import org.kopi.galite.visual.form.VListDialog
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.html.Span
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {

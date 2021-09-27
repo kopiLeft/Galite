@@ -15,14 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.visual.ui.vaadin.base
 
 import java.util.Hashtable
 import java.util.concurrent.CompletableFuture
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.visual.VColor
 
 import com.flowingcode.vaadin.addons.ironicons.AvIcons
 import com.flowingcode.vaadin.addons.ironicons.DeviceIcons
@@ -291,7 +291,7 @@ object Utils : Utils() {
   private const val VAADIN_RESOURCE_DIR = "ui/vaadin"
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
-  private const val RESOURCE_DIR = "org/kopi/galite"
+  private const val RESOURCE_DIR = "org/kopi/galite/visual"
   val UKN_IMAGE = Image("$THEME_DIR/unknown.png")
   private val cache = Hashtable<String, Image>()
   private var pngToIconMap = mutableMapOf<String, Any>()

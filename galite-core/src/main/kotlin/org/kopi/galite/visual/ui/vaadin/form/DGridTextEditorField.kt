@@ -15,42 +15,42 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.ModelTransformer
-import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VCodeField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VDateField
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.form.VFixnumField
-import org.kopi.galite.form.VIntegerField
-import org.kopi.galite.form.VMonthField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTimeField
-import org.kopi.galite.form.VTimestampField
-import org.kopi.galite.form.VWeekField
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.grid.GridEditorDateField
-import org.kopi.galite.ui.vaadin.grid.GridEditorEnumField
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.ui.vaadin.grid.GridEditorFixnumField
-import org.kopi.galite.ui.vaadin.grid.GridEditorIntegerField
-import org.kopi.galite.ui.vaadin.grid.GridEditorMonthField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTextAreaField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTimeField
-import org.kopi.galite.ui.vaadin.grid.GridEditorTimestampField
-import org.kopi.galite.ui.vaadin.grid.GridEditorWeekField
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.form.ModelTransformer
+import org.kopi.galite.visual.form.UTextField
+import org.kopi.galite.visual.form.VCodeField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VDateField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VIntegerField
+import org.kopi.galite.visual.form.VMonthField
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.form.VTimeField
+import org.kopi.galite.visual.form.VTimestampField
+import org.kopi.galite.visual.form.VWeekField
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorEnumField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorFixnumField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorIntegerField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorMonthField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextAreaField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimeField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimestampField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorWeekField
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VlibProperties
 
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.data.renderer.TextRenderer
-import com.vaadin.flow.component.AbstractField
 
 /**
  * A grid text editor based on custom components.

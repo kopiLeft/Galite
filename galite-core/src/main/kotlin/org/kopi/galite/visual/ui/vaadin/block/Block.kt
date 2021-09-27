@@ -15,20 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.block
+package org.kopi.galite.visual.ui.vaadin.block
 
 import java.io.Serializable
 
-import org.kopi.galite.form.BlockListener
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VConstants
-import org.kopi.galite.ui.vaadin.field.CheckTypeException
-import org.kopi.galite.ui.vaadin.form.DBlock
-import org.kopi.galite.ui.vaadin.form.DGridEditorLabel
-import org.kopi.galite.ui.vaadin.form.Form
-import org.kopi.galite.ui.vaadin.form.Page
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.notif.NotificationUtils
+import org.kopi.galite.visual.form.BlockListener
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.VConstants
+import org.kopi.galite.visual.ui.vaadin.field.CheckTypeException
+import org.kopi.galite.visual.ui.vaadin.form.DBlock
+import org.kopi.galite.visual.ui.vaadin.form.Form
+import org.kopi.galite.visual.ui.vaadin.form.Page
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.notif.NotificationUtils
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled

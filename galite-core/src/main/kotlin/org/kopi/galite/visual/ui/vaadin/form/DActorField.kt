@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.form.UActorField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.ui.vaadin.field.ActorField
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.form.UActorField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.field.ActorField
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -35,7 +35,7 @@ import java.util.Vector
 import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
 
-import org.kopi.galite.base.Utils
+import org.kopi.galite.visual.base.Utils
 
 @Deprecated("replaced by the class HylaFAXUtils")
 class Fax(var port: Int, var host: String) {

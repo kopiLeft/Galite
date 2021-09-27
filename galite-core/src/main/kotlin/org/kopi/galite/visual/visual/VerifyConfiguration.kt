@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.net.InetAddress
 import java.net.UnknownHostException
 
-import org.kopi.galite.util.mailer.Mailer
+import org.kopi.galite.visual.util.mailer.Mailer
 
 class VerifyConfiguration private constructor() {
 

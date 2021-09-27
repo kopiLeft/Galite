@@ -19,10 +19,10 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.chart.ChartSample
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.Key
 
 object FormWithChart: Form() {
   override val locale = Locale.UK

@@ -16,19 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import kotlin.math.max
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.list.VListColumn
-import org.kopi.galite.list.VStringColumn
-import org.kopi.galite.type.Date
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Module
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.VModel
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VStringColumn
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Module
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.VModel
+import org.kopi.galite.visual.visual.VWindow
 
 class VListDialog(list: Array<VListColumn?>,
                   val data: Array<Array<Any?>>,

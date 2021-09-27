@@ -20,13 +20,13 @@ import java.util.Locale
 
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Provider
-import org.kopi.galite.domain.IMAGE
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
+import org.kopi.galite.visual.domain.IMAGE
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.ReportSelectionForm
+import org.kopi.galite.visual.report.Report
 
 class ProviderForm : ReportSelectionForm() {
   override val locale = Locale.UK

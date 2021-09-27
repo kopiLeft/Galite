@@ -16,21 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.awt.event.KeyEvent
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
 
-import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.l10n.LocalizationManager
 
 /**
  * A special window that display an html help
  */
 class VHelpViewer : VWindow() {
   companion object {
-    private const val HELPVIEWER_LOCALIZATION_RESOURCE = "org/kopi/galite/HelpViewer"
+    private const val HELPVIEWER_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/HelpViewer"
 
     const val CMD_QUIT = 0
 
@@ -102,13 +102,14 @@ class VHelpViewer : VWindow() {
 
   init {
     setTitle(VlibProperties.getString("help_viewer"))
-    addActors(arrayOf(VActor("File",
-                             HELPVIEWER_LOCALIZATION_RESOURCE,
-                             "Close",
-                             HELPVIEWER_LOCALIZATION_RESOURCE,
-                             "quit",
-                             KeyEvent.VK_ESCAPE,
-                             0)
+    addActors(arrayOf(
+      VActor("File",
+             HELPVIEWER_LOCALIZATION_RESOURCE,
+             "Close",
+             HELPVIEWER_LOCALIZATION_RESOURCE,
+             "quit",
+             KeyEvent.VK_ESCAPE,
+             0)
     ))
 
     // localize the help viewer using the default locale

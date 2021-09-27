@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.Item
-import org.kopi.galite.visual.UItemTree.UTreeComponent
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.visual.Item
+import org.kopi.galite.visual.visual.UItemTree.UTreeComponent
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI

@@ -15,10 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.visual.ui.vaadin.base
 
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.visual.VColor
 
 /**
  * A centralized way to inject styles in the browser page.
@@ -69,9 +69,9 @@ class StylesInjector {
    * A style is represented by its align, foreground color and background color.
    */
   internal inner class Style(private val id: Int,
-          private val align: Int,
-          foreground: VColor?,
-          background: VColor?) {
+                             private val align: Int,
+                             foreground: VColor?,
+                             background: VColor?) {
     // --------------------------------------------------
     // IMPLEMENTATION
     // --------------------------------------------------

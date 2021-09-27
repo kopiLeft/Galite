@@ -15,42 +15,42 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.io.File
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
-import org.kopi.galite.ui.vaadin.notif.AbstractNotification
-import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.ui.vaadin.notif.InformationNotification
-import org.kopi.galite.ui.vaadin.notif.NotificationListener
-import org.kopi.galite.ui.vaadin.notif.WarningNotification
-import org.kopi.galite.ui.vaadin.progress.ProgressDialog
-import org.kopi.galite.ui.vaadin.wait.WaitDialog
-import org.kopi.galite.ui.vaadin.wait.WaitWindow
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.MessageListener
-import org.kopi.galite.visual.PropertyException
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WaitInfoListener
-import org.kopi.galite.ui.vaadin.window.Window
-import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.visual.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.visual.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.visual.ui.vaadin.notif.WarningNotification
+import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
+import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
+import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.MessageListener
+import org.kopi.galite.visual.visual.PropertyException
+import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.visual.WaitInfoListener
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component

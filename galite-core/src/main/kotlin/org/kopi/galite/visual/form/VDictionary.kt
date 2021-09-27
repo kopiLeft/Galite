@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.Executable
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.visual.Executable
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VWindow
 
 /**
  * The `VDictionary` is a meaning to handle three basic operations.

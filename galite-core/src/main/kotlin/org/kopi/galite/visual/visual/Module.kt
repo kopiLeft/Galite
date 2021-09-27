@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import kotlin.jvm.Throws
 
-import org.kopi.galite.base.Image
-import org.kopi.galite.common.Window
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.l10n.ModuleLocalizer
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.base.Image
+import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.l10n.ModuleLocalizer
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents an Module.
@@ -118,10 +118,12 @@ class Module(val id: Int,
       help = loc.getHelp()
     } catch (e: InconsistencyException) {
       // If the module localization is not found, report it
-      ApplicationContext.reportTrouble(shortname,
-                                       source,
-                                       "Module '$shortname' was not found in '$source'",
-                                       e)
+      ApplicationContext.reportTrouble(
+        shortname,
+        source,
+        "Module '$shortname' was not found in '$source'",
+        e
+      )
       description = "!!! $shortname !!!"
       help = description
     }
@@ -177,13 +179,17 @@ class Module(val id: Int,
         v.printStackTrace()
         throw v
       } catch (t: Throwable) {
-        ApplicationContext.reportTrouble("Form loading",
-                                         "Module.startForm(DBContext ctxt, " +
-                                                 "String object, String description, ImageIcon icon)",
-                                         t.message,
-                                         t)
-        ApplicationContext.displayError(ApplicationContext.getMenu()!!.getDisplay(),
-                                        MessageCode.getMessage("VIS-00041"))
+        ApplicationContext.reportTrouble(
+          "Form loading",
+          "Module.startForm(DBContext ctxt, " +
+                  "String object, String description, ImageIcon icon)",
+          t.message,
+          t
+        )
+        ApplicationContext.displayError(
+          ApplicationContext.getMenu()!!.getDisplay(),
+          MessageCode.getMessage("VIS-00041")
+        )
         null
       }
     }

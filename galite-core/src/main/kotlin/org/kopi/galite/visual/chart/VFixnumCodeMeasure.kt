@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual.chart
 
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VColor
 
 /**
  * Represents a code decimal measure.

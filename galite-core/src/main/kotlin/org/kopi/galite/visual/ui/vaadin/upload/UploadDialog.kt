@@ -15,20 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.upload
+package org.kopi.galite.visual.ui.vaadin.upload
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.visual.ui.vaadin.base.VInputButton
+import org.kopi.galite.visual.ui.vaadin.common.VSpan
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.upload.Receiver
-import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.html.NativeButton
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.upload.Receiver
+import com.vaadin.flow.component.upload.Upload
 
 /**
  * A dialog showing an upload component.

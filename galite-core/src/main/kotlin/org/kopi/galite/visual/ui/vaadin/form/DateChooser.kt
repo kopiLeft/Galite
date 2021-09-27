@@ -15,17 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.time.LocalDate
 import java.util.Calendar
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.visual.ApplicationContext
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component

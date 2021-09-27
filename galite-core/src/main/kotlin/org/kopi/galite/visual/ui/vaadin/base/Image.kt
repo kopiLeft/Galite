@@ -15,9 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.visual.ui.vaadin.base
 
-import org.kopi.galite.base.Image
+import org.kopi.galite.visual.base.Image
 
 /**
  * The vaadin implementation of an image model.

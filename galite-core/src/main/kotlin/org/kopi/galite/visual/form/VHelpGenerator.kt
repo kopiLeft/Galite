@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.io.BufferedWriter
 import java.io.FileOutputStream
@@ -25,10 +25,10 @@ import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.io.Serializable
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VHelpGenerator
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VHelpGenerator
+import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  * This class implements a pretty printer

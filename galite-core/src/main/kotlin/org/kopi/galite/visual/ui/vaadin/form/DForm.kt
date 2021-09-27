@@ -15,24 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.File
 
-import org.kopi.galite.form.BlockListener
-import org.kopi.galite.form.BlockRecordListener
-import org.kopi.galite.form.UBlock
-import org.kopi.galite.form.UForm
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFieldException
-import org.kopi.galite.form.VForm
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.visual.DWindow
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.form.BlockListener
+import org.kopi.galite.visual.form.BlockRecordListener
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UForm
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldException
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.VRuntimeException
 
 /**
  * The `DForm` is the vaadin implementation of the [UForm] specifications.

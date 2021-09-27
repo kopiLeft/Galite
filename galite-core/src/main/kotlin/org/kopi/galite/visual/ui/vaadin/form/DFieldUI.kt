@@ -15,22 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.FieldHandler
-import org.kopi.galite.form.UBlock
-import org.kopi.galite.form.UChartLabel
-import org.kopi.galite.form.UField
-import org.kopi.galite.form.ULabel
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VBooleanField
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.form.VImageField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTextField
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.form.FieldHandler
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UChartLabel
+import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.ULabel
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.form.VTextField
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * The `DFieldUI` is the vaadin UI components implementation of

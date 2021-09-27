@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
-import org.kopi.galite.l10n.LocalizationManager
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
+
+import org.kopi.galite.visual.l10n.LocalizationManager
 
 /**
  * A root menu must provide its ID and name. The root tree node
@@ -122,6 +123,6 @@ class RootMenu(id: Int, name: String) {
   }
 
   companion object {
-    const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/RootMenu"
+    const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/RootMenu"
   }
 }

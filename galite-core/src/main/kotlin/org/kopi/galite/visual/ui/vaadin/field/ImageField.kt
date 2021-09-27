@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.visual.ui.vaadin.field
+
+import org.kopi.galite.visual.ui.vaadin.common.VImage
 
 import com.vaadin.flow.component.Component
-import org.kopi.galite.ui.vaadin.common.VImage
-
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div

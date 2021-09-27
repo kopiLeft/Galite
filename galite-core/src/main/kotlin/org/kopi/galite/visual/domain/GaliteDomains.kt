@@ -14,16 +14,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.domain
+package org.kopi.galite.visual.domain
 
 import org.joda.time.DateTime
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Image
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Image
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
 
 /**
  * Integer field type is LONG is used to insert integers.

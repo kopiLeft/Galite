@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.ui.vaadin.field.RichTextField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.form.UTextField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.field.RichTextField
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
 * Rich text editor implementation based on CK editor for vaadin.

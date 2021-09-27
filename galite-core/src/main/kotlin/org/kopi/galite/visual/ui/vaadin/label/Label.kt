@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.label
+package org.kopi.galite.visual.ui.vaadin.label
 
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VAnchorPanel
-import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.VAnchorPanel
+import org.kopi.galite.visual.ui.vaadin.common.VSpan
 
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.dependency.CssImport

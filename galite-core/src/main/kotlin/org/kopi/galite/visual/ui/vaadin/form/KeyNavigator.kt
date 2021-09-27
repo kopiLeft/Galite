@@ -15,18 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.IOException
 
-import org.kopi.galite.form.VField
-import org.kopi.galite.ui.vaadin.event.TextFieldListener
-import org.kopi.galite.ui.vaadin.field.InputTextField
-import org.kopi.galite.util.PrintException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.PrinterManager
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
+import org.kopi.galite.visual.ui.vaadin.field.InputTextField
+import org.kopi.galite.visual.util.PrintException
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.PrinterManager
+import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VWindow
 
 /**
  * Text field key navigation.

@@ -15,14 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.visual.ui.vaadin.report
 
-import org.kopi.galite.report.Constants
-import org.kopi.galite.report.UReport.UTable
-import org.kopi.galite.report.VFixnumColumn
-import org.kopi.galite.report.VIntegerColumn
-import org.kopi.galite.report.VReportColumn
-import org.kopi.galite.report.VSeparatorColumn
+import org.kopi.galite.visual.report.Constants
+import org.kopi.galite.visual.report.UReport.UTable
+import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VIntegerColumn
+import org.kopi.galite.visual.report.VReportColumn
+import org.kopi.galite.visual.report.VSeparatorColumn
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dependency.CssImport

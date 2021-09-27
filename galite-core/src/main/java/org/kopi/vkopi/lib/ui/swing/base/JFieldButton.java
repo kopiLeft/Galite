@@ -30,7 +30,7 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
-import org.kopi.galite.base.UComponent;
+import org.kopi.galite.visual.base.UComponent;
 
 public class JFieldButton extends JButton implements UComponent {
 

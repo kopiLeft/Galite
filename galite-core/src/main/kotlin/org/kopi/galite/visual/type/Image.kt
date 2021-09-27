@@ -14,10 +14,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.type
+package org.kopi.galite.visual.type
+
+import java.util.Locale
 
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import java.util.Locale
 
 /**
  * This class represents image types

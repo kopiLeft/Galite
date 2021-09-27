@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import kotlin.math.max
 
-import org.kopi.galite.l10n.FieldLocalizer
-import org.kopi.galite.l10n.TypeLocalizer
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.TypeLocalizer
 
 /**
  * Represents a report column description

@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
-import java.util.Locale
 import java.text.MessageFormat
+import java.util.Locale
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * This class handles localized properties
@@ -74,10 +74,12 @@ object VlibProperties {
       }
 
     } catch (e: InconsistencyException) {
-      ApplicationContext.reportTrouble("localize Property",
-                                       "org.kopi.galite.visual.VlibProperties.getString(key: String, params: Any?)",
-                                       e.message,
-                                       e)
+      ApplicationContext.reportTrouble(
+        "localize Property",
+        "org.kopi.galite.visual.visual.VlibProperties.getString(key: String, params: Any?)",
+        e.message,
+        e
+      )
       System.err.println("ERROR: ${e.message}")
       "!$key!"
     }
@@ -86,5 +88,5 @@ object VlibProperties {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/galite/VlibProperties"
+  private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/galite/visual/VlibProperties"
 }

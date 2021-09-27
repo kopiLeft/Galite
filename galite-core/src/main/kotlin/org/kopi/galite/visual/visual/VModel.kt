@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import org.kopi.galite.base.UComponent
+package org.kopi.galite.visual.visual
 
 import java.io.Serializable
+
+import org.kopi.galite.visual.base.UComponent
 
 /**
  * `VModel` is the top level interface that all model classes should implement.

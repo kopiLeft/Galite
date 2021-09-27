@@ -14,21 +14,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.visual.form.dsl
 
 import java.io.IOException
 
-import org.kopi.galite.common.Action
-import org.kopi.galite.common.FormTrigger
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.common.Window
-import org.kopi.galite.form.Commands
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VForm
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.common.Action
+import org.kopi.galite.visual.common.FormTrigger
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.form.Commands
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.VException
 
 /**
  * Represents a form.

@@ -15,19 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.swing.visual
+package org.kopi.galite.visual.ui.swing.visual
 
-import javax.swing.JLabel
-import javax.swing.tree.TreeCellRenderer
-import javax.swing.JTree
-import javax.swing.tree.DefaultMutableTreeNode
 import java.awt.Color
 import java.awt.Component
 import java.awt.Image
-import javax.swing.ImageIcon
-import javax.swing.UIManager
 
-import org.kopi.galite.visual.Module
+import javax.swing.ImageIcon
+import javax.swing.JLabel
+import javax.swing.JTree
+import javax.swing.UIManager
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeCellRenderer
+
+import org.kopi.galite.visual.visual.Module
 import org.kopi.vkopi.lib.ui.swing.base.Utils
 
 internal class MenuItemRenderer(private val superUser: Boolean) : JLabel(), TreeCellRenderer {

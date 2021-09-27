@@ -19,11 +19,11 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.BlockOption
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.dsl.BlockOption
+import org.kopi.galite.visual.form.dsl.Form
+import org.kopi.galite.visual.form.dsl.FormBlock
 
 val FormAlignTest = FormAlignTest_()
 class FormAlignTest_ : Form() {

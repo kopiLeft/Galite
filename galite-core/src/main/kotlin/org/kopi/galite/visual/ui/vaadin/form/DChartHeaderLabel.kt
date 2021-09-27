@@ -15,10 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.UChartLabel
-import org.kopi.galite.form.VBlock
+import org.kopi.galite.visual.form.UChartLabel
+import org.kopi.galite.visual.form.VBlock
 
 /**
  * The `DChartHeaderLabel` is the vaadin implementation

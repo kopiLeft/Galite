@@ -15,11 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.window
+package org.kopi.galite.visual.ui.vaadin.window
 
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.common.VSpan
-import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.common.VSpan
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle

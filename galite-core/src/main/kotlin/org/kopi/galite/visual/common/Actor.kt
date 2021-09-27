@@ -15,14 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.visual.common
 
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VDefaultActor
+import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VDefaultActor
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut

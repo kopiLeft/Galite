@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.awt.event.KeyEvent
 import java.util.Locale
@@ -25,8 +25,8 @@ import javax.swing.tree.TreeNode
 
 import kotlin.system.exitProcess
 
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents a new instance of VItemTree.
@@ -74,7 +74,7 @@ class VItemTree(rootName: String?,
     const val CMD_EDIT = 7
     const val CMD_ADD = 8
     const val CMD_REMOVE = 9
-    private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/Menu"
+    private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/Menu"
 
     init {
       WindowController.windowController.registerWindowBuilder(Constants.MDL_ITEM_TREE, object : WindowBuilder {
@@ -100,10 +100,12 @@ class VItemTree(rootName: String?,
     try {
       super.localizeActors(manager) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
-      ApplicationContext.reportTrouble("ItemTree Actor localization",
-                                       "ItemTreeModel.localize",
-                                       e.message,
-                                       e)
+      ApplicationContext.reportTrouble(
+        "ItemTree Actor localization",
+        "ItemTreeModel.localize",
+        e.message,
+        e
+      )
       exitProcess(1)
     }
     manager = null

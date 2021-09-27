@@ -15,26 +15,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.io.IOException
 import java.lang.RuntimeException
 import java.util.Locale
 
-import org.kopi.galite.common.Action
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.ReportTrigger
-import org.kopi.galite.common.Trigger
-import org.kopi.galite.common.Window
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.common.Action
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.common.ReportTrigger
+import org.kopi.galite.visual.common.Trigger
+import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
+import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].

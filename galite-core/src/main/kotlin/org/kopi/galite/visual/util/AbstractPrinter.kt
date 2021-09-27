@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.FileWriter
 import java.io.InputStreamReader
 
-import org.kopi.galite.base.Utils
+import org.kopi.galite.visual.base.Utils
 
 /**
  * DefaultPrinter

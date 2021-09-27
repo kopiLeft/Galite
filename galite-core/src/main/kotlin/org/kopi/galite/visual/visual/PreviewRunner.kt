@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
-import org.kopi.galite.util.PrintException
-import org.kopi.galite.util.PrintJob
 import java.io.IOException
+
+import org.kopi.galite.visual.util.PrintException
+import org.kopi.galite.visual.util.PrintJob
 
 interface PreviewRunner {
   /**

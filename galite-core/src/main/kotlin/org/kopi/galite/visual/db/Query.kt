@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.db
+package org.kopi.galite.visual.db
 
-import org.kopi.galite.type.Date
 import java.sql.Blob
 
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
 
 class Query(conn: Connection) {
 

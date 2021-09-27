@@ -15,10 +15,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.field
+package org.kopi.galite.visual.field
 
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.domain.Domain
 
 /**
  * A field represents a visual component that can hold values

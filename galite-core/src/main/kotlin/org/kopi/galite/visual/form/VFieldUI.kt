@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.visual.form
 
 import java.io.Serializable
 
-import org.kopi.galite.form.VBlock.OrderModel
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.form.VBlock.OrderModel
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ActionHandler
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
 
 /**
  * This class implements all UI actions on fields

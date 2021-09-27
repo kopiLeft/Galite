@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.visual.Application
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.PreviewRunner
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.visual.Application
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.PreviewRunner
 
 class VApplicationContext : ApplicationContext() {
   override fun getApplication(): Application {

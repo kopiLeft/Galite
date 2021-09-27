@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.visual.list
+
+import java.io.Serializable
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import java.io.Serializable
 
 /**
  * Represents a column

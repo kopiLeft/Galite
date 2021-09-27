@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
@@ -26,9 +26,9 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.db.References
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.db.References
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 object VDatabaseUtils {
 
@@ -48,10 +48,12 @@ object VDatabaseUtils {
             val query2 = auxTable.slice(auxTable.id)
                     .select { auxTable.column eq id }
             if (query2.toList()[1] != null) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(
+              throw VExecFailedException(
+                MessageCode.getMessage("VIS-00021", arrayOf<Any>(
                       query1Row[References.column],
                       query1Row[References.table]
-              )))
+                ))
+              )
             }
           }
 
@@ -93,10 +95,12 @@ object VDatabaseUtils {
             val query2 = auxTable.slice(auxTable.id)
                     .select { auxTable.column eq id }
             if (query2.toList()[1] != null) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(
+              throw VExecFailedException(
+                MessageCode.getMessage("VIS-00021", arrayOf<Any>(
                       query1Row[References.column],
                       query1Row[References.table]
-              )))
+                ))
+              )
             }
           }
 

@@ -15,14 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
+import org.kopi.galite.visual.form.UTextField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorBooleanField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.HasValue

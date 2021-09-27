@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.io.BufferedWriter
 import java.io.IOException
@@ -24,8 +24,8 @@ import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.io.Writer
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.report.UReport.UTable
+import org.kopi.galite.visual.report.UReport.UTable
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class PExport2CSV(table: UTable,
                   model: MReport,

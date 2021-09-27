@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.io.BufferedWriter
 import java.io.File
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpGenerator
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VHelpGenerator
 
 /**
  * This class implements a pretty printer

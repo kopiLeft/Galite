@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual.util
 
 import java.io.InputStream
 
-import org.kopi.galite.util.lpr.LpR
-import org.kopi.galite.util.lpr.LpdException
+import org.kopi.galite.visual.util.lpr.LpR
+import org.kopi.galite.visual.util.lpr.LpdException
 
 /**
  * Remote execution client

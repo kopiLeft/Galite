@@ -15,24 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.form
+
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.form.Alignment
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UForm
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.block.Block
+import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.VExecFailedException
 
 import com.vaadin.flow.component.AttachEvent
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.form.Alignment
-import org.kopi.galite.form.UBlock
-import org.kopi.galite.form.UForm
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.block.Block
-import org.kopi.galite.ui.vaadin.block.BlockLayout
-import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport

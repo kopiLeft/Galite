@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.visual.visual
 
 import java.util.Hashtable
 
@@ -25,7 +25,7 @@ open class Registry(val domain: String, private var parents: Array<Registry>?) {
   var dependencies = Hashtable<String, String>()
 
   init {
-    dependencies[VISUAL_DOMAIN] = "org.kopi.galite" + ".Messages"
+    dependencies[VISUAL_DOMAIN] = "org.kopi.galite.visual" + ".Messages"
   }
 
   /**

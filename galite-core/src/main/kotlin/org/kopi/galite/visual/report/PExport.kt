@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual.report
 
 import java.awt.Color
 import java.io.File
@@ -24,7 +24,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.Serializable
 
-import org.kopi.galite.report.UReport.UTable
+import org.kopi.galite.visual.report.UReport.UTable
 
 abstract class PExport(val table: UTable,
                        val model: MReport,
