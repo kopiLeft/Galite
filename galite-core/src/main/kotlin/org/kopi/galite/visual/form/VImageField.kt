@@ -19,17 +19,24 @@
 package org.kopi.galite.visual.form
 
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.util.Arrays
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
+import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.kopi.galite.visual.list.VImageColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VlibProperties
 
 class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
@@ -116,11 +123,49 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result        the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    TODO()
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    val inputStream = when (val value = result[column]) {
+      is ExposedBlob -> {
+        value.bytes.inputStream()
+      }
+      is ByteArray -> {
+        value.inputStream()
+      }
+      else -> {
+        return null
+      }
+    }
+
+    return if (currentDialect is PostgreSQLDialect) {
+      val out = ByteArrayOutputStream()
+      val buf = ByteArray(2048)
+      var nread: Int
+
+      try {
+        while (inputStream.read(buf).also { nread = it } != -1) {
+          out.write(buf, 0, nread)
+        }
+        out.toByteArray()
+      } catch (e: IOException) {
+        throw InconsistencyException("INPUT STREAM BROKEN:" + e.message)
+      }
+    } else {
+      val out = ByteArrayOutputStream()
+      val buf = ByteArray(2048)
+      var nread: Int
+
+      try {
+        while (inputStream.read(buf).also { nread = it } != -1) {
+          out.write(buf, 0, nread)
+        }
+      } catch (e: IOException) {
+        throw VRuntimeException(e)
+      }
+      out.toByteArray()
+    }
   }
 
   /**

@@ -24,7 +24,8 @@ import java.util.StringTokenizer
 import kotlin.math.min
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTimestampColumn
 import org.kopi.galite.visual.type.Date
@@ -289,14 +290,14 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
-      null
-    } else {
-      query.getTimestamp(column)
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    return when (val tmp = result[column]) {
+      is java.sql.Timestamp -> Timestamp(tmp)
+      is Instant -> Timestamp(tmp)
+      else -> null
     }
   }
 

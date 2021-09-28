@@ -24,7 +24,9 @@ import java.io.InputStream
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.visual.list.VColorColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -114,16 +116,23 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
-      null
-    } else {
-      val b = query.getObject(column) as ByteArray
-      Color(reformat(b[0]), reformat(b[1]), reformat(b[2]))
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    val bytes = when (val value = result[column]) {
+      is ExposedBlob -> {
+        value.bytes
+      }
+      is ByteArray -> {
+        value
+      }
+      else -> {
+        return null
+      }
     }
+
+    return Color(reformat(bytes[0]), reformat(bytes[1]), reformat(bytes[2]))
   }
 
   /**

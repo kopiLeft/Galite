@@ -18,14 +18,19 @@
 package org.kopi.galite.visual.form
 
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
 
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTextColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.VRuntimeException
 
 /**
  * This class implements multi-line text fields.
@@ -96,11 +101,36 @@ class VTextField(bufferSize: Int,
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param        query                the query holding the tuple
-   * @param        column                the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any {
-    TODO()
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    return when (val value = result[column]) {
+      is String -> {
+        super.retrieveQuery(result, column)
+      }
+      is ExposedBlob, is ByteArray -> {
+        val inputStream = if (value is ExposedBlob) {
+          value.bytes.inputStream()
+        } else {
+          (value as ByteArray).inputStream()
+        }
+        val out = ByteArrayOutputStream()
+        val buf = ByteArray(2048)
+        var nread: Int
+        try {
+          while (inputStream.read(buf).also { nread = it } != -1) {
+            out.write(buf, 0, nread)
+          }
+          out.toByteArray()
+        } catch (e: IOException) {
+          throw VRuntimeException(e)
+        }
+      }
+      else -> {
+        result[column]
+      }
+    }
   }
 
   /**
