@@ -23,6 +23,7 @@ import java.io.InputStream
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.ImageField
 
@@ -85,7 +86,7 @@ class DImageField(
    *
    * @param s The object to set in
    */
-  fun setObject(s: Any?) {
+  fun setObject(s: ByteArray?) {
     access(currentUI) {
       if (s == null) {
         field.setData(s)
@@ -97,7 +98,7 @@ class DImageField(
         setBlink(true)
       }
     }
-    image = s as ByteArray?
+    image = s
   }
 
   override fun setBlink(b: Boolean) {
@@ -127,6 +128,7 @@ class DImageField(
 
   fun onRemove(event: DomEvent) {
     setObject(null)
+    setImage(null)
   }
 
   /*fun onImageClick() { TODO
@@ -159,9 +161,11 @@ class DImageField(
     }
   }
 
-  fun onUploadSucceeded(event: SucceededEvent) {
+  private fun onUploadSucceeded(event: SucceededEvent) {
     try {
-      setObject(buffer.inputStream.readBytes())
+      val bytes = buffer.inputStream.readBytes()
+      setObject(bytes)
+      setImage(bytes)
     } finally {
       if (event.contentLength > 50 * 1024 * 1024) {
         getModel().getForm().unsetProgressDialog()
@@ -169,11 +173,17 @@ class DImageField(
     }
   }
 
-  fun onUploadFailed(event: FailedEvent) {
+  fun setImage(bytes: ByteArray?) {
+    getModel().isChangedUI = true
+    getModel().setImage(bytes)
+    getModel().onAfterDrop()
+  }
+
+  private fun onUploadFailed(event: FailedEvent) {
     event.reason.printStackTrace(System.err)
     Thread {
       getModel().getForm().error(event.reason.message)
-      //BackgroundThreadHandler.updateUI() TODO
+      BackgroundThreadHandler.updateUI(currentUI)
     }.start()
   }
 }

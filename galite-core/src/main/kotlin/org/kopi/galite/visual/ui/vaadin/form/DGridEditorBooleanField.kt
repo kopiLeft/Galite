@@ -164,14 +164,14 @@ class DGridEditorBooleanField(
    * @return The true representation of this boolean field.
    */
   protected val trueRepresentation: String?
-    get() = getModel().toText(java.lang.Boolean.TRUE)
+    get() = getModel().toText(true)
 
   /**
    * Returns the false representation of this boolean field.
    * @return The false representation of this boolean field.
    */
   protected val falseRepresentation: String?
-    get() = getModel().toText(java.lang.Boolean.FALSE)
+    get() = getModel().toText(false)
 
   /**
    * Gets the focus to this field.

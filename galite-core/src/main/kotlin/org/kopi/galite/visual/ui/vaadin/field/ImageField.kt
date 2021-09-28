@@ -87,6 +87,7 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
   fun setData(stream: AbstractStreamResource?) {
     if(stream == null) {
       image.element.removeAttribute("src")
+      upload.element.executeJs("this.files=[]");
     } else {
       image.element.setAttribute("src", stream)
     }
