@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.report
 
+import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.type.Decimal
 
 /**

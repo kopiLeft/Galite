@@ -20,7 +20,8 @@ package org.kopi.galite.visual.domain
 import kotlin.reflect.KClass
 
 import org.joda.time.DateTime
-import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
@@ -34,7 +35,6 @@ import org.kopi.galite.visual.form.VTextField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.form.dsl.FormField
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Image

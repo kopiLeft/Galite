@@ -24,12 +24,12 @@ import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.form.dsl.Access
-import org.kopi.galite.visual.form.dsl.FormBlock
-import org.kopi.galite.visual.form.dsl.Key
-import org.kopi.galite.visual.form.dsl.Modes
-import org.kopi.galite.visual.form.dsl.ReportSelectionForm
-import org.kopi.galite.visual.report.Report
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.Modes
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.dsl.report.Report
 
 class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK

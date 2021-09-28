@@ -18,13 +18,13 @@ package org.kopi.galite.tests.chart
 
 import java.util.Locale
 
-import org.kopi.galite.visual.chart.Chart
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 

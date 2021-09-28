@@ -37,4 +37,3 @@ data class Point(val x: Int = 0, val y: Int = 0) : Serializable {
    */
   override fun toString() = javaClass.name + "[x=" + x + ",y=" + y + "]"
 }
-

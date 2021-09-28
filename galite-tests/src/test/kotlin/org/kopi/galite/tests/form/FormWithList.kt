@@ -26,9 +26,9 @@ import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
-import org.kopi.galite.visual.form.dsl.DictionaryForm
-import org.kopi.galite.visual.form.dsl.FormBlock
-import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
 
 class FormWithList : DictionaryForm() {
   override val locale = Locale.UK

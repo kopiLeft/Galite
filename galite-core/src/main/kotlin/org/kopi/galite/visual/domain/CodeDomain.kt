@@ -17,14 +17,14 @@
 
 package org.kopi.galite.visual.domain
 
-import org.kopi.galite.visual.common.CodeDescription
-import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.CodeDescription
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFixnumCodeField
 import org.kopi.galite.visual.form.VIntegerCodeField
 import org.kopi.galite.visual.form.VStringCodeField
-import org.kopi.galite.visual.form.dsl.FormField
 import org.kopi.galite.visual.type.Decimal
 
 /**

@@ -22,10 +22,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.dsl.DictionaryForm
-import org.kopi.galite.visual.form.dsl.FormBlock
-import org.kopi.galite.visual.form.dsl.Key
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm() {

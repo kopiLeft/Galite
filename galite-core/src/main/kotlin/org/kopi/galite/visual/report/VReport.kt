@@ -28,9 +28,9 @@ import kotlin.jvm.Throws
 
 import org.apache.poi.ss.formula.functions.T
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.kopi.galite.visual.common.Trigger
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.l10n.LocalizationManager

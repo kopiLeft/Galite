@@ -19,7 +19,6 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

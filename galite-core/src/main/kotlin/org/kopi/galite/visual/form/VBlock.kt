@@ -60,7 +60,6 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.visual.common.Trigger
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.DBDeadLockException
@@ -68,6 +67,7 @@ import org.kopi.galite.visual.db.DBForeignKeyException
 import org.kopi.galite.visual.db.DBInterruptionException
 import org.kopi.galite.visual.db.Utils
 import org.kopi.galite.visual.db.transaction
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.list.VListColumn

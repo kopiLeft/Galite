@@ -21,11 +21,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.chart.Chart
 import org.kopi.galite.visual.chart.UChart
 import org.kopi.galite.visual.chart.VChart
+import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.MReport
-import org.kopi.galite.visual.report.Report
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
 

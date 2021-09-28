@@ -17,8 +17,8 @@
 
 package org.kopi.galite.visual.field
 
-import org.kopi.galite.visual.common.LocalizationWriter
 import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
 
 /**
  * A field represents a visual component that can hold values

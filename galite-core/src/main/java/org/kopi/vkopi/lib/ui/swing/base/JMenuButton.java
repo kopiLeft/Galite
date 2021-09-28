@@ -99,4 +99,3 @@ public class JMenuButton extends JButton {
 	 */
   private static final long serialVersionUID = -2120770411233444725L;
 }
-

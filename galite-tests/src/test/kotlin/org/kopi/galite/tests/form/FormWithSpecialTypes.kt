@@ -31,11 +31,11 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.minValue
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.dsl.Form
-import org.kopi.galite.visual.form.dsl.FormBlock
-import org.kopi.galite.visual.form.dsl.Key
-import org.kopi.galite.visual.form.dsl.minValue
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Timestamp

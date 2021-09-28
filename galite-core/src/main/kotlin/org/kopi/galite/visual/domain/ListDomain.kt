@@ -23,9 +23,9 @@ import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
-import org.kopi.galite.visual.common.FieldList
-import org.kopi.galite.visual.common.ListDescription
-import org.kopi.galite.visual.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.FieldList
+import org.kopi.galite.visual.dsl.common.ListDescription
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.form.VDictionary
 import org.kopi.galite.visual.list.VList
 

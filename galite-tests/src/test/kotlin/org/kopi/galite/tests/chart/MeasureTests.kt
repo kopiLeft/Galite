@@ -20,8 +20,8 @@ package org.kopi.galite.tests.chart
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.visual.chart.ChartMeasure
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.visual.Color
 
 class MeasureTests {
