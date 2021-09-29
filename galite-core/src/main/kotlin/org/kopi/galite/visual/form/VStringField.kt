@@ -167,13 +167,6 @@ open class VStringField(val bufferSize: Int,
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
-   */
-  override fun retrieveQuery(query: Query, column: Int): Any = query.getString(column)
-
-  /**
    * Is the field value of given record null ?
    */
   override fun isNullImpl(r: Int): Boolean = value[r] == null

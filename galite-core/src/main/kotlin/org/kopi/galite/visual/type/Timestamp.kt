@@ -33,6 +33,8 @@ class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp, Instant>
 
   constructor(millis: Long) : this(java.sql.Timestamp(millis))
 
+  constructor(instant: Instant) : this(java.sql.Timestamp.from(instant))
+
   constructor(calendar: Calendar) : this(java.sql.Timestamp(calendar.timeInMillis))
 
   /**

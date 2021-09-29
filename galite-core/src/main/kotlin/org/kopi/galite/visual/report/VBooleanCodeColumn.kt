@@ -52,7 +52,7 @@ class VBooleanCodeColumn(ident: String?,
                 names) {
 
   override fun compareTo(object1: Any, object2: Any): Int {
-    return if (object1 == object2) 0 else if (java.lang.Boolean.TRUE == object1) 1 else -1
+    return if (object1 == object2) 0 else if (true == object1) 1 else -1
   }
 
   /**

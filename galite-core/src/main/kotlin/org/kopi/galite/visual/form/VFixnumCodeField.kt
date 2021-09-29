@@ -22,7 +22,8 @@ import java.math.BigDecimal
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VFixnumCodeColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Decimal
@@ -126,14 +127,16 @@ open class VFixnumCodeField(bufferSize: Int,
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    val bigDecimal = result[column] as? BigDecimal
+
+    return if (bigDecimal == null) {
       null
     } else {
-      query.getDecimal(column)
+      Decimal(bigDecimal)
     }
   }
 

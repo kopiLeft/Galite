@@ -116,12 +116,15 @@ fun <T> VWindow.doAndWait(message: String?, task: () -> T): T {
     }
   }
 
-  val returnValue = task()
-
-  synchronized(finished) {
-    finished = true
-    unsetWaitInfo()
+  val returnValue = try {
+    task()
+  } finally {
+    synchronized(finished) {
+      finished = true
+      unsetWaitInfo()
+    }
   }
+
   return returnValue
 }
 

@@ -35,6 +35,7 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.WindowController
@@ -223,7 +224,7 @@ open class FormBlock(var buffer: Int,
       blockFields.add(field)
     } else {
       if (domain.kClass != String::class
-              && TODO("add Image type")) {
+              && domain.kClass != Image::class) {
         error("The field is droppable but its type is not supported as a drop target.")
       } else {
         val flavor = addDropList(dropList!!, field)

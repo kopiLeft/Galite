@@ -217,21 +217,10 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
-      null
-    } else {
-      query.getWeek(column)
-    }
-  }
-
-  /**
-   * TODO document!
-   */
-  override fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? {
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     val tmp = result[column] as? Int ?: return null
     return Week(tmp / 100, tmp % 100)
   }
