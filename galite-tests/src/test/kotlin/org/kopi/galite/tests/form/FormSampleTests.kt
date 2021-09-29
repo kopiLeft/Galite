@@ -25,20 +25,20 @@ import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 class FormSampleTests: JApplicationTestBase() {
   @Test
   fun sourceFormTest() {
-    val formModel = FormSample.model
+    val formModel = FormSample().model
 
     assertEquals(FormSample::class.qualifiedName!!.replace(".", "/"), formModel.source)
   }
 
   @Test
   fun changeBlockAccessTest() {
-    FormSample.model
+    val formSample = FormSample().also { it.model }
 
-    assertEquals(1, FormSample.tb4ToTestChangeBlockAccess.vBlock.getAccess())
+    assertEquals(1, formSample.tb4ToTestChangeBlockAccess.vBlock.getAccess())
 
-    assertArrayEquals(intArrayOf(0, 0, 0), FormSample.tb4ToTestChangeBlockAccess.id.access)
-    assertArrayEquals(intArrayOf(1, 1, 2), FormSample.tb4ToTestChangeBlockAccess.name.access)
-    assertArrayEquals(intArrayOf(1, 1, 4), FormSample.tb4ToTestChangeBlockAccess.password.access)
-    assertArrayEquals(intArrayOf(1, 1, 2), FormSample.tb4ToTestChangeBlockAccess.age.access)
+    assertArrayEquals(intArrayOf(0, 0, 0), formSample.tb4ToTestChangeBlockAccess.id.access)
+    assertArrayEquals(intArrayOf(1, 1, 2), formSample.tb4ToTestChangeBlockAccess.name.access)
+    assertArrayEquals(intArrayOf(1, 1, 4), formSample.tb4ToTestChangeBlockAccess.password.access)
+    assertArrayEquals(intArrayOf(1, 1, 2), formSample.tb4ToTestChangeBlockAccess.age.access)
   }
 }

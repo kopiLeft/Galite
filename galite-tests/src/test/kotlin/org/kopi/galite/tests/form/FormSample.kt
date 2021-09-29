@@ -50,8 +50,7 @@ object User : Table() {
 
 val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
 
-val FormSample = FormSample_()
-class FormSample_ : Form() {
+class FormSample : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
 
@@ -277,5 +276,5 @@ object Ages : CodeDomain<Int>() {
 }
 
 fun main() {
-  Application.runForm(formName = FormSample)
+  Application.runForm(formName = FormSample())
 }

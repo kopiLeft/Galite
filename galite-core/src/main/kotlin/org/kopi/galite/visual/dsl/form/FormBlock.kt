@@ -35,6 +35,7 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.WindowController
@@ -67,7 +68,7 @@ open class FormBlock(var buffer: Int,
   : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
-  val help: String? = null
+  open val help: String? = null
   private var blockOptions: Int = 0
   private var blockTables: MutableList<FormBlockTable> = mutableListOf()
   private var indices: MutableList<FormBlockIndex> = mutableListOf()
@@ -223,7 +224,7 @@ open class FormBlock(var buffer: Int,
       blockFields.add(field)
     } else {
       if (domain.kClass != String::class
-              && TODO("add Image type")) {
+              && domain.kClass != Image::class) {
         error("The field is droppable but its type is not supported as a drop target.")
       } else {
         val flavor = addDropList(dropList!!, field)
@@ -706,10 +707,6 @@ open class FormBlock(var buffer: Int,
     (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
-  fun showChart(chart: Chart) {
-    WindowController.windowController.doNotModal(chart)
-  }
-
   /** The block model */
   lateinit var vBlock: VBlock
 
@@ -777,12 +774,7 @@ open class FormBlock(var buffer: Int,
       }
 
       init {
-        //TODO ----------begin-------------
-
         handleTriggers(this@FormBlock.triggers)
-
-        //TODO ------------end-----------
-
         super.source = source ?: sourceFile
         super.title = this@FormBlock.title
         super.help = this@FormBlock.help

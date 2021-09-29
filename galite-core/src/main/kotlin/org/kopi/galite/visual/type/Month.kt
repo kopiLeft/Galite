@@ -28,7 +28,7 @@ import java.util.Locale
 /**
  * This class represents month types
  */
-open class Month(year: Int, month: Int) : Type<Month, LocalDate>() {
+open class Month(year: Int, month: Int) : Type<Month, Int>() {
   /**
    * Constructs a Month from a Date
    */

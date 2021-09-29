@@ -1690,7 +1690,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       when (getMode()) {
         VConstants.MOD_INSERT -> insertRecord(0, -1)
         VConstants.MOD_UPDATE -> updateRecord(0)
-        else -> throw InconsistencyException()
+        else -> throw InconsistencyException("The block is neither in insert nor in update mode.")
       }
     } else {
       if (isIndexed()) {
@@ -2273,7 +2273,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       ids[rows] = result[idColumn]
       for (i in 0 until query_cnt) {
-        values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
+        values[i][rows] = query_tab[i]!!.retrieveQuery(result, columns[i])
       }
       rows += 1
     }

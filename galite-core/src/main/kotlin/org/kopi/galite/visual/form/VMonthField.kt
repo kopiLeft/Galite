@@ -24,7 +24,8 @@ import java.util.GregorianCalendar
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VMonthColumn
 import org.kopi.galite.visual.type.Month
@@ -162,15 +163,17 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
-      null
-    } else {
-      query.getMonth(column)
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    val tmp = result[column] as? Int
+
+    if (tmp == null) {
+      return null
     }
+
+    return Month(tmp / 100, tmp % 100)
   }
 
   /**

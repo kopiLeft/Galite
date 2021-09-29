@@ -107,19 +107,6 @@ class VIntegerCodeField : VCodeField {
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
-   */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
-      null
-    } else {
-      query.getInt(column)
-    }
-  }
-
-  /**
    * Returns the field value of given record as a int value.
    */
   override fun getInt(r: Int): Int? = if (value[r] == -1) null else codes[value[r]]

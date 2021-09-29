@@ -97,13 +97,6 @@ class VStringCodeField(bufferSize: Int,
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
-   */
-  override fun retrieveQuery(query: Query, column: Int): Any = query.getString(column)
-
-  /**
    * Returns the field value of given record as a int value.
    */
   override fun getString(r: Int): String = getObject(r) as String

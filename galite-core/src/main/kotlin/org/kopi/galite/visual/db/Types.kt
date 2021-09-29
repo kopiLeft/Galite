@@ -15,24 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.form
+package org.kopi.galite.visual.db
 
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.jetbrains.exposed.sql.Table
 
 /**
- * A page represents a Tab for each page you create under the form's toolbar.
- * You can put as much blocks you want in each page, the same goes for form without pages.
+ * Month column type.
  *
- * @param ident                the identifier of the page
- * @param title                the page title in default locale
+ * @param name the column name
  */
-class FormPage(internal val pageNumber: Int, val ident: String, val title: String, val form: Form) {
+fun Table.month(name: String) = integer(name)
 
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
-
-  fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genPage(ident, title)
-  }
-}
+/**
+ * Week column type.
+ *
+ * @param name the column name
+ */
+fun Table.week(name: String) = integer(name)

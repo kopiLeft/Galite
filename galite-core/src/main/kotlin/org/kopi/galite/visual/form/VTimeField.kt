@@ -18,9 +18,11 @@
 
 package org.kopi.galite.visual.form
 
+import java.time.LocalTime
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTimeColumn
 import org.kopi.galite.visual.type.Time
@@ -205,14 +207,14 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param    query        the query holding the tuple
-   * @param    column        the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (query.isNull(column)) {
-      null
-    } else {
-      query.getTime(column)
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
+    return when (val tmp = result[column]) {
+      is java.sql.Time ->  Time(tmp)
+      is LocalTime -> Time(tmp)
+      else -> null
     }
   }
 

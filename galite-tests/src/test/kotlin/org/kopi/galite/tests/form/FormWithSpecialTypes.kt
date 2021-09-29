@@ -20,11 +20,11 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.visual.db.month
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
@@ -48,7 +48,7 @@ object Product : Table() {
   val price = decimal("PRICE", 10, 5).nullable()
   val image = blob("IMAGE")
   val date = timestamp("MAN_DATE")
-  val month = date("EXP_MONTH").nullable()
+  val month = month("EXP_MONTH").nullable()
 }
 
 object FormWithSpecialTypes : Form() {

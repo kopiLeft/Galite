@@ -59,6 +59,6 @@ class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
 
     private const val GENERAL_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/General"
     private val booleanNames = arrayOf("true", "false")
-    private val booleanCodes = arrayOf(java.lang.Boolean.TRUE, java.lang.Boolean.FALSE)
+    private val booleanCodes: Array<Boolean?> = arrayOf(true, false)
   }
 }

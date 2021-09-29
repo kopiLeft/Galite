@@ -122,10 +122,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     this.indices = indices
     this.priority = priority
-    this.align = align
     if (this is VFixnumField || this is VIntegerField) {
-      // move it to compiler !!!
       this.align = VConstants.ALG_RIGHT
+    } else {
+      this.align = align
     }
     position = pos
     command = commands
@@ -1069,22 +1069,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     column          the index of the column in the tuple
    */
   fun setQuery(record: Int, result: ResultRow, column: Column<*>) {
-    setObject(record, retrieveQuery_(result, column))
+    setObject(record, retrieveQuery(result, column))
   }
 
   /**
    * Returns the specified tuple column as object of correct type for the field.
-   * @param     query           the query holding the tuple
-   * @param     column          the index of the column in the tuple
+   * @param    result       the result row
+   * @param    column       the column in the tuple
    */
-  @Deprecated("use retrieveQuery_(result: ResultRow, column: Column<*>)")
-  abstract fun retrieveQuery(query: Query, column: Int): Any?
-
-
-  /**
-   * TODO document! and add needed implementations
-   */
-  open fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? = result[column]
+  open fun retrieveQuery(result: ResultRow, column: Column<*>): Any? = result[column]
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
