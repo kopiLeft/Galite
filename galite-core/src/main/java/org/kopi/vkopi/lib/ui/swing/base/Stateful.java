@@ -30,4 +30,3 @@ public interface Stateful {
   Color getBgColor();
   Object getModel();
 }
-

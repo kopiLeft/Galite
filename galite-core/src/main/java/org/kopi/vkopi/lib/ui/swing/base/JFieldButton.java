@@ -84,4 +84,3 @@ public class JFieldButton extends JButton implements UComponent {
      */
 	private static final long serialVersionUID = 261415262407169537L;
 }
-

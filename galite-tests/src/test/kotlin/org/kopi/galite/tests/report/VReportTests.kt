@@ -35,10 +35,10 @@ import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.report.FieldAlignment
+import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Constants
-import org.kopi.galite.visual.report.FieldAlignment
 import org.kopi.galite.visual.report.PConfig
-import org.kopi.galite.visual.report.Report
 import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV

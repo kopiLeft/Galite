@@ -225,4 +225,3 @@ object HylaFAXUtils {
   var HFX_DEFAULT_PORT = 4559
   var HFX_DEFAULT_USER = "GALITE"
 }
-

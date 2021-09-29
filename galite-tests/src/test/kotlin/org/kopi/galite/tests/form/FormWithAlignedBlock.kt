@@ -21,9 +21,9 @@ import java.util.Locale
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.form.dsl.BlockOption
-import org.kopi.galite.visual.form.dsl.Form
-import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
 
 class FormWithAlignedBlock : Form() {
   override val locale = Locale.UK

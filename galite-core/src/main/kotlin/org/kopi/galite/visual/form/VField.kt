@@ -55,7 +55,7 @@ import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.db.Utils
-import org.kopi.galite.visual.form.dsl.Access
+import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.l10n.BlockLocalizer
 import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.list.VColumn

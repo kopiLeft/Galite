@@ -21,8 +21,8 @@ package org.kopi.galite.visual.visual
 import kotlin.jvm.Throws
 
 import org.kopi.galite.visual.base.Image
-import org.kopi.galite.visual.common.Window
 import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.l10n.ModuleLocalizer
 import org.kopi.galite.visual.util.base.InconsistencyException

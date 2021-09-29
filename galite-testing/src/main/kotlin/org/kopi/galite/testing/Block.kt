@@ -16,8 +16,8 @@
  */
 package org.kopi.galite.testing
 
+import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.dsl.FormBlock
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DGridBlock

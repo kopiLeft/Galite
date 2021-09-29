@@ -100,7 +100,7 @@ public class JWindowController extends WindowController {
   }
 
 
-  public boolean doModal(org.kopi.galite.visual.common.Window model) {
+  public boolean doModal(org.kopi.galite.visual.dsl.common.Window model) {
   	return doModal(model.getModel());
   }
 
@@ -131,7 +131,7 @@ public class JWindowController extends WindowController {
     });
   }
 
-  public void doNotModal(final org.kopi.galite.visual.common.Window model) {
+  public void doNotModal(final org.kopi.galite.visual.dsl.common.Window model) {
   	doNotModal(model.getModel());
   }
 

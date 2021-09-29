@@ -28,8 +28,8 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.common.Trigger
 import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.ChartLocalizer
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable

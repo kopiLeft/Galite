@@ -27,10 +27,9 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIME
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.domain.WEEK
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.dsl.DictionaryForm
-import org.kopi.galite.visual.form.dsl.FormBlock
-import org.kopi.galite.visual.form.dsl.insertBlock
 
 class FormExample : DictionaryForm() {
   override val locale = Locale.UK
@@ -43,9 +42,9 @@ class FormExample : DictionaryForm() {
     help = "Autofill",
   )
   val clientsPage= page("Clients")
-  val block = clientsPage.insertBlock(Clients())
-  val salesBlock = clientsPage.insertBlock(Sales())
-  val salesSimpleBlock = clientsPage.insertBlock(SalesSimpleBlock())
+  val block = insertBlock(Clients(), clientsPage)
+  val salesBlock = insertBlock(Sales(), clientsPage)
+  val salesSimpleBlock = insertBlock(SalesSimpleBlock(), clientsPage)
 
   inner class Clients : FormBlock(1, 1, "Clients") {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {

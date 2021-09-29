@@ -39,5 +39,3 @@ public class TextSelecter extends FocusAdapter {
 
   public static final  TextSelecter   TEXT_SELECTOR = new TextSelecter(); 
 }
-
-

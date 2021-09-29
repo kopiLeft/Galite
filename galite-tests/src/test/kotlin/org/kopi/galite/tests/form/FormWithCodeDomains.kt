@@ -21,8 +21,8 @@ import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.visual.domain.CodeDomain
-import org.kopi.galite.visual.form.dsl.Form
-import org.kopi.galite.visual.form.dsl.FormBlock
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
 
 class FormWithCodeDomains: Form() {
   val edit = menu("Edit")

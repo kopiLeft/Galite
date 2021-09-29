@@ -20,7 +20,7 @@ package org.kopi.galite.visual.visual
 
 import java.io.Serializable
 
-import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**

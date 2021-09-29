@@ -16,9 +16,9 @@
  */
 package org.kopi.galite.testing
 
+import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.dsl.FormField
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
 import org.kopi.galite.visual.ui.vaadin.field.InputTextField

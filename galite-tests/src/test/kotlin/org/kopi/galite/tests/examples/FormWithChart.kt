@@ -19,16 +19,16 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.visual.chart.Chart
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.dsl.Form
-import org.kopi.galite.visual.form.dsl.Key
-import org.kopi.galite.visual.form.dsl.insertBlock
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 
@@ -67,10 +67,10 @@ class ChartSample: Chart() {
   val action = menu("Action")
 
   val greeting = actor(
-    ident = "greeting",
-    menu = action,
-    label = "Greeting",
-    help = "Click me to show greeting",
+          ident = "greeting",
+          menu = action,
+          label = "Greeting",
+          help = "Click me to show greeting",
   ) {
     key  =  Key.F1          // key is optional here
     icon =  "ask"  // icon is optional here

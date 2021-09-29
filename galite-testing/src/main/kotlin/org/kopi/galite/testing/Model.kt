@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.visual.common.Window
+import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.visual.VWindow

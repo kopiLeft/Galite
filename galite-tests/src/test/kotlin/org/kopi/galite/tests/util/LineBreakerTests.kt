@@ -52,4 +52,3 @@ class LineBreakerTests : TestBase() {
     assertArraysEquals(arrayOf("", "This ", "text ", "contains ", "carriage ", "return."), LineBreaker.splitForWidth(sourceWithoutCarriage, 4))
   }
 }
-

@@ -56,6 +56,3 @@ import javax.swing.JLabel;
 	private static final long serialVersionUID = -7394760313569275609L;
 
 }
-
-
-

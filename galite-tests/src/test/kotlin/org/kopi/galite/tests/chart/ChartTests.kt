@@ -22,8 +22,8 @@ import kotlin.test.assertFailsWith
 
 import org.junit.Test
 import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.visual.chart.Formatter
 import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.dsl.chart.Formatter
 import org.kopi.galite.visual.exceptions.MissingMeasureException
 
 class ChartTests : TestBase() {

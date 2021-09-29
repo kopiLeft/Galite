@@ -25,9 +25,9 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import org.kopi.galite.visual.common.Trigger
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.DBContextHandler
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException

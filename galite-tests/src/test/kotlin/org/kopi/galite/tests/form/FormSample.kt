@@ -26,16 +26,16 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.Modes
+import org.kopi.galite.visual.dsl.form.maxValue
+import org.kopi.galite.visual.dsl.form.minValue
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.dsl.Access
-import org.kopi.galite.visual.form.dsl.BlockOption
-import org.kopi.galite.visual.form.dsl.FieldOption
-import org.kopi.galite.visual.form.dsl.Form
-import org.kopi.galite.visual.form.dsl.FormBlock
-import org.kopi.galite.visual.form.dsl.Key
-import org.kopi.galite.visual.form.dsl.Modes
-import org.kopi.galite.visual.form.dsl.maxValue
-import org.kopi.galite.visual.form.dsl.minValue
 import org.kopi.galite.visual.visual.FileHandler
 
 object User : Table() {
