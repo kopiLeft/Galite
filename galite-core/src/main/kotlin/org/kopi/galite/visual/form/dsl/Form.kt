@@ -18,6 +18,7 @@ package org.kopi.galite.visual.form.dsl
 
 import java.io.IOException
 
+import org.kopi.galite.visual.chart.Chart
 import org.kopi.galite.visual.common.Action
 import org.kopi.galite.visual.common.FormTrigger
 import org.kopi.galite.visual.common.LocalizationWriter
@@ -29,6 +30,7 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Represents a form.
@@ -79,6 +81,7 @@ abstract class Form : Window() {
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
+  @Deprecated("Use FormPage.insertBlock(block)")
   fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
@@ -90,6 +93,14 @@ abstract class Form : Window() {
     formBlocks.add(block)
     return block
   }
+
+  /**
+   * Adds a new block to this form.
+   *
+   * @param        block                 the block to insert
+   * @param        formPage              the page containing the block
+   */
+  fun <T : FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
 
   /**
    * Adds triggers to this form
@@ -124,7 +135,7 @@ abstract class Form : Window() {
    * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String): FormPage {
-    val page = FormPage(pages.size, "Id\$${pages.size}", title)
+    val page = FormPage(pages.size, "Id\$${pages.size}", title, this)
     pages.add(page)
     return page
   }
@@ -138,7 +149,7 @@ abstract class Form : Window() {
    * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage(pages.size, "Id\$${pages.size}", title)
+    val page = FormPage(pages.size, "Id\$${pages.size}", title, this)
     page.init()
     pages.add(page)
     return page
@@ -173,6 +184,10 @@ abstract class Form : Window() {
    */
   fun gotoBlock(target: VBlock) {
     model.gotoBlock(target)
+  }
+
+  fun showChart(chart: Chart) {
+    WindowController.windowController.doNotModal(chart)
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -332,3 +347,12 @@ abstract class Form : Window() {
     }
   }
 }
+
+/**
+ * Adds a new block to this form.
+ *
+ * @param        block                 the block to insert
+ * @receiver                           the page containing the block
+ */
+fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
+  this.form.insertBlock(block, this, init)

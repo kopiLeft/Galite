@@ -14,19 +14,50 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.chart
+package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.visual.chart.Chart
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.dsl.Form
 import org.kopi.galite.visual.form.dsl.Key
+import org.kopi.galite.visual.form.dsl.insertBlock
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
+
+object FormWithChart: Form() {
+  override val locale = Locale.UK
+  override val title = "form for test"
+
+  val action = menu("Action")
+
+  val graph = actor (
+          ident =  "graph",
+          menu =   action,
+          label =  "Graph for test",
+          help =   "show graph values" ,
+  ) {
+    key  =  Key.F9          // key is optional here
+    icon =  "column_chart"  // icon is optional here
+  }
+
+  val p1 = page("test page")
+  val b = p1.insertBlock(Traineeship())
+
+  val cmd = command(item = graph) {
+    mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+    action = {
+      showChart(ChartSample())
+    }
+  }
+}
 
 class ChartSample: Chart() {
   override val locale = Locale.UK
@@ -36,10 +67,10 @@ class ChartSample: Chart() {
   val action = menu("Action")
 
   val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
+    ident = "greeting",
+    menu = action,
+    label = "Greeting",
+    help = "Click me to show greeting",
   ) {
     key  =  Key.F1          // key is optional here
     icon =  "ask"  // icon is optional here
@@ -101,4 +132,8 @@ class ChartSample: Chart() {
       this[population] = 368500
     }
   }
+}
+
+fun main() {
+  Application.runForm(formName = FormWithChart)
 }

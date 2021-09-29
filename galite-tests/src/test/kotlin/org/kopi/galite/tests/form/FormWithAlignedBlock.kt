@@ -25,14 +25,11 @@ import org.kopi.galite.visual.form.dsl.BlockOption
 import org.kopi.galite.visual.form.dsl.Form
 import org.kopi.galite.visual.form.dsl.FormBlock
 
-val FormAlignTest = FormAlignTest_()
-class FormAlignTest_ : Form() {
+class FormWithAlignedBlock : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
 
-  val p1 = page("test page")
-
-  val targetBlock = insertBlock(TestAlign(), p1)
+  val targetBlock = insertBlock(TestAlign())
 
   val totalBlock = block(1, 1, "Total", "Total block") {
 
@@ -71,5 +68,5 @@ class TestAlign : FormBlock(10, 8, "Test block") {
 }
 
 fun main() {
-  Application.runForm(formName = FormAlignTest)
+  Application.runForm(formName = FormWithAlignedBlock())
 }
