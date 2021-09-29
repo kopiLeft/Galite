@@ -57,8 +57,8 @@ publishing {
         url.set("https://github.com/kopiLeft/Galite")
         licenses {
           license {
-            name.set("The Apache Software License, Version 2.0")
-            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            name.set("The GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1")
+            url.set("https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt")
           }
         }
         developers {
