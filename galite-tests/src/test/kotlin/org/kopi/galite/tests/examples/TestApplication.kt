@@ -18,10 +18,8 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.connectToDatabase
+import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
@@ -31,25 +29,17 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.server.PWA
 
 @SpringBootApplication
 open class TestApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
-  DBSchemaTest.reset()
-  transaction {
-    DBSchemaTest.createDBSchemaTables()
-    DBSchemaTest.insertIntoUsers(DBSchemaTest.testUser, "administrator")
-  }
-  initData()
-  initModules()
+  initDatabase()
   runApplication<TestApplication>(*args)
 }
 
 @Route("")
-@PWA(name = "Galite test", shortName = "Tests", iconPath = "favicon.png")
 class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"

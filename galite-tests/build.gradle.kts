@@ -27,7 +27,7 @@ plugins {
 }
 
 application {
-  mainClass.set("org.kopi.galite.demo.GShopApplicationKt")
+  mainClass.set("org.kopi.galite.demo.ApplicationKt")
 }
 
 vaadin {

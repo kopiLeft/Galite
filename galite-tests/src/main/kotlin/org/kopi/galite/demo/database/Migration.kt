@@ -14,18 +14,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo
+package org.kopi.galite.demo.database
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
-
 import kotlin.reflect.KClass
-
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
@@ -35,167 +33,72 @@ import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
-import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.db.list_Of_Tables
+import org.kopi.galite.visual.db.sequencesList
 import org.kopi.galite.visual.type.Decimal
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-object Client : Table("CLIENTS") {
-  val idClt = integer("ID").autoIncrement()
-  val firstNameClt = varchar("FIRSTNAME", 25)
-  val lastNameClt = varchar("LASTNAME", 25)
-  val addressClt = varchar("ADDRESS", 50)
-  val ageClt = integer("AGE")
-  val mail = varchar("EMAIL", 25)
-  val countryClt = varchar("COUNTRY", 30)
-  val cityClt = varchar("CITY", 30)
-  val zipCodeClt = integer("ZIP_CODE")
-  val activeClt = bool("ACTIVE")
+const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
+const val testDriver = "org.h2.Driver"
+const val testUser = "admin"
+const val testPassword = "admin"
 
-  override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
-}
-
-object Purchase: Table("PURCHASE") {
-  val id = integer("ID").autoIncrement()
-  val idClt = integer("CLIENT").references(Client.idClt)
-  val idPdt = integer("PRODUCT").references(Product.idPdt)
-  val quantity = integer("QUANTITY")
-}
-
-object Product : Table("PRODUCTS") {
-  val idPdt = integer("ID").autoIncrement()
-  val description = varchar("DESCRIPTION", 50)
-  val category = integer("CATEGORY")
-  val department = varchar("DEPARTMENT", 10)
-  val supplier = varchar("SUPPLIER", 20)
-  val taxName = varchar("TAX", 20).references(TaxRule.taxName)
-  val price = decimal("UNIT_PRICE_EXCLUDING_VAT", 9, 3)
-  val photo = blob("PHOTO").nullable()
-
-  override val primaryKey = PrimaryKey(idPdt)
-}
-
-object Stock : Table("STOCK") {
-  val idStckPdt = integer("PRODUCT_ID").references(Product.idPdt)
-  val idStckProv = integer("PROVIDER_ID").references(Provider.idProvider)
-  val minAlert = integer("MIN_VALUE_ALERT")
-
-  override val primaryKey = PrimaryKey(idStckPdt, idStckProv)
-}
-
-object Provider : Table("PROVIDERS") {
-  val idProvider = integer("ID").autoIncrement()
-  val nameProvider = varchar("NAME", 50)
-  val tel = integer("PHONE")
-  val description = varchar("DESCRIPTION", 70)
-  val address = varchar("ADDRESS ", 50)
-  val zipCode = integer("ZIP_CODE")
-  val logo = blob("COMPANY_LOGO").nullable()
-
-  override val primaryKey = PrimaryKey(idProvider)
-}
-
-object BillProduct : Table("BILL_PRODUCT") {
-  val idBPdt = integer("BILL_PRODUCT_ID").references(Product.idPdt)
-  val quantity = integer("QUANTITY")
-  val amount = decimal("AMOUNT_BEFORE_TAXES", 9, 3)
-  val amountWithTaxes = decimal("AMOUNT_INCLUDING_TAXES", 9, 3)
-
-  override val primaryKey = PrimaryKey(idBPdt)
-}
-
-object Command : Table("COMMANDS") {
-  val numCmd = integer("ID").autoIncrement()
-  val idClt = integer("CLIENT_ID").references(Client.idClt)
-  val dateCmd = date("COMMAND_DATE")
-  val paymentMethod = varchar("PAYMENT_METHOD", 50)
-  val statusCmd = varchar("COMMAND_STATUS", 30)
-
-  override val primaryKey = PrimaryKey(numCmd)
-}
-
-object Bill : Table("BILLS") {
-  val numBill = integer("BILL_NUMBER").autoIncrement()
-  val addressBill = varchar("BILL_ADDRESS", 50)
-  val dateBill = date("BILL_DATE")
-  val amountWithTaxes = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountWithTaxes)
-  val refCmd = integer("COMMAND_REFERENCE").references(Command.numCmd)
-
-  override val primaryKey = PrimaryKey(numBill)
-}
-
-object TaxRule : Table("TAX_RULE") {
-  val idTaxe = integer("ID").autoIncrement()
-  val taxName = varchar("NAME", 20)
-  val rate = integer("RATE_IN_PERCENTAGE")
-  val informations = varchar("INFORMATION", 200).nullable()
-
-  override val primaryKey = PrimaryKey(idTaxe)
-}
-
-@SpringBootApplication
-open class GShopApplication : SpringBootServletInitializer()
-
-fun main(args: Array<String>) {
-  connectToDatabase()
-  DBSchemaTest.reset()
-  Application.initDatabase()
-  initModules()
-  runApplication<GShopApplication>(*args)
-}
-
-object Application : DBSchemaTest() {
-  /**
-   * Used to run the application and show a specific form.
-   */
-  fun runForm(formName: Form, init: (Application.() -> Unit)? = null) {
-    connectToDatabase()
-    initDatabase()
-    init?.invoke(this)
-    org.kopi.galite.demo.desktop.Application.run(formName)
-  }
-
-  /**
-   * Initialises the database with creating the necessary tables and creates users.
-   */
-  override fun initDatabase(user: String) {
-    super.initDatabase(user)
-    transaction {
-      createGShopApplicationTables()
-      addClients()
-      addTaxRules()
-      addProducts()
-      addSales()
-      addFourns()
-      addStocks()
-      addCmds()
-      addBillPrdts()
-      addBills()
-    }
-  }
-}
-
-fun connectToDatabase(url: String = DBSchemaTest.testURL,
-                      driver: String = DBSchemaTest.testDriver,
-                      user: String = DBSchemaTest.testUser,
-                      password: String = DBSchemaTest.testPassword) {
+/**
+ * Connects to the database.
+ */
+fun connectToDatabase(url: String = testURL,
+                      driver: String = testDriver,
+                      user: String = testUser,
+                      password: String = testPassword
+) {
   Database.connect(url, driver = driver, user = user, password = password)
-  DBSchemaTest.connectedUser = user
+}
+
+/**
+ * Initialises the database with creating the necessary tables and creates users.
+ */
+fun initDatabase() {
+  transaction {
+    dropDBSchemaTables()
+    dropApplicationTables()
+    createDBSchemaTables()
+    createApplicationTables()
+    insertIntoUsers(testUser, "administrator")
+    addClients()
+    addTaxRules()
+    addProducts()
+    addSales()
+    addFourns()
+    addStocks()
+    addCmds()
+    addBillPrdts()
+    addBills()
+  }
 }
 
 /**
  * Creates DBSchema tables
  */
-fun createGShopApplicationTables() {
+fun createApplicationTables() {
+  list_Of_GShopApplicationTables.forEach { table ->
+    SchemaUtils.create(table)
+  }
+}
+
+
+/**
+ * Drops DBSchema tables
+ */
+fun dropApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.create(table)
   }
 }
 
 val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
-                                 Bill, TaxRule, Command, BillProduct, Purchase)
+                                            Bill, TaxRule, Command, BillProduct, Purchase)
 
 fun initModules() {
   transaction {
@@ -216,15 +119,84 @@ fun initModules() {
     insertIntoModule("7001", "org/kopi/galite/demo/Menu", 701, "7000", ProviderForm::class)
   }
 }
+
+/**
+ * Creates DBSchema tables
+ */
+fun createDBSchemaTables() {
+  list_Of_Tables.forEach { table ->
+    SchemaUtils.create(table)
+  }
+  sequencesList.forEach { sequence ->
+    SchemaUtils.createSequence(sequence)
+  }
+}
+
+/**
+ * Creates DBSchema tables
+ */
+fun dropDBSchemaTables() {
+  list_Of_Tables.forEach { table ->
+    SchemaUtils.drop(table)
+  }
+  sequencesList.forEach { sequence ->
+    SchemaUtils.dropSequence(sequence)
+  }
+}
+
+/**
+ * this test insert data into Users table
+ */
+fun insertIntoUsers(shortname: String,
+                    userName: String) {
+  Users.insert {
+    it[uc] = 0
+    it[ts] = 0
+    it[shortName] = shortname
+    it[name] = userName
+    it[character] = shortname
+    it[active] = true
+    it[createdOn] = Instant.now()
+    it[createdBy] = 1
+    it[changedOn] = Instant.now()
+    it[changedBy] = 1
+  }
+}
+
+/**
+ * this test insert data into UserRights table
+ */
+fun insertIntoUserRights(userName: String,
+                         moduleName: String,
+                         accessUser: Boolean) {
+  UserRights.insert {
+    it[ts] = 0
+    it[module] = Modules.slice(Modules.id).select { Modules.shortName eq moduleName }.single()[Modules.id]
+    it[user] = Users.slice(Users.id).select { Users.shortName eq userName }.single()[Users.id]
+    it[access] = accessUser
+  }
+}
+
+/**
+ * this test insert data into Module table
+ */
 fun insertIntoModule(shortname: String,
                      source: String,
                      priorityNumber: Int,
                      parentName: String = "-1",
                      className: KClass<*>? = null,
-                     symbolNumber: Int? = null,
-                     user: String = DBSchemaTest.connectedUser) {
-  DBSchemaTest.insertIntoModule(shortname, source, priorityNumber, parentName, className, symbolNumber)
-  DBSchemaTest.insertIntoUserRights(user, shortname, true)
+                     symbolNumber: Int? = null) {
+  Modules.insert {
+    it[uc] = 0
+    it[ts] = 0
+    it[shortName] = shortname
+    it[parent] = if (parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
+    it[sourceName] = source
+    it[priority] = priorityNumber
+    it[objectName] = if (className != null) className.qualifiedName!! else null
+    it[symbol] = symbolNumber
+  }
+  insertIntoUserRights(testUser, shortname, true)
 }
 
 fun addClients() {

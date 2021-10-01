@@ -23,6 +23,10 @@ import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.database.createDBSchemaTables
+import org.kopi.galite.demo.database.dropDBSchemaTables
+import org.kopi.galite.demo.database.insertIntoUsers
+import org.kopi.galite.demo.database.testUser
 import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
@@ -54,13 +58,23 @@ object Center : Table("Center") {
 
 val centerSequence = Sequence("CENTERID", startWith = 5)
 
+fun initDatabase() {
+  initData()
+  initModules()
+}
+
 fun initData() {
   transaction {
+    dropDBSchemaTables()
+    SchemaUtils.drop(Training)
+    SchemaUtils.drop(Center)
+    createDBSchemaTables()
     SchemaUtils.create(Training)
     SchemaUtils.create(Center)
     SchemaUtils.createSequence(centerSequence)
     addTrainings()
     addCenters()
+    insertIntoUsers(testUser, "administrator")
   }
 }
 

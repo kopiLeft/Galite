@@ -18,9 +18,9 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Client
-import org.kopi.galite.demo.Command
+import org.kopi.galite.demo.database.Client
+import org.kopi.galite.demo.database.Command
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Access
@@ -183,5 +183,5 @@ object CommandStatus : CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = CommandForm())
+  runForm(formName = CommandForm())
 }

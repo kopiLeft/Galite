@@ -305,7 +305,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a string value.
    */
-  override fun getString(r: Int): String {
+  override fun getString(r: Int): String? {
     throw InconsistencyException()
   }
 

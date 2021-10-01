@@ -19,10 +19,10 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Client
-import org.kopi.galite.demo.Product
-import org.kopi.galite.demo.Purchase
+import org.kopi.galite.demo.database.Client
+import org.kopi.galite.demo.database.Product
+import org.kopi.galite.demo.database.Purchase
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -340,5 +340,5 @@ class ClientForm : ReportSelectionForm() {
 }
 
 fun main() {
-  Application.runForm(formName = ClientForm())
+  runForm(formName = ClientForm())
 }

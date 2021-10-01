@@ -103,7 +103,7 @@ class VIntegerCodeField : VCodeField {
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setInt(r, v as Int)
+    setInt(r, v as? Int)
   }
 
   /**

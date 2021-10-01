@@ -53,7 +53,6 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.db.Utils
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.l10n.BlockLocalizer
@@ -1138,7 +1137,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getString(): String = getString(block!!.currentRecord)
+  fun getString(): String? = getString(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a time value.
@@ -1288,7 +1287,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getString(r: Int): String {
+  open fun getString(r: Int): String? {
     throw InconsistencyException()
   }
 
@@ -1612,9 +1611,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while (true) {
           try {
-            val column = list!!.getColumn(0).column as Column<String>
+            val column = list!!.getColumn(0).column as Column<String?>
             val query = evalListTable().slice(column).select {
-              column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
+              column.substring(1, getString(block!!.activeRecord)!!.length) eq getString(block!!.activeRecord)
             }.orderBy(column)
 
             val transaction = TransactionManager.currentOrNull()
@@ -1681,7 +1680,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
 
-          result = displayQueryList(query, list!!.columns) as String?
+          result = displayQueryList(query, list!!.columns) as? String
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {

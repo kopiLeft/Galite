@@ -17,9 +17,9 @@
 package org.kopi.galite.demo.product
 
 import java.util.Locale
+import org.kopi.galite.demo.database.Product
+import org.kopi.galite.demo.desktop.runForm
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Product
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
@@ -127,5 +127,5 @@ object Tax : CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = ProductForm())
+  runForm(formName = ProductForm())
 }

@@ -18,8 +18,8 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.connectToDatabase
+import org.kopi.galite.demo.database.connectToDatabase
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
@@ -208,5 +208,5 @@ class MultipleBlockForm : DictionaryForm() {
 fun main() {
   connectToDatabase()
   initData()
-  Application.runForm(formName = MultipleBlockForm())
+  runForm(formName = MultipleBlockForm())
 }

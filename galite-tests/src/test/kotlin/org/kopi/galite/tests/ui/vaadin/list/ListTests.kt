@@ -16,15 +16,12 @@
  */
 package org.kopi.galite.tests.ui.vaadin.list
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.demo.addClients
-import org.kopi.galite.demo.addCmds
-import org.kopi.galite.demo.command.CommandForm
-import org.kopi.galite.demo.createGShopApplicationTables
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.examples.CommandsForm
+import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 
@@ -36,7 +33,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class ListTests: GaliteVUITestBase() {
 
-  private val formWithList = CommandForm().also { it.model } // initialize the model
+  private val formWithList = CommandsForm().also { it.model } // initialize the model
 
   @Test
   fun `test list command`() {
@@ -58,9 +55,10 @@ class ListTests: GaliteVUITestBase() {
     // Check that the grid data is correct
     val grid = _get<DListDialog>()._get<Grid<*>>()
     val data = arrayOf(
-      arrayOf("1", "check", "available"),
-      arrayOf("2", "bank card", "delivered"),
-      arrayOf("3", "cash", "canceled")
+      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
+      arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
+      arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4")
     )
 
     grid.expectRows(data.size)
@@ -74,12 +72,7 @@ class ListTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
-        createGShopApplicationTables()
-        addClients()
-        addCmds()
-      }
-      org.kopi.galite.tests.examples.initModules()
+      initDatabase()
     }
   }
 }
