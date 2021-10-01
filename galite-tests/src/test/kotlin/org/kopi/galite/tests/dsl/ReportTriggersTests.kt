@@ -43,63 +43,63 @@ class ReportTriggersTests: VApplicationTestBase() {
     return reportModel
   }
   @Test
-  fun `test avgInteger triggers`() {
+  fun `test avgInteger trigger`() {
     val reportModel = init()
 
     assertEquals(23, reportModel.model.getRow(0)!!.data[0])
   }
 
   @Test
-  fun `test sumInteger triggers`() {
+  fun `test sumInteger trigger`() {
     val reportModel = init()
 
     assertEquals(100, reportModel.model.getRow(0)!!.data[1])
   }
 
   @Test
-  fun `test countInteger triggers`() {
+  fun `test countInteger trigger`() {
     val reportModel = init()
 
     assertEquals(3, reportModel.model.getRow(0)!!.data[2])
   }
 
   @Test
-  fun `test sumDecimal triggers`() {
+  fun `test sumDecimal trigger`() {
     val reportModel = init()
 
     assertEquals(Decimal("298.7"), reportModel.model.getRow(0)!!.data[3])
   }
 
   @Test
-  fun `test sumNullInteger triggers`() {
+  fun `test sumNullInteger trigger`() {
     val reportModel = init()
 
     assertEquals(null, reportModel.model.getRow(0)!!.data[4])
   }
 
   @Test
-  fun `test sumNullDecimal triggers`() {
+  fun `test sumNullDecimal trigger`() {
     val reportModel = init()
 
     assertEquals(null, reportModel.model.getRow(0)!!.data[5])
   }
 
   @Test
-  fun `test reportIdenticalValue triggers`() {
+  fun `test reportIdenticalValue trigger`() {
     val reportModel = init()
 
     assertEquals(70, reportModel.model.getRow(0)!!.data[6])
   }
 
   @Test
-  fun `test avgDecimal triggers`() {
+  fun `test avgDecimal trigger`() {
     val reportModel = init()
 
     assertEquals(Decimal("99.57"), reportModel.model.getRow(0)!!.data[7])
   }
 
   @Test
-  fun `test serialInteger triggers`() {
+  fun `test serialInteger trigger`() {
     val reportModel = init()
 
     assertEquals(3, reportModel.model.getRow(0)!!.data[8])
