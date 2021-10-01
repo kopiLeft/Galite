@@ -22,18 +22,24 @@ import kotlin.test.assertEquals
 
 import org.junit.Test
 import org.kopi.galite.tests.form.FormWithAlignedBlock
+import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.FieldAlignment
+import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.insertBlock
+import org.kopi.galite.visual.form.VConstants
 
 class FormDSLTests: VApplicationTestBase() {
   @Test
   fun `test generated model from a basic form`() {
     val form = BasicForm()
     val model = form.model
+
     assertEquals(form.locale, model.locale)
     assertEquals(form.title, model.getTitle())
   }
@@ -51,6 +57,11 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.block.title, blockModel.title)
     assertEquals(form.block.buffer, blockModel.bufferSize)
     assertEquals(form.block.visible, blockModel.displaySize)
+    assertEquals(form.block.border, blockModel.border)
+    assertEquals(2, blockModel.maxColumnPos)
+    assertEquals(1, blockModel.maxRowPos)
+    assertEquals(0, blockModel.pageNumber)
+    assertEquals(0, blockModel.displayedFields)
     assertEquals(null, blockModel.alignment)
   }
 
@@ -64,6 +75,12 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.block.idClt.help, model.toolTip)
     assertEquals(block, model.block)
     assertEquals(FieldAlignment.RIGHT.value, model.align)
+    assertEquals(0, model.border)
+    assertEquals(0, model.options)
+    assertEquals(-1, model.posInArray)
+    assertEquals(1, model.height)
+    assertEquals(form.block.idClt.domain.width, model.width)
+    assertEquals(true, form.block.idClt.vField.isNumeric())
   }
 
   @Test
@@ -75,6 +92,146 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(targetBlockModel, totalBlockModel.alignment!!.block)
     assertArraysEquals(arrayOf(2, 3), totalBlockModel.alignment!!.targets.toTypedArray())
   }
+
+  @Test
+  fun `test a form with simple and multiple block`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+
+    assertCollectionsEquals(form.formBlocks, mutableListOf(form.clientBlock, form.commandsBlock))
+    assertEquals(2, formModel.blocks.size)
+
+    val clientBlock = formModel.blocks[0]
+    val commandsBlock = formModel.blocks[1]
+
+    assertEquals(form.title, formModel.getTitle())
+    assertEquals(form.locale, formModel.locale)
+    //clientBlock
+    assertEquals(3, clientBlock.fields.size)
+    assertEquals(form.clientBlock.buffer, clientBlock.bufferSize)
+    assertEquals(form.clientBlock.visible, clientBlock.displaySize)
+    assertEquals(form.clientBlock.border, clientBlock.border)
+    assertEquals(form.clientBlock.title, clientBlock.title)
+    assertEquals(1, clientBlock.maxColumnPos)
+    assertEquals(3, clientBlock.maxRowPos)
+    assertEquals(0, clientBlock.pageNumber)
+    assertEquals(0, clientBlock.displayedFields)
+    assertEquals(null, clientBlock.alignment)
+    //commandsBlock
+    assertEquals(2, commandsBlock.fields.size)
+    assertEquals(form.commandsBlock.visible, commandsBlock.displaySize)
+    assertEquals(form.commandsBlock.border, commandsBlock.border)
+    assertEquals(form.commandsBlock.title, commandsBlock.title)
+    assertEquals(1, commandsBlock.maxColumnPos)
+    assertEquals(1, commandsBlock.maxRowPos)
+    assertEquals(1, commandsBlock.pageNumber)
+    assertEquals(1, commandsBlock.displayedFields)
+    assertEquals(null, commandsBlock.alignment)
+  }
+
+ /* @Test
+  fun `test access fields values`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+    val commandsBlock = formModel.blocks[1]
+
+    assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0].access) // Mustfill field
+    assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1].access) // Visit field
+    assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0].access) // Hidden field
+    assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1].access) // Skipped field
+  }*/
+
+  @Test
+  fun `test block triggers`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+
+    assertEquals(true, clientBlock.hasTrigger(VConstants.TRG_INIT))
+    assertEquals(true, clientBlock.hasTrigger(VConstants.TRG_PREBLK))
+    assertEquals(false, clientBlock.hasTrigger(VConstants.TRG_POSTBLK))
+  }
+
+  @Test
+  fun `test field triggers`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+    val idClientModel =  clientBlock.fields[0]
+    val nameClientModel =  clientBlock.fields[1]
+
+    assertEquals(false, idClientModel.hasTrigger(VConstants.TRG_POSTCHG))
+    assertEquals(true, nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
+    assertEquals(false, nameClientModel.hasTrigger(VConstants.TRG_DEFAULT))
+  }
+
+  @Test
+  fun `test field column name, table, priority and number of columns associated with this field`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+    val nameClientModel =  clientBlock.fields[1]
+
+    assertEquals(User.name.name, nameClientModel.getColumn(0)!!.name)
+    assertEquals(User, nameClientModel.getColumn(0)!!.getTable_())
+    assertEquals(form.clientBlock.clientName.columns!!.priority, nameClientModel.getPriority())
+    assertEquals(1, nameClientModel.getColumnCount())
+  }
+
+  @Test
+  fun `test form actors`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+
+    assertEquals(3, formModel.actors.size)
+    assertEquals(form.reset.label, formModel.actors[2]!!.menuName)
+    assertEquals(form.resetForm.ident, formModel.actors[2]!!.actorIdent)
+    assertEquals(form.resetForm.icon, formModel.actors[2]!!.iconName)
+    assertEquals(form.resetForm.help, formModel.actors[2]!!.help)
+    assertEquals(form.resetForm.key!!.value, formModel.actors[2]!!.acceleratorKey)
+  }
+
+  @Test
+  fun `test field command`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+    val fileModel =  clientBlock.fields[2]
+
+    assertEquals(1, fileModel.command!!.size)
+    assertEquals(form.autoFill.label, fileModel.command!![0].item)
+    assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.actorIdent)
+    assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
+    assertEquals(form.autoFill.icon, fileModel.command!![0].actor!!.iconName)
+    assertEquals(form.autoFill.help, fileModel.command!![0].actor!!.help)
+  }
+
+  @Test
+  fun `test field options`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+    val nameClientModel =  clientBlock.fields[1]
+    val fileModel =  clientBlock.fields[2]
+
+    assertEquals(FieldOption.QUERY_LOWER.value, nameClientModel.options)
+    assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)
+  }
+
+  /*@Test
+  fun `test access fields`() {
+    val form = org.kopi.galite.tests.form.FormToCheckFieldVisibility
+    val formModel = form.model
+    val clientBlock = formModel.blocks[0]
+    val nameClientModel =  clientBlock.fields[1]
+    val ageClientModel =  clientBlock.fields[2]
+    val genderClientModel =  clientBlock.fields[4]
+
+    assertEquals(blockToCheckFieldVisibility.name.access, nameClientModel.access)
+    assertEquals(blockToCheckFieldVisibility.age.access, ageClientModel.access)
+    assertEquals(blockToCheckFieldVisibility.gender.access, genderClientModel.access)
+  }*/
 }
 
 class BasicForm : Form() {
@@ -93,6 +250,91 @@ class FormWithOneSimpleBlock : Form() {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
+    }
+  }
+}
+
+class FormWithMultipleBlock : Form() {
+  override val locale = Locale.UK
+  override val title = "Information"
+  val reset = menu("reset")
+  val edit = menu("edit")
+
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val resetForm = actor(
+    ident = "resetForm",
+    menu = reset,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = "break"
+  }
+
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
+  }
+
+  val firstPage = page("Client")
+  val secondPage = page("Commands")
+  val clientBlock = firstPage.insertBlock(ClientBlock())
+  val commandsBlock = secondPage.insertBlock(CommandsBlock())
+
+  inner class ClientBlock : FormBlock(1, 1, "ClientBlock") {
+    val u = table(User)
+    override val help = "Information about the client"
+    val idClt = mustFill(domain = INT(30), position = at(1, 1)) {
+      label = "ID"
+      help = "The client id"
+    }
+    val clientName = visit(domain = STRING(30), position = at(2, 1)) {
+      label = "Name"
+      help = "The client Name"
+      options(FieldOption.QUERY_LOWER)
+      columns(u.name) {
+        priority = 9
+      }
+      trigger(POSTCHG) {
+        println("value changed !!")
+      }
+    }
+    val file = visit(domain = STRING(25), position = at(3, 1)) {
+      label = "test"
+      help = "The test"
+      options(FieldOption.QUERY_UPPER)
+      command(item = autoFill) {
+        action = {
+          println("---------------Command into field---------------")
+        }
+      }
+    }
+    init {
+      trigger(PREBLK, INIT) {
+        println("---------------PREBLK & INIT triggers---------------")
+      }
+    }
+  }
+  inner class CommandsBlock : FormBlock(10, 5, "CommandsBlock") {
+    override val help = "Information about the commands"
+    val idCmd = hidden(domain = INT(30)) {
+      label = "ID"
+      help = "The command id"
+    }
+    val cmdName = skipped(domain = STRING(30), position = at(1, 1)) {
+      label = "Name"
+      help = "The command Name"
+    }
+
+    init {
+      border = VConstants.BRD_LINE
     }
   }
 }
