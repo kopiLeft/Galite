@@ -75,7 +75,7 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.block.idClt.help, model.toolTip)
     assertEquals(block, model.block)
     assertEquals(FieldAlignment.RIGHT.value, model.align)
-    assertEquals(0, model.border)
+    assertEquals(form.block.border, model.border)
     assertEquals(0, model.options)
     assertEquals(-1, model.posInArray)
     assertEquals(1, model.height)
@@ -277,12 +277,6 @@ class FormWithMultipleBlock : Form() {
     icon = "break"
   }
 
-  val resetFormCmd = command(item = resetForm) {
-    action = {
-      resetForm()
-    }
-  }
-
   val firstPage = page("Client")
   val secondPage = page("Commands")
   val clientBlock = firstPage.insertBlock(ClientBlock())
@@ -311,15 +305,11 @@ class FormWithMultipleBlock : Form() {
       help = "The test"
       options(FieldOption.QUERY_UPPER)
       command(item = autoFill) {
-        action = {
-          println("---------------Command into field---------------")
-        }
+        action = {}
       }
     }
     init {
-      trigger(PREBLK, INIT) {
-        println("---------------PREBLK & INIT triggers---------------")
-      }
+      trigger(PREBLK, INIT) {}
     }
   }
   inner class CommandsBlock : FormBlock(10, 5, "CommandsBlock") {

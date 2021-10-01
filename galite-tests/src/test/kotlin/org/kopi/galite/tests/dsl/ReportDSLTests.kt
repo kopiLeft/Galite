@@ -26,7 +26,6 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.Triggers
 
 class ReportDSLTests: VApplicationTestBase() {
 
@@ -91,13 +90,8 @@ class ReportWithData : Report() {
   override val locale = Locale.UK
   override val title = "Clients Report"
 
-  val preReport = trigger(PREREPORT) {
-    println("---------PREREPORT TRIGGER-------------")
-  }
-
-  val postReport = trigger(POSTREPORT) {
-    println("---------POSTREPORT TRIGGER-------------")
-  }
+  val preReport = trigger(PREREPORT) {}
+  val postReport = trigger(POSTREPORT) {}
 
   val id = field(INT(11)) {
     hidden = true
@@ -107,27 +101,17 @@ class ReportWithData : Report() {
     label = "First Name"
     help = "The client first name"
     align = FieldAlignment.LEFT
-    format { value ->
-      (value as String).toUpperCase()
-    }
   }
 
   val addressClt = field(STRING(50)) {
     label = "Address"
     help = "The client address"
     align = FieldAlignment.CENTER
-    format { value ->
-      (value as String).toLowerCase()
-    }
   }
 
   val ageClt = field(INT(2)) {
     label = "Age"
     help = "The client age"
-    compute {
-      // Computes the average of ages
-      Triggers.avgInteger(this)
-    }
   }
 
   init {

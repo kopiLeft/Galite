@@ -16,18 +16,23 @@
  */
 package org.kopi.galite.tests.dsl
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.demo.client.ChartSample
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.chart.VChartType
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.chart.Chart
 
 class ChartDSLTests: VApplicationTestBase() {
 
   @Test
   fun `test generated model from a basic chart`() {
-    val chart = ChartSample()
+    val chart = BasicChart()
     val model = chart.model
 
     assertEquals(chart.locale, model.locale)
@@ -37,7 +42,7 @@ class ChartDSLTests: VApplicationTestBase() {
 
   @Test
   fun `test chart measure`() {
-    val chart = ChartSample()
+    val chart = BasicChart()
     val model = chart.model
     val areaMeasure = model.getMeasure(0)
     val populationMeasure = model.getMeasure(1)
@@ -53,7 +58,7 @@ class ChartDSLTests: VApplicationTestBase() {
 
   @Test
   fun `test chart dimension`() {
-    val chart = ChartSample()
+    val chart = BasicChart()
     val model = chart.model
     val dimension = model.getDimension(0)
 
@@ -64,7 +69,7 @@ class ChartDSLTests: VApplicationTestBase() {
 
   @Test
   fun `test chart contains trigger CHARTTYPE`() {
-    val chart = ChartSample()
+    val chart = BasicChart()
     val model = chart.model
 
     assertEquals(true, model.hasFixedType())
@@ -72,9 +77,31 @@ class ChartDSLTests: VApplicationTestBase() {
 
   @Test
   fun `test chart type`() {
-    val chart = ChartSample()
+    val chart = BasicChart()
     val model = chart.model
 
     assertEquals(VChartType.BAR, model.getFixedType())
+  }
+}
+
+class BasicChart: Chart() {
+  override val locale = Locale.UK
+  override val title = "Area/population per city"
+  override val help = "This chart presents the area/population per city"
+
+  val area = measure(DECIMAL(width = 10, scale = 5)) {
+    label = "area (ha)"
+  }
+
+  val population = measure(INT(10)) {
+    label = "population"
+  }
+
+  val city = dimension(STRING(10)) {
+    label = "dimension"
+  }
+
+  val type = trigger(CHARTTYPE) {
+    VChartType.BAR
   }
 }
