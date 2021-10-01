@@ -445,27 +445,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         #toc  a:hover {
           color:black;
         }
-
-#toc .active-menu{color:#000;}
     </style>
 </head>
-
-<script>
-    $("a[href^='#']").click(function(event) {
-    event.preventDefault();
-    $('ul li a').removeClass( 'active-menu' );
-    $(this).addClass( 'active-menu' );
-    var $this = $(this),
-      target = this.hash,
-      $target = $(target);
-
-    $(scrollElement).stop().animate({
-      'scrollTop': $target.offset().top
-    }, 1000, 'swing', function() {
-      window.location.hash = target;
-    });
-});
-</script>
 </html>
 
 
@@ -635,18 +616,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_preface">Preface</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Galite Project is the framework of kopiLeft for creating business applications. It&#8217;s the successor of the Kopi project which is a framework from the company DMS that allows to development of database applications using Java, JDBC, SWING and Vaadin 7.</p>
+<p>The Galite Project is a framework that lets you build business applications with few code. It&#8217;s the successor of the Kopi project which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.</p>
 </div>
 <div class="paragraph">
 <p>Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./docs/galite-architecture.png" alt="650" width="650">
+<img src="./images/galite-architecture.png" alt="650" width="650">
 </div>
 </div>
 <div class="paragraph">
-<p>The basic architecture of Visual Galite is made of a three strongly independent layers:</p>
+<p>The basic architecture of Visual Galite package is made of a three strongly independent parts:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -654,10 +635,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>DSL: The DSL is the Kotlin functions provided for the user to develop his application.</p>
 </li>
 <li>
-<p>Model: The model layer is a set of model classes responsible for structuring and processing data. Also it contains a hight specification interfaces that any UI implementation should respect.</p>
+<p>Model: The model layer is a set of model classes responsible for structuring and processing data. Also, it contains a high specification interfaces that any UI implementation should respect.</p>
 </li>
 <li>
-<p>UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).</p>
+<p>UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop, etc.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).</p>
 </li>
 </ul>
 </div>
@@ -685,7 +666,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>Visual Galite is an application framework using VAADIN which lets you create database applications in a high level specification language. In this chapter, we will explore the capabilities of this framework.</p>
+<p>In this chapter, we will explore the capabilities of this framework.</p>
 </div>
 </div>
 </div>
@@ -745,10 +726,10 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 <div class="sect2">
 <h3 id="_galite_standard_tables">Galite standard tables</h3>
 <div class="paragraph">
-<p>There is a list of standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.</p>
+<p>There is a list of standard database tables used by Galite inorder to manage application modules and users. you may create these tables in your first database migration.</p>
 </div>
 <div class="paragraph">
-<p>The definition of these tables is in the file <code>DBSchema</code>. You can use Exposed to create these tables using <code>SchemaUtils.create(table)</code>.</p>
+<p>The definition of these tables is in the file <a href="https://github.com/kopiLeft/Galite/blob/master/galite-core/src/main/kotlin/org/kopi/galite/visual/db/DBSchema.kt">DBSchema.kt</a>. You can use Exposed to create these tables using <code>SchemaUtils.create(table)</code>.</p>
 </div>
 <div class="paragraph">
 <p>This is the role of every table:</p>
@@ -756,8 +737,7 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 <div class="ulist">
 <ul>
 <li>
-<p><strong>MODULE</strong>: This table contains the modules of our application. Example in our Menu bar we have <code>Client</code> Menu that contains the client form also we have <code>Bill</code> menu that contain two forms bill and bill product,
-so in this case we need to insert 5 lines in our <code>Module</code> table.</p>
+<p><strong>MODULE</strong>: This table contains the modules of our application.</p>
 </li>
 </ul>
 </div>
@@ -1474,7 +1454,7 @@ The field is a richtext editor beacause the option <code>styled</code> is set to
 <div class="sect4">
 <h5 id="_the_image_field_type">The IMAGE Field Type</h5>
 <div class="paragraph">
-<p>This field type is used to insert an illustration or a picture. When introducing an IMAGE, you have to determine its width and height. These values have to be integers and are measured in pixel. In this case, the two attributes are compulsory.The field will look like a file chooser that lets you choose and image file to show in the field.</p>
+<p>This field type is used to insert an illustration or a picture. When introducing an IMAGE, you have to determine its width and height. These values have to be integers and are measured in pixel. In this case, the two attributes are compulsory. The field will look like a file chooser that lets you choose an image file to show in the field.</p>
 </div>
 <div class="paragraph">
 <p><strong>Syntax:</strong></p>
@@ -1492,7 +1472,7 @@ The field is a richtext editor beacause the option <code>styled</code> is set to
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val image = visit(domain = IMAGE(width = 20, height = 10), position = at(1, 3)) {
     label = "image"
     help = "The product image"
-  }</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1528,8 +1508,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
     help = "The price"
     minValue = Decimal.valueOf("1.9")
     maxValue = Decimal.valueOf("5.9")
-
-  }</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1566,12 +1545,12 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 <div class="sect3">
 <h4 id="_code_field_types">Code Field Types</h4>
 <div class="paragraph">
-<p>In addition to the predefined field types already available in visual Galite, you can define more specific types like CODE type. Unlike the predefined field types, these types have to be set in the Type definition type of the form before you can use them in the fields.</p>
+<p>In addition to the predefined field types already available in visual Galite, you can define more specific types like CODE type.</p>
 </div>
 <div class="sect4">
 <h5 id="_the_code_types">The CODE types</h5>
 <div class="paragraph">
-<p>The code Filed can be defined with many type like Boolean, Int, Decimal, etc&#8230;&#8203; These types enable you to have a list of item-value pairs, the items will be displayed in the field and the values will be assigned instead.</p>
+<p>The code Filed can be defined with many types like Boolean, Int, Decimal, etc&#8230;&#8203; These types enable you to have a list of item-value pairs, the items will be displayed in the field and the values will be assigned instead.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1588,11 +1567,12 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeBooleanType : "object" "NameToUse" ":" "CodeDomain&lt;Boolean&gt;() {"
-                    "init {"
-                        CodeBooleanList
-                    "}"
-                  "}"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeBooleanType :
+"object" "NameToUse" ":" "CodeDomain&lt;Boolean&gt;() {"
+    "init {"
+        CodeBooleanList
+    "}"
+"}"
 
 CodeBooleanList : CodeBoolean  [CodeBooleanList]
 
@@ -1627,11 +1607,12 @@ CodeBoolean     : code : String "keyOf" value : Boolean</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeIntegerType : "object" "NameToUse" ":" "CodeDomain&lt;Int&gt;() {"
-                    "init {"
-                        CodeIntegerList
-                    "}"
-                  "}"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeIntegerType :
+"object" "NameToUse" ":" "CodeDomain&lt;Int&gt;() {"
+    "init {"
+        CodeIntegerList
+    "}"
+"}"
 
 CodeIntegerList : CodeInteger  [CodeIntegerList]
 
@@ -1671,11 +1652,12 @@ CodeInteger     : code : String "keyOf" value : Int</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeFixedType : "object" "NameToUse" ":" "CodeDomain&lt;Decimal&gt;() {"
-                    "init {"
-                        CodeFixedList
-                    "}"
-                  "}"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeFixedType :
+"object" "NameToUse" ":" "CodeDomain&lt;Decimal&gt;() {"
+    "init {"
+        CodeFixedList
+    "}"
+"}"
 
 CodeFixedList : CodeFixed  [CodeFixedList]
 
@@ -1710,11 +1692,12 @@ CodeFixed     : code : String "keyOf" value : Decimal</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeStringType : "object" "NameToUse" ":" "CodeDomain&lt;String&gt;() {"
-                    "init {"
-                        CodeStringType
-                    "}"
-                  "}"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">CodeStringType :
+"object" "NameToUse" ":" "CodeDomain&lt;String&gt;() {"
+    "init {"
+        CodeStringType
+    "}"
+"}"
 
 CodeStringType : CodeString  [CodeStringType]
 
@@ -1745,13 +1728,14 @@ CodeString     : code : String "keyOf" value : String</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">List        : "class" "ListName" ":" "ListDomain&lt;String&gt;(20) {"
-                 "override val table = TableName"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">List        :
+"class" "ListName" ":" "ListDomain&lt;String&gt;(20) {"
+    "override val table = TableName"
 
-                 "init {"
-                    ListColumns
-                 "}"
-               "}"
+    "init {"
+       ListColumns
+    "}"
+"}"
 
 ListColumns : ListColumn  [ListColumns]
 
@@ -4333,27 +4317,22 @@ But most important, you need to d fill the report&#8217;s lines or rows.
 ALL you need that you use EXPOSED Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields</p>
 </div>
 <div class="paragraph">
-<p>For example here is  a dynamic report, we will retrieve data from the Client table on the database. Then affect the query result to our report to create rows.</p>
+<p>For example here is  a dynamic report named UserList with 3 fields (FirstName, LastName, Age), we will retrieve data from the <code>User</code> table on the database. Then affect the query result to our report to create rows.</p>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val clients = Client.selectAll()
-
-init {
-  transaction {
-    clients.forEach { result -&gt;
-      add {
-        this[firstName] = result[Client.firstNameClt]
-        this[lastName] = result[Client.lastNameClt]
-        this[addressClt] = result[Client.addressClt]
-        this[ageClt] = result[Client.ageClt]
-        this[countryClt] = result[Client.countryClt]
-        this[cityClt] = result[Client.cityClt]
-        this[zipCodeClt] = result[Client.zipCodeClt]
-        this[activeClt] = result[Client.activeClt]
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class UserList : Report() {
+  init {
+    transaction {
+      User.selectAll().forEach { result -&gt;
+        add {
+          this[firstName] = result[Client.firstNameClt]
+          this[lastName] = result[Client.lastNameClt]
+          this[age] = result[Client.age]
+        }
       }
     }
   }
@@ -4365,12 +4344,12 @@ init {
 <div class="sect3">
 <h4 id="_calling_reports">Calling reports</h4>
 <div class="paragraph">
-<p>A report is always called from a form, if the caller form extends from the VDictionaryForm class you have to do the following steps :</p>
+<p>A report is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Change VDictionaryForm to VReportSelectionForm</p>
+<p>Change DictionaryForm to ReportSelectionForm</p>
 </li>
 <li>
 <p>Add the CreateReport command to the caller form</p>
@@ -4386,7 +4365,7 @@ init {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override fun createReport(): Report {
-   return ClientR()
+   return UserList()
 }</code></pre>
 </div>
 </div>
@@ -4395,7 +4374,7 @@ init {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   WindowController.getWindowController().doNotModal(new UserList(this));</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   WindowController.windowController.doNotModal(UserList())</code></pre>
 </div>
 </div>
 </div>
@@ -4423,16 +4402,16 @@ To create a dimension field you need to use dimension function and specify the t
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val city = dimension(STRING(10)) {
-        label = "dimension"
+  label = "dimension"
 
-        format {
-          object : VColumnFormat() {
-            override fun format(value: Any?): String {
-              return (value as String).toUpperCase()
-            }
-          }
-        }
+  format {
+    object : VColumnFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
       }
+    }
+  }
+}
 
 ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }</code></pre>
 </div>
@@ -4601,16 +4580,16 @@ TrigerAction : color | format { KOTLIN code }</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val city = dimension(STRING(10)) {
-    label = "dimension"
-    help = "test"
+  label = "dimension"
+  help = "test"
 
-    format {
-      object : VColumnFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
+  format {
+    object : VColumnFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
       }
     }
+  }
 }</code></pre>
 </div>
 </div>
@@ -4865,26 +4844,26 @@ to customize these new types.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart : Chart() {
 
-    object Days: CodeDomain&lt;Int&gt;() {
-      init {
-        "Sunday" keyOf 1
-        "Monday" keyOf 2
-        "Tuesday" keyOf 3
-        "Wednesday" keyOf 4
-        "Thursday" keyOf 5
-        "Friday" keyOf 6
-        "Saturday" keyOf 7
-      }
+  object Days: CodeDomain&lt;Int&gt;() {
+    init {
+      "Sunday" keyOf 1
+      "Monday" keyOf 2
+      "Tuesday" keyOf 3
+      "Wednesday" keyOf 4
+      "Thursday" keyOf 5
+      "Friday" keyOf 6
+      "Saturday" keyOf 7
     }
+  }
 
-    object CurrentDegree : ListDomain&lt;String&gt;(20) {
-      override val table = query(Degree.selectAll())
+  object CurrentDegree : ListDomain&lt;String&gt;(20) {
+    override val table = query(Degree.selectAll())
 
-      init {
-        "Symbol" keyOf Degree.Symbol
-        "Description" keyOf Degree.Description
-      }
+    init {
+      "Symbol" keyOf Degree.Symbol
+      "Description" keyOf Degree.Description
     }
+  }
 }</code></pre>
 </div>
 </div>
@@ -4970,14 +4949,14 @@ ChartEventList:    ChartEvent*</pre>
   override val locale = Locale.UK
   override val title = "Ordered quantities per month"
 
-   val init = trigger(INITCHART) {
-      chartType = VChartType.BAR
-    }
+  val init = trigger(INITCHART) {
+    chartType = VChartType.BAR
+  }
 
-    // This is the type that will be taken because CHARTTYPE is executed after INIT
-    val type = trigger(CHARTTYPE) {
-      VChartType.BAR
-    }
+  // This is the type that will be taken because CHARTTYPE is executed after INIT
+  val type = trigger(CHARTTYPE) {
+    VChartType.BAR
+  }
 }</code></pre>
 </div>
 </div>
@@ -5003,21 +4982,21 @@ For example here we have added three dimension and for each dimension we have to
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">init {
-    city.add("Tunis") {
-      this[area] = Decimal("34600")
-      this[population] = 1056247
-    }
+  city.add("Tunis") {
+    this[area] = Decimal("34600")
+    this[population] = 1056247
+  }
 
-    city.add("Kasserine") {
-      this[area] = Decimal("806600")
-      this[population] = 439243
-    }
+  city.add("Kasserine") {
+    this[area] = Decimal("806600")
+    this[population] = 439243
+  }
 
-    city.add("Bizerte") {
-      this[area] = Decimal("568219")
-      this[population] = 368500
-    }
-  }</code></pre>
+  city.add("Bizerte") {
+    this[area] = Decimal("568219")
+    this[population] = 368500
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -5084,12 +5063,12 @@ which is responsible for creating views for every chart type.</p>
 <div class="sect3">
 <h4 id="_calling_charts">Calling charts</h4>
 <div class="paragraph">
-<p>A chart is always called from a form, if the caller form extends from the VDictionaryForm class you have to do the following steps :</p>
+<p>A chart is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Change VDictionaryForm to VChartSelectionForm</p>
+<p>Change DictionaryForm to ChartSelectionForm</p>
 </li>
 <li>
 <p>Add the CreateChart command to the caller form</p>
@@ -5114,7 +5093,7 @@ which is responsible for creating views for every chart type.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">showChart(ChartSample())</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   WindowController.windowController.doNotModal(ChartSample())</code></pre>
 </div>
 </div>
 </div>
@@ -5134,7 +5113,7 @@ Vaadin, uses java as programming language to create web content and web componen
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-24 15:27:00 +0100
+Last updated 2021-10-01 11:04:10 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

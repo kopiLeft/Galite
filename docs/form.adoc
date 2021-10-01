@@ -210,7 +210,6 @@ ExtentionList       : extension : String [,ExtenstionList]
 *Example*
 [source,kotlin]
 ----
-
 val cv = visit(domain = STRING(20), position = at(4, 1)) {
     label = "Cv"
     help = "The user curriculum vitae"

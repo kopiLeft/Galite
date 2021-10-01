@@ -17,16 +17,16 @@ To create a dimension field you need to use dimension function and specify the t
 [source,kotlin]
 ----
 val city = dimension(STRING(10)) {
-        label = "dimension"
+  label = "dimension"
 
-        format {
-          object : VColumnFormat() {
-            override fun format(value: Any?): String {
-              return (value as String).toUpperCase()
-            }
-          }
-        }
+  format {
+    object : VColumnFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
       }
+    }
+  }
+}
 
 ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
 ----
@@ -154,16 +154,16 @@ Here is the two triggers available for chart fields (dimensions & measures) :
 [source,kotlin]
 ----
 val city = dimension(STRING(10)) {
-    label = "dimension"
-    help = "test"
+  label = "dimension"
+  help = "test"
 
-    format {
-      object : VColumnFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
+  format {
+    object : VColumnFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
       }
     }
+  }
 }
 ----
 
@@ -366,26 +366,26 @@ TypeDefinition:  "object" SimplName":" CodeDomain<FieldType>() {[TypeList] } | "
 ----
 class OrderedChart : Chart() {
 
-    object Days: CodeDomain<Int>() {
-      init {
-        "Sunday" keyOf 1
-        "Monday" keyOf 2
-        "Tuesday" keyOf 3
-        "Wednesday" keyOf 4
-        "Thursday" keyOf 5
-        "Friday" keyOf 6
-        "Saturday" keyOf 7
-      }
+  object Days: CodeDomain<Int>() {
+    init {
+      "Sunday" keyOf 1
+      "Monday" keyOf 2
+      "Tuesday" keyOf 3
+      "Wednesday" keyOf 4
+      "Thursday" keyOf 5
+      "Friday" keyOf 6
+      "Saturday" keyOf 7
     }
+  }
 
-    object CurrentDegree : ListDomain<String>(20) {
-      override val table = query(Degree.selectAll())
+  object CurrentDegree : ListDomain<String>(20) {
+    override val table = query(Degree.selectAll())
 
-      init {
-        "Symbol" keyOf Degree.Symbol
-        "Description" keyOf Degree.Description
-      }
+    init {
+      "Symbol" keyOf Degree.Symbol
+      "Description" keyOf Degree.Description
     }
+  }
 }
 ----
 
@@ -441,14 +441,14 @@ class OrderedChart: Chart() {
   override val locale = Locale.UK
   override val title = "Ordered quantities per month"
 
-   val init = trigger(INITCHART) {
-      chartType = VChartType.BAR
-    }
+  val init = trigger(INITCHART) {
+    chartType = VChartType.BAR
+  }
 
-    // This is the type that will be taken because CHARTTYPE is executed after INIT
-    val type = trigger(CHARTTYPE) {
-      VChartType.BAR
-    }
+  // This is the type that will be taken because CHARTTYPE is executed after INIT
+  val type = trigger(CHARTTYPE) {
+    VChartType.BAR
+  }
 }
 ----
 
@@ -468,21 +468,21 @@ For example here we have added three dimension and for each dimension we have to
 [source,kotlin]
 ----
 init {
-    city.add("Tunis") {
-      this[area] = Decimal("34600")
-      this[population] = 1056247
-    }
-
-    city.add("Kasserine") {
-      this[area] = Decimal("806600")
-      this[population] = 439243
-    }
-
-    city.add("Bizerte") {
-      this[area] = Decimal("568219")
-      this[population] = 368500
-    }
+  city.add("Tunis") {
+    this[area] = Decimal("34600")
+    this[population] = 1056247
   }
+
+  city.add("Kasserine") {
+    this[area] = Decimal("806600")
+    this[population] = 439243
+  }
+
+  city.add("Bizerte") {
+    this[area] = Decimal("568219")
+    this[population] = 368500
+  }
+}
 ----
 
 ==== Chart types
@@ -514,9 +514,9 @@ You should note that calling setType will create the data series and refresh the
 
 ==== Calling charts
 
-A chart is always called from a form, if the caller form extends from the VDictionaryForm class you have to do the following steps :
+A chart is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :
 
- * Change VDictionaryForm to VChartSelectionForm
+ * Change DictionaryForm to ChartSelectionForm
  * Add the CreateChart command to the caller form
  * Use showChart method :
 
@@ -532,5 +532,5 @@ Otherwise you can create a normal form or block command that executes the follow
 
 [source,kotlin]
 ----
-showChart(ChartSample())
+   WindowController.windowController.doNotModal(ChartSample())
 ----

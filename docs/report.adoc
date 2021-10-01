@@ -538,25 +538,20 @@ This section should follow the report fields declaration and have to be placed b
 But most important, you need to d fill the report's lines or rows.
 ALL you need that you use EXPOSED Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields
 
-For example here is  a dynamic report, we will retrieve data from the Client table on the database. Then affect the query result to our report to create rows.
+For example here is  a dynamic report named UserList with 3 fields (FirstName, LastName, Age), we will retrieve data from the `User` table on the database. Then affect the query result to our report to create rows.
 
 *Example*
 [source,kotlin]
 ----
-val clients = Client.selectAll()
-
-init {
-  transaction {
-    clients.forEach { result ->
-      add {
-        this[firstName] = result[Client.firstNameClt]
-        this[lastName] = result[Client.lastNameClt]
-        this[addressClt] = result[Client.addressClt]
-        this[ageClt] = result[Client.ageClt]
-        this[countryClt] = result[Client.countryClt]
-        this[cityClt] = result[Client.cityClt]
-        this[zipCodeClt] = result[Client.zipCodeClt]
-        this[activeClt] = result[Client.activeClt]
+class UserList : Report() {
+  init {
+    transaction {
+      User.selectAll().forEach { result ->
+        add {
+          this[firstName] = result[Client.firstNameClt]
+          this[lastName] = result[Client.lastNameClt]
+          this[age] = result[Client.age]
+        }
       }
     }
   }
@@ -565,9 +560,9 @@ init {
 
 ==== Calling reports
 
-A report is always called from a form, if the caller form extends from the VDictionaryForm class you have to do the following steps :
+A report is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :
 
- * Change VDictionaryForm to VReportSelectionForm
+ * Change DictionaryForm to ReportSelectionForm
  * Add the CreateReport command to the caller form
  * Implement the createReport abstract method :
 
@@ -575,7 +570,7 @@ A report is always called from a form, if the caller form extends from the VDict
 [source,kotlin]
 ----
 override fun createReport(): Report {
-   return ClientR()
+   return UserList()
 }
 ----
 
@@ -583,5 +578,5 @@ Otherwise you can create a normal form or block command that executes the follow
 
 [source,kotlin]
 ----
-   WindowController.getWindowController().doNotModal(new UserList(this));
+   WindowController.windowController.doNotModal(UserList())
 ----

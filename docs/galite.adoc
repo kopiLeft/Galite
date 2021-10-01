@@ -9,18 +9,18 @@
 [preface]
 Preface
 -------
-The Galite Project is the framework of kopiLeft for creating business applications. It's the successor of the Kopi project which is a framework from the company DMS that allows to development of database applications using Java, JDBC, SWING and Vaadin 7.
+The Galite Project is a framework that lets you build business applications with few code. It's the successor of the Kopi project which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.
 
 Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.
 
-image::./docs/galite-architecture.png[650,650]
+image::./images/galite-architecture.png[650,650]
 :Galite architecture!:
 
-The basic architecture of Visual Galite is made of a three strongly independent layers:
+The basic architecture of Visual Galite package is made of a three strongly independent parts:
 
 - DSL: The DSL is the Kotlin functions provided for the user to develop his application.
-- Model: The model layer is a set of model classes responsible for structuring and processing data. Also it contains a hight specification interfaces that any UI implementation should respect.
-- UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop,.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).
+- Model: The model layer is a set of model classes responsible for structuring and processing data. Also, it contains a high specification interfaces that any UI implementation should respect.
+- UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop, etc.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).
 
 *Organization of This Document*
 
@@ -32,7 +32,7 @@ This chapter is intended to show how to configure the application and essential 
 
 * CHAPTER 2 : The Visual Galite application Framework
 
-Visual Galite is an application framework using VAADIN which lets you create database applications in a high level specification language. In this chapter, we will explore the capabilities of this framework.
+In this chapter, we will explore the capabilities of this framework.
 
 == Getting Started
 
@@ -84,14 +84,13 @@ The `Route` annotation allows you to define the navigation URL of your web appli
 
 === Galite standard tables
 
-There is a list of standard database tables used by Galite inorder to manage application modules and users. you should create these tables in your first database migration.
+There is a list of standard database tables used by Galite inorder to manage application modules and users. you may create these tables in your first database migration.
 
-The definition of these tables is in the file `DBSchema`. You can use Exposed to create these tables using `SchemaUtils.create(table)`.
+The definition of these tables is in the file https://github.com/kopiLeft/Galite/blob/master/galite-core/src/main/kotlin/org/kopi/galite/visual/db/DBSchema.kt[DBSchema.kt]. You can use Exposed to create these tables using `SchemaUtils.create(table)`.
 
 This is the role of every table:
 
-- *MODULE*: This table contains the modules of our application. Example in our Menu bar we have `Client` Menu that contains the client form also we have `Bill` menu that contain two forms bill and bill product,
-so in this case we need to insert 5 lines in our `Module` table.
+- *MODULE*: This table contains the modules of our application.
 
 [cols="3*"]
 [%header]
