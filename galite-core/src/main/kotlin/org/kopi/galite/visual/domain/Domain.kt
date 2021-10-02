@@ -30,6 +30,7 @@ import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.form.VTextField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
