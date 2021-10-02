@@ -16,14 +16,18 @@
  */
 package org.kopi.galite.tests.ui.vaadin.list
 
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
+import org.kopi.galite.visual.ui.vaadin.list.ListTable
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -35,6 +39,10 @@ class ListTests: GaliteVUITestBase() {
 
   private val formWithList = CommandsForm().also { it.model } // initialize the model
 
+  /**
+   * Checks that the list dialog is displayed and contains a correct data,
+   * then select a row and check that form fields contain data
+   */
   @Test
   fun `test list command`() {
     // Login
@@ -50,10 +58,11 @@ class ListTests: GaliteVUITestBase() {
     _expectOne<DListDialog>()
 
     // Check that the list dialog contains a grid
-    _get<DListDialog>()._expectOne<Grid<*>>()
+    val listDialog = _get<DListDialog>()
+    listDialog._expectOne<Grid<*>>()
 
     // Check that the grid data is correct
-    val grid = _get<DListDialog>()._get<Grid<*>>()
+    val grid = _get<DListDialog>()._get<ListTable>()
     val data = arrayOf(
       arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
       arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
@@ -66,6 +75,16 @@ class ListTests: GaliteVUITestBase() {
     data.forEachIndexed { index, it ->
       grid.expectRow(index, *it)
     }
+
+    // Choose second row
+    grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(1))
+
+    // Dialog is closed and row data are filled into the form
+    assertFalse(listDialog.isOpened)
+    assertEquals("2", formWithList.block.trainingID.findField().value)
+    assertEquals("training 2", formWithList.block.trainingName.findField().value)
+    assertEquals(true, formWithList.block.active.findField().value)
+    assertEquals("informations training 2", formWithList.block.informations.findField().value)
   }
 
   companion object {

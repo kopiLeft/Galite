@@ -22,15 +22,6 @@ import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 class CommandsFormTests : GaliteVUITestBase() {
 
   @Test
-  fun `test list command`() {
-    //TODO
-    /*
-      check that the list dialog is displayed & that contain a correct data,
-      then chose a row and check that first field in form contain data
-     */
-  }
-
-  @Test
   fun `test resetBlock command`(){
     //TODO
     /*
