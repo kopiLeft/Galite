@@ -82,6 +82,7 @@ class VListDialog(list: Array<VListColumn?>,
               data: Array<String?>,
               rows: Int = data.size) : this(arrayOf(VStringColumn(title,
                                                                   null,
+                                                                  null,
                                                                   VConstants.ALG_LEFT,
                                                                   getMaxLength(data),
                                                                   true)),
@@ -273,7 +274,7 @@ class VListDialog(list: Array<VListColumn?>,
       str.forEach {
         size = max(size, it.length)
       }
-      return VListDialog(arrayOf(VStringColumn("Auswahl", null, 0, size, true)),
+      return VListDialog(arrayOf(VStringColumn("Auswahl", null, null, 0, size, true)),
                          arrayOf(str as Array<Any?>)).selectFromDialog(window, null, true)
     }
 

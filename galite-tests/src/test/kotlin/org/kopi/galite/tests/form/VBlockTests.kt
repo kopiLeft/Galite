@@ -788,7 +788,6 @@ class VBlockTests : VApplicationTestBase() {
     }
   }
 
-  @Ignore
   @Test
   fun `fetchLookup no table found exception scenario test`() {
     val FormSample = FormSample().also { it.model }

@@ -1560,7 +1560,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         while (true) {
           try {
             val table = evalListTable()
-            val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<Any?>
+            val column = list!!.getColumn(0).column as Column<Any?>
 
             val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord) }
 
@@ -1700,7 +1700,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getListID(): Int {
     val table = evalListTable()
-    val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<Any?>
+    val column = list!!.getColumn(0).column as Column<Any?>
     val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
@@ -2077,7 +2077,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           result = transaction {
             val table = evalListTable()
             val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
-            val firstRecord = table.slice(table.resolveColumn(list!!.getColumn(0).column!!)).select {
+            val firstRecord = table.slice(list!!.getColumn(0).column!!).select {
               idColumn eq id
             }.firstOrNull()
 
@@ -2097,28 +2097,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     setObject(block!!.activeRecord, result)
     isChanged = true // if you edit the value it's like if you change it
-  }
-
-  /**
-   * Finds and returns the column in this [ColumnSet] corresponding to the [column] from the original table
-   *
-   * @param column The column in the original table
-   */
-  private fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
-    return when (this) {
-      is Table -> {
-        column
-      }
-      is QueryAlias -> {
-        get(column)
-      }
-      is Alias<*> -> {
-        get(column)
-      }
-      else -> {
-        columns.single { it.name == column.name }
-      }
-    }
   }
 
   // ----------------------------------------------------------------------

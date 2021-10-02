@@ -57,7 +57,7 @@ class VTextField(bufferSize: Int,
    * @return a list column for list
    */
   override fun getListColumn(): VListColumn {
-    return VTextColumn(getHeader(), null, align, width, getPriority() >= 0)
+    return VTextColumn(getHeader(), null, null, align, width, getPriority() >= 0)
   }
 
   /**
