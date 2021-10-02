@@ -23,6 +23,7 @@ import org.junit.Test
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -78,6 +79,8 @@ class ListTests: GaliteVUITestBase() {
 
     // Choose second row
     grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(1))
+
+    waitAndRunUIQueue(100)
 
     // Dialog is closed and row data are filled into the form
     assertFalse(listDialog.isOpened)
