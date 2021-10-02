@@ -134,6 +134,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
   if (inputField != null) {
     inputField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
     inputField._fireEvent(ComponentValueChangeEvent<Component, Any?>(inputField, inputField, oldValue, true))
+    waitAndRunUIQueue(50)
   }
 
   return field
