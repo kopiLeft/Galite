@@ -95,6 +95,7 @@ class DRichTextEditor(
     // value change event is fired when the field is blurred.
     getModel().isChangedUI = true
     getModel().setChanged(true)
+    getModel().checkType(text)
   }
 
   override fun updateText() {

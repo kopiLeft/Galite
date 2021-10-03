@@ -24,6 +24,7 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VlibProperties
 
@@ -228,25 +229,6 @@ open class DTextField(
   /**
    * Check the given text against model definition.
    *
-   * @param r The record number.
-   * @param s The text to be verified.
-   * @throws VException Errors occurs during check.
-   */
-  private fun checkText(r: Int, s: String) {
-    val text = transformer!!.toModel(s)
-    if (!transformer!!.checkFormat(text)) {
-      return
-    }
-    if (getModel().checkText(text!!)) {
-      getModel().checkType(r, text)
-    }
-  }
-
-  /**
-   * Check the given text against model definition.
-   *
-   * TODO: merge with checkText(r, s)
-   *
    * @param s The text to be verified.
    * @throws VException Errors occurs during check.
    */
@@ -257,6 +239,13 @@ open class DTextField(
     }
     if (getModel().checkText(text!!)) {
       getModel().onTextChange(text)
+
+      // affect value directly to the model.
+      getModel().getForm().performAsyncAction(object : Action("check_type") {
+        override fun execute() {
+          getModel().checkType(text)
+        }
+      })
     }
   }
 
