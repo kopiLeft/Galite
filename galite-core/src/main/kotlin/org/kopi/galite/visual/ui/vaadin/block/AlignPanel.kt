@@ -18,6 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
@@ -81,7 +83,12 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
         arrayOfNulls<Component>(columnsSize)
       }
 
-      grid.width = gridBlock.width
+      var gridBlockWidth = 0
+      gridBlock.columns.forEach {column ->
+        gridBlockWidth += column.width.substring(0, column.width.indexOf("p")).toInt()
+      }
+
+      grid.width = gridBlockWidth.toString() + "px"
       grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
       grid.setSelectionMode(Grid.SelectionMode.NONE)
       gridBlock.columns.forEachIndexed { index, column ->
@@ -90,11 +97,21 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
       }
       (grid.dataProvider as ListDataProvider).addFilter { it != null }
 
+      var isFirstLabel = true
       for (i in aligns!!.indices) {
         val align = aligns!![i]
-
         if (align.x != -1) {
-          alignedGridComponents[align.y][align.x] = components!![i]
+          if(components!![i] is Label) {
+            if (isFirstLabel) {
+              val label = (components!![i] as Label).label
+
+              label.classNames.add(Styles.LABEL)
+              alignedGridComponents[align.y][align.x] = label
+              isFirstLabel = false
+            }
+          } else {
+            alignedGridComponents[align.y][align.x] = components!![i]
+          }
         }
       }
 
