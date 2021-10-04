@@ -45,7 +45,9 @@ import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
+import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
 import org.kopi.galite.visual.visual.VlibProperties
+import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
 
 class CommandsFormTests : GaliteVUITestBase() {
@@ -396,12 +398,15 @@ class CommandsFormTests : GaliteVUITestBase() {
     assertNull(form.findForm())
   }
 
+  /**
+   * Click on help command.
+   * Check that the help window is displayed
+   */
+  @Test
   fun `test helpForm command`() {
-    //TODO
-    /*
-       click on Operator button.
-       assert that help is displayed
-     */
+    form.helpForm.triggerCommand()
+
+    _expectOne<DHelpViewer>()
   }
 
   fun `test shortcut`() {
