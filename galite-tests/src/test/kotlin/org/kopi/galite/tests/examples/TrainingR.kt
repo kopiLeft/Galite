@@ -145,9 +145,6 @@ class TrainingR : Report() {
     help = "The training type"
     align = FieldAlignment.LEFT
     group = trainingName
-    format { value ->
-      (value as String).toUpperCase()
-    }
   }
 
   val trainingName = field(STRING(25)) {
@@ -155,11 +152,11 @@ class TrainingR : Report() {
     help = "The training name"
     align = FieldAlignment.LEFT
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 
-  val price = field(DECIMAL(50, 20)) {
+  val price = field(DECIMAL(20, 10)) {
     label = "price"
     help = "The price"
     align = FieldAlignment.LEFT

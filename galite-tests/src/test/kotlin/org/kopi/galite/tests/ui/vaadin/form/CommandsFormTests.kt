@@ -16,10 +16,44 @@
  */
 package org.kopi.galite.tests.ui.vaadin.form
 
+import kotlin.test.assertEquals
+
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._clickCell
+import org.kopi.galite.testing.confirm
+import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editText
+import org.kopi.galite.testing.expect
+import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.examples.CommandsForm
+import org.kopi.galite.tests.examples.Training
+import org.kopi.galite.tests.examples.Type
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.ui.vaadin.report.DReport
+import org.kopi.galite.visual.ui.vaadin.report.DTable
+import com.github.mvysny.kaributesting.v10._get
 
 class CommandsFormTests : GaliteVUITestBase() {
+
+  val form = CommandsForm().also { it.model }
+
+  @Before
+  fun `login to the App`() {
+    org.kopi.galite.tests.examples.initData()
+
+    login()
+
+    // Open the form
+    form.open()
+  }
 
   @Test
   fun `test list command`() {
@@ -30,66 +64,74 @@ class CommandsFormTests : GaliteVUITestBase() {
      */
   }
 
+  /**
+   * put a value in the first field then click on resetBlock button,
+   * check that a popup is displayed,
+   * click on yes and check that the first field is empty
+   */
   @Test
-  fun `test resetBlock command`(){
-    //TODO
-    /*
-      put a value in the first field then click on resetBlock button,
-      check that a popup is displayed,
-      click on yes and check that the first field is empty
-     */
+  fun `test resetBlock command`() {
+
   }
 
+
+  /**
+   * click on serialQuery button,
+   * check that the first field contain a value
+   */
   @Test
   fun `test serialQuery command`() {
-    //TODO
-    /*
-      click on serialQuery button,
-      check that the first field contain a value
-     */
+
   }
 
+  /**
+   * click on report button,
+   * check that a report contains data is displayed
+   * double click on the first row then check that new values are displayed
+   */
   @Test
-  fun `test report command`() {
-    //TODO
-    /*
-      click on report button,
-      check that a report contains data is displayed
-     */
+  fun `test report command and report groups`() {
+
   }
 
-  fun `test report group`() {
-    //TODO
-    /*
-      open the report,
-      double click on the first row then check that new values are displayed
-     */
-  }
-
+  /**
+   * click on dynamicReport button,
+   * check that a report contains data is displayed
+   */
+  @Test
   fun `test dynamicReport command`() {
-    //TODO
-    /*
-       click on dynamicReport button,
-      check that a report contains data is displayed
-     */
+
   }
 
-  fun `test saveBlock command`() {
-    //TODO
-    /*
-       load data with list button,
-       then change second field and click on saveBlock.
-       assert that new data is saved
-     */
+  /**
+   * fill into form fields and click on saveBlock.
+   * assert that new data is saved
+   */
+  @Test
+  fun `test saveBlock command to save new record`() {
+
   }
 
+
+  /**
+   * load data with serialQuery command,
+   * then change second field and click on saveBlock.
+   * assert that new data is saved
+   */
+  @Test
+  fun `test saveBlock command to update a record`() {
+
+  }
+
+
+  /**
+   * load data with serialQuery command,
+   * then click on deleteBlock.
+   * assert that data is deleted.
+   */
+  @Test
   fun `test deleteBlock command`() {
-    //TODO
-    /*
-       load data with list button,
-       then click on deleteBlock.
-       assert that data is deleted
-     */
+
   }
 
   fun `test Operator command`() {
@@ -120,5 +162,15 @@ class CommandsFormTests : GaliteVUITestBase() {
     /*
        try to show help with F1 shortcut
      */
+  }
+
+  companion object {
+    @BeforeClass
+    @JvmStatic
+    fun initTestModules() {
+      transaction {
+        org.kopi.galite.tests.examples.initModules()
+      }
+    }
   }
 }

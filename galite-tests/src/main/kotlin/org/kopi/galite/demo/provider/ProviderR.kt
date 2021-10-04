@@ -107,7 +107,7 @@ class ProviderR : Report() {
     help = "The provider name"
     align = FieldAlignment.LEFT
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 
@@ -122,7 +122,7 @@ class ProviderR : Report() {
     help = "The provider description"
     align = FieldAlignment.LEFT
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 

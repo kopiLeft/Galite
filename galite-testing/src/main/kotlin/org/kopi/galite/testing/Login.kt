@@ -71,12 +71,5 @@ fun logout(confirm: Boolean = true, duration: Long = 50) {
   waitAndRunUIQueue(20)
   Thread.sleep(duration)
 
-  val notificationFooter = _get<ConfirmNotification>().footer
-  val button = if(confirm) {
-    notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "OK") }
-  } else {
-    notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "NO") }
-  }
-
-  button._click()
+  confirm(confirm)
 }
