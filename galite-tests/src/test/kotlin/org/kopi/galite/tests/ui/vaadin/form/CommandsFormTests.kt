@@ -17,6 +17,8 @@
 package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -29,6 +31,7 @@ import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.findForm
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
@@ -380,12 +383,17 @@ class CommandsFormTests : GaliteVUITestBase() {
     ))
   }
 
+  /**
+   * Check that the form is initially rendered.
+   * Click on quit command and check that the form is not visible anymore.
+   */
+  @Test
   fun `test quit command`() {
-    //TODO
-    /*
-       click on Operator button.
-       assert that list popup is displayed
-     */
+    assertNotNull(form.findForm())
+
+    form.quit.triggerCommand()
+
+    assertNull(form.findForm())
   }
 
   fun `test helpForm command`() {
