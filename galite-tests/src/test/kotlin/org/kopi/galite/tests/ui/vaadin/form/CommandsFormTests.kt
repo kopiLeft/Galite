@@ -199,7 +199,48 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test saveBlock command to save new record`() {
+    transaction {
+      // Check initial data
+      val initialData = Training.selectAll().map {
+        arrayOf(it[Training.id],
+                it[Training.trainingName],
+                it[Training.type],
+                it[Training.price],
+                it[Training.active]
+        )
+      }
 
+      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
+      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
+      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
+      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
+    }
+
+    form.InsertMode.triggerCommand()
+
+    form.block.trainingName.edit("training test")
+    form.block.trainingType.editText("Galite")
+    form.block.trainingPrice.edit(Decimal("1000"))
+    form.block.active.edit(true)
+
+    form.saveBlock.triggerCommand()
+
+    transaction {
+      val data = Training.selectAll().map {
+        arrayOf(it[Training.id],
+                it[Training.trainingName],
+                it[Training.type],
+                it[Training.price],
+                it[Training.active]
+        )
+      }
+
+      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), data[0])
+      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[1])
+      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[2])
+      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[3])
+      assertArraysEquals(arrayOf(5, "training test", 1, Decimal("1000.000").value, true), data[4])
+    }
   }
 
 
