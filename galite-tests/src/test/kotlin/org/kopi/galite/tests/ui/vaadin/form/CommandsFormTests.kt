@@ -100,7 +100,78 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test report command and report groups`() {
+    form.report.triggerCommand()
+    val reportTable = _get<DReport>().getTable() as DTable
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
 
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    // TEST UNFOLDING
+
+    reportTable._clickCell(1, 0, 2)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    reportTable._clickCell(4, 0, 2)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    reportTable._clickCell(6, 0, 2)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("3", "", "", "", ""),
+      arrayOf("", "TRAINING 1", reportColumn.format(Decimal("1149.24")), "yes", "")
+    ))
+
+    // TEST FOLDING
+
+    reportTable._clickCell(6, 0, 2)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("3", "", "", "", ""),
+    ))
+
+    reportTable._clickCell(1, 0, 2)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("3", "", "", "", ""),
+    ))
   }
 
   /**
