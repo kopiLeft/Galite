@@ -71,7 +71,13 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test resetBlock command`() {
+    val field = form.block.trainingID.findField()
 
+    form.block.trainingID.edit(10)
+    assertEquals("10", field.value)
+    form.resetBlock.triggerCommand()
+    confirm(true)
+    assertEquals("", field.value)
   }
 
 
