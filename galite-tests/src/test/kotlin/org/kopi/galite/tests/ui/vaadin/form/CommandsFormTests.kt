@@ -180,7 +180,17 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test dynamicReport command`() {
+    form.dynamicReport.triggerCommand()
+    val reportTable = _get<DReport>().getTable() as DTable
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
 
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", "", ""),
+      arrayOf("1", "training 1", Type.labelOf(3), reportColumn.format(Decimal("1149.24")), "yes", "informations training 1"),
+      arrayOf("2", "training 2", Type.labelOf(1), reportColumn.format(Decimal("219.6")), "yes", "informations training 2"),
+      arrayOf("3", "training 3", Type.labelOf(2), reportColumn.format(Decimal("146.9")), "yes", "informations training 3"),
+      arrayOf("4", "training 4", Type.labelOf(1), reportColumn.format(Decimal("3129.7")), "yes", "informations training 4")
+    ))
   }
 
   /**
