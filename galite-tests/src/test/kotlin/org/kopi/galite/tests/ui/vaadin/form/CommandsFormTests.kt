@@ -87,7 +87,10 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test serialQuery command`() {
+    val field = form.block.trainingID.findField()
 
+    form.serialQuery.triggerCommand()
+    assertEquals("1", field.value)
   }
 
   /**
