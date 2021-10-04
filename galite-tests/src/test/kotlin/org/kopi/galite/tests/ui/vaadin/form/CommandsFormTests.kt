@@ -31,14 +31,18 @@ import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.Type
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.report.VFixnumColumn
 import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.ui.vaadin.form.DListDialog
+import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
+import org.kopi.galite.visual.visual.VlibProperties
 import com.github.mvysny.kaributesting.v10._get
 
 class CommandsFormTests : GaliteVUITestBase() {
@@ -335,13 +339,47 @@ class CommandsFormTests : GaliteVUITestBase() {
     }
   }
 
-  fun `test Operator command`() {
-    //TODO
-    /*
-       click on Operator button.
-       assert that list contain data is displayed
-     */
+
+  /**
+   * click on the search operator command.
+   * assert that the list of operators is displayed.
+   * Then choose operator (less than) and fill into id field with "3",
+   * click on the list command and check that list contains only records
+   * with id < 3.
+   */
+  @Test
+  fun `test search operator command`() {
+    form.Operator.triggerCommand()
+
+    // Check that the grid data is correct
+    val grid = _get<DListDialog>()._get<ListTable>()
+
+    grid.expect(arrayOf(
+      arrayOf(VlibProperties.getString("operator_eq")),
+      arrayOf(VlibProperties.getString("operator_lt")),
+      arrayOf(VlibProperties.getString("operator_gt")),
+      arrayOf(VlibProperties.getString("operator_le")),
+      arrayOf(VlibProperties.getString("operator_ge")),
+      arrayOf(VlibProperties.getString("operator_ne"))
+    ))
+
+    // Choose smaller operator
+    grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(1))
+
+    waitAndRunUIQueue(100)
+
+    form.block.trainingID.edit(3)
+
+    form.list.triggerCommand()
+
+    val list = _get<DListDialog>()._get<ListTable>()
+
+    list.expect(arrayOf(
+      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2")
+    ))
   }
+
   fun `test quit command`() {
     //TODO
     /*
