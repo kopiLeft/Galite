@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,21 +22,21 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.ListDomain
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.Access
-import org.kopi.galite.form.dsl.BlockOption
-import org.kopi.galite.form.dsl.FieldOption
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.Modes
-import org.kopi.galite.form.dsl.maxValue
-import org.kopi.galite.form.dsl.minValue
-import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.Modes
+import org.kopi.galite.visual.dsl.form.maxValue
+import org.kopi.galite.visual.dsl.form.minValue
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.visual.FileHandler
 
 object User : Table() {
   val id = integer("ID")
@@ -50,8 +50,7 @@ object User : Table() {
 
 val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
 
-val FormSample = FormSample_()
-class FormSample_ : Form() {
+class FormSample : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
 
@@ -277,5 +276,5 @@ object Ages : CodeDomain<Int>() {
 }
 
 fun main() {
-  Application.runForm(formName = FormSample)
+  Application.runForm(formName = FormSample())
 }

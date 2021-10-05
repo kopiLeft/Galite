@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,8 @@ object Versions {
   const val APACHE_POI = "4.1.2"
 
   const val VAADIN = "21.0.1"
+
+  const val SLF4J = "1.7.30"
 
   const val KARIBU_TESTING = "1.3.3"
   const val ENHANCED_DIALOG = "21.0.0"

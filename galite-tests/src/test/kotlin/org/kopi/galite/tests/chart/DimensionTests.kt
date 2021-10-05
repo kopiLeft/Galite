@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,14 +20,14 @@ package org.kopi.galite.tests.chart
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.chart.ChartDimension
-import org.kopi.galite.chart.ChartMeasure
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.MONTH
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Month
-import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.MONTH
+import org.kopi.galite.visual.dsl.chart.ChartDimension
+import org.kopi.galite.visual.dsl.chart.ChartMeasure
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.visual.Color
 
 class DimensionTests {
 

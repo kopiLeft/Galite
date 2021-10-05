@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JComponent;
 
-import org.kopi.galite.report.Constants;
+import org.kopi.galite.visual.report.Constants;
 
 /**
  * @version 1.0 11/09/98

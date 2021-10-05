@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,8 @@ import kotlin.test.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.ui.vaadin.menu.ModuleItem
-import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find

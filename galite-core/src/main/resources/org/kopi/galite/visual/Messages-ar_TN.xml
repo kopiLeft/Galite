@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<messages>
+<!-- ERRORS-->
+  <message ident="00001" text="خطأ تسجيل : لا توجد أية قيمة مناسبة"/>
+  <message ident="00002" text="خطأ تسجيل : القيم متعددة"/>
+  <message ident="00003" text="خطأ تسجيل : هذا التاريخ غير صحيح"/>
+  <message ident="00004" text="خطأ تسجيل : انه ليس بعدد صحيح"/>
+  <message ident="00005" text="خطأ تسجيل : هذا الشهر غير صحيح"/>
+  <message ident="00006" text="خطأ تسجيل :هذا العددغير صحيح"/>
+  <message ident="00007" text="خطأ تسجيل :هذه الساعة غير صحيحة"/>
+  <message ident="00008" text="خطأ تسجبل : هذا الاأسبوع غير صحيح"/>
+  <message ident="00009" text="خطأ تسجيل : هذا  الرقم كبير جدا (الأقصى{0})"/>
+  <message ident="00010" text="خطأ تسجيل : هذا االرقم كبير جدا."/>
+  <message ident="00011" text="خطأ تسجيل :الأرقام كثيرة بعد الفاصلة(الأقصى{0})"/>
+  <message ident="00012" text="هذا العدد صغير جدا(الأدنى {0})"/>
+  <message ident="00013" text="خطأ تسجيل : النص طويل جدا"/>
+  <message ident="00014" text="{0}" />
+  <message ident="00015" text="لا يوجد (أكثر) بيانات"/>
+  <message ident="00016" text="لا توجد القيمة مناسبة في {0}."/>
+  <message ident="00017" text="قيمة التسجيل تغيرت"/>
+  <message ident="00018" text="وقع شطب  التسجيل."/>
+  <message ident="00019" text="لا يمكن  شطب  هذا التسجيل"/>
+  <message ident="00020" text="القيمة في {0} ليست موحدة"/>
+  <message ident="00021" text="{0} مستخدم في العلاقة مع {1}"/>
+  <message ident="00022" text="لا توجد أية قيمة مناسبة"/>
+  <message ident="00023" text="يجب ملء هذا الموقع."/>
+  <message ident="00024" text="لا يمكن الدخول الى هذه الصفحة"/>
+  <message ident="00025" text="الطلبية  غير مسموح بها"/>
+  <message ident="00026" text="لا يوجد ملف"/>
+  <message ident="00027" text="" />
+<!-- WARNINGS-->
+  <message ident="00028" text="البيانات كثيرة."/>
+  <message ident="00029" text="الالغاء غير ممكن."/>
+  <message ident="00030" text="الاعادة غير ممكنة"/>
+<!-- QUESTIONS-->
+  <message ident="00033" text="{0} : طرأ خطأعند محاولة قطع التطبيق, القطع مع ذلك ؟"/>
+  <message ident="00034" text="لم يقع ارسال  الفاكس , القطع مع ذلك ؟"/>
+  <message ident="00039" text=" الاجراء تعطل : اعادة المحاولة ؟"/>
+  <message ident="00040" text="طرأ خطأ خلال الطباعة : اعادة المحاولة ؟"/>
+<!-- ERROR MESSAGES-->
+  <message ident="00041" text="خطأ فادح , سيقع ابلاغ مدير  النظام."/>
+  <message ident="00042" text="لا يمكن  الدخول الى أي استمارة."/>
+<!-- EXCEL READER (APPS.COMMON)-->
+  <message ident="00043" text="خطأ في قراءة السطر."/>
+  <message ident="00044" text="خطأ في الغلق."/>
+  <message ident="00045" text="خطأ في التركيب على السطر / الموقع."/>
+  <message ident="00046" text="خطأ, الموقع فارغ على السطر / الموقع"/>
+  <message ident="00047" text="الموقع لا يتضمن تاريخا على السطر/ الموقع."/>
+  <message ident="00048" text="الموقع لايتضمن قيمة بولينية على السطر/ الموقع."/>
+  <message ident="00049" text="الموقع لا يتضمن تاريخا على السطر / الموقع"/>
+  <message ident="00050" text="الموقع لا يتضمن سلسلة على السطر/ الموقع"/>
+  <message ident="00051" text="الموقع لايتضمن عددا صحيحا على السطر / الموقع"/>
+  <message ident="00052" text="الموقع  لا يتضمن عددا بالفاصلة ثابت على السطر / الموقع"/>
+<!-- LOGIN (APPS.COMMON)-->
+  <message ident="00053" text="لا يمكن تحميل المشغل في قاعدة البيانات"/>
+  <message ident="00054" text="طرأ خطأ خلال التوصيل بقاعدة البيانات"/>
+<!-- MAIL (APPS.COMMON)-->
+  <message ident="00055" text="المرسل ليس له عنوان الكتروني"/>
+  <message ident="00056" text="لا يمكن الارسال"/>
+<!-- INFO TEXTS-->
+  <message ident="00057" text="لا يوجد بيانات معلقة"/>
+  <message ident="00058" text="الغاء العملية"/>
+<!-- ERRORS-->
+  <message ident="00059" text="خطأ تسجيل : الفترة غير صحيحة."/>
+  <message ident="00060" text="التحديد {0} أكبر من  التحديد الأقصى المسموح به{1}."/>
+  <message ident="00061" text="الضابط {0} خاطئ, قائمة الضوابط الممكنة هي : {1} مع رقم الخانة."/>
+  <message ident="00062" text="{0} ليس رقما"/>
+  <message ident="00063" text="رقم الخانة خاطئ : {0},اختيارالخانة انطلاقا من القائمة"/>
+  <message ident="00064" text="حصل استثناء عند تعثر التعبير : {0} {1}"/>
+  <message ident="00065" text="هذا النص أوسع من هذا الموقع ({0},{1})"/>
+  <message ident="00066" text="can not compute this formula."/>
+  <message ident="00067" text="Please wait ..." />
+  <message ident="00068" text="الحد الأقصى {0} أحرف" />
+  <message ident="00069" text="أقصى عمق للشجرة: {0} مستويات" />
+</messages>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,9 +22,9 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.dsl.form.Form
 
 val testLocale: Locale = Locale.FRANCE
 

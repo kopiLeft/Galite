@@ -117,7 +117,7 @@ class ClientForm : Form() {
 
   val clientsPage= page("Clients")
   
-  val block = insertBlock(Clients(), clientsPage) 
+  val block = clientsPage.insertBlock(Clients()) 
 }
 
 class Clients : FormBlock(1, 1, "Clients") {

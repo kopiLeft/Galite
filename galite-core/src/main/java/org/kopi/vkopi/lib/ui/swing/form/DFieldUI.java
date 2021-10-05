@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,17 +19,17 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.FieldHandler;
-import org.kopi.galite.form.UBlock;
-import org.kopi.galite.form.UChartLabel;
-import org.kopi.galite.form.UField;
-import org.kopi.galite.form.ULabel;
-import org.kopi.galite.form.VBlock.OrderModel;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.form.VImageField;
-import org.kopi.galite.form.VTextField;
+import org.kopi.galite.visual.form.FieldHandler;
+import org.kopi.galite.visual.form.UBlock;
+import org.kopi.galite.visual.form.UChartLabel;
+import org.kopi.galite.visual.form.UField;
+import org.kopi.galite.visual.form.ULabel;
+import org.kopi.galite.visual.form.VBlock.OrderModel;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.form.VImageField;
+import org.kopi.galite.visual.form.VTextField;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 
 /**

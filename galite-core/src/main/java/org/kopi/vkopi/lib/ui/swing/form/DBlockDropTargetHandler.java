@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,11 +37,11 @@ import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import org.kopi.galite.form.VBlock;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VImageField;
-import org.kopi.galite.form.VStringField;
-import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.form.VBlock;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VImageField;
+import org.kopi.galite.visual.form.VStringField;
+import org.kopi.galite.visual.visual.VException;
 
 public class DBlockDropTargetHandler implements DropTargetListener {
 

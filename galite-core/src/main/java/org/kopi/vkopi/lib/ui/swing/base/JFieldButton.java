@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
-import org.kopi.galite.base.UComponent;
+import org.kopi.galite.visual.base.UComponent;
 
 public class JFieldButton extends JButton implements UComponent {
 
@@ -84,4 +84,3 @@ public class JFieldButton extends JButton implements UComponent {
      */
 	private static final long serialVersionUID = 261415262407169537L;
 }
-

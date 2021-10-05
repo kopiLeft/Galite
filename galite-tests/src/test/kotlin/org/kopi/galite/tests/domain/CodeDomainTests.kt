@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,10 +17,10 @@
 
 package org.kopi.galite.tests.domain
 
-import org.junit.Test
-import org.kopi.galite.domain.CodeDomain
-
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.domain.CodeDomain
 
 /**
  * Contains tests of code-domain creation and manipulation

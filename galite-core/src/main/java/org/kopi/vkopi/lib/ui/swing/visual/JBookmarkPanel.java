@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,7 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import org.kopi.galite.visual.UMenuTree.UBookmarkPanel;
+import org.kopi.galite.visual.visual.UMenuTree.UBookmarkPanel;
 
 public class JBookmarkPanel extends JFrame implements UBookmarkPanel {
 

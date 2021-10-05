@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,24 +19,24 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.galite.base.UComponent;
-import org.kopi.galite.chart.VChart;
-import org.kopi.galite.form.VForm;
-import org.kopi.galite.form.VListDialog;
-import org.kopi.galite.preview.VPreviewWindow;
-import org.kopi.galite.report.VReport;
-import org.kopi.galite.ui.swing.visual.DMenuTree;
+import org.kopi.galite.visual.base.UComponent;
+import org.kopi.galite.visual.chart.VChart;
+import org.kopi.galite.visual.form.VForm;
+import org.kopi.galite.visual.form.VListDialog;
+import org.kopi.galite.visual.preview.VPreviewWindow;
+import org.kopi.galite.visual.report.VReport;
+import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
+import org.kopi.galite.visual.visual.UIFactory;
+import org.kopi.galite.visual.visual.VActor;
+import org.kopi.galite.visual.visual.VHelpViewer;
+import org.kopi.galite.visual.visual.VItemTree;
+import org.kopi.galite.visual.visual.VMenuTree;
+import org.kopi.galite.visual.visual.VModel;
 import org.kopi.vkopi.lib.ui.swing.chart.DChart;
 import org.kopi.vkopi.lib.ui.swing.form.DForm;
 import org.kopi.vkopi.lib.ui.swing.form.DListDialog;
 import org.kopi.vkopi.lib.ui.swing.preview.DPreviewWindow;
 import org.kopi.vkopi.lib.ui.swing.report.DReport;
-import org.kopi.galite.visual.UIFactory;
-import org.kopi.galite.visual.VActor;
-import org.kopi.galite.visual.VItemTree;
-import org.kopi.galite.visual.VHelpViewer;
-import org.kopi.galite.visual.VMenuTree;
-import org.kopi.galite.visual.VModel;
 
 /**
  * {@code JUIFactory} is a swing implementation of the {@link UIFactory}.

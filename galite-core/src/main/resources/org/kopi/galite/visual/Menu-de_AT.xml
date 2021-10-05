@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<insert>
+  <menu ident="File" label="Datei" />
+  <menu ident="Edit" label="Bearbeiten" />
+  <menu ident="Action" label="Aktionen" />
+  <menu ident="Help" label="Hilfe" />
+  <actor ident="Close" label="Beenden" help="Programm beenden" />
+  <actor ident="Open" label="Aufrufen" help="Programm aufrufen" />
+  <actor ident="Show" label="Favoriten anzeigen" help="Favoriten anzeigen" />
+  <actor ident="Add" label="Favoriten hinzufügen" help="Favoriten hinzufügen" />
+  <actor ident="Remove" label="Favoriten entfernen" help="Favoriten entfernen" />
+  <actor ident="Fold" label="Schließen" help="Das ausgewählte Verzeichnis schließen" />
+  <actor ident="Unfold" label="Öffnen" help="Das ausgewählte Verzeichnis öffnen" />
+  <actor ident="Information" label="Information" help="Information" />
+  <actor ident="Help" label="Hilfe" help="Das Hilfefenster öffnen" />
+  <actor ident="Autofill" label="Standard" help="Hier erhalten Sie eine Liste der möglichen Eingabewerte." />
+  <actor ident="NewItem" label="Neuer Eintrag" help="Anlegen eines neuen Eintrages für dieses Feld" />
+  <actor ident="EditItem" label="Eintrag bearbeiten" help="Bearbeiten des vollständigen Feldinhaltes" />
+  <actor ident="EditItem_S" label="Standard" help="Bearbeiten des vollständigen Feldinhaltes" />
+  <actor ident="Default" label="Standard" help="Als standard einstellen" />
+  <actor ident="Select" label="Wählen Sie" help="Element auswählen" />
+  <actor ident="AddItem" label="Hinzufügen" help="Ein neues Element hinzufügen" />
+  <actor ident="RemoveItem" label="Löschen" help="Element löschen" />
+  <actor ident="Localise" label="Übersetzen" help="Element übersetzen" />
+  <actor ident="Save" label="Speichern" help="Speichere den Baum" />
+</insert>
