@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,20 +30,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.kopi.galite.base.UComponent;
-import org.kopi.galite.form.UBlock;
-import org.kopi.galite.form.UField;
-import org.kopi.galite.form.VBlock;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.form.VForm;
+import org.kopi.galite.visual.base.UComponent;
+import org.kopi.galite.visual.form.UBlock;
+import org.kopi.galite.visual.form.UField;
+import org.kopi.galite.visual.form.VBlock;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.form.VForm;
+import org.kopi.galite.visual.visual.Action;
+import org.kopi.galite.visual.visual.VColor;
 import org.kopi.vkopi.lib.ui.swing.base.FieldStates;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldButton;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
-import org.kopi.galite.visual.Action;
-import org.kopi.galite.visual.VColor;
 
 /**
  * DField is a panel composed in a text field and an information panel

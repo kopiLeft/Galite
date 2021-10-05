@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,14 +19,14 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-
-import org.kopi.galite.visual.DPositionPanelListener;
-
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+
+import org.kopi.galite.visual.visual.DPositionPanelListener;
 
 /**
  * The position panel is the used to go trough the rows when fetching

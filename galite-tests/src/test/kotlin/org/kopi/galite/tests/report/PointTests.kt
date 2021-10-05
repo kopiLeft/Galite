@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests.report
 
-import org.junit.Test
-import org.kopi.galite.report.Point
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.report.Point
 
 class PointTests {
   val origin = Point()

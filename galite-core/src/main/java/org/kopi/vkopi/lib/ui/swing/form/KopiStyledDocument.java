@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,11 +29,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.ModelTransformer;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFixnumField;
-import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.form.ModelTransformer;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFixnumField;
+import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.visual.visual.ApplicationContext;
 
 public class KopiStyledDocument extends HTMLDocument implements KopiDocument {
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<insert>
+  <menu ident="File" label="File" />
+  <menu ident="Edit" label="Edit" />
+  <menu ident="Help" label="Help" />
+  <actor ident="Close" label="Quit" help="Quit the application" />
+  <actor ident="Open" label="Open" help="Open the selected form" />
+  <actor ident="Show" label="Show bookmarks" help="Show bookmarks" />
+  <actor ident="Add" label="Add to bookmarks" help="Add to bookmarks" />
+  <actor ident="Remove" label="Remove from bookmarks" help="Remove from bookmarks" />
+  <actor ident="Fold" label="Fold" help="Fold the menu" />
+  <actor ident="Unfold" label="Open" help="Open the menu" />
+  <actor ident="Information" label="Information" help="Information" />
+  <actor ident="Help" label="Help" help="Open the help window" />
+  <actor ident="Default" label="Default" help="Set as default" />
+  <actor ident="Select" label="Select" help="Select element" />
+  <actor ident="AddItem" label="Add" help="Add a new item" />
+  <actor ident="RemoveItem" label="Delete" help="Delete item" />
+  <actor ident="Localise" label="Localise" help="Localise item" />
+  <actor ident="Save" label="Save" help="Save the item tree" />
+</insert>

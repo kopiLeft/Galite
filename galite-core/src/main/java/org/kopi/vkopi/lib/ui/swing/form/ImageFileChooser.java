@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,6 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -35,6 +33,8 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 public class ImageFileChooser {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,12 +16,12 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.ui.vaadin.field.Field
-import org.kopi.galite.ui.vaadin.form.DBlock
-import org.kopi.galite.ui.vaadin.form.DGridBlock
-import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.ui.vaadin.field.Field
+import org.kopi.galite.visual.ui.vaadin.form.DBlock
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10._clickItem

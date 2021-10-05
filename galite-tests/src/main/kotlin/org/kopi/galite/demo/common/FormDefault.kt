@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,9 +19,9 @@ package org.kopi.galite.demo.common
 
 import java.util.Locale
 
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
 
 class FormDefault(block: FormBlock) : Form() {
 

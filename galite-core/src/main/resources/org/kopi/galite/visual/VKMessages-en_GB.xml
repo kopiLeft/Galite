@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<messages>
+  <!-- WAIT MESSAGES-->
+  <message ident="searching_database" text="Searching." />
+  <message ident="loading_record" text="Loading record." />
+  <message ident="saving_record" text="Saving record." />
+  <message ident="deleting_record" text="Deleting record." />
+  <message ident="printing" text="Printing in progress." />
+  <message ident="report_generation" text="Building report." />
+  <message ident="report_generation" text="Building chart." />
+  <!-- INFO TEXTS-->
+  <message ident="saved_successfully" text="Record saved successfully." />
+  <!-- QUESTIONS-->
+  <message ident="confirm_break" text="Interrupt: Are you sure ?" />
+  <message ident="confirm_quit" text="Quit: Are you sure ?" />
+  <message ident="confirm_delete" text="Delete: Are you sure ?" />
+  <message ident="confirm_save_unchanged" text="No fields modified: Save anyway ?" />
+  <message ident="confirm_discard_changes" text="Discard changes: Are you sure ?" />
+  <message ident="confirm_insert_mode" text="Insert mode: Are you sure ?" />
+</messages>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,10 +46,14 @@ dependencies {
   }
   implementation("com.vaadin", "vaadin-spring-boot-starter") {
     excludeWebJars()
+    exclude(module = "spring-boot-starter-logging")
   }
   implementation("org.springframework.boot", "spring-boot-devtools") {
     excludeWebJars()
   }
+
+  // Logging
+  implementation("org.slf4j", "slf4j-simple", Versions.SLF4J)
 
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.KARIBU_TESTING)

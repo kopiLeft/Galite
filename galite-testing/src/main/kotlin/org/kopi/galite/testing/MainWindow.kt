@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,11 +20,11 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.Modules
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
+import org.kopi.galite.visual.visual.ApplicationContext
 
 import com.github.mvysny.kaributesting.v10._get
 import com.vaadin.flow.component.menubar.MenuBar

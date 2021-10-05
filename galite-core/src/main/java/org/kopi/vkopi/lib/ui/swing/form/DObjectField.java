@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,10 +28,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.visual.Action;
-import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.visual.Action;
 
 /**
  * DImageField is a panel composed in a Image field and a label behind

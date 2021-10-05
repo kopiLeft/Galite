@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,11 +18,11 @@ package org.kopi.galite.demo.vaadin
 
 import java.util.Locale
 
-import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.util.Rexec
-import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.util.Rexec
+import org.kopi.galite.visual.visual.ApplicationConfiguration
 
 import com.vaadin.flow.router.Route
 
