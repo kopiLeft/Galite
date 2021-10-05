@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,13 +17,13 @@
 
 package org.kopi.galite.tests.util.base
 
-import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.util.base.Utils
-
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+
+import org.kopi.galite.tests.common.TestBase
+import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.util.base.Utils
 
 class UtilsTests: TestBase() {
   /**

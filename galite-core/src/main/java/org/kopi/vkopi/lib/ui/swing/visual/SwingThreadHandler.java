@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.kopi.galite.visual.ApplicationContext;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VRuntimeException;
 
 /**
  * Helps to run code in the Event dispatch Thread. Subclass it

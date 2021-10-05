@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,16 +19,16 @@ package org.kopi.galite.tests.l10n
 
 import java.util.Locale
 
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+
 import org.jdom2.Document
 import org.jdom2.Element
 import org.junit.Test
-import org.kopi.galite.l10n.BlockLocalizer
-import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.util.base.InconsistencyException
-
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import org.kopi.galite.visual.l10n.BlockLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 class BlockLocalizerTests : TestBase() {
 

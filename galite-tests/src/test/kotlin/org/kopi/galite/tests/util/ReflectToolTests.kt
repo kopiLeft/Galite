@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,12 +16,12 @@
  */
 package org.kopi.galite.tests.util
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.tests.form.FormSample
-import org.kopi.galite.util.ReflectTool
 import org.kopi.galite.tests.form.TestBlock
-
-import kotlin.test.assertEquals
+import org.kopi.galite.visual.util.ReflectTool
 
 class ReflectToolTests {
 
@@ -43,7 +43,7 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolFormTest() {
-    assertEquals("autoFill", ReflectTool.formActorAt(FormSample, 0))
-    assertEquals("action", ReflectTool.formMenuAt(FormSample, 0))
+    assertEquals("autoFill", ReflectTool.formActorAt(FormSample(), 0))
+    assertEquals("action", ReflectTool.formMenuAt(FormSample(), 0))
   }
 }

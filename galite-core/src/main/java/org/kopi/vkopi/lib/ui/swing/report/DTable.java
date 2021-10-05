@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ package org.kopi.vkopi.lib.ui.swing.report;
 
 import javax.swing.JTable;
 
-import org.kopi.galite.report.UReport.UTable;
+import org.kopi.galite.visual.report.UReport.UTable;
 
 /**
  * {@code DTable} is swing implementation of {@link UTable}

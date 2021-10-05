@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,14 +18,14 @@ package org.kopi.galite.demo.client
 
 import java.util.Locale
 
-import org.kopi.galite.chart.Chart
-import org.kopi.galite.chart.VChartType
-import org.kopi.galite.chart.VColumnFormat
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.chart.VChartType
+import org.kopi.galite.visual.chart.VColumnFormat
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.VColor
 
 class ChartSample: Chart() {
   override val locale = Locale.UK

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,21 +27,21 @@ import java.awt.dnd.DropTarget;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.base.UComponent;
-import org.kopi.galite.form.Alignment;
-import org.kopi.galite.form.LayoutManager;
-import org.kopi.galite.form.UBlock;
-import org.kopi.galite.form.UForm;
-import org.kopi.galite.form.VBlock;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.form.ViewBlockAlignment;
+import org.kopi.galite.visual.base.UComponent;
+import org.kopi.galite.visual.form.Alignment;
+import org.kopi.galite.visual.form.LayoutManager;
+import org.kopi.galite.visual.form.UBlock;
+import org.kopi.galite.visual.form.UForm;
+import org.kopi.galite.visual.form.VBlock;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.form.ViewBlockAlignment;
+import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VExecFailedException;
 import org.kopi.vkopi.lib.ui.swing.base.KopiTitledBorder;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VExecFailedException;
 
 public class DBlock extends JPanel implements UBlock {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,21 +52,21 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.kopi.galite.report.ColumnStyle;
-import org.kopi.galite.report.Constants;
-import org.kopi.galite.report.MReport;
-import org.kopi.galite.report.Parameters;
-import org.kopi.galite.report.Point;
-import org.kopi.galite.report.UReport;
-import org.kopi.galite.report.VFixnumColumn;
-import org.kopi.galite.report.VIntegerColumn;
-import org.kopi.galite.report.VReport;
-import org.kopi.galite.report.VReportColumn;
-import org.kopi.galite.report.VSeparatorColumn;
+import org.kopi.galite.visual.report.ColumnStyle;
+import org.kopi.galite.visual.report.Constants;
+import org.kopi.galite.visual.report.MReport;
+import org.kopi.galite.visual.report.Parameters;
+import org.kopi.galite.visual.report.Point;
+import org.kopi.galite.visual.report.UReport;
+import org.kopi.galite.visual.report.VFixnumColumn;
+import org.kopi.galite.visual.report.VIntegerColumn;
+import org.kopi.galite.visual.report.VReport;
+import org.kopi.galite.visual.report.VReportColumn;
+import org.kopi.galite.visual.report.VSeparatorColumn;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VlibProperties;
 
 /**
  * This is the display class of a report.

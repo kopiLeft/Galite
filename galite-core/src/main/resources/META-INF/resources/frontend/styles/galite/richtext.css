@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,8 +26,13 @@
         border-right: #dadada 1px solid;
         border-bottom: #dadada 1px solid;
         overflow: auto;
-        line-height: normal;
+        line-height: 1.5em;
     };
+
+    --wysiwyg-editable-p: {
+        margin-block-start: 0.3em;
+        margin-block-end: 0.3em;
+    }
 }
 
 .richtext:focus-within {
@@ -35,7 +40,7 @@
         border-left: #009bd4 1px solid;
         border-right: #009bd4 1px solid;
         border-bottom: #009bd4 1px solid;
-        line-height: normal;
         overflow: auto;
+        line-height: 1.5em;
     };
 }

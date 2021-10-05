@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,12 @@
 
 package org.kopi.galite.tests.domain
 
+import kotlin.test.assertEquals
+
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
-import org.kopi.galite.domain.ListDomain
-import kotlin.test.assertEquals
+import org.kopi.galite.visual.domain.ListDomain
 
 /**
  * Contains tests of list-domain creation and manipulation

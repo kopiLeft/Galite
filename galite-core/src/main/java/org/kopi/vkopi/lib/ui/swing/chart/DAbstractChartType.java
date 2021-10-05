@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,36 +19,35 @@
 
 package org.kopi.vkopi.lib.ui.swing.chart;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Rectangle;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import com.lowagie.text.pdf.DefaultFontMapper;
-import com.lowagie.text.pdf.FontMapper;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.PdfTemplate;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.ResourceBundleWrapper;
+import org.kopi.galite.visual.chart.UChartType;
+import org.kopi.galite.visual.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VDimensionData;
+import org.kopi.galite.visual.chart.VMeasureData;
+import org.kopi.galite.visual.chart.VPrintOptions;
+import org.kopi.galite.visual.util.PPaperType;
+import org.kopi.galite.visual.visual.ApplicationContext;
 
-import org.kopi.galite.chart.UChartType;
-import org.kopi.galite.chart.VDataSeries;
-import org.kopi.galite.chart.VDimensionData;
-import org.kopi.galite.chart.VPrintOptions;
-import org.kopi.galite.chart.VMeasureData;
-import org.kopi.galite.util.PPaperType;
-import org.kopi.galite.visual.ApplicationContext;
-
-import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.OutputStream;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.DefaultFontMapper;
+import com.lowagie.text.pdf.FontMapper;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfTemplate;
+import com.lowagie.text.pdf.PdfWriter;
 
 @SuppressWarnings("serial")
 public abstract class DAbstractChartType extends ChartPanel implements UChartType {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,8 +24,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.kopi.galite.visual.FileHandler;
-import org.kopi.galite.visual.UWindow;
+import org.kopi.galite.visual.visual.FileHandler;
+import org.kopi.galite.visual.visual.UWindow;
 
 public class JFileHandler extends FileHandler {
 

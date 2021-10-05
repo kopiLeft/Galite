@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,9 +30,9 @@ import java.awt.Toolkit;
 import javax.swing.JScrollBar;
 import javax.swing.UIManager;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.Alignment;
-import org.kopi.galite.form.LayoutManager;
+import org.kopi.galite.visual.form.Alignment;
+import org.kopi.galite.visual.form.LayoutManager;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 
 /**
  *

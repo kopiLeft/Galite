@@ -41,8 +41,11 @@ To see the code for this app, go to [Demo](galite-tests/src/main/kotlin/org/kopi
 ## Customize and configure your App
 To define your application customizations (logo, locales, .etc) you need to implement the `VApplication` class.
 
+This creates an application developed with [Vaadin](https://vaadin.com/).
+
 Exemple:
 ````KOTLIN
+@Route("")
 class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 
   override val sologanImage get() = "galite-slogan.png"
@@ -75,6 +78,8 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
   }
 }
 ````
+
+> Note: The `Route` annotation allow you to define the navigation URL of your web application.
 
 When starting the application, the login page is displayed. It is provided by default by Galite, so you don't need to create it.
 ![login page](docs/login-page.png)
@@ -110,7 +115,7 @@ class ClientForm : Form() {
 
   val clientsPage= page("Clients")
   
-  val block = insertBlock(Clients(), clientsPage) 
+  val block = clientsPage.insertBlock(Clients()) 
 }
 
 class Clients : FormBlock(1, 1, "Clients") {

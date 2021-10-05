@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,9 +25,9 @@ import java.awt.Font;
 import javax.swing.JToolTip;
 import javax.swing.UIManager;
 
-import org.kopi.galite.form.ULabel;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VField;
+import org.kopi.galite.visual.form.ULabel;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VField;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldLabel;
 import org.kopi.vkopi.lib.ui.swing.base.MultiLineToolTip;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,8 +24,8 @@ import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.targetTables
 import org.junit.Test
-import org.kopi.galite.db.Users
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.db.Users
 
 class FormWithListDomainsTests: JApplicationTestBase() {
   val FormWithListDomains = FormWithListDomains()
@@ -50,6 +50,6 @@ class FormWithListDomainsTests: JApplicationTestBase() {
     assertEquals(1, FormWithListDomains.userListBlock.user.value)
 
     model.setValueID(0)
-    assertEquals(null, FormWithListDomains.userListBlock.user.value)
+    assertEquals(null as Int?, FormWithListDomains.userListBlock.user.value)
   }
 }

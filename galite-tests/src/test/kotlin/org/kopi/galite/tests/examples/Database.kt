@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,18 +19,18 @@ package org.kopi.galite.tests.examples
 import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Sequence
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.type.Decimal
+import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
   val id = integer("ID")
   val trainingName = varchar("Name", 25)
   val type = integer("type")
   val price = decimal("UNIT_PRICE", 9, 3)
-  val active = bool("ACTIVE",)
+  val active = bool("ACTIVE")
   val photo = blob("PHOTO").nullable()
   val informations = varchar("INFORMATION", 200).nullable()
 

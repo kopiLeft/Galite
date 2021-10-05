@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,12 +19,10 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.AbstractFieldHandler;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.visual.Constants;
+import org.kopi.galite.visual.form.AbstractFieldHandler;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
-import org.kopi.galite.visual.VException;
 
 /**
  * {@code JFieldHandler} is a swing implementation of the {@link AbstractFieldHandler}.

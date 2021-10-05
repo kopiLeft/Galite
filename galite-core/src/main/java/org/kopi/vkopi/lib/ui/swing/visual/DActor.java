@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,9 +29,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.KeyStroke;
 
+import org.kopi.galite.visual.visual.UActor;
+import org.kopi.galite.visual.visual.VActor;
 import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
-import org.kopi.galite.visual.UActor;
-import org.kopi.galite.visual.VActor;
 
 @SuppressWarnings("serial")
 public class DActor implements UActor {

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,12 +18,11 @@
 
 package org.kopi.galite.tests.chart
 
-import org.junit.Test
-
-import org.kopi.galite.chart.VRow
-import org.kopi.galite.tests.common.TestBase
-
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.tests.common.TestBase
+import org.kopi.galite.visual.chart.VRow
 
 class VRowTests : TestBase() {
   /**

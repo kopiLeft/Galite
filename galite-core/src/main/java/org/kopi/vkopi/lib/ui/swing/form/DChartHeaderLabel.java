@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,8 +26,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.UIManager;
 
-import org.kopi.galite.form.UChartLabel;
-import org.kopi.galite.form.VBlock;
+import org.kopi.galite.visual.form.UChartLabel;
+import org.kopi.galite.visual.form.VBlock;
 
 public class DChartHeaderLabel extends DLabel implements UChartLabel {
 

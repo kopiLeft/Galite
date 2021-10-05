@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,17 +20,16 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.domain.BOOL
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.report.FieldAlignment
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.UReport
-import org.kopi.galite.report.VCellFormat
-import org.kopi.galite.report.VReport
-import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.report.FieldAlignment
+import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Training Report
