@@ -195,7 +195,7 @@ fun createGShopApplicationTables() {
 }
 
 val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
-                                 Bill, TaxRule, Command, BillProduct, Purchase)
+                                            Bill, TaxRule, Command, BillProduct, Purchase)
 
 fun initModules() {
   transaction {

@@ -18,8 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.label.Label
+import org.kopi.galite.visual.ui.vaadin.form.DField
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
@@ -27,6 +26,7 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.provider.ListDataProvider
 
 /**
@@ -83,12 +83,9 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
         arrayOfNulls<Component>(columnsSize)
       }
 
-      var gridBlockWidth = 0
-      gridBlock.columns.forEach {column ->
-        gridBlockWidth += column.width.substring(0, column.width.indexOf("p")).toInt()
-      }
+      val gridBlockWidth = gridBlock.columns.joinToString(" + ") { it.width }
 
-      grid.width = gridBlockWidth.toString() + "px"
+      grid.width = "calc($gridBlockWidth)"
       grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
       grid.setSelectionMode(Grid.SelectionMode.NONE)
       gridBlock.columns.forEachIndexed { index, column ->
@@ -97,18 +94,27 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
       }
       (grid.dataProvider as ListDataProvider).addFilter { it != null }
 
-      var isFirstLabel = true
       for (i in aligns!!.indices) {
         val align = aligns!![i]
-        if (align.x != -1) {
-          if(components!![i] is Label) {
-            if (isFirstLabel) {
-              val label = (components!![i] as Label).label
 
-              label.classNames.add(Styles.LABEL)
-              alignedGridComponents[align.y][align.x] = label
-              isFirstLabel = false
+        if (align.x != -1 && alignedGridComponents[align.y][align.x] == null) {
+          if (components!![i] is DField && (components!![i] as DField).label != alignedGridComponents[0][0]) {
+            val label = (components!![i] as DField).label
+            val layout = VerticalLayout()
+
+            label?.element?.classList?.add("hide")
+
+            layout.element.addEventListener("mouseover") {
+              label?.element?.classList?.add("show")
+              label?.element?.classList?.remove("hide")
             }
+
+            layout.element.addEventListener("mouseout") {
+              label?.element?.classList?.add("hide")
+              label?.element?.classList?.remove("show")
+            }
+            layout.add(components!![i], label)
+            alignedGridComponents[align.y][align.x] = layout
           } else {
             alignedGridComponents[align.y][align.x] = components!![i]
           }

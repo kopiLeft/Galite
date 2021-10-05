@@ -65,3 +65,13 @@
     color: #009bd4;
     padding-left: 2px;
 }
+
+.show {
+    visibility: visible;
+    background: #d9f0f8;
+    margin: 1px;
+}
+
+.hide {
+    visibility: hidden;
+}
