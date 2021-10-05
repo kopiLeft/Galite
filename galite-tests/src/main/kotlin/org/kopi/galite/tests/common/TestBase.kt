@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,14 +20,14 @@ package org.kopi.galite.tests.common
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.chart.Chart
-import org.kopi.galite.chart.UChart
-import org.kopi.galite.chart.VChart
-import org.kopi.galite.report.MReport
-import org.kopi.galite.report.Report
-import org.kopi.galite.report.UReport
-import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.chart.UChart
+import org.kopi.galite.visual.chart.VChart
+import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.report.MReport
+import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.report.VReport
 
 /**
  * TestBase class for all tests.
@@ -98,6 +98,10 @@ open class TestBase {
     expected.forEachIndexed { index, expectedElement ->
       assertEquals(expectedElement, actual.elementAt(index), "Element mismatch at index $index")
     }
+  }
+
+  fun <K, V> assertMapsEquals(expected: Map<K, V>, actual: Map<K, V>) {
+    assertEquals(expected, actual)
   }
 
   fun <T> assertArraysEquals(expected: Array<T>, actual: Array<T>) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.visual.form.VFieldUI;
 
 /**
  * DField is a panel composed in a text field and an information panel

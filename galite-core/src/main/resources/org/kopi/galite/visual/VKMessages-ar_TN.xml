@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<messages>
+<!-- WAIT MESSAGES-->
+  <message ident="searching_database" text="البحث جار"/>
+  <message ident="loading_record" text="تحميل التسجيل"/>
+  <message ident="saving_record" text="تثبيت التسجيل"/>
+  <message ident="deleting_record" text="شطب التسجيل"/>
+  <message ident="printing" text="الطباعة  جارية"/>
+  <message ident="report_generation" text="انشاء التقرير جار"/>
+  <message ident="chart_generation" text="انشاء الرسم البياني جار"/>
+<!-- INFO TEXTS-->
+  <message ident="saved_successfully" text="بيانات مسجلة"/>
+<!-- QUESTIONS-->
+  <message ident="confirm_break" text="قطع هل أنت متأكد ؟             "/>
+  <message ident="confirm_quit" text="انصراف هل  أنت متأكد ؟"/>
+  <message ident="confirm_delete" text="شطب هل أنت متأكد ؟"/>
+  <message ident="confirm_save_unchanged" text="لاتغيير في أي موقع هل تسجل رغم ذلك ؟"/>
+  <message ident="confirm_discard_changes" text="فقدان التغييرات هل أنت متأكد ؟"/>
+  <message ident="confirm_insert_mode" text="أسلوب  الادخال  هل  أنت متأكد ؟"/>
+
+</messages>

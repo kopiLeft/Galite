@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
-import org.kopi.galite.chart.VDataSeries;
+import org.kopi.galite.visual.chart.VDataSeries;
 
 @SuppressWarnings("serial")
 public class DColumnChart extends DAbstractChartType {

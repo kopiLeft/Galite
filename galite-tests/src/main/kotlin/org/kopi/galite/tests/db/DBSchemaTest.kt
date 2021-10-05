@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,10 +29,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.UserRights
-import org.kopi.galite.db.Users
-import org.kopi.galite.db.list_Of_Tables
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.db.list_Of_Tables
+import org.kopi.galite.visual.db.sequencesList
 
 /**
  * Creates a connection and initializes the database. Useful if your test/demo needs a connection, the initial
@@ -80,6 +81,9 @@ open class DBSchemaTest : TestBase() {
       list_Of_Tables.forEach { table ->
         SchemaUtils.create(table)
       }
+      sequencesList.forEach { sequence ->
+        SchemaUtils.createSequence(sequence)
+      }
     }
 
     /**
@@ -88,6 +92,9 @@ open class DBSchemaTest : TestBase() {
     fun dropDBSchemaTables() {
       list_Of_Tables.forEach { table ->
         SchemaUtils.drop(table)
+      }
+      sequencesList.forEach { sequence ->
+        SchemaUtils.dropSequence(sequence)
       }
     }
 

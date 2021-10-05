@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,17 +48,16 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.preview.PreviewListener;
-import org.kopi.galite.preview.VPreviewWindow;
+import org.kopi.galite.visual.preview.PreviewListener;
+import org.kopi.galite.visual.preview.VPreviewWindow;
+import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.visual.visual.Action;
+import org.kopi.galite.visual.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.visual.DPositionPanelListener;
+import org.kopi.galite.visual.visual.UserConfiguration;
 import org.kopi.vkopi.lib.ui.swing.visual.DPositionPanel;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.DPositionPanelListener;
-import org.kopi.galite.visual.Action;
-import org.kopi.galite.visual.UserConfiguration;
-import org.kopi.galite.visual.VException;
 
 /**
  * A window with an html pane

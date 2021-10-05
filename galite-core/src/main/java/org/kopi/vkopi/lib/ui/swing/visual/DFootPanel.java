@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.kopi.vkopi.lib.ui.swing.plaf.KopiLookAndFeel;
+
 /**
  * An information panel displayed at the foot of every window.
  */

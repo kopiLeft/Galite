@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2018 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,8 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 
+import org.kopi.galite.visual.visual.Item;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.galite.visual.Item;
 
 class ItemRenderer extends JLabel implements TreeCellRenderer {
 

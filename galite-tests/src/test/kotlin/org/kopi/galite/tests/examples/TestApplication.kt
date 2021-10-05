@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,19 +19,18 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.DBContext
 import org.kopi.galite.demo.connectToDatabase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.util.Rexec
-import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.util.Rexec
+import org.kopi.galite.visual.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.AppShellSettings
+import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.PWA
 
 @SpringBootApplication
@@ -49,14 +48,14 @@ fun main(args: Array<String>) {
   runApplication<TestApplication>(*args)
 }
 
-@PWA(name = "Galite test", shortName = "Tests", iconPath = "ui/vaadin/window.gif")
-class GaliteApplication : VApplication(GaliteRegistry()), AppShellConfigurator {
+@Route("")
+@PWA(name = "Galite test", shortName = "Tests", iconPath = "favicon.png")
+class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
   override val alternateLocale get() = Locale.UK
   override val title get() = "Galite demo"
-  override val favIcon get() = "ui/vaadin/window.gif"
   override val supportedLocales
     get() =
       arrayOf(
@@ -115,15 +114,5 @@ class GaliteApplication : VApplication(GaliteRegistry()), AppShellConfigurator {
         override fun useAcroread(): Boolean = TODO()
       }
     )
-  }
-
-  override fun configurePage(settings: AppShellSettings) {
-    pageTitle?.let {
-      settings.setPageTitle(it)
-    }
-    favIcon.let {
-      settings.addLink("shortcut icon", it)
-      settings.addFavIcon("icon", it, "192x192")
-    }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,11 +19,12 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.DictionaryForm
-import org.kopi.galite.form.dsl.FormBlock
-
+import org.kopi.galite.visual.domain.Fixed
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.insertBlock
 
 class ManyPagesForm : DictionaryForm() {
   override val locale = Locale.UK
@@ -31,9 +32,9 @@ class ManyPagesForm : DictionaryForm() {
   val clientsPage= page("Clients")
   val contactsPage= page("Contacts")
   val detailsPage= page("Details")
-  val clientsBlock = insertBlock(Clients(), clientsPage)
-  val contactsBlock = insertBlock(Contacts(), contactsPage)
-  val detailsBlock = insertBlock(Details(), detailsPage)
+  val clientsBlock = clientsPage.insertBlock(Clients())
+  val contactsBlock = contactsPage.insertBlock(Contacts())
+  val detailsBlock = detailsPage.insertBlock(Details())
 
   inner class Clients : FormBlock(1, 100, "Clients") {
     val idClt = visit(domain = INT(30), position = at(1, 1)) {
@@ -50,7 +51,7 @@ class ManyPagesForm : DictionaryForm() {
   }
 
   inner class Details : FormBlock(1, 100, "Details") {
-    val detail = visit(domain = STRING(30, 30, 30, true), position = at(1, 1)) {
+    val detail = visit(domain = STRING(30, 30, 30, Fixed.ON), position = at(1, 1)) {
       label = "detail"
       help = "The detail"
     }

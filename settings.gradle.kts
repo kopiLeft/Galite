@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "Galite"
+rootProject.name = "galite"
 include("galite-core")
 include("galite-testing")
 include("galite-tests")

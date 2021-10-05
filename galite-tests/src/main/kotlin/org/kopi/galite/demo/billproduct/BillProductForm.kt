@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,12 +22,12 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.BillProduct
 import org.kopi.galite.demo.Product
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.dsl.report.Report
 
 class BillProductForm : ReportSelectionForm() {
   override val locale = Locale.UK

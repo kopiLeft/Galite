@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,14 +21,13 @@ package org.kopi.vkopi.lib.ui.swing.visual;
 
 import java.io.IOException;
 
-import org.kopi.galite.preview.VPreviewWindow;
-import org.kopi.galite.print.PSPrintException;
-import org.kopi.galite.util.AbstractPrinter;
-import org.kopi.galite.util.PrintException;
-import org.kopi.galite.util.PrintJob;
-import org.kopi.galite.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.PreviewRunner;
-import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.preview.VPreviewWindow;
+import org.kopi.galite.visual.print.PSPrintException;
+import org.kopi.galite.visual.util.AbstractPrinter;
+import org.kopi.galite.visual.util.PrintException;
+import org.kopi.galite.visual.util.PrintJob;
+import org.kopi.galite.visual.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.visual.PreviewRunner;
 
 public class JPreviewRunner implements PreviewRunner {
 

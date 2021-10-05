@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,20 +17,21 @@
 
 package org.kopi.galite.tests.visual
 
-import org.junit.Test
-import org.kopi.galite.visual.Registry
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.visual.Registry
 
 class RegistryTests {
   val registry1 = Registry("firstDomaineName", null)
   val registry2 = Registry("secondDomaineName", null)
-  val testRegistry = Registry("mainDomain", arrayOf(registry1, registry2))
+  val testRegistry = object : Registry("mainDomain", arrayOf(registry1, registry2)) {}
 
   @Test
   fun registryTest() {
     testRegistry.buildDependencies()
-    assertEquals("org.kopi.galite.visual.Messages", testRegistry.dependencies["mainDomain"])
-    assertEquals("org.kopi.galite.Messages", testRegistry.dependencies["VIS"])
+    assertEquals("org.kopi.galite.tests.visual.Messages", testRegistry.dependencies["mainDomain"])
+    assertEquals("org.kopi.galite.visual.Messages", testRegistry.dependencies["VIS"])
     assertEquals(true, testRegistry.dependencies.containsKey("firstDomaineName"))
     assertEquals(true, testRegistry.dependencies.containsKey("secondDomaineName"))
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,17 +19,18 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.BOOL
-import org.kopi.galite.domain.DATETIME
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.IMAGE
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.MONTH
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.domain.TIME
-import org.kopi.galite.domain.WEEK
-import org.kopi.galite.form.dsl.DictionaryForm
-import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DATETIME
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.Fixed
+import org.kopi.galite.visual.domain.IMAGE
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.MONTH
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TIME
+import org.kopi.galite.visual.domain.WEEK
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
 
 class SimpleForm : DictionaryForm() {
   override val locale = Locale.UK
@@ -102,7 +103,7 @@ class TraineeshipWithAllFieldTypes : FormBlock(1, 1, "Training") {
     help = "photo"
     columns(t.photo)
   }
-  val informations = visit(domain = STRING(80, 50, 10, true), position = at(10, 1)) {
+  val informations = visit(domain = STRING(80, 50, 10, Fixed.ON), position = at(10, 1)) {
     label = "training informations"
     help = "The training informations"
     columns(t.informations) {

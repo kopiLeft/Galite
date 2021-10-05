@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +35,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
 
-import org.kopi.galite.visual.VHelpViewer;
+import org.kopi.galite.visual.visual.VHelpViewer;
 
 /**
  * A window with an html pane
@@ -67,7 +67,7 @@ import org.kopi.galite.visual.VHelpViewer;
     try {
       html = new JEditorPane(model.getUrl());
     } catch (java.io.IOException e) {
-      throw new org.kopi.galite.util.base.InconsistencyException(e);
+      throw new org.kopi.galite.visual.util.base.InconsistencyException(e);
     }
     html.setEditable(false);
     html.addHyperlinkListener(this);

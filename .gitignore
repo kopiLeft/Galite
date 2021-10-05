@@ -43,3 +43,5 @@ galite-tests/tsconfig.json
 galite-tests/types.d.ts
 galite-tests/webpack.config.js
 galite-tests/webpack.generated.js
+galite-tests/.npmrc
+galite-tests/frontend/generated/*

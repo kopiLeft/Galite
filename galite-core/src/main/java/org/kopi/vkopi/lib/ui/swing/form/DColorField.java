@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,8 +34,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import org.kopi.galite.form.VColorField;
-import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.visual.form.VColorField;
+import org.kopi.galite.visual.form.VFieldUI;
 
 /**
  * DColorField is a panel composed in a color field and a label behind

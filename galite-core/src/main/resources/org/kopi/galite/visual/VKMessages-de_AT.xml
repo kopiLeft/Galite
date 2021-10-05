@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<messages>
+<!-- WAIT MESSAGES-->
+  <message ident="searching_database" text="Suche läuft." />
+  <message ident="loading_record" text="Datensatz wird geladen." />
+  <message ident="saving_record" text="Datensatz wird gespeichert." />
+  <message ident="deleting_record" text="Datensatz wird gelöscht." />
+  <message ident="printing" text="Druck wird vorbereitet." />
+  <message ident="report_generation" text="Bericht wird erstellt." />
+  <message ident="chart_generation" text="Diagramm wird erstellt." />
+<!-- INFO TEXTS-->
+  <message ident="saved_successfully" text="Datensatz wurde geändert." />
+<!-- QUESTIONS-->
+  <message ident="confirm_break" text="Abbrechen: sind Sie sicher ?" />
+  <message ident="confirm_quit" text="Beenden: sind Sie sicher ?" />
+  <message ident="confirm_delete" text="Datensatz löschen: sind Sie sicher ?" />
+  <message ident="confirm_save_unchanged" text="Keine Änderung erfolgt: trotzdem speichern ?" />
+  <message ident="confirm_discard_changes" text="Änderungen verwerfen: sind Sie sicher ?" />
+  <message ident="confirm_insert_mode" text="Anlage-Modus verlangt: sind Sie sicher ?" />
+</messages>

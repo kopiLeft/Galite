@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,10 +19,10 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
 import org.kopi.galite.tests.report.SimpleReport
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.dsl.report.Report
 
 class FormWithReport : ReportSelectionForm() {
   override val locale = Locale.UK

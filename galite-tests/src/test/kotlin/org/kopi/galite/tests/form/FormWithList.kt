@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,17 +18,17 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.UserRights
-import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.BOOL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.domain.TIMESTAMP
-import org.kopi.galite.form.dsl.DictionaryForm
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
 
 class FormWithList : DictionaryForm() {
   override val locale = Locale.UK

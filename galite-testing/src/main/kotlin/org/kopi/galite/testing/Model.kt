@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,10 +16,10 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.common.Window
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.visual.VWindow
 
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get

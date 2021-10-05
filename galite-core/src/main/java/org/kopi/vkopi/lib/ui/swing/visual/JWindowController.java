@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,12 +31,12 @@ import javax.swing.FocusManager;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.kopi.galite.visual.ApplicationContext;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VRuntimeException;
-import org.kopi.galite.visual.VWindow;
-import org.kopi.galite.visual.WindowBuilder;
-import org.kopi.galite.visual.WindowController;
+import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VRuntimeException;
+import org.kopi.galite.visual.visual.VWindow;
+import org.kopi.galite.visual.visual.WindowBuilder;
+import org.kopi.galite.visual.visual.WindowController;
 
 /**
  * {@code JWindowController} is a swing implementation of the {@link WindowController}.
@@ -100,7 +100,7 @@ public class JWindowController extends WindowController {
   }
 
 
-  public boolean doModal(org.kopi.galite.common.Window model) {
+  public boolean doModal(org.kopi.galite.visual.dsl.common.Window model) {
   	return doModal(model.getModel());
   }
 
@@ -131,7 +131,7 @@ public class JWindowController extends WindowController {
     });
   }
 
-  public void doNotModal(final org.kopi.galite.common.Window model) {
+  public void doNotModal(final org.kopi.galite.visual.dsl.common.Window model) {
   	doNotModal(model.getModel());
   }
 

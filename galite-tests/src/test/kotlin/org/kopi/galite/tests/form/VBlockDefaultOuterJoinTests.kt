@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,11 +25,11 @@ import org.jetbrains.exposed.sql.targetTables
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
-import org.kopi.galite.db.Modules
-import org.kopi.galite.db.UserRights
-import org.kopi.galite.db.Users
-import org.kopi.galite.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.visual.db.UserRights
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.form.VBlockDefaultOuterJoin
 
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,12 +31,12 @@ import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.Week
 
 import com.github.mvysny.kaributesting.v10.expectRow
 

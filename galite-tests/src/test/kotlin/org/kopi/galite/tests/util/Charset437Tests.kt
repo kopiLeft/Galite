@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,13 +17,15 @@
 
 package org.kopi.galite.tests.util
 
-import org.junit.Test
-import org.kopi.galite.util.Charset437
-import org.kopi.galite.util.Encoder437
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
 import java.nio.charset.Charset
+
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.visual.util.Charset437
+import org.kopi.galite.visual.util.Encoder437
 
 class Charset437Tests {
   val testChar: Charset437 = Charset437()

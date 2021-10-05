@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,25 +20,25 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.IMAGE
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.MONTH
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.domain.TIMESTAMP
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Timestamp
+import org.kopi.galite.visual.db.month
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.IMAGE
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.MONTH
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.minValue
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Timestamp
 
 object Product : Table() {
   val id = integer("ID").autoIncrement().nullable()
@@ -48,7 +48,7 @@ object Product : Table() {
   val price = decimal("PRICE", 10, 5).nullable()
   val image = blob("IMAGE")
   val date = timestamp("MAN_DATE")
-  val month = date("EXP_MONTH").nullable()
+  val month = month("EXP_MONTH").nullable()
 }
 
 object FormWithSpecialTypes : Form() {

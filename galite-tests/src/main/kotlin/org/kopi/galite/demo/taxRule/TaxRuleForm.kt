@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,15 +20,16 @@ import java.util.Locale
 
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.TaxRule
-import org.kopi.galite.domain.BOOL
-import org.kopi.galite.domain.INT
-import org.kopi.galite.domain.STRING
-import org.kopi.galite.form.dsl.Access
-import org.kopi.galite.form.dsl.FormBlock
-import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.Modes
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.Fixed
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.Modes
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.dsl.report.Report
 
 class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -155,7 +156,7 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     }
   }
 
-  val informations = visit(domain = STRING(80, 50, 10, true, styled = true), position = at(3, 1)) {
+  val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
     label = "tax informations"
     help = "The tax informations"
     columns(u.informations) {

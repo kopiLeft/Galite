@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,11 +19,11 @@
 
 package org.kopi.vkopi.lib.ui.swing.chart;
 
-import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.chart.CConstants;
-import org.kopi.galite.chart.ChartTypeFactory;
-import org.kopi.galite.chart.UChartType;
-import org.kopi.galite.chart.VChartType;
+import org.kopi.galite.visual.chart.CConstants;
+import org.kopi.galite.visual.chart.ChartTypeFactory;
+import org.kopi.galite.visual.chart.UChartType;
+import org.kopi.galite.visual.chart.VChartType;
+import org.kopi.galite.visual.util.base.InconsistencyException;
 
 /**
  * Swing implementation of the chart type factory.

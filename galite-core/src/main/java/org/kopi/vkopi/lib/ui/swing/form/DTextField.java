@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,22 +50,22 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.undo.UndoManager;
 
-import org.kopi.galite.form.ModelTransformer;
-import org.kopi.galite.form.UTextField;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VField;
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.form.VStringField;
+import org.kopi.galite.visual.form.ModelTransformer;
+import org.kopi.galite.visual.form.UTextField;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VField;
+import org.kopi.galite.visual.form.VFieldUI;
+import org.kopi.galite.visual.form.VStringField;
+import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
+import org.kopi.galite.visual.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.base.JHtmlTextArea;
 import org.kopi.vkopi.lib.ui.swing.base.TextSelecter;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellChecker;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellException;
-import org.kopi.galite.ui.swing.visual.DMenuTree;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.galite.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.ApplicationContext;
-import org.kopi.galite.visual.VlibProperties;
 
 /**
  * DTextField is a panel composed in a text field and an information panel
@@ -441,7 +441,7 @@ public class DTextField extends DField implements UTextField, VConstants {
         }
 
         public void actionPerformed(ActionEvent e) {
-            getModel().getForm().performAsyncAction(new org.kopi.galite.visual.Action() {
+            getModel().getForm().performAsyncAction(new org.kopi.galite.visual.visual.Action() {
                 public void execute() {
                     model.transferFocus(DTextField.this);
                     model.autofillButton();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,15 +17,14 @@
 
 package org.kopi.galite.tests.chart
 
-import org.junit.Test
-
-import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.chart.Formatter
-import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.exceptions.MissingMeasureException
-
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+
+import org.junit.Test
+import org.kopi.galite.tests.common.TestBase
+import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.dsl.chart.Formatter
+import org.kopi.galite.visual.exceptions.MissingMeasureException
 
 class ChartTests : TestBase() {
 

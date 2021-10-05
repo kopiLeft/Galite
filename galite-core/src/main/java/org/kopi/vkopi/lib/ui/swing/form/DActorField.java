@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,9 +25,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.kopi.galite.form.UActorField;
-import org.kopi.galite.form.VConstants;
-import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.visual.form.UActorField;
+import org.kopi.galite.visual.form.VConstants;
+import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.vkopi.lib.ui.swing.base.JActorFieldButton;
 
 /**

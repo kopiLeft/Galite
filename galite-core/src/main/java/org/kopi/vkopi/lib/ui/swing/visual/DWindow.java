@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -66,23 +66,22 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
-import org.kopi.galite.ui.swing.visual.DMenuTree;
+import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
+import org.kopi.galite.visual.util.LineBreaker;
+import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.MessageCode;
+import org.kopi.galite.visual.visual.MessageListener;
+import org.kopi.galite.visual.visual.UIFactory;
+import org.kopi.galite.visual.visual.UWindow;
+import org.kopi.galite.visual.visual.VActor;
+import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.visual.VRuntimeException;
+import org.kopi.galite.visual.visual.VWindow;
+import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.visual.WaitInfoListener;
 import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
 import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.galite.util.LineBreaker;
-import org.kopi.galite.visual.ApplicationContext;
-import org.kopi.galite.visual.MessageCode;
-import org.kopi.galite.visual.MessageListener;
-import org.kopi.galite.visual.UIFactory;
-import org.kopi.galite.visual.UWindow;
-import org.kopi.galite.visual.VActor;
-import org.kopi.galite.visual.VException;
-import org.kopi.galite.visual.VRuntimeException;
-import org.kopi.galite.visual.VWindow;
-import org.kopi.galite.visual.VlibProperties;
-import org.kopi.galite.visual.WaitInfoListener;
-
 
 /**
  * This class displays a window with a menu, a tool bar, a content panel
@@ -638,7 +637,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    * @deprecated   Use method #performAsyncAction(KopiAction action) without
    *               boolean parameter because this parameter  was ignored.
    */
-  public void performAction(final org.kopi.galite.visual.Action action, boolean block) {
+  public void performAction(final org.kopi.galite.visual.visual.Action action, boolean block) {
     performAsyncAction(action);
   }
   /**
@@ -647,7 +646,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performAsyncAction(final org.kopi.galite.visual.Action action) {
+  public void performAsyncAction(final org.kopi.galite.visual.visual.Action action) {
     performActionImpl(action, true);
   }
 
@@ -656,7 +655,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performBasicAction(final org.kopi.galite.visual.Action action) {
+  public void performBasicAction(final org.kopi.galite.visual.visual.Action action) {
     performActionImpl(action, false);
   }
 
@@ -666,7 +665,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  private void performActionImpl(final org.kopi.galite.visual.Action action, boolean asynch) {
+  private void performActionImpl(final org.kopi.galite.visual.visual.Action action, boolean asynch) {
     SwingThreadHandler.verifyRunsInEventThread("DForm:performActionImpl");
 
     if (inAction == true) {
@@ -955,7 +954,7 @@ public abstract class DWindow extends JPanel implements UWindow {
     contentPanel = null;
     model = null;
     self.setJMenuBar(null);
-    org.kopi.galite.base.Utils.Companion.freeMemory();
+    org.kopi.galite.visual.base.Utils.Companion.freeMemory();
     self = null;
   }
 
@@ -1393,7 +1392,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   // set/access inAction ONLY in the event-disp.-Thread
   private boolean				inAction;
   // set/access these fields ONLY in the event-disp.-Thread
-  private org.kopi.galite.visual.Action				currentAction;
+  private org.kopi.galite.visual.visual.Action currentAction;
   private LinkedList<AWTEvent>            	currentEventQueue;
 
   private int                   		returnCode = -1;
