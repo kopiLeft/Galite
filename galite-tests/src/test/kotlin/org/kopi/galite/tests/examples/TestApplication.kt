@@ -49,7 +49,6 @@ fun main(args: Array<String>) {
 }
 
 @Route("")
-@PWA(name = "Galite test", shortName = "Tests", iconPath = "favicon.png")
 class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"

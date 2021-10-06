@@ -82,6 +82,22 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
     codes.add(codeDescription)
   }
 
+  /**
+   * Returns the label assigned to a value.
+   *
+   * @param value the value
+   * @return the text label
+   */
+  fun labelOf(value: T): String = codes.single { it.value == value }.label
+
+  /**
+   * Returns the value assigned to a label.
+   *
+   * @param label the label
+   * @return the value
+   */
+  fun keyOf(label: String): T = codes.single { it.label == label }.value
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
