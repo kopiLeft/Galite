@@ -25,7 +25,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.form.VConstants

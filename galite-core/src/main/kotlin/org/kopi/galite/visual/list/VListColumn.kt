@@ -19,8 +19,8 @@
 package org.kopi.galite.visual.list
 
 import kotlin.reflect.KClass
-import org.jetbrains.exposed.sql.Alias
 
+import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.QueryAlias
