@@ -697,7 +697,7 @@ class ApplicationServiceInitListener: VaadinServiceInitListener {
 
     event.source.addUIInitListener { uiInitEvent ->
       val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
-      loadingIndicatorConfiguration.firstDelay = 500
+      loadingIndicatorConfiguration.firstDelay = 1000
     }
   }
 }
