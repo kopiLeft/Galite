@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.visual.ui.vaadin.report.DTable
 import com.github.mvysny.kaributesting.v10._fireEvent
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.checkEditableByUser
@@ -25,6 +24,8 @@ import com.github.mvysny.kaributesting.v10.expectRows
 import com.github.mvysny.kaributools._internalId
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.ItemClickEvent
+
+import org.kopi.galite.visual.ui.vaadin.report.DTable
 
 fun <T> Grid<T>.expect(data: Array<Array<String>>) {
   expectRows(data.size)

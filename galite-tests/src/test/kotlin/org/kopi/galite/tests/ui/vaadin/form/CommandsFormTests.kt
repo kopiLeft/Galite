@@ -19,6 +19,7 @@ package org.kopi.galite.tests.ui.vaadin.form
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import org.jetbrains.exposed.sql.deleteWhere
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -35,6 +36,7 @@ import org.kopi.galite.testing.findForm
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.Type
@@ -47,6 +49,7 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
 import org.kopi.galite.visual.visual.VlibProperties
+
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
 
@@ -308,9 +311,9 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test deleteBlock command`() {
-    transaction {
-      // Check initial data
-      val initialData = Training.selectAll().map {
+    // Check initial data
+    val initialData = transaction {
+      Training.selectAll().map {
         arrayOf(it[Training.id],
                 it[Training.trainingName],
                 it[Training.type],
@@ -318,18 +321,28 @@ class CommandsFormTests : GaliteVUITestBase() {
                 it[Training.active]
         )
       }
+    }
+    assertEquals(4, initialData.size)
+    assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
+    assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
+    assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
+    assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
 
-      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
+
+    // Delete the foreign key references first.
+    transaction {
+      Center.deleteWhere {
+        Center.refTraining eq 1
+      }
     }
 
+    form.block.trainingID.edit(1)
     form.serialQuery.triggerCommand()
     form.deleteBlock.triggerCommand()
+    confirm(true)
 
-    transaction {
-      val data = Training.selectAll().map {
+    val data = transaction {
+      Training.selectAll().map {
         arrayOf(it[Training.id],
                 it[Training.trainingName],
                 it[Training.type],
@@ -337,13 +350,12 @@ class CommandsFormTests : GaliteVUITestBase() {
                 it[Training.active]
         )
       }
-
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[3])
     }
+    assertEquals(3, data.size)
+    assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[0])
+    assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[1])
+    assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[2])
   }
-
 
   /**
    * click on the search operator command.
