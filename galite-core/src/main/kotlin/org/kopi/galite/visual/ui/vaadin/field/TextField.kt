@@ -517,7 +517,7 @@ class TextField(val model: VField,
 
   override fun focus() {
     inputField.parentWindow?.lasFocusedField = this
-    super.focus()
+    inputField.focus()
   }
 
   override fun addFocusListener(function: () -> Unit) {
