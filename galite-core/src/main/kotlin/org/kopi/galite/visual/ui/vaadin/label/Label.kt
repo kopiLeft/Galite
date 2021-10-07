@@ -60,7 +60,7 @@ open class Label : VAnchorPanel(), HasEnabled {
   // DATA MEMBERS
   //---------------------------------------------------
   private var info: VSpan
-  var label: VSpan
+  private var label: VSpan
   private var marker: VSpan
 
   init {

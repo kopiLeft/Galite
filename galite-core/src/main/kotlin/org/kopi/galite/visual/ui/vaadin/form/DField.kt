@@ -46,7 +46,7 @@ import com.vaadin.flow.component.UI
  * @param inDetail Is it a detail view ?
  */
 abstract class DField(internal var model: VFieldUI,
-                      var label: DLabel?,
+                      internal var label: DLabel?,
                       align: Int,
                       protected var options: Int,
                       private var inDetail: Boolean)
