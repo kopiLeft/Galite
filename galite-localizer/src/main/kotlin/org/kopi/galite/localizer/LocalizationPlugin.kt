@@ -14,23 +14,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.localizer
 
-import org.kopi.galite.gradle.Versions
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-plugins {
-  kotlin("jvm") apply true
-  id("java-gradle-plugin")
-}
+/**
+ * Localization task class
+ */
+class LocalizationPlugin : Plugin<Project> {
+  override fun apply(project: Project) {
+    project.extensions.create("localize", LocalizationExtension::class.java)
 
-dependencies {
-  implementation(project(":galite-core"))
-  testImplementation(kotlin("test-junit"))
-  testImplementation("com.h2database", "h2", Versions.H2)
-  testImplementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
-}
+    project.tasks.apply {
+      register("localize", LocalizationTask::class.java)
+    }
 
-tasks {
-  compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    project.afterEvaluate {
+      val extension = project.extensions.getByType(LocalizationExtension::class.java)
+
+      extension.configure(project)
+    }
   }
 }

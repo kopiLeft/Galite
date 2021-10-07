@@ -34,6 +34,18 @@ fun localizeWindows(url: String,
                     driver: String,
                     userName: String,
                     password: String,
+                    locales: List<Locale>,
+                    schema: String? = null,
+                    output: String? = null) {
+  locales.forEach {
+    localizeWindows(url, driver, userName, password, it, schema, output)
+  }
+}
+
+fun localizeWindows(url: String,
+                    driver: String,
+                    userName: String,
+                    password: String,
                     locale: Locale,
                     schema: String? = null,
                     output: String? = null) {
@@ -55,7 +67,6 @@ fun localizeWindows(url: String,
     }
   }
 }
-
 
 /**
  * Fetches the modules from the database.
