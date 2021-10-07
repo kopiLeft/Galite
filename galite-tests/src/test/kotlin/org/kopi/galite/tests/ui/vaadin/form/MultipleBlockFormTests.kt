@@ -169,8 +169,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
       arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4"),
     ))
 
-    // Choose second row
-    grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(1))
+    // Choose third row
+    grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(2))
 
     waitAndRunUIQueue(100)
 
@@ -179,9 +179,9 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     // Dialog is closed and row data are filled into the form
     assertFalse(listDialog.isOpened)
-    assertEquals("2", field.value)
+    assertEquals("3", field.value)
     val data = arrayOf(
-      arrayOf("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", "2001"),
+      arrayOf("Center 3", "10,Rue du Lac", "example@mail", "Tunisia", "Mourouj", "5003"),
     )
 
     data.forEachIndexed { index, row ->
