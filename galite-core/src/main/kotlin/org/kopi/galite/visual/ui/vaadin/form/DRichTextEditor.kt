@@ -56,7 +56,9 @@ class DRichTextEditor(
                            ApplicationContext.getDefaultLocale(),
                            this)
     editor.addTextValueChangeListener {
-      valueChanged()
+      if (it.isFromClient && !(it.oldValue == "" && it.value == "<p><br></p>")) {
+        valueChanged()
+      }
     }
     setFieldContent(editor)
     //editor.addNavigationListener(this) TODO
