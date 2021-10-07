@@ -41,6 +41,9 @@ class Traineeship : FormBlock(1, 10, "Training") {
     columns(t.trainingName) {
       priority = 1
     }
+    trigger(DEFAULT) {
+      "training value"
+    }
   }
   val trainingType = visit(domain = Type, position = follow(trainingName)) {
     label = "training Type"

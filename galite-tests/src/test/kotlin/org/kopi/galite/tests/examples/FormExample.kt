@@ -114,16 +114,27 @@ class FormExample : DictionaryForm() {
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"
-      trigger(VALUE) {
-        10
-      }
       trigger(POSTCHG) {
-        description.value = "item description"
+        description.value = "sales description"
       }
     }
     val description = visit(domain = STRING(25), position = at(2, 1)) {
       label = "Description"
       help = "The item description"
+    }
+    val information = visit(domain = STRING(25), position = at(2, 2)) {
+      label = "information"
+      help = "The item information"
+      trigger(VALUE) {
+        "sales information"
+      }
+    }
+    val action = visit(domain =  STRING(25), position = at(3, 1)) {
+      label = "action"
+      help = "The item action"
+      trigger(ACTION) {
+         description.value = "item description"
+      }
     }
     val price = visit(domain = DECIMAL(10, 5), position = at(3, 2)) {
       label = "Price"
