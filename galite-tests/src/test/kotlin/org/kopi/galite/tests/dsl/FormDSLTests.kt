@@ -17,10 +17,14 @@
 package org.kopi.galite.tests.dsl
 
 import java.util.Locale
+import java.awt.event.KeyEvent
 
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
@@ -148,9 +152,11 @@ class FormDSLTests: VApplicationTestBase() {
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
 
-    assertEquals(true, clientBlock.hasTrigger(VConstants.TRG_INIT))
-    assertEquals(true, clientBlock.hasTrigger(VConstants.TRG_PREBLK))
-    assertEquals(false, clientBlock.hasTrigger(VConstants.TRG_POSTBLK))
+    for (i in 0 until 32) {
+      if (i !in listOf(VConstants.TRG_INIT, VConstants.TRG_PREBLK)) {
+        assertFalse(clientBlock.hasTrigger(i))
+      }
+    }
   }
 
   @Test
@@ -161,9 +167,14 @@ class FormDSLTests: VApplicationTestBase() {
     val idClientModel =  clientBlock.fields[0]
     val nameClientModel =  clientBlock.fields[1]
 
-    assertEquals(false, idClientModel.hasTrigger(VConstants.TRG_POSTCHG))
-    assertEquals(true, nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
-    assertEquals(false, nameClientModel.hasTrigger(VConstants.TRG_DEFAULT))
+    assertTrue(nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
+
+    for (i in 0 until 32) {
+      assertFalse(idClientModel.hasTrigger(i))
+      if (i != VConstants.TRG_POSTCHG) {
+        assertFalse(nameClientModel.hasTrigger(i))
+      }
+    }
   }
 
   @Test
@@ -185,6 +196,18 @@ class FormDSLTests: VApplicationTestBase() {
     val formModel = form.model
 
     assertEquals(3, formModel.actors.size)
+
+    assertEquals("File", formModel.actors[0]!!.menuName)
+    assertEquals("GotoShortcuts", formModel.actors[0]!!.actorIdent)
+    assertEquals(null, formModel.actors[0]!!.iconName)
+    assertEquals("Go to shortcut list", formModel.actors[0]!!.help)
+    assertEquals(KeyEvent.VK_F12, formModel.actors[0]!!.acceleratorKey)
+
+    assertEquals(form.edit.label, formModel.actors[1]!!.menuName)
+    assertEquals(form.autoFill.ident, formModel.actors[1]!!.actorIdent)
+    assertEquals(form.autoFill.icon, formModel.actors[1]!!.iconName)
+    assertEquals(form.autoFill.help, formModel.actors[1]!!.help)
+
     assertEquals(form.reset.label, formModel.actors[2]!!.menuName)
     assertEquals(form.resetForm.ident, formModel.actors[2]!!.actorIdent)
     assertEquals(form.resetForm.icon, formModel.actors[2]!!.iconName)
@@ -200,6 +223,7 @@ class FormDSLTests: VApplicationTestBase() {
     val fileModel =  clientBlock.fields[2]
 
     assertEquals(1, fileModel.command!!.size)
+
     assertEquals(form.autoFill.label, fileModel.command!![0].item)
     assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.actorIdent)
     assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
