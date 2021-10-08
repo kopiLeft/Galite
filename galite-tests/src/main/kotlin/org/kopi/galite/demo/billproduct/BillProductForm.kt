@@ -17,6 +17,7 @@
 package org.kopi.galite.demo.billproduct
 
 import java.util.Locale
+
 import org.kopi.galite.demo.database.Bill
 import org.kopi.galite.demo.database.BillProduct
 import org.kopi.galite.demo.database.Product

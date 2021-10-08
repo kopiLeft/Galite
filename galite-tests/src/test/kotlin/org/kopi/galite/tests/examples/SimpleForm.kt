@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.examples
 
 import java.util.Locale
+
 import org.kopi.galite.demo.desktop.runForm
 
 import org.kopi.galite.visual.domain.BOOL

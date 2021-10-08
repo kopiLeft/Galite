@@ -18,6 +18,7 @@ package org.kopi.galite.tests.ui.vaadin.list
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.findField

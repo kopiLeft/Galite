@@ -19,7 +19,9 @@ package org.kopi.galite.demo.database
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+
 import kotlin.reflect.KClass
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
@@ -87,7 +89,6 @@ fun createApplicationTables() {
   }
 }
 
-
 /**
  * Drops DBSchema tables
  */
@@ -133,7 +134,7 @@ fun createDBSchemaTables() {
 }
 
 /**
- * Creates DBSchema tables
+ * Drops DBSchema tables
  */
 fun dropDBSchemaTables() {
   list_Of_Tables.forEach { table ->
@@ -145,7 +146,7 @@ fun dropDBSchemaTables() {
 }
 
 /**
- * this test insert data into Users table
+ * Inserts data into [Users] table
  */
 fun insertIntoUsers(shortname: String,
                     userName: String) {
@@ -164,7 +165,7 @@ fun insertIntoUsers(shortname: String,
 }
 
 /**
- * this test insert data into UserRights table
+ * Inserts data into [UserRights] table
  */
 fun insertIntoUserRights(userName: String,
                          moduleName: String,
@@ -178,7 +179,7 @@ fun insertIntoUserRights(userName: String,
 }
 
 /**
- * this test insert data into Module table
+ * Inserts data into [Module] table
  */
 fun insertIntoModule(shortname: String,
                      source: String,

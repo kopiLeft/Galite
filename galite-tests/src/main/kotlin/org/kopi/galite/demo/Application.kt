@@ -17,6 +17,7 @@
 package org.kopi.galite.demo
 
 import java.util.Locale
+
 import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.demo.database.initDatabase
 import org.kopi.galite.demo.database.initModules

@@ -17,6 +17,7 @@
 package org.kopi.galite.demo.product
 
 import java.util.Locale
+
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
 
