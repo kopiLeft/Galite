@@ -152,6 +152,9 @@ class FormDSLTests: VApplicationTestBase() {
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
 
+    assertTrue(clientBlock.hasTrigger(VConstants.TRG_INIT))
+    assertTrue(clientBlock.hasTrigger(VConstants.TRG_PREBLK))
+
     for (i in 0 until 32) {
       if (i !in listOf(VConstants.TRG_INIT, VConstants.TRG_PREBLK)) {
         assertFalse(clientBlock.hasTrigger(i))
