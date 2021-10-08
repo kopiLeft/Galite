@@ -79,7 +79,6 @@ fun insertIntoModule(shortname: String,
   }
 }
 
-
 object User : Table() {
   val id = integer("ID")
   val uc = integer("UC")
