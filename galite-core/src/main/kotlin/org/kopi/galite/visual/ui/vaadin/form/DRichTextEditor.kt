@@ -56,7 +56,9 @@ class DRichTextEditor(
                            ApplicationContext.getDefaultLocale(),
                            this)
     editor.addTextValueChangeListener {
-      valueChanged()
+      if (it.isFromClient && !(it.oldValue == "" && it.value == "<p><br></p>")) {
+        valueChanged()
+      }
     }
     setFieldContent(editor)
     //editor.addNavigationListener(this) TODO
@@ -95,6 +97,7 @@ class DRichTextEditor(
     // value change event is fired when the field is blurred.
     getModel().isChangedUI = true
     getModel().setChanged(true)
+    getModel().checkType(text)
   }
 
   override fun updateText() {

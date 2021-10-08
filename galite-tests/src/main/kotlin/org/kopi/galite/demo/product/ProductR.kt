@@ -134,7 +134,7 @@ class ProductReport : Report() {
     label = "Description"
     help = "The product description"
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 

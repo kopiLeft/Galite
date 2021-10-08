@@ -109,6 +109,15 @@ class CommandsForm : ReportSelectionForm() {
     key = Key.F7
     icon = "detail_view"
   }
+  val InsertMode = actor(
+    ident = "Insert",
+    menu = action,
+    label = "Insert",
+    help = " Insert",
+  ) {
+    key = Key.F7
+    icon = "insert"
+  }
   val quit = actor(
     ident = "quit",
     menu = action,
@@ -177,6 +186,11 @@ class CommandsForm : ReportSelectionForm() {
     command(item = Operator) {
       action = {
         searchOperator()
+      }
+    }
+    command(item = InsertMode) {
+      action = {
+        insertMode()
       }
     }
   }

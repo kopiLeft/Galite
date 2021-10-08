@@ -81,7 +81,9 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
         arrayOfNulls<Component>(columnsSize)
       }
 
-      grid.width = gridBlock.width
+      val gridBlockWidth = gridBlock.columns.joinToString(" + ") { it.width }
+
+      grid.width = "calc($gridBlockWidth)"
       grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
       grid.setSelectionMode(Grid.SelectionMode.NONE)
       gridBlock.columns.forEachIndexed { index, column ->

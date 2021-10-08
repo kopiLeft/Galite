@@ -75,6 +75,9 @@ class Traineeship : FormBlock(1, 10, "Training") {
       priority = 1
     }
   }
+
+  val uc = hidden(domain = INT(20)) { columns(t.uc) }
+  val ts = hidden(domain = INT(20)) { columns(t.ts) }
 }
 
 object Type : CodeDomain<Int>() {

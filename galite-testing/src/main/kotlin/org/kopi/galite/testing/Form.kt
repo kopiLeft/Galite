@@ -14,31 +14,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.gradle
+package org.kopi.galite.testing
 
-object Versions {
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.ui.vaadin.form.DForm
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
-  const val EXPOSED = "0.35.1"
-  const val H2 = "1.4.199"
-  const val  POSTGRES_NG = "0.8.6"
+import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._get
 
-  const val ITEXT = "2.1.5"
-  const val  GRAPH_BUILDER = "1.02"
-  const val HYLAFAX = "1.0.0"
-  const val GETOPT = "1.0.13"
-  const val JDOM = "2.0.5"
-  const val APACHE_POI = "4.1.2"
+/**
+ * Finds the Vaadin form component of this form.
+ */
+fun Form.findForm(): DForm? {
+  val mainWindow = _get<MainWindow>()
+  val forms = mainWindow
+    ._find<DForm>()
 
-  const val VAADIN = "21.0.2"
+  return forms.singleOrNull {
+    it.getModel()!! eq this.model
+  }
+}
 
-  const val SLF4J = "1.7.30"
-
-  const val KARIBU_TESTING = "1.3.3"
-  const val ENHANCED_DIALOG = "21.0.0"
-  const val APEX_CHARTS = "2.0.0.beta10"
-  const val IRON_ICONS = "2.0.1"
-  const val JAVAX_SERVLET_API = "4.0.1"
-
-  const val JFREE_CHART = "1.0.19"
-  const val WYSIWYG_EJAVA = "2.0.1"
+infix fun VForm.eq(form: VForm): Boolean {
+  return this.getName()  == form.getName()
+          && this.source == form.source
 }
