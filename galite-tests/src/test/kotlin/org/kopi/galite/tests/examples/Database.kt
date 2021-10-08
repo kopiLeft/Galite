@@ -94,6 +94,7 @@ fun addTraining(name: String, category: Int, amount: BigDecimal, info: String? =
 
 fun addCenters() {
   addCenter("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 2)
+  addCenter("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 1)
   addCenter("Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", 6000, 1)
   addCenter("Center 3", "10,Rue du Lac", "example@mail", "Tunisia", "Mourouj", 5003, 3)
   addCenter("Center 4", "10,Rue du Lac", "example@mail", "Tunisia", "Megrine", 2001, 4)
