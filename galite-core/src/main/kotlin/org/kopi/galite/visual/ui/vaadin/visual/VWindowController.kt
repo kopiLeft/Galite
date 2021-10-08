@@ -23,6 +23,8 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VHelpViewer
@@ -106,6 +108,11 @@ class VWindowController : WindowController() {
     popup.setCaption(title) // put popup title
     accessAndPush {
       popup.open()
+
+      // Focus on a field inside a popup is not working.
+      // This is a workaround to call focus asynchronously after some time from
+      // popup attachment.
+      view.focusOnLastField()
     }
   }
 
@@ -148,6 +155,11 @@ class VWindowController : WindowController() {
             popup.setContent(view!!)
             popup.setCaption(model.getTitle()) // put popup title
             popup.open()
+
+            // Focus on a field inside a popup is not working.
+            // This is a workaround to call focus asynchronously after some time from
+            // popup attachment.
+            view!!.focusOnLastField()
           }
         } catch (e: VException) {
           throw VRuntimeException(e.message, e)
@@ -161,6 +173,24 @@ class VWindowController : WindowController() {
      */
     fun getView(): DWindow? {
       return view
+    }
+  }
+
+  /**
+   * Focus on last focused field of this window.
+   */
+  fun DWindow.focusOnLastField() {
+    element.executeJs("").then {
+      val lasFocusedField = lasFocusedField
+
+      if (lasFocusedField != null) {
+        val internalField = when (lasFocusedField) {
+          is TextField -> lasFocusedField.inputField
+          is GridEditorTextField -> lasFocusedField.wrappedField
+          else -> lasFocusedField
+        }
+        internalField.element.executeJs("setTimeout(function(){$0.focus()},60)", internalField.element)
+      }
     }
   }
 }
