@@ -15,8 +15,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
+import org.kopi.galite.gradle.Versions
+
+plugins {
+  kotlin("jvm") apply true
+  id("java-gradle-plugin")
+}
+
+dependencies {
+  implementation(project(":galite-core"))
+  testImplementation(kotlin("test-junit"))
+  testImplementation("com.h2database", "h2", Versions.H2)
+  testImplementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
+}
+
+tasks {
+  compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+  }
+}

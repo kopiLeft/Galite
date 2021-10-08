@@ -14,9 +14,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.localizer
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+/**
+ * Localization task class
+ */
+class LocalizationPlugin : Plugin<Project> {
+  override fun apply(project: Project) {
+    project.extensions.create("localize", LocalizationExtension::class.java)
+
+    project.tasks.apply {
+      register("localize", LocalizationTask::class.java)
+    }
+
+    project.afterEvaluate {
+      val extension = project.extensions.getByType(LocalizationExtension::class.java)
+
+      extension.configure(project)
+    }
+  }
+}

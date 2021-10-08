@@ -116,6 +116,8 @@ abstract class Window {
     return command
   }
 
+  abstract fun genLocalization(destination: String? = null, locale: Locale? = this.locale)
+
   /**
    * Returns the qualified source file name where this object is defined.
    */

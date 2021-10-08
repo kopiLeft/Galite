@@ -14,9 +14,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.localizer
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import org.gradle.work.InputChanges
+
+/**
+ * Localization task class
+ */
+class LocalizationTask : DefaultTask() {
+  @TaskAction
+  fun run(inputChanges: InputChanges) {
+    val extension = project.extensions.getByType(LocalizationExtension::class.java)
+
+    localizeWindows(extension.url,
+                    extension.driver,
+                    extension.username,
+                    extension.password,
+                    extension.locales,
+                    extension.schema,
+                    extension.output)
+  }
+}
