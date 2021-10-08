@@ -25,7 +25,7 @@ plugins {
   signing
 }
 
-group = "io.github.kopiLeft"
+group = "org.kopi"
 version = "1.0.0"
 
 subprojects {
@@ -98,8 +98,8 @@ nexusPublishing {
     sonatype {
       nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
       snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-      username.set(project.property("sonatype.username").toString())
-      password.set(project.property("sonatype.password").toString())
+      username.set(System.getenv("SONATYPE_USERNAME"))
+      password.set(System.getenv("SONATYPE_PASSWORD"))
     }
   }
 }
