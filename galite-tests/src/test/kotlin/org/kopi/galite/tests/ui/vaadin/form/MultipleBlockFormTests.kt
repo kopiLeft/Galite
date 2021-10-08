@@ -74,6 +74,9 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test changeBlock command`() {
+    var blockCaption = _get<H4> { classes = "block-title" }
+
+    assertEquals(multipleForm.formBlocks[1].title, blockCaption.text)
     multipleForm.changeBlock.triggerCommand()
     // Check that the list dialog is displayed
     _expectOne<DListDialog>()
@@ -86,8 +89,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val grid = _get<DListDialog>()._get<ListTable>()
 
     grid.expect(arrayOf(
-      arrayOf("Centers"),
-      arrayOf("Simple block"),
+      arrayOf(multipleForm.formBlocks[1].title),
+      arrayOf(multipleForm.formBlocks[2].title)
     ))
 
     // Choose second row
@@ -95,11 +98,11 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     waitAndRunUIQueue(100)
 
-    val blockCaption = _get<H4> { classes = "block-title" }
+    blockCaption = _get<H4> { classes = "block-title" }
 
     // Dialog is closed and the block title is correct
     assertFalse(listDialog.isOpened)
-    assertEquals(multipleForm.block3.title, blockCaption.text)
+    assertEquals(multipleForm.formBlocks[2].title, blockCaption.text)
   }
 
   /**
@@ -113,12 +116,20 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     multipleForm.block2.enter()
     multipleForm.showHideFilter.triggerCommand()
 
+    val block = multipleForm.block2.findBlock() as DGridBlock
+    val data = arrayOf(
+      arrayOf("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", "2001"),
+      arrayOf("Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", "6000")
+    )
+
+    data.forEachIndexed { index, row ->
+      block.grid.expectRow(index, *row)
+    }
+
     val filter = _find<TextField> { classes = "block-filter-text" }
 
     filter[0]._value = "2"
     waitAndRunUIQueue(500)
-
-    val block = multipleForm.block2.findBlock() as DGridBlock
 
     block.grid.expect(arrayOf(
       arrayOf("Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", "6000")
