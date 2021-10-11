@@ -85,7 +85,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(10)
     assertEquals("10", field.value)
     form.resetBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
     assertEquals("", field.value)
   }
 
