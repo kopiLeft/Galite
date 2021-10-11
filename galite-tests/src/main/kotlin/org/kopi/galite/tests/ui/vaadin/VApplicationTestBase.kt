@@ -19,7 +19,7 @@ package org.kopi.galite.tests.ui.vaadin
 
 import java.util.Locale
 
-import org.kopi.galite.demo.vaadin.ConfigurationManager
+import org.kopi.galite.demo.ConfigurationManager
 import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.base.UComponent
@@ -33,7 +33,6 @@ import org.kopi.galite.visual.ui.vaadin.visual.VApplicationContext
 import org.kopi.galite.visual.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VUIFactory
-import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.FileHandler
