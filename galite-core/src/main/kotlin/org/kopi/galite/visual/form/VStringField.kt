@@ -76,7 +76,7 @@ open class VStringField(val bufferSize: Int,
    * return a list column for list
    */
   override fun getListColumn(): VListColumn =
-          VStringColumn(getHeader(), null, align, width, getPriority() >= 0)
+          VStringColumn(getHeader(), null, null, align, width, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)

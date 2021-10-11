@@ -70,6 +70,7 @@ class VIntegerField(val bufferSize: Int,
    */
   override fun getListColumn(): VListColumn = VIntegerColumn(getHeader(),
                                                              null,
+                                                             null,
                                                              align,
                                                              width,
                                                              getPriority() >= 0)

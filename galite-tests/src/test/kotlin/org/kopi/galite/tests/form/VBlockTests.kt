@@ -18,6 +18,7 @@ package org.kopi.galite.tests.form
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
@@ -27,7 +28,6 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThrows
-import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.examples.Center
@@ -788,7 +788,6 @@ class VBlockTests : VApplicationTestBase() {
     }
   }
 
-  @Ignore
   @Test
   fun `fetchLookup no table found exception scenario test`() {
     val FormSample = FormSample().also { it.model }
@@ -800,9 +799,10 @@ class VBlockTests : VApplicationTestBase() {
         FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
       }
 
-      assertEquals("Table \"USER\" not found; SQL statement:\n" +
-                           "SELECT \"USER\".ID, \"USER\".TS, \"USER\".UC, \"USER\".\"NAME\", \"USER\".AGE, \"USER\".JOB, \"USER\".\"CURRICULUM VITAE\" FROM \"USER\" WHERE \"USER\".ID = ?",
-                   vExecFailedException.message!!.substring(vExecFailedException.message!!.indexOf("\n") + 1, vExecFailedException.message!!.indexOf("?") + 1))
+      assertTrue(vExecFailedException.message!!.contains(
+        "Table \"USER\" not found; SQL statement:\n" +
+                "SELECT \"USER\".ID, \"USER\".TS, \"USER\".UC, \"USER\".\"NAME\", \"USER\".AGE, \"USER\".JOB, \"USER\".\"CURRICULUM VITAE\" FROM \"USER\" WHERE \"USER\".ID = ?"
+      ))
     }
   }
 

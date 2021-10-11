@@ -26,7 +26,7 @@ import org.jetbrains.exposed.sql.IDateColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.LongColumnType
 import org.jetbrains.exposed.sql.StringColumnType
-import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.list.VBooleanColumn
 import org.kopi.galite.visual.list.VDateColumn
 import org.kopi.galite.visual.list.VIntegerColumn
@@ -42,7 +42,7 @@ import org.kopi.galite.visual.list.VStringColumn
  */
 class ListDescription(val title: String,
                       val column: Column<*>,
-                      val domain: Domain<*>) {
+                      val domain: ListDomain<*>) {
 
   fun buildModel(): VListColumn {
     val type = if(column.columnType is AutoIncColumnType) {
@@ -52,11 +52,11 @@ class ListDescription(val title: String,
     }
 
     return when(type) {
-      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.defaultAlignment, domain.width!!, true)
-      is StringColumnType -> VStringColumn(title, column, domain.defaultAlignment, domain.width!!, true)
-      is BooleanColumnType -> VBooleanColumn(title, column, true)
+      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.table, domain.defaultAlignment, domain.width!!, true)
+      is StringColumnType -> VStringColumn(title, column, domain.table, domain.defaultAlignment, domain.width!!, true)
+      is BooleanColumnType -> VBooleanColumn(title, column, domain.table, true)
       is IDateColumnType, ->
-        VDateColumn(title, column, true)
+        VDateColumn(title, column, domain.table, true)
       else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
     }
   }

@@ -50,7 +50,7 @@ class VStringCodeField(bufferSize: Int,
    * return a list column for list
    */
   override fun getListColumn(): VListColumn =
-          VStringCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+          VStringCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
 
   /**
    * Returns the array of codes.

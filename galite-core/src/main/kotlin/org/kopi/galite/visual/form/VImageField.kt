@@ -62,7 +62,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn = VImageColumn(getHeader(), null, getPriority() >= 0)
+  override fun getListColumn(): VListColumn = VImageColumn(getHeader(), null, null, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)
