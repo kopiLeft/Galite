@@ -19,8 +19,8 @@ package org.kopi.galite.tests.ui.vaadin.form
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import org.jetbrains.exposed.sql.deleteWhere
 
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before

@@ -18,6 +18,7 @@ package org.kopi.galite.testing
 
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._get
@@ -35,6 +36,19 @@ fun confirm(value: Boolean) {
   } else {
     notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "NO") }
   }
+
+  button._click()
+  waitAndRunUIQueue(100)
+}
+
+/**
+ * Interacts with a [ErrorNotification] dialog.
+ *
+ * call function to close error notification
+ */
+fun closeErrorNotification() {
+  val notificationFooter = _get<ErrorNotification>().buttons
+  val button =  notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }
 
   button._click()
   waitAndRunUIQueue(100)

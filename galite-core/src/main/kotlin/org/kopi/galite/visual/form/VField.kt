@@ -42,6 +42,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
@@ -725,12 +726,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException()
         }
 
-        val stringOperandLiteral = when (options and VConstants.FDO_SEARCH_MASK) {
-          VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
-          VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()
-          VConstants.FDO_SEARCH_LOWER -> stringLiteral(stringOperand).lowerCase()
-          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-        }
+        val stringOperandLiteral = getOperand(stringOperand)
 
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
@@ -754,28 +750,42 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException()
         }
       } else {
+        val operand = if (operand is String) {
+          getOperand(operand)
+        } else {
+          column.wrap(operand)
+        }
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            EqOp(column, column.wrap(operand))
+            EqOp(column, operand)
           }
           VConstants.SOP_NE -> Op.build {
-            NeqOp(column, column.wrap(operand))
+            NeqOp(column, operand)
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column, column.wrap(operand))
+            GreaterEqOp(column, operand)
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column, column.wrap(operand))
+            GreaterOp(column, operand)
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column, column.wrap(operand))
+            LessEqOp(column, operand)
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column, column.wrap(operand))
+            LessOp(column, operand)
           }
           else -> throw InconsistencyException()
         }
       }
+    }
+  }
+
+  private fun getOperand(stringOperand: String) : ExpressionWithColumnType<String> {
+    return when (options and VConstants.FDO_SEARCH_MASK) {
+      VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
+      VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()
+      VConstants.FDO_SEARCH_LOWER -> stringLiteral(stringOperand).lowerCase()
+      else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
     }
   }
 

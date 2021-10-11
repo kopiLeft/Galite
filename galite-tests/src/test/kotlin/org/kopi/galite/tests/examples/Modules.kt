@@ -31,5 +31,6 @@ fun initModules() {
     insertIntoModule("2003", "org/kopi/galite/test/Menu", 103, "2000", MultipleBlockForm::class)
     insertIntoModule("2004", "org/kopi/galite/test/Menu", 104, "2000", FormToTestSaveMultipleBlock::class)
     insertIntoModule("2005", "org/kopi/galite/test/Menu", 105, "2000", CommandsForm::class)
+    insertIntoModule("2006", "org/kopi/galite/test/Menu", 106, "2000", TestFieldsForm::class)
   }
 }
