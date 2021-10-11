@@ -136,10 +136,10 @@ class VTextField(bufferSize: Int,
   /**
    * Returns the field value of given record as a string value.
    */
-  override fun getString(r: Int): String {
+  override fun getString(r: Int): String? {
     // lackner 2005.04027
     // !!! this does not work for alias fields
-    return super.getObjectImpl(r) as String
+    return super.getObjectImpl(r) as? String
   }
 
   /**

@@ -50,6 +50,8 @@ import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
 import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.tests.examples.MultipleBlockForm
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initDatabase
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -61,21 +63,14 @@ class CommandsFormTests : GaliteVUITestBase() {
 
   @Before
   fun `login to the App`() {
-    org.kopi.galite.tests.examples.initData()
+    transaction {
+      initData()
+    }
 
     login()
 
     // Open the form
     form.open()
-  }
-
-  @Test
-  fun `test list command`() {
-    //TODO
-    /*
-      check that the list dialog is displayed & that contain a correct data,
-      then chose a row and check that first field in form contain data
-     */
   }
 
   /**
@@ -457,7 +452,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.examples.initModules()
+        initDatabase()
       }
     }
   }

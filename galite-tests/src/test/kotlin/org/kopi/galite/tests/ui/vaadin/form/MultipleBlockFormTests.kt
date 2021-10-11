@@ -36,6 +36,7 @@ import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.MultipleBlockForm
+import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 
@@ -243,8 +244,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      initData()
-      initModules()
+      initDatabase()
     }
   }
 }

@@ -24,6 +24,10 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.database.createDBSchemaTables
+import org.kopi.galite.demo.database.dropDBSchemaTables
+import org.kopi.galite.demo.database.insertIntoUsers
+import org.kopi.galite.demo.database.testUser
 import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
@@ -59,19 +63,27 @@ val sequence = Sequence("TRAININGID")
 
 val centerSequence = Sequence("CENTERID")
 
-fun initData() {
+fun initDatabase() {
   transaction {
-    SchemaUtils.drop(Training)
-    SchemaUtils.dropSequence(sequence)
-    SchemaUtils.drop(Center)
-    SchemaUtils.dropSequence(centerSequence)
-    SchemaUtils.create(Training)
-    SchemaUtils.createSequence(sequence)
-    SchemaUtils.create(Center)
-    SchemaUtils.createSequence(centerSequence)
-    addTrainings()
-    addCenters()
+    dropDBSchemaTables()
+    createDBSchemaTables()
+    insertIntoUsers(testUser, "administrator")
+    initData()
+    initModules()
   }
+}
+
+fun initData() {
+  SchemaUtils.drop(Center)
+  SchemaUtils.drop(Training)
+  SchemaUtils.dropSequence(sequence)
+  SchemaUtils.dropSequence(centerSequence)
+  SchemaUtils.createSequence(sequence)
+  SchemaUtils.createSequence(centerSequence)
+  SchemaUtils.create(Training)
+  SchemaUtils.create(Center)
+  addTrainings()
+  addCenters()
 }
 
 fun addTrainings() {

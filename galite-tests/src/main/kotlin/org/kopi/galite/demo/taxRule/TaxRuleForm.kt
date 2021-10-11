@@ -18,8 +18,8 @@ package org.kopi.galite.demo.taxRule
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.TaxRule
+import org.kopi.galite.demo.database.TaxRule
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.INT
@@ -175,5 +175,5 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
 }
 
 fun main() {
-  Application.runForm(formName = TaxRuleForm())
+  runForm(formName = TaxRuleForm())
 }

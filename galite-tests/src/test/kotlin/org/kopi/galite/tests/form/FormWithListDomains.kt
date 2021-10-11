@@ -21,7 +21,8 @@ import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.domain.AutoComplete
@@ -257,7 +258,7 @@ class SomeDictionnaryForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithListDomains()) {
+  runForm(formName = FormWithListDomains()) {
     initModules()
   }
 }
