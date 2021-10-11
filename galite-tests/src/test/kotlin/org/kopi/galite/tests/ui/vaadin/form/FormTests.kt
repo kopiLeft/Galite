@@ -21,15 +21,15 @@ import kotlin.test.assertEquals
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.demo.addClients
-import org.kopi.galite.demo.addProducts
-import org.kopi.galite.demo.addSales
-import org.kopi.galite.demo.addTaxRules
+import org.kopi.galite.demo.database.addClients
+import org.kopi.galite.demo.database.addProducts
+import org.kopi.galite.demo.database.addSales
+import org.kopi.galite.demo.database.addTaxRules
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
-import org.kopi.galite.demo.createGShopApplicationTables
+import org.kopi.galite.demo.database.createApplicationTables
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
@@ -123,14 +123,14 @@ class FormTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        createGShopApplicationTables()
+        createApplicationTables()
         addClients()
         addTaxRules()
         addProducts()
         addSales()
       }
       // Using modules defined in demo application
-      org.kopi.galite.demo.initModules()
+      org.kopi.galite.demo.database.initModules()
     }
   }
 }

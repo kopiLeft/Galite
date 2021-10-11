@@ -167,7 +167,7 @@ abstract class Chart : Window() {
   /**
    * !!!FIX : comment move file creation to upper level
    */
-  open fun genLocalization(destination: String? = null) {
+  override fun genLocalization(destination: String?, locale: Locale?) {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)

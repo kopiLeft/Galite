@@ -20,6 +20,7 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.kopi.galite.visual.type.Decimal
 
 /**
@@ -27,12 +28,14 @@ import org.kopi.galite.visual.type.Decimal
  */
 class VFixnumColumn(title: String,
                     column: Column<*>?,
+                    table: ColumnSet?,
                     align: Int,
                     width: Int,
                     scale: Int,
                     sortAscending: Boolean)
       : VListColumn(title,
                     column,
+                    table,
                     align,
                     width,
                     sortAscending) {

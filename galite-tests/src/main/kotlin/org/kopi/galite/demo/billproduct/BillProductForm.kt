@@ -18,10 +18,11 @@ package org.kopi.galite.demo.billproduct
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Bill
-import org.kopi.galite.demo.BillProduct
-import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.database.Bill
+import org.kopi.galite.demo.database.BillProduct
+import org.kopi.galite.demo.database.Product
+import org.kopi.galite.demo.desktop.runForm
+
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.FormBlock
@@ -84,5 +85,5 @@ class BlockBillProduct : FormBlock(1, 1, "bill product") {
 }
 
 fun main() {
-  Application.runForm(formName = BillProductForm())
+  runForm(formName = BillProductForm())
 }

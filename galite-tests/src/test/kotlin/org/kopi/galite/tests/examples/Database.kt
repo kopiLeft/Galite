@@ -24,6 +24,10 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.database.createDBSchemaTables
+import org.kopi.galite.demo.database.dropDBSchemaTables
+import org.kopi.galite.demo.database.insertIntoUsers
+import org.kopi.galite.demo.database.testUser
 import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
@@ -67,28 +71,35 @@ object Trainer : Table("TRAINER") {
 
 val trainingSequence = Sequence("TRAININGID")
 
-val centerSequence = Sequence("CENTERID")
-
 val trainerSequence = Sequence("TRAINERID")
 
-fun initData() {
+val centerSequence = Sequence("CENTERID")
+
+fun initDatabase() {
   transaction {
-    SchemaUtils.drop(Training)
-    SchemaUtils.dropSequence(trainingSequence)
-    SchemaUtils.drop(Center)
-    SchemaUtils.dropSequence(centerSequence)
-    SchemaUtils.drop(Trainer)
-    SchemaUtils.dropSequence(trainerSequence)
-    SchemaUtils.create(Training)
-    SchemaUtils.createSequence(trainingSequence)
-    SchemaUtils.create(Center)
-    SchemaUtils.createSequence(centerSequence)
-    SchemaUtils.create(Trainer)
-    SchemaUtils.createSequence(trainerSequence)
-    addTrainings()
-    addCenters()
-    addTrainer()
+    dropDBSchemaTables()
+    createDBSchemaTables()
+    insertIntoUsers(testUser, "administrator")
+    initData()
+    initModules()
   }
+}
+
+fun initData() {
+  SchemaUtils.drop(Center)
+  SchemaUtils.drop(Training)
+  SchemaUtils.drop(trainer)
+  SchemaUtils.dropSequence(trainingSequence)
+  SchemaUtils.dropSequence(trainerSequence)
+  SchemaUtils.dropSequence(centerSequence)
+  SchemaUtils.createSequence(trainingSequence)
+  SchemaUtils.createSequence(trainerSequence)
+  SchemaUtils.createSequence(centerSequence)
+  SchemaUtils.create(Training)
+  SchemaUtils.create(Center)
+  SchemaUtils.create(trainer)
+  addTrainings()
+  addCenters()
 }
 
 fun addTrainings() {
@@ -111,6 +122,7 @@ fun addTraining(name: String, category: Int, amount: BigDecimal, info: String? =
 
 fun addCenters() {
   addCenter("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 2)
+  addCenter("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 1)
   addCenter("Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", 6000, 1)
   addCenter("Center 3", "10,Rue du Lac", "example@mail", "Tunisia", "Mourouj", 5003, 3)
   addCenter("Center 4", "10,Rue du Lac", "example@mail", "Tunisia", "Megrine", 2001, 4)

@@ -17,5 +17,6 @@
 
 rootProject.name = "galite"
 include("galite-core")
+include("galite-localizer")
 include("galite-testing")
 include("galite-tests")

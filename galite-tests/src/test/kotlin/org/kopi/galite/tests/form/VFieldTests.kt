@@ -25,7 +25,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.form.VConstants
@@ -45,7 +44,7 @@ class VFieldTests : JApplicationTestBase() {
   fun getListIDTest() {
     val vListColumn = VList("test",
                             "apps/common/Global",
-                            arrayOf(VStringColumn("test", User.name, 2, 50, true)),
+                            arrayOf(VStringColumn("test", User.name, User, 2, 50, true)),
                             User,
                             null,
                             0,
@@ -93,7 +92,7 @@ class VFieldTests : JApplicationTestBase() {
   fun checkListVStringFieldTest() {
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
-            VStringColumn("test", User.name, 2, 50, true)),
+            VStringColumn("test", User.name, User, 2, 50, true)),
                             User,
                             null,
                             0,
@@ -133,7 +132,7 @@ class VFieldTests : JApplicationTestBase() {
   fun checkListVIntegerFieldTest() {
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
-            VIntegerColumn("test", User.age, 2, 50, true)),
+            VIntegerColumn("test", User.age, User, 2, 50, true)),
                             User,
                             null,
                             0,
@@ -338,7 +337,7 @@ class VFieldTests : JApplicationTestBase() {
       SchemaUtils.drop(User)
     }
   }
-  @Ignore
+
   @Test
   fun `selectFromList valid scenario test with query entry`() {
     transaction {

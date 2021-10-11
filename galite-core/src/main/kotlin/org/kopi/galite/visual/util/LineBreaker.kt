@@ -79,7 +79,7 @@ class LineBreaker : Utils() {
      * @param        source                the source text with white space
      * @param        col                the width of the text area
      */
-    fun modelToText(source: String, col: Int): String =
+    fun modelToText(source: String?, col: Int): String =
             if (source != null) buildString {
               val length = source.length
               for (start in 0 until length step col) {

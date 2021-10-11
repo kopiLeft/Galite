@@ -21,9 +21,10 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 
-class VIntegerColumn(title: String, column: Column<*>?, align: Int, width: Int, sortAscending: Boolean) :
-        VListColumn(title, column, align, width, sortAscending) {
+class VIntegerColumn(title: String, column: Column<*>?, table: ColumnSet?, align: Int, width: Int, sortAscending: Boolean) :
+        VListColumn(title, column, table, align, width, sortAscending) {
 
   override fun getDataType(): KClass<*> {
     return Integer::class

@@ -18,10 +18,10 @@ package org.kopi.galite.demo.stock
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Product
-import org.kopi.galite.demo.Provider
-import org.kopi.galite.demo.Stock
+import org.kopi.galite.demo.database.Product
+import org.kopi.galite.demo.database.Provider
+import org.kopi.galite.demo.database.Stock
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
@@ -86,5 +86,5 @@ class StockBlock : FormBlock(1, 1, "Stock") {
 }
 
 fun main() {
-  Application.runForm(formName = StockForm())
+  runForm(formName = StockForm())
 }

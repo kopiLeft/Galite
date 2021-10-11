@@ -19,7 +19,7 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
@@ -57,5 +57,5 @@ object Days: CodeDomain<Int>() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithCodeDomains())
+  runForm(formName = FormWithCodeDomains())
 }

@@ -49,6 +49,9 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
 import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.tests.examples.MultipleBlockForm
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initDatabase
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -56,24 +59,18 @@ import com.github.mvysny.kaributesting.v10._get
 class CommandsFormTests : GaliteVUITestBase() {
 
   val form = CommandsForm().also { it.model }
+  val multipleForm = MultipleBlockForm().also { it.model }
 
   @Before
   fun `login to the App`() {
-    org.kopi.galite.tests.examples.initData()
+    transaction {
+      initData()
+    }
 
     login()
 
     // Open the form
     form.open()
-  }
-
-  @Test
-  fun `test list command`() {
-    //TODO
-    /*
-      check that the list dialog is displayed & that contain a correct data,
-      then chose a row and check that first field in form contain data
-     */
   }
 
   /**
@@ -91,7 +88,6 @@ class CommandsFormTests : GaliteVUITestBase() {
     confirm(true)
     assertEquals("", field.value)
   }
-
 
   /**
    * click on serialQuery button,
@@ -428,12 +424,35 @@ class CommandsFormTests : GaliteVUITestBase() {
      */
   }
 
+  /**
+   * put a value in the first field of the first block and a value in the first field of second block
+   * then click on resetBlock button,
+   * check that a popup is displayed,
+   * click on yes and check that the fields are empty
+   */
+  @Test
+  fun `test resetForm command`() {
+    multipleForm.open()
+
+    val simpleField = multipleForm.block.trainingID.findField()
+    val multipleField = multipleForm.block2.centerName.findField()
+
+    multipleForm.block.trainingID.edit(10)
+    multipleForm.block2.centerName.edit("center name")
+    assertEquals("10", simpleField.value)
+    assertEquals("center name", multipleField.value)
+    multipleForm.resetForm.triggerCommand()
+    confirm(true)
+    assertEquals("", simpleField.value)
+    assertEquals("", multipleField.value)
+  }
+
   companion object {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.examples.initModules()
+        initDatabase()
       }
     }
   }

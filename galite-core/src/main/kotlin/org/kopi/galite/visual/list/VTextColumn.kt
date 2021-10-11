@@ -21,10 +21,11 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.kopi.galite.visual.visual.Message
 
-class VTextColumn(title: String, column: Column<*>?, align: Int, width: Int, sortAscending: Boolean)
-  : VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
+class VTextColumn(title: String, column: Column<*>?, table: ColumnSet?, align: Int, width: Int, sortAscending: Boolean)
+  : VListColumn(title, column, table, align, Message.getMessage("text-type").length, sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------

@@ -84,7 +84,6 @@ open class FormField<T>(val block: FormBlock,
     return if (vField.block == null) {
       initialValues[0] as T
     } else {
-      val g = vField.getObject()
       vField.getObject() as T
     }
   }
