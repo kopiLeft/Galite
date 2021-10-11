@@ -18,8 +18,6 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-
 import org.kopi.galite.visual.domain.Convert
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -132,8 +130,4 @@ class BlockWithSaveCommand : FormBlock(1, 1, "Block With Save Command") {
   }
   val uc = hidden(domain = INT(20)) { columns(t.uc) }
   val ts = hidden(domain = INT(20)) { columns(t.ts) }
-}
-
-fun main() {
-  Application.runForm(formName = TestFieldsForm())
 }

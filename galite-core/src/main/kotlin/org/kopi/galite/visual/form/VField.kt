@@ -725,7 +725,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException()
         }
 
-        val stringOperandLiteral = getOperand(stringOperand)
+        val stringOperandLiteral = getOperandExpression(stringOperand)
 
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
@@ -750,7 +750,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       } else {
         val operand = if (operand is String) {
-          getOperand(operand)
+          getOperandExpression(operand)
         } else {
           column.wrap(operand)
         }
@@ -779,7 +779,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  private fun getOperand(stringOperand: String) : ExpressionWithColumnType<String> {
+  private fun getOperandExpression(stringOperand: String) : ExpressionWithColumnType<String> {
     return when (options and VConstants.FDO_SEARCH_MASK) {
       VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
       VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()

@@ -88,7 +88,7 @@ fun initDatabase() {
 fun initData() {
   SchemaUtils.drop(Center)
   SchemaUtils.drop(Training)
-  SchemaUtils.drop(trainer)
+  SchemaUtils.drop(Trainer)
   SchemaUtils.dropSequence(trainingSequence)
   SchemaUtils.dropSequence(trainerSequence)
   SchemaUtils.dropSequence(centerSequence)
@@ -97,9 +97,10 @@ fun initData() {
   SchemaUtils.createSequence(centerSequence)
   SchemaUtils.create(Training)
   SchemaUtils.create(Center)
-  SchemaUtils.create(trainer)
+  SchemaUtils.create(Trainer)
   addTrainings()
   addCenters()
+  addTrainer()
 }
 
 fun addTrainings() {

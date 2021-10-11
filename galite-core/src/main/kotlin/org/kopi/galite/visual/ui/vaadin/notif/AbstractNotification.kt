@@ -60,7 +60,7 @@ abstract class AbstractNotification(title: String?,
   private val title = H3(title)
   private var content = HorizontalLayout()
   private var message = VSpan()
-  var buttons = Div()
+  protected var buttons = Div()
   internal var yesIsDefault = false
   val footer = Div()
 

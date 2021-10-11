@@ -25,7 +25,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.click
-import org.kopi.galite.testing.closeErrorNotification
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.findField
@@ -35,9 +34,10 @@ import org.kopi.galite.tests.examples.TestFieldsForm
 import org.kopi.galite.tests.examples.Trainer
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Decimal
-import org.kopi.galite.visual.ui.vaadin.common.VSpan
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.testing.expectErrorNotification
+import org.kopi.galite.tests.examples.initData
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -46,7 +46,6 @@ import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FieldsTests : GaliteVUITestBase() {
@@ -55,7 +54,9 @@ class FieldsTests : GaliteVUITestBase() {
 
   @Before
   fun `login to the App`() {
-    org.kopi.galite.tests.examples.initData()
+    transaction {
+      initData()
+    }
 
     login()
 
@@ -94,14 +95,9 @@ class FieldsTests : GaliteVUITestBase() {
 
     // Check that the error notification is displayed
     _expectOne<ErrorNotification>()
-    val errorPopUp = _get<ErrorNotification>()
-    val errorMessage = errorPopUp.
-      _get<HorizontalLayout> { classes = "k-notification-content"}.
-      _get<VSpan> { classes = "k-notification-message"  }
 
-    assertEquals(MessageCode.getMessage("VIS-00023"), errorMessage.getHtml())
-    // Close the error notification and check that's disappearing
-    closeErrorNotification()
+    // Check that error notification display message, then close the error notification and check that's disappearing
+    expectErrorNotification(MessageCode.getMessage("VIS-00023"))
     _expectNone<ErrorNotification>()
   }
 
@@ -113,14 +109,9 @@ class FieldsTests : GaliteVUITestBase() {
 
     // Check that the error notification is displayed
     _expectOne<ErrorNotification>()
-    val errorPopUp = _get<ErrorNotification>()
-    val errorMessage = errorPopUp.
-      _get<HorizontalLayout> { classes = "k-notification-content"}.
-      _get<VSpan> { classes = "k-notification-message"  }
 
-    assertEquals(MessageCode.getMessage("VIS-00009", 50), errorMessage.getHtml())
-    // Close the error notification and check that's disappearing
-    closeErrorNotification()
+    // Check that error notification display message, then close the error notification and check that's disappearing
+    expectErrorNotification(MessageCode.getMessage("VIS-00009", 50))
     _expectNone<ErrorNotification>()
   }
 
@@ -132,14 +123,9 @@ class FieldsTests : GaliteVUITestBase() {
 
     // Check that the error notification is displayed
     _expectOne<ErrorNotification>()
-    val errorPopUp = _get<ErrorNotification>()
-    val errorMessage = errorPopUp.
-      _get<HorizontalLayout> { classes = "k-notification-content"}.
-      _get<VSpan> { classes = "k-notification-message"  }
 
-    assertEquals(MessageCode.getMessage("VIS-00012", 10), errorMessage.getHtml())
-    // Close the error notification and check that's disappearing
-    closeErrorNotification()
+    // Check that error notification display message, then close the error notification and check that's disappearing
+    expectErrorNotification(MessageCode.getMessage("VIS-00012", 10))
     _expectNone<ErrorNotification>()
   }
 
@@ -150,14 +136,9 @@ class FieldsTests : GaliteVUITestBase() {
 
     // Check that the error notification is displayed
     _expectOne<ErrorNotification>()
-    val errorPopUp = _get<ErrorNotification>()
-    val errorMessage = errorPopUp.
-      _get<HorizontalLayout> { classes = "k-notification-content"}.
-      _get<VSpan> { classes = "k-notification-message"  }
 
-    assertEquals(MessageCode.getMessage("VIS-00009", 999.99), errorMessage.getHtml())
-    // Close the error notification and check that's disappearing
-    closeErrorNotification()
+    // Check that error notification display message, then close the error notification and check that's disappearing
+    expectErrorNotification(MessageCode.getMessage("VIS-00009", 999.99))
     _expectNone<ErrorNotification>()
   }
 

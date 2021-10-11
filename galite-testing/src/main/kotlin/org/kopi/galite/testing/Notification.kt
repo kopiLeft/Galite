@@ -16,13 +16,17 @@
  */
 package org.kopi.galite.testing
 
+import kotlin.test.assertEquals
+
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.visual.ui.vaadin.common.VSpan
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._get
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Interacts with a [ConfirmNotification] dialog.
@@ -46,10 +50,17 @@ fun confirm(value: Boolean) {
  *
  * call function to close error notification
  */
-fun closeErrorNotification() {
-  val notificationFooter = _get<ErrorNotification>().buttons
+fun expectErrorNotification(message: String, close: Boolean = true) {
+  val notificationFooter = _get<ErrorNotification>().footer
   val button =  notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }
+  val errorPopUp = _get<ErrorNotification>()
+  val errorMessage = errorPopUp.
+  _get<HorizontalLayout> { classes = "k-notification-content"}.
+  _get<VSpan> { classes = "k-notification-message"  }
 
-  button._click()
-  waitAndRunUIQueue(100)
+  assertEquals(message, errorMessage.getHtml())
+  if (close) {
+    button._click()
+    waitAndRunUIQueue(100)
+  }
 }
