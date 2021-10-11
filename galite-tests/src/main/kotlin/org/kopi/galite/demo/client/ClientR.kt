@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.Client
+import org.kopi.galite.demo.database.Client
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -146,7 +146,7 @@ class ClientR : Report() {
     align = FieldAlignment.LEFT
     group = ageClt
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 
@@ -155,7 +155,7 @@ class ClientR : Report() {
     help = "The client last name"
     align = FieldAlignment.LEFT
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 
@@ -164,7 +164,7 @@ class ClientR : Report() {
     help = "The client address"
     align = FieldAlignment.LEFT
     format { value ->
-      (value as String).toLowerCase()
+      value.toLowerCase()
     }
   }
 

@@ -64,7 +64,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Return a list column for list
    */
-  override fun getListColumn(): VListColumn = VIntegerCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+  override fun getListColumn(): VListColumn = VIntegerCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
 
   /**
    * Returns the array of codes.
@@ -103,7 +103,7 @@ class VIntegerCodeField : VCodeField {
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setInt(r, v as Int)
+    setInt(r, v as? Int)
   }
 
   /**

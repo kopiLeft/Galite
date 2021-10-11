@@ -395,7 +395,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   internal fun scrollToStart() {
     access(currentUI) {
-      if (grid != null) {
+      if (::grid.isInitialized) {
         grid.scrollToStart()
       }
     }
@@ -406,7 +406,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun clearSortOrder() {
     /*BackgroundThreadHandler.access(Runnable { TODO
-      if (grid != null) {
+      if (::grid.isInitialized) {
         grid.clearSortOrder()
       }
     })*/
@@ -445,7 +445,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun orderChanged() {
     access(currentUI) {
-      if (grid != null) {
+      if (::grid.isInitialized) {
         cancelEditor()
         clearSortOrder()
         containerDatasource.doSort()
@@ -673,7 +673,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @param record The record number
    */
   fun editRecord(record: Int) {
-    if (grid != null) {
+    if (::grid.isInitialized) {
       itemToBeEdited = record
       access(currentUI) {
         if (grid.isEnabled

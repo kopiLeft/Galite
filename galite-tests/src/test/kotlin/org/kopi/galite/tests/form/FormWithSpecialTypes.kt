@@ -23,7 +23,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.db.month
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
@@ -160,5 +160,5 @@ class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithSpecialTypes)
+  runForm(formName = FormWithSpecialTypes)
 }

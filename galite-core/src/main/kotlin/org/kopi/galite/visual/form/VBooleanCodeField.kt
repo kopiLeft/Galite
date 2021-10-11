@@ -71,7 +71,7 @@ open class VBooleanCodeField : VCodeField {
    * Returns a list column for list.
    */
   override fun getListColumn(): VListColumn {
-    return VBooleanCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+    return VBooleanCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
   }
 
   /*

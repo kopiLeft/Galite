@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.database.Product
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Key
@@ -134,7 +134,7 @@ class ProductReport : Report() {
     label = "Description"
     help = "The product description"
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 

@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.Command
+import org.kopi.galite.demo.database.Command
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.INT

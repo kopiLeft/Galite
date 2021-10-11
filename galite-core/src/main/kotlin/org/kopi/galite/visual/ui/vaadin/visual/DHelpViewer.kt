@@ -19,11 +19,9 @@ package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.io.IOException
 
-import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VHelpViewer
 
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -36,7 +34,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * of the the [VHelpViewer] model.
  *
  */
-class DHelpViewer(model: VHelpViewer) : DWindow(model), Focusable<Window> {
+class DHelpViewer(model: VHelpViewer) : DWindow(model) {
 
   private val html = Html(model.url!!.openStream())
 

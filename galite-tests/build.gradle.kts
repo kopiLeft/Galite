@@ -22,12 +22,12 @@ plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.4.0"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "21.0.1"
+  id("com.vaadin") version "21.0.2"
   application
 }
 
 application {
-  mainClass.set("org.kopi.galite.demo.GShopApplicationKt")
+  mainClass.set("org.kopi.galite.demo.ApplicationKt")
 }
 
 vaadin {

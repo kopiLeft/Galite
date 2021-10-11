@@ -20,7 +20,6 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.util.LineBreaker
@@ -76,7 +75,7 @@ open class VStringField(val bufferSize: Int,
    * return a list column for list
    */
   override fun getListColumn(): VListColumn =
-          VStringColumn(getHeader(), null, align, width, getPriority() >= 0)
+          VStringColumn(getHeader(), null, null, align, width, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)
@@ -174,7 +173,7 @@ open class VStringField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a string value.
    */
-  override fun getString(r: Int): String = getObject(r) as String
+  override fun getString(r: Int): String? = getObject(r) as? String
 
   /**
    * Returns the field value of the current record as an object
@@ -257,7 +256,7 @@ open class VStringField(val bufferSize: Int,
      * @param    source        the source text with white space
      * @param    col           the width of the text area
      */
-    fun modelToText(source: String, col: Int): String =
+    fun modelToText(source: String?, col: Int): String =
             // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
             LineBreaker.modelToText(source, col)
   }

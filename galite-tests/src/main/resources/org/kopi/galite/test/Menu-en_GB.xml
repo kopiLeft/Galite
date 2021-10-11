@@ -10,4 +10,5 @@
     <module ident="2002" label="Form example" />
     <module ident="2003" label="Form to test multiple block" />
     <module ident="2004" label="Form to test saving data of multiple block" />
+    <module ident="2005" label="Form to test operations on fields" />
 </modules>

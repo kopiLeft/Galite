@@ -14,17 +14,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.vaadin
+package org.kopi.galite.demo
 
 import java.util.Locale
 
+import org.kopi.galite.demo.database.connectToDatabase
+import org.kopi.galite.demo.database.initDatabase
+import org.kopi.galite.demo.database.initModules
+
 import org.kopi.galite.tests.common.GaliteRegistry
+import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import com.vaadin.flow.router.Route
+
+@SpringBootApplication
+open class GShopApplication : SpringBootServletInitializer()
+
+fun main(args: Array<String>) {
+  connectToDatabase()
+  DBSchemaTest.reset()
+  initDatabase()
+  initModules()
+  runApplication<GShopApplication>(*args)
+}
 
 @Route("")
 class GaliteApplication : VApplication(GaliteRegistry()) {

@@ -170,14 +170,21 @@ class TextField(val model: VField,
       }
       inputField.suffixComponent = autofill
       autofill!!.isVisible = false
+      var focused = false
       inputField.addFocusListener {
-        if (autofill != null) {
-          autofill!!.isVisible = true
-        }
+        focused = true
+        autofill?.isVisible = true
       }
       inputField.addBlurListener {
-        if (autofill != null) {
-          autofill!!.isVisible = false
+        focused = false
+        autofill?.isVisible = false
+      }
+      inputField.element.addEventListener("mouseover") {
+        autofill?.isVisible = true
+      }
+      inputField.element.addEventListener("mouseout") {
+        if (!focused) {
+          autofill?.isVisible = false
         }
       }
     }
@@ -510,7 +517,7 @@ class TextField(val model: VField,
 
   override fun focus() {
     inputField.parentWindow?.lasFocusedField = this
-    super.focus()
+    inputField.focus()
   }
 
   override fun addFocusListener(function: () -> Unit) {

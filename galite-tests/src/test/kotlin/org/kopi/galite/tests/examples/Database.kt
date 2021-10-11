@@ -22,7 +22,12 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.database.createDBSchemaTables
+import org.kopi.galite.demo.database.dropDBSchemaTables
+import org.kopi.galite.demo.database.insertIntoUsers
+import org.kopi.galite.demo.database.testUser
 import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
@@ -33,6 +38,8 @@ object Training : Table("TRAINING") {
   val active = bool("ACTIVE")
   val photo = blob("PHOTO").nullable()
   val informations = varchar("INFORMATION", 200).nullable()
+  val uc = integer("UC").autoIncrement()
+  val ts = integer("TS").autoIncrement()
 
   override val primaryKey = PrimaryKey(id, name = "PK_TRAINING_ID")
 }
@@ -52,28 +59,60 @@ object Center : Table("Center") {
   override val primaryKey = PrimaryKey(id, name = "PK_CENTER_ID")
 }
 
-val centerSequence = Sequence("CENTERID", startWith = 5)
+object Trainer : Table("TRAINER") {
+  val id = integer("ID")
+  val uc = integer("UC").default(0)
+  val ts = integer("TS").default(0)
+  val trainerFirstName = varchar("trainerFirstName", 25)
+  val trainerLastName = varchar("trainerLastName", 25)
 
-fun initData() {
+  override val primaryKey = PrimaryKey(id, name = "PK_TRAINER_ID")
+}
+
+val trainingSequence = Sequence("TRAININGID")
+
+val trainerSequence = Sequence("TRAINERID")
+
+val centerSequence = Sequence("CENTERID")
+
+fun initDatabase() {
   transaction {
-    SchemaUtils.create(Training)
-    SchemaUtils.create(Center)
-    SchemaUtils.createSequence(centerSequence)
-    addTrainings()
-    addCenters()
+    dropDBSchemaTables()
+    createDBSchemaTables()
+    insertIntoUsers(testUser, "administrator")
+    initData()
+    initModules()
   }
 }
 
-fun addTrainings() {
-  addTraining(1, "training 1", 3, Decimal("1149.24").value, "informations training 1")
-  addTraining(2, "training 2", 1, Decimal("219.6").value, "informations training 2")
-  addTraining(3, "training 3", 2, Decimal("146.9").value, "informations training 3")
-  addTraining(4, "training 4", 1, Decimal("3129.7").value, "informations training 4")
+fun initData() {
+  SchemaUtils.drop(Center)
+  SchemaUtils.drop(Training)
+  SchemaUtils.drop(Trainer)
+  SchemaUtils.dropSequence(trainingSequence)
+  SchemaUtils.dropSequence(trainerSequence)
+  SchemaUtils.dropSequence(centerSequence)
+  SchemaUtils.createSequence(trainingSequence)
+  SchemaUtils.createSequence(trainerSequence)
+  SchemaUtils.createSequence(centerSequence)
+  SchemaUtils.create(Training)
+  SchemaUtils.create(Center)
+  SchemaUtils.create(Trainer)
+  addTrainings()
+  addCenters()
+  addTrainer()
 }
 
-fun addTraining(num: Int, name: String, category: Int, amount: BigDecimal, info: String? = null) {
+fun addTrainings() {
+  addTraining("training 1", 3, Decimal("1149.24").value, "informations training 1")
+  addTraining("training 2", 1, Decimal("219.6").value, "informations training 2")
+  addTraining("training 3", 2, Decimal("146.9").value, "informations training 3")
+  addTraining("training 4", 1, Decimal("3129.7").value, "informations training 4")
+}
+
+fun addTraining(name: String, category: Int, amount: BigDecimal, info: String? = null) {
   Training.insert {
-    it[id] = num
+    it[id] = trainingSequence.nextIntVal()
     it[trainingName] = name
     it[type] = category
     it[price] = amount
@@ -83,13 +122,14 @@ fun addTraining(num: Int, name: String, category: Int, amount: BigDecimal, info:
 }
 
 fun addCenters() {
-  addCenter(1, "Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 2)
-  addCenter(2, "Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", 6000, 1)
-  addCenter(3, "Center 3", "10,Rue du Lac", "example@mail", "Tunisia", "Mourouj", 5003, 3)
-  addCenter(4, "Center 4", "10,Rue du Lac", "example@mail", "Tunisia", "Megrine", 2001, 4)
+  addCenter("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 2)
+  addCenter("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 1)
+  addCenter("Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", 6000, 1)
+  addCenter("Center 3", "10,Rue du Lac", "example@mail", "Tunisia", "Mourouj", 5003, 3)
+  addCenter("Center 4", "10,Rue du Lac", "example@mail", "Tunisia", "Megrine", 2001, 4)
 }
 
-fun addCenter(num: Int, name: String,
+fun addCenter(name: String,
               centerAdress: String,
               email: String,
               centerCountry: String,
@@ -97,7 +137,7 @@ fun addCenter(num: Int, name: String,
               centerZipCode: Int,
               training: Int) {
   Center.insert {
-    it[id] = num
+    it[id] = centerSequence.nextIntVal()
     it[centerName] = name
     it[address] = centerAdress
     it[mail] = email
@@ -105,5 +145,18 @@ fun addCenter(num: Int, name: String,
     it[city] = centerCity
     it[zipCode] = centerZipCode
     it[refTraining] = training
+  }
+}
+
+fun addTrainer() {
+  addTrainer("first name", "LAST NAME")
+
+}
+
+fun addTrainer(firstName: String, lastName: String) {
+  Trainer.insert {
+    it[id] = trainerSequence.nextIntVal()
+    it[trainerFirstName] = firstName
+    it[trainerLastName] = lastName
   }
 }

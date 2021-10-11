@@ -42,7 +42,7 @@ class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
   /**
    * Returns a list column for list.
    */
-  override fun getListColumn(): VListColumn = VBooleanColumn(getHeader(), null, getPriority() >= 0)
+  override fun getListColumn(): VListColumn = VBooleanColumn(getHeader(), null, null, getPriority() >= 0)
 
   companion object {
 

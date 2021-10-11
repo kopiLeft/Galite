@@ -68,3 +68,12 @@ To edit the value of the field you can use `FormField.edit(value)`.
 #### Click inside a field
 
 To simulate a user click on a field you can use `FormField.click()`.
+
+### Notification
+#### Confirm notification
+
+To expect a confirm notification, you can use `expectConfirmNotification(confirm)`. The `confirm` parameter allows to either click on the confirm or the cancel button in the displayed dialog.
+
+#### Error notification
+
+You can use `expectErrorNotification(message, value)` to assert that the error message is displayed. Set the value as `true` if you want to close the dialog.

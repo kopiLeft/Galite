@@ -192,4 +192,8 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
       }
     }
   }
+
+  override fun focus() {
+    // Override this to define focus logic
+  }
 }

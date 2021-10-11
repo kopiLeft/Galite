@@ -45,7 +45,7 @@ open class VFixnumCodeField(bufferSize: Int,
    * return a list column for list
    */
   override fun getListColumn(): VListColumn =
-          VFixnumCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+          VFixnumCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
 
 
   /**

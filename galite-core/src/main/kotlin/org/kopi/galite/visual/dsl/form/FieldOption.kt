@@ -62,7 +62,7 @@ enum class FieldOption(val value: Int) {
   NO_CHART(VConstants.FDO_NOCHART),
 
   /**
-   * Whatever the string you input, this option will make kopi transform it to capital letters.
+   * Whatever the string you input, this option will make galite transform it to capital letters.
    */
   QUERY_UPPER(VConstants.FDO_SEARCH_UPPER),
 

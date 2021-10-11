@@ -41,7 +41,7 @@ open class LocalizationWriter {
    * @param        baseName        the base name of the file to open
    * @param     locale          the locale
    */
-  fun write(directory: String?, baseName: String, locale: Locale) {
+  fun write(directory: String, baseName: String, locale: Locale) {
     val doc = Document(peekNode(null))
     val format = Format.getPrettyFormat()
     format.encoding = "UTF-8"
@@ -49,6 +49,11 @@ open class LocalizationWriter {
 
     val writer = XMLOutputter(format)
     val fileName = "$baseName-$locale.xml"
+    val directoryFile = File(directory)
+
+    if (!directoryFile.exists()) {
+      directoryFile.mkdirs()
+    }
     writer.output(doc, FileOutputStream(File(directory, fileName)))
   }
   // -------------------------------------------------------------------

@@ -20,6 +20,7 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.kopi.galite.visual.type.Time
 
 /**
@@ -27,9 +28,11 @@ import org.kopi.galite.visual.type.Time
  */
 class VTimeColumn(title: String,
                   column: Column<*>?,
+                  table: ColumnSet?,
                   sortAscending: Boolean)
     : VListColumn(title,
                   column,
+                  table,
                   VConstants.ALG_LEFT,
                   5,
                   sortAscending) {

@@ -222,7 +222,7 @@ class SimpleReport : Report() {
     align = FieldAlignment.LEFT
     group = age
     format { value ->
-      (value as String).toUpperCase()
+      value.toUpperCase()
     }
   }
 

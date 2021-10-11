@@ -18,7 +18,7 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -109,6 +109,15 @@ class CommandsForm : ReportSelectionForm() {
     key = Key.F7
     icon = "detail_view"
   }
+  val InsertMode = actor(
+    ident = "Insert",
+    menu = action,
+    label = "Insert",
+    help = " Insert",
+  ) {
+    key = Key.F7
+    icon = "insert"
+  }
   val quit = actor(
     ident = "quit",
     menu = action,
@@ -179,9 +188,14 @@ class CommandsForm : ReportSelectionForm() {
         searchOperator()
       }
     }
+    command(item = InsertMode) {
+      action = {
+        insertMode()
+      }
+    }
   }
 }
 
 fun main() {
-  Application.runForm(formName = CommandsForm())
+  runForm(formName = CommandsForm())
 }

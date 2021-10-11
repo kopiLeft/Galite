@@ -17,8 +17,9 @@
 package org.kopi.galite.visual.dsl.form
 
 import java.io.IOException
-import org.kopi.galite.visual.dsl.chart.Chart
+import java.util.Locale
 
+import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
@@ -256,7 +257,7 @@ abstract class Form : Window() {
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
 
-  fun genLocalization(destination: String? = null) {
+  override fun genLocalization(destination: String?, locale: Locale?) {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
@@ -266,7 +267,7 @@ abstract class Form : Window() {
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
-        writer.write(localizationDestination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")

@@ -79,7 +79,7 @@ class MainWindowTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       // Using modules defined in demo application
-      org.kopi.galite.demo.initModules()
+      org.kopi.galite.demo.database.initModules()
     }
   }
 }

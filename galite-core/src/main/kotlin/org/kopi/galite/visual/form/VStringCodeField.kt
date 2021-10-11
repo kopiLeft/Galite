@@ -20,7 +20,6 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringCodeColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -50,7 +49,7 @@ class VStringCodeField(bufferSize: Int,
    * return a list column for list
    */
   override fun getListColumn(): VListColumn =
-          VStringCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+          VStringCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
 
   /**
    * Returns the array of codes.
@@ -99,7 +98,7 @@ class VStringCodeField(bufferSize: Int,
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getString(r: Int): String = getObject(r) as String
+  override fun getString(r: Int): String? = getObject(r) as? String
 
   /**
    * Returns the field value of the current record as an object

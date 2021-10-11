@@ -56,7 +56,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * return a list column for list
    */
   override fun getListColumn(): VListColumn {
-    return VDateColumn(getHeader(), null, getPriority() >= 0)
+    return VDateColumn(getHeader(), null, null, getPriority() >= 0)
   }
 
   /**
