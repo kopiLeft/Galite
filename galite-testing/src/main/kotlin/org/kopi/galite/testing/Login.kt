@@ -19,19 +19,16 @@ package org.kopi.galite.testing
 import java.util.Locale
 
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
 import org.kopi.galite.visual.ui.vaadin.base.VInputText
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
-import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.RootMenu.Companion.ROOT_MENU_LOCALIZATION_RESOURCE
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
-import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.menubar.MenuBar
 import com.vaadin.flow.component.textfield.PasswordField
@@ -71,5 +68,5 @@ fun logout(confirm: Boolean = true, duration: Long = 50) {
   waitAndRunUIQueue(20)
   Thread.sleep(duration)
 
-  confirm(confirm)
+  expectConfirmNotification(confirm)
 }
