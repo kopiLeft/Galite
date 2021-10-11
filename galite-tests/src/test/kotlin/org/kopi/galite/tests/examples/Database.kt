@@ -59,7 +59,19 @@ object Center : Table("Center") {
   override val primaryKey = PrimaryKey(id, name = "PK_CENTER_ID")
 }
 
-val sequence = Sequence("TRAININGID")
+object Trainer : Table("TRAINER") {
+  val id = integer("ID")
+  val uc = integer("UC").default(0)
+  val ts = integer("TS").default(0)
+  val trainerFirstName = varchar("trainerFirstName", 25)
+  val trainerLastName = varchar("trainerLastName", 25)
+
+  override val primaryKey = PrimaryKey(id, name = "PK_TRAINER_ID")
+}
+
+val trainingSequence = Sequence("TRAININGID")
+
+val trainerSequence = Sequence("TRAINERID")
 
 val centerSequence = Sequence("CENTERID")
 
@@ -76,14 +88,19 @@ fun initDatabase() {
 fun initData() {
   SchemaUtils.drop(Center)
   SchemaUtils.drop(Training)
-  SchemaUtils.dropSequence(sequence)
+  SchemaUtils.drop(Trainer)
+  SchemaUtils.dropSequence(trainingSequence)
+  SchemaUtils.dropSequence(trainerSequence)
   SchemaUtils.dropSequence(centerSequence)
-  SchemaUtils.createSequence(sequence)
+  SchemaUtils.createSequence(trainingSequence)
+  SchemaUtils.createSequence(trainerSequence)
   SchemaUtils.createSequence(centerSequence)
   SchemaUtils.create(Training)
   SchemaUtils.create(Center)
+  SchemaUtils.create(Trainer)
   addTrainings()
   addCenters()
+  addTrainer()
 }
 
 fun addTrainings() {
@@ -95,7 +112,7 @@ fun addTrainings() {
 
 fun addTraining(name: String, category: Int, amount: BigDecimal, info: String? = null) {
   Training.insert {
-    it[id] = sequence.nextIntVal()
+    it[id] = trainingSequence.nextIntVal()
     it[trainingName] = name
     it[type] = category
     it[price] = amount
@@ -128,5 +145,18 @@ fun addCenter(name: String,
     it[city] = centerCity
     it[zipCode] = centerZipCode
     it[refTraining] = training
+  }
+}
+
+fun addTrainer() {
+  addTrainer("first name", "LAST NAME")
+
+}
+
+fun addTrainer(firstName: String, lastName: String) {
+  Trainer.insert {
+    it[id] = trainerSequence.nextIntVal()
+    it[trainerFirstName] = firstName
+    it[trainerLastName] = lastName
   }
 }

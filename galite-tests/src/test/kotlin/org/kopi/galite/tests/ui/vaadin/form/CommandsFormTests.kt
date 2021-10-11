@@ -27,7 +27,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing._clickCell
-import org.kopi.galite.testing.confirm
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.expect
@@ -52,6 +51,7 @@ import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.testing.expectConfirmNotification
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -70,7 +70,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     login()
 
     // Open the form
-    form.open()
+    form.open(500)
   }
 
   /**
@@ -85,7 +85,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(10)
     assertEquals("10", field.value)
     form.resetBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
     assertEquals("", field.value)
   }
 
@@ -335,7 +335,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(1)
     form.serialQuery.triggerCommand()
     form.deleteBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
 
     val data = transaction {
       Training.selectAll().map {
@@ -442,7 +442,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     assertEquals("10", simpleField.value)
     assertEquals("center name", multipleField.value)
     multipleForm.resetForm.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
     assertEquals("", simpleField.value)
     assertEquals("", multipleField.value)
   }
