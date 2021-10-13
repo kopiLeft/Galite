@@ -78,11 +78,8 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
   override val isNoBugReport: Boolean
     get() = true
 
-
-  companion object {
-    init {
-      ApplicationConfiguration.setConfiguration(ConfigurationManager)
-    }
+  init {
+    ApplicationConfiguration.setConfiguration(ConfigurationManager)
   }
 }
 

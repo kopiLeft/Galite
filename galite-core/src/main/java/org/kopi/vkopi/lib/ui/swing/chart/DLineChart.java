@@ -45,10 +45,8 @@ public class DLineChart extends DAbstractChartType {
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------------------------
-  
-  /**
-   * @Override
-   */
+
+  @Override
   protected JFreeChart createChart(String title, VDataSeries[] series) {
     JFreeChart			chart;
     CategoryDataset		dataset;
