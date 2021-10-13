@@ -18,6 +18,9 @@
 
 package org.kopi.galite.visual.util.base
 
+import java.util.Timer
+import java.util.TimerTask
+
 /**
  * This class defines several utilities methods used in source code
  */
@@ -100,5 +103,22 @@ open class Utils {
      * @param        list                the list containing the elements
      */
     fun toArray(list: List<*>): Array<*> = list.toTypedArray()
+
+    /**
+     * Executes a task after some delay.
+     *
+     * @param delay   the delay.
+     * @param task    the task to execute.
+     */
+    fun doAfter(delay: Long, task: () -> Unit) {
+      Timer().schedule(
+        object : TimerTask() {
+          override fun run() {
+            task()
+          }
+        },
+        delay
+      )
+    }
   }
 }
