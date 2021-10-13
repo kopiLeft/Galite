@@ -37,7 +37,6 @@ public class DTextEditor extends DTextField {
      *
      * @param    model        the model for this text field
      * @param    label        The label that describe this field
-     * @param    width        the number of column
      * @param    options        The possible options (NO EDIT, NO ECHO)
      */
     public DTextEditor(VFieldUI model,

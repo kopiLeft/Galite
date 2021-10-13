@@ -104,7 +104,6 @@ public class DImageField extends DObjectField {
   /**
    * Returns the object associed to record r
    *
-   * @param	r		the position of the record
    * @return	the displayed value at this position
    */
   public Object getObject() {
@@ -114,7 +113,6 @@ public class DImageField extends DObjectField {
   /**
    * Sets the object associed to record r
    *
-   * @param	r		the position of the record
    * @param	s		the object to set in
    */
   public void setObject(Object s) {

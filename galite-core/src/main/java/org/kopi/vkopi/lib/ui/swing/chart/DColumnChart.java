@@ -46,9 +46,7 @@ public class DColumnChart extends DAbstractChartType {
   // IMPLEMENTATIONS
   //---------------------------------------------------------------------
   
-  /**
-   * @Override
-   */
+  @Override
   protected JFreeChart createChart(String title, VDataSeries[] series) {
     CategoryDataset		dataset;
     JFreeChart			chart;
