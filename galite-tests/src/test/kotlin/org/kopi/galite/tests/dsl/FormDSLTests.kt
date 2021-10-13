@@ -26,6 +26,7 @@ import kotlin.test.assertEquals
 import org.junit.Test
 import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.form.User
+import org.kopi.galite.tests.form.blockToCheckFieldVisibility
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -57,10 +58,15 @@ class FormDSLTests: VApplicationTestBase() {
 
     val blockModel = model.blocks.single()
 
+    assertEquals(form.pages.size, model._getPage().size)
+    assertEquals(form.pages[0].title, model._getPage()[0])
+
     assertEquals(form.block.title, blockModel.title)
+    assertEquals(form.block.help, blockModel._getHelp())
     assertEquals(form.block.buffer, blockModel.bufferSize)
     assertEquals(form.block.visible, blockModel.displaySize)
     assertEquals(form.block.border, blockModel.border)
+    assertEquals(form.block._getBlockAccess(), blockModel._getAccess())
     assertEquals(2, blockModel.maxColumnPos)
     assertEquals(1, blockModel.maxRowPos)
     assertEquals(0, blockModel.pageNumber)
@@ -115,6 +121,10 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.clientBlock.visible, clientBlock.displaySize)
     assertEquals(form.clientBlock.border, clientBlock.border)
     assertEquals(form.clientBlock.title, clientBlock.title)
+    assertEquals(form.clientBlock.help, clientBlock._getHelp())
+    assertEquals(form.clientBlock._getBlockTables().size, clientBlock._getTables()?.size)
+    assertEquals(form.clientBlock._getBlockTables()[0].name, clientBlock._getTables()?.get(0)?.tableName)
+    assertEquals(form.clientBlock._getBlockAccess(), clientBlock._getAccess())
     assertEquals(1, clientBlock.maxColumnPos)
     assertEquals(3, clientBlock.maxRowPos)
     assertEquals(0, clientBlock.pageNumber)
@@ -125,6 +135,8 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.commandsBlock.visible, commandsBlock.displaySize)
     assertEquals(form.commandsBlock.border, commandsBlock.border)
     assertEquals(form.commandsBlock.title, commandsBlock.title)
+    assertEquals(form.commandsBlock.help, commandsBlock._getHelp())
+    assertEquals(form.commandsBlock._getBlockAccess(), commandsBlock._getAccess())
     assertEquals(1, commandsBlock.maxColumnPos)
     assertEquals(1, commandsBlock.maxRowPos)
     assertEquals(1, commandsBlock.pageNumber)
@@ -132,18 +144,18 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(null, commandsBlock.alignment)
   }
 
- /* @Test
+  @Test
   fun `test access fields values`() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
     val commandsBlock = formModel.blocks[1]
 
-    assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0].access) // Mustfill field
-    assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1].access) // Visit field
-    assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0].access) // Hidden field
-    assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1].access) // Skipped field
-  }*/
+    assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0]._getAccess()) // Mustfill field
+    assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1]._getAccess()) // Visit field
+    assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0]._getAccess()) // Hidden field
+    assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1]._getAccess()) // Skipped field
+  }
 
   @Test
   fun `test block triggers`() {
@@ -245,7 +257,7 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)
   }
 
-  /*@Test
+  @Test
   fun `test access fields`() {
     val form = org.kopi.galite.tests.form.FormToCheckFieldVisibility
     val formModel = form.model
@@ -254,15 +266,16 @@ class FormDSLTests: VApplicationTestBase() {
     val ageClientModel =  clientBlock.fields[2]
     val genderClientModel =  clientBlock.fields[4]
 
-    assertEquals(blockToCheckFieldVisibility.name.access, nameClientModel.access)
-    assertEquals(blockToCheckFieldVisibility.age.access, ageClientModel.access)
-    assertEquals(blockToCheckFieldVisibility.gender.access, genderClientModel.access)
-  }*/
+    assertEquals(blockToCheckFieldVisibility.name.access, nameClientModel._getAccess())
+    assertEquals(blockToCheckFieldVisibility.age.access, ageClientModel._getAccess())
+    assertEquals(blockToCheckFieldVisibility.gender.access, genderClientModel._getAccess())
+  }
 }
 
 class BasicForm : Form() {
   override val locale = Locale.UK
   override val title = "Clients"
+  val help = "Clients"
 }
 
 class FormWithOneSimpleBlock : Form() {

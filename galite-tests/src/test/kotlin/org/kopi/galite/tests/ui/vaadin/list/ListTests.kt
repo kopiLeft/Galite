@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.list
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -25,11 +27,13 @@ import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
-import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
+import org.kopi.galite.tests.examples.Traineeship
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Key
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -39,7 +43,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class ListTests: GaliteVUITestBase() {
 
-  private val formWithList = CommandsForm().also { it.model } // initialize the model
+  private val formWithList = ListForm().also { it.model } // initialize the model
 
   /**
    * Checks that the list dialog is displayed and contains a correct data,
@@ -96,6 +100,37 @@ class ListTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       initDatabase()
+    }
+  }
+}
+
+
+class ListForm : DictionaryForm() {
+  override val locale = Locale.UK
+  override val title = "Commands Form"
+
+  val action = menu("Action")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F2
+    icon = "list"
+  }
+
+  val block = insertBlock(Traineeship()) {
+    command(item = list) {
+      action = {
+        recursiveQuery()
+      }
     }
   }
 }

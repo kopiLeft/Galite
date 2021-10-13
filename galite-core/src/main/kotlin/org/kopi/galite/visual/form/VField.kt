@@ -26,6 +26,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
@@ -2430,6 +2431,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun getUI(): Compatible {
     return Compatible()
   }
+
+  @TestOnly
+  fun _getAccess(): IntArray = access
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

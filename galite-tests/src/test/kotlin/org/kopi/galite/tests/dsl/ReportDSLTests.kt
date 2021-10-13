@@ -26,6 +26,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.report.Constants
 
 class ReportDSLTests: VApplicationTestBase() {
 
@@ -70,14 +71,14 @@ class ReportDSLTests: VApplicationTestBase() {
     assertEquals(listOf(20, 20, 30), report.getRowsForField(report.ageClt))
   }
 
- /* @Test
+  @Test
   fun `test report triggers`() {
     val report = ReportWithData()
     val reportModel = report.model
 
-    assertEquals(true, reportModel.hasTrigger(VConstants.TRG_INIT))
-    assertEquals(true, reportModel.hasTrigger(VConstants.TRG_PREBLK))
-  }*/
+   // assertEquals(true, reportModel._hasTrigger(Constants.TRG_PREREPORT))
+    assertEquals(true, reportModel._hasTrigger(Constants.TRG_POSTREPORT))
+  }
 }
 
 class BasicReport : Report() {

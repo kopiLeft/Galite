@@ -16,19 +16,30 @@
  */
 package org.kopi.galite.tests.ui.vaadin.report
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.form.FormWithReport
-import org.kopi.galite.tests.report.SimpleReport
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
 import org.kopi.galite.visual.ui.vaadin.report.DReport
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.dsl.report.FieldAlignment
+import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.report.Triggers
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.tests.examples.initDatabase
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -83,7 +94,104 @@ class ReportTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      org.kopi.galite.tests.examples.initModules()
+      initDatabase()
+    }
+  }
+}
+
+class FormWithReport : ReportSelectionForm() {
+  override val locale = Locale.UK
+  override val title = "form for test"
+
+  val action = menu("Action")
+
+  val report = actor(
+    ident = "report",
+    menu = action,
+    label = "CreateReport",
+    help = "Create report",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "report"  // icon is optional here
+  }
+
+  val block = insertBlock(BlockSample()) {
+    command(item = report) {
+      action = {
+        createReport(this@insertBlock)
+      }
+    }
+  }
+
+  override fun createReport(): Report {
+    return SimpleReport()
+  }
+
+  inner class BlockSample : FormBlock(1, 1, "Test block") {
+    val name = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "name"
+      help = "The user name"
+    }
+  }
+}
+
+class SimpleReport : Report() {
+  override val locale = Locale.UK
+  override val title = "SimpleReport"
+
+  val name = field(STRING(20)) {
+    label = "name"
+    help = "The user name"
+    align = FieldAlignment.LEFT
+    group = age
+    format { value ->
+      value.toUpperCase()
+    }
+  }
+
+  val age = field(INT(3)) {
+    label = "age"
+    help = "The user age"
+    align = FieldAlignment.LEFT
+    compute {
+      // Computes the average of ages
+      Triggers.avgInteger(this)
+    }
+  }
+
+  val profession = field(STRING(20)) {
+    label = "profession"
+    help = "The user profession"
+  }
+
+  val salary = field(DECIMAL(width = 10, scale = 5)) {
+    label = "salary"
+    help = "The user salary"
+    align = FieldAlignment.LEFT
+    compute {
+      // Computes the average of ages
+      Triggers.avgDecimal(this)
+    }
+  }
+
+  init {
+    add {
+      this[name] = "Sami"
+      this[age] = 22
+      this[profession] = "Journalist"
+      this[salary] = Decimal("2000")
+    }
+    add {
+      this[name] = "Sofia"
+      this[age] = 23
+      this[profession] = "Dentist"
+      this[salary] = Decimal("2000.55")
+    }
+    add {
+      this[age] = 25
+      this[profession] = "Baker"
+      this[name] = "Sofia"
+      this[salary] = Decimal("2000.55")
     }
   }
 }

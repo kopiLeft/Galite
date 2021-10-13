@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.form
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -37,7 +39,6 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.Center
-import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.Type
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -49,9 +50,20 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
 import org.kopi.galite.visual.visual.VlibProperties
-import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.tests.examples.Traineeship
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.dsl.report.FieldAlignment
+import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -59,7 +71,6 @@ import com.github.mvysny.kaributesting.v10._get
 class CommandsFormTests : GaliteVUITestBase() {
 
   val form = CommandsForm().also { it.model }
-  val multipleForm = MultipleBlockForm().also { it.model }
 
   @Before
   fun `login to the App`() {
@@ -251,7 +262,6 @@ class CommandsFormTests : GaliteVUITestBase() {
     }
   }
 
-
   /**
    * load data with serialQuery command,
    * then change second field and click on saveBlock.
@@ -298,7 +308,6 @@ class CommandsFormTests : GaliteVUITestBase() {
       assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[3])
     }
   }
-
 
   /**
    * load data with serialQuery command,
@@ -424,35 +433,337 @@ class CommandsFormTests : GaliteVUITestBase() {
      */
   }
 
-  /**
-   * put a value in the first field of the first block and a value in the first field of second block
-   * then click on resetBlock button,
-   * check that a popup is displayed,
-   * click on yes and check that the fields are empty
-   */
-  @Test
-  fun `test resetForm command`() {
-    multipleForm.open()
-
-    val simpleField = multipleForm.block.trainingID.findField()
-    val multipleField = multipleForm.block2.centerName.findField()
-
-    multipleForm.block.trainingID.edit(10)
-    multipleForm.block2.centerName.edit("center name")
-    assertEquals("10", simpleField.value)
-    assertEquals("center name", multipleField.value)
-    multipleForm.resetForm.triggerCommand()
-    confirm(true)
-    assertEquals("", simpleField.value)
-    assertEquals("", multipleField.value)
-  }
-
   companion object {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
       transaction {
         initDatabase()
+      }
+    }
+  }
+}
+
+class CommandsForm : ReportSelectionForm() {
+  override val locale = Locale.UK
+  override fun createReport(): Report {
+    return TrainingR()
+  }
+
+  override val title = "Commands Form"
+  val action = menu("Action")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F2
+    icon = "list"
+  }
+  val resetBlock = actor(
+    ident = "reset",
+    menu = action,
+    label = "break",
+    help = "Reset Block",
+  ) {
+    key = Key.F11
+    icon = "break"
+  }
+  val serialQuery = actor(
+    ident = "serialQuery",
+    menu = action,
+    label = "serialQuery",
+    help = "serial query",
+  ) {
+    key = Key.F6
+    icon = "serialquery"
+  }
+  val report = actor(
+    ident = "report",
+    menu = action,
+    label = "CreateReport",
+    help = "Create report",
+  ) {
+    key = Key.F8
+    icon = "report"
+  }
+  val dynamicReport = actor(
+    ident = "dynamicReport",
+    menu = action,
+    label = "DynamicReport",
+    help = " Create Dynamic Report",
+  ) {
+    key = Key.F9
+    icon = "report"
+  }
+  val saveBlock = actor(
+    ident = "saveBlock",
+    menu = action,
+    label = "Save Block",
+    help = " Save Block",
+  ) {
+    key = Key.F3
+    icon = "save"
+  }
+  val deleteBlock = actor(
+    ident = "deleteBlock",
+    menu = action,
+    label = "deleteBlock",
+    help = " deletes block",
+  ) {
+    key = Key.F4
+    icon = "delete"
+  }
+  val Operator = actor(
+    ident = "search",
+    menu = action,
+    label = "search",
+    help = " search",
+  ) {
+    key = Key.F7
+    icon = "detail_view"
+  }
+  val InsertMode = actor(
+    ident = "Insert",
+    menu = action,
+    label = "Insert",
+    help = " Insert",
+  ) {
+    key = Key.F7
+    icon = "insert"
+  }
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+  val helpForm = actor(
+    ident = "helpForm",
+    menu = action,
+    label = "Help",
+    help = " Help"
+  ) {
+    key = Key.F1
+    icon = "help"
+  }
+  val helpCmd = command(item = helpForm) {
+    action = {
+      showHelp()
+    }
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
+
+  val block = insertBlock(Traineeship()) {
+    command(item = list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+    command(item = resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+    command(item = serialQuery) {
+      action = {
+        serialQuery()
+      }
+    }
+    command(item = report) {
+      action = {
+        createReport(this@insertBlock)
+      }
+    }
+    command(item = dynamicReport) {
+      action = {
+        createDynamicReport()
+      }
+    }
+    command(item = saveBlock) {
+      action = {
+        saveBlock()
+      }
+    }
+    command(item = deleteBlock) {
+      action = {
+        deleteBlock()
+      }
+    }
+    command(item = Operator) {
+      action = {
+        searchOperator()
+      }
+    }
+    command(item = InsertMode) {
+      action = {
+        insertMode()
+      }
+    }
+  }
+}
+
+/**
+ * Training Report
+ */
+class TrainingR : Report() {
+  override val locale = Locale.UK
+
+  override val title = "Clients_Report"
+
+  val action = menu("Action")
+
+  val csv = actor(
+    ident = "CSV",
+    menu = action,
+    label = "CSV",
+    help = "CSV Format",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "exportCsv"  // icon is optional here
+  }
+
+  val xls = actor(
+    ident = "XLS",
+    menu = action,
+    label = "XLS",
+    help = "Excel (XLS) Format",
+  ) {
+    key = Key.SHIFT_F8          // key is optional here
+    icon = "exportXlsx"  // icon is optional here
+  }
+
+  val xlsx = actor(
+    ident = "XLSX",
+    menu = action,
+    label = "XLSX",
+    help = "Excel (XLSX) Format",
+  ) {
+    key = Key.SHIFT_F8          // key is optional here
+    icon = "exportXlsx"  // icon is optional here
+  }
+
+  val pdf = actor(
+    ident = "PDF",
+    menu = action,
+    label = "PDF",
+    help = "PDF Format",
+  ) {
+    key = Key.F9          // key is optional here
+    icon = "exportPdf"  // icon is optional here
+  }
+
+  val editColumnData = actor(
+    ident = "EditColumnData",
+    menu = action,
+    label = "Edit Column Data",
+    help = "Edit Column Data",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "formula"  // icon is optional here
+  }
+
+  val helpForm = actor(
+    ident = "helpForm",
+    menu = action,
+    label = "Help",
+    help = " Help"
+  ) {
+    key = Key.F1
+    icon = "help"
+  }
+
+  val cmdCSV = command(item = csv) {
+    action = {
+      model.export(VReport.TYP_CSV)
+    }
+  }
+
+  val cmdPDF = command(item = pdf) {
+    action = {
+      model.export(VReport.TYP_PDF)
+    }
+  }
+
+  val cmdXLS = command(item = xls) {
+    action = {
+      model.export(VReport.TYP_XLS)
+    }
+  }
+
+  val cmdXLSX = command(item = xlsx) {
+    action = {
+      model.export(VReport.TYP_XLSX)
+    }
+  }
+
+  val helpCmd = command(item = helpForm) {
+    action = {
+      model.showHelp()
+    }
+  }
+
+  val editColumn = command(item = editColumnData) {
+    action = {
+      if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
+        val formula  = org.kopi.galite.demo.product.ProductForm()
+        WindowController.windowController.doModal(formula)
+      }
+    }
+  }
+
+  val type = field(INT(25)) {
+    label = "training type"
+    help = "The training type"
+    align = FieldAlignment.LEFT
+    group = trainingName
+  }
+
+  val trainingName = field(STRING(25)) {
+    label = "training Name"
+    help = "The training name"
+    align = FieldAlignment.LEFT
+    format { value ->
+      value.toUpperCase()
+    }
+  }
+
+  val price = field(DECIMAL(20, 10)) {
+    label = "price"
+    help = "The price"
+    align = FieldAlignment.LEFT
+  }
+  val disponibility = field(BOOL) {
+    label = "disponibility"
+    help = "disponibility"
+    align = FieldAlignment.LEFT
+  }
+
+  val training = Training.selectAll()
+
+  init {
+    transaction {
+      training.forEach { result ->
+        add {
+          this[trainingName] = result[Training.trainingName]
+          this[type] = result[Training.type]
+          this[price] = result[Training.price]
+          this[disponibility] = result[Training.active]
+        }
       }
     }
   }

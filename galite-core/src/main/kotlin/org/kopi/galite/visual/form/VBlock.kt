@@ -42,6 +42,7 @@ import kotlin.collections.single
 import kotlin.collections.toTypedArray
 import kotlin.math.abs
 
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.IntegerColumnType
@@ -3633,6 +3634,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
     }
   }
+
+  @TestOnly
+  fun _getHelp() = help
+
+  @TestOnly
+  fun _getTables() = tables
+
+  @TestOnly
+  fun _getAccess() = access
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

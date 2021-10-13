@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.block
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -29,7 +31,6 @@ import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
-import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Decimal
@@ -37,12 +38,26 @@ import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
+import org.kopi.galite.tests.examples.Type
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DATE
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.MONTH
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TIME
+import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.domain.WEEK
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.tests.examples.initDatabase
 
 import com.github.mvysny.kaributesting.v10.expectRow
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
-  val formExample = FormExample().also { it.model }
+  val multipleForm = MultipleFormExample().also { it.model }
 
   @Before
   fun `login to the App`() {
@@ -52,10 +67,10 @@ class MultipleBlockTests: GaliteVUITestBase() {
   @Test
   fun `test multiple-block data is sent to model after going to next record`() {
     // Open client form
-    formExample.open()
+    multipleForm.open()
 
     // Enters the sales block
-    formExample.salesBlock.enter()
+    multipleForm.salesBlock.enter()
 
     // Enters values to fields
     val currentTimestamp   = Timestamp.now()
@@ -63,19 +78,19 @@ class MultipleBlockTests: GaliteVUITestBase() {
     val currentWeek        = Week.now()
     val currentMonth       = Month.now()
     val currentTime        = Time.now()
-    val idClt       = formExample.salesBlock.idClient.edit(100)
-    val description = formExample.salesBlock.description.edit("description")
-    val price       = formExample.salesBlock.price.edit(Decimal.valueOf("100.2"))
-    val active      = formExample.salesBlock.active.edit(true)
-    val date        = formExample.salesBlock.date.edit(currentDate)
-    val month       = formExample.salesBlock.month.edit(currentMonth)
-    val timestamp   = formExample.salesBlock.timestamp.edit(currentTimestamp)
-    val time        = formExample.salesBlock.time.edit(currentTime)
-    val week        = formExample.salesBlock.week.edit(currentWeek)
-    val codeDomain  = formExample.salesBlock.codeDomain.editText("Galite")
+    val idClt       = multipleForm.salesBlock.idClient.edit(100)
+    val description = multipleForm.salesBlock.description.edit("description")
+    val price       = multipleForm.salesBlock.price.edit(Decimal.valueOf("100.2"))
+    val active      = multipleForm.salesBlock.active.edit(true)
+    val date        = multipleForm.salesBlock.date.edit(currentDate)
+    val month       = multipleForm.salesBlock.month.edit(currentMonth)
+    val timestamp   = multipleForm.salesBlock.timestamp.edit(currentTimestamp)
+    val time        = multipleForm.salesBlock.time.edit(currentTime)
+    val week        = multipleForm.salesBlock.week.edit(currentWeek)
+    val codeDomain  = multipleForm.salesBlock.codeDomain.editText("Galite")
 
     // Go to the next record
-    formExample.salesBlock.editRecord(1)
+    multipleForm.salesBlock.editRecord(1)
 
     // Check that values are sent to the model
     assertEquals(100, idClt.getModel().getInt(0))
@@ -93,16 +108,16 @@ class MultipleBlockTests: GaliteVUITestBase() {
   @Test
   fun `test multiple-block data is sent to model after going to next field`() {
     // Open client form
-    formExample.open()
+    multipleForm.open()
 
     // Enters the sales block
-    formExample.salesBlock.enter()
+    multipleForm.salesBlock.enter()
 
     // Enters the id field editor
-    val field = formExample.salesBlock.idClient.edit(100)
+    val field = multipleForm.salesBlock.idClient.edit(100)
 
     // Go to the next field
-    formExample.salesBlock.description.click()
+    multipleForm.salesBlock.description.click()
 
     // Check that values are sent to the model
     assertEquals(100, field.getModel().getInt(0))
@@ -111,18 +126,18 @@ class MultipleBlockTests: GaliteVUITestBase() {
   @Test
   fun `test displayed value of code-domain field in a multiple-block`() {
     // Open client form
-    formExample.open()
+    multipleForm.open()
 
     // Enters the sales block
-    formExample.salesBlock.enter()
+    multipleForm.salesBlock.enter()
 
     // Set the value of the code-domain field
-    formExample.salesBlock.codeDomain.editText("Kotlin")
+    multipleForm.salesBlock.codeDomain.editText("Kotlin")
 
     // Go to the next record
-    formExample.salesBlock.editRecord(1)
+    multipleForm.salesBlock.editRecord(1)
 
-    val block = formExample.salesBlock.findMultipleBlock()
+    val block = multipleForm.salesBlock.findMultipleBlock()
     block.grid.expectRow(0, "", "", "", "", "", "", "", "", "", "Kotlin")
   }
 
@@ -134,8 +149,76 @@ class MultipleBlockTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.examples.initModules()
+        initDatabase()
       }
+    }
+  }
+}
+
+class MultipleFormExample : DictionaryForm() {
+  override val locale = Locale.UK
+  override val title = "Sales"
+  val action = menu("Action")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+  val block = insertBlock(Clients())
+  val salesBlock = insertBlock(Sales())
+
+  inner class Clients : FormBlock(1, 1, "Clients") {
+    val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The client id"
+    }
+  }
+
+  inner class Sales : FormBlock(10, 10, "Sales") {
+    val idClient = visit(domain = INT(5), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The item id"
+    }
+    val description = visit(domain = STRING(25), position = at(2, 1)) {
+      label = "Description"
+      help = "The item description"
+    }
+    val price = visit(domain = DECIMAL(10, 5), position = at(3, 2)) {
+      label = "Price"
+      help = "The item price"
+    }
+    val active = visit(domain = BOOL, position = at(4, 1)) {
+      label = "Status"
+      help = "Is the user account active?"
+    }
+    val date = visit(domain = DATE, position = at(5, 1)) {
+      label = "Date"
+      help = "The date"
+    }
+    val month = visit(domain = MONTH, position = at(6, 1)) {
+      label = "Month"
+      help = "The month"
+    }
+    val timestamp = visit(domain = TIMESTAMP, position = at(7, 1)) {
+      label = "Timestamp"
+      help = "The Timestamp"
+    }
+    val time = visit(domain = TIME, position = at(8, 1)) {
+      label = "Time"
+      help = "The time"
+    }
+    val week = visit(domain = WEEK, position = at(9, 1)) {
+      label = "Week"
+      help = "The week"
+    }
+    val codeDomain = visit(domain = Type, position = at(10, 1)) {
+      label = "codeDomain"
+      help = "A code-domain field"
+    }
+
+    init {
+      border = VConstants.BRD_LINE
     }
   }
 }

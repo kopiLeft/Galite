@@ -27,6 +27,7 @@ import java.util.Locale
 import kotlin.jvm.Throws
 
 import org.apache.poi.ss.formula.functions.T
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContextHandler
@@ -520,6 +521,9 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
    * Returns true iff there is trigger associated with given event.
    */
   protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
+
+  @TestOnly
+  fun _hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
   fun setMenu() {
     if (!built) {

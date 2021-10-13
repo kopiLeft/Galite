@@ -25,6 +25,7 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
+import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
@@ -809,6 +810,9 @@ abstract class VForm : VWindow, VConstants {
   fun printFormScreen(): PrintJob? {
     return (getDisplay() as UForm).printForm()
   }
+
+  @TestOnly
+  fun _getPage() = pages
 
   val eventList: MutableList<Int> = mutableListOf()
 

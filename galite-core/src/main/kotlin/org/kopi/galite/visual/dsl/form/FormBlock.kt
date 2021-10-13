@@ -19,11 +19,11 @@ package org.kopi.galite.visual.dsl.form
 
 import java.awt.Point
 
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
@@ -38,7 +38,6 @@ import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.WindowController
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -90,6 +89,12 @@ open class FormBlock(var buffer: Int,
 
   /** Domains of fields added to this block. */
   val ownDomains = mutableListOf<Domain<*>>()
+
+  @TestOnly
+  fun _getBlockTables() = blockTables
+
+  @TestOnly
+  fun _getBlockAccess() = access
 
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
