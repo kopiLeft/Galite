@@ -30,7 +30,7 @@ import com.github.mvysny.kaributesting.v10._get
  * @param duration how much time it takes for the command to finish its action.
  * @receiver the actor of the command to trigger.
  */
-fun Actor.triggerCommand(duration: Long = 500) {
+fun Actor.triggerCommand(duration: Long = 300) {
   val mainWindow = _get<MainWindow>()
   val actors = mainWindow
     ._get<VActorPanel> {  }

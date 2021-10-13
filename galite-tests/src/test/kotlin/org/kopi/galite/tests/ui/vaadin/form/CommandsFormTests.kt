@@ -29,7 +29,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing._clickCell
-import org.kopi.galite.testing.confirm
+import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.expect
@@ -96,7 +96,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(10)
     assertEquals("10", field.value)
     form.resetBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
     assertEquals("", field.value)
   }
 
@@ -344,7 +344,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(1)
     form.serialQuery.triggerCommand()
     form.deleteBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
 
     val data = transaction {
       Training.selectAll().map {

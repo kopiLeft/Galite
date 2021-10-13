@@ -37,7 +37,6 @@ import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
-import org.kopi.galite.testing.confirm
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.Traineeship
 import org.kopi.galite.tests.examples.Training
@@ -50,6 +49,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.testing.expectConfirmNotification
 
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.vaadin.flow.component.grid.Grid
@@ -269,7 +269,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     assertEquals("10", simpleField.value)
     assertEquals("center name", multipleField.value)
     multipleForm.resetForm.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
     assertEquals("", simpleField.value)
     assertEquals("", multipleField.value)
   }

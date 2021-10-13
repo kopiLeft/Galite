@@ -21,4 +21,5 @@
     <module ident="2013" label="Stock Form" />
     <module ident="2014" label="Tax Rule Form" />
     <module ident="2015" label="Provider Form" />
+    <module ident="2016" label="Form to test operations on fields" />
 </modules>

@@ -54,6 +54,6 @@ fun initModules() {
     insertIntoModule("2013", "org/kopi/galite/test/Menu", 206, "2007", StockForm::class)
     insertIntoModule("2014", "org/kopi/galite/test/Menu", 207, "2007", TaxRuleForm::class)
     insertIntoModule("2015", "org/kopi/galite/test/Menu", 208, "2007", ProviderForm::class)
-
+    insertIntoModule("20016", "org/kopi/galite/test/Menu", 105, "2000", TestFieldsForm::class)
   }
 }

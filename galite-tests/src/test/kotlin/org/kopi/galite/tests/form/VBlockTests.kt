@@ -195,7 +195,7 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
-                "(\"USER\".AGE = 6) AND (UPPER(\"USER\".JOB) = 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE = 6) AND (UPPER(\"USER\".JOB) = UPPER('jobValue'))", blockSearchCondition.toString()
       )
     }
   }
@@ -242,7 +242,7 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
-                "(\"USER\".AGE > 9) AND (UPPER(\"USER\".JOB) = 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE > 9) AND (UPPER(\"USER\".JOB) = UPPER('jobValue'))", blockSearchCondition.toString()
       )
     }
   }
