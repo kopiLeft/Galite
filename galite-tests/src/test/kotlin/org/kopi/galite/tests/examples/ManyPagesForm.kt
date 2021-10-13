@@ -18,7 +18,7 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -59,5 +59,5 @@ class ManyPagesForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = ManyPagesForm())
+  runForm(formName = ManyPagesForm())
 }

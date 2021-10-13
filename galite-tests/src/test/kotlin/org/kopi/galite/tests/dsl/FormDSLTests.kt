@@ -24,7 +24,6 @@ import kotlin.test.assertTrue
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase

@@ -37,7 +37,7 @@ enum class Convert(val value: Int) {
   /**
    * Converts the whole text to normal letters.
    */
-  LOWER(VConstants.FDO_CONVERT_NAME),
+  LOWER(VConstants.FDO_CONVERT_LOWER),
 
   /**
    * No conversion.

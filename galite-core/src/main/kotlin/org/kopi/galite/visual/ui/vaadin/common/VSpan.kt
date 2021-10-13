@@ -44,4 +44,8 @@ class VSpan : Span {
   fun setHtml(html: String?) {
     element.setProperty("innerHTML", html)
   }
+
+  fun getHtml () : String {
+    return element.getProperty("innerHTML")
+  }
 }

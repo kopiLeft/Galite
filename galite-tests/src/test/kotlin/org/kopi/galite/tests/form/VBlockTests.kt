@@ -29,11 +29,11 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.form.VConstants
@@ -175,8 +175,7 @@ class VBlockTests : VApplicationTestBase() {
     FormWithList.block.shortName[0] = "1000"
 
     transaction {
-      Application.initModules()
-      Application.initUserRights()
+      initModules()
       FormWithList.block.vBlock.refreshLookup(0)
     }
   }
@@ -196,7 +195,7 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
-                "(\"USER\".AGE = 6) AND (UPPER(\"USER\".JOB) = 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE = 6) AND (UPPER(\"USER\".JOB) = UPPER('jobValue'))", blockSearchCondition.toString()
       )
     }
   }
@@ -243,7 +242,7 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
-                "(\"USER\".AGE > 9) AND (UPPER(\"USER\".JOB) = 'jobValue')", blockSearchCondition.toString()
+                "(\"USER\".AGE > 9) AND (UPPER(\"USER\".JOB) = UPPER('jobValue'))", blockSearchCondition.toString()
       )
     }
   }

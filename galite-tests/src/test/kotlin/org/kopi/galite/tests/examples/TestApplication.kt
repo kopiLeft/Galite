@@ -18,33 +18,24 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.connectToDatabase
+import org.kopi.galite.demo.ConfigurationManager
+import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.server.PWA
 
 @SpringBootApplication
 open class TestApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
-  DBSchemaTest.reset()
-  transaction {
-    DBSchemaTest.createDBSchemaTables()
-    DBSchemaTest.insertIntoUsers(DBSchemaTest.testUser, "administrator")
-  }
-  initData()
-  initModules()
+  initDatabase()
   runApplication<TestApplication>(*args)
 }
 
@@ -84,34 +75,6 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
     get() = true
 
   init {
-    ApplicationConfiguration.setConfiguration(
-      object : ApplicationConfiguration() {
-        override val isDebugModeEnabled: Boolean = true
-        override val version get(): String = "1.0"
-        override val applicationName get(): String = "MyApp"
-        override val informationText get(): String = "info"
-        override val logFile get(): String = ""
-        override val debugMailRecipient get(): String = ""
-        override fun getSMTPServer(): String = ""
-        override val faxServer get(): String = ""
-        override val dictionaryServer get(): String = ""
-        override fun mailErrors(): Boolean = false
-        override fun logErrors(): Boolean = true
-        override fun debugMessageInTransaction(): Boolean = true
-        override val RExec get(): Rexec = TODO()
-        override fun getStringFor(var1: String): String = TODO()
-        override fun getIntFor(var1: String): Int {
-          val var2 = this.getStringFor(var1)
-          return var2.toInt()
-        }
-
-        override fun getBooleanFor(var1: String): Boolean {
-          return java.lang.Boolean.valueOf(this.getStringFor(var1))
-        }
-
-        override fun isUnicodeDatabase(): Boolean = false
-        override fun useAcroread(): Boolean = TODO()
-      }
-    )
+    ApplicationConfiguration.setConfiguration(ConfigurationManager)
   }
 }

@@ -36,7 +36,7 @@ class INT(width: Int) : Domain<Int>(width)
 /**
  * A STRING is used to enter characters which can be either letters, numbers or both.
  * The width has always to be given.
- * Moreover, you can optionaly indicate how many rows it will contain and how many will finally be displayed
+ * Moreover, you can optionally indicate how many rows it will contain and how many will finally be displayed
  * on the form.
  * If these optional arguments are used, you have to indicate the carriage return method by specifying either
  * the FIXED ON or the FIXED OFF option.

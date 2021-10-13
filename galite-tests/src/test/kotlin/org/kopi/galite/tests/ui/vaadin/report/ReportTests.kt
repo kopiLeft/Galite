@@ -52,7 +52,7 @@ class ReportTests: GaliteVUITestBase() {
     login()
 
     // Opens a form that contain a report command
-    formWithReport.open()
+    formWithReport.open(500)
 
     // Trigger the report command
     formWithReport.report.triggerCommand()
@@ -65,7 +65,7 @@ class ReportTests: GaliteVUITestBase() {
 
     // Check that the grid data is correct
     val report = _get<Grid<*>>()
-    /** Last column contains empty strings. That represents the values for [org.kopi.galite.report.VSeparatorColumn] */
+    /** Last column contains empty strings. That represents the values for [org.kopi.galite.visual.report.VSeparatorColumn] */
     val data = arrayOf(
       arrayOf("", "23", "", "2.000,37000", ""),
       arrayOf("SAMI", "22", "", "2.000,00000", ""),

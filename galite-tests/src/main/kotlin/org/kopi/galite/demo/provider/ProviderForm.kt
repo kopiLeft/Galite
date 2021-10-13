@@ -18,8 +18,8 @@ package org.kopi.galite.demo.provider
 
 import java.util.Locale
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Provider
+import org.kopi.galite.demo.database.Provider
+import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -103,5 +103,5 @@ class BlockProvider : FormBlock(1, 1, "Providers") {
 }
 
 fun main() {
-  Application.runForm(formName = ProviderForm())
+  runForm(formName = ProviderForm())
 }

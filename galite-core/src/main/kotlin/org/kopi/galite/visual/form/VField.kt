@@ -42,6 +42,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
@@ -53,7 +54,6 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.db.Utils
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.l10n.BlockLocalizer
@@ -725,12 +725,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException()
         }
 
-        val stringOperandLiteral = when (options and VConstants.FDO_SEARCH_MASK) {
-          VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
-          VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()
-          VConstants.FDO_SEARCH_LOWER -> stringLiteral(stringOperand).lowerCase()
-          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-        }
+        val stringOperandLiteral = getOperandExpression(stringOperand)
 
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
@@ -754,28 +749,42 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException()
         }
       } else {
+        val operand = if (operand is String) {
+          getOperandExpression(operand)
+        } else {
+          column.wrap(operand)
+        }
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            EqOp(column, column.wrap(operand))
+            EqOp(column, operand)
           }
           VConstants.SOP_NE -> Op.build {
-            NeqOp(column, column.wrap(operand))
+            NeqOp(column, operand)
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column, column.wrap(operand))
+            GreaterEqOp(column, operand)
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column, column.wrap(operand))
+            GreaterOp(column, operand)
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column, column.wrap(operand))
+            LessEqOp(column, operand)
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column, column.wrap(operand))
+            LessOp(column, operand)
           }
           else -> throw InconsistencyException()
         }
       }
+    }
+  }
+
+  private fun getOperandExpression(stringOperand: String) : ExpressionWithColumnType<String> {
+    return when (options and VConstants.FDO_SEARCH_MASK) {
+      VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
+      VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()
+      VConstants.FDO_SEARCH_LOWER -> stringLiteral(stringOperand).lowerCase()
+      else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
     }
   }
 
@@ -1138,7 +1147,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getString(): String = getString(block!!.currentRecord)
+  fun getString(): String? = getString(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a time value.
@@ -1288,7 +1297,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getString(r: Int): String {
+  open fun getString(r: Int): String? {
     throw InconsistencyException()
   }
 
@@ -1612,9 +1621,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while (true) {
           try {
-            val column = list!!.getColumn(0).column as Column<String>
+            val column = list!!.getColumn(0).column as Column<String?>
             val query = evalListTable().slice(column).select {
-              column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
+              column.substring(1, getString(block!!.activeRecord)!!.length) eq getString(block!!.activeRecord)
             }.orderBy(column)
 
             val transaction = TransactionManager.currentOrNull()
@@ -1681,7 +1690,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
 
-          result = displayQueryList(query, list!!.columns) as String?
+          result = displayQueryList(query, list!!.columns) as? String
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
