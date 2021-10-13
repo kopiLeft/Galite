@@ -48,10 +48,8 @@ public class DChart extends DWindow implements UChart {
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------------------------
-  
-  /**
-   * @Override
-   */
+
+  @Override
   public void refresh() {
     getContentPanel().invalidate();
     getContentPanel().repaint();
@@ -60,9 +58,7 @@ public class DChart extends DWindow implements UChart {
     requestFocusInWindow();
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void setType(UChartType type) {
     if (this.type != null && type != null) {
       getContentPanel().remove((Component)this.type);
@@ -74,9 +70,7 @@ public class DChart extends DWindow implements UChart {
     }
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void typeChanged() {
     getContentPanel().repaint();
     setFocusable(true);
@@ -84,9 +78,7 @@ public class DChart extends DWindow implements UChart {
     ((VChart)getModel()).setMenu();
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void run() throws VException {
     run(true);
   }
@@ -119,9 +111,7 @@ public class DChart extends DWindow implements UChart {
     }
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public UChartType getType() {
     return type;
   }

@@ -53,9 +53,7 @@ public class DPieChart extends DAbstractChartType {
   // IMPLEMENTATIONS
   //---------------------------------------------------------------------
   
-  /**
-   * @Override
-   */
+  @Override
   protected JFreeChart createChart(String title, VDataSeries[] series) {
     JFreeChart			chart;
     

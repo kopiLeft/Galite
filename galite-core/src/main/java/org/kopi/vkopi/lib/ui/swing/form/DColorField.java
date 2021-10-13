@@ -52,8 +52,6 @@ public class DColorField extends DObjectField {
    *
    * @param	model		the model for this text field
    * @param	label		The label that describe this field
-   * @param	height		the number of line
-   * @param	width		the number of column
    * @param	options		The possible options (NO EDIT, NO ECHO)
    */
   public DColorField(VFieldUI model,
@@ -91,7 +89,6 @@ public class DColorField extends DObjectField {
   /**
    * Returns the object associed to record r
    *
-   * @param	r		the position of the record
    * @return	the displayed value at this position
    */
   public Object getObject() {
@@ -101,7 +98,6 @@ public class DColorField extends DObjectField {
   /**
    * Sets the object associed to record r
    *
-   * @param	r		the position of the record
    * @param	s		the object to set in
    */
   public void setObject(Object s) {
