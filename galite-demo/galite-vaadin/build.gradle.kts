@@ -39,6 +39,7 @@ vaadin {
 dependencies {
   implementation(project(":galite-core"))
   testImplementation(project(":galite-testing"))
+  testImplementation(project(":galite-tests"))
 
   implementation(kotlin("test-junit"))
 
@@ -64,6 +65,14 @@ dependencies {
 tasks {
   compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+  }
+
+  findByName("bootJar")?.apply {
+    enabled = false
+  }
+
+  findByName("jar")?.apply {
+    enabled = true
   }
 }
 
