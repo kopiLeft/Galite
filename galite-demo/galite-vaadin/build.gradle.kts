@@ -22,8 +22,13 @@ plugins {
   kotlin("jvm") apply true
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
   id("com.vaadin") version "21.0.2"
-  id("org.gretty") version "4.0.0"
+  id("org.gretty") version "3.0.6"
   war
+}
+
+gretty {
+  contextPath = "/"
+  servletContainer = "jetty9.4"
 }
 
 vaadin {
