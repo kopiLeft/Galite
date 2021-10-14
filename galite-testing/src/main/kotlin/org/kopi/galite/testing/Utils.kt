@@ -30,6 +30,7 @@ import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.contextmenu.HasMenuItems
+import org.kopi.galite.visual.dsl.form.Form
 
 fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
   _clickItemWithCaption(caption)
@@ -69,6 +70,34 @@ fun blurOnLastField() {
   if(lastFocusedField is Component) {
     lastFocusedField._blur()
   }
+}
+
+fun Form.calculateTime() : Long {
+  var time = 0
+
+  val formTime = 220
+  val simpleBlockTime = 60
+  val multipleBlockTime = 140
+  val fieldTime = 5
+  val extraTime = 200
+
+  time += formTime
+
+  formBlocks.forEach { block ->
+    time += if (block.isSingle()) {
+      simpleBlockTime
+    } else {
+      multipleBlockTime
+    }
+  }
+
+  formBlocks.forEach { block ->
+    time += block.blockFields.size * fieldTime
+  }
+
+  time += extraTime
+
+  return time.toLong()
 }
 
 val defaultLocale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()
