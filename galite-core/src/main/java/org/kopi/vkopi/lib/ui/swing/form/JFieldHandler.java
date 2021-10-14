@@ -42,9 +42,7 @@ public class JFieldHandler extends AbstractFieldHandler {
     // ABSTRACTFIELDHANDLER IMPLEMENTATION
     // ----------------------------------------------------------------------
 
-    /**
-     * @Override
-     */
+    @Override
     public boolean predefinedFill() {
         boolean filled;
 
@@ -56,9 +54,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         return filled;
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void enter() {
         // this is the correct thread to calculate the display of the
         // field NOT later in the event thread
@@ -74,9 +70,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         }
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void leave() {
         // this is the correct thread to calculate the display of the
         // field NOT later in the event thread
@@ -92,9 +86,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         }
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void labelChanged() {
         SwingThreadHandler.startEnqueued(new Runnable() {
             public void run() {
@@ -103,9 +95,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         });
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void searchOperatorChanged() {
         int operator = getModel().getSearchOperator();
         final String info = operator == VConstants.SOP_EQ ? null : VConstants.Companion.getOPERATOR_NAMES()[operator];
@@ -122,9 +112,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         });
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void valueChanged(int r) {
         final int dispRow = getRowController().getBlockView().getDisplayLine(r);
 
@@ -142,9 +130,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         }
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void accessChanged(final int row) {
         if (getRowController().getBlockView().getDisplayLine(row) != -1) {
             SwingThreadHandler.startEnqueued(new Runnable() {
@@ -155,9 +141,7 @@ public class JFieldHandler extends AbstractFieldHandler {
         }
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public void colorChanged(final int r) {
         SwingThreadHandler.startEnqueued(new Runnable() {
             public void run() {

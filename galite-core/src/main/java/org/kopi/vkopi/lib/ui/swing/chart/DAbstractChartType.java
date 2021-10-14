@@ -71,10 +71,8 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------------------------
-  
-  /**
-   * @Override
-   */
+
+  @Override
   public void build() {
     JFreeChart		chart;
     
@@ -85,18 +83,14 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     }
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void refresh() {
     invalidate();
     repaint();
     validate();
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void exportToPDF(OutputStream destination, VPrintOptions options)
     throws IOException
   {
@@ -126,9 +120,7 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     }
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void exportToPNG(OutputStream destination, int width, int height)
     throws IOException
   {
@@ -137,9 +129,7 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     }
   }
 
-  /**
-   * @Override
-   */
+  @Override
   public void exportToJPEG(OutputStream destination, int width, int height) throws IOException {
     if (getChart() != null) {
       ChartUtilities.writeChartAsJPEG(destination, getChart(), width , height);

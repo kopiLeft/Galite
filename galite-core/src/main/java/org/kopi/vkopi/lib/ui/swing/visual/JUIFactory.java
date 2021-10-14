@@ -47,10 +47,7 @@ public class JUIFactory extends UIFactory {
    * The only way to do here is to use the compiler javac with -sourcepath option to handle non yet
    * compiler UForm and UListDialog classes
    */
-
-  /**
-   * @Override
-   */
+  @Override
   public UComponent createView(VModel model) {
     UComponent		view;
 
