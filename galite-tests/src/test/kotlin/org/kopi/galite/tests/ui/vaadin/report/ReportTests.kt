@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.ui.vaadin.report
+package org.kopi.galite.tests.ui.vaadin.report
 
 import kotlin.test.assertEquals
 
@@ -25,7 +25,7 @@ import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.form.FormWithReport
 import org.kopi.galite.tests.report.SimpleReport
-import org.kopi.galite.demo.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer

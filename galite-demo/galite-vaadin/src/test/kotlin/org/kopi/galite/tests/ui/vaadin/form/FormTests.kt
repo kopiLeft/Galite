@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.ui.vaadin.form
+package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
 
@@ -37,7 +37,7 @@ import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.demo.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer

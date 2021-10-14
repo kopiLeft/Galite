@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.demo.ui.vaadin
+package org.kopi.galite.tests.ui.vaadin
 
 import org.junit.Before
 import org.junit.BeforeClass

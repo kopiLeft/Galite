@@ -37,8 +37,10 @@ vaadin {
 
 dependencies {
   implementation(project(":galite-core"))
-  implementation(project(":galite-demo:galite-vaadin")) // Demo application code in galite-vaadin module
-  testImplementation(project(":galite-testing"))
+  implementation(project(":galite-testing"))
+
+  // Demo application code in galite-vaadin module
+  implementation(project(":galite-demo:galite-vaadin"))
 
   implementation(kotlin("test-junit"))
 

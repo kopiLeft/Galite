@@ -21,7 +21,6 @@ import java.util.Locale
 import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.demo.database.initDatabase
 import org.kopi.galite.demo.database.initModules
-
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec

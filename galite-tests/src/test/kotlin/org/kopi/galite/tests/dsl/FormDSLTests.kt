@@ -26,7 +26,7 @@ import kotlin.test.assertEquals
 import org.junit.Test
 import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.form.User
-import org.kopi.galite.demo.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.FieldAlignment

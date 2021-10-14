@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.ui.vaadin.login
+package org.kopi.galite.tests.ui.vaadin.login
 
 import kotlin.test.assertEquals
 
@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.tests.db.insertIntoModule
-import org.kopi.galite.demo.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
 import org.kopi.galite.visual.ui.vaadin.base.VInputText
 import org.kopi.galite.visual.ui.vaadin.common.VSelect

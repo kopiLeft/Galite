@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.ui.vaadin.field
+package org.kopi.galite.tests.ui.vaadin.field
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -32,7 +32,7 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.TestFieldsForm
 import org.kopi.galite.tests.examples.Trainer
-import org.kopi.galite.demo.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode

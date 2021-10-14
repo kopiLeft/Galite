@@ -39,7 +39,6 @@ vaadin {
 dependencies {
   implementation(project(":galite-core"))
   testImplementation(project(":galite-testing"))
-  testImplementation(project(":galite-tests"))
 
   implementation(kotlin("test-junit"))
 

@@ -14,13 +14,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.ui.vaadin.login
+package org.kopi.galite.tests.ui.vaadin.login
 
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.logout
 import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.demo.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
 
