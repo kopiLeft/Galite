@@ -219,15 +219,13 @@ abstract class Chart : Window() {
      */
     fun handleTriggers(triggers: MutableList<Trigger>) {
       // CHART TRIGGERS
+      super.VKT_Triggers[0] = addTrigger(triggers, CConstants.TRG_TYPES)
       triggers.forEach { trigger ->
-        val chartTriggerArray = IntArray(CConstants.TRG_TYPES.size)
         for (i in VConstants.TRG_TYPES.indices) {
           if (trigger.events shr i and 1 > 0) {
-            chartTriggerArray[i] = i
             super.triggers[i] = trigger
           }
         }
-        super.VKT_Triggers[0] = chartTriggerArray
       }
 
       // DIMENSION TRIGGERS

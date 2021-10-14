@@ -21,7 +21,9 @@ import java.io.File
 import java.util.Locale
 
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.form.VConstants
 
 /**
  * This class represents the definition of a window
@@ -113,7 +115,62 @@ abstract class Window {
 
     command.init()
     commands.add(command)
+    voidTriggers.add(command)
     return command
+  }
+
+  fun triggerType(trigger : Trigger, triggerTypes: IntArray) : Int {
+    var type = -1
+    val TRG_TYPES: IntArray = triggerTypes
+
+    for (i in TRG_TYPES.indices) {
+      if (trigger.events shr i and 1 > 0) {
+        if (type == -1) {
+          type = TRG_TYPES[i]
+
+        } else if (TRG_TYPES[i] != type) {
+          //throw PositionedError(getTokenReference(), BaseMessages.TRIGGER_DIFFERENT_RETURN, TRG_NAMES.get(i)) FIXME
+        }
+      }
+    }
+    return type
+  }
+
+  fun addTrigger(triggers: MutableList<Trigger>, triggerTypes: IntArray) : IntArray {
+    val triggerArray = IntArray(triggerTypes.size)
+    var pos = 0
+
+    triggers.forEach { trigger ->
+      val type = triggerType(trigger, triggerTypes)
+
+      when (type) {
+        VConstants.TRG_VOID -> pos = voidTriggers.size
+        VConstants.TRG_PRTCD -> pos = voidProtectedTriggers.size
+        VConstants.TRG_OBJECT -> pos = objectTriggers.size
+        VConstants.TRG_BOOLEAN -> pos = booleanTriggers.size
+        VConstants.TRG_INT -> pos = integerTriggers.size
+        else -> throw InconsistencyException("INTERNAL ERROR: UNEXPECTED TRG $type")
+      }
+
+      pos += 1 // we want to start our switches at 1
+
+      when (type) {
+        VConstants.TRG_VOID -> voidTriggers.add(trigger)
+        VConstants.TRG_PRTCD -> voidProtectedTriggers.add(trigger)
+        VConstants.TRG_OBJECT -> objectTriggers.add(trigger)
+        VConstants.TRG_BOOLEAN -> booleanTriggers.add(trigger)
+        VConstants.TRG_INT -> integerTriggers.add(trigger)
+        else -> throw InconsistencyException("INTERNAL ERROR: UNEXPECTED TRG $type")
+      }
+
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          triggerArray[i] = pos
+        }
+      }
+    }
+
+    return triggerArray
   }
 
   abstract fun genLocalization(destination: String? = null, locale: Locale? = this.locale)
@@ -126,4 +183,10 @@ abstract class Window {
       val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
     }
+
+  val voidProtectedTriggers = mutableListOf<Trigger>()
+  val voidTriggers = mutableListOf<Any>()
+  val objectTriggers = mutableListOf<Trigger>()
+  val booleanTriggers = mutableListOf<Trigger>()
+  val integerTriggers = mutableListOf<Trigger>()
 }

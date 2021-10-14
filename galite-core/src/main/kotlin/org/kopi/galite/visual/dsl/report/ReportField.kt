@@ -103,6 +103,7 @@ class ReportField<T>(override val domain: Domain<T>,
     val fieldAction = Action(null, method)
     return ReportTrigger(0L or (1L shl Constants.TRG_COMPUTE), fieldAction).also {
       computeTrigger = it
+      triggers.add(it)
     }
   }
 
@@ -120,6 +121,7 @@ class ReportField<T>(override val domain: Domain<T>,
     val fieldAction = Action(null, formatMethod)
     return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it
+      triggers.add(it)
     }
   }
 
