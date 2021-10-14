@@ -130,5 +130,5 @@ signing {
 
 java {
   withSourcesJar()
-  //withJavadocJar()
+  withJavadocJar()
 }
