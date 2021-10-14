@@ -17,7 +17,7 @@
 package org.kopi.galite.tests.examples
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.database.insertIntoModule
+import org.kopi.galite.tests.db.insertIntoModule
 import org.kopi.galite.tests.form.FormWithReport
 
 fun initModules() {

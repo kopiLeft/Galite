@@ -34,7 +34,7 @@ import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.demo.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException

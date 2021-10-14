@@ -21,7 +21,7 @@ import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
-import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.Users

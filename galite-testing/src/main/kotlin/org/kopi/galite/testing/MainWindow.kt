@@ -48,7 +48,7 @@ fun openForm(form: String, duration: Long) {
  * @param menu to which menu the form belongs.
  * @receiver the form to open.
  */
-fun Form.open(duration: Long = 300, menu: String? = null) {
+fun Form.open(duration: Long = 500, menu: String? = null) {
   val form = lookupFormCaption(menu)
 
   openForm(form, duration)

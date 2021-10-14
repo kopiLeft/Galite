@@ -19,7 +19,7 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock

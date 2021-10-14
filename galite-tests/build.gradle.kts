@@ -23,11 +23,6 @@ plugins {
   id("org.springframework.boot") version "2.4.0"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
   id("com.vaadin") version "21.0.2"
-  application
-}
-
-application {
-  mainClass.set("org.kopi.galite.demo.ApplicationKt")
 }
 
 vaadin {
@@ -48,7 +43,7 @@ dependencies {
     excludeWebJars()
     exclude(module = "spring-boot-starter-logging")
   }
-  implementation("org.springframework.boot", "spring-boot-devtools") {
+  testImplementation("org.springframework.boot", "spring-boot-devtools") {
     excludeWebJars()
   }
 
