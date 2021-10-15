@@ -70,7 +70,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     login()
 
     // Open the form
-    form.open(500)
+    form.open()
   }
 
   /**

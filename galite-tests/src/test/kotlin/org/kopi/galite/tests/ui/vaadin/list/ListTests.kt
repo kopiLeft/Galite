@@ -51,7 +51,7 @@ class ListTests: GaliteVUITestBase() {
     login()
 
     // Opens a form that contain a list command
-    formWithList.open(700)
+    formWithList.open()
 
     // Trigger the report command
     formWithList.list.triggerCommand()

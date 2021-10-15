@@ -62,7 +62,7 @@ class FieldsTests : GaliteVUITestBase() {
     login()
 
     // Open the form
-    form.open(1000)
+    form.open()
   }
 
   @Test
