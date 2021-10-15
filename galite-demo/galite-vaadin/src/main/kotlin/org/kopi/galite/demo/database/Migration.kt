@@ -94,7 +94,7 @@ fun createApplicationTables() {
  */
 fun dropApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
-    SchemaUtils.create(table)
+    SchemaUtils.drop(table)
   }
 }
 
