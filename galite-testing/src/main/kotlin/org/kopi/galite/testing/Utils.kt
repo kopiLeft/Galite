@@ -75,29 +75,31 @@ fun blurOnLastField() {
 fun Form.calculateTime() : Long {
   var time = 0
 
-  val formTime = 220
-  val simpleBlockTime = 60
-  val multipleBlockTime = 140
-  val fieldTime = 5
-  val extraTime = 200
-
-  time += formTime
+  time += Duration.FORM
 
   formBlocks.forEach { block ->
     time += if (block.isSingle()) {
-      simpleBlockTime
+      Duration.SIMPLE_BLOCK
     } else {
-      multipleBlockTime
+      Duration.MULTI_BLOCK
     }
   }
 
   formBlocks.forEach { block ->
-    time += block.blockFields.size * fieldTime
+    time += block.blockFields.size * Duration.FIELD
   }
 
-  time += extraTime
+  time += Duration.EXTRA
 
   return time.toLong()
 }
 
 val defaultLocale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()
+
+object Duration {
+  const val FORM = 220
+  const val SIMPLE_BLOCK = 60
+  const val MULTI_BLOCK = 140
+  const val FIELD = 5
+  const val EXTRA = 200
+}
