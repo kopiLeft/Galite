@@ -116,6 +116,13 @@ open class Label : VAnchorPanel(), HasEnabled {
   }
 
   /**
+   * Gets the label text.
+   */
+  override fun getText(): String? {
+    return label.text
+  }
+
+  /**
    * Sets this label to indicate that its field is mandatory.
    *
    * @return Is the field of this label is mandatory
