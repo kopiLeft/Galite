@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.testing
 
+import java.util.function.Predicate
+
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.ui.vaadin.form.DForm
@@ -27,14 +29,32 @@ import com.github.mvysny.kaributesting.v10._get
 /**
  * Finds the Vaadin form component of this form.
  */
-fun Form.findForm(): DForm? {
-  val mainWindow = _get<MainWindow>()
-  val forms = mainWindow
-    ._find<DForm>()
+fun Form.findForm(): DForm {
+  val forms = findForms()
 
-  return forms.singleOrNull {
-    it.getModel()!! eq this.model
+  if (forms.isEmpty()) {
+    throw Exception("Form '$title' not found")
+  } else if (forms.size > 1) {
+    throw Exception("Form '$title' is found many times")
   }
+
+  return forms.single()
+}
+
+/**
+ * Finds the Vaadin form components of this form.
+ */
+fun Form.findForms(): List<DForm> {
+  val mainWindow = _get<MainWindow>()
+
+  return mainWindow
+    ._find {
+      predicates = mutableListOf(
+        Predicate {
+          it.getModel()!! eq model
+        }
+      )
+    }
 }
 
 infix fun VForm.eq(form: VForm): Boolean {

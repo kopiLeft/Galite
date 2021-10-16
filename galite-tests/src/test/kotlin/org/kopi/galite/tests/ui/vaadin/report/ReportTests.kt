@@ -52,7 +52,7 @@ class ReportTests: GaliteVUITestBase() {
     login()
 
     // Opens a form that contain a report command
-    formWithReport.open(500)
+    formWithReport.open()
 
     // Trigger the report command
     formWithReport.report.triggerCommand()

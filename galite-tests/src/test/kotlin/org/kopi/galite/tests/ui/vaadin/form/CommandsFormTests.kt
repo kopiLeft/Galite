@@ -17,8 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
@@ -31,7 +30,6 @@ import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
-import org.kopi.galite.testing.findForm
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
@@ -52,6 +50,7 @@ import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.testing.expectConfirmNotification
+import org.kopi.galite.testing.findForms
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -70,7 +69,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     login()
 
     // Open the form
-    form.open(500)
+    form.open()
   }
 
   /**
@@ -399,11 +398,11 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test quit command`() {
-    assertNotNull(form.findForm())
+    assertTrue(form.findForms().isNotEmpty())
 
     form.quit.triggerCommand()
 
-    assertNull(form.findForm())
+    assertTrue(form.findForms().isEmpty())
   }
 
   /**
