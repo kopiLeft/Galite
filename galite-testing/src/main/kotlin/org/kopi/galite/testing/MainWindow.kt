@@ -38,6 +38,7 @@ import com.vaadin.flow.component.menubar.MenuBar
  */
 fun Form.openForm(form: String, duration: Long?) {
   val modulesMenu = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
+  val existingForms = findForms()
 
   if (duration != null) {
     modulesMenu._clickItemWithCaptionAndWait(form, duration)
@@ -46,7 +47,7 @@ fun Form.openForm(form: String, duration: Long?) {
     var time = 0
 
     modulesMenu._clickItemWithCaption(form)
-    while(findForm() == null && time < timeout) {
+    while((findForms() - existingForms).isEmpty() && time < timeout) {
       Thread.sleep(100)
       time += 100
     }
