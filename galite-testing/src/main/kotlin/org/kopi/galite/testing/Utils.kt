@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.ApplicationContext
@@ -71,7 +70,5 @@ fun blurOnLastField() {
     lastFocusedField._blur()
   }
 }
-
-fun Form.calculateTime() : Long = 1000 // TODO
 
 val defaultLocale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()

@@ -26,6 +26,7 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
 import org.kopi.galite.visual.visual.ApplicationContext
 
+import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get
 import com.vaadin.flow.component.menubar.MenuBar
 
@@ -35,10 +36,21 @@ import com.vaadin.flow.component.menubar.MenuBar
  * @param form the form caption.
  * @param duration how much time it takes to open the form.
  */
-fun openForm(form: String, duration: Long) {
+fun Form.openForm(form: String, duration: Long?) {
   val modulesMenu = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
 
-  modulesMenu._clickItemWithCaptionAndWait(form, duration)
+  if (duration != null) {
+    modulesMenu._clickItemWithCaptionAndWait(form, duration)
+  } else {
+    val timeout = 2000
+    var time = 0
+
+    modulesMenu._clickItemWithCaption(form)
+    while(findForm() == null && time < timeout) {
+      Thread.sleep(100)
+      time += 100
+    }
+  }
 }
 
 /**
@@ -48,7 +60,7 @@ fun openForm(form: String, duration: Long) {
  * @param menu to which menu the form belongs.
  * @receiver the form to open.
  */
-fun Form.open(duration: Long = calculateTime(), menu: String? = null) {
+fun Form.open(duration: Long? = null, menu: String? = null) {
   val form = lookupFormCaption(menu)
 
   openForm(form, duration)
