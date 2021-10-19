@@ -85,8 +85,8 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
   private fun openAndExpand() {
     val ui = UI.getCurrent()
     var width = ""
-    var columns = 0
     val progress = Dialog(ProgressBar().also { it.isIndeterminate = true })
+    val tableHeight = "450px"
 
     super.open()
 
@@ -96,25 +96,28 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
     if(table!!.headerComponents.isNotEmpty()) {
       height = "0px"
       progress.open()
+    } else {
+      table!!.height = tableHeight
     }
+
     table!!.headerComponents.first().element.addAttachListener {
       Thread {
         table!!.headerComponents.forEach { header ->
           val headerWidth = Utils.getWidth(header.parent.get().element, ui)
+
           if (width == "") {
             width = headerWidth.orEmpty()
-          } else if(headerWidth != null && headerWidth.isNotEmpty()) {
+          } else if (headerWidth != null && headerWidth.isNotEmpty()) {
             width = "$width + $headerWidth"
           }
+        }
 
-          if(++columns == table!!.headerComponents.size) {
-            accessAndPush(ui) {
-              widthStyler.width = "calc(calc($width) + 20px)"
-              widthStyler.minWidth = "calc(calc($width) + 20px)"
-              progress.close()
-              height = null
-            }
-          }
+        accessAndPush(ui) {
+          widthStyler.width = "calc(calc($width) + 20px)"
+          widthStyler.minWidth = "calc(calc($width) + 20px)"
+          progress.close()
+          height = null
+          table!!.height = tableHeight
         }
       }.start()
     }
