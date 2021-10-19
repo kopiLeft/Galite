@@ -24,10 +24,14 @@ If you're using Gradle Kotlin Script, add the following to your build.gradle.kts
 ````KOTLIN
 repositories {
   mavenCentral()
+  
+  maven {
+    url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
+  }
 }
 
 dependencies {
-  implementation("org.kopi", "galite-core", "0.0.1-SNAPSHOT")
+  implementation("org.kopi", "galite-core", "1.0.0-alpha")
 }
 ````
 
