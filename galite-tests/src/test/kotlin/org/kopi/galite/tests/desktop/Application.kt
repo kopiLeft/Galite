@@ -25,7 +25,6 @@ import org.kopi.galite.tests.db.testPassword
 import org.kopi.galite.tests.db.testURL
 import org.kopi.galite.tests.db.testUser
 import org.kopi.galite.tests.examples.initDatabase
-import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.dsl.form.Form
 
@@ -37,7 +36,6 @@ val testLocale: Locale = Locale.FRANCE
 fun main(args: Array<String>) {
   connectToDatabase()
   initDatabase()
-  initModules()
   run(args)
 }
 
