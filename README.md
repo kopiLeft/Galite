@@ -18,7 +18,20 @@ Galite offers many advantages:
 * Database-backed application: it provides you with the feature of connecting forms with databases and getting queries from different database dialects. You declare the database tables using [Exposed](https://github.com/JetBrains/Exposed) framework.
 * Strongly typed fields: you have to declare the data types of fields explicitly, which allows to check the type of data assigned to a field at compile-time.
 
-## Running the demo application
+## Getting started
+### Download
+If you're using Gradle Kotlin Script, add the following to your build.gradle.kts file:
+````KOTLIN
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation("org.kopi", "galite-core", "0.0.1-SNAPSHOT")
+}
+````
+
+### Running the demo application
 Before running the app make sure that you have Java 8 (or higher) JDK installed.
 
 To quickly start the app, type this into your terminal:
