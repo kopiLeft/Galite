@@ -78,6 +78,7 @@ fun initDatabase() {
     addBillPrdts()
     addBills()
   }
+  initModules()
 }
 
 /**

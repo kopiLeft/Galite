@@ -41,7 +41,6 @@ val testLocale: Locale = Locale.FRANCE
 fun main(args: Array<String>) {
   connectToDatabase()
   initDatabase()
-  initModules()
   run(args)
 }
 
