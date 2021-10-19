@@ -26,7 +26,7 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
 
   repositories {
-    jcenter()
+    mavenCentral()
     maven {
       url = uri("https://maven.vaadin.com/vaadin-addons")
     }

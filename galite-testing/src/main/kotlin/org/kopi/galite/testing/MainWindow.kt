@@ -40,7 +40,6 @@ fun Form.openForm(form: String, duration: Long?) {
   val modulesMenu = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
   val existingForms = findForms()
 
-
   if (duration != null) {
     modulesMenu._clickItemWithCaptionAndWait(form, duration)
   } else {

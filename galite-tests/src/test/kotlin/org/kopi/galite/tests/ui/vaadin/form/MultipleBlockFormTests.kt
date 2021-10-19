@@ -27,8 +27,6 @@ import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
-import org.kopi.galite.tests.examples.initData
-import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.junit.Assert.assertFalse

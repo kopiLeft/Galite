@@ -21,8 +21,6 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.kopi.galite.demo.database.createDBSchemaTables
-import org.kopi.galite.demo.database.insertIntoUsers
 import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.visual.db.Users
 

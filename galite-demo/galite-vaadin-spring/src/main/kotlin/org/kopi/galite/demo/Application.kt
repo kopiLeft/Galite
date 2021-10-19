@@ -20,14 +20,11 @@ import java.util.Locale
 
 import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.demo.database.initDatabase
-import org.kopi.galite.demo.database.initModules
-
-import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.Registry
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -39,9 +36,7 @@ open class GShopApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
-  DBSchemaTest.reset()
   initDatabase()
-  initModules()
   runApplication<GShopApplication>(*args)
 }
 
@@ -110,3 +105,5 @@ object ConfigurationManager : ApplicationConfiguration() {
   override fun isUnicodeDatabase(): Boolean = false
   override fun useAcroread(): Boolean = TODO()
 }
+
+class GaliteRegistry : Registry("Galite", null)

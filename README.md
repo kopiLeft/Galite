@@ -36,7 +36,7 @@ login = admin
 password = admin
 ```
 
-To see the code for this app, go to [Demo](galite-tests/src/main/kotlin/org/kopi/galite/demo).
+To see the code for this app, go to [Demo](galite-demo/galite-vaadin/src/main/kotlin/org/kopi/galite/demo).
 
 ## Customize and configure your App
 To define your application customizations (logo, locales, .etc) you need to implement the `VApplication` class.
