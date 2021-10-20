@@ -333,7 +333,6 @@ open class FormBlock(var buffer: Int,
     val command = Command(item)
     command.init()
     blockCommands.add(command)
-    voidTriggers.add(command)
     return command
   }
 
@@ -725,31 +724,36 @@ open class FormBlock(var buffer: Int,
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // BLOCK TRIGGERS
-        super.VKT_Triggers[0] = addTrigger(triggers, VConstants.TRG_TYPES)
+        val blockTriggerArray = arrayOfNulls<Int>(VConstants.TRG_TYPES.size)
+
         triggers.forEach { trigger ->
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
+              blockTriggerArray[i] = i
               super.triggers[i] = trigger
             }
           }
+          super.VKT_Triggers[0] = blockTriggerArray
         }
 
         // FIELD TRIGGERS
         blockFields.forEach { field ->
+          val fieldTriggerArray = arrayOfNulls<Int>(VConstants.TRG_TYPES.size)
+
           field.triggers.forEach { trigger ->
             for (i in VConstants.TRG_TYPES.indices) {
               if (trigger.events shr i and 1 > 0) {
+                fieldTriggerArray[i] = i
                 super.triggers[i] = trigger
               }
             }
           }
-
-          super.VKT_Triggers.add(addTrigger(field.triggers, VConstants.TRG_TYPES))
+          super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // COMMANDS TRIGGERS
         blockCommands.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = arrayOfNulls<Int>(VConstants.TRG_TYPES.size)
           // TODO : Add commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
@@ -757,7 +761,7 @@ open class FormBlock(var buffer: Int,
         // FIELDS COMMANDS TRIGGERS
         val fieldsCommands = getFieldsCommands()
         fieldsCommands.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = arrayOfNulls<Int>(VConstants.TRG_TYPES.size)
           // TODO : Add field commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
@@ -768,61 +772,6 @@ open class FormBlock(var buffer: Int,
           it.setInfo(super.source, form)
         }
       }
-
-      fun triggerType(trigger : Trigger, triggerTypes: IntArray) : Int {
-        var type = -1
-        val TRG_TYPES: IntArray = triggerTypes
-
-        for (i in TRG_TYPES.indices) {
-          if (trigger.events shr i and 1 > 0) {
-            if (type == -1) {
-              type = TRG_TYPES[i]
-
-            } else if (TRG_TYPES[i] != type) {
-              //throw PositionedError(getTokenReference(), BaseMessages.TRIGGER_DIFFERENT_RETURN, TRG_NAMES.get(i)) FIXME
-            }
-          }
-        }
-        return type
-      }
-
-      fun addTrigger(triggers: MutableList<Trigger>, triggerTypes: IntArray) : IntArray {
-        val triggerArray = IntArray(triggerTypes.size)
-        var pos = 0
-
-        triggers.forEach { trigger ->
-          val type = triggerType(trigger, triggerTypes)
-
-          when (type) {
-            VConstants.TRG_VOID -> pos = voidTriggers.size
-            VConstants.TRG_PRTCD -> pos = voidProtectedTriggers.size
-            VConstants.TRG_OBJECT -> pos = objectTriggers.size
-            VConstants.TRG_BOOLEAN -> pos = booleanTriggers.size
-            VConstants.TRG_INT -> pos = integerTriggers.size
-            else -> throw InconsistencyException("INTERNAL ERROR: UNEXPECTED TRG $type")
-          }
-
-          pos += 1 // we want to start our switches at 1
-
-          when (type) {
-            VConstants.TRG_VOID -> voidTriggers.add(trigger)
-            VConstants.TRG_PRTCD -> voidProtectedTriggers.add(trigger)
-            VConstants.TRG_OBJECT -> objectTriggers.add(trigger)
-            VConstants.TRG_BOOLEAN -> booleanTriggers.add(trigger)
-            VConstants.TRG_INT -> integerTriggers.add(trigger)
-            else -> throw InconsistencyException("INTERNAL ERROR: UNEXPECTED TRG $type")
-          }
-
-          for (i in VConstants.TRG_TYPES.indices) {
-            if (trigger.events shr i and 1 > 0) {
-              triggerArray[i] = pos
-            }
-          }
-        }
-
-        return triggerArray
-      }
-
 
       init {
         handleTriggers(this@FormBlock.triggers)
@@ -860,10 +809,4 @@ open class FormBlock(var buffer: Int,
       vBlock = it
     }
   }
-
-  val voidProtectedTriggers = mutableListOf<Trigger>()
-  val voidTriggers = mutableListOf<Any>()
-  val objectTriggers = mutableListOf<Trigger>()
-  val booleanTriggers = mutableListOf<Trigger>()
-  val integerTriggers = mutableListOf<Trigger>()
 }

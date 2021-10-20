@@ -329,18 +329,21 @@ abstract class Form : Window() {
    */
   private fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
     // FORM TRIGGERS
-    VKT_Triggers[0] = addTrigger(triggers, VConstants.TRG_TYPES)
+    val formTriggerArray = arrayOfNulls<Int>(VConstants.TRG_TYPES.size)
+
     triggers.forEach { trigger ->
       for (i in VConstants.TRG_TYPES.indices) {
         if (trigger.events shr i and 1 > 0) {
+          formTriggerArray[i] = i
           formTriggers[i] = trigger
         }
       }
+      VKT_Triggers[0] = formTriggerArray
     }
 
     // COMMANDS TRIGGERS
     this@Form.commands.forEach {
-      val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+      val fieldTriggerArray = arrayOfNulls<Int>(VConstants.TRG_TYPES.size)
       // TODO : Add commands triggers here
       VKT_Triggers.add(fieldTriggerArray)
     }

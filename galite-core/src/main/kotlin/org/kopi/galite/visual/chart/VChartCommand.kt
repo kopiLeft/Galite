@@ -35,7 +35,7 @@ class VChartCommand(private val chart: VChart, actor: VActor)
     }
   }
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     // TODO
   }
 

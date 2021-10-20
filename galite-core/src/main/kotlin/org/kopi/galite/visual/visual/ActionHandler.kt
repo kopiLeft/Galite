@@ -29,7 +29,7 @@ interface ActionHandler {
    *
    * @param  VKT_Type   the number of the trigger
    */
-  fun executeVoidTrigger(VKT_Type: Int)
+  fun executeVoidTrigger(VKT_Type: Int?)
 
   /**
    * Performs the appropriate action asynchronously.

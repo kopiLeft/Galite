@@ -430,20 +430,20 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // TRIGGER HANDLING
   // --------------------------------------------------------------------
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     triggers[VKT_Type]?.action?.method?.invoke()
     super.executeVoidTrigger(VKT_Type)
   }
 
-  fun executeObjectTrigger(VKT_Type: Int): Any {
+  fun executeObjectTrigger(VKT_Type: Int?): Any {
     return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+  fun executeBooleanTrigger(VKT_Type: Int?): Boolean {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
+  fun executeIntegerTrigger(VKT_Type: Int?): Int {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
@@ -473,7 +473,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   /**
    * Returns true if there is trigger associated with given event.
    */
-  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != 0
+  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != null
 
   /**
    * Returns the dimension column.
@@ -595,7 +595,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   var chartType: VChartType? = null  // chart type
     private set
 
-  protected var VKT_Triggers = mutableListOf(IntArray(CConstants.TRG_TYPES.size)) // trigger list
+  protected var VKT_Triggers = mutableListOf(arrayOfNulls<Int>(CConstants.TRG_TYPES.size)) // trigger list
   protected val triggers = mutableMapOf<Int, Trigger>()
 
   protected var commands: Array<VCommand>? = null // commands

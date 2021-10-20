@@ -261,29 +261,40 @@ abstract class Report : Window() {
      */
     fun handleTriggers(triggers: MutableList<Trigger>) {
       // REPORT TRIGGERS
-      super.VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
+      super.VKT_Triggers = mutableListOf(arrayOfNulls(Constants.TRG_TYPES.size))
 
-      super.VKT_Triggers!![0] = addTrigger(triggers, Constants.TRG_TYPES)
+      val blockTriggerArray = arrayOfNulls<Int>(Constants.TRG_TYPES.size)
+
       triggers.forEach { trigger ->
         for (i in VConstants.TRG_TYPES.indices) {
           if (trigger.events shr i and 1 > 0) {
+            blockTriggerArray[i] = i
             super.triggers[i] = trigger
           }
         }
+        super.VKT_Triggers!![0] = blockTriggerArray
       }
 
       // REPORT FIELD TRIGGERS
       fields.forEach {
+        val fieldTriggerArray = arrayOfNulls<Int>(Constants.TRG_TYPES.size)
+
+        if (it.computeTrigger != null) {
+          fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
+        }
+        if (it.formatTrigger != null) {
+          fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+        }
         // TODO : Add field triggers here
-        super.VKT_Triggers!!.add(addTrigger(it.triggers, Constants.TRG_TYPES))
+        super.VKT_Triggers!!.add(fieldTriggerArray)
       }
 
       // TODO: for separator column
-      super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
+      super.VKT_Triggers!!.add(arrayOfNulls<Int>(Constants.TRG_TYPES.size))
 
       // COMMANDS TRIGGERS
       commands?.forEach {
-        val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+        val fieldTriggerArray = arrayOfNulls<Int>(Constants.TRG_TYPES.size)
         // TODO : Add commands triggers here
         super.VKT_Triggers!!.add(fieldTriggerArray)
       }

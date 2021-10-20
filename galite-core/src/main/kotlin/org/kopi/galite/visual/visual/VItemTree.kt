@@ -148,7 +148,7 @@ class VItemTree(rootName: String?,
    *
    * @param   key           the number of the actor.
    */
-  override fun executeVoidTrigger(key: Int) {
+  override fun executeVoidTrigger(key: Int?) {
     val currentDisplay = getDisplay()
 
     when (key) {

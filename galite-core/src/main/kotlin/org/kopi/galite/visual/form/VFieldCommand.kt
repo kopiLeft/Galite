@@ -73,7 +73,7 @@ class VFieldCommand(private val form: VForm,
    *
    * @param    VKT_Type    the number of the trigger
    */
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     when (VKT_Type) {
       VForm.CMD_AUTOFILL ->
         form.getActiveBlock()!!.activeField!!.predefinedFill()

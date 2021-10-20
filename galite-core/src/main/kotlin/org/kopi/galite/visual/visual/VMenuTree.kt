@@ -226,7 +226,7 @@ class VMenuTree constructor(ctxt: DBContext?,
    * @param   VKT_Type           the number of the actor.
    * @return  true if an action was found for the specified number
    */
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     val currentDisplay = getDisplay()
 
     when (VKT_Type) {

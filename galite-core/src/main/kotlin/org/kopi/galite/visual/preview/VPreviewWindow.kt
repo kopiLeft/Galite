@@ -137,7 +137,7 @@ open class VPreviewWindow : VWindow() {
    *
    * @param   VKT_Type    the number of the actor.
    */
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     when (VKT_Type) {
       CMD_QUIT -> getDisplay()!!.closeWindow()
       CMD_FIRST -> {

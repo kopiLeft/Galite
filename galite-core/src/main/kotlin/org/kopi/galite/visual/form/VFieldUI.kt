@@ -618,7 +618,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: 
    *
    * @param        VKT_Type        the number of the trigger
    */
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     getBlock().executeVoidTrigger(VKT_Type)
   }
 

@@ -457,27 +457,26 @@ abstract class VForm : VWindow, VConstants {
   /**
    * @return If there is trigger associated with event
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean {
-    return VKT_Triggers[index][event] != 0
-  }
+  protected fun hasTrigger(event: Int, index: Int = 0) = VKT_Triggers[index][event] != null
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
+
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     formTriggers[VKT_Type]?.action?.method?.invoke()
     super.executeVoidTrigger(VKT_Type)
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeObjectTrigger(VKT_Type: Int): Any {
+  fun executeObjectTrigger(VKT_Type: Int?): Any {
     return (formTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+  fun executeBooleanTrigger(VKT_Type: Int?): Boolean {
     return (formTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
+  fun executeIntegerTrigger(VKT_Type: Int?): Int {
     return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
@@ -821,7 +820,7 @@ abstract class VForm : VWindow, VConstants {
   internal lateinit var pages: Array<String>
   internal lateinit var pagesIdents: Array<String>
   internal var help: String? = null //the name of this field
-  internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
+  internal val VKT_Triggers = mutableListOf(arrayOfNulls<Int>(VConstants.TRG_TYPES.size))
   internal val formTriggers = mutableMapOf<Int, Trigger>()
 
   // dynamic data

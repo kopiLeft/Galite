@@ -219,18 +219,21 @@ abstract class Chart : Window() {
      */
     fun handleTriggers(triggers: MutableList<Trigger>) {
       // CHART TRIGGERS
-      super.VKT_Triggers[0] = addTrigger(triggers, CConstants.TRG_TYPES)
+      val chartTriggerArray = arrayOfNulls<Int>(CConstants.TRG_TYPES.size)
+
       triggers.forEach { trigger ->
         for (i in VConstants.TRG_TYPES.indices) {
           if (trigger.events shr i and 1 > 0) {
+            chartTriggerArray[i] = i
             super.triggers[i] = trigger
           }
         }
+        super.VKT_Triggers[0] = chartTriggerArray
       }
 
       // DIMENSION TRIGGERS
       this@Chart.dimension.also {
-        val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+        val fieldTriggerArray = arrayOfNulls<Int>(CConstants.TRG_TYPES.size)
 
         if(it.formatTrigger != null) {
           fieldTriggerArray[CConstants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
@@ -241,7 +244,7 @@ abstract class Chart : Window() {
 
       // MEASURE TRIGGERS
       this@Chart.measures.forEach {
-        val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+        val fieldTriggerArray = arrayOfNulls<Int>(CConstants.TRG_TYPES.size)
 
         if(it.colorTrigger != null) {
           fieldTriggerArray[CConstants.TRG_COLOR] = it.colorTrigger!!.events.toInt()
@@ -252,7 +255,7 @@ abstract class Chart : Window() {
 
       // COMMANDS TRIGGERS
       commands?.forEach {
-        val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+        val fieldTriggerArray = arrayOfNulls<Int>(CConstants.TRG_TYPES.size)
         // TODO : Add commands triggers here
         super.VKT_Triggers.add(fieldTriggerArray)
       }

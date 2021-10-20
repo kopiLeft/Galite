@@ -436,7 +436,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    *
    * @param        VKT_Type        the number of the trigger
    */
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int?) {
     if (VKT_Type == Constants.CMD_GOTO_SHORTCUTS) {
       try {
         ApplicationContext.getMenu()!!.getDisplay().gotoShortcuts()
