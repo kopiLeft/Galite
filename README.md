@@ -4,7 +4,7 @@ Galite Framework
 
 ![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
 ![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
-[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.kopi%22%20AND%20a:%22galite-core%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core)
 
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
