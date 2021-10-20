@@ -165,6 +165,7 @@ fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?
 
 /**
  * Click on a field.
+ * When the field is in a multiBlock, this should be used after editing a record, see [editRecord].
  */
 fun <T> FormField<T>.click(): UField {
   val mainWindow = _get<MainWindow>()

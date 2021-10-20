@@ -55,6 +55,7 @@ import org.kopi.galite.testing.expectConfirmNotification
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 
 class CommandsFormTests : GaliteVUITestBase() {
 
@@ -179,6 +180,180 @@ class CommandsFormTests : GaliteVUITestBase() {
       arrayOf("2", "", "", "", ""),
       arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
       arrayOf("3", "", "", "", ""),
+    ))
+  }
+
+  /**
+   * click on report button,
+   * check that a report contains data is displayed,
+   * sort data descending,
+   * check that data are sorted correctly,
+   * sort data ascending,
+   * check that data are sorted correctly
+   */
+  @Test
+  fun `test sort report`() {
+    form.report.triggerCommand()
+    val reportTable = _get<DReport>().getTable() as DTable
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    // TEST SORT DSC
+    val contextMenu = _get<DReport>().contextMenuList
+
+    // SORT by the first column
+    contextMenu[0]._clickItemWithCaption(VlibProperties.getString("sort_DSC"))
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("3", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+    ))
+
+    // TEST SORT ASC
+    contextMenu[0]._clickItemWithCaption(VlibProperties.getString("sort_ASC"))
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+  }
+
+  /**
+   * click on report button,
+   * check that a report contains data is displayed,
+   * add column to the report,
+   * check the new column exist in the report
+   */
+  @Test
+  fun `test adding column to the report`() {
+    form.report.triggerCommand()
+    val reportTable = _get<DReport>().getTable() as DTable
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    val contextMenu = _get<DReport>().contextMenuList
+
+    // add column to the report
+    contextMenu[0]._clickItemWithCaption(VlibProperties.getString("add_column"))
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", "", ""),
+      arrayOf("1", "", "", "", "", ""),
+      arrayOf("2", "", "", "", "", ""),
+      arrayOf("3", "", "", "", "", "")
+    ))
+  }
+
+  /**
+   * click on report button,
+   * check that a report contains data is displayed,
+   * add column to the report,
+   * check the new column exist in the report,
+   * remove this column and check
+   */
+  @Test
+  fun `test removing column to the report`() {
+    form.report.triggerCommand()
+    val reportTable = _get<DReport>().getTable() as DTable
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    var contextMenu = _get<DReport>().contextMenuList
+
+    // add column to the report
+    contextMenu[0]._clickItemWithCaption(VlibProperties.getString("add_column"))
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", "", ""),
+      arrayOf("1", "", "", "", "", ""),
+      arrayOf("2", "", "", "", "", ""),
+      arrayOf("3", "", "", "", "", "")
+    ))
+
+    contextMenu = _get<DReport>().contextMenuList
+    // remove column from the report
+    contextMenu[contextMenu.size - 1]._clickItemWithCaption(VlibProperties.getString("remove_column"))
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+  }
+
+  /**
+   * click on report button,
+   * check that a report contains data is displayed,
+   * reorder columns by putting the separator in first position,
+   * check data in the report,
+   * reorder columns by putting the separator in second position,
+   * check data in the report
+   */
+  @Test
+  fun `test reorder report columns`() {
+    form.report.triggerCommand()
+    val reportTable = _get<DReport>().getTable() as DTable
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("3", "", "", "", "")
+    ))
+
+    val columns = reportTable.columns
+    val list = mutableListOf(*columns.toTypedArray())
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
+
+    list.removeLast()
+    reportTable.setColumnOrder(columns.last(), *(list).toTypedArray())
+
+    waitAndRunUIQueue(10)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("", "1", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes"),
+      arrayOf("", "1", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes"),
+      arrayOf("", "2", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes"),
+      arrayOf("", "3", "TRAINING 1", reportColumn.format(Decimal("1149.24")), "yes")
+    ))
+
+    val finalList =  mutableListOf(*list.toTypedArray())
+
+    finalList.removeFirst()
+    reportTable.setColumnOrder(list.first(),columns.last(), *(finalList).toTypedArray())
+
+    waitAndRunUIQueue(10)
+
+    reportTable.expect(arrayOf(
+      arrayOf("", "", "", "", ""),
+      arrayOf("1", "", "", "", ""),
+      arrayOf("", "", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes"),
+      arrayOf("", "", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes"),
+      arrayOf("2", "", "", "", ""),
+      arrayOf("", "", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes"),
+      arrayOf("3", "", "", "", ""),
+      arrayOf("","", "TRAINING 1", reportColumn.format(Decimal("1149.24")), "yes")
     ))
   }
 

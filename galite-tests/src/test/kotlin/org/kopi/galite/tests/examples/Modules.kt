@@ -19,6 +19,7 @@ package org.kopi.galite.tests.examples
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.insertIntoModule
 import org.kopi.galite.tests.form.FormWithReport
+import org.kopi.galite.tests.ui.vaadin.field.FormToTestFormPopUp
 
 fun initModules() {
   transaction {
@@ -30,5 +31,6 @@ fun initModules() {
     insertIntoModule("2003", "org/kopi/galite/test/Menu", 103, "2000", MultipleBlockForm::class)
     insertIntoModule("2004", "org/kopi/galite/test/Menu", 104, "2000", FormToTestSaveMultipleBlock::class)
     insertIntoModule("2005", "org/kopi/galite/test/Menu", 105, "2000", TestFieldsForm::class)
+    insertIntoModule("2006", "org/kopi/galite/test/Menu", 105, "2000", FormToTestFormPopUp::class)
   }
 }

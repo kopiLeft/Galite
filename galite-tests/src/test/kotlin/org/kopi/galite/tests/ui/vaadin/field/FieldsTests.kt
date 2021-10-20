@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -38,14 +40,26 @@ import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
+import org.junit.Ignore
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FieldsTests : GaliteVUITestBase() {
@@ -194,6 +208,24 @@ class FieldsTests : GaliteVUITestBase() {
     }
   }
 
+  @Ignore
+  @Test
+  fun `open form via field`() {
+    val form = FormToTestFormPopUp().also { it.model }
+    form.open()
+
+    val field = form.userListBlock.user.findField() as Focusable<*>
+
+    field.focus()
+
+    val icon = (field as Component)._get<IronIcon> {  }
+
+    icon._clickAndWait(500)
+
+    // Check that the form is displayed id popUp
+    _expectOne<EnhancedDialog>()
+  }
+
   companion object {
     @BeforeClass
     @JvmStatic
@@ -201,6 +233,79 @@ class FieldsTests : GaliteVUITestBase() {
       transaction {
         org.kopi.galite.tests.examples.initModules()
       }
+    }
+  }
+}
+
+class FormToTestFormPopUp: Form() {
+  val edit = menu("Edit")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+  )
+  override val locale = Locale.UK
+  override val title = "form to test list domains"
+  val userListBlock = insertBlock(UsersListBlock()) {
+    val field = visit(domain = STRING(25), position = at(3, 1)) {
+      label = "test"
+      help = "The test"
+    }
+  }
+
+  inner class UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
+    val user = mustFill(domain = UsersList(), position = at(1, 1)) {
+      label = "user"
+      help = "The user"
+    }
+  }
+
+  inner class UsersList: ListDomain<Int>(20) {
+    override val table = Users
+    override val access = {
+      FormInPopUp()
+    }
+  }
+}
+
+class FormInPopUp : DictionaryForm() {
+  override val locale = Locale.UK
+  override val title = "form for test"
+  val action = menu("Action")
+
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
+
+  val block = insertBlock(UsersBlock()) {}
+
+  inner class UsersBlock : FormBlock(1, 1, "Test block") {
+    val shortName = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "Kurzname"
+      help = "Kurzname"
+    }
+    val name = visit(domain = STRING(20), position = at(2, 1)) {
+      label = "name"
+      help = "name"
     }
   }
 }
