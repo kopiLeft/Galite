@@ -19,7 +19,6 @@ package org.kopi.galite.tests.ui.vaadin
 
 import java.util.Locale
 
-import org.kopi.galite.demo.ConfigurationManager
 import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.base.UComponent
@@ -33,6 +32,7 @@ import org.kopi.galite.visual.ui.vaadin.visual.VApplicationContext
 import org.kopi.galite.visual.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VUIFactory
+import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.FileHandler
@@ -109,4 +109,32 @@ open class VApplicationTestBase : ApplicationTestBase() {
       ApplicationConfiguration.setConfiguration(ConfigurationManager)
     }
   }
+}
+
+object ConfigurationManager : ApplicationConfiguration() {
+  override val isDebugModeEnabled: Boolean = true
+  override val version get(): String = "1.0"
+  override val applicationName get(): String = "MyApp"
+  override val informationText get(): String = "info"
+  override val logFile get(): String = ""
+  override val debugMailRecipient get(): String = ""
+  override fun getSMTPServer(): String = ""
+  override val faxServer get(): String = ""
+  override val dictionaryServer get(): String = ""
+  override fun mailErrors(): Boolean = false
+  override fun logErrors(): Boolean = true
+  override fun debugMessageInTransaction(): Boolean = true
+  override val RExec get(): Rexec = TODO()
+  override fun getStringFor(var1: String): String = TODO()
+  override fun getIntFor(var1: String): Int {
+    val var2 = getStringFor(var1)
+    return var2.toInt()
+  }
+
+  override fun getBooleanFor(var1: String): Boolean {
+    return java.lang.Boolean.valueOf(getStringFor(var1))
+  }
+
+  override fun isUnicodeDatabase(): Boolean = false
+  override fun useAcroread(): Boolean = TODO()
 }

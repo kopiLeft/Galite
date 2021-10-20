@@ -4,6 +4,7 @@ Galite Framework
 
 ![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
 ![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.kopi%22%20AND%20a:%22galite-core%22)
 
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
@@ -18,7 +19,20 @@ Galite offers many advantages:
 * Database-backed application: it provides you with the feature of connecting forms with databases and getting queries from different database dialects. You declare the database tables using [Exposed](https://github.com/JetBrains/Exposed) framework.
 * Strongly typed fields: you have to declare the data types of fields explicitly, which allows to check the type of data assigned to a field at compile-time.
 
-## Running the demo application
+## Getting started
+### Download
+If you're using Gradle Kotlin Script, add the following to your build.gradle.kts file:
+````KOTLIN
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation("org.kopi", "galite-core", "1.0.0-alpha")
+}
+````
+
+### Running the demo application
 Before running the app make sure that you have Java 8 (or higher) JDK installed.
 
 To quickly start the app, type this into your terminal:
@@ -36,7 +50,7 @@ login = admin
 password = admin
 ```
 
-To see the code for this app, go to [Demo](galite-tests/src/main/kotlin/org/kopi/galite/demo).
+To see the code for this app, go to [Demo](galite-demo/galite-vaadin/src/main/kotlin/org/kopi/galite/demo).
 
 ## Customize and configure your App
 To define your application customizations (logo, locales, .etc) you need to implement the `VApplication` class.

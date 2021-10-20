@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID"
+         version="3.0"
+         xmlns:j2ee="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_3_0.xsd">
+  <display-name>kopiRight</display-name>
+  <context-param>
+    <description>Vaadin production mode</description>
+    <param-name>productionMode</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <servlet>
+    <servlet-name>kopiRight Application</servlet-name>
+    <servlet-class>com.vaadin.flow.server.VaadinServlet</servlet-class>
+    <init-param>
+      <description>useWebSocketAndServlet3</description>
+      <param-name>org.atmosphere.useWebSocketAndServlet3</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <description>jdbc url</description>
+      <param-name>database</param-name>
+      <param-value>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</param-value>
+    </init-param>
+    <init-param>
+      <description>database driver</description>
+      <param-name>driver</param-name>
+      <param-value>org.h2.Driver</param-value>
+    </init-param>
+    <init-param>
+      <description>application locale</description>
+      <param-name>locale</param-name>
+      <param-value>en_GB</param-value>
+    </init-param>
+    <init-param>
+      <description>should not we send bug reports ?</description>
+      <param-name>nobugreport</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <description>query trace level: 0 -> none, 1 -> all but FETCH, 2 -> all</description>
+      <param-name>trace</param-name>
+      <param-value></param-value>
+    </init-param>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Galite Demo Application</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>480</session-timeout>
+  </session-config>
+</web-app>

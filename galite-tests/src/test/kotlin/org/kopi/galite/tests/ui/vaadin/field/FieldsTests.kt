@@ -21,6 +21,14 @@ import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
+import org.junit.Ignore
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Key
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
@@ -40,14 +48,7 @@ import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
-import org.kopi.galite.visual.db.Users
-import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
-import org.kopi.galite.visual.dsl.form.Key
-import org.junit.Ignore
+import org.kopi.galite.tests.examples.initModules
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -231,7 +232,7 @@ class FieldsTests : GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.examples.initModules()
+        initModules()
       }
     }
   }

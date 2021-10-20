@@ -18,7 +18,7 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.UserRights

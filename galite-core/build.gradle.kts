@@ -35,6 +35,7 @@ dependencies {
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
     excludeWebJars()
+    exclude("org.slf4j", "slf4j-ext")
   }
   // Vaadin addons
   // Wysiwyg-e Rich Text Editor component for Java
@@ -62,7 +63,9 @@ dependencies {
   implementation("com.github.virtuald", "curvesapi", Versions.GRAPH_BUILDER)
 
   // Hylafax dependencies
-  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", Versions.HYLAFAX)
+  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", Versions.HYLAFAX) {
+    exclude("log4j")
+  }
 
   //JFreeChart dependency
   implementation("org.jfree", "jfreechart", Versions.JFREE_CHART)
@@ -101,14 +104,14 @@ publishing {
             id.set("KopiLeft")
             name.set("KopiLeft Team")
             organization.set("kopiLeft Services")
-            organizationUrl.set("www.kopileft.com")
+            organizationUrl.set("https://www.kopileft.com")
             email.set("office@kopileft.com")
           }
           developer {
             id.set("KopiRight")
             name.set("KopiRight Team")
             organization.set("KopiRight")
-            organizationUrl.set("www.kopiright.com")
+            organizationUrl.set("https://www.kopiright.com")
             email.set("office@kopiright.fr")
           }
         }

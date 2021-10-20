@@ -26,9 +26,12 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
 
   repositories {
-    jcenter()
+    mavenCentral()
     maven {
       url = uri("https://maven.vaadin.com/vaadin-addons")
+    }
+    maven {
+      url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
   }
 
