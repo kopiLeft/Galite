@@ -4,6 +4,7 @@ Galite Framework
 
 ![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
 ![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.kopi%22%20AND%20a:%22galite-core%22)
 
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
@@ -24,10 +25,6 @@ If you're using Gradle Kotlin Script, add the following to your build.gradle.kts
 ````KOTLIN
 repositories {
   mavenCentral()
-  
-  maven {
-    url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
-  }
 }
 
 dependencies {
