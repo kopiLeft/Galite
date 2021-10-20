@@ -23,7 +23,7 @@ import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
@@ -34,7 +34,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorEnumField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorFixnumField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorIntegerField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorMonthField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextAreaField
@@ -212,7 +212,7 @@ class DGridTextEditorField(
     } else if (getModel() is VCodeField) {
       // code field
       createEnumEditorField()
-    } else if (getModel() is VFixnumField) {
+    } else if (getModel() is VDecimalField) {
       createFixnumEditorField()
     } else if (getModel() is VTimestampField) {
       createTimestampEditorField()
@@ -256,13 +256,13 @@ class DGridTextEditorField(
    * Creates a deciaml editor for the grid block.
    * @return The created editor
    */
-  protected fun createFixnumEditorField(): GridEditorFixnumField {
-    val model = getModel() as VFixnumField
-    return GridEditorFixnumField(model.width,
-                                 model.maxValue.toDouble(),
-                                 model.maxValue.toDouble(),
-                                 model.maxScale,
-                                 model.isFraction)
+  protected fun createFixnumEditorField(): GridEditorDecimalField {
+    val model = getModel() as VDecimalField
+    return GridEditorDecimalField(model.width,
+                                  model.maxValue.toDouble(),
+                                  model.maxValue.toDouble(),
+                                  model.maxScale,
+                                  model.isFraction)
   }
 
   /**

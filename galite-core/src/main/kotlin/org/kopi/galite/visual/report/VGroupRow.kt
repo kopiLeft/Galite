@@ -44,7 +44,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
   }
 
   /**
-   * Returns true iff all the child nodes of the level generation are visible.
+   * Returns true if all the child nodes of the level generation are visible.
    *
    * @param level level to test
    */

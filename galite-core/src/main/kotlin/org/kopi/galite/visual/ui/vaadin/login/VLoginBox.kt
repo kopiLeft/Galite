@@ -29,7 +29,6 @@ import org.kopi.galite.visual.ui.vaadin.common.VSimpleTable
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.Tag
@@ -44,9 +43,24 @@ import com.vaadin.flow.dom.ElementFactory
  * The login box widget.
  */
 class VLoginBox : Div() {
+
   //---------------------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val table: Table
+
+  /**
+   * Creates the login box component.
+   */
+  init {
+    className = Styles.LOGIN_BOX
+    table = Table()
+    add(table)
+  }
+
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
   /**
    * Sets the welcome text.
    * @param text The welcome text.
@@ -182,13 +196,49 @@ class VLoginBox : Div() {
   }
 
   //---------------------------------------------------
-// INNER CLASSES
-//---------------------------------------------------
+  // INNER CLASSES
+  //---------------------------------------------------
   /**
    * Special table element for login box.
    */
   @Tag("table")
   private class Table : Component() {
+
+    //---------------------------------------
+    // DATA MEMBERS
+    //---------------------------------------
+    private val welcomeText: Element
+    private val welcomeImage: Element
+    private val content: LoginPane
+
+    /**
+     * Creates the table component.
+     */
+    init {
+      element.setProperty("align", "center")
+      element.setProperty("border", "0")
+      element.setProperty("cellPadding", "0")
+      element.setProperty("cellSpacing", "0")
+      val headerRow = Element("tr")
+      val contentRow = Element("tr")
+      element.appendChild(headerRow)
+      element.appendChild(contentRow)
+      val headerColumn = Element("td")
+      val contentColumn = Element("td")
+      headerRow.appendChild(headerColumn)
+      contentRow.appendChild(contentColumn)
+      headerColumn.setProperty("align", "left")
+      contentColumn.setProperty("align", "center")
+      welcomeText = Element("b")
+      welcomeImage = Element("img")
+      welcomeImage.setAttribute("class", Styles.LOGIN_BOX_IMAGE)
+      headerColumn.appendChild(welcomeText)
+      headerColumn.appendChild(ElementFactory.createBr())
+      headerColumn.appendChild(welcomeImage)
+      content = LoginPane()
+      contentColumn.appendChild(content.element)
+    }
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
@@ -316,7 +366,7 @@ class VLoginBox : Div() {
      * Focus on the first field in the login box.
      */
     fun focus() {
-      content.focus();
+      content.focus()
     }
 
     fun disableLoginButton() {
@@ -326,53 +376,110 @@ class VLoginBox : Div() {
     fun enableLoginButton() {
       content.enableLoginButton()
     }
-
-    //---------------------------------------
-    // DATA MEMBERS
-    //---------------------------------------
-    private val welcomeText: Element
-    private val welcomeImage: Element
-    private val content: LoginPane
-    //---------------------------------------
-    // CONSTRUCTOR
-    //---------------------------------------
-    /**
-     * Creates the table widget.
-     */
-    init {
-      element.setProperty("align", "center")
-      element.setProperty("border", "0")
-      element.setProperty("cellPadding", "0")
-      element.setProperty("cellSpacing", "0")
-      val headerRow = Element("tr")
-      val contentRow = Element("tr")
-      element.appendChild(headerRow)
-      element.appendChild(contentRow)
-      val headerColumn = Element("td")
-      val contentColumn = Element("td")
-      headerRow.appendChild(headerColumn)
-      contentRow.appendChild(contentColumn)
-      headerColumn.setProperty("align", "left")
-      contentColumn.setProperty("align", "center")
-      welcomeText = Element("b")
-      welcomeImage = Element("img")
-      welcomeImage.setAttribute("class", Styles.LOGIN_BOX_IMAGE)
-      headerColumn.appendChild(welcomeText)
-      headerColumn.appendChild(ElementFactory.createBr())
-      headerColumn.appendChild(welcomeImage)
-      content = LoginPane()
-      contentColumn.appendChild(content.element)
-    }
   }
 
   /**
    * The login panel.
    */
   private class LoginPane : Div(), Focusable<LoginPane> {
+
+    //---------------------------------------
+    // DATA MEMBERS
+    //---------------------------------------
+    private val table: VSimpleTable
+    private val errorIndicator: Span
+    private val informationText: Span
+    private val usernameLabel: VInputLabel
+    private val username: VInputText
+    private val passwordLabel: VInputLabel
+    private val password: VInputPassword
+    private val languageLabel: VInputLabel
+    private val language: VSelect
+    private val login: VInputButton
+
+    /**
+     * Creates the login panel
+     */
+    init {
+      className = Styles.LOGIN_BOX_PANE
+      element.setAttribute("hideFocus", "true")
+      element.style["outline"] = "0px"
+      table = VSimpleTable()
+      errorIndicator = Span()
+      errorIndicator.setId("post_error")
+      errorIndicator.className = Styles.LOGIN_BOX_PANE_ERROR
+      informationText = Span()
+      informationText.className = Styles.LOGIN_BOX_PANE_INFO
+      usernameLabel = VInputLabel()
+      usernameLabel.setHtmlFor("user_name")
+      username = VInputText()
+      username.setId("user_name")
+      username.setName("user_name")
+      username.setSize(10)
+      username.tabIndex = 1
+      username.addKeyPressListener { removeError() }
+      passwordLabel = VInputLabel()
+      passwordLabel.setHtmlFor("user_password")
+      password = VInputPassword()
+      password.setId("user_password")
+      password.element.setAttribute("name", "user_password")
+      password.tabIndex = 2
+      password.maxLength = 20
+      password.addKeyPressListener { removeError() }
+      languageLabel = VInputLabel()
+      language = VSelect()
+      language.element.setAttribute("name", "login_language")
+      language.width = "152px"
+      login = VInputButton()
+      login.setId("login_button")
+      login.className = Styles.INPUT_BUTTON_PRIMARY
+      login.setName("Login")
+      login.tabIndex = 3
+      table.setCellSpacing(2)
+      table.setCellPadding(0)
+      table.setBorderWidth(0)
+      table.element.setProperty("align", "center")
+      table.element.setProperty("width", "100%")
+      table.addCell(true, errorIndicator)
+      table.setTdColSpan(2)
+      table.setTdHeight("15px")
+      table.addCell(true, informationText)
+      table.setTdColSpan(2)
+      table.setTdHeight("15px")
+      table.addCell(true, VHiddenSeparator(12))
+      table.setTdColSpan(2)
+      table.addCell(true, usernameLabel)
+      table.setTdHeight("15px")
+      table.lastTd?.setAttribute("scope", "row")
+      table.addCell(false, username)
+      table.setTdHeight("15px")
+      table.addCell(true, passwordLabel)
+      table.setTdHeight("20%")
+      table.addCell(false, password)
+      table.setTdHeight("15px")
+      table.addCell(true, languageLabel)
+      table.setTdWidth("15px")
+      table.addCell(false, language)
+      table.setTdHeight("15px")
+      table.addCell(true, VHiddenSeparator(16))
+      table.setTdColSpan(2)
+      table.addCell(true, null)
+      table.setTdWidth("150px")
+      table.addCell(false, login)
+      table.setTdHeight("15px")
+      table.setTdWidth("250px")
+      setFieldsToEagerMode()
+      add(table)
+      Shortcuts.addShortcutListener(this,
+                                    { _: ShortcutEvent? -> onEnterEvent() },
+                                    Key.ENTER)
+        .listenOn(this)
+    }
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
+    fun onEnterEvent() {
       login.click()
     }
 
@@ -388,8 +495,7 @@ class VLoginBox : Div() {
      * Removes an error
      */
     fun removeError() {
-      if (errorIndicator.text != null
-        && errorIndicator.text.length > 0) {
+      if (errorIndicator.text != null && errorIndicator.text.isNotEmpty()) {
         errorIndicator.text = ""
       }
     }
@@ -399,7 +505,7 @@ class VLoginBox : Div() {
      * @param text The information text.
      */
     fun setInformationText(text: String?) {
-      InformationText.text = text
+      informationText.text = text
     }
 
     /**
@@ -499,119 +605,10 @@ class VLoginBox : Div() {
       login.isEnabled = true
     }
 
-    //---------------------------------------
-    // DATA MEMBERS
-    //---------------------------------------
-    private val table: VSimpleTable
-    private val errorIndicator: Span
-    private val InformationText: Span
-    private val usernameLabel: VInputLabel
-    private val username: VInputText
-    private val passwordLabel: VInputLabel
-    private val password: VInputPassword
-    private val languageLabel: VInputLabel
-    private val language: VSelect
-    private val login: VInputButton
-
-    /**
-     * Creates the login panel
-     */
-    init {
-      className = Styles.LOGIN_BOX_PANE
-      element.setAttribute("hideFocus", "true")
-      element.style["outline"] = "0px"
-      table = VSimpleTable()
-      errorIndicator = Span()
-      errorIndicator.setId("post_error")
-      errorIndicator.className = Styles.LOGIN_BOX_PANE_ERROR
-      InformationText = Span()
-      InformationText.className = Styles.LOGIN_BOX_PANE_INFO
-      usernameLabel = VInputLabel()
-      usernameLabel.setHtmlFor("user_name")
-      username = VInputText()
-      username.setId("user_name")
-      username.setName("user_name")
-      username.setSize(10)
-      username.tabIndex = 1
-      username.addKeyPressListener { event: KeyPressEvent? -> removeError() }
-      passwordLabel = VInputLabel()
-      passwordLabel.setHtmlFor("user_password")
-      password = VInputPassword()
-      password.setId("user_password")
-      password.element.setAttribute("name", "user_password")
-      password.tabIndex = 2
-      password.maxLength = 20
-      password.addKeyPressListener { event: KeyPressEvent? -> removeError() }
-      languageLabel = VInputLabel()
-      language = VSelect()
-      language.element.setAttribute("name", "login_language")
-      language.width = "152px"
-      login = VInputButton()
-      login.setId("login_button")
-      login.className = Styles.INPUT_BUTTON_PRIMARY
-      login.setName("Login")
-      login.tabIndex = 3
-      table.setCellSpacing(2)
-      table.setCellPadding(0)
-      table.setBorderWidth(0)
-      table.element.setProperty("align", "center")
-      table.element.setProperty("width", "100%")
-      table.addCell(true, errorIndicator)
-      table.setTdColSpan(2)
-      table.setTdHeight("15px")
-      table.addCell(true, InformationText)
-      table.setTdColSpan(2)
-      table.setTdHeight("15px")
-      table.addCell(true, VHiddenSeparator(12))
-      table.setTdColSpan(2)
-      table.addCell(true, usernameLabel)
-      table.setTdHeight("15px")
-      table.lastTd?.setAttribute("scope", "row")
-      table.addCell(false, username)
-      table.setTdHeight("15px")
-      table.addCell(true, passwordLabel)
-      table.setTdHeight("20%")
-      table.addCell(false, password)
-      table.setTdHeight("15px")
-      table.addCell(true, languageLabel)
-      table.setTdWidth("15px")
-      table.addCell(false, language)
-      table.setTdHeight("15px")
-      table.addCell(true, VHiddenSeparator(16))
-      table.setTdColSpan(2)
-      table.addCell(true, null)
-      table.setTdWidth("150px")
-      table.addCell(false, login)
-      table.setTdHeight("15px")
-      table.setTdWidth("250px")
-      setFieldsToEagerMode()
-      add(table)
-      Shortcuts.addShortcutListener(this,
-                                    { keyDownEvent: ShortcutEvent? -> onEnterEvent(keyDownEvent) },
-                                    Key.ENTER)
-        .listenOn(this)
-    }
-
     // Issue: https://github.com/vaadin/flow/issues/5959
     private fun setFieldsToEagerMode() {
       username.valueChangeMode = ValueChangeMode.EAGER
       password.valueChangeMode = ValueChangeMode.EAGER
     }
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val table: Table
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates the login box widget.
-   */
-  init {
-    className = Styles.LOGIN_BOX
-    table = Table()
-    add(table)
   }
 }

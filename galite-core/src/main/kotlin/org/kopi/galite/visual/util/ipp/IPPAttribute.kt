@@ -20,6 +20,16 @@ package org.kopi.galite.visual.util.ipp
 
 class IPPAttribute {
 
+  var group: Int
+    private set
+
+  private var valueTag: Int
+
+  var name: String
+    private set
+
+  private var values: MutableList<IPPValue>
+
   // --------------------------------------------------------------------
   // CONSTRUCTORS
   // --------------------------------------------------------------------
@@ -178,14 +188,4 @@ class IPPAttribute {
     }
     println()
   }
-
-  var group: Int
-    private set
-
-  private var valueTag: Int
-
-  var name: String
-    private set
-
-  private var values: MutableList<IPPValue>
 }

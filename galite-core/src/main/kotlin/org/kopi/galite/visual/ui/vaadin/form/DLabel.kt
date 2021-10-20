@@ -37,6 +37,15 @@ import com.vaadin.flow.component.UI
  */
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  /**
+   * `true` is the label is in detail mode.
+   */
+  var isInDetail = false
+  private var tooltip: String? = null
+
   init {
     //setSortable(false)
     init(text, help)
@@ -45,6 +54,17 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+  /**
+   * Sets the info text.
+   */
+  override var infoText: String? = null
+    set(info) {
+      field = info
+      access(currentUI) {
+        super@DLabel.infoText = info
+      }
+    }
+
   /**
    * Prepares the label's snapshot.
    * @param activ The field state.
@@ -178,25 +198,6 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  /**
-   * Sets the info text.
-   */
-  override var infoText: String? = null
-    set(info) {
-      field = info
-      access(currentUI) {
-        super@DLabel.infoText = info
-      }
-    }
-
-  /**
-   * `true` is the label is in detail mode.
-   */
-  var isInDetail = false
-  private var tooltip: String? = null
 
   companion object {
     /**

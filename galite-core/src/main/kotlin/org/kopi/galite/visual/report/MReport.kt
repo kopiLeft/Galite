@@ -34,6 +34,41 @@ import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
 
 class MReport : Constants, Serializable {
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  // Columns contains all columns defined by the user
+  // accessiblecolumns is a part of columns which contains only visible columns
+  var columns: Array<VReportColumn?> = arrayOf()    // array of column definitions
+  var accessibleColumns: Array<VReportColumn?> = arrayOf() // array of visible or hide columns
+    private set
+
+  // Root is the root of the tree (which is our model to manipulate data)
+  private var root: VGroupRow? = null    // root of grouping tree
+
+  // Baserows contains data give by the request of the user
+  // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
+  // is changed when a column move or one or more row are folded
+  private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
+  private lateinit var baseRows: Array<VReportRow?>    // array of base data rows
+  private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
+  private var maxRowCount = 0
+
+  // Sortedcolumn contain the index of the sorted column
+  // sortingOrder store the type of sort of the sortedColumn : ascending or descending
+  private var sortedColumn = 0    // the table is sorted wrt. to this column
+  private var sortingOrder = 0    // 1: ascending, -1: descending
+
+  // displayOrder contains index column model in display order
+  // reverseOrder is calculate with displayOrder and contains index column display into model order
+  private lateinit var displayOrder: IntArray    // column mapping from display to model
+  private lateinit var reverseOrder: IntArray    // column mapping from model to display
+
+  // The displayLevels variable is a table which contains the level of each column
+  private lateinit var displayLevels: IntArray   // column levels in display order
+  private val listenerList = EventListenerList()  // List of listeners
+
   fun computeColumnWidth(column: Int): Int {
     var max = 0
 
@@ -110,7 +145,7 @@ class MReport : Constants, Serializable {
     val cols = arrayOfNulls<VReportColumn>(columns.size + 1)
 
     // add the new column;
-    cols[columns.size] = VFixnumColumn(null, 0, 4, -1, null, 15, 7, null)
+    cols[columns.size] = VDecimalColumn(null, 0, 4, -1, null, 15, 7, null)
     cols[columns.size]!!.label = label
     cols[columns.size]!!.isAddedAtRuntime = true
     // copy the other columns.
@@ -995,38 +1030,4 @@ class MReport : Constants, Serializable {
   companion object {
     private const val serialVersionUID = 0L
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  // Columns contains all columns defined by the user
-  // accessiblecolumns is a part of columns which contains only visible columns
-  var columns: Array<VReportColumn?> = arrayOf()    // array of column definitions
-  var accessibleColumns: Array<VReportColumn?> = arrayOf() // array of visible or hide columns
-    private set
-
-  // Root is the root of the tree (which is our model to manipulate data)
-  private var root: VGroupRow? = null    // root of grouping tree
-
-  // Baserows contains data give by the request of the user
-  // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
-  // is changed when a column move or one or more row are folded
-  private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
-  private lateinit var baseRows: Array<VReportRow?>    // array of base data rows
-  private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
-  private var maxRowCount = 0
-
-  // Sortedcolumn contain the index of the sorted column
-  // sortingOrder store the type of sort of the sortedColumn : ascending or descending
-  private var sortedColumn = 0    // the table is sorted wrt. to this column
-  private var sortingOrder = 0    // 1: ascending, -1: descending
-
-  // displayOrder contains index column model in display order
-  // reverseOrder is calculate with displayOrder and contains index column display into model order
-  private lateinit var displayOrder: IntArray    // column mapping from display to model
-  private lateinit var reverseOrder: IntArray    // column mapping from model to display
-
-  // The displayLevels variable is a table which contains the level of each column
-  private lateinit var displayLevels: IntArray   // column levels in display order
-  private val listenerList = EventListenerList()  // List of listeners
 }

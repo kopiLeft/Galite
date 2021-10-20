@@ -31,7 +31,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.kopi.galite.visual.form.ModelTransformer;
 import org.kopi.galite.visual.form.VField;
-import org.kopi.galite.visual.form.VFixnumField;
+import org.kopi.galite.visual.form.VDecimalField;
 import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.visual.ApplicationContext;
 
@@ -118,7 +118,7 @@ public class KopiStyledDocument extends HTMLDocument implements KopiDocument {
             return;
         }
         // special treatment for decimal separator
-        if (model instanceof VFixnumField && str.equals(".")) {
+        if (model instanceof VDecimalField && str.equals(".")) {
             DecimalFormatSymbols symbols;
 
             symbols = new DecimalFormatSymbols(ApplicationContext.Companion.getDefaultLocale());

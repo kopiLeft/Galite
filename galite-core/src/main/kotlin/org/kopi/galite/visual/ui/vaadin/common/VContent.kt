@@ -24,6 +24,18 @@ import com.vaadin.flow.component.html.Div
  * The main window content component.
  */
 class VContent : Div() {
+
+  /**
+   * Checks for view content.
+   * @return `true` is content exists.
+   */
+  var isEmpty = true
+    private set
+
+  init {
+    setId("content")
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -43,16 +55,5 @@ class VContent : Div() {
   fun clearContent() {
     removeAll()
     isEmpty = true
-  }
-
-  /**
-   * Checks for view content.
-   * @return `true` is content exists.
-   */
-  var isEmpty = true
-    private set
-
-  init {
-    setId("content")
   }
 }

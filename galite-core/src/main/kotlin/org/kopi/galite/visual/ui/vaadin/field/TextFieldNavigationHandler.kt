@@ -29,7 +29,7 @@ import com.vaadin.flow.component.UI
  *
  * @param isMulti is it a multiple line text field ?
  */
-class TextFieldNavigationHandler protected constructor(private val isMulti: Boolean) {
+open class TextFieldNavigationHandler protected constructor(private val isMulti: Boolean) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -94,7 +94,7 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
     addKeyNavigator(field, Key.PRINT_SCREEN, KeyModifier.of("Shift")) {
       field.connector.firePrintForm()
     }
-    // the magnet card reader sends a CNTR-J as last character
+    // the magnet card reader sends a CTRL-J as last character
     addKeyNavigator(field, Key.KEY_J, KeyModifier.of("Control")) {
       field.fieldConnector.columnView!!.gotoNextField()
     }

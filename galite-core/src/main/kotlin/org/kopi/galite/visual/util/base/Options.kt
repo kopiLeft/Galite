@@ -27,6 +27,14 @@ import gnu.getopt.LongOpt
  */
 abstract class Options(private val name: String?) {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  /**
+   * The array of non-option arguments.
+   */
+  lateinit var nonOptions: Array<String?>
+
   /**
    * Parses the command line and processes the arguments.
    *
@@ -191,11 +199,4 @@ abstract class Options(private val name: String?) {
             LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'.toInt()),
             LongOpt("version", LongOpt.NO_ARGUMENT, null, 'V'.toInt())
     )
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  /**
-   * The array of non-option arguments.
-   */
-  lateinit var nonOptions: Array<String?>
 }

@@ -18,29 +18,59 @@ package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContext
-import org.kopi.galite.visual.form.VDictionary
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.VException
 
 /**
  * Represents a dictionary form.
  */
-abstract class DictionaryForm : VDictionary, Form() {
+abstract class DictionaryForm : Form() {
 
-  override fun search(parent: VWindow): Int = model.search(parent)
+  /**
+   * Searches for an existing record.
+   *
+   * The implementation can be done in a UI context or by a simple
+   * database query. The returned integer represents the identifier
+   * of the selected record after the search operation.
+   *
+   * @return The selected ID of the searched record.
+   * @throws VException Any visual errors that occurs during search operation.
+   */
+  fun search(): Int = model.search(model)
 
-  override fun edit(parent: VWindow, id: Int): Int = model.edit(parent, id)
+  /**
+   * Edits an existing record.
+   *
+   * The implementation can be done in a UI context or by a simple
+   * database query. The returned integer represents the identifier
+   * of the edited record after the edit operation.
+   *
+   * @param id The record ID to be edited.
+   * @return The edited record ID.
+   * @throws VException Any visual errors that occurs during edit operation.
+   */
+  fun edit(id: Int): Int = model.edit(model, id)
 
-  override fun add(parent: VWindow): Int = model.add(parent)
+  /**
+   * Adds a new record.
+   *
+   * The implementation can be done in a UI context or by a simple
+   * database query. The returned integer represents the identifier
+   * of the created record.
+   *
+   * @return The created record ID.
+   * @throws VException Any visual errors that occurs during edit operation.
+   */
+  fun add(): Int = model.add(model)
 
-  override var dBContext: DBContext?
+  var dBContext: DBContext?
     get() = model.dBContext
     set(value) {
       model.dBContext = value
     }
 
-  override fun doNotModal() {
+  fun doNotModal() {
     model.doNotModal()
   }
 

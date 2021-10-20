@@ -1081,7 +1081,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
         i += 1
       }
       if (displine < displaySize) {
-        // record should be visible => redisplay iff requested
+        // record should be visible => redisplay if requested
         redisplay = force // do nothing
       } else {
         // scroll upwards until record is visible => redisplay

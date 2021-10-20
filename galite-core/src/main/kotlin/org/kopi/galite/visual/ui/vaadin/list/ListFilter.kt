@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.list
 
+import java.util.Locale
+
 import com.vaadin.flow.function.SerializablePredicate
 
 class ListFilter(val propertyId: Int,
@@ -24,14 +26,14 @@ class ListFilter(val propertyId: Int,
                  val ignoreCase: Boolean,
                  val onlyMatchPrefix: Boolean) : SerializablePredicate<List<Any?>> {
 
-val filterString = if(ignoreCase) filterString.toLowerCase() else filterString
+  val filterString = if(ignoreCase) filterString.lowercase(Locale.getDefault()) else filterString
 
   override fun test(t: List<Any?>): Boolean {
     if (t[propertyId] == null) {
       return false
     }
 
-   val value = if (ignoreCase) t[propertyId].toString().toLowerCase() else t[propertyId].toString()
+   val value = if (ignoreCase) t[propertyId].toString().lowercase(Locale.getDefault()) else t[propertyId].toString()
 
     if (onlyMatchPrefix) {
       if (!value.startsWith(filterString)) {

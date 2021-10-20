@@ -42,6 +42,22 @@ open class VActor(var menuIdent: String,
                   val acceleratorModifier: Int,
                   val userActor: Boolean = false) : VModel {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  var isEnabled: Boolean
+    get() = display != null && display!!.isEnabled() // Checks whether the actor is enabled
+    set(enabled) {
+      display?.setEnabled(enabled)
+    }    // Enables/disables the actor.
+  var menuName: String? = null
+  var menuItem: String? = null
+  private var display: UActor? = null
+  var number = 0 // The number for the actor
+  var action: (() -> Unit)? = null
+  internal var handler: ActionHandler? = null // the handler for the actor
+  var help: String? = null
+
   override fun getDisplay(): UActor? = display
 
   override fun setDisplay(display: UComponent) {
@@ -146,20 +162,4 @@ open class VActor(var menuIdent: String,
     buffer.append("]")
     return buffer.toString()
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  var isEnabled: Boolean
-    get() = display != null && display!!.isEnabled() // Checks whether the actor is enabled
-    set(enabled) {
-      display?.setEnabled(enabled)
-    }    // Enables/disables the actor.
-  var menuName: String? = null
-  var menuItem: String? = null
-  private var display: UActor? = null
-  var number = 0 // The number for the actor
-  var action: (() -> Unit)? = null
-  internal var handler: ActionHandler? = null // the handler for the actor
-  var help: String? = null
 }

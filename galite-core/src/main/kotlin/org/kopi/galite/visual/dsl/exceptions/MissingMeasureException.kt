@@ -14,15 +14,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.form
 
-import org.kopi.galite.visual.form.VConstants
+package org.kopi.galite.visual.dsl.exceptions
 
-enum class Modes(val value: Int) {
-  /** mode query */
-  QUERY(VConstants.MOD_QUERY),
-  /** mode insert */
-  INSERT(VConstants.MOD_INSERT),
-  /** mode update */
-  UPDATE(VConstants.MOD_UPDATE)
+import java.lang.IllegalArgumentException
+
+import org.kopi.galite.visual.dsl.chart.ChartMeasure
+
+/**
+ * Thrown to indicate that a [ChartMeasure] value has not been provided to a dimension.
+ *
+ * @param measure        the measure
+ * @param dimensionValue the the dimension value
+ *
+ */
+class MissingMeasureException(measure: ChartMeasure<*>, dimensionValue: Comparable<*>?) : IllegalArgumentException() {
+  override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
 }

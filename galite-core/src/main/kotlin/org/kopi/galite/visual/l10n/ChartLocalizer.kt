@@ -29,6 +29,22 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param             document        the document containing the report localization
  */
 class ChartLocalizer(manager: LocalizationManager, document: Document) : Localizer(manager) {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val root: Element = document.rootElement
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+
+  init {
+    if (root.name != "chart") {
+      throw InconsistencyException("bad root element $root")
+    }
+  }
+
   /**
    * Returns the value of the title attribute.
    */
@@ -46,20 +62,5 @@ class ChartLocalizer(manager: LocalizationManager, document: Document) : Localiz
    */
   fun getFieldLocalizer(ident: String): FieldLocalizer {
     return FieldLocalizer(manager, Utils.lookupChild(root, "field", "ident", ident))
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private val root: Element = document.rootElement
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
-
-  init {
-    if (root.name != "chart") {
-      throw InconsistencyException("bad root element $root")
-    }
   }
 }

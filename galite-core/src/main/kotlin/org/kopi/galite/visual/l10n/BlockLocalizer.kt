@@ -32,6 +32,24 @@ import org.kopi.galite.visual.util.base.InconsistencyException
 class BlockLocalizer(manager: LocalizationManager,
                      document: Document,
                      ident: String) : Localizer(manager) {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val self: Element
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val root: Element = document.rootElement
+    val names = listOf("form", "blockinsert")
+
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
+    }
+    self = Utils.lookupChild(root, "block", "name", ident)
+  }
   /**
    * Returns the value of the title attribute.
    */
@@ -59,23 +77,5 @@ class BlockLocalizer(manager: LocalizationManager,
    */
   fun getFieldLocalizer(ident: String): FieldLocalizer {
     return FieldLocalizer(manager, Utils.lookupChild(self, "field", "ident", ident))
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private val self: Element
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
-  init {
-    val root: Element = document.rootElement
-    val names = listOf("form", "blockinsert")
-
-    if (root.name !in names) {
-      throw InconsistencyException("bad root element $root")
-    }
-    self = Utils.lookupChild(root, "block", "name", ident)
   }
 }

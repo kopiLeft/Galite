@@ -65,7 +65,7 @@ class DActor(private var model: VActor)
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
   UActor,
-          ComponentEventListener<ClickEvent<Button>> {
+  ComponentEventListener<ClickEvent<Button>> {
 
   var item: VActorNavigationItem? = null
 

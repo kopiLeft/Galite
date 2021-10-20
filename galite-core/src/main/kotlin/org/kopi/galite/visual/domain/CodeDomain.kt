@@ -22,7 +22,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFixnumCodeField
+import org.kopi.galite.visual.form.VDecimalCodeField
 import org.kopi.galite.visual.form.VIntegerCodeField
 import org.kopi.galite.visual.form.VStringCodeField
 import org.kopi.galite.visual.type.Decimal
@@ -48,11 +48,11 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                             block.sourceFile,
                                             codes.map { it.ident }.toTypedArray(),
                                             codes.map { it.value as? Boolean }.toTypedArray())
-        Decimal::class -> VFixnumCodeField(block.buffer,
-                                           ident,
-                                           block.sourceFile,
-                                           codes.map { it.ident }.toTypedArray(),
-                                           codes.map { it.value as? Decimal }.toTypedArray())
+        Decimal::class -> VDecimalCodeField(block.buffer,
+                                            ident,
+                                            block.sourceFile,
+                                            codes.map { it.ident }.toTypedArray(),
+                                            codes.map { it.value as? Decimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeField(block.buffer,
                                                      ident,
                                                      block.sourceFile,

@@ -24,7 +24,7 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
-import org.kopi.galite.visual.list.VFixnumCodeColumn
+import org.kopi.galite.visual.list.VDecimalCodeColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -35,17 +35,17 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param     ident           the identifier of the type in the source file
  * @param     source          the qualified name of the source file defining the list
  */
-open class VFixnumCodeField(bufferSize: Int,
-                            ident: String,
-                            source: String,
-                            names: Array<String>,
-                            private val codes: Array<Decimal?>) : VCodeField(bufferSize, ident, source, names) {
+open class VDecimalCodeField(bufferSize: Int,
+                             ident: String,
+                             source: String,
+                             names: Array<String>,
+                             private val codes: Array<Decimal?>) : VCodeField(bufferSize, ident, source, names) {
 
   /**
    * return a list column for list
    */
   override fun getListColumn(): VListColumn =
-          VFixnumCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
+          VDecimalCodeColumn(getHeader(), null, null, labels, codes, getPriority() >= 0)
 
 
   /**
@@ -160,11 +160,9 @@ open class VFixnumCodeField(bufferSize: Int,
    */
   override fun getDataType(): KClass<*> = Decimal::class
 
-  /*
-   * ----------------------------------------------------------------------
-   * FORMATTING VALUES WRT FIELD TYPE
-   * ----------------------------------------------------------------------
-   */
+  // ----------------------------------------------------------------------
+  // FORMATTING VALUES WRT FIELD TYPE
+  // ----------------------------------------------------------------------
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */

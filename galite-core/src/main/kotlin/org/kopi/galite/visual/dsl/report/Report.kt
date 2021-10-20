@@ -34,7 +34,7 @@ import org.kopi.galite.visual.report.VBooleanColumn
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
 import org.kopi.galite.visual.report.VDateColumn
-import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VIntegerColumn
 import org.kopi.galite.visual.report.VMonthColumn
 import org.kopi.galite.visual.report.VReport
@@ -205,8 +205,8 @@ abstract class Report : Window() {
           VStringColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
                         it.domain.height ?: 0, format)
         Decimal::class ->
-          VFixnumColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
-                        it.domain.height ?: 0, format)
+          VDecimalColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
+                         it.domain.height ?: 0, format)
         Boolean::class ->
           VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Date::class, java.util.Date::class ->

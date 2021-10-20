@@ -25,15 +25,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class VNavigationColumn(val ident : String?) : VerticalLayout(), HasStyle {
 
-  init {
-    width = "calc(25% - 3px)"
-  }
-
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private val items = ArrayList<VActorNavigationItem>()
   private val header = VHeaderNavigationItem()
+
+  init {
+    width = "calc(25% - 3px)"
+  }
 
   /**
    * Sets the header item of this navigation column.

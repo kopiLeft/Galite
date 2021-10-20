@@ -292,7 +292,7 @@ public class DBlock extends JPanel implements UBlock {
       }
 
       if (displine < model.getDisplaySize()) {
-	// record should be visible => redisplay iff requested
+	// record should be visible => redisplay if requested
 	redisplay = force;// do nothing
       } else {
 	// scroll upwards until record is visible => redisplay

@@ -29,16 +29,6 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param             ident           the identifier of the actor localization
  */
 class ModuleLocalizer(document: Document, ident: String) {
-  /**
-   * Returns the value of the label attribute.
-   */
-  fun getLabel(): String? = self.getAttributeValue("label")
-
-  /**
-   * Returns the value of the help attribute.
-   */
-  fun getHelp(): String? = self.getAttributeValue("help")
-
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -55,4 +45,14 @@ class ModuleLocalizer(document: Document, ident: String) {
     }
     self = Utils.lookupChild(root, "module", "ident", ident)
   }
+
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getLabel(): String? = self.getAttributeValue("label")
+
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String? = self.getAttributeValue("help")
 }

@@ -37,6 +37,84 @@ class VListDialog(list: Array<VListColumn?>,
                   skipFirstLine: Boolean) : VModel {
 
   /**
+   * @return the skipFirstLine
+   */
+  var isSkipFirstLine = true
+    private set
+
+  var form: VForm? = null
+
+  /**
+   * @return the forceNew
+   */
+  var isForceNew = false
+    private set
+
+  /**
+   * @return the tooManyRows
+   */
+  var isTooManyRows = false
+    private set
+
+  /**
+   * @return the sizes
+   */
+  val sizes: IntArray
+
+  /**
+   * @return the columns
+   */
+  val columns: Array<VListColumn?>
+
+  /**
+   * @return the titles
+   */
+  val titles: Array<String?>
+
+  /**
+   * @return the count
+   */
+  val count: Int
+
+  /**
+   * @return the newForm
+   */
+  var newForm: VDictionary? = null
+    private set
+
+  val translatedIdents: IntArray
+
+  private var display: UListDialog
+
+  /**
+   * Creates a dialog with specified data
+   */
+  init {
+    if (list.size != data.size) {
+      throw InconsistencyException("WRONG NUMBER OF COLUMN OR TITLES: list.length = ${list.size}" +
+                                           " does not match data.length = ${data.size}")
+    }
+    isSkipFirstLine = skipFirstLine
+    count = rows
+    columns = list
+    sizes = IntArray(list.size)
+    titles = arrayOfNulls(list.size)
+
+    if (idents[0] != 0) {
+      isSkipFirstLine = false
+    }
+    translatedIdents = IntArray(idents.size - if (isSkipFirstLine) 1 else 0)
+    for (i in sizes.indices) {
+      sizes[i] = max(list[i]!!.width, list[i]!!.title.length)
+      titles[i] = list[i]!!.title
+    }
+    for (i in translatedIdents.indices) {
+      translatedIdents[i] = i + if (isSkipFirstLine) 1 else 0
+    }
+    display = UIFactory.uiFactory.createView(this) as UListDialog
+  }
+
+  /**
    * Creates a dialog with specified data
    */
   constructor(list: Array<VListColumn?>,
@@ -213,56 +291,6 @@ class VListDialog(list: Array<VListColumn?>,
 
   fun getColumnName(column: Int): String? = titles[column]
 
-  /**
-   * @return the skipFirstLine
-   */
-  var isSkipFirstLine = true
-    private set
-
-  var form: VForm? = null
-
-  /**
-   * @return the forceNew
-   */
-  var isForceNew = false
-    private set
-
-  /**
-   * @return the tooManyRows
-   */
-  var isTooManyRows = false
-    private set
-
-  /**
-   * @return the sizes
-   */
-  val sizes: IntArray
-
-  /**
-   * @return the columns
-   */
-  val columns: Array<VListColumn?>
-
-  /**
-   * @return the titles
-   */
-  val titles: Array<String?>
-
-  /**
-   * @return the count
-   */
-  val count: Int
-
-  /**
-   * @return the newForm
-   */
-  var newForm: VDictionary? = null
-    private set
-
-  val translatedIdents: IntArray
-
-  private var display: UListDialog
-
   companion object {
 
     /**
@@ -307,33 +335,5 @@ class VListDialog(list: Array<VListColumn?>,
     // returned value if a user click on a forced new button and there
     // is no form to create a record
     var NEW_CLICKED = -2
-  }
-
-  /**
-   * Creates a dialog with specified data
-   */
-  init {
-    if (list.size != data.size) {
-      throw InconsistencyException("WRONG NUMBER OF COLUMN OR TITLES: list.length = ${list.size}" +
-                                           " does not match data.length = ${data.size}")
-    }
-    isSkipFirstLine = skipFirstLine
-    count = rows
-    columns = list
-    sizes = IntArray(list.size)
-    titles = arrayOfNulls(list.size)
-
-    if (idents[0] != 0) {
-      isSkipFirstLine = false
-    }
-    translatedIdents = IntArray(idents.size - if (isSkipFirstLine) 1 else 0)
-    for (i in sizes.indices) {
-      sizes[i] = max(list[i]!!.width, list[i]!!.title.length)
-      titles[i] = list[i]!!.title
-    }
-    for (i in translatedIdents.indices) {
-      translatedIdents[i] = i + if (isSkipFirstLine) 1 else 0
-    }
-    display = UIFactory.uiFactory.createView(this) as UListDialog
   }
 }

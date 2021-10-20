@@ -21,7 +21,7 @@ import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
@@ -231,7 +231,7 @@ class TextField(val model: VField,
         type = Type.CODE
         enumerations = model.labels
       }
-      is VFixnumField -> {
+      is VDecimalField -> {
         // fixnum field
         type = Type.DECIMAL
         if (model.minValue != null) {

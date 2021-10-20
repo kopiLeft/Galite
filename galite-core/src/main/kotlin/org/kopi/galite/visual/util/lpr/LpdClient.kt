@@ -36,6 +36,20 @@ import kotlin.collections.ArrayList
  */
 internal class LpdClient(var options: LpdOptions) {
 
+  private var connection: Socket? = null
+
+  /**
+   * Gets the input stream
+   */
+  var inputStream: DataInputStream? = null
+    private set
+
+  /**
+   * Gets the output stream
+   */
+  var outputStream: DataOutputStream? = null
+    private set
+
   // --------------------------------------------------------------------
   // CONNECTION
   // --------------------------------------------------------------------
@@ -296,20 +310,6 @@ internal class LpdClient(var options: LpdOptions) {
       throw LpdException(returnCode, errorMessage)
     }
   }
-
-  private var connection: Socket? = null
-
-  /**
-   * Gets the input stream
-   */
-  var inputStream: DataInputStream? = null
-    private set
-
-  /**
-   * Gets the output stream
-   */
-  var outputStream: DataOutputStream? = null
-    private set
 
   companion object {
 

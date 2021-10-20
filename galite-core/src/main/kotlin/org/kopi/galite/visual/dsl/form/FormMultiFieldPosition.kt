@@ -78,7 +78,7 @@ class FormMultiFieldPosition(private var line: Int,
    */
   override fun createRBPoint(point: Point, field: FormField<*>) {
     point.x = point.x.coerceAtLeast(column)
-    point.y = point.y.coerceAtLeast(line + /*field.getFieldType().getDef().getHeight()*/ 0) // TODO
+    point.y = point.y.coerceAtLeast(line + (field.domain.height ?: 0))
   }
 
   /**

@@ -27,9 +27,9 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIME
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.domain.WEEK
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FormBlock
-import org.kopi.galite.visual.form.VConstants
 
 class FormExample : DictionaryForm() {
   override val locale = Locale.UK
@@ -97,7 +97,7 @@ class FormExample : DictionaryForm() {
     }
 
     init {
-      border = VConstants.BRD_LINE
+      border = Border.LINE
     }
   }
 
@@ -145,7 +145,7 @@ class FormExample : DictionaryForm() {
     }
 
     init {
-      border = VConstants.BRD_LINE
+      border = Border.LINE
     }
   }
 }

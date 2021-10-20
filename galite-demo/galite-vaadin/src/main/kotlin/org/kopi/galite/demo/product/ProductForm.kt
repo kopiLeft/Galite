@@ -26,10 +26,10 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.Modes
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
 
@@ -95,7 +95,7 @@ class ProductForm : ReportSelectionForm() {
     }
 
     init {
-      blockVisibility(Access.VISIT, Modes.QUERY)
+      blockVisibility(Access.VISIT, Mode.QUERY)
 
       command(item = report) {
         action = {
