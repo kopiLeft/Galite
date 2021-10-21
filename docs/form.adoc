@@ -675,16 +675,6 @@ The example bellow show how to create a block, you need to specify the block tit
 class Degree : FormBlock(10, 5, "Degree Block")
 ----
 
-===== Block superClass and Interface
-
-A Block may extend a superClass and implements one or more Interface. In this example we will implement the interface VConstants.
-
-*Example*
-[source,kotlin]
-----
-class BlockCommand : FormBlock(10, 5, "Degree Block"), VConstants
-----
-
 ===== Block Border
 
 You can insert the optional border statement that defines the Block's frame type into the init block. Besides, the Title of the block will appear only if the Block's Border type has been specified. There are actually four Border options defined into VConstants interface :
