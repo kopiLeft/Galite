@@ -147,8 +147,8 @@ TrigerAction : color | format { KOTLIN code }
 
 Here is the two triggers available for chart fields (dimensions & measures) :
 
- * FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.chart.VColumnFormat instance. This trigger is not available for measures.
- * COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.VColor instance. This trigger is not available for dimensions.
+ * FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.visual.chart.VColumnFormat instance. This trigger is not available for measures.
+ * COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.visual.VColor instance. This trigger is not available for dimensions.
 
 *Example*
 [source,kotlin]
@@ -427,11 +427,11 @@ ChartTrigger  :    TriggerAction : ChartEventList
 ChartEventList:    ChartEvent*
 ----
 
-Kopi actually defines 4 chart Triggers or chart Events : 
+Galite actually defines 4 chart Triggers or chart Events :
 
  * PRECHART  : executed before the chart is displayed.
  * INIT      : executed at chart initialization.
- * CHARTTYPE : executed after the chart initialization. This trigger should return org.kopi.vkopi.lib.chart.VChartType and will a fixed type for the chart.
+ * CHARTTYPE : executed after the chart initialization. This trigger should return org.kopi.galite.visual.chart.VChartType and will a fixed type for the chart.
  * POSTCHART : executed after the chart is closed.
 
 *Example*
@@ -457,11 +457,10 @@ class OrderedChart: Chart() {
 As you already know, a chart is based on field that will be shown as chart series, in this section you have to write at least on dimension and one measure definition or more following 
 the definition and the structure we saw in the previous chapter.
 
-===== Chart Context init:
+===== Chart data initialization:
 
-This section should follow the chart fields (dimensions and measures) declaration and have to be placed between curly braces of init function, here you may define all the functions, data, classes you need in your chart, written in KOTLIN code.
-But most important, you need to define the constructor of you chart, this constructor will be responsible of filling the chart's lines or rows.
-All you need to do is importing your data (a List or vector parameter, database query cursors ...) , declaring a row in the chart then add the add(); statement to add the row to the chart.
+You can fill the chart's lines or rows in the constructor of you chart class.
+All you need to do is importing your data (from a variable, file, database query using Exposed...) , declaring a row in the chart then add the `add()` function to add the row to the chart.
 For example here we have added three dimension and for each dimension we have to specify 2 measures
 
 *Example*
@@ -487,7 +486,7 @@ init {
 
 ==== Chart types
 
-Kopi offers five predefined chart types :
+Galite offers five predefined chart types :
 
   * Pie charts
   * Bar charts

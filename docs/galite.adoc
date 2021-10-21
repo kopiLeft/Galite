@@ -42,7 +42,7 @@ Galite provides an entry point to the application that should be implemented to 
 
 If you are creating a Vaadin application, you should implement the class `VApplication` and specify your application configurations by overriding the class properties:
 
-[source,kotlin]
+[source,kotlin,highlight='7-9']
 ----
 @Route("")
 class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
@@ -420,8 +420,8 @@ Galite introduces 6 types to the basic types available in the java language :
 
 == Galite application framework
 
-The visual Galite Framework is an application framework based using the Kotlin DSL in order to create database applications easily.
-In this chapter we will se how to create Galite powered forms, reports and charts.
+The visual Galite Framework is an application framework using the Kotlin DSL in order to create database applications easily.
+In this chapter we will see how to create Galite powered forms, reports and charts.
 
 include::general.adoc[]
 include::form.adoc[]

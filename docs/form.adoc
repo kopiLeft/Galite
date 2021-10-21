@@ -6,21 +6,35 @@ By the end of this chapter, you will learn how to create a form, but before, you
 
 ==== Creating Form Fields
 
-In Visual Galite, a fields are containers in which you can define different types of data. A field definition begins with an SimpleName followed by an access modifier that contain in parentheses the domain and the position of the field in the block, and ends the field definition in braces.
+In Galite, fields are containers in which you can define different types of data.
+To define a field you can call one of the 4 functions `mustFill()`, `visit()`, `skipped()` or `hidden()`. You can pass the domain and the position of the field in the block as arguments.
+
 
 *Syntax*
 [source,kotlin]
 ----
-val ts = hidden(domain = INT(20)) {
-    label = "ts"
-    help = "The user ts"
-    value = 0
-    columns(u.ts)
-  }
+FieldDeclaration  :
+val fieldName = mustFill("FieldDomain", [FieldPosition]) {
+    FieldBody
+}
 
-FieldDeclaration  : val fieldName = AccessModifier("FieldDomain", [FieldPosition]) "{"
-                    FieldBody
-                    "}"
+or
+
+val fieldName = visit("FieldDomain", [FieldPosition]) {
+    FieldBody
+}
+
+or
+
+val fieldName = skipped("FieldDomain", [FieldPosition]) {
+    FieldBody
+}
+
+or
+
+val fieldName = hidden("FieldDomain", [FieldPosition]) {
+    FieldBody
+}
 
 FieldBody         : [FieldLabel] [FieldHelp] [FieldAlignment]
                     [FieldDropList]     [FieldOptions]    [FieldColumns] 
@@ -33,13 +47,13 @@ An access modifier determines the way the application user will have to handle e
 *Syntax:*
 [source,kotlin]
 ----
-AccessModifier:   "mustFill"
+AccessModifier:   mustFill()
                   |
-                  "visit"
+                  visit()
                   |
-                  "skipped"
+                  skipped()
                   |
-                  "hidden"
+                  hidden()
 ----
 
  * mustFill : As indicated, a MUSTFILL field has to be filled by the user.
@@ -70,23 +84,30 @@ There are two possibilities to define the field position.
 *Syntax:*
 [source,kotlin]
 ----
-FieldPosition : "at" "(<)"Integer row  [,Integer column [-Integer multi]]")"
-                | "follow(" SimpleName ")"
+FieldPosition : at(row: Int  [,column: Int])
+                |
+                at(rowRange: IntRange,  [,column: Int])
+                |
+                at(row: Int  [,columnRange: IntRange])
+                |
+                at(rowRange: IntRange,  [,columnRange: IntRange])
+                |
+                follow(otherField)
 ----
 
- * *Absolute Position With at*
+ * *Absolute Position With the function `at()`*
 
 You can define it according to one integer or more: ::
 
- ** at(Integer row)
- ** at(Integer row , Integer column)
- ** at(Integer row, Integer column-Integer multifield)
+ ** at(row)
+ ** at(row , column)
+ ** at(row, column..multifield)
 
 *Example*
  	
 [source,kotlin]
 ----
-val name = visit(domain = STRING(20), position = at(1, 1-4)) {
+val name = visit(domain = STRING(20), position = at(1, 1..4)) {
   ...
 }
 ----
@@ -94,11 +115,11 @@ The first integer indicates the row number while the second defines the column.
 In fact, Galite automatically divides up the window in rows and columns when setting up a form. +
  When defining the width of a column, thus,
 it always adopts the width of the longest field. Since the form wide is not unlimited,
-you can put a long field in two or more columns in order to spare place as it is the case in the example above and it is usually used for multiple fields.
+you can put a long field in two or more columns in order to spare place as it is the case in the example above.
 
  * *Relative Position With follow*
 
-You can also make use of the following structure : follow (SimpleName)
+You can also make use of the following structure : `follow(otherField)`
 
 *Example*
  	
@@ -108,7 +129,7 @@ val age = visit(domain = INT(3), position = follow(name)) {
   ...
 }
 ----
-If you enter a new field with this option (in this case it would be the field "name"), it means that this field will be placed directly next to the first field defined by the follow property (field "Name") on the same row. The two fields will then form one single column.
+If you declare a field with the follow function, it means that this field will be placed directly next to the first field defined by the follow property (field "Name") on the same row. The two fields will then form one single column.
 
 ===== Field label
 
@@ -117,7 +138,7 @@ The field label is optional, you declare it with the label property inside the f
 *Syntax*
 [source,kotlin]
 ----
-FieldLabel : "label" "=" nomDuField : String
+FieldLabel : label = "NAME OF THE FIELD"
 ----
 
 If you don't want your field to have a label, you can set the property label to empty.
@@ -126,7 +147,7 @@ If you don't want your field to have a label, you can set the property label to 
 [source,kotlin]
 ----
 val secondName = visit(domain = STRING(20), position = at(1, 1)) {
-    label = "The second Name","another Label for this field"
+    label = "The second Name"
     ...
   }
 ----
@@ -139,7 +160,7 @@ this property is used to insert an explanation text for the application user in 
  	
 [source,kotlin]
 ----
-HelpText:   "help" "=" HelpText : String
+HelpText:   help = "HELP TEXT"
 ----
 *Example*
  	
@@ -162,6 +183,7 @@ The field type is a required entry, you may enter a predefined field type :
 val name = visit(domain = STRING(20), position = at(1, 1)) {
     ...
 }
+
 val age = visit(domain = INT(3), position = at(1, 2)) {
     ...
 }
@@ -266,11 +288,12 @@ Two more option are available with the COLUMNS command, the index and the priori
  	
 [source,kotlin]
 ----
-FieldColumns : "columns (" (ColumnList) ") {"
-                    columnsBody
-                "}"
+FieldColumns :
+columns(ColumnList) {
+    ColumnsBody
+}
 
-columnsBody  : [ColumnIndex] [ColumnPriority]
+ColumnsBody  : [ColumnIndex] [ColumnPriority]
 
 ColumnList   : Column  [, Column ]
 Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]
@@ -321,19 +344,19 @@ For example, two different lessons cannot be given in the same room. In this cas
  	
 [source,kotlin]
 ----
-val i = index(message = "this should be unique")"
+val i = index(message = "this should be unique")
 
 val lesson = mustFill(domain = INT(11), position = at(1, 1)) {
     label = "Lesson"
     help = "The lesson you have to attend to"
-    COLUMN (LEC.Lesson)  {
+    column(LEC.Lesson)  {
         index = i
     }
 }
 
 val lecturer = mustFill(domain = INT(11), position = at(2, 1)) {
     label = "Lecturer"
-    COLUMN (LES.Lecturer)  {
+    column(LES.Lecturer)  {
         index = i
     }
 }
@@ -341,41 +364,42 @@ val lecturer = mustFill(domain = INT(11), position = at(2, 1)) {
 val time = mustFill(domain = STRING(20), position = at(3, 1)) {
     label = "Time"
     help = "The lesson you have to attend to"
-    COLUMN (LES.Time)  {
+    column(LES.Time)  {
         index = i
     }
 }
 ----
-//-------------------------------> TO CHECK HOW TO PUT 2 INDEX WITH GALITE !!!!!!!!!
-However, this example would implicate a professor can give two different lessons at the same time. In order to avoid such errors, you can attribute one field two or more indexes. So you can associate the two fields "professor" and "time" together. Thus, you will have: 
+
+However, this example would implicate a professor can give two different lessons at the same time. In order to avoid such errors, you can attribute one field two or more indexes. So you can associate the two fields "professor" and "time" together. Thus, you will have:
 
 *Example*
  	
 [source,kotlin]
 ----
-MUSTFILL "Lesson"
-  LABEL 
-  HELP "The lesson you have to attend to"
-  LONG (11)
-  COLUMN (LEC.Lesson)
-INDEX 0
-END FIELD
+mustFill(domain = LONG(20)) {
+  label = "Lesson"
+  help = "The lesson you have to attend to"
+  column(LEC.Lesson) {
+    index = 0
+  }
+}
 
-VISIT "Lecturer"
-  LABEL
-  LONG
-  COLUMN (T.Lecturer)
-  INDEX 0 1
-END FIELD
+visit(domain = LONG(10)) {
+  label = "Lecturer"
+  column(T.Lecturer) {
+    index = 1
+  }
+}
 
-MUSTFILL "Time"
-  STRING
-  COLUMN (LEC.Time)
-  INDEX 1
-END FIELD
+mustFill(domain = STRING(20)) {
+  label = "Time"
+  column(LEC.Time) {
+    index = 1
+  }
+}
 ----
-In this case, notice that the "Lecturer" field has been associated 
-with two indexes: 0 and 1.
+//In this case, notice that the "Lecturer" field has been associated
+//with two indexes: 0 and 1. TODO
 
 The index value is ascendant. When attributing an index value to a field combination, you shall always take the value nexting that you have taken the last.
 
@@ -385,9 +409,9 @@ The index value is ascendant. When attributing an index value to a field combina
  	
 [source,kotlin]
 ----
-ColumnPriority:   "PRIORITY" ["-"] Integer priority 
+ColumnPriority:   "priority = Integer"
 ----
-This option is used in order to define the column order within a list when this list is displayed. A PRIORITY is always followed by an integer according to the structure given above. The column with the biggest priority value will appear on the extreme left side of the table and the one with the least value will be on the extreme right side.
+This option is used in order to define the column order within a list when this list is displayed. A priority is always followed by an integer according to the structure given above. The column with the biggest priority value will appear on the extreme left side of the table and the one with the least value will be on the extreme right side.
 
 We shall notice that negative values are also permitted in this option. However, the minus sign ("-") standing before the number does not have any influence over its value but simply indicates the way all the information will be sorted out within a column. Actually, the different fields are always sorted in the ascending way, i.e from A to Z in case of an alphabetical text and from 1 to x+1 for numbers. Now, if the integer is preceded by a minus, the column content will be sorted in the other way round.
 
@@ -399,7 +423,7 @@ val i = index(message = "this should be unique")"
 
 val surname = mustFill(domain = STRING(20), position = at(1, 1)) {
     label = "Surname"
-    COLUMN (User.Surname)  {
+    column(User.Surname)  {
         priority = 3
     }
 }
@@ -421,15 +445,17 @@ Once you have defined the columns , you may define the field commands.
  	
 [source,kotlin]
 ----
-Command         : "command (item : String) {"
-                    CommandBody
-                  "}"
+ModeAndCommands :
+command(item : Actor) {
+    [AccessMode]
+    CommandBody
+}
 
-CommandBody     :   CommandAction [AccessMode]
+CommandBody     :   CommandAction
 
-CommandAction   : "action" [(Parameter)] { KotlinCode  }
+CommandAction   : action = { KotlinCode  }
 
-AccessMode      : "mode(" ListOfModes ")"
+AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE
 ----
 
 ===== Standard Field Command
@@ -437,17 +463,15 @@ AccessMode      : "mode(" ListOfModes ")"
 The command QualifiedNames that we will can be Galite predefined commands or you can make new Actors and commands you can use in the field command definition.
 There are five ways in calling a standard command
 
+Example:
 [source,kotlin]
 ----
-"command" (item = SimpleName) { "action" (VField SimpleName) {Kotlin Code} }
-
-Example
 command(item = clear) {
-        mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-        action = {
-           ...
-          }
-        }
+    mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+    action = {
+       ...
+    }
+}
 ----
 
 ===== Field Command using Modes
@@ -465,7 +489,7 @@ So you will have: ON Mode COMMAND, ON MODE QualifiedName ...
 [source,kotlin]
 ----
 command(item = insertMode) {
-        mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
 }
 ----
 
@@ -957,12 +981,6 @@ val name = visit(domain = STRING(25), position = at(1, 2)) {
       columns(c.name)
 }
 ----
-
-===== Block Context Footer
-
-In this section of the block, you can write local functions, define inner classes, override command actions, define your data members.
-The elements you write in the block Context Footer are accessible in the concerned block and are written in KOTLIN code.
-  
  
 ==== Creating Forms 
 
@@ -1283,8 +1301,3 @@ You can put as much blocks you want in each page, the same goes for form without
 ----
 val p1 = page("Page1")
 ----
-
-==== Form Context Footer
-
-In this section of the form, you can write your local functions, define inner classes, override command actions, define your data members.
-The elements you write in the forms Context Footer are accessible in all the form and are writen in KOTLIN code.

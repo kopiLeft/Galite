@@ -391,15 +391,15 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
  	
 [source,kotlin]
 ----  
-ActorDefinition:  "actor("
-                           "ident =" SimpleName,
-                           "menu =" SimpleName,
-                           "label =" label : String,
-                           "help" = helpText : String,
-                         ) {
-                           [key = key  : String]
-                           [icon = icon : String]
-                         }
+ActorDefinition:
+actor("ident =" SimpleName,
+      "menu =" SimpleName,
+      "label =" label : String,
+      "help" = helpText : String
+     ) {
+      [key = key  : String]
+      [icon = icon : String]
+}
 ----
 
 *Example*
@@ -532,11 +532,10 @@ class SimpleReport : Report() {
 As you already know, a dynamic report is based on field that will be shown as report columns, in this section you have to write at least on field definition or more following 
 the definition and the structure we saw in the previous chapter.
 
-===== Report Context init:
+===== Report data initialization:
 
-This section should follow the report fields declaration and have to be placed between curly braces of init function, here you may define all the functions, data, classes you need in your report, written in KOTLIN code.
-But most important, you need to d fill the report's lines or rows.
-ALL you need that you use EXPOSED Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields
+You can define the report initial data in the constructor of your report class.
+You can use Exposed Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields
 
 For example here is  a dynamic report named UserList with 3 fields (FirstName, LastName, Age), we will retrieve data from the `User` table on the database. Then affect the query result to our report to create rows.
 
