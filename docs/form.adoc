@@ -612,13 +612,10 @@ To create a block you need first to create a class that extend from FormBlock cl
 *Syntax*
 [source,kotlin]
 ----
-BlockDefinition : "class" blockName ": FormBlock" (buffer: Int, rows: Int, blockName : String) {
-                  BlockBody
-                  }
-                  |
-                  "val" blockName = "block"(buffer: Int, rows: Int, blockName : String, blockTitle : String) {
-                  BlockBody
-                  }
+BlockDefinition :
+class Block: FormBlock(buffer: Int, rows: Int, blockName : String) {
+    BlockBody
+}
   
 BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
                   [blockOptions] [blockTables]  
@@ -641,9 +638,9 @@ class BlockCommand : FormBlock(1, 5, "Commands") {
   ...
 }
 
-or
+// usage:
 
-val BlockCommand = block(1, 5, "Commands", "Commands") {
+val BlockCommand = page.insertBlock(BlockCommand()) {
 ...
 }
 ----
@@ -676,12 +673,6 @@ The example bellow show how to create a block, you need to specify the block tit
 [source,kotlin] 
 ----
 class Degree : FormBlock(10, 5, "Degree Block")
-
-or
-
-val Degree = block(10, 5, "Degree Block", "Degree Block") {
-...
-}
 ----
 
 ===== Block superClass and Interface
@@ -708,7 +699,7 @@ You can insert the optional border statement that defines the Block's frame type
 ----
 inner class Degree : FormBlock(10, 5, "Degree Block") {
     init {
-          border = VConstants.BRD_LINE
+        border = VConstants.BRD_LINE
     }
 }
 ----
@@ -785,7 +776,7 @@ When making use of this section, you have to type the function table and enter t
  	
 [source,kotlin]
 ----
-BlockTables:   "table"  "(" SimpleName ")" [BlockTables]*
+BlockTables:   table(vararg ExposedTables)
 ----
 
 *Example*
@@ -1044,48 +1035,6 @@ Every form have can have a title (optional).
 ----
 class LecturersForm : Form() {
     override val title = "Lecturers List"
-}
-----
-
-===== Form Superclass And Interfaces
-
- * *Superclass:*
-
-*Syntax:*
- 	
-[source,kotlin]
-----  
-SuperForm:   ":" QualifiedName
-----
-Every form is a class that may extend another Kotlin class by using the optional keyword :. Otherwise,  Galite will automatically take over the java.lang.Object QualifiedName.
-
-*Example*
- 	
-[source,kotlin]
-----
-class ServiceRegister : VReportSelectionForm() {
-    ...
-}
-----
-In other words, the class declaration you have just made specifies the direct superclass of the current class.
-
- * *Interfaces*
-
-You can also specify interfaces which the form may implement by using the ":" option. When used in a form declaration, this option then lists the names of interfaces that are direct superInterfaces of the class being declared. Thus, you will have the following structure:
-
-*Syntax*
-
-[source,kotlin]
-----
-Interface :  ":" QualifiedName [,QualifiedName]*
-----
-
-*Example:*
- 	
-[source,kotlin]
-----
-class RecordRegistering : VReportSelectionForm(), VConstants {
-    ...
 }
 ----
 

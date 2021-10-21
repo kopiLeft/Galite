@@ -1,11 +1,11 @@
 
 === Visual Galite Charts
 
-Visual Galite allows you to create charts. These are files with the ".kt" extension that have a very simple structure, in fact, all you have to do to create such charts
+Visual Galite allows you to create charts. They have a very simple structure, in fact, all you have to do to create such charts
 is to define the dimensions you need and their measures, then you will have to load data into these fields in the init section.
 With Galite Charts, you will also be able to print or export the created chart to different file formats.
 
-The Visual Galite Charts are generated from Visual Galite form files with the ".kt" extension by different methods that we will see in this chapter, along with the process of making a
+The Visual Galite Charts are generated from Visual Galite form by different methods that we will see in this chapter, along with the process of making a
 visual charts.
 
 ==== Creating Charts dimensions and measures
@@ -14,6 +14,12 @@ As we said in the introduction, the chart structure is based on chart dimensions
 To create a dimension field you need to use dimension function and specify the type of the field, the field have the following syntax :
 
 *Syntax*
+[source,kotlin]
+----
+ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
+----
+
+*Example*
 [source,kotlin]
 ----
 val city = dimension(STRING(10)) {
@@ -27,9 +33,8 @@ val city = dimension(STRING(10)) {
     }
   }
 }
-
-ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
 ----
+
 Use the measure function to create a measure field, this field have the following syntax :
 
 *Syntax*
@@ -174,13 +179,14 @@ Visual Galite charts have a unique structure, you need to create new class that 
 *Syntax*
 [source,kotlin]
 ----
-ChartDefinition   :"class" ChartClass ":" QualifiedName [,QualifiedName]*] {
-                                             [CharttLocalization]
-                                             ChartTitle
-                                             [ContextHeader] [CharttHelp] [ChartDefinitions]
-                                             [ChartCommands] [ChartTriggers] (ChartFields)
-                                             [ContextFooter]
-                                           }
+ChartDefinition   :
+classChartClass : Chart() {
+    [CharttLocalization]
+    ChartTitle
+    [ContextHeader] [CharttHelp] [ChartDefinitions]
+    [ChartCommands] [ChartTriggers] (ChartFields)
+    [ContextFooter]
+}
 
 ChartTitle        : "title =" Title : String
 
@@ -210,52 +216,6 @@ To set you chart title you need to override the title variable of Chart class.
 class ChartSample: Chart() {
   override val locale = Locale.UK
   override val title = "Area/population per city"
-  ...
-}
-----
-
-===== Chart Superclass And Interfaces
-
- * *Superclass:*
-
-*Syntax:*
- 	
-[source,kotlin]
-----  
-SuperClass:   ":" QualifiedName
-----
-Every Chart is a class that may extend another Kotlin class by using the optional keyword ":". Otherwise, Galite will automatically take over the java.lang.Object QualifiedName.
-
-*Example:*
- 	
-[source,kotlin]
-----
-class Earnings: Chart() {
-  override val locale = Locale.UK
-  override val title = "Earnings"
-  ...
-}
-----
-In other words, the class declaration you have just made specifies the direct superclass of the current class.
-
- * *Interfaces:*
-
-You can also specify interfaces which the chart may implement by using the keyword ":".
-
-*Syntax*
-
-[source,kotlin]
-----
-":" QualifiedName [,QualifiedName]*
-----
-
-*Example:*
- 	
-[source,kotlin]
-----
-class Earnings: Chart(), IChart() {
-  override val locale = Locale.UK
-  override val title = "Earnings"
   ...
 }
 ----

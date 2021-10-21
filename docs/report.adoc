@@ -1,11 +1,11 @@
 
 === Visual Galite Reports
 
-Visual Galite allows you to create dynamic reports. These are  files with the ".kt" extension that have a very simple structure, in fact, all you have to do to create such reports
+Visual Galite allows you to create dynamic reports. They have a very simple structure, in fact, all you have to do to create such reports
 is to list the definitions of all the fields you need, then you will that will load data into these fields in the init method by creating a query with Exposed syntax.
 The so created reports will have dynamic functions such as sorting and group making, you will also be able to print it or export to different file formats.You can even add other fields
 to the report after it's generated, do more calculus, customize the report columns...
-The Visual Galite Reports are generated from Visual Galite form files with the ".kt" extension by different methods that we will see in this chapter, along with the process of making a
+The Galite Reports are generated from Visual Galite forms by different methods that we will see in this chapter, along with the process of making a
 dynamic report.
 
 ==== Creating Report Fields
@@ -20,7 +20,7 @@ ReportFieldDef: "field(" FieldType ")" {
                     [GroupCommand] [FieldCommands] [FieldTriggers]
                     }
 
-GroupCommands : "group =" SimpleName
+GroupCommands : "group =" field
 ----
 
 *Example*
@@ -247,13 +247,14 @@ Visual Galite Dynamic reports have a unique structure, you need to create new cl
 *Syntax*
 [source,kotlin]
 ----
-ReportDefinition  : "class" ReportClass ":" QualifiedName [,QualifiedName]*] {
-                      [ReportLocalization]
-                      ReportTitle
-                      [ContextHeader] [ReportHelp] [ReportDefinitions]
-                      [ReportCommands] [ReportTriggers] (ReportFields)
-                      [ContextFooter]
-                    }
+ReportDefinition  :
+class ReportClass : Report {
+    [ReportLocalization]
+    ReportTitle
+    [ContextHeader] [ReportHelp] [ReportDefinitions]
+    [ReportCommands] [ReportTriggers] (ReportFields)
+    [ContextFooter]
+}
 
 ReportTitle       : "title =" Title : String
 
@@ -285,52 +286,6 @@ class ClientR : Report() {
 
     override val title = "Clients_Report"
     ...
-}
-----
-
-===== Report Superclass And Interfaces
-
- * *Superclass:*
-
-*Syntax:*
- 	
-[source,kotlin]
-----  
-SuperClass:   ":" QualifiedName
-----
-Every Report is a class that may extend another Kotlin class by using the optional keyword ":". Otherwise,  Galite will automatically take over the java.lang.Object QualifiedName.
-
-*Example:*
- 	
-[source,kotlin]
-----
-class OrdersReport : Report() {
-    override val title = "Orders Report"
-    ...
-
-}
-----
-In other words, the class declaration you have just made specifies the direct superclass of the current class.
-
- * *Interfaces:*
-
-You can also specify interfaces which the report may implement by using the keyword ":".
-
-*Syntax*
-
-[source,kotlin]
-----
-":" QualifiedName [,QualifiedName]*
-----
-
-*Example:*
- 	
-[source,kotlin]
-----
-class OrdersReport : Report(), UReport() {
-    override val title = "Orders Report"
-    ...
-
 }
 ----
 
@@ -568,7 +523,7 @@ A report is always called from a form, if the caller form extends from the Dicti
 *Example*
 [source,kotlin]
 ----
-override fun createReport(): Report {
+override fun createReport(): Report() {
    return UserList()
 }
 ----

@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
          code.hljs {
-             font-size: 14px !important;
+             font-size: 15px !important;
          }
     </style>
 </head>
@@ -531,7 +531,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel4">
 <li><a href="#_form_localization">Form Localization</a></li>
 <li><a href="#_form_title">Form Title</a></li>
-<li><a href="#_form_superclass_and_interfaces">Form Superclass And Interfaces</a></li>
 <li><a href="#_menus_definition">Menus Definition</a></li>
 <li><a href="#_actors_definition">Actors Definition</a></li>
 <li><a href="#_types_definition">Types Definition</a></li>
@@ -561,7 +560,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel4">
 <li><a href="#_report_localization">Report Localization</a></li>
 <li><a href="#_report_title">Report Title</a></li>
-<li><a href="#_report_superclass_and_interfaces">Report Superclass And Interfaces</a></li>
 <li><a href="#_report_help_text">Report Help Text</a></li>
 <li><a href="#_report_menus_definition">Report Menus Definition</a></li>
 <li><a href="#_report_actors_definition">Report Actors Definition</a></li>
@@ -591,7 +589,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel4">
 <li><a href="#_chart_localization">Chart Localization</a></li>
 <li><a href="#_chart_title">Chart Title</a></li>
-<li><a href="#_chart_superclass_and_interfaces">Chart Superclass And Interfaces</a></li>
 <li><a href="#_chart_help_text">Chart Help Text</a></li>
 <li><a href="#_chart_menus_definition">Chart Menus Definition</a></li>
 <li><a href="#_chart_actors_definition">Chart Actors Definition</a></li>
@@ -2562,13 +2559,10 @@ To create a block you need first to create a class that extend from FormBlock cl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockDefinition : "class" blockName ": FormBlock" (buffer: Int, rows: Int, blockName : String) {
-                  BlockBody
-                  }
-                  |
-                  "val" blockName = "block"(buffer: Int, rows: Int, blockName : String, blockTitle : String) {
-                  BlockBody
-                  }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockDefinition :
+class Block: FormBlock(buffer: Int, rows: Int, blockName : String) {
+    BlockBody
+}
 
 BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
                   [blockOptions] [blockTables]
@@ -2600,9 +2594,9 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
   ...
 }
 
-or
+// usage:
 
-val BlockCommand = block(1, 5, "Commands", "Commands") {
+val BlockCommand = page.insertBlock(BlockCommand()) {
 ...
 }</code></pre>
 </div>
@@ -2650,13 +2644,7 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : FormBlock(10, 5, "Degree Block")
-
-or
-
-val Degree = block(10, 5, "Degree Block", "Degree Block") {
-...
-}</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : FormBlock(10, 5, "Degree Block")</code></pre>
 </div>
 </div>
 </div>
@@ -2702,7 +2690,7 @@ val Degree = block(10, 5, "Degree Block", "Degree Block") {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(10, 5, "Degree Block") {
     init {
-          border = VConstants.BRD_LINE
+        border = VConstants.BRD_LINE
     }
 }</code></pre>
 </div>
@@ -2810,7 +2798,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockTables:   "table"  "(" SimpleName ")" [BlockTables]*</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockTables:   table(vararg ExposedTables)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3219,68 +3207,6 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 </div>
 </div>
 <div class="sect4">
-<h5 id="_form_superclass_and_interfaces">Form Superclass And Interfaces</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Superclass:</strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Syntax:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">SuperForm:   ":" QualifiedName</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Every form is a class that may extend another Kotlin class by using the optional keyword :. Otherwise,  Galite will automatically take over the java.lang.Object QualifiedName.</p>
-</div>
-<div class="paragraph">
-<p><strong>Example</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ServiceRegister : VReportSelectionForm() {
-    ...
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In other words, the class declaration you have just made specifies the direct superclass of the current class.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Interfaces</strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You can also specify interfaces which the form may implement by using the ":" option. When used in a form declaration, this option then lists the names of interfaces that are direct superInterfaces of the class being declared. Thus, you will have the following structure:</p>
-</div>
-<div class="paragraph">
-<p><strong>Syntax</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Interface :  ":" QualifiedName [,QualifiedName]*</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Example:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class RecordRegistering : VReportSelectionForm(), VConstants {
-    ...
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_menus_definition">Menus Definition</h5>
 <div class="paragraph">
 <p>Defining a menu means adding an entry to the menu bar in the top of the form, you can add actors to this menu later by specifying the menu name in the actor definition.</p>
@@ -3579,11 +3505,11 @@ You can put as much blocks you want in each page, the same goes for form without
 <div class="sect2">
 <h3 id="_visual_galite_reports">Visual Galite Reports</h3>
 <div class="paragraph">
-<p>Visual Galite allows you to create dynamic reports. These are  files with the ".kt" extension that have a very simple structure, in fact, all you have to do to create such reports
+<p>Visual Galite allows you to create dynamic reports. They have a very simple structure, in fact, all you have to do to create such reports
 is to list the definitions of all the fields you need, then you will that will load data into these fields in the init method by creating a query with Exposed syntax.
 The so created reports will have dynamic functions such as sorting and group making, you will also be able to print it or export to different file formats.You can even add other fields
 to the report after it&#8217;s generated, do more calculus, customize the report columns&#8230;&#8203;
-The Visual Galite Reports are generated from Visual Galite form files with the ".kt" extension by different methods that we will see in this chapter, along with the process of making a
+The Galite Reports are generated from Visual Galite forms by different methods that we will see in this chapter, along with the process of making a
 dynamic report.</p>
 </div>
 <div class="sect3">
@@ -3601,7 +3527,7 @@ dynamic report.</p>
                     [GroupCommand] [FieldCommands] [FieldTriggers]
                     }
 
-GroupCommands : "group =" SimpleName</code></pre>
+GroupCommands : "group =" field</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3889,13 +3815,14 @@ val name = field(STRING(20)) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ReportDefinition  : "class" ReportClass ":" QualifiedName [,QualifiedName]*] {
-                      [ReportLocalization]
-                      ReportTitle
-                      [ContextHeader] [ReportHelp] [ReportDefinitions]
-                      [ReportCommands] [ReportTriggers] (ReportFields)
-                      [ContextFooter]
-                    }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ReportDefinition  :
+class ReportClass : Report {
+    [ReportLocalization]
+    ReportTitle
+    [ContextHeader] [ReportHelp] [ReportDefinitions]
+    [ReportCommands] [ReportTriggers] (ReportFields)
+    [ContextFooter]
+}
 
 ReportTitle       : "title =" Title : String
 
@@ -3933,72 +3860,6 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 
     override val title = "Clients_Report"
     ...
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_report_superclass_and_interfaces">Report Superclass And Interfaces</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Superclass:</strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Syntax:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">SuperClass:   ":" QualifiedName</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Every Report is a class that may extend another Kotlin class by using the optional keyword ":". Otherwise,  Galite will automatically take over the java.lang.Object QualifiedName.</p>
-</div>
-<div class="paragraph">
-<p><strong>Example:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrdersReport : Report() {
-    override val title = "Orders Report"
-    ...
-
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In other words, the class declaration you have just made specifies the direct superclass of the current class.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Interfaces:</strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You can also specify interfaces which the report may implement by using the keyword ":".</p>
-</div>
-<div class="paragraph">
-<p><strong>Syntax</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">":" QualifiedName [,QualifiedName]*</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Example:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrdersReport : Report(), UReport() {
-    override val title = "Orders Report"
-    ...
-
 }</code></pre>
 </div>
 </div>
@@ -4300,7 +4161,7 @@ You can use Exposed Syntax to create query that select data from you database ta
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override fun createReport(): Report {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override fun createReport(): Report() {
    return UserList()
 }</code></pre>
 </div>
@@ -4318,12 +4179,12 @@ You can use Exposed Syntax to create query that select data from you database ta
 <div class="sect2">
 <h3 id="_visual_galite_charts">Visual Galite Charts</h3>
 <div class="paragraph">
-<p>Visual Galite allows you to create charts. These are files with the ".kt" extension that have a very simple structure, in fact, all you have to do to create such charts
+<p>Visual Galite allows you to create charts. They have a very simple structure, in fact, all you have to do to create such charts
 is to define the dimensions you need and their measures, then you will have to load data into these fields in the init section.
 With Galite Charts, you will also be able to print or export the created chart to different file formats.</p>
 </div>
 <div class="paragraph">
-<p>The Visual Galite Charts are generated from Visual Galite form files with the ".kt" extension by different methods that we will see in this chapter, along with the process of making a
+<p>The Visual Galite Charts are generated from Visual Galite form by different methods that we will see in this chapter, along with the process of making a
 visual charts.</p>
 </div>
 <div class="sect3">
@@ -4337,6 +4198,14 @@ To create a dimension field you need to use dimension function and specify the t
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val city = dimension(STRING(10)) {
   label = "dimension"
 
@@ -4347,9 +4216,7 @@ To create a dimension field you need to use dimension function and specify the t
       }
     }
   }
-}
-
-ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4541,13 +4408,14 @@ TrigerAction : color | format { KOTLIN code }</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDefinition   :"class" ChartClass ":" QualifiedName [,QualifiedName]*] {
-                                             [CharttLocalization]
-                                             ChartTitle
-                                             [ContextHeader] [CharttHelp] [ChartDefinitions]
-                                             [ChartCommands] [ChartTriggers] (ChartFields)
-                                             [ContextFooter]
-                                           }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDefinition   :
+classChartClass : Chart() {
+    [CharttLocalization]
+    ChartTitle
+    [ContextHeader] [CharttHelp] [ChartDefinitions]
+    [ChartCommands] [ChartTriggers] (ChartFields)
+    [ContextFooter]
+}
 
 ChartTitle        : "title =" Title : String
 
@@ -4583,72 +4451,6 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart() {
   override val locale = Locale.UK
   override val title = "Area/population per city"
-  ...
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_chart_superclass_and_interfaces">Chart Superclass And Interfaces</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Superclass:</strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Syntax:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">SuperClass:   ":" QualifiedName</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Every Chart is a class that may extend another Kotlin class by using the optional keyword ":". Otherwise, Galite will automatically take over the java.lang.Object QualifiedName.</p>
-</div>
-<div class="paragraph">
-<p><strong>Example:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Earnings: Chart() {
-  override val locale = Locale.UK
-  override val title = "Earnings"
-  ...
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In other words, the class declaration you have just made specifies the direct superclass of the current class.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Interfaces:</strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You can also specify interfaces which the chart may implement by using the keyword ":".</p>
-</div>
-<div class="paragraph">
-<p><strong>Syntax</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">":" QualifiedName [,QualifiedName]*</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Example:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Earnings: Chart(), IChart() {
-  override val locale = Locale.UK
-  override val title = "Earnings"
   ...
 }</code></pre>
 </div>
