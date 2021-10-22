@@ -158,7 +158,7 @@ abstract class Report : Window() {
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
 
-  fun genLocalization(destination: String? = null) {
+  override fun genLocalization(destination: String?, locale: Locale?) {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)

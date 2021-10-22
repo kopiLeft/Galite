@@ -23,6 +23,7 @@ import java.awt.Color
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 
 /**
  * laurent :<br></br>
@@ -30,9 +31,11 @@ import org.jetbrains.exposed.sql.Column
  */
 class VColorColumn(title: String,
                    column: Column<*>?,
+                   table: ColumnSet?,
                    sortAscending: Boolean)
   : VListColumn(title,
                 column,
+                table,
                 VConstants.ALG_LEFT,
                 7,
                 sortAscending) {

@@ -63,7 +63,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn = VTimestampColumn(getHeader(), null, getPriority() >= 0)
+  override fun getListColumn(): VListColumn = VTimestampColumn(getHeader(), null, null, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)

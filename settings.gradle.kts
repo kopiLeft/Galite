@@ -17,5 +17,8 @@
 
 rootProject.name = "galite"
 include("galite-core")
+include("galite-localizer")
 include("galite-testing")
 include("galite-tests")
+include("galite-demo:galite-vaadin")
+include("galite-demo:galite-vaadin-spring")

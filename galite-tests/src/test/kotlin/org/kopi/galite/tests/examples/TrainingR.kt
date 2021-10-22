@@ -134,7 +134,7 @@ class TrainingR : Report() {
   val editColumn = command(item = editColumnData) {
     action = {
       if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
-        val formula  = org.kopi.galite.demo.product.ProductForm()
+        val formula  = FormExample()
         WindowController.windowController.doModal(formula)
       }
     }

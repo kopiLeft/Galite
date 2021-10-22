@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modules>
+    <!--Forms-->
+    <module ident="1000" label="Form" />
+    <module ident="1001" label="Form Sample" />
+</modules>

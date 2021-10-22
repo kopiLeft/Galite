@@ -46,8 +46,6 @@ public abstract class DObjectField extends DField {
      *
      * @param    model        the model for this text field
      * @param    label        The label that describe this field
-     * @param    height        the number of line
-     * @param    width        the number of column
      * @param    options        The possible options (NO EDIT, NO ECHO)
      */
     public DObjectField(VFieldUI model,

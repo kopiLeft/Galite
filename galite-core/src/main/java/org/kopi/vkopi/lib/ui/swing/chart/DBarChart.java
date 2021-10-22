@@ -41,10 +41,8 @@ public class DBarChart extends DColumnChart {
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------------------------
-  
-  /**
-   * @Override
-   */
+
+  @Override
   protected PlotOrientation getPlotOrientation() {
     return PlotOrientation.HORIZONTAL;
   }

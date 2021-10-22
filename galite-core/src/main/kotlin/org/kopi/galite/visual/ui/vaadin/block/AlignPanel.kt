@@ -18,6 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
@@ -81,7 +83,9 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
         arrayOfNulls<Component>(columnsSize)
       }
 
-      grid.width = gridBlock.width
+      val gridBlockWidth = gridBlock.columns.joinToString(" + ") { it.width }
+
+      grid.width = "calc($gridBlockWidth)"
       grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
       grid.setSelectionMode(Grid.SelectionMode.NONE)
       gridBlock.columns.forEachIndexed { index, column ->
@@ -94,7 +98,19 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
         val align = aligns!![i]
 
         if (align.x != -1) {
-          alignedGridComponents[align.y][align.x] = components!![i]
+          if (getOverlappingComponent(i, align.x, align.y) != null) {
+            val overlap = components!![i]
+            if (overlap is Label) {
+              val field = getFieldOf(overlap)
+              field?.let {
+                addTooltipToField(overlap, it)
+              }
+            } else {
+              Exception("Overlapping components at position ${align.x}, ${align.y}").printStackTrace()
+            }
+          } else {
+            alignedGridComponents[align.y][align.x] = components!![i]
+          }
         }
       }
 
@@ -138,13 +154,31 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
    * @param y The row number.
    * @return The overlapping component. `null` otherwise.
    */
-  protected fun getOverlappingComponent(end: Int, x: Int, y: Int): Component? {
+  private fun getOverlappingComponent(end: Int, x: Int, y: Int): Component? {
     for (i in 0 until end) {
       if (aligns!![i].x == x && aligns!![i].y == y) {
         return components!![i]
       }
     }
     return null
+  }
+
+  /**
+   * Returns the field that has the label [label].
+   *
+   */
+  private fun getFieldOf(label: Label): Component? {
+    for (component in components!!) {
+      if(component is DField && component.label == label) {
+        return component
+      }
+    }
+    return null
+  }
+
+  private fun addTooltipToField(label: Label, field: Component) {
+    // TODO: Add an advanced tooltip to render all the label component instead of using title attribute.
+    field.element.setAttribute("title", label.text)
   }
 
   override fun onAttach(attachEvent: AttachEvent?) {

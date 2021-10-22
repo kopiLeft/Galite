@@ -22,6 +22,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.form.FormWithReport
 import org.kopi.galite.tests.report.SimpleReport
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -65,7 +66,7 @@ class ReportTests: GaliteVUITestBase() {
 
     // Check that the grid data is correct
     val report = _get<Grid<*>>()
-    /** Last column contains empty strings. That represents the values for [org.kopi.galite.report.VSeparatorColumn] */
+    /** Last column contains empty strings. That represents the values for [org.kopi.galite.visual.report.VSeparatorColumn] */
     val data = arrayOf(
       arrayOf("", "23", "", "2.000,37000", ""),
       arrayOf("SAMI", "22", "", "2.000,00000", ""),
@@ -83,7 +84,7 @@ class ReportTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      org.kopi.galite.tests.examples.initModules()
+      initModules()
     }
   }
 }

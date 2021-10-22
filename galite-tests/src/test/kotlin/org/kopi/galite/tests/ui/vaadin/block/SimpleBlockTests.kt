@@ -28,6 +28,7 @@ import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Decimal
@@ -94,7 +95,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.examples.initModules()
+        initModules()
       }
     }
   }

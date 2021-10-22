@@ -21,7 +21,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
@@ -276,5 +276,5 @@ object Ages : CodeDomain<Int>() {
 }
 
 fun main() {
-  Application.runForm(formName = FormSample())
+  runForm(formName = FormSample())
 }

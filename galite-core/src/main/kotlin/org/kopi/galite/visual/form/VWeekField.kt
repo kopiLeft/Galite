@@ -53,7 +53,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn = VWeekColumn(getHeader(), null, getPriority() >= 0)
+  override fun getListColumn(): VListColumn = VWeekColumn(getHeader(), null, null, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)

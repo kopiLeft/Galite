@@ -17,22 +17,19 @@
 package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import org.jetbrains.exposed.sql.deleteWhere
+import kotlin.test.assertTrue
 
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing._clickCell
-import org.kopi.galite.testing.confirm
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
-import org.kopi.galite.testing.findForm
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
@@ -49,6 +46,11 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
 import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.tests.examples.MultipleBlockForm
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.testing.expectConfirmNotification
+import org.kopi.galite.testing.findForms
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
@@ -56,24 +58,18 @@ import com.github.mvysny.kaributesting.v10._get
 class CommandsFormTests : GaliteVUITestBase() {
 
   val form = CommandsForm().also { it.model }
+  val multipleForm = MultipleBlockForm().also { it.model }
 
   @Before
   fun `login to the App`() {
-    org.kopi.galite.tests.examples.initData()
+    transaction {
+      initData()
+    }
 
     login()
 
     // Open the form
     form.open()
-  }
-
-  @Test
-  fun `test list command`() {
-    //TODO
-    /*
-      check that the list dialog is displayed & that contain a correct data,
-      then chose a row and check that first field in form contain data
-     */
   }
 
   /**
@@ -88,10 +84,9 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(10)
     assertEquals("10", field.value)
     form.resetBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
     assertEquals("", field.value)
   }
-
 
   /**
    * click on serialQuery button,
@@ -339,7 +334,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.block.trainingID.edit(1)
     form.serialQuery.triggerCommand()
     form.deleteBlock.triggerCommand()
-    confirm(true)
+    expectConfirmNotification(true)
 
     val data = transaction {
       Training.selectAll().map {
@@ -403,11 +398,11 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test quit command`() {
-    assertNotNull(form.findForm())
+    assertTrue(form.findForms().isNotEmpty())
 
     form.quit.triggerCommand()
 
-    assertNull(form.findForm())
+    assertTrue(form.findForms().isEmpty())
   }
 
   /**
@@ -428,12 +423,35 @@ class CommandsFormTests : GaliteVUITestBase() {
      */
   }
 
+  /**
+   * put a value in the first field of the first block and a value in the first field of second block
+   * then click on resetBlock button,
+   * check that a popup is displayed,
+   * click on yes and check that the fields are empty
+   */
+  @Test
+  fun `test resetForm command`() {
+    multipleForm.open()
+
+    val simpleField = multipleForm.block.trainingID.findField()
+    val multipleField = multipleForm.block2.centerName.findField()
+
+    multipleForm.block.trainingID.edit(10)
+    multipleForm.block2.centerName.edit("center name")
+    assertEquals("10", simpleField.value)
+    assertEquals("center name", multipleField.value)
+    multipleForm.resetForm.triggerCommand()
+    expectConfirmNotification(true)
+    assertEquals("", simpleField.value)
+    assertEquals("", multipleField.value)
+  }
+
   companion object {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.examples.initModules()
+        initDatabase()
       }
     }
   }

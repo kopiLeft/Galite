@@ -19,13 +19,12 @@ package org.kopi.galite.visual.db
 
 import java.sql.Connection
 import java.sql.SQLException
-import java.util.Timer
-import java.util.TimerTask
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.visual.VWindow
 
 /**
@@ -126,21 +125,4 @@ fun <T> VWindow.doAndWait(message: String?, task: () -> T): T {
   }
 
   return returnValue
-}
-
-/**
- * Executes a task after some delay.
- *
- * @param delay   the delay.
- * @param task    the task to execute.
- */
-fun doAfter(delay: Long, task: () -> Unit) {
-  Timer().schedule(
-    object : TimerTask() {
-      override fun run() {
-        task()
-      }
-    },
-    delay
-  )
 }

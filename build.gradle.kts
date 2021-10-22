@@ -19,15 +19,19 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("org.jetbrains.kotlin.jvm") version "1.5.30" apply false
+  id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
 
   repositories {
-    jcenter()
+    mavenCentral()
     maven {
       url = uri("https://maven.vaadin.com/vaadin-addons")
+    }
+    maven {
+      url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
   }
 
@@ -38,5 +42,16 @@ subprojects {
 
   tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+  }
+}
+
+nexusPublishing {
+  repositories {
+    sonatype {
+      nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+      snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+      username.set(System.getenv("SONATYPE_USERNAME"))
+      password.set(System.getenv("SONATYPE_PASSWORD"))
+    }
   }
 }

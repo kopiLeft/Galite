@@ -119,7 +119,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   protected fun build() {
     model.build()
     model.createTree()
-    (getDisplay() as UReport).build()
+    (getDisplay() as UReport?)?.build()
     built = true
 
     // all commands are by default enabled

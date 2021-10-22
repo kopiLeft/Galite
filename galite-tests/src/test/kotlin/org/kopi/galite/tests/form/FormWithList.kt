@@ -18,7 +18,8 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.UserRights
 import org.kopi.galite.visual.db.Users
@@ -250,8 +251,7 @@ class BlockWithManyTables : FormBlock(20, 20, "Test block") {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithList()) {
+  runForm(formName = FormWithList()) {
     initModules()
-    initUserRights()
   }
 }

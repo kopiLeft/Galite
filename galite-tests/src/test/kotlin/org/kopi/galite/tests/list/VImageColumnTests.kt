@@ -25,7 +25,7 @@ import org.kopi.galite.visual.list.VImageColumn
 class VImageColumnTests {
   @Test
   fun vColorColumnTests() {
-    val vImageColumn = VImageColumn("title", null, true)
+    val vImageColumn = VImageColumn("title", null, null, true)
 
     assertEquals("", vImageColumn.formatObject(null))
     assertEquals(ByteArray::class, vImageColumn.getDataType())

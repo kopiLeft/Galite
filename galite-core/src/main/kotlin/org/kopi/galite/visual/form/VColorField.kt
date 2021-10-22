@@ -55,7 +55,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn = VColorColumn(getHeader(), null, getPriority() >= 0)
+  override fun getListColumn(): VListColumn = VColorColumn(getHeader(), null, null, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)

@@ -30,9 +30,7 @@ import org.kopi.galite.visual.util.base.InconsistencyException;
  */
 public class JChartTypeFactory extends ChartTypeFactory {
 
-  /**
-   * @Override
-   */
+  @Override
   public UChartType createTypeView(String title, VChartType model) {
     DAbstractChartType		view;
     

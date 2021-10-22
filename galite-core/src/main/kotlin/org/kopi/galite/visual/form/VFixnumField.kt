@@ -124,6 +124,7 @@ class VFixnumField(val bufferSize: Int,
   override fun getListColumn(): VListColumn {
     return VFixnumColumn(getHeader(),
                          null,
+                         null,
                          align,
                          width,
                          maxScale,

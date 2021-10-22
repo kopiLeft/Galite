@@ -101,18 +101,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       if (component is FormItem) {
         components!![x][y] = component
       } else if (component is DField) {
-        if(constraints.width < 0 ) {
-          val formItem = object : FormItem(component) {}
-
-          add(component, constraints)
-        } else {
-          val formItem = object : FormItem(component) {
-            init {
-              addToLabel(component.label)
-            }
-          }
-          add(component, constraints)
-        }
+        add(component, constraints)
 
         // a follow field has no label
         // an actor field has no label too.

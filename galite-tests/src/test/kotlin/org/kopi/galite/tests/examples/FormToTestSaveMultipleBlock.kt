@@ -19,7 +19,7 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.Application
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
@@ -153,5 +153,5 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = FormToTestSaveMultipleBlock())
+  runForm(formName = FormToTestSaveMultipleBlock())
 }

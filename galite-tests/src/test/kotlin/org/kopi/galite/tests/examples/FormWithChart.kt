@@ -18,7 +18,7 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.domain.DECIMAL
@@ -135,5 +135,5 @@ class ChartSample: Chart() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithChart)
+  runForm(formName = FormWithChart)
 }

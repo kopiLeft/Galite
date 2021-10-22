@@ -19,7 +19,7 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
@@ -69,5 +69,5 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
 }
 
 fun main() {
-  Application.runForm(FormWithBlockTrigger)
+  runForm(FormWithBlockTrigger)
 }

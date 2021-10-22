@@ -17,14 +17,16 @@
 package org.kopi.galite.tests.examples
 
 import java.util.Locale
+import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.connectToDatabase
+import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.form.VConstants
 
 class MultipleBlockForm : DictionaryForm() {
@@ -56,6 +58,15 @@ class MultipleBlockForm : DictionaryForm() {
     help = "query",
   ) {
     key = Key.F3
+    icon = "list"
+  }
+  val load = actor(
+    ident = "load",
+    menu = action,
+    label = "load",
+    help = "load",
+  ) {
+    key = Key.F8
     icon = "list"
   }
   val changeBlock = actor(
@@ -94,8 +105,22 @@ class MultipleBlockForm : DictionaryForm() {
     key = Key.F10
     icon = "add"
   }
+  val resetForm = actor(
+    ident = "resetForm",
+    menu = action,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = "break"
+  }
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
+  }
 
-  val block = insertBlock(Traineeship(), page1) {
+  val block = page1.insertBlock(Traineeship()) {
     trigger(POSTQRY) {
       block2.trainingId[0] = trainingID.value
       block2.load()
@@ -110,6 +135,13 @@ class MultipleBlockForm : DictionaryForm() {
     command(item = query) {
       action = {
         queryMove()
+      }
+    }
+    command(item = load) {
+      action = {
+        transaction {
+          load()
+        }
       }
     }
     command(item = changeBlock) {
@@ -199,14 +231,18 @@ class MultipleBlockForm : DictionaryForm() {
       label = "contact"
       help = "The contact"
     }
-    val name = visit(domain = STRING(20), position = follow(contact)) {
+    val name = visit(domain = STRING(20), position = follow(contact)) {}
 
+    init {
+      border = VConstants.BRD_LINE
     }
   }
 }
 
 fun main() {
-  connectToDatabase()
-  initData()
-  Application.runForm(formName = MultipleBlockForm())
+  runForm(formName = MultipleBlockForm()) {
+    transaction {
+      initData()
+    }
+  }
 }

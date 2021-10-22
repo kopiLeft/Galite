@@ -150,7 +150,7 @@ fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
 /**
  * Finds the Vaadin field component of this form field.
  */
-fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<*>, *> {
+fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?> {
   val mainWindow = _get<MainWindow>()
 
   return if (block.vBlock.isMulti()) {
@@ -160,7 +160,7 @@ fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<*>, *> {
       .editorComponent as GridEditorField<*>
   } else {
     mainWindow._find<DField>().single { it.getModel() eq vField }.wrappedField
-  } as HasValue<HasValue.ValueChangeEvent<*>, *>
+  } as HasValue<HasValue.ValueChangeEvent<Any?>, Any?>
 }
 
 /**
