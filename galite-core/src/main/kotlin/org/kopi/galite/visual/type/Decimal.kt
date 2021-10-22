@@ -132,6 +132,23 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal>, Type0<BigD
   operator fun remAssign(f: Decimal) {
     value = value.remainder(f.value, MATH_CONTEXT)
   }
+
+  // ----------------------------------------------------------------------
+  // SHIFTS
+  // ----------------------------------------------------------------------
+
+  infix fun shr(shiftCount: Number): Decimal {
+    return setScale(shiftCount.toInt(), BigDecimal.ROUND_FLOOR);
+  }
+
+  infix fun ushr(shiftCount: Number): Decimal {
+    return setScale(shiftCount.toInt(), BigDecimal.ROUND_HALF_UP);
+  }
+
+  infix fun shl(shiftCount: Number): Decimal {
+    return setScale(shiftCount.toInt(), BigDecimal.ROUND_UP);
+  }
+
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
   // ----------------------------------------------------------------------
