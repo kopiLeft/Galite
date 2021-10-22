@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.report
 
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.print.DefaultPrintManager
 import org.kopi.galite.visual.print.PrintManager
 import org.kopi.galite.visual.visual.Action
@@ -102,6 +103,15 @@ class VReportCommand(val report: VReport,
       Constants.CMD_UNFOLD_COLUMN -> report.unfoldSelectedColumn()
       Constants.CMD_HELP -> report.showHelp()
     }
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    trigger    the  trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
   }
 
   // ----------------------------------------------------------------------

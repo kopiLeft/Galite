@@ -64,8 +64,7 @@ class DActor(private var model: VActor)
           Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
-  UActor,
-          ComponentEventListener<ClickEvent<Button>> {
+  UActor, ComponentEventListener<ClickEvent<Button>> {
 
   var item: VActorNavigationItem? = null
 

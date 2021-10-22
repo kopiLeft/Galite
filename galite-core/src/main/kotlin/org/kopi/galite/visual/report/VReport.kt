@@ -480,15 +480,15 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    triggers[VKT_Type]?.action?.method?.invoke()
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
   }
 
-  open fun executeObjectTrigger(VKT_Type: Int): Any = throw InconsistencyException("SHOULD BE REDEFINED")
+  open fun executeObjectTrigger(trigger: Trigger?): Any = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean = throw InconsistencyException("SHOULD BE REDEFINED")
+  fun executeBooleanTrigger(trigger: Trigger?): Boolean = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int = throw InconsistencyException("SHOULD BE REDEFINED")
+  fun executeIntegerTrigger(trigger: Trigger?): Int = throw InconsistencyException("SHOULD BE REDEFINED")
 
   fun getDocumentType(): Int = DOC_UNKNOWN
 
@@ -496,8 +496,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
    * overridden by forms to implement triggers
    * default triggers
    */
-  protected fun execTrigger(block: Any, id: Int): Any? {
-    executeVoidTrigger(id)
+  protected fun execTrigger(block: Any, trigger: Trigger?): Any? {
+    executeVoidTrigger(trigger)
     return null
   }
 
@@ -519,7 +519,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
+  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != null
 
   fun setMenu() {
     if (!built) {
@@ -642,8 +642,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
-  protected var VKT_Triggers: MutableList<IntArray>? = null
-  protected val triggers = mutableMapOf<Int, Trigger>()
+  protected var VKT_Triggers: MutableList<Array<Trigger?>>? = null
   var commands: Array<VCommand?>? = null
   private val activeCommands = ArrayList<VCommand>()
   var printOptions: PConfig = PConfig() // The print options

@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual.visual
 
+import org.kopi.galite.visual.dsl.common.Trigger
+
 /**
  * Child of this class represents objects than can be executed asynchronously
  * by the action mechanism
@@ -30,6 +32,13 @@ interface ActionHandler {
    * @param  VKT_Type   the number of the trigger
    */
   fun executeVoidTrigger(VKT_Type: Int)
+
+  /**
+   * Performs a void trigger
+   *
+   * @param  trigger   the trigger
+   */
+  fun executeVoidTrigger(trigger: Trigger?)
 
   /**
    * Performs the appropriate action asynchronously.

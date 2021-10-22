@@ -49,6 +49,7 @@ import org.kopi.galite.visual.db.Symbols
 import org.kopi.galite.visual.db.UserRights
 import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.db.subQuery
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.base.InconsistencyException
 
@@ -267,6 +268,15 @@ class VMenuTree constructor(ctxt: DBContext?,
       }
       else -> super.executeVoidTrigger(VKT_Type)
     }
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    trigger    the trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
   }
 
   /**

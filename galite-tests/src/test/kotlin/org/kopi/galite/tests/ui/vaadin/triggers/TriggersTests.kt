@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests.ui.vaadin.triggers
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
@@ -29,21 +30,17 @@ import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.click
-import org.kopi.galite.testing.editText
-import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.examples.CommandsForm
-import org.kopi.galite.tests.examples.FormExample
-import org.kopi.galite.tests.examples.Training
-import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FormBlock
 
 class TriggersTests : GaliteVUITestBase() {
 
-  val form = FormExample().also { it.model }
+  val form = FormToTestTriggers().also { it.model }
 
   @Before
   fun `login to the App`() {
-    org.kopi.galite.tests.examples.initData()
-
     login()
 
     // Open the form
@@ -104,52 +101,14 @@ class TriggersTests : GaliteVUITestBase() {
     assertEquals("item description", field.value)
   }
 
-  @Ignore
   @Test
-  fun `test DEFAULT trigger and save new record`() {
-    val form = CommandsForm().also { it.model }
-    form.open()
-    transaction {
-      // Check initial data
-      val initialData = Training.selectAll().map {
-        arrayOf(it[Training.id],
-                it[Training.trainingName],
-                it[Training.type],
-                it[Training.price],
-                it[Training.active]
-        )
-      }
+  fun `test DEFAULT trigger`() {
+    form.salesSimpleBlock.idClt.click()
+    val fieldEditedByBlock = form.salesSimpleBlock.defaultValueFromBlock.findField()
+    val field = form.salesSimpleBlock.defaultValueFromField.findField()
 
-      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
-    }
-
-    form.InsertMode.triggerCommand()
-
-    form.block.trainingType.editText("Galite")
-    form.block.trainingPrice.edit(Decimal("1000"))
-    form.block.active.edit(true)
-
-    form.saveBlock.triggerCommand()
-
-    transaction {
-      val data = Training.selectAll().map {
-        arrayOf(it[Training.id],
-                it[Training.trainingName],
-                it[Training.type],
-                it[Training.price],
-                it[Training.active]
-        )
-      }
-
-      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), data[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[3])
-      assertArraysEquals(arrayOf(5, "training value", 1, Decimal("1000.000").value, true), data[4])
-    }
+    assertEquals("Setting by block", fieldEditedByBlock.value)
+    assertEquals("Default field value", field.value)
   }
 
   companion object {
@@ -158,6 +117,80 @@ class TriggersTests : GaliteVUITestBase() {
     fun initTestModules() {
       transaction {
         org.kopi.galite.tests.examples.initModules()
+      }
+    }
+  }
+}
+
+class FormToTestTriggers : DictionaryForm() {
+  override val locale = Locale.UK
+  override val title = "Form to test triggers"
+  val action = menu("Action")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val block = insertBlock(Clients()) {
+    trigger(PREBLK) {
+      idClt.value = 50
+    }
+  }
+  val salesSimpleBlock = insertBlock(SalesSimpleBlock()) {
+    trigger(PREBLK) {
+      vBlock.setDefault()
+    }
+    trigger(DEFAULT) {
+      defaultValueFromBlock.value = "Setting by block"
+    }
+
+    trigger(INIT) {
+      description.value = "description value"
+    }
+  }
+
+  inner class Clients : FormBlock(1, 1, "Clients") {
+    val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The client id"
+    }
+  }
+
+  inner class SalesSimpleBlock : FormBlock(1, 1, "Sales") {
+    val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The item id"
+      trigger(POSTCHG) {
+        description.value = "sales description"
+      }
+    }
+    val description = visit(domain = STRING(25), position = at(2, 1)) {
+      label = "Description"
+      help = "The item description"
+    }
+    val information = visit(domain = STRING(25), position = at(2, 2)) {
+      label = "information"
+      help = "The item information"
+      trigger(VALUE) {
+        "sales information"
+      }
+    }
+    val action = visit(domain =  STRING(25), position = at(3, 1)) {
+      label = "action"
+      help = "The item action"
+      trigger(ACTION) {
+        description.value = "item description"
+      }
+    }
+    val defaultValueFromBlock = visit(domain =  STRING(25), position = at(4, 1)) {
+      label = "default value from block"
+    }
+    val defaultValueFromField = visit(domain =  STRING(25), position = at(5, 1)) {
+      label = "default value from field"
+      trigger(DEFAULT) {
+        this.value = "Default field value"
       }
     }
   }

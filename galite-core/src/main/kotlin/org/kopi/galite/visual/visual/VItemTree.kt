@@ -27,6 +27,7 @@ import kotlin.system.exitProcess
 
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.dsl.common.Trigger
 
 /**
  * Represents a new instance of VItemTree.
@@ -188,6 +189,15 @@ class VItemTree(rootName: String?,
       }
       else -> super.executeVoidTrigger(key)
     }
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    trigger    the trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
   }
 
   /**
