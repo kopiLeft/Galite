@@ -86,7 +86,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
     val ui = UI.getCurrent()
     var width = ""
     val progress = Dialog(ProgressBar().also { it.isIndeterminate = true })
-    val tableHeight = "450px"
+    val tableHeight = "400px"
 
     super.open()
 
