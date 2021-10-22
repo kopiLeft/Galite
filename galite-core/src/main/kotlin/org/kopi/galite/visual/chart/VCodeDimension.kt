@@ -29,7 +29,7 @@ import org.kopi.galite.visual.l10n.FieldLocalizer
  * @param idents  The columns displayed labels.
  */
 abstract class VCodeDimension(ident: String,
-                              format: VColumnFormat,
+                              format: VColumnFormat?,
                               private val type: String,
                               private val source: String,
                               private val idents: Array<String>) : VDimension(ident, format) {
@@ -57,6 +57,10 @@ abstract class VCodeDimension(ident: String,
     names = Array(idents.size) { i ->
       localizer.getCodeLabel(idents[i])
     }
+  }
+
+  fun initLabels(labels: Array<String?>) {
+    this.names = labels
   }
 
   protected var names: Array<String?>? = null // array of external representations

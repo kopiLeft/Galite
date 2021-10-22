@@ -435,8 +435,8 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     super.executeVoidTrigger(VKT_Type)
   }
 
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  fun executeObjectTrigger(VKT_Type: Int): Any? {
+    return triggers[VKT_Type]?.action?.method?.invoke()
   }
 
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {

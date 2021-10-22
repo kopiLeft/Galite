@@ -17,15 +17,35 @@
 
 package org.kopi.galite.visual.domain
 
+import org.kopi.galite.visual.chart.VBooleanCodeDimension
+import org.kopi.galite.visual.chart.VColumnFormat
+import org.kopi.galite.visual.chart.VDimension
+import org.kopi.galite.visual.chart.VFixnumCodeDimension
+import org.kopi.galite.visual.chart.VFixnumCodeMeasure
+import org.kopi.galite.visual.chart.VIntegerCodeDimension
+import org.kopi.galite.visual.chart.VIntegerCodeMeasure
+import org.kopi.galite.visual.chart.VMeasure
+import org.kopi.galite.visual.chart.VStringCodeDimension
+import org.kopi.galite.visual.dsl.chart.ChartDimension
+import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.CodeDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
+import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFixnumCodeField
 import org.kopi.galite.visual.form.VIntegerCodeField
 import org.kopi.galite.visual.form.VStringCodeField
+import org.kopi.galite.visual.report.VBooleanCodeColumn
+import org.kopi.galite.visual.report.VCalculateColumn
+import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VFixnumCodeColumn
+import org.kopi.galite.visual.report.VIntegerCodeColumn
+import org.kopi.galite.visual.report.VReportColumn
+import org.kopi.galite.visual.report.VStringCodeColumn
 import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.visual.VColor
 
 /**
  * Represents a code domain.
@@ -40,7 +60,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
   /**
    * Builds the form field model
    */
-  override fun buildFieldModel(formField: FormField<T>): VField {
+  override fun buildFormFieldModel(formField: FormField<T>): VField {
     return with(formField) {
       when (kClass) {
         Boolean::class -> VBooleanCodeField(block.buffer,
@@ -66,6 +86,140 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }.also { field ->
         field.initLabels(codes.map { it.label }.toTypedArray())
+      }
+    }
+  }
+
+  /**
+   * Builds the chart dimension model
+   */
+  override fun buildDimensionModel(dimension: ChartDimension<*>, format: VColumnFormat?): VDimension {
+    return with(dimension) {
+      val source = dimension.source!!
+
+      when (kClass) {
+        Boolean::class -> VBooleanCodeDimension(ident,
+                                                format,
+                                                this@CodeDomain.ident,
+                                                source,
+                                                codes.map { it.ident }.toTypedArray(),
+                                                codes.map { it.value as? Boolean }.toTypedArray())
+        Decimal::class -> VFixnumCodeDimension(ident,
+                                               true, // FIXME: do we need this?
+                                               format,
+                                               this@CodeDomain.ident,
+                                               source,
+                                               codes.map { it.ident }.toTypedArray(),
+                                               codes.map { it.value as? Decimal }.toTypedArray())
+        Int::class, Long::class -> VIntegerCodeDimension(ident,
+                                                         format,
+                                                         this@CodeDomain.ident,
+                                                         source,
+                                                         codes.map { it.ident }.toTypedArray(),
+                                                         codes.map { it.value as? Int }.toTypedArray())
+        String::class -> VStringCodeDimension(ident,
+                                              format,
+                                              this@CodeDomain.ident,
+                                              source,
+                                              codes.map { it.ident }.toTypedArray(),
+                                              codes.map { it.value as? String }.toTypedArray())
+        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }.also {
+        it.initLabels(codes.map { it.label }.toTypedArray())
+      }
+    }
+  }
+
+  /**
+   * Builds the chart measure model
+   */
+  override fun buildMeasureModel(measure: ChartMeasure<*>, color: VColor?): VMeasure {
+    return with(measure) {
+      when (kClass) {
+        Decimal::class -> VFixnumCodeMeasure(ident,
+                                             color,
+                                             this@CodeDomain.ident,
+                                             measure.source,
+                                             codes.map { it.ident }.toTypedArray(),
+                                             codes.map { it.value as? Decimal }.toTypedArray())
+        Int::class, Long::class -> VIntegerCodeMeasure(ident,
+                                                       color,
+                                                       this@CodeDomain.ident,
+                                                       measure.source,
+                                                       codes.map { it.ident }.toTypedArray(),
+                                                       codes.map { it.value as? Int }.toTypedArray())
+        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }.also {
+        it.initLabels(codes.map { it.label }.toTypedArray())
+      }
+    }
+  }
+
+  /**
+   * Builds the report column model
+   */
+  override fun buildReportFieldModel(
+    field: ReportField<*>,
+    function: VCalculateColumn?,
+    format: VCellFormat?
+  ): VReportColumn {
+    return with(field) {
+      when (kClass) {
+        Boolean::class -> VBooleanCodeColumn(
+          ident,
+          this@CodeDomain.ident,
+          field.source,
+          options,
+          align.value,
+          groupID,
+          function,
+          width ?: 0,
+          format,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as Boolean }.toBooleanArray()
+        )
+        Decimal::class -> VFixnumCodeColumn(
+          ident,
+          this@CodeDomain.ident,
+          field.source,
+          options,
+          align.value,
+          groupID,
+          function,
+          width ?: 0,
+          format,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as? Decimal }.toTypedArray()
+        )
+        Int::class, Long::class -> VIntegerCodeColumn(
+          ident,
+          this@CodeDomain.ident,
+          field.source!!,
+          options,
+          align.value,
+          groupID,
+          function,
+          width ?: 0,
+          format,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as Int }.toIntArray()
+        )
+        String::class -> VStringCodeColumn(
+          ident,
+          this@CodeDomain.ident,
+          field.source,
+          options,
+          align.value,
+          groupID,
+          function,
+          width ?: 0,
+          format,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as? String }.toTypedArray()
+        )
+        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }.also {
+        it.initLabels(codes.map { it.label }.toTypedArray())
       }
     }
   }

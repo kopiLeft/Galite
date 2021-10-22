@@ -33,11 +33,11 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  */
 class VFixnumCodeDimension(ident: String,
                            isDimension: Boolean,
-                           format: VColumnFormat,
+                           format: VColumnFormat?,
                            type: String,
                            source: String,
                            idents: Array<String>,
-                           private val codes: Array<Decimal>)
+                           private val codes: Array<Decimal?>)
           : VCodeDimension(ident,
                            format,
                            type,

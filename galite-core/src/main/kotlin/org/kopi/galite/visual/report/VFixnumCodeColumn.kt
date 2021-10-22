@@ -32,7 +32,7 @@ class VFixnumCodeColumn(ident: String?,
                         format: VCellFormat?,
                         names: Array<String>,
                         // array of internal representations
-                        private val codes: Array<Decimal>)
+                        private val codes: Array<Decimal?>)
           : VCodeColumn(ident,
                         type,
                         source,

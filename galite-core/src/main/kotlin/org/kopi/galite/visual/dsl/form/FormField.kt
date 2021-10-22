@@ -265,7 +265,7 @@ open class FormField<T>(val block: FormBlock,
    * The field model based on the field type.
    */
   val vField: VField by lazy {
-    domain.buildFieldModel(this).also {
+    domain.buildFormFieldModel(this).also {
       it.label = label
       it.toolTip = help
     }

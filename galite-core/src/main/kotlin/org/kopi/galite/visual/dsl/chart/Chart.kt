@@ -60,7 +60,7 @@ abstract class Chart : Window() {
   inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
                                                     init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
-    val chartDimension = ChartDimension(domain)
+    val chartDimension = ChartDimension(domain, `access$sourceFile`)
     chartDimension.init()
     dimension = chartDimension
     return chartDimension
@@ -121,7 +121,7 @@ abstract class Chart : Window() {
           init: ChartMeasure<T>.() -> Unit
   ): ChartMeasure<T> where T : Comparable<T>?, T : Number? {
     domain.kClass = T::class
-    val chartMeasure = ChartMeasure(domain)
+    val chartMeasure = ChartMeasure(domain, `access$sourceFile`)
     chartMeasure.init()
     this.measures.add(chartMeasure)
     return chartMeasure
@@ -284,4 +284,8 @@ abstract class Chart : Window() {
       // TODO
     }
   }
+
+  @PublishedApi
+  internal val `access$sourceFile`: String
+    get() = sourceFile
 }

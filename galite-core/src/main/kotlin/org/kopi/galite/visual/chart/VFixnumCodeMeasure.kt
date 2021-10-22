@@ -33,11 +33,11 @@ import org.kopi.galite.visual.visual.VColor
  * @param codes The decimal codes.
  */
 class VFixnumCodeMeasure(ident: String,
-                         color: VColor,
+                         color: VColor?,
                          type: String,
                          source: String,
                          idents: Array<String>,
-                         private val codes: Array<Decimal>)
+                         private val codes: Array<Decimal?>)
           : VCodeMeasure(ident,
                          color,
                          type,
