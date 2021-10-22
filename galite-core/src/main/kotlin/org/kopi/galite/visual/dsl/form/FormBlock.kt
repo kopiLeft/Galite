@@ -23,12 +23,12 @@ import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.Commands
@@ -38,7 +38,6 @@ import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.WindowController
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -66,7 +65,7 @@ open class FormBlock(var buffer: Int,
                      val title: String,
                      ident: String? = null)
   : FormElement(ident), VConstants {
-  var border: Int = 0
+  var border: Border = Border.NONE
   var align: FormBlockAlign? = null
   open val help: String? = null
   private var blockOptions: Int = 0
@@ -369,19 +368,19 @@ open class FormBlock(var buffer: Int,
    * This method changes the blocks' visibility.
    *
    * Use [Access] to see the list of the access.
-   * Use [Modes] to see the list of the modes.
+   * Use [Mode] to see the list of the modes.
    *
    * @param access the access to set in the block
    * @param modes the list of modes where the access will be changed
    */
-  fun blockVisibility(access: Access, vararg modes: Modes) {
-    if (modes.contains(Modes.QUERY)) {
+  fun blockVisibility(access: Access, vararg modes: Mode) {
+    if (modes.contains(Mode.QUERY)) {
       this.access[VConstants.MOD_QUERY] = access.value
     }
-    if (modes.contains(Modes.INSERT)) {
+    if (modes.contains(Mode.INSERT)) {
       this.access[VConstants.MOD_INSERT] = access.value
     }
-    if (modes.contains(Modes.UPDATE)) {
+    if (modes.contains(Mode.UPDATE)) {
       this.access[VConstants.MOD_UPDATE] = access.value
     }
   }
@@ -463,7 +462,6 @@ open class FormBlock(var buffer: Int,
   /**
    * Returns the table number
    *
-   * TODO : Do we really need this?
    */
   fun getTableNum(table: FormBlockTable): Int {
     val indexOfTable = blockTables.indexOf(table)
@@ -781,7 +779,7 @@ open class FormBlock(var buffer: Int,
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
-        super.border = this@FormBlock.border
+        super.border = this@FormBlock.border.value
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields

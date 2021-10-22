@@ -58,6 +58,21 @@ class PExport2PDF(
         tonerSaveMode: Boolean = false,
 ) : PExport(table, model, printConfig, title, tonerSaveMode), Constants {
 
+  private var datatable: PdfPTable? = null
+  private var pages = 0
+  private lateinit var document: Document
+  private var currentSubtitle: String? = null
+  private var nextPageSubtitle: String? = null
+  private var firstPage = false
+  private var scale = 0.0
+  private var widthSum = 0.0
+  private val widths: FloatArray = FloatArray(columnCount)
+
+  companion object {
+    private const val BORDER_PADDING = 1
+    private const val BORDER_WIDTH = 1
+  }
+
   fun export(): PrintJob {
     try {
       val printJob: PrintJob
@@ -414,20 +429,5 @@ class PExport2PDF(
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
                         Chunk("00.00.0000 00:00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
-  }
-
-  private var datatable: PdfPTable? = null
-  private var pages = 0
-  private lateinit var document: Document
-  private var currentSubtitle: String? = null
-  private var nextPageSubtitle: String? = null
-  private var firstPage = false
-  private var scale = 0.0
-  private var widthSum = 0.0
-  private val widths: FloatArray = FloatArray(columnCount)
-
-  companion object {
-    private const val BORDER_PADDING = 1
-    private const val BORDER_WIDTH = 1
   }
 }

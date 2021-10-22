@@ -21,7 +21,7 @@ package org.kopi.galite.visual.list
 import java.io.Serializable
 
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.l10n.ListLocalizer
 import org.kopi.galite.visual.l10n.LocalizationManager
@@ -44,7 +44,7 @@ class VList(private val ident: String,
             val newForm: String?,
             val columns: Array<VListColumn?>,
             val table: ColumnSet,
-            val action: (() -> VDictionary)?,
+            val action: (() -> DictionaryForm)?,
             val autocompleteType: Int,
             val autocompleteLength: Int,
             val hasShortcut: Boolean) : VConstants, Serializable {
@@ -53,7 +53,7 @@ class VList(private val ident: String,
               source: String,
               columns: Array<VListColumn?>,
               table: ColumnSet,
-              action: (() -> VDictionary)?,
+              action: (() -> DictionaryForm)?,
               autocompleteType: Int,
               autocompleteLength: Int,
               newForm: Class<VForm>?,

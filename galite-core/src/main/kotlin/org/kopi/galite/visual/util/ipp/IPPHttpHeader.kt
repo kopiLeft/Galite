@@ -22,6 +22,9 @@ import java.io.IOException
 
 class IPPHttpHeader {
 
+  private var name: String? = null
+  private var size = 0
+
   constructor(printerName: String, contentLength: Int) {
     this.name = printerName
     this.size = contentLength
@@ -63,7 +66,4 @@ class IPPHttpHeader {
   companion object {
     private const val HTTP_OK = 200
   }
-
-  private var name: String? = null
-  private var size = 0
 }

@@ -41,13 +41,13 @@ class VColumn(val pos: Int,
    * Returns the position of the table in the array of tables
    * of the field's block
    */
-  @Deprecated("use getTable_()")
-  fun getTable(): Int = pos
+  @Deprecated("use getTable()")
+  fun _getTable(): Int = pos
 
   /**
    * Returns the table in the array of tables of the field's block
    */
-  fun getTable_(): Table {
+  fun getTable(): Table {
     return column.table
   }
 

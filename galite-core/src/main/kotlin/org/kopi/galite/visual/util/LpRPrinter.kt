@@ -35,6 +35,9 @@ class LpRPrinter(private val name: String,
                  private val queue: String,
                  private val user: String) : Printer {
 
+  private var tray = 0
+  private var paperFormat: String? = null
+
   init {
     selectTray(1) // Standard tray
     setPaperFormat(null)
@@ -67,6 +70,11 @@ class LpRPrinter(private val name: String,
                                                                 proxyHost,
                                                                 queue,
                                                                 user) {
+
+    init {
+      setPrintBurst(false)
+    }
+
     fun print(): String {
       try {
         if (data.title != null) {
@@ -91,12 +99,5 @@ class LpRPrinter(private val name: String,
       inputStream.close()
       return data
     }
-
-    init {
-      setPrintBurst(false)
-    }
   }
-
-  private var tray = 0
-  private var paperFormat: String? = null
 }

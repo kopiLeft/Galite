@@ -32,5 +32,4 @@ class DBInterruptionException : DBException {
    * @param     query           the sql query which generated the exception
    */
   constructor(query: String) : super(query, SQLException("DBInterruptionException"))
-
 }

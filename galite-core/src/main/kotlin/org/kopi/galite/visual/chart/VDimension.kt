@@ -30,15 +30,18 @@ abstract class VDimension protected constructor(ident: String, var format: VColu
   //---------------------------------------------------------------------
   /**
    * Formats the dimension value.
+   *
    * @param value The value to be formatted.
    * @return The string representation of the object value.
    */
   protected abstract fun toString(value: Any?): String
+
   //---------------------------------------------------------------------
   // UTILS
   //---------------------------------------------------------------------
   /**
    * Returns the String representation of the dimension value.
+   *
    * @param value The dimension value.
    * @return The formatted value.
    */

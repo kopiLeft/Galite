@@ -89,6 +89,49 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     }
   }
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  private var cmdBarView: VCommand? = null
+  private var cmdColumnView: VCommand? = null
+  private var cmdLineView: VCommand? = null
+  private var cmdAreaView: VCommand? = null
+  private var cmdPieView: VCommand? = null
+
+  override lateinit var source: String
+  private var built = false
+  private var pageTitle = ""
+  var help: String? = null
+  var chartType: VChartType? = null  // chart type
+    private set
+
+  protected var VKT_Triggers = mutableListOf(IntArray(CConstants.TRG_TYPES.size)) // trigger list
+  protected val triggers = mutableMapOf<Int, Trigger>()
+
+  protected var commands: Array<VCommand>? = null // commands
+  private val activeCommands: ArrayList<VCommand> = ArrayList()
+  var printOptions: VPrintOptions = VPrintOptions()
+
+  /**
+   * The chart dimensions. The actual version supports only one dimension
+   */
+  protected lateinit var dimensions: Array<VDimension>
+
+  /**
+   * The chart measures.
+   */
+  protected lateinit var measures: Array<VMeasure>
+  private val rows: ArrayList<VRow> = ArrayList(500)
+
+  init {
+    if (context != null) {
+      dBContext = context.dBContext
+    }
+    init()
+    // localize the report using the default locale
+    localize(ApplicationContext.getDefaultLocale())
+  }
+
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -578,47 +621,4 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Adds a data row to this chart.
    */
   abstract fun add()
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var cmdBarView: VCommand? = null
-  private var cmdColumnView: VCommand? = null
-  private var cmdLineView: VCommand? = null
-  private var cmdAreaView: VCommand? = null
-  private var cmdPieView: VCommand? = null
-
-  override lateinit var source: String
-  private var built = false
-  private var pageTitle = ""
-  var help: String? = null
-  var chartType: VChartType? = null  // chart type
-    private set
-
-  protected var VKT_Triggers = mutableListOf(IntArray(CConstants.TRG_TYPES.size)) // trigger list
-  protected val triggers = mutableMapOf<Int, Trigger>()
-
-  protected var commands: Array<VCommand>? = null // commands
-  private val activeCommands: ArrayList<VCommand> = ArrayList()
-  var printOptions: VPrintOptions = VPrintOptions()
-
-  /**
-   * The chart dimensions. The actual version supports only one dimension
-   */
-  protected lateinit var dimensions: Array<VDimension>
-
-  /**
-   * The chart measures.
-   */
-  protected lateinit var measures: Array<VMeasure>
-  private val rows: ArrayList<VRow> = ArrayList(500)
-
-  init {
-    if (context != null) {
-      dBContext = context.dBContext
-    }
-    init()
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
-  }
 }

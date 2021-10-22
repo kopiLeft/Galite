@@ -23,9 +23,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * An empty module list.
  */
 class VEmptyModuleList : HorizontalLayout() {
-  //---------------------------------------------------
-// CONSTRUCTORS
-//---------------------------------------------------
   /**
    * Creates the empty module list component.
    */

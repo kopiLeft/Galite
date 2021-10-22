@@ -30,23 +30,6 @@ import java.net.URL
 class IPPHttpConnection(private val url: URL) {
 
   // --------------------------------------------------------------------
-  // ACCESSORS
-  // --------------------------------------------------------------------
-
-  fun sendRequest(request: IPP) {
-    val httpRequest = IPPHttp(url.path, request)
-
-    httpRequest.write(IPPOutputStream(os))
-    os.flush()
-  }
-
-  fun receiveResponse(): IPP {
-    val httpRequest = IPPHttp(IPPInputStream(inputStream))
-
-    return httpRequest.ipp
-  }
-
-  // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
 
@@ -65,5 +48,22 @@ class IPPHttpConnection(private val url: URL) {
     connection = Socket(url.host, url.port)
     os = BufferedOutputStream(DataOutputStream(connection.getOutputStream()))
     inputStream = BufferedInputStream(DataInputStream(connection.getInputStream()))
+  }
+
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
+
+  fun sendRequest(request: IPP) {
+    val httpRequest = IPPHttp(url.path, request)
+
+    httpRequest.write(IPPOutputStream(os))
+    os.flush()
+  }
+
+  fun receiveResponse(): IPP {
+    val httpRequest = IPPHttp(IPPInputStream(inputStream))
+
+    return httpRequest.ipp
   }
 }

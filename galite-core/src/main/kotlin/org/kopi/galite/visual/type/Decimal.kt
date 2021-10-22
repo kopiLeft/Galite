@@ -27,6 +27,12 @@ import java.util.Locale
  * This class represents the decimal type
  */
 class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal>, Type0<BigDecimal> {
+
+  /**
+   * The Max scale
+   */
+  var maxScale = -1
+
   constructor(b: BigInteger) : this(BigDecimal(b))
 
   constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
@@ -248,11 +254,6 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal>, Type0<BigD
     result = 31 * result + maxScale
     return result
   }
-
-  /**
-   * The Max scale
-   */
-  var maxScale = -1
 
   companion object {
     /**

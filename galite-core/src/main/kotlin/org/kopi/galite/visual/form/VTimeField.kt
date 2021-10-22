@@ -32,6 +32,8 @@ import org.kopi.galite.visual.visual.VlibProperties
 
 class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
+  private var value: Array<Time?> = arrayOfNulls(2 * bufferSize)
+
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -400,6 +402,4 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   companion object {
     internal fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m in 0..59
   }
-
-  private var value: Array<Time?> = arrayOfNulls(2 * bufferSize)
 }

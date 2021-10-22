@@ -48,7 +48,6 @@ import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.Symbols
 import org.kopi.galite.visual.db.UserRights
 import org.kopi.galite.visual.db.Users
-import org.kopi.galite.visual.db.subQuery
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.base.InconsistencyException
 
@@ -579,7 +578,7 @@ class VMenuTree constructor(ctxt: DBContext?,
           Favorites.insert {
             it[this.id] = FAVORITENId.nextIntVal()
             it[ts] = (System.currentTimeMillis() / 1000).toInt()
-            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }.subQuery()
+            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }
             it[module] = id
           }
         } else {

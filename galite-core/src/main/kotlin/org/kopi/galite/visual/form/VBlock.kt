@@ -85,6 +85,144 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+
+  /**
+   * The sorted records array.
+   */
+  lateinit var sortedRecords: IntArray
+    protected set
+
+  protected var blockAccess = false
+
+  // prevent that the access of a field is updated
+  // (performance in big charts)
+  protected var ignoreAccessChange = false
+
+  // max number of buffered records
+  var bufferSize = 0
+
+  // max number of buffered IDs
+  protected var fetchSize = 0
+
+  // max number of displayed records
+  var displaySize = 0
+
+  /** The page number of this block */
+  var pageNumber = 0 // page number
+  protected lateinit var source: String // qualified name of source file
+  lateinit var name: String // block name
+  protected lateinit var shortcut: String // block short name
+  var title: String = "" // block title
+  var alignment: BlockAlignment? = null
+  protected var help: String? = null // the help on this block
+  internal var tables: Array<Table>? = null // names of database tables
+  protected var options = 0 // block options
+  protected lateinit var access: IntArray // access flags for each mode
+  protected var indices: Array<String>? = null // error messages for violated indices
+  protected var indicesIdents: Array<String>? = null // error messages for violated indices
+  internal var commands: Array<VCommand>? = null // commands
+  open var actors: Array<VActor>? = null // actors to send to form (move to block import)
+    get(): Array<VActor>? {
+      val temp: Array<VActor>? = field
+      field = null
+      return temp
+    }
+
+  lateinit var fields: Array<VField> // fields
+  protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
+
+  // current mode
+  private var mode = 0
+  protected lateinit var recordInfo: IntArray // status vector for records
+  protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
+  protected var fetchCount = 0 // # of fetched records
+  protected var fetchPosition = 0 // position of current record
+  protected var blockListener = EventListenerList()
+  internal var orderModel = OrderModel()
+  var border = 0
+  var maxRowPos = 0
+  var maxColumnPos = 0
+  var displayedFields = 0
+  private var isFilterVisible = false
+  protected var dropListMap = HashMap<String, String>()
+
+  // dynamic data
+  var activeRecord = 0 // current record
+    get() {
+      return if (field in 0 until bufferSize) field else -1
+    }
+    set(rec) {
+      assert(isMulti() || rec == 0) { "multi? " + isMulti() + "rec: " + rec }
+      field = rec
+    }
+
+  var activeField: VField? = null
+  var isDetailMode = false
+    set(mode: Boolean) {
+      if (mode != field) {
+        // remember field to enter it in the next view
+        val vField = activeField
+        fireViewModeLeaved(this, vField)
+        field = mode
+        fireViewModeEntered(this, vField)
+      }
+    }
+
+  // number of active records
+  val recordCount
+    get(): Int {
+      var count = 0
+      if (isMulti()) {
+        for (i in 0 until bufferSize) {
+          if (isRecordFetched(i) || isRecordChanged(i)) {
+            count++
+          }
+        }
+      } else {
+        for (i in 0 until fetchCount) {
+          if (fetchBuffer[i] != -1) {
+            count++
+          }
+        }
+      }
+      return count
+    }
+
+  protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
+  private var _currentRecord = 0
+  var currentRecord
+    get(): Int {
+      return if (!isMulti()) {
+        0
+      } else {
+        assert(_currentRecord in 0 until bufferSize) { "Bad currentRecord $_currentRecord" }
+        _currentRecord
+      }
+    }
+    set(rec) {
+      if (isMulti()) {
+        _currentRecord = rec
+      }
+    }
+
+  companion object {
+    // record info flags
+    protected const val RCI_FETCHED = 0x00000001
+    protected const val RCI_CHANGED = 0x00000002
+    protected const val RCI_DELETED = 0x00000004
+    protected const val RCI_TRAILED = 0x00000008
+
+    //Inner class Order Model constants
+    const val STE_UNORDERED = 1
+    const val STE_INC = 2
+    const val STE_DESC = 4
+  }
+
   /**
    * Build everything after construction
    */
@@ -136,6 +274,29 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     activeCommands.toArray(temp)
     return temp
+  }
+
+  fun getMode(): Int = mode
+
+  fun setMode(mode: Int) {
+    if (this !== form.getActiveBlock()) {
+      this.mode = mode
+      for (i in fields.indices) {
+        fields[i].updateModeAccess()
+      }
+    } else {
+      // is this restriction acceptable ?
+      assert(!isMulti()) { "Block $name is a multiblock." }
+      val act = activeField
+      act?.leave(true)
+      this.mode = mode
+      for (i in fields.indices) {
+        fields[i].updateModeAccess()
+      }
+      if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+        act.enter()
+      }
+    }
   }
 
   /**
@@ -1796,9 +1957,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return idField.lookupColumn(tables!![0]) as? Column<Int> ?: throw InconsistencyException()
     }
 
-  // laurent : return f even if it's null until we add this field in
-  // all the forms. After we can throw an Exception if the field UC
-  // of the block base table is not present.
   /**
    * Searches field holding UC of block base table
    */
@@ -1876,7 +2034,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
    *
-   * @return    true iff Oracle outer join syntax should be used.
+   * @return    true if Oracle outer join syntax should be used.
    */
   private fun useOracleOuterJoinSyntax(): Boolean {
     TODO()
@@ -2019,7 +2177,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       (name + " != "
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
-    val table = fld!!.getColumn(0)!!.getTable_()
+    val table = fld!!.getColumn(0)!!.getTable()
 
     fetchLookup(table, fld)
   }
@@ -2035,7 +2193,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
     assert(fld!!.getColumnCount() == 1) { "column count: " + fld.getColumnCount() }
-    val table = fld.getColumn(0)!!.getTable_()
+    val table = fld.getColumn(0)!!.getTable()
 
     fetchLookup(table, fld)
   }
@@ -2307,7 +2465,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Returns true iff at least one record is filled
+   * Returns true if at least one record is filled
    */
   fun isFilled(): Boolean {
     var i = 0
@@ -2322,59 +2480,59 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Returns true iff the record is filled
+   * Returns true if the record is filled
    */
   fun isRecordFilled(rec: Int): Boolean {
     return !isRecordDeleted(rec) && (isRecordFetched(rec) || isRecordChanged(rec))
   }
 
   /**
-   * Returns true iff the specified record has been fetched from the database
+   * Returns true if the specified record has been fetched from the database
    */
   fun isRecordFetched(rec: Int): Boolean = recordInfo[rec] and RCI_FETCHED != 0
 
   /**
-   * Returns true iff the specified record has been changed
+   * Returns true if the specified record has been changed
    */
   fun isRecordChanged(rec: Int): Boolean = recordInfo[rec] and RCI_CHANGED != 0
 
   /**
-   * Returns true iff the specified record has been deleted
+   * Returns true if the specified record has been deleted
    */
   fun isRecordDeleted(rec: Int): Boolean = recordInfo[rec] and RCI_DELETED != 0
 
   /**
-   * Returns true iff the specified record has been deleted
+   * Returns true if the specified record has been deleted
    */
   fun isSortedRecordDeleted(sortedRec: Int): Boolean = recordInfo[sortedRecords[sortedRec]] and RCI_DELETED != 0
 
   /**
-   * Returns true iff the specified record is trailed
+   * Returns true if the specified record is trailed
    */
   fun isRecordTrailed(rec: Int): Boolean = recordInfo[rec] and RCI_TRAILED != 0
 
   /**
-   * Returns true iff the current record is filled
+   * Returns true if the current record is filled
    */
   fun isCurrentRecordFilled(): Boolean = !isCurrentRecordDeleted() && (isCurrentRecordFetched() || isCurrentRecordChanged())
 
   /**
-   * Returns true iff the current record has been fetched from the database
+   * Returns true if the current record has been fetched from the database
    */
   fun isCurrentRecordFetched(): Boolean = recordInfo[currentRecord] and RCI_FETCHED != 0
 
   /**
-   * Returns true iff the current record has been changed
+   * Returns true if the current record has been changed
    */
   fun isCurrentRecordChanged(): Boolean = recordInfo[currentRecord] and RCI_CHANGED != 0
 
   /**
-   * Returns true iff the current record has been deleted
+   * Returns true if the current record has been deleted
    */
   fun isCurrentRecordDeleted(): Boolean = recordInfo[currentRecord] and RCI_DELETED != 0
 
   /**
-   * Returns true iff the current record is trailed
+   * Returns true if the current record is trailed
    */
   fun isCurrentRecordTrailed(): Boolean = recordInfo[currentRecord] and RCI_TRAILED != 0
 
@@ -2578,7 +2736,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   open fun getActor(i: Int): VActor = form.getActor(i)
 
   /**
-   * Returns true iff this block can display more than one record.
+   * Returns true if this block can display more than one record.
    */
   @Deprecated("This method is replaced by noChart()")
   fun isChart(): Boolean = !noChart()
@@ -2846,12 +3004,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Returns true iff there is trigger associated with given event.
+   * Returns true if there is trigger associated with given event.
    */
   fun hasTrigger(event: Int): Boolean = hasTrigger(event, 0)
 
   /**
-   * Returns true iff there is trigger associated with given event.
+   * Returns true if there is trigger associated with given event.
    */
   fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != 0
 
@@ -3292,7 +3450,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Returns true iff this block has no UC and no TS field.
+   * Returns true if this block has no UC and no TS field.
    * May be overridden in subclasses eg actual blocks. Note: In this case,
    * conflicting deletes or updates of a record being edited, are impossible to
    * detect.
@@ -3632,166 +3790,5 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         append("Exception while retrieving bock information. \n")
       }
     }
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-
-  /**
-   * Returns the sorted records array.
-   * @return The sorted records array.
-   */
-  lateinit var sortedRecords: IntArray
-    protected set
-
-  protected var blockAccess = false
-
-  // prevent that the access of a field is updated
-  // (performance in big charts)
-  protected var ignoreAccessChange = false
-
-  // max number of buffered records
-  var bufferSize = 0
-
-  // max number of buffered IDs
-  protected var fetchSize = 0
-
-  // max number of displayed records
-  var displaySize = 0
-
-  /** The page number of this block */
-  var pageNumber = 0 // page number
-  protected lateinit var source: String // qualified name of source file
-  lateinit var name: String // block name
-  protected lateinit var shortcut: String // block short name
-  var title: String = "" // block title
-  var alignment: BlockAlignment? = null
-  protected var help: String? = null // the help on this block
-  internal var tables: Array<Table>? = null // names of database tables
-  protected var options = 0 // block options
-  protected lateinit var access: IntArray // access flags for each mode
-  protected var indices: Array<String>? = null // error messages for violated indices
-  protected var indicesIdents: Array<String>? = null // error messages for violated indices
-  internal var commands: Array<VCommand>? = null // commands
-  open var actors: Array<VActor>? = null // actors to send to form (move to block import)
-    get(): Array<VActor>? {
-      val temp: Array<VActor>? = field
-      field = null
-      return temp
-    }
-
-  lateinit var fields: Array<VField> // fields
-  protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
-  protected val triggers = mutableMapOf<Int, Trigger>()
-
-  // dynamic data
-  var activeRecord = 0 // current record
-    get() {
-      return if (field in 0 until bufferSize) field else -1
-    }
-    set(rec) {
-      assert(isMulti() || rec == 0) { "multi? " + isMulti() + "rec: " + rec }
-      field = rec
-    }
-
-  var activeField: VField? = null
-  var isDetailMode = false
-    set(mode: Boolean) {
-      if (mode != field) {
-        // remember field to enter it in the next view
-        val vField = activeField
-        fireViewModeLeaved(this, vField)
-        field = mode
-        fireViewModeEntered(this, vField)
-      }
-    }
-
-  // number of active records
-  val recordCount
-    get(): Int {
-      var count = 0
-      if (isMulti()) {
-        for (i in 0 until bufferSize) {
-          if (isRecordFetched(i) || isRecordChanged(i)) {
-            count++
-          }
-        }
-      } else {
-        for (i in 0 until fetchCount) {
-          if (fetchBuffer[i] != -1) {
-            count++
-          }
-        }
-      }
-      return count
-    }
-
-  protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
-  private var _currentRecord = 0
-  var currentRecord
-    get(): Int {
-      return if (!isMulti()) {
-        0
-      } else {
-        assert(_currentRecord in 0 until bufferSize) { "Bad currentRecord $_currentRecord" }
-        _currentRecord
-      }
-    }
-    set(rec) {
-      if (isMulti()) {
-        _currentRecord = rec
-      }
-    }
-
-  fun getMode(): Int = mode
-
-  fun setMode(mode: Int) {
-    if (this !== form.getActiveBlock()) {
-      this.mode = mode
-      for (i in fields.indices) {
-        fields[i].updateModeAccess()
-      }
-    } else {
-      // is this restriction acceptable ?
-      assert(!isMulti()) { "Block $name is a multiblock." }
-      val act = activeField
-      act?.leave(true)
-      this.mode = mode
-      for (i in fields.indices) {
-        fields[i].updateModeAccess()
-      }
-      if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= VConstants.ACS_VISIT) {
-        act.enter()
-      }
-    }
-  }
-
-  // current mode
-  private var mode = 0
-  protected lateinit var recordInfo: IntArray // status vector for records
-  protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
-  protected var fetchCount = 0 // # of fetched records
-  protected var fetchPosition = 0 // position of current record
-  protected var blockListener = EventListenerList()
-  internal var orderModel = OrderModel()
-  var border = 0
-  var maxRowPos = 0
-  var maxColumnPos = 0
-  var displayedFields = 0
-  private var isFilterVisible = false
-  protected var dropListMap = HashMap<String, String>()
-
-  companion object {
-    // record info flags
-    protected const val RCI_FETCHED = 0x00000001
-    protected const val RCI_CHANGED = 0x00000002
-    protected const val RCI_DELETED = 0x00000004
-    protected const val RCI_TRAILED = 0x00000008
-
-    //Inner class Order Model constants
-    const val STE_UNORDERED = 1
-    const val STE_INC = 2
-    const val STE_DESC = 4
   }
 }

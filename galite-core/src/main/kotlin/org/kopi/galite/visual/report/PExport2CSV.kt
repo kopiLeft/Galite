@@ -33,6 +33,11 @@ class PExport2CSV(table: UTable,
                   title: String)
   : PExport(table, model, pConfig, title), Constants {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private lateinit var writer: Writer
+
   override fun export(stream: OutputStream) {
     try {
       writer = BufferedWriter(OutputStreamWriter(stream, "UTF-8"))
@@ -70,9 +75,4 @@ class PExport2CSV(table: UTable,
       throw InconsistencyException(e)
     }
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private lateinit var writer: Writer
 }

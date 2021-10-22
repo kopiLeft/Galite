@@ -30,6 +30,11 @@ import java.net.UnknownHostException
  * @param port identifies the port number.
  */
 class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT) {
+
+  private var socket: Socket? = null
+  private var user: String? = null
+  private var pass: String? = null
+
   /**
    *  This function is used to establish the connection on a socket
    */
@@ -109,11 +114,6 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
    * returns an output stream for the given socket
    */
   fun getOutputStream(): OutputStream = socket!!.getOutputStream()
-
-
-  private var socket: Socket? = null
-  private var user: String? = null
-  private var pass: String? = null
 
   companion object {
     // ----------------------------------------------------------------------

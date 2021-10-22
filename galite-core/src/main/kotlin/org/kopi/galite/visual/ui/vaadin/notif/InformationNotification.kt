@@ -36,6 +36,11 @@ class InformationNotification(title: String?,
                               parent: Component?)
   : AbstractNotification(title, message, locale, parent) {
 
+  //--------------------------------------------------
+  // DATA MEMBERS
+  //--------------------------------------------------
+  private lateinit var close: Button
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
@@ -49,9 +54,4 @@ class InformationNotification(title: String?,
 
   override val iconName: VaadinIcon
     get() = VaadinIcon.INFO_CIRCLE
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private lateinit var close: Button
 }

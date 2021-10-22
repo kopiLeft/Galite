@@ -26,7 +26,7 @@ import org.jetbrains.exposed.sql.alias
 import org.kopi.galite.visual.dsl.common.FieldList
 import org.kopi.galite.visual.dsl.common.ListDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.list.VList
 
 /**
@@ -55,7 +55,7 @@ abstract class ListDomain<T>(width: Int? = null,
    *
    * @sample org.kopi.galite.tests.form.UsersList
    */
-  open val access: (() -> VDictionary)? = null
+  open val access: (() -> DictionaryForm)? = null
 
   /**
    * Override it if you want to define a constraint that the domain values must verify.

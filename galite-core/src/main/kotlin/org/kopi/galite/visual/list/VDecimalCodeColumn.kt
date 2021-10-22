@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual.list
 
 import kotlin.reflect.KClass
@@ -22,25 +23,36 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents a list column.
  */
-class VFixnumColumn(title: String,
-                    column: Column<*>?,
-                    table: ColumnSet?,
-                    align: Int,
-                    width: Int,
-                    scale: Int,
-                    sortAscending: Boolean)
-      : VListColumn(title,
-                    column,
-                    table,
-                    align,
-                    width,
-                    sortAscending) {
+class VDecimalCodeColumn(title: String,
+                         column: Column<*>?,
+                         table: ColumnSet?,
+                         names: Array<String>,
+                         private val codes: Array<Decimal?>,
+                         sortAscending: Boolean)
+          : VCodeColumn(title,
+                        column,
+                        table,
+                        names,
+                        sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
+  /**
+   * Returns the index.of given object
+   */
+  override fun getObjectIndex(value: Any): Int {
+    codes.forEachIndexed { index, code ->
+      if (value == code) {
+        return index
+      }
+    }
+    throw InconsistencyException("bad code value " + value as Decimal)
+  }
+
   override fun getDataType(): KClass<*> = Decimal::class
 }

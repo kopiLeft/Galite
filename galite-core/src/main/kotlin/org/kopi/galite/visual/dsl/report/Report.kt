@@ -31,6 +31,10 @@ import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.MReport
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VDateColumn
+import org.kopi.galite.visual.report.VDecimalColumn
+import org.kopi.galite.visual.report.VIntegerColumn
+import org.kopi.galite.visual.report.VMonthColumn
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.visual.ApplicationContext

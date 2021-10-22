@@ -24,8 +24,8 @@ import org.kopi.galite.visual.chart.VBooleanDimension
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.chart.VDateDimension
 import org.kopi.galite.visual.chart.VDimension
-import org.kopi.galite.visual.chart.VFixnumDimension
-import org.kopi.galite.visual.chart.VFixnumMeasure
+import org.kopi.galite.visual.chart.VDecimalDimension
+import org.kopi.galite.visual.chart.VDecimalMeasure
 import org.kopi.galite.visual.chart.VIntegerDimension
 import org.kopi.galite.visual.chart.VIntegerMeasure
 import org.kopi.galite.visual.chart.VMeasure
@@ -43,7 +43,7 @@ import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.form.VMonthField
@@ -56,7 +56,7 @@ import org.kopi.galite.visual.report.VBooleanColumn
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
 import org.kopi.galite.visual.report.VDateColumn
-import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VIntegerColumn
 import org.kopi.galite.visual.report.VMonthColumn
 import org.kopi.galite.visual.report.VReportColumn
@@ -124,12 +124,12 @@ open class Domain<T>(val width: Int? = null,
                          styled)
           }
         }
-        Decimal::class -> VFixnumField(block.buffer,
-                                       width!!,
-                                       height ?: 6,
-                                       height == null,
-                                       min as? Decimal,
-                                       max as? Decimal)
+        Decimal::class -> VDecimalField(block.buffer,
+                                        width!!,
+                                        height ?: 6,
+                                        height == null,
+                                        min as? Decimal,
+                                        max as? Decimal)
         Boolean::class -> VBooleanField(block.buffer)
         Date::class, java.util.Date::class -> VDateField(block.buffer)
         Month::class -> VMonthField(block.buffer)
@@ -162,7 +162,7 @@ open class Domain<T>(val width: Int? = null,
         Int::class, Long::class ->
           VIntegerDimension(ident, format)
         Decimal::class ->
-          VFixnumDimension(ident, format, height ?: 6, true)
+          VDecimalDimension(ident, format, height ?: 6, true)
         String::class ->
           VStringDimension(ident, format)
         Boolean::class ->
@@ -189,7 +189,7 @@ open class Domain<T>(val width: Int? = null,
     return with(measure) {
       when (kClass) {
         Int::class, Long::class -> VIntegerMeasure(ident, color)
-        Decimal::class -> VFixnumMeasure(ident, color, height!!)
+        Decimal::class -> VDecimalMeasure(ident, color, height!!)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }
@@ -209,7 +209,7 @@ open class Domain<T>(val width: Int? = null,
             height ?: 0, format
           )
         Decimal::class ->
-          VFixnumColumn(
+          VDecimalColumn(
             ident, options, align.value, groupID, function, width ?: 0,
             height ?: 0, format
           )

@@ -22,7 +22,7 @@ import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat

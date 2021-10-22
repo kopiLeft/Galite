@@ -21,7 +21,7 @@ package org.kopi.galite.visual.type
 import java.util.Locale
 
 /**
- * This class is the super-class for types
+ * This height level interface for all types.
  */
 interface Type0<T> {
   /**

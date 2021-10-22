@@ -30,7 +30,7 @@ import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
@@ -97,8 +97,6 @@ open class FormField<T>(val block: FormBlock,
   /**
    * Returns the field value of the current record number [record]
    *
-   * FIXME temporary workaround
-   *
    * @param record the record number
    */
   operator fun get(record: Int): T? {
@@ -111,8 +109,6 @@ open class FormField<T>(val block: FormBlock,
 
   /**
    * Sets the field value of given record.
-   *
-   * FIXME temporary workaround
    *
    * @param record the record number
    * @param value  the value
@@ -371,7 +367,7 @@ open class FormField<T>(val block: FormBlock,
   fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
 
   /**
-   * Returns true iff it is certain that the field will never be entered
+   * Returns true if it is certain that the field will never be entered
    */
   val isNeverAccessible: Boolean
     get() {

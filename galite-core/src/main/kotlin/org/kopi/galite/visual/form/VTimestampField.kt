@@ -37,6 +37,11 @@ import org.kopi.galite.visual.visual.VlibProperties
 
 class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var value: Array<Timestamp?> = arrayOfNulls(2 * bufferSize)
+
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -412,9 +417,4 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
       }
     }
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private var value: Array<Timestamp?> = arrayOfNulls(2 * bufferSize)
 }

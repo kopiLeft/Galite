@@ -20,8 +20,8 @@ package org.kopi.galite.visual.domain
 import org.kopi.galite.visual.chart.VBooleanCodeDimension
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.chart.VDimension
-import org.kopi.galite.visual.chart.VFixnumCodeDimension
-import org.kopi.galite.visual.chart.VFixnumCodeMeasure
+import org.kopi.galite.visual.chart.VDecimalCodeDimension
+import org.kopi.galite.visual.chart.VDecimalCodeMeasure
 import org.kopi.galite.visual.chart.VIntegerCodeDimension
 import org.kopi.galite.visual.chart.VIntegerCodeMeasure
 import org.kopi.galite.visual.chart.VMeasure
@@ -34,13 +34,13 @@ import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFixnumCodeField
+import org.kopi.galite.visual.form.VDecimalCodeField
 import org.kopi.galite.visual.form.VIntegerCodeField
 import org.kopi.galite.visual.form.VStringCodeField
 import org.kopi.galite.visual.report.VBooleanCodeColumn
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
-import org.kopi.galite.visual.report.VFixnumCodeColumn
+import org.kopi.galite.visual.report.VDecimalCodeColumn
 import org.kopi.galite.visual.report.VIntegerCodeColumn
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.report.VStringCodeColumn
@@ -68,11 +68,11 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                             block.sourceFile,
                                             codes.map { it.ident }.toTypedArray(),
                                             codes.map { it.value as? Boolean }.toTypedArray())
-        Decimal::class -> VFixnumCodeField(block.buffer,
-                                           ident,
-                                           block.sourceFile,
-                                           codes.map { it.ident }.toTypedArray(),
-                                           codes.map { it.value as? Decimal }.toTypedArray())
+        Decimal::class -> VDecimalCodeField(block.buffer,
+                                            ident,
+                                            block.sourceFile,
+                                            codes.map { it.ident }.toTypedArray(),
+                                            codes.map { it.value as? Decimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeField(block.buffer,
                                                      ident,
                                                      block.sourceFile,
@@ -104,13 +104,13 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                                 source,
                                                 codes.map { it.ident }.toTypedArray(),
                                                 codes.map { it.value as? Boolean }.toTypedArray())
-        Decimal::class -> VFixnumCodeDimension(ident,
-                                               true, // FIXME: do we need this?
-                                               format,
-                                               this@CodeDomain.ident,
-                                               source,
-                                               codes.map { it.ident }.toTypedArray(),
-                                               codes.map { it.value as? Decimal }.toTypedArray())
+        Decimal::class -> VDecimalCodeDimension(ident,
+                                                true, // FIXME: do we need this?
+                                                format,
+                                                this@CodeDomain.ident,
+                                                source,
+                                                codes.map { it.ident }.toTypedArray(),
+                                                codes.map { it.value as? Decimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeDimension(ident,
                                                          format,
                                                          this@CodeDomain.ident,
@@ -136,12 +136,12 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
   override fun buildMeasureModel(measure: ChartMeasure<*>, color: VColor?): VMeasure {
     return with(measure) {
       when (kClass) {
-        Decimal::class -> VFixnumCodeMeasure(ident,
-                                             color,
-                                             this@CodeDomain.ident,
-                                             measure.source,
-                                             codes.map { it.ident }.toTypedArray(),
-                                             codes.map { it.value as? Decimal }.toTypedArray())
+        Decimal::class -> VDecimalCodeMeasure(ident,
+                                              color,
+                                              this@CodeDomain.ident,
+                                              measure.source,
+                                              codes.map { it.ident }.toTypedArray(),
+                                              codes.map { it.value as? Decimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeMeasure(ident,
                                                        color,
                                                        this@CodeDomain.ident,
@@ -178,7 +178,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           codes.map { it.ident }.toTypedArray(),
           codes.map { it.value as Boolean }.toBooleanArray()
         )
-        Decimal::class -> VFixnumCodeColumn(
+        Decimal::class -> VDecimalCodeColumn(
           ident,
           this@CodeDomain.ident,
           field.source,

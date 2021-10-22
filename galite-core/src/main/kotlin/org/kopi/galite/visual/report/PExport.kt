@@ -32,6 +32,35 @@ abstract class PExport(val table: UTable,
                        var title: String,
                        val tonerSaveMode: Boolean = false) : Serializable {
 
+  var columnCount = 0
+    private set
+  private var firstVisibleColumn: Int = -1
+  var maxLevel: Int
+    private set
+  private var minLevel = 0
+  private val parameters = Parameters(Color.blue)
+
+  init {
+    for (j in 0 until model.getAccessibleColumnCount()) {
+      val visibleColumn: Int = table.convertColumnIndexToModel(j)
+      val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
+
+      if (column!!.isVisible && !column.isFolded) {
+        if (firstVisibleColumn == -1) {
+          firstVisibleColumn = j
+        }
+        columnCount += 1
+      }
+    }
+    if (printConfig.groupFormfeed) {
+      // each group an own page:
+      // first column is not shown because its the
+      // same for all -> it is added to the "title"
+      columnCount -= 1
+    }
+    maxLevel = model.getTree()!!.level
+  }
+
   fun formatColumns() {
     var index = 0
 
@@ -227,34 +256,4 @@ abstract class PExport(val table: UTable,
    * @return    true if we are in a toner saving mode ?
    */
   fun tonerSaveMode(): Boolean = tonerSaveMode
-
-
-  var columnCount = 0
-    private set
-  private var firstVisibleColumn: Int = -1
-  var maxLevel: Int
-    private set
-  private var minLevel = 0
-  private val parameters = Parameters(Color.blue)
-
-  init {
-    for (j in 0 until model.getAccessibleColumnCount()) {
-      val visibleColumn: Int = table.convertColumnIndexToModel(j)
-      val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
-
-      if (column!!.isVisible && !column.isFolded) {
-        if (firstVisibleColumn == -1) {
-          firstVisibleColumn = j
-        }
-        columnCount += 1
-      }
-    }
-    if (printConfig.groupFormfeed) {
-      // each group an own page:
-      // first column is not shown because its the
-      // same for all -> it is added to the "title"
-      columnCount -= 1
-    }
-    maxLevel = model.getTree()!!.level
-  }
 }

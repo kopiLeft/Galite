@@ -31,6 +31,26 @@ import com.vaadin.flow.dom.Element
 class VSingleRowTable : Component(), HasComponents {
 
   //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val td: Element
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  /**
+   * Creates the table instance.
+   */
+  init {
+    val body = Element("tbody")
+    element.appendChild(body)
+    val tr = Element("tr")
+    body.appendChild(tr)
+    td = Element("td")
+    tr.appendChild(td)
+  }
+
+  //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   /**
@@ -57,25 +77,5 @@ class VSingleRowTable : Component(), HasComponents {
                              "Component to add cannot be null")
       td.appendChild(component.element)
     }
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val td: Element
-
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates the table instance.
-   */
-  init {
-    val body = Element("tbody")
-    element.appendChild(body)
-    val tr = Element("tr")
-    body.appendChild(tr)
-    td = Element("td")
-    tr.appendChild(td)
   }
 }

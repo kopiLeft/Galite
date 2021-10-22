@@ -48,6 +48,9 @@ abstract class VCodeColumn(ident: String?,
                            width,
                            1,
                            format) {
+
+  protected var names: Array<String?>? = null // array of external representations
+
   /**
    * Compares two objects.
    *
@@ -74,6 +77,7 @@ abstract class VCodeColumn(ident: String?,
    * Get the index of the value.
    */
   abstract fun getIndex(value: Any): Int
+
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -97,6 +101,4 @@ abstract class VCodeColumn(ident: String?,
       it
     }.toTypedArray()
   }
-
-  protected var names: Array<String?>? = null // array of external representations
 }

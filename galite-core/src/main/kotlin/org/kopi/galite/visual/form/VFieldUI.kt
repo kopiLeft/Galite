@@ -36,10 +36,72 @@ import org.kopi.galite.visual.visual.VExecFailedException
  * @param model     The field model.
  * @param index     The row controller index.
  */
-abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: UBlock,
+abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: UBlock,
                                                             val model: VField,
                                                             val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  val fieldHandler = createFieldHandler() // The field handler instance.
+
+  // static (compiled) data
+  private val hasAutofill: Boolean // RE
+  private var hasNewItem = false // MO
+  private var hasEditItem = false // VE
+
+  //private	boolean			hasEditItem_S;	// IT !!!!
+  private val commands: Array<VCommand>? // commands
+  lateinit var displays: Array<UField?> // the object displayed on screen
+    private set
+  private lateinit var dl: ULabel // label text
+  private var dlDetail: ULabel? = null // label text (chart)
+  var detailDisplay: UField? = null // the object displayed on screen (detail)
+    private set
+  private var line = 0 // USE A VPosition !!!!
+  private var lineEnd = 0
+  private var column = 0
+  private var columnEnd = 0
+  private var chartPos = 0
+
+  // dynamic data
+  private val activeCommands = arrayListOf<VCommand>() // commands currently actives
+  private var incrementCommand: VCommand? = null
+  private var decrementCommand: VCommand? = null
+  private var autofillCommand: VCommand? = null
+
+  init {
+    model.addFieldListener(fieldHandler)
+    model.addFieldChangeListener(fieldHandler)
+    val pos = model.position
+    if (pos != null) {
+      line = pos.line
+      lineEnd = pos.lineEnd
+      column = pos.column
+      columnEnd = pos.columnEnd
+      chartPos = pos.chartPos
+    }
+    val cmd = model.command
+
+    cmd?.forEach {
+      val commandText = it.getIdent()
+      when {
+        commandText == "Increment" -> incrementCommand = it
+        commandText == "Decrement" -> decrementCommand = it
+        commandText == "Autofill" && !model.hasAutofill() -> autofillCommand = it
+      }
+    }
+    hasAutofill = model.hasAutofill() && !hasAutofillCommand()
+    commands = cmd
+    if (model.list != null) {
+      if (model.list!!.newForm != null || model.list!!.action != null) {
+        hasNewItem = true
+        hasEditItem = hasNewItem
+      }
+    }
+    buildDisplay()
+  }
 
   private fun hasEditItem_S(): Boolean = model.list != null && model.list!!.hasShortcut
 
@@ -653,66 +715,4 @@ abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: 
   fun getLabel(): ULabel = dl
 
   fun getDetailLabel(): ULabel? = dlDetail
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  val fieldHandler = createFieldHandler() // The field handler instance.
-
-  // static (compiled) data
-  private val hasAutofill: Boolean // RE
-  private var hasNewItem = false // MO
-  private var hasEditItem = false // VE
-
-  //private	boolean			hasEditItem_S;	// IT !!!!
-  private val commands: Array<VCommand>? // commands
-  lateinit var displays: Array<UField?> // the object displayed on screen
-    private set
-  private lateinit var dl: ULabel // label text
-  private var dlDetail: ULabel? = null // label text (chart)
-  var detailDisplay: UField? = null // the object displayed on screen (detail)
-    private set
-  private var line = 0 // USE A VPosition !!!!
-  private var lineEnd = 0
-  private var column = 0
-  private var columnEnd = 0
-  private var chartPos = 0
-
-  // dynamic data
-  private val activeCommands = arrayListOf<VCommand>() // commands currently actives
-  private var incrementCommand: VCommand? = null
-  private var decrementCommand: VCommand? = null
-  private var autofillCommand: VCommand? = null
-
-  init {
-    model.addFieldListener(fieldHandler)
-    model.addFieldChangeListener(fieldHandler)
-    val pos = model.position
-    if (pos != null) {
-      line = pos.line
-      lineEnd = pos.lineEnd
-      column = pos.column
-      columnEnd = pos.columnEnd
-      chartPos = pos.chartPos
-    }
-    val cmd = model.command
-
-    cmd?.forEach {
-      val commandText = it.getIdent()
-      when {
-        commandText == "Increment" -> incrementCommand = it
-        commandText == "Decrement" -> decrementCommand = it
-        commandText == "Autofill" && !model.hasAutofill() -> autofillCommand = it
-      }
-    }
-    hasAutofill = model.hasAutofill() && !hasAutofillCommand()
-    commands = cmd
-    if (model.list != null) {
-      if (model.list!!.newForm != null || model.list!!.action != null) {
-        hasNewItem = true
-        hasEditItem = hasNewItem
-      }
-    }
-    buildDisplay()
-  }
 }

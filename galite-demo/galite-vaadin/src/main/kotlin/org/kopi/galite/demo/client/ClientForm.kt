@@ -27,11 +27,12 @@ import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class ClientForm : ReportSelectionForm() {
@@ -220,7 +221,7 @@ class ClientForm : ReportSelectionForm() {
         }
       }
       command(item = graph) {
-        mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
         action = {
           showChart(ChartSample())
         }
@@ -277,7 +278,7 @@ class ClientForm : ReportSelectionForm() {
     }
 
     init {
-      border = VConstants.BRD_LINE
+      border = Border.LINE
 
       command(item = showHideFilter) {
         action = {
@@ -296,7 +297,7 @@ class ClientForm : ReportSelectionForm() {
         }
       }
       command(item = graph) {
-        mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
         action = {
           showChart(ChartSample())
         }

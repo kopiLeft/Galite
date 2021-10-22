@@ -29,6 +29,12 @@ import java.util.Locale
  * This class represents the time types
  */
 open class Time : Type<Time, LocalTime> {
+
+  /**
+   * Sets the base value for this object
+   */
+  internal var scalar = 0
+
   constructor(hours: Int, minutes: Int, seconds: Int = 0) {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
   }
@@ -199,11 +205,6 @@ open class Time : Type<Time, LocalTime> {
   override fun hashCode(): Int {
     return scalar
   }
-
-  /**
-   * Sets the base value for this object
-   */
-  internal var scalar = 0
 
   companion object {
     /**

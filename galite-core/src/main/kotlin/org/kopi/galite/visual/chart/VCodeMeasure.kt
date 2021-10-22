@@ -34,6 +34,9 @@ abstract class VCodeMeasure protected constructor(ident: String,
                                                   private val type: String,
                                                   private val source: String,
                                                   private val idents: Array<String>) : VMeasure(ident, color) {
+
+  protected var names: Array<String?>? = null // array of external representations
+
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
@@ -63,6 +66,4 @@ abstract class VCodeMeasure protected constructor(ident: String,
   fun initLabels(labels: Array<String?>) {
     this.names = labels
   }
-
-  protected var names: Array<String?>? = null // array of external representations
 }

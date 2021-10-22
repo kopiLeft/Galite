@@ -51,7 +51,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
   protected var formView: DForm = parent
   protected lateinit var columnViews: Array<VFieldUI?>
 
-  // protected Layout  		layout;
   protected var maxRowPos: Int = model.maxRowPos
   protected var maxColumnPos: Int = model.maxColumnPos
   protected var displayedFields: Int = model.displayedFields
@@ -223,7 +222,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
         i += 1
       }
       if (displine < model.displaySize) {
-        // record should be visible => redisplay iff requested
+        // record should be visible => redisplay if requested
         redisplay = force // do nothing
       } else {
         // scroll upwards until record is visible => redisplay

@@ -46,6 +46,36 @@ import org.kopi.galite.visual.visual.VlibProperties
 abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig, title: String)
   : PExport(table, model, printConfig, title), Constants {
 
+  //-----------------------------------------------------------
+  // DATA MEMBERS
+  //-----------------------------------------------------------
+  private var rowNumber = 0
+  protected var workbook: Workbook? = null
+    private set
+  private var sheet: Sheet? = null
+  private var format: DataFormat? = null
+  private val datatype: IntArray = IntArray(columnCount)
+  private val dataformats: ShortArray = ShortArray(columnCount)
+  private val widths: ShortArray = ShortArray(columnCount)
+  private var sheetIndex = 0
+
+  // cell style cache
+  private val cellStyleCacheManager: CellStyleCacheManager = CellStyleCacheManager()
+
+  companion object {
+    /**
+     * Set the value of the cell to the specified date value.
+     */
+    protected fun setCellValue(cell: Cell, value: Date) {
+      val cal = GregorianCalendar()
+      cal.clear()
+      cal[Calendar.YEAR] = value.year
+      cal[Calendar.MONTH] = value.month - 1
+      cal[Calendar.DAY_OF_MONTH] = value.day
+      cell.setCellValue(cal)
+    }
+  }
+
   override fun export(stream: OutputStream) {
     rowNumber = 0
     sheetIndex = 0
@@ -226,7 +256,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
 
   override fun formatDecimalColumn(column: VReportColumn, index: Int) {
     var decimalFormat = "#,##0"
-    for (i in 0 until (column as VFixnumColumn).maxScale) {
+    for (i in 0 until (column as VDecimalColumn).maxScale) {
       decimalFormat += if (i == 0) ".0" else "0"
     }
     dataformats[index] = format!!.getFormat(decimalFormat)
@@ -259,35 +289,6 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   protected abstract fun createWorkbook(): Workbook?
+
   abstract fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color?
-
-  //-----------------------------------------------------------
-  // DATA MEMBERS
-  //-----------------------------------------------------------
-  private var rowNumber = 0
-  protected var workbook: Workbook? = null
-    private set
-  private var sheet: Sheet? = null
-  private var format: DataFormat? = null
-  private val datatype: IntArray = IntArray(columnCount)
-  private val dataformats: ShortArray = ShortArray(columnCount)
-  private val widths: ShortArray = ShortArray(columnCount)
-  private var sheetIndex = 0
-
-  // cell style cache
-  private val cellStyleCacheManager: CellStyleCacheManager = CellStyleCacheManager()
-
-  companion object {
-    /**
-     * Set the value of the cell to the specified date value.
-     */
-    protected fun setCellValue(cell: Cell, value: Date) {
-      val cal = GregorianCalendar()
-      cal.clear()
-      cal[Calendar.YEAR] = value.year
-      cal[Calendar.MONTH] = value.month - 1
-      cal[Calendar.DAY_OF_MONTH] = value.day
-      cell.setCellValue(cal)
-    }
-  }
 }

@@ -22,6 +22,7 @@ import org.kopi.galite.visual.visual.VlibProperties
 
 /**
  * Represents a boolean chart column.
+ *
  * @param ident         The column identifier.
  * @param format        The dimension format.
  */

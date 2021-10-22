@@ -23,6 +23,14 @@ package org.kopi.galite.visual.db
  */
 class DBContext {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  /** Connection currently opened */
+  lateinit var connection: Connection
+    private set
+  lateinit var defaultConnection: Connection //  The underlying default connection.
+
   /**
    * Create a connection. Connects to database and logs on.
    *
@@ -86,12 +94,4 @@ class DBContext {
   fun close() {
     // TODO
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  /** Connection currently opened */
-  lateinit var connection: Connection
-    private set
-  lateinit var defaultConnection: Connection //  The underlying default connection.
 }
