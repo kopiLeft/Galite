@@ -26,6 +26,12 @@ import java.io.PrintWriter
  * This class implements a pretty printer
  */
 open class VHelpGenerator {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  protected open lateinit var printer: PrintWriter
+
   /**
    * Key to name
    */
@@ -114,9 +120,4 @@ open class VHelpGenerator {
   fun addButton(name: String) {
     addImage(name, 1)
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected open lateinit var printer: PrintWriter
 }

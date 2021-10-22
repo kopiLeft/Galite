@@ -38,7 +38,7 @@ import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.Type
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
@@ -109,7 +109,7 @@ class CommandsFormTests : GaliteVUITestBase() {
   fun `test report command and report groups`() {
     form.report.triggerCommand()
     val reportTable = _get<DReport>().getTable() as DTable
-    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VDecimalColumn }!!
 
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
@@ -189,7 +189,7 @@ class CommandsFormTests : GaliteVUITestBase() {
   fun `test dynamicReport command`() {
     form.dynamicReport.triggerCommand()
     val reportTable = _get<DReport>().getTable() as DTable
-    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VDecimalColumn }!!
 
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", "", ""),

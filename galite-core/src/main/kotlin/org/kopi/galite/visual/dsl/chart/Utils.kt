@@ -17,7 +17,7 @@
 
 package org.kopi.galite.visual.dsl.chart
 
-import org.kopi.galite.visual.exceptions.MissingMeasureException
+import org.kopi.galite.visual.dsl.exceptions.MissingMeasureException
 
 /**
  * Chart data formatter utility.

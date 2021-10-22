@@ -80,6 +80,40 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
     }
   }
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var cmdFold: VCommand? = null
+  private var cmdUnfold: VCommand? = null
+  private var cmdSort: VCommand? = null
+  private var cmdOpenLine: VCommand? = null
+  private var cmdFoldColumn: VCommand? = null
+  private var cmdUnfoldColumn: VCommand? = null
+  private var cmdColumnInfo: VCommand? = null
+  private var cmdEditColumn: VCommand? = null
+  override lateinit var source: String // The source for this document
+  val model: MReport = MReport()
+  private var built = false
+  private var pageTitle = ""
+  private var firstPageHeader = ""
+  protected var VKT_Triggers: MutableList<IntArray>? = null
+  protected val triggers = mutableMapOf<Int, Trigger>()
+  var commands: Array<VCommand?>? = null
+  private val activeCommands = ArrayList<VCommand>()
+  var printOptions: PConfig = PConfig() // The print options
+  var media: String? = null             // The media for this document
+  var help: String? = null
+
+  init {
+    if (ctxt != null) {
+      dBContext = ctxt.dBContext
+    }
+    init()
+
+    // localize the report using the default locale
+    localize(ApplicationContext.getDefaultLocale())
+  }
+
   override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_REPORT
 
   /**
@@ -517,7 +551,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   }
 
   /**
-   * Returns true iff there is trigger associated with given event.
+   * Returns true if there is trigger associated with given event.
    */
   protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
@@ -622,40 +656,5 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
     actors.forEachIndexed { index, vActor ->
       commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
     }
-  }
-
-  var help: String? = null
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private var cmdFold: VCommand? = null
-  private var cmdUnfold: VCommand? = null
-  private var cmdSort: VCommand? = null
-  private var cmdOpenLine: VCommand? = null
-  private var cmdFoldColumn: VCommand? = null
-  private var cmdUnfoldColumn: VCommand? = null
-  private var cmdColumnInfo: VCommand? = null
-  private var cmdEditColumn: VCommand? = null
-  override lateinit var source: String // The source for this document
-  val model: MReport = MReport()
-  private var built = false
-  private var pageTitle = ""
-  private var firstPageHeader = ""
-  protected var VKT_Triggers: MutableList<IntArray>? = null
-  protected val triggers = mutableMapOf<Int, Trigger>()
-  var commands: Array<VCommand?>? = null
-  private val activeCommands = ArrayList<VCommand>()
-  var printOptions: PConfig = PConfig() // The print options
-  var media: String? = null             // The media for this document
-
-  init {
-    if (ctxt != null) {
-      dBContext = ctxt.dBContext
-    }
-    init()
-
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
   }
 }

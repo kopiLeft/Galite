@@ -23,22 +23,18 @@ package org.kopi.galite.visual.form
  */
 object Triggers : VConstants {
 
-  /*
-   * ----------------------------------------------------------------------
-   * FORM-LEVEL TRIGGERS
-   * ----------------------------------------------------------------------
-   */
+  // ----------------------------------------------------------------------
+  // FORM-LEVEL TRIGGERS
+  // ----------------------------------------------------------------------
 
   /**
    * Returns true if form is changed.
    */
   fun isChanged(f: VForm): Boolean = f.isChanged()
 
-  /*
-   * ----------------------------------------------------------------------
-   * BLOCK-LEVEL TRIGGERS
-   * ----------------------------------------------------------------------
-   */
+  // ----------------------------------------------------------------------
+  // BLOCK-LEVEL TRIGGERS
+  // ----------------------------------------------------------------------
 
   /**
    * Returns always false (= unchanged).
@@ -46,15 +42,13 @@ object Triggers : VConstants {
   fun ignoreChanges(b: VBlock): Boolean = false
 
   /**
-   * Returns true iff first block of form is not in query mode
+   * Returns true if first block of form is not in query mode
    */
   fun mainBlockInsertable(b: VBlock): Boolean = b.form.getBlock(0).getMode() != VConstants.MOD_QUERY
 
-  /*
-   * ----------------------------------------------------------------------
-   * FIELD-LEVEL TRIGGERS
-   * ----------------------------------------------------------------------
-   */
+  // ----------------------------------------------------------------------
+  // FIELD-LEVEL TRIGGERS
+  // ----------------------------------------------------------------------
 
   /**
    * Fetches fields of lookup table with key current field.

@@ -28,6 +28,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
 
   @JvmField
   var schema: String? = null
+
   override fun processOption(code: Int, g: Getopt): Boolean {
     return when (code.toChar()) {
       'b' -> {
@@ -81,6 +82,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       total[parent.size + 7] = "  --schema, -s<String>: The current database schema to be set."
       return total
     }
+
   override val shortOptions: String
     get() = "b:d:u:p:Ut::q:s:" + super.shortOptions
 

@@ -20,6 +20,8 @@ package org.kopi.galite.visual.util.ipp
 
 class BooleanValue : IPPValue {
 
+  private var value: Boolean
+
   constructor(value: Boolean) {
     this.value = value
   }
@@ -45,6 +47,4 @@ class BooleanValue : IPPValue {
   }
 
   override fun toString(): String = value.toString() + ""
-
-  private var value: Boolean
 }

@@ -34,6 +34,12 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * Constructs a localization writer unit
  */
 open class LocalizationWriter {
+
+  // -------------------------------------------------------------------
+  // DATA MEMBERS
+  // -------------------------------------------------------------------
+  private val currentHierarchy = Stack<Element>()
+
   /**
    * Writes the XML tree to the specified file.
    *
@@ -166,9 +172,4 @@ open class LocalizationWriter {
     }
     return top
   }
-
-  // -------------------------------------------------------------------
-  // DATA MEMBERS
-  // -------------------------------------------------------------------
-  private val currentHierarchy = Stack<Element>()
 }

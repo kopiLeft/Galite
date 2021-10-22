@@ -19,12 +19,23 @@ package org.kopi.galite.visual.dsl.form
 import org.kopi.galite.visual.form.VConstants
 
 enum class Access(val value: Int) {
-  /** access hidden */
+  /**
+   * hidden access
+   */
   HIDDEN(VConstants.ACS_HIDDEN),
-  /** access skipped */
+
+  /**
+   * Skipped access
+   */
   SKIPPED(VConstants.ACS_SKIPPED),
-  /** access visit */
+
+  /**
+   * Visit access
+   */
   VISIT(VConstants.ACS_VISIT),
-  /** access mustfill */
+
+  /**
+   * Mustfill access
+   */
   MUSTFILL(VConstants.ACS_MUSTFILL)
 }

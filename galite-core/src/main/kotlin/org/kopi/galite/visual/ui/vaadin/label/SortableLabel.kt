@@ -18,9 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.label
 
 /**
- * The server side of the sortable label component.
- * TODO: Implement this class with appropriate component
+ * The sortable label component.
  */
 open class SortableLabel(text: String?) : Label() {
-
+ // TODO
 }

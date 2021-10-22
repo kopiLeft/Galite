@@ -40,6 +40,12 @@ import org.apache.poi.xssf.usermodel.XSSFColor
  * Use [.setCellStyle] for caching functions.
  */
 class CellStyleCacheManager : Serializable {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val stylesCache: MutableMap<StyleKey, CellStyle> = HashMap()
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -106,9 +112,4 @@ class CellStyleCacheManager : Serializable {
 
     override fun hashCode(): Int = alignment + dataFormat + color.hashCode()
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val stylesCache: MutableMap<StyleKey, CellStyle> = HashMap()
 }

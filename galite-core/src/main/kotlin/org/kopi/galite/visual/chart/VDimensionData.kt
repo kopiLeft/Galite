@@ -22,6 +22,7 @@ import java.io.Serializable
 
 /**
  * Creates a new dimension data.
+ *
  * @param     name    the dimension name.
  * @param     value   the dimension value.
  */

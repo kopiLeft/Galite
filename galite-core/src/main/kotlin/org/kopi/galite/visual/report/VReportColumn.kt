@@ -44,6 +44,17 @@ abstract class VReportColumn(
         var height: Int,
         protected var format: VCellFormat?) {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  var label: String = ""
+  var help: String? = null
+  var isVisible: Boolean = true
+  open var isFolded: Boolean = false
+  var isAddedAtRuntime: Boolean = false
+  var userDefinedLabel: Boolean = false
+  private var styles: Array<ColumnStyle>? = null
+
   /**
    * Returns true if this Column is hidden
    */
@@ -132,15 +143,4 @@ abstract class VReportColumn(
       styles!!
     }
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  var label: String = ""
-  var help: String? = null
-  var isVisible: Boolean = true
-  open var isFolded: Boolean = false
-  var isAddedAtRuntime: Boolean = false
-  var userDefinedLabel: Boolean = false
-  private var styles: Array<ColumnStyle>? = null
 }

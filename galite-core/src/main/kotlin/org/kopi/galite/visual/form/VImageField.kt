@@ -41,6 +41,8 @@ import org.kopi.galite.visual.visual.VlibProperties
 
 class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
 
+  private var value: Array<ByteArray?> = arrayOfNulls(2 * bufferSize)
+
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -267,6 +269,4 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
     }
     return false
   }
-
-  private var value: Array<ByteArray?> = arrayOfNulls(2 * bufferSize)
 }

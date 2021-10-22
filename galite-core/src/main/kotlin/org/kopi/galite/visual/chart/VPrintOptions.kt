@@ -28,6 +28,7 @@ import org.kopi.galite.visual.util.PPaperType
  * // Paper
  * @param paperType   different formats of paper
  * @param paperLayout the layout of the paper (Portrait or Landscape)
+ *
  * // Margins
  * @param topMargin    top sheet margin in points
  * @param bottomMargin bottom sheet margin in points

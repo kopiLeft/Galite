@@ -26,12 +26,21 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  */
 @CssImport("./styles/galite/header.css")
 class VHeader : HorizontalLayout() {
-  init {
-    this.setWidthFull()
-  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private val logo = VCompanyLogo()
+
+  /**
+   * Creates the window header component.
+   */
+  init {
+    setId("header")
+    setWidthFull()
+    add(logo)
+  }
+
   /**
    * Sets the main menu component.
    *
@@ -85,21 +94,5 @@ class VHeader : HorizontalLayout() {
    */
   fun setImage(url: String, alt: String?) {
     logo.setImage(url, alt)
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val logo = VCompanyLogo()
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates the window header component.
-   */
-  init {
-    setId("header")
-    setWidthFull()
-    add(logo)
   }
 }

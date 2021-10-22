@@ -40,6 +40,39 @@ import org.kopi.galite.visual.base.Utils
 @Deprecated("replaced by the class HylaFAXUtils")
 class Fax(var port: Int, var host: String) {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+
+  private val debug = false
+  private val clnt: Socket?
+  private val clntIn: BufferedReader
+  private val clntOut: PrintWriter
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTORS
+  // ----------------------------------------------------------------------
+  init {
+
+    if (port == 0) {
+      port = HFAX_PORT
+    }
+
+    if (host == null) {
+      host = HFAX_HOST
+    }
+    this.host = host
+
+    // Create socket
+    clnt = Socket(host, port)
+
+    // I/O Streams creation
+    clntIn = BufferedReader(InputStreamReader(clnt.getInputStream()))
+    clntOut = PrintWriter(clnt.getOutputStream())
+
+    check(readLine())
+  }
+
   fun login(uname: String): Int {
     Utils.log("Fax", "login:$uname")
 
@@ -394,15 +427,6 @@ class Fax(var port: Int, var host: String) {
     typeOfThread = which
     errText = "$msg: $e"
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-
-  private val debug = false
-  private val clnt: Socket?
-  private val clntIn: BufferedReader
-  private val clntOut: PrintWriter
 
   // ----------------------------------------------------------------------
   // INNER CLASSES
@@ -789,29 +813,5 @@ class Fax(var port: Int, var host: String) {
     private const val verboseMode = false
     private var errText = ""
 
-  }
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTORS
-  // ----------------------------------------------------------------------
-  init {
-
-    if (port == 0) {
-      port = HFAX_PORT
-    }
-
-    if (host == null) {
-      host = HFAX_HOST
-    }
-    this.host = host
-
-    // Create socket
-    clnt = Socket(host, port)
-
-    // I/O Streams creation
-    clntIn = BufferedReader(InputStreamReader(clnt.getInputStream()))
-    clntOut = PrintWriter(clnt.getOutputStream())
-
-    check(readLine())
   }
 }

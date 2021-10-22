@@ -27,6 +27,10 @@ import kotlin.system.exitProcess
 
 open class LpR {
 
+  private var control: StringBuffer? = null
+  private lateinit var options: LpROptions
+  private var client: LpdClient
+
   @JvmOverloads
   constructor(host: String,
               port: Int,
@@ -321,10 +325,6 @@ open class LpR {
         }
       }
     }
-
-  private var control: StringBuffer? = null
-  private lateinit var options: LpROptions
-  private var client: LpdClient
 
   companion object {
 

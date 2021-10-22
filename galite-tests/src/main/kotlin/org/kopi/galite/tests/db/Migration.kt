@@ -30,18 +30,18 @@ import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.db.list_Of_Tables
 import org.kopi.galite.visual.db.sequencesList
 
-const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
-const val testDriver = "org.h2.Driver"
-const val testUser = "admin"
-const val testPassword = "admin"
+const val TEST_DB_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
+const val TEST_DB_DRIVER = "org.h2.Driver"
+const val TEST_DB_USER = "admin"
+const val TEST_DB_USER_PASSWORD = "admin"
 
 /**
  * Connects to the database.
  */
-fun connectToDatabase(url: String = testURL,
-                      driver: String = testDriver,
-                      user: String = testUser,
-                      password: String = testPassword
+fun connectToDatabase(url: String = TEST_DB_URL,
+                      driver: String = TEST_DB_DRIVER,
+                      user: String = TEST_DB_USER,
+                      password: String = TEST_DB_USER_PASSWORD
 ) {
   Database.connect(url, driver = driver, user = user, password = password)
 }
@@ -122,5 +122,5 @@ fun insertIntoModule(shortname: String,
     it[objectName] = if (className != null) className.qualifiedName!! else null
     it[symbol] = symbolNumber
   }
-  insertIntoUserRights(testUser, shortname, true)
+  insertIntoUserRights(TEST_DB_USER, shortname, true)
 }

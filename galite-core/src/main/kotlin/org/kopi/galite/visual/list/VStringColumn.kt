@@ -54,7 +54,5 @@ class VStringColumn(title: String,
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> {
-    return String::class
-  }
+  override fun getDataType(): KClass<*> = String::class
 }

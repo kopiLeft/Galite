@@ -22,7 +22,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.visual.MessageCode
@@ -37,6 +36,11 @@ class VIntegerField(val bufferSize: Int,
                     width: Int,
                     val minValue: Int,
                     val maxValue: Int) : VField(width, 1) {
+
+  // dynamic data
+  private var value: Array<Int?> = arrayOfNulls(2 * bufferSize)
+  private var criticalMinValue: Int? = minValue
+  private var criticalMaxValue: Int? = maxValue
 
   /**
    * return the name of this field
@@ -343,10 +347,4 @@ class VIntegerField(val bufferSize: Int,
       (getDisplay() as UTextField).setHasCriticalValue(critical)
     }
   }
-
-  // dynamic data
-  // value
-  private var value: Array<Int?> = arrayOfNulls(2 * bufferSize)
-  private var criticalMinValue: Int? = minValue
-  private var criticalMaxValue: Int? = maxValue
 }

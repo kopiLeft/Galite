@@ -20,6 +20,13 @@ package org.kopi.galite.visual.util.ipp
 
 class LangValue : IPPValue {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var charset: String
+  private var value: String
+
   constructor(charset: String, value: String) {
     this.charset = charset
     this.value = value
@@ -48,11 +55,4 @@ class LangValue : IPPValue {
   }
 
   override fun toString(): String = value
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var charset: String
-  private var value: String
 }

@@ -39,6 +39,16 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  */
 class Connection {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+
+  val url: String
+  val userName: String
+  val password: String?
+  var dbConnection: Database
+  var user: Int = 0
+
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
@@ -151,16 +161,6 @@ class Connection {
     // -2 do not lookup user ID
     private const val USERID_NO_LOOKUP = -2
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-
-  val url: String
-  val userName: String
-  val password: String?
-  var dbConnection: Database
-  var user: Int = 0
 }
 
 val GaliteDatabaseConfig = DatabaseConfig {

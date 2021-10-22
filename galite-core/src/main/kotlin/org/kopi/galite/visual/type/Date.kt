@@ -32,6 +32,14 @@ import java.util.regex.Pattern
  */
 open class Date : Type<Date, LocalDate> {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  /**
+   * the base value for this object
+   */
+  var scalar = 0
+
   constructor(year: Int, month: Int, day: Int) {
     scalar = gregorianToJulian(year, month, day)
   }
@@ -212,14 +220,6 @@ open class Date : Type<Date, LocalDate> {
 
     return java.sql.Date.valueOf(date)
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  /**
-   * the base value for this object
-   */
-  var scalar = 0
 
   companion object {
     /**

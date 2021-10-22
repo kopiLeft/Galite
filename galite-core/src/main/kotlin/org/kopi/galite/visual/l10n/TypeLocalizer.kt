@@ -33,15 +33,6 @@ class TypeLocalizer(manager: LocalizationManager,
                     document: Document,
                     ident: String?) : Localizer(manager) {
 
-  /**
-   * Returns the title of the specified item.
-   */
-  fun getCodeLabel(column: String): String {
-    val e: Element = Utils.lookupChild(self, "codedesc", "ident", column)
-
-    return e.getAttributeValue("label")
-  }
-
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -60,5 +51,14 @@ class TypeLocalizer(manager: LocalizationManager,
     }
     type = Utils.lookupChild(root, "type", "ident", ident)
     self = Utils.lookupChild(type, "code")
+  }
+
+  /**
+   * Returns the title of the specified item.
+   */
+  fun getCodeLabel(column: String): String {
+    val e: Element = Utils.lookupChild(self, "codedesc", "ident", column)
+
+    return e.getAttributeValue("label")
   }
 }

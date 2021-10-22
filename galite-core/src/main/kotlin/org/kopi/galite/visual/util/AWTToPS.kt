@@ -42,6 +42,25 @@ import org.kopi.galite.visual.util.base.NotImplementedException
  * A class to paint in a postscript file instead of screen
  */
 class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
+
+  private val toolkit = Toolkit.getDefaultToolkit()
+  private var oldSize = -1
+  private var oldName = "XXXX"
+  private var lastRed = -1
+  private var lastGreen = -1
+  private var lastBlue = -1
+  private var clr = Color.black
+  private var backClr = Color.white
+  private var font = Font("Helvetica", Font.PLAIN, 12)
+  private var clippingRect = Rectangle(0, 0, PAGEWIDTH, PAGEHEIGHT)
+  private var transColor = 0
+
+  init {
+    if (!clone) {
+      emitProlog()
+    }
+  }
+
   constructor(stream: OutputStream, clone: Boolean) : this(PrintStream(stream), clone)
 
   constructor(stream: OutputStream) : this(stream, false)
@@ -1284,18 +1303,6 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     stream.println(" scale")
   }
 
-  private val toolkit = Toolkit.getDefaultToolkit()
-  private var oldSize = -1
-  private var oldName = "XXXX"
-  private var lastRed = -1
-  private var lastGreen = -1
-  private var lastBlue = -1
-  private var clr = Color.black
-  private var backClr = Color.white
-  private var font = Font("Helvetica", Font.PLAIN, 12)
-  private var clippingRect = Rectangle(0, 0, PAGEWIDTH, PAGEHEIGHT)
-  private var transColor = 0
-
   companion object {
     // ----------------------------------------------------------------------
     // DATA MEMBERS
@@ -1304,11 +1311,5 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     private const val PAGEWIDTH = 1600
     private val hd = "0123456789ABCDEF".toCharArray()
     private const val charsPerRow = 12 * 6
-  }
-
-  init {
-    if (!clone) {
-      emitProlog()
-    }
   }
 }

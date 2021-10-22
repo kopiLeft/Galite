@@ -27,10 +27,10 @@ import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.visual.VCommand
 import org.kopi.galite.visual.visual.VHelpGenerator
 
-class VReportCommand(val report: VReport,
-                     actor: VActor
-)
-  : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+class VReportCommand(
+  val report: VReport,
+  actor: VActor
+) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
   /**
    * Returns the actor
    */

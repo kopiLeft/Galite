@@ -246,44 +246,4 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
   }
 
   private val locale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()
-
-  /**
-   * The list dialog selection target.
-   */
-  enum class SelectionTarget {
-    /**
-     * Selects the current row and close the list.
-     */
-    CURRENT_ROW,
-
-    /**
-     * Navigates to the next row.
-     */
-    NEXT_ROW,
-
-    /**
-     * Navigates to the previous row.
-     */
-    PREVIOUS_ROW,
-
-    /**
-     * Navigates to the next page.
-     */
-    NEXT_PAGE,
-
-    /**
-     * Navigates to the previous page.
-     */
-    PREVIOUS_PAGE,
-
-    /**
-     * Navigates to the first row.
-     */
-    FIRST_ROW,
-
-    /**
-     * Navigates to the last row.
-     */
-    LAST_ROW
-  }
 }

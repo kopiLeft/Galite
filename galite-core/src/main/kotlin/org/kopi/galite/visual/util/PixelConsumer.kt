@@ -27,6 +27,34 @@ import java.util.Hashtable
 import kotlin.math.abs
 
 class PixelConsumer(picture: Image) : ImageConsumer {
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  /** the dimension of the image */
+  var dimensions: Dimension? = null
+    private set
+  var isComplete = false
+    private set
+  private lateinit var pixelTable: Array<IntArray>
+  private lateinit var transparent: Array<BooleanArray>
+
+  /**
+   * Constructs a new pixel consumer
+   */
+  init {
+    picture.source.startProduction(this)
+    var t = 50000
+    while (t > 0 && !isComplete) {
+      try {
+        Thread.sleep(10)
+      } catch (ignored: Throwable) {
+      }
+      t -= 10
+    }
+  }
+
   override fun imageComplete(status: Int) {
     // bug - STATICIMAGEDONE is sent twice before and a break at this
     // time leads to incomplete images.
@@ -103,32 +131,5 @@ class PixelConsumer(picture: Image) : ImageConsumer {
 
   fun getPixelAt(x: Int, y: Int): Int {
     return pixelTable[x][y]
-  }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  /** the dimension of the image */
-  var dimensions: Dimension? = null
-    private set
-  var isComplete = false
-    private set
-  private lateinit var pixelTable: Array<IntArray>
-  private lateinit var transparent: Array<BooleanArray>
-
-  /**
-   * Constructs a new pixel consumer
-   */
-  init {
-    picture.source.startProduction(this)
-    var t = 50000
-    while (t > 0 && !isComplete) {
-      try {
-        Thread.sleep(10)
-      } catch (ignored: Throwable) {
-      }
-      t -= 10
-    }
   }
 }

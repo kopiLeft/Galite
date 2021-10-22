@@ -32,6 +32,12 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param     defaultLocale   the default locale used when there is no file in [locale]
  */
 class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale?) {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val documents = Hashtable<String, Document>()
+
   /**
    * Constructs a form localizer using the specified source.
    *
@@ -189,9 +195,4 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
     document.baseURI = fileName
     return document
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private val documents = Hashtable<String, Document>()
 }
