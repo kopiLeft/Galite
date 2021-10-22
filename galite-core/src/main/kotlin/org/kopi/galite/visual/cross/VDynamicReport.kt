@@ -20,8 +20,8 @@ package org.kopi.galite.visual.cross
 import java.awt.event.KeyEvent
 import java.sql.SQLException
 import java.util.Locale
-import org.jetbrains.exposed.sql.Table
 
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.visual.db.transaction

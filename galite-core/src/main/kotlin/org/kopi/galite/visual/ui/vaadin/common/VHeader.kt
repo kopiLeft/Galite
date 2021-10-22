@@ -36,7 +36,6 @@ class VHeader : HorizontalLayout() {
    * Creates the window header component.
    */
   init {
-    this.setWidthFull()
     setId("header")
     setWidthFull()
     add(logo)

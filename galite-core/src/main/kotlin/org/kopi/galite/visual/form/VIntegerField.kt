@@ -38,7 +38,6 @@ class VIntegerField(val bufferSize: Int,
                     val maxValue: Int) : VField(width, 1) {
 
   // dynamic data
-  // value
   private var value: Array<Int?> = arrayOfNulls(2 * bufferSize)
   private var criticalMinValue: Int? = minValue
   private var criticalMaxValue: Int? = maxValue

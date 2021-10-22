@@ -20,10 +20,10 @@ package org.kopi.galite.tests.desktop
 import java.util.Locale
 
 import org.kopi.galite.tests.db.connectToDatabase
-import org.kopi.galite.tests.db.testDriver
-import org.kopi.galite.tests.db.testPassword
-import org.kopi.galite.tests.db.testURL
-import org.kopi.galite.tests.db.testUser
+import org.kopi.galite.tests.db.TEST_DB_DRIVER
+import org.kopi.galite.tests.db.TEST_DB_USER_PASSWORD
+import org.kopi.galite.tests.db.TEST_DB_URL
+import org.kopi.galite.tests.db.TEST_DB_USER
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.dsl.form.Form
@@ -47,13 +47,13 @@ fun run(args: Array<String>) {
     args
   } else {
     arrayOf("-d",
-            testDriver,
+            TEST_DB_DRIVER,
             "-b",
-            testURL,
+            TEST_DB_URL,
             "-u",
-            testUser,
+            TEST_DB_USER,
             "-p",
-            testPassword,
+            TEST_DB_USER_PASSWORD,
             "-l",
             testLocale.toString(),
             "-r"
@@ -68,13 +68,13 @@ fun run(args: Array<String>) {
 fun run(formName: Form) {
   run(arrayOf(
     "-d",
-    testDriver,
+    TEST_DB_DRIVER,
     "-b",
-    testURL,
+    TEST_DB_URL,
     "-u",
-    testUser,
+    TEST_DB_USER,
     "-p",
-    testPassword,
+    TEST_DB_USER_PASSWORD,
     "-l",
     testLocale.toString(),
     "-r",
