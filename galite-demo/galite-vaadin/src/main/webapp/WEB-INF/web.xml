@@ -11,8 +11,8 @@
     <param-value>false</param-value>
   </context-param>
   <servlet>
-    <servlet-name>kopiRight Application</servlet-name>
-    <servlet-class>com.vaadin.flow.server.VaadinServlet</servlet-class>
+    <servlet-name>Galite Demo Application</servlet-name>
+    <servlet-class>org.kopi.galite.demo.MyServlet</servlet-class>
     <init-param>
       <description>useWebSocketAndServlet3</description>
       <param-name>org.atmosphere.useWebSocketAndServlet3</param-name>
