@@ -42,9 +42,17 @@ class FormExample : DictionaryForm() {
     help = "Autofill",
   )
   val clientsPage= page("Clients")
-  val block = insertBlock(Clients(), clientsPage)
+  val block = insertBlock(Clients(), clientsPage) {
+    trigger(PREBLK) {
+      idClt.value = 50
+    }
+  }
   val salesBlock = insertBlock(Sales(), clientsPage)
-  val salesSimpleBlock = insertBlock(SalesSimpleBlock(), clientsPage)
+  val salesSimpleBlock = insertBlock(SalesSimpleBlock(), clientsPage) {
+    trigger(INIT) {
+      description.value = "description value"
+    }
+  }
 
   inner class Clients : FormBlock(1, 1, "Clients") {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
@@ -106,10 +114,27 @@ class FormExample : DictionaryForm() {
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"
+      trigger(POSTCHG) {
+        description.value = "sales description"
+      }
     }
     val description = visit(domain = STRING(25), position = at(2, 1)) {
       label = "Description"
       help = "The item description"
+    }
+    val information = visit(domain = STRING(25), position = at(2, 2)) {
+      label = "information"
+      help = "The item information"
+      trigger(VALUE) {
+        "sales information"
+      }
+    }
+    val action = visit(domain =  STRING(25), position = at(3, 1)) {
+      label = "action"
+      help = "The item action"
+      trigger(ACTION) {
+         description.value = "item description"
+      }
     }
     val price = visit(domain = DECIMAL(10, 5), position = at(3, 2)) {
       label = "Price"

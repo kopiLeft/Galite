@@ -133,8 +133,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
-  protected val triggers = mutableMapOf<Int, Trigger>()
+  protected var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
 
   // current mode
   private var mode = 0
@@ -372,29 +371,38 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Performs a void trigger
    *
+   * @param     trigger        the trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
+  }
+
+  /**
+   * Performs a void trigger
+   *
    * @param     VKT_Type        the number of the trigger
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
-    triggers[VKT_Type]?.action?.method?.invoke()
+    // DO NOTHING !
   }
 
-  fun executeProtectedVoidTrigger(VKT_Type: Int) {
-    triggers[VKT_Type]?.action?.method?.invoke()
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  fun executeProtectedVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    return (triggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
+  fun executeObjectTrigger(trigger: Trigger?): Any {
+    return (trigger?.action?.method as () -> Any).invoke()
   }
 
   @Suppress("UNCHECKED_CAST")
-  open fun executeIntegerTrigger(VKT_Type: Int): Int {
-    return (triggers[VKT_Type]?.action?.method as () -> Int).invoke()
+  fun executeBooleanTrigger(trigger: Trigger?): Boolean {
+    return (trigger?.action?.method as () -> Boolean).invoke()
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  open fun executeIntegerTrigger(trigger: Trigger?): Int {
+    return (trigger?.action?.method as () -> Int).invoke()
   }
 
   /**
@@ -3011,7 +3019,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns true if there is trigger associated with given event.
    */
-  fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != 0
+  fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != null
 
   /*
    * Clears all hidden lookup fields.

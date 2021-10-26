@@ -170,7 +170,7 @@ fun <T> FormField<T>.click(): UField {
   val mainWindow = _get<MainWindow>()
   lateinit var field: UField
 
-  val editorField  = if (this.block.vBlock.isMulti()) {
+  val editorField = if (this.block.vBlock.isMulti()) {
     val column = mainWindow
       ._find<Grid.Column<*>>()
       .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }
@@ -189,7 +189,6 @@ fun <T> FormField<T>.click(): UField {
 
   return field
 }
-
 
 infix fun VField.eq(block: VField): Boolean {
   return this.name == block.name

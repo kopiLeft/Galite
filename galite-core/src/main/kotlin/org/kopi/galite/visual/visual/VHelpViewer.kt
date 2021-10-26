@@ -24,6 +24,7 @@ import java.net.URL
 import java.util.Locale
 
 import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.dsl.common.Trigger
 
 /**
  * A special window that display an html help
@@ -107,6 +108,15 @@ class VHelpViewer : VWindow() {
     when (VKT_Type) {
       CMD_QUIT -> close(0)
     }
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    trigger    the trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
   }
 
   fun setURL(surl: String) {
