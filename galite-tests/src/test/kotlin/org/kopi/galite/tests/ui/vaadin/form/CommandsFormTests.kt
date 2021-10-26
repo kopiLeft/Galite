@@ -51,8 +51,11 @@ import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findForms
+import org.kopi.galite.visual.ui.vaadin.actor.Actor
 
+import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 
 class CommandsFormTests : GaliteVUITestBase() {
@@ -414,6 +417,43 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.helpForm.triggerCommand()
 
     _expectOne<DHelpViewer>()
+  }
+
+  /**
+   * click on dynamicReport button,
+   * check that the report is displayed
+   * click on close
+   * check that the report is closed
+   */
+  @Test
+  fun `test dynamicReport quit command`() {
+    form.dynamicReport.triggerCommand()
+
+    _expectOne<DReport>()
+    val actors = _find<Actor>()
+
+    actors[0]._clickAndWait()
+    _expectNone<DReport>()
+  }
+
+  /**
+   * Click on help command.
+   * Check that the help window is displayed
+   * click on close command,
+   * check that help windows is disappear
+   */
+  @Test
+  fun `test close helpForm command`() {
+    form.helpForm.triggerCommand()
+
+    _expectOne<DHelpViewer>()
+
+    val actors = _get<DHelpViewer>()._find<Actor>()
+
+    // quit command
+    actors[0]._clickAndWait()
+
+    _expectNone<DHelpViewer>()
   }
 
   fun `test shortcut`() {

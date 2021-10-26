@@ -34,6 +34,7 @@ import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.XInterruptProtectedException
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 
 /**
@@ -444,6 +445,10 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
         throw VExecFailedException(VlibProperties.getString("shortcuts-not-available"))
       }
     }
+  }
+
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
   }
 
   // ----------------------------------------------------------------------
