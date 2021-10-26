@@ -58,17 +58,17 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
 
       /* READ HEADER */
       val reader = BufferedReader(InputStreamReader(printData.inputStream))
-      var line: String
+      var line: String?
       var currentPage = -1
 
       while (reader.readLine().also { line = it } != null) {
         when {
           line == TOPRINTER_TRUE -> ous.write(TOPRINTER_FALSE)
-          printData.numberOfPages == -1 && line.startsWith("%%Page: ") -> {
-            currentPage = readCurrentPageNumber(line)
-            ous.write(line)
+          printData.numberOfPages == -1 && line!!.startsWith("%%Page: ") -> {
+            currentPage = readCurrentPageNumber(line!!)
+            ous.write(line!!)
           }
-          else -> ous.write(line)
+          else -> ous.write(line!!)
         }
         ous.write("\n")
       }

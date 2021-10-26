@@ -17,44 +17,25 @@
 
 package org.kopi.galite.visual.dsl.chart
 
-import java.lang.RuntimeException
-
 import org.kopi.galite.visual.chart.CConstants
-import org.kopi.galite.visual.chart.VBooleanDimension
 import org.kopi.galite.visual.chart.VColumnFormat
-import org.kopi.galite.visual.chart.VDateDimension
 import org.kopi.galite.visual.chart.VDimension
-import org.kopi.galite.visual.chart.VIntegerDimension
-import org.kopi.galite.visual.chart.VMonthDimension
-import org.kopi.galite.visual.chart.VStringDimension
-import org.kopi.galite.visual.chart.VTimeDimension
-import org.kopi.galite.visual.chart.VTimestampDimension
-import org.kopi.galite.visual.chart.VWeekDimension
-import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.ChartTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
 
 /**
  * Represents a one dimension that contains measures [values] to use in chart.
  *
  * @param domain dimension domain.
  */
-open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>(domain) {
+open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>, val source: String? = null) : ChartField<T>(domain) {
 
   /**
    * Dimension values
    */
   val values = mutableListOf<DimensionData<T>>()
-
-
 
   /** format trigger */
   internal var formatTrigger: Trigger? = null
@@ -91,35 +72,7 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
         null
       }
 
-      return when {
-        domain is CodeDomain -> {
-          TODO()
-        }
-        domain is ListDomain -> {
-          TODO()
-        }
-        else -> {
-          when (domain.kClass) {
-            Int::class, Long::class ->
-              VIntegerDimension(ident, format)
-            String::class ->
-              VStringDimension(ident, format)
-            Boolean::class ->
-              VBooleanDimension(ident, format)
-            Date::class, java.util.Date::class ->
-              VDateDimension(ident, format)
-            Month::class ->
-              VMonthDimension(ident, format)
-            Week::class ->
-              VWeekDimension(ident, format)
-            Time::class ->
-              VTimeDimension(ident, format)
-            Timestamp::class ->
-              VTimestampDimension(ident, format)
-            else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-          }
-        }
-      }.also {
+      return domain.buildDimensionModel(this, format).also {
         if (ident != "") {
           it.label = label
           it.help = help

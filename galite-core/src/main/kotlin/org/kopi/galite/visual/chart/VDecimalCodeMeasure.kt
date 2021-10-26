@@ -20,29 +20,29 @@ package org.kopi.galite.visual.chart
 
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.VColor
 
 /**
- * Represents a decimal code chart column.
+ * Represents a code decimal measure.
  *
- * @param ident         The column identifier.
- * @param isDimension   Is it a dimension column ?
- * @param type          The column type.
- * @param source        The column localization source.
- * @param idents        The column labels.
- * @param codes         The column codes.
+ * @param ident The measure identifier.
+ * @param color The measure color.
+ * @param type The measure type.
+ * @param source The localization source.
+ * @param idents The code identifiers.
+ * @param codes The decimal codes.
  */
-class VFixnumCodeDimension(ident: String,
-                           isDimension: Boolean,
-                           format: VColumnFormat,
-                           type: String,
-                           source: String,
-                           idents: Array<String>,
-                           private val codes: Array<Decimal>)
-          : VCodeDimension(ident,
-                           format,
-                           type,
-                           source,
-                           idents) {
+class VDecimalCodeMeasure(ident: String,
+                          color: VColor?,
+                          type: String,
+                          source: String,
+                          idents: Array<String>,
+                          private val codes: Array<Decimal?>)
+           : VCodeMeasure(ident,
+                          color,
+                          type,
+                          source,
+                          idents) {
 
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
@@ -54,5 +54,14 @@ class VFixnumCodeDimension(ident: String,
       }
     }
     throw InconsistencyException("Object not found $value, $ident")
+  }
+
+  override fun toNumber(value: Any?): Number? {
+    codes.forEach { code ->
+      if (value == code) {
+        return code
+      }
+    }
+    return null
   }
 }

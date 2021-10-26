@@ -268,7 +268,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                            field.width,
                                            null,
                                            (field as VCodeField).labels,
-                                           (field as VCodeField).getCodes() as Array<String>)
+                                           (field as VCodeField).getCodes() as Array<String?>)
         is VIntegerCodeField ->
           columns[col] = VIntegerCodeColumn(null,
                                             null,
@@ -292,7 +292,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                             1,
                                             null,
                                             (field as VCodeField).labels,
-                                            (field as VCodeField).getCodes() as Array<Decimal>)
+                                            (field as VCodeField).getCodes() as Array<Decimal?>)
         is VBooleanCodeField ->
           columns[col] = VBooleanCodeColumn(null,
                                             null,

@@ -20,11 +20,11 @@ package org.kopi.galite.visual.ui.vaadin.field
 import com.vaadin.flow.component.textfield.TextField
 
 /**
- * An fixnum field.
+ * A decimal field.
  */
-class VFixnumField(col: Int,
-                   maxScale: Int,
-                   minval: Double?,
-                   maxval: Double?,
-                   fraction: Boolean)
+class VDecimalField(col: Int,
+                    maxScale: Int,
+                    minval: Double?,
+                    maxval: Double?,
+                    fraction: Boolean)
   : InputTextField<TextField>(TextField())

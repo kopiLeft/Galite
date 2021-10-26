@@ -31,11 +31,11 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param codes The column codes.
  */
 class VStringCodeDimension(ident: String,
-                           format: VColumnFormat,
+                           format: VColumnFormat?,
                            type: String,
                            source: String,
                            idents: Array<String>,
-                           private val codes: Array<String>)
+                           private val codes: Array<String?>)
   : VCodeDimension(ident, format, type, source, idents) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
