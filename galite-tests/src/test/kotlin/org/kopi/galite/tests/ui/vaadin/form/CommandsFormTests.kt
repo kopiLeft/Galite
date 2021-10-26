@@ -51,7 +51,7 @@ import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findForms
-import org.kopi.galite.visual.ui.vaadin.actor.Actor
+import org.kopi.galite.visual.ui.vaadin.visual.DActor
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -430,9 +430,9 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.dynamicReport.triggerCommand()
 
     _expectOne<DReport>()
-    val actors = _find<Actor>()
+    val actors = _find<DActor>()
 
-    actors[0]._clickAndWait()
+    actors.single { it.getModel().actorIdent == "Quit" }._clickAndWait()
     _expectNone<DReport>()
   }
 
@@ -448,10 +448,10 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     _expectOne<DHelpViewer>()
 
-    val actors = _get<DHelpViewer>()._find<Actor>()
+    val actors = _get<DHelpViewer>()._find<DActor>()
 
     // quit command
-    actors[0]._clickAndWait()
+    actors.single { it.getModel().actorIdent == "Close" }._clickAndWait()
 
     _expectNone<DHelpViewer>()
   }

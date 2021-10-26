@@ -30,6 +30,7 @@ import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.click
+import org.kopi.galite.testing.enter
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
@@ -103,7 +104,7 @@ class TriggersTests : GaliteVUITestBase() {
 
   @Test
   fun `test DEFAULT trigger`() {
-    form.salesSimpleBlock.idClt.click()
+    form.salesSimpleBlock.enter()
     val fieldEditedByBlock = form.salesSimpleBlock.defaultValueFromBlock.findField()
     val field = form.salesSimpleBlock.defaultValueFromField.findField()
 
