@@ -29,6 +29,13 @@ import com.vaadin.flow.component.timepicker.TimePicker
 @CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-time-picker-text-field")
 class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
 
+  init {
+    // Workaround for autoselection on focus
+    addFocusListener {
+      element.executeJs("this.focusElement.inputElement.select()")
+    }
+  }
+
   override fun setPresentationValue(newPresentationValue: String?) {
     content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
       LocalTime.parse(newPresentationValue)

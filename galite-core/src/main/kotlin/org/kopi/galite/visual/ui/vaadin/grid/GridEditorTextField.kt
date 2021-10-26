@@ -51,6 +51,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
       setModelValue(value, it.isFromClient)
     }
     createNavigationActions()
+    wrappedField.isAutoselect = true
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
