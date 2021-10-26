@@ -21,28 +21,28 @@ package org.kopi.galite.visual.report
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
 
-class VFixnumCodeColumn(ident: String?,
-                        type: String?,
-                        source: String?,
-                        options: Int,
-                        align: Int,
-                        groups: Int,
-                        function: VCalculateColumn?,
-                        width: Int,
-                        format: VCellFormat?,
-                        names: Array<String>,
-                        // array of internal representations
-                        private val codes: Array<Decimal>)
-          : VCodeColumn(ident,
-                        type,
-                        source,
-                        options,
-                        align,
-                        groups,
-                        function,
-                        width,
-                        format,
-                        names) {
+class VDecimalCodeColumn(ident: String?,
+                         type: String?,
+                         source: String?,
+                         options: Int,
+                         align: Int,
+                         groups: Int,
+                         function: VCalculateColumn?,
+                         width: Int,
+                         format: VCellFormat?,
+                         names: Array<String>,
+                         // array of internal representations
+                         private val codes: Array<Decimal>)
+           : VCodeColumn(ident,
+                         type,
+                         source,
+                         options,
+                         align,
+                         groups,
+                         function,
+                         width,
+                         format,
+                         names) {
   /**
    * Get the index of the value.
    */

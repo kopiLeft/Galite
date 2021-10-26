@@ -20,6 +20,12 @@ package org.kopi.galite.visual.util.ipp
 
 class IntegerValue : IPPValue {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var value: Int
+
   constructor(value: Int) {
     this.value = value
   }
@@ -45,10 +51,4 @@ class IntegerValue : IPPValue {
   }
 
   override fun toString(): String = value.toString() + ""
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var value: Int
 }

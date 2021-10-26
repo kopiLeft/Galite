@@ -21,6 +21,12 @@ package org.kopi.galite.visual.ui.vaadin.base
  * Localized properties.
  */
 object LocalizedProperties {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var properties: HashMap<String, HashMap<String, String>?>? = null
+
   //---------------------------------------------------
   // LOCALIZED STRINGS
   //---------------------------------------------------
@@ -261,9 +267,4 @@ object LocalizedProperties {
       properties["actorsMenuHelp"] = "يعرض القائمة المقترنة مع هذه النافذة"
       return properties
     }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var properties: HashMap<String, HashMap<String, String>?>? = null
 }

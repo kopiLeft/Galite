@@ -41,5 +41,4 @@ class VImage : Image(), Focusable<VImage> {
    */
   val isEmpty: Boolean
     get() = src == null || "" == src
-
 }

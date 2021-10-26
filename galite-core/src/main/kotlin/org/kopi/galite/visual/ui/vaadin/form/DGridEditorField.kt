@@ -47,6 +47,9 @@ abstract class DGridEditorField<T>(
         GridEditorField.NavigationListener,
         GridEditorField.AutofillListener {
 
+  internal var access = 0 // current access of field
+  protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
+
   /**
    * Returns the field editor hold by this component.
    */
@@ -61,8 +64,6 @@ abstract class DGridEditorField<T>(
       }
     }
   }
-  internal var access = 0 // current access of field
-  protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
 
   // ----------------------------------------------------------------------
   // CONSTRUCTOR

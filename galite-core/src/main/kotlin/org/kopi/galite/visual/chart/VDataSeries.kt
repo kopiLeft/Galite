@@ -27,14 +27,14 @@ import java.io.Serializable
  */
 class VDataSeries(val dimension: VDimensionData) : Serializable {
 
-  /**
-   * @return the measures
-   */
-  fun getMeasures(): Array<VMeasureData> = measures.toTypedArray()
-
   //---------------------------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------------------------
 
   internal val measures = mutableListOf<VMeasureData>()
+
+  /**
+   * @return the measures
+   */
+  fun getMeasures(): Array<VMeasureData> = measures.toTypedArray()
 }

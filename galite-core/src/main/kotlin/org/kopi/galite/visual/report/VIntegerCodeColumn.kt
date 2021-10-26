@@ -22,6 +22,9 @@ import org.kopi.galite.visual.util.base.InconsistencyException
 
 class VIntegerCodeColumn : VCodeColumn {
 
+  private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
+  private lateinit var codes: IntArray // array of internal representations
+
   /**
    * Constructs a report column description (!!!! TO BE REMOVED)
    *
@@ -143,7 +146,4 @@ class VIntegerCodeColumn : VCodeColumn {
 
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
-
-  private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
-  private lateinit var codes: IntArray // array of internal representations
 }

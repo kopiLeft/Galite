@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent
 import java.sql.SQLException
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.visual.db.transaction
@@ -30,8 +31,8 @@ import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFixnumCodeField
-import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VDecimalCodeField
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VIntegerCodeField
 import org.kopi.galite.visual.form.VIntegerField
@@ -47,8 +48,8 @@ import org.kopi.galite.visual.report.VBooleanCodeColumn
 import org.kopi.galite.visual.report.VBooleanColumn
 import org.kopi.galite.visual.report.VDateColumn
 import org.kopi.galite.visual.report.VDefaultReportActor
-import org.kopi.galite.visual.report.VFixnumCodeColumn
-import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VDecimalCodeColumn
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VIntegerCodeColumn
 import org.kopi.galite.visual.report.VIntegerColumn
 import org.kopi.galite.visual.report.VMonthColumn
@@ -69,6 +70,59 @@ import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class VDynamicReport(block: VBlock) : VReport() {
+
+  // ----------------------------------------------------------------------
+  // Data Members
+  // ----------------------------------------------------------------------
+  private val columns: Array<VReportColumn?>
+  private val fields: Array<VField>
+  private val block: VBlock
+  private lateinit var actorsDef: Array<VActor?>
+  private var number = 0
+  private var idColumn = 0
+
+  init {
+    printOptions = PConfig()
+    dBContext = block.dBContext
+    this.block = block
+    fields = initFields(block.fields)
+    columns = arrayOfNulls(fields.size)
+    idColumn = -1
+    setPageTitle(block.title)
+    initDefaultActors()
+    initDefaultCommands()
+    initColumns()
+  }
+
+  companion object {
+    /**
+     * Implements interface for COMMAND CreateDynamicReport
+     */
+    fun createDynamicReport(block: VBlock) {
+      try {
+        val report: VReport
+        block.form.setWaitInfo(Message.getMessage("report_generation"))
+        report = VDynamicReport(block)
+        report.doNotModal()
+      } catch (e: VNoRowException) {
+        block.form.error(MessageCode.getMessage("VIS-00057"))
+      } finally {
+        block.form.unsetWaitInfo()
+      }
+      block.setRecordChanged(0, false)
+    }
+
+    const val EXPORT_ICON = "export"
+    const val FOLD_ICON = "fold"
+    const val UNFOLD_ICON = "unfold"
+    const val FOLD_COLUMN_ICON = "foldColumn"
+    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
+    const val SERIALQUERY_ICON = "serialquery"
+    const val HELP_ICON = "help"
+    const val QUIT_ICON = "quit"
+    const val PRINT_ICON = "print"
+  }
+
   /**
    * @param     fields  block fields.
    * @return fields that will represent columns in the dynamic report.
@@ -136,15 +190,15 @@ class VDynamicReport(block: VBlock) : VReport() {
                                      null,
                                      1,
                                      null)
-        is VFixnumField ->
-          columns[col] = VFixnumColumn(null,
-                                       0,
-                                       field.align,
-                                       getColumnGroups(field),
-                                       null,
-                                       field.width,
-                                       (field as VFixnumField).getScale(0),
-                                       null)
+        is VDecimalField ->
+          columns[col] = VDecimalColumn(null,
+                                        0,
+                                        field.align,
+                                        getColumnGroups(field),
+                                        null,
+                                        field.width,
+                                        (field as VDecimalField).getScale(0),
+                                        null)
         is VIntegerField ->
           // hidden field ID of the block will represent the last column in the report.
           if (field.name == block.idField.name && field.isInternal()) {
@@ -227,18 +281,18 @@ class VDynamicReport(block: VBlock) : VReport() {
                                             null,
                                             (field as VCodeField).labels,
                                             getIntArray((field as VCodeField).getCodes() as Array<Int>))
-        is VFixnumCodeField ->
-          columns[col] = VFixnumCodeColumn(null,
-                                           null,
-                                           null,
-                                           0,
-                                           field.align,
-                                           getColumnGroups(field),
-                                           null,
-                                           1,
-                                           null,
-                                           (field as VCodeField).labels,
-                                           (field as VCodeField).getCodes() as Array<Decimal>)
+        is VDecimalCodeField ->
+          columns[col] = VDecimalCodeColumn(null,
+                                            null,
+                                            null,
+                                            0,
+                                            field.align,
+                                            getColumnGroups(field),
+                                            null,
+                                            1,
+                                            null,
+                                            (field as VCodeField).labels,
+                                            (field as VCodeField).getCodes() as Array<Decimal>)
         is VBooleanCodeField ->
           columns[col] = VBooleanCodeColumn(null,
                                             null,
@@ -374,6 +428,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   }
 
   override fun add() {}
+
   override fun init() {}
 
   override fun initReport() {
@@ -437,7 +492,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   /**
    * return the report column group for the given table.
    */
-  private fun getColumnGroups(table: Int): Int {
+  private fun getColumnGroups(table: Table): Int {
     val fields = block.fields
     for (i in fields.indices) {
       if (fields[i].isInternal() && fields[i].getColumnCount() > 1) {
@@ -457,7 +512,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given field.
    */
   private fun getColumnGroups(field: VField): Int {
-    return if (field.getColumnCount() == 0 || field.getColumn(0)!!.getTable() == 0) {
+    return if (field.getColumnCount() == 0 || field.getColumn(0)!!._getTable() == 0) {
       -1
     } else {
       getColumnGroups(field.getColumn(0)!!.getTable())
@@ -483,57 +538,5 @@ class VDynamicReport(block: VBlock) : VReport() {
       result[i] = codes[i]
     }
     return result
-  }
-
-  // ----------------------------------------------------------------------
-  // Data Members
-  // ----------------------------------------------------------------------
-  private val columns: Array<VReportColumn?>
-  private val fields: Array<VField>
-  private val block: VBlock
-  private lateinit var actorsDef: Array<VActor?>
-  private var number = 0
-  private var idColumn = 0
-
-  companion object {
-    /**
-     * Implements interface for COMMAND CreateDynamicReport
-     */
-    fun createDynamicReport(block: VBlock) {
-      try {
-        val report: VReport
-        block.form.setWaitInfo(Message.getMessage("report_generation"))
-        report = VDynamicReport(block)
-        report.doNotModal()
-      } catch (e: VNoRowException) {
-        block.form.error(MessageCode.getMessage("VIS-00057"))
-      } finally {
-        block.form.unsetWaitInfo()
-      }
-      block.setRecordChanged(0, false)
-    }
-
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
-  }
-
-  init {
-    printOptions = PConfig()
-    dBContext = block.dBContext
-    this.block = block
-    fields = initFields(block.fields)
-    columns = arrayOfNulls(fields.size)
-    idColumn = -1
-    setPageTitle(block.title)
-    initDefaultActors()
-    initDefaultCommands()
-    initColumns()
   }
 }

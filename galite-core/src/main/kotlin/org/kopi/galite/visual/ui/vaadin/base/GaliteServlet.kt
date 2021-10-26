@@ -39,6 +39,12 @@ import com.vaadin.flow.server.VaadinSession
  * of the "session expired" message.
  */
 open class GaliteServlet : VaadinServlet(), SessionInitListener {
+
+  // --------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------
+  private var locale: Locale? = null
+
   override fun servletInitialized() {
     super.servletInitialized()
     val locale: String = getInitParameter("locale")
@@ -140,11 +146,6 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
    */
   private val isDebugMode: Boolean
     get() = java.lang.Boolean.parseBoolean(getInitParameter("debugMode"))
-
-  // --------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------
-  private var locale: Locale? = null
 
   companion object {
     private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/galite/visual/VlibProperties"

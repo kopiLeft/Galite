@@ -34,8 +34,7 @@ import org.kopi.galite.visual.ui.vaadin.notif.NotificationUtils
 class InvalidEditorFieldException(val field: GridEditorField<*>,
                                   val messageKey: String,
                                   vararg val params: Any)
-  : Exception(),
-      NotificationListener {
+  : Exception(), NotificationListener {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

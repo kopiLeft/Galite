@@ -24,6 +24,12 @@ import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.PreviewRunner
 
 class VApplicationContext : ApplicationContext() {
+
+  //---------------------------------------------------
+  // DATA MEMBEERS
+  //---------------------------------------------------
+  private var previewRunner: VPreviewRunner? = null
+
   override fun getApplication(): Application {
     val ui = BackgroundThreadHandler.locateUI()
 
@@ -52,10 +58,4 @@ class VApplicationContext : ApplicationContext() {
   override fun isWebApplicationContext(): Boolean {
     return true
   }
-
-  //---------------------------------------------------
-  // DATA MEMBEERS
-  //---------------------------------------------------
-  private var previewRunner: VPreviewRunner? = null
-
 }

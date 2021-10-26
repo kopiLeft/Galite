@@ -162,11 +162,10 @@ abstract class AbstractNotification(title: String?,
   }
 
   //-------------------------------------------------
-  // ABSTRACT METHODS
+  // ABSTRACT METHODS / PROPERTIES
   //-------------------------------------------------
   /**
    * Sets the notification buttons.
-   * @param locale The notification locale.
    */
   abstract fun setButtons()
 

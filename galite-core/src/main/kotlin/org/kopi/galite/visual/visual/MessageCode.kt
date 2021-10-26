@@ -30,6 +30,11 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  */
 object MessageCode {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val keyPattern = Pattern.compile("^[A-Z][A-Z][A-Z]-\\d\\d\\d\\d\\d$")
+
   /**
    * Returns a message (convenience routine).
    *
@@ -85,9 +90,4 @@ object MessageCode {
       "$key: message for !$key! not found!"
     }
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private val keyPattern = Pattern.compile("^[A-Z][A-Z][A-Z]-\\d\\d\\d\\d\\d$")
 }

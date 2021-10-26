@@ -14,20 +14,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.demo
 
-package org.kopi.galite.visual.exceptions
-
-import java.lang.IllegalArgumentException
-
-import org.kopi.galite.visual.dsl.chart.ChartMeasure
+import org.kopi.galite.demo.database.connectToDatabase
+import org.kopi.galite.demo.database.initDatabase
+import org.kopi.galite.visual.ui.vaadin.base.GaliteServlet
 
 /**
- * Thrown to indicate that a [ChartMeasure] value has not been provided to a dimension.
- *
- * @param measure        the measure
- * @param dimensionValue the the dimension value
- *
+ * A customized servlet that initializes database.
  */
-class MissingMeasureException(measure: ChartMeasure<*>, dimensionValue: Comparable<*>?) : IllegalArgumentException() {
-  override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
+open class MyServlet : GaliteServlet() {
+
+  override fun servletInitialized() {
+    super.servletInitialized()
+
+    connectToDatabase()
+    initDatabase()
+  }
 }

@@ -45,7 +45,7 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
    * Creates the data series objects from the chart model.
    * @param chart The chart model.
    */
-  fun createDataSeries(chart: VChart) {
+  internal fun createDataSeries(chart: VChart) {
     dataSeries.clear()
     chart.getRows().forEach { row ->
       val data = VDataSeries(createDimensionData(chart, row))

@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.dsl.common
 
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.form.VDictionary
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.list.VList
 
 /**
@@ -34,7 +34,7 @@ import org.kopi.galite.visual.list.VList
  */
 class FieldList<T>(val type: String,
                    val table: ColumnSet,
-                   val action: (() -> VDictionary)?,
+                   val action: (() -> DictionaryForm)?,
                    val columns: MutableList<ListDescription>,
                    val autocompleteType: Int,
                    val autocompleteLength: Int,

@@ -371,9 +371,9 @@ abstract class VForm : VWindow, VConstants {
   }
 
   /**
-   * Returns true iff the form contents have been changed by the user.
+   * Returns true if the form contents have been changed by the user.
    *
-   * NOTE: TRG_CHANGED returns true iff form is considered changed
+   * NOTE: TRG_CHANGED returns true if form is considered changed
    */
   fun isChanged(): Boolean {
     return if (hasTrigger(VConstants.TRG_CHANGED)) {
@@ -396,7 +396,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * Resets form to initial state
    *
-   * NOTE: TRG_RESET returns true iff reset handled by trigger
+   * NOTE: TRG_RESET returns true if reset handled by trigger
    * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   override fun reset() {

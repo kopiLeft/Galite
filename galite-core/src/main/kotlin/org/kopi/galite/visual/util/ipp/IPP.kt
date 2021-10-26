@@ -20,6 +20,17 @@ package org.kopi.galite.visual.util.ipp
 
 class IPP() {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  var header: IPPHeader = IPPHeader()
+    private set
+
+  private var attributes: MutableList<IPPAttribute> = mutableListOf()
+
+  var data: ByteArray = ByteArray(0)
+
   constructor(ippInputStream: IPPInputStream) : this() {
     var endAttributes = false
     var groupTag = IPPConstants.TAG_ZERO.toByte()
@@ -107,17 +118,6 @@ class IPP() {
       it.simpleDump()
     }
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  var header: IPPHeader = IPPHeader()
-    private set
-
-  private var attributes: MutableList<IPPAttribute> = mutableListOf()
-
-  var data: ByteArray = ByteArray(0)
 
   companion object {
     const val DEBUG = false

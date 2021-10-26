@@ -20,12 +20,18 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VIntegerCodeColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 class VIntegerCodeField : VCodeField {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+
+  // dynamic data
+  private val codes: Array<Int?>    // code array
 
   /**
    * @param     ident           the identifier of the type in the source file
@@ -148,11 +154,4 @@ class VIntegerCodeField : VCodeField {
     }
     return formatCode(code)
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-
-  // dynamic data
-  private val codes: Array<Int?>    // code array
 }

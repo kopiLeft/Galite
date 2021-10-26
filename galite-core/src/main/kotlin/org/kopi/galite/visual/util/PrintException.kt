@@ -22,6 +22,14 @@ package org.kopi.galite.visual.util
  * An error has occur during printing
  */
 open class PrintException : Exception {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  /** The error code */
+  var code: Int
+    private set
+
   /**
    * PrintException
    *
@@ -56,15 +64,6 @@ open class PrintException : Exception {
   fun shouldRetry(): Boolean {
     return code == EXC_RETRY
   }
-
-  /**
-   * Gets the error code
-   */
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  var code: Int
-    private set
 
   companion object {
     // ----------------------------------------------------------------------

@@ -29,10 +29,6 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param     ident           the identifier of the actor localization
  */
 class MessageLocalizer(document: Document, ident: String) {
-  /**
-   * Returns the value of the text attribute.
-   */
-  fun getText(): String = self.getAttributeValue("text")
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -51,4 +47,9 @@ class MessageLocalizer(document: Document, ident: String) {
     }
     self = Utils.lookupChild(root, "message", "ident", ident)
   }
+
+  /**
+   * Returns the value of the text attribute.
+   */
+  fun getText(): String = self.getAttributeValue("text")
 }

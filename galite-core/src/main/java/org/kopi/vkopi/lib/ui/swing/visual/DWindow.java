@@ -1135,7 +1135,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   }
 
   /**
-   * Reports iff a message is shown while in a transaction.
+   * Reports if a message is shown while in a transaction.
    */
   protected void verifyNotInTransaction(String message) {
     if (getModel().inTransaction() && debugMessageInTransaction()) {
@@ -1151,7 +1151,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   }
 
   /**
-   * Returns true iff it should be checked whether a message is shown
+   * Returns true if it should be checked whether a message is shown
    * while in a transaction.
    */
   private boolean debugMessageInTransaction() {

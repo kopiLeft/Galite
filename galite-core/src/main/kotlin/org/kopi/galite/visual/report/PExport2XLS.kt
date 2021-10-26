@@ -36,6 +36,13 @@ class PExport2XLS(table: UTable,
                   printConfig,
                   title), Constants {
 
+  //-----------------------------------------------------------
+  // DATA MEMBERS
+  //-----------------------------------------------------------
+  private var palette: HSSFPalette? = null
+  private var colorindex: Short = 0
+  private var colorpalete: Hashtable<Color, HSSFColor?>? = null
+
   override fun createWorkbook(): Workbook {
     val wb = HSSFWorkbook()
 
@@ -56,11 +63,4 @@ class PExport2XLS(table: UTable,
       return rowCol
     }
   }
-
-  //-----------------------------------------------------------
-  // DATA MEMBERS
-  //-----------------------------------------------------------
-  private var palette: HSSFPalette? = null
-  private var colorindex: Short = 0
-  private var colorpalete: Hashtable<Color, HSSFColor?>? = null
 }

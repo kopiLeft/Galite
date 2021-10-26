@@ -35,6 +35,13 @@ open class VStringField(val bufferSize: Int,
                         styled: Boolean)
                : VField(width, height) {
 
+  /**
+   * Returns true if the text field supports styled content.
+   */
+  val isStyled: Boolean = styled
+
+  protected var value: Array<String?> = arrayOfNulls(2 * bufferSize)
+
   constructor(bufferSize: Int,
               width: Int,
               height: Int,
@@ -230,13 +237,6 @@ open class VStringField(val bufferSize: Int,
    * @param    record        the index of the record
    */
   fun modelToText(record: Int): String = modelToText(getString(record), width)
-
-  /**
-   * Returns true if the text field supports styled content.
-   */
-  val isStyled: Boolean = styled
-
-  protected var value: Array<String?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     /**

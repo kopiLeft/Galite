@@ -29,7 +29,6 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  */
 object VlibProperties {
 
-
   // ----------------------------------------------------------------------
   // STATIC METHODS
   // ----------------------------------------------------------------------

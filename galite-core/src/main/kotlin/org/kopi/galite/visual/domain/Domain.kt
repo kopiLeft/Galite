@@ -26,7 +26,7 @@ import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.form.VMonthField
@@ -94,12 +94,12 @@ open class Domain<T>(val width: Int? = null,
                          styled)
           }
         }
-        Decimal::class -> VFixnumField(block.buffer,
-                                       width!!,
-                                       height ?: 6,
-                                       height == null,
-                                       min as? Decimal,
-                                       max as? Decimal)
+        Decimal::class -> VDecimalField(block.buffer,
+                                        width!!,
+                                        height ?: 6,
+                                        height == null,
+                                        min as? Decimal,
+                                        max as? Decimal)
         Boolean::class -> VBooleanField(block.buffer)
         Date::class, java.util.Date::class -> VDateField(block.buffer)
         Month::class -> VMonthField(block.buffer)

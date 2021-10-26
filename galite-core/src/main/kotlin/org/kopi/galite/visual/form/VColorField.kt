@@ -34,6 +34,11 @@ import org.kopi.galite.visual.visual.VlibProperties
 
 class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var value: Array<Color?> = arrayOfNulls(2 * bufferSize)
+
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -46,11 +51,9 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
    */
   override fun getTypeName(): String = VlibProperties.getString("Color")
 
-  /*
-   * ----------------------------------------------------------------------
-   * Interface Display
-   * ----------------------------------------------------------------------
-   */
+  // ----------------------------------------------------------------------
+  // Interface Display
+  // ----------------------------------------------------------------------
 
   /**
    * return a list column for list
@@ -207,11 +210,9 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
    */
   override fun getDataType(): KClass<*> = Color::class
 
-  /*
-   * ----------------------------------------------------------------------
-   * FORMATTING VALUES WRT FIELD TYPE
-   * ----------------------------------------------------------------------
-   */
+  // ----------------------------------------------------------------------
+  // FORMATTING VALUES WRT FIELD TYPE
+  // ----------------------------------------------------------------------
 
   /**
    * Returns a string representation of a date value wrt the field type.
@@ -234,11 +235,4 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
    * Reformat a unsigned int from a byte
    */
   private fun reformat(b: Byte): Int = if (b < 0) b + 255 else b.toInt()
-
-  /*
-   * ----------------------------------------------------------------------
-   * DATA MEMBERS
-   * ----------------------------------------------------------------------
-   */
-  private var value: Array<Color?> = arrayOfNulls(2 * bufferSize)
 }

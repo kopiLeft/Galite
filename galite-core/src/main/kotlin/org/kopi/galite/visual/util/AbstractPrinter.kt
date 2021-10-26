@@ -29,6 +29,11 @@ import org.kopi.galite.visual.base.Utils
  * DefaultPrinter
  */
 abstract class AbstractPrinter protected constructor(private val name: String) : Printer {
+
+  var numberOfCopies = 1 // the number of copy to print
+  private var tray = 1
+  private var paperFormat: String? = null
+
   override fun getPrinterName(): String = name
 
   /**
@@ -93,8 +98,4 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
     protected const val TOPRINTER_TRUE = "/toprinter {true} def"
     protected const val TOPRINTER_FALSE = "/toprinter {false} def"
   }
-
-  var numberOfCopies = 1 // the number of copy to print
-  private var tray = 1
-  private var paperFormat: String? = null
 }

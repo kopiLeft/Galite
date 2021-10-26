@@ -25,7 +25,7 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
-import org.kopi.galite.visual.list.VFixnumColumn
+import org.kopi.galite.visual.list.VDecimalColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -41,12 +41,12 @@ import org.kopi.galite.visual.visual.VlibProperties
  * @param    maxval      The max permitted value
  *
  */
-class VFixnumField(val bufferSize: Int,
-                   private val digits: Int,
-                   maxScale: Int,
-                   val isFraction: Boolean,
-                   minValue: Decimal?,
-                   maxValue: Decimal?)
+class VDecimalField(val bufferSize: Int,
+                    private val digits: Int,
+                    maxScale: Int,
+                    val isFraction: Boolean,
+                    minValue: Decimal?,
+                    maxValue: Decimal?)
   : VField(computeWidth(digits, maxScale, minValue, maxValue), 1) {
   /*
    * ----------------------------------------------------------------------
@@ -122,13 +122,13 @@ class VFixnumField(val bufferSize: Int,
    * return a list column for list
    */
   override fun getListColumn(): VListColumn {
-    return VFixnumColumn(getHeader(),
-                         null,
-                         null,
-                         align,
-                         width,
-                         maxScale,
-                         getPriority() >= 0)
+    return VDecimalColumn(getHeader(),
+                          null,
+                          null,
+                          align,
+                          width,
+                          maxScale,
+                          getPriority() >= 0)
   }
 
   /**

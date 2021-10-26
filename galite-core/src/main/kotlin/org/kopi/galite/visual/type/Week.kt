@@ -230,7 +230,7 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
     }
 
     /**
-     * Returns true iff the specified year is a leap year.
+     * Returns true if the specified year is a leap year.
      */
     private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && year % 100 != 0 || year % 400 == 0
 

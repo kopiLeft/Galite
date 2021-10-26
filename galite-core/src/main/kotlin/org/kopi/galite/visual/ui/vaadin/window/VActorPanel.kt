@@ -32,6 +32,7 @@ import com.vaadin.flow.component.menubar.MenuBar
 class VActorPanel : MenuBar() {
   private val actorsNavigationItem = VActorsRootNavigationItem()
   private val menu = Div()
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------

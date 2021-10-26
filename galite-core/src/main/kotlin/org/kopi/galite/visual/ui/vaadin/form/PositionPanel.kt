@@ -33,7 +33,6 @@ import com.vaadin.flow.component.textfield.TextField
  */
 class PositionPanel : HorizontalLayout() {
 
-
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------

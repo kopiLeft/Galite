@@ -589,7 +589,7 @@ class VMenuTree constructor(ctxt: DBContext?,
           Favorites.insert {
             it[this.id] = FAVORITENId.nextIntVal()
             it[ts] = (System.currentTimeMillis() / 1000).toInt()
-            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }.subQuery()
+            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }
             it[module] = id
           }
         } else {

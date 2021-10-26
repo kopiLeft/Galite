@@ -26,6 +26,13 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * Implements a Property localizer.
  */
 class PropertyLocalizer {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var root: Element
+  private lateinit var self: Element
+
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
@@ -69,10 +76,4 @@ class PropertyLocalizer {
 
     return self.getAttributeValue("value")
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private var root: Element
-  private lateinit var self: Element
 }

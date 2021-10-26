@@ -243,6 +243,5 @@ open class Utils : org.kopi.galite.visual.util.base.Utils() {
             "Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT. All rights reserved."
     )
     private var allowExplicitGcCall: Boolean? = null
-
   }
 }

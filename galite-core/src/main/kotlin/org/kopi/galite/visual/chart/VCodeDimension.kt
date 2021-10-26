@@ -22,6 +22,7 @@ import org.kopi.galite.visual.l10n.FieldLocalizer
 
 /**
  * Creates a chart code column.
+ *
  * @param ident   The column identifier.
  * @param format  The dimension format.
  * @param type    The column type.
@@ -33,6 +34,9 @@ abstract class VCodeDimension(ident: String,
                               private val type: String,
                               private val source: String,
                               private val idents: Array<String>) : VDimension(ident, format) {
+
+  protected var names: Array<String?>? = null // array of external representations
+
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
@@ -58,6 +62,4 @@ abstract class VCodeDimension(ident: String,
       localizer.getCodeLabel(idents[i])
     }
   }
-
-  protected var names: Array<String?>? = null // array of external representations
 }

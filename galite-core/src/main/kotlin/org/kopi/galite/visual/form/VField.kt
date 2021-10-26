@@ -26,7 +26,6 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.EqOp
@@ -39,7 +38,6 @@ import org.jetbrains.exposed.sql.LikeOp
 import org.jetbrains.exposed.sql.NeqOp
 import org.jetbrains.exposed.sql.NotLikeOp
 import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
@@ -86,6 +84,138 @@ import org.kopi.galite.visual.visual.VlibProperties
  */
 abstract class VField protected constructor(width: Int, height: Int) : VConstants, VModel {
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+
+  /**
+   * The width of a field is the max number of character needed to display
+   * any value
+   * @return    the width of this field
+   */
+  var width = 0
+    // max # of chars per line
+    protected set
+
+  /**
+   * The height of a field is the max number of line needed to display
+   * any value
+   * @return    the width of this field
+   */
+  var height = 0 // max # of lines
+    protected set
+
+  private lateinit var access: IntArray // access in each mode
+
+  private var priority = 0  // order in select results
+
+  private var indices = 0  // bitset of unique indices
+
+  /**
+   * The name of the field is the ident.
+   *
+   * @return    the name of this field.
+   */
+  lateinit var name: String   // field name (for dumps)
+    private set
+
+  var label: String? = null // field label
+    set(label) {
+      field = label
+      fireLabelChanged()
+    }
+
+  /**
+   * Returns the option of this field
+   */
+  var options = 0 // options
+
+  /**
+   * The tooltip of the field is a small sentence that describe usage of the field
+   * It is the first line of the field help
+   * @return    the help of this field
+   */
+  var toolTip: String? = null // help text
+    internal set
+
+  private var index = 0 // The position in parent field array
+
+  /**
+   * Returns the alignment
+   */
+  var align = 0   // field alignment
+    private set
+
+  var posInArray = 0   // position in array of fields
+    private set
+
+  var list: VList? = null   // list
+    private set
+
+  /**
+   * Returns the containing block.
+   */
+  var block: VBlock? = null // containing block
+    set(block) {
+      field = block
+      dynAccess = IntArray(block!!.bufferSize)
+      foreground = arrayOfNulls(block.bufferSize)
+      background = arrayOfNulls(block.bufferSize)
+      setAccess(-1)
+    }
+
+  private var columns: Array<VColumn?>? = null // columns in block's tables
+
+  //  private   VFieldUI        ui;             // The UI manager
+  private var alias: VField? = null // The alias field
+
+  // changed?
+  var isChanged = false // changed by user / changes are done in the model
+    private set
+
+  var isChangedUI = false // changed by user / changes are in the ui -> update model
+
+  // UPDATE model before doing anything
+  var border = 0
+
+  // dynamic data
+  private var searchOperator = 0  // search operator
+
+  private lateinit var dynAccess: IntArray // dynamic access
+
+  // ####
+  private var fieldListener: EventListenerList? = null
+
+  // if there is only the model and no gui
+  // all the job use less memory and are faster
+  private var hasListener = false
+
+  var position: VPosition? = null
+    private set
+
+  var command: Array<VCommand>? = null
+
+  private lateinit var foreground: Array<VColor?> // foreground colors for this field.
+
+  private lateinit var background: Array<VColor?> // background colors for this field.
+
+  init {
+    setDimension(width, height)
+  }
+
+  companion object {
+    /**
+     * @return a String with the current thread information for debugging
+     */
+    private fun threadInfo(): String = "Thread: ${Thread.currentThread()}".trimIndent()
+
+    const val MDL_FLD_COLOR = 1
+    const val MDL_FLD_IMAGE = 2
+    const val MDL_FLD_EDITOR = 3
+    const val MDL_FLD_TEXT = 4
+    const val MDL_FLD_ACTOR = 5
+  }
+
   /**
    * Sets the dimensions
    */
@@ -122,7 +252,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     this.indices = indices
     this.priority = priority
-    if (this is VFixnumField || this is VIntegerField) {
+    if (this is VDecimalField || this is VIntegerField) {
       this.align = VConstants.ALG_RIGHT
     } else {
       this.align = align
@@ -146,7 +276,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun fetchColumn(table: Int): Int {
     if (columns != null) {
       for (i in columns!!.indices) {
-        if (columns!![i]!!.getTable() == table) {
+        if (columns!![i]!!._getTable() == table) {
           return i
         }
       }
@@ -157,7 +287,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun fetchColumn(table: Table): Int {
     if (columns != null) {
       for (i in columns!!.indices) {
-        if (columns!![i]!!.getTable_() == table) {
+        if (columns!![i]!!.getTable() == table) {
           return i
         }
       }
@@ -655,18 +785,18 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * returns null if the field has no access to this table.
    */
   @Deprecated("use lookupColumn(corr: Table)")
-  fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
+  fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!._getTable() }?.column
 
   /**
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
-  fun lookupColumn(corr: Table): Column<*>? = columns!!.find { corr == it!!.getTable_() }?.column
+  fun lookupColumn(corr: Table): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable_() }?.key ?: false
+  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
 
   /**
    * Is the field part of given index ?
@@ -1762,7 +1892,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
       list!!.action != null -> {
         // NEW SYNTAX
-        list!!.action!!()
+        list!!.action!!().model
       }
       else -> {
         null // should never happen.
@@ -2439,137 +2569,5 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   @Deprecated("")
   fun getUI(): Compatible {
     return Compatible()
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-
-  /**
-   * The width of a field is the max number of character needed to display
-   * any value
-   * @return    the width of this field
-   */
-  var width = 0
-    // max # of chars per line
-    protected set
-
-  /**
-   * The height of a field is the max number of line needed to display
-   * any value
-   * @return    the width of this field
-   */
-  var height = 0 // max # of lines
-    protected set
-
-  private lateinit var access: IntArray // access in each mode
-
-  private var priority = 0  // order in select results
-
-  private var indices = 0  // bitset of unique indices
-
-  /**
-   * The name of the field is the ident.
-   *
-   * @return    the name of this field.
-   */
-  lateinit var name: String   // field name (for dumps)
-    private set
-
-  var label: String? = null // field label
-    set(label) {
-      field = label
-      fireLabelChanged()
-    }
-
-  /**
-   * Returns the option of this field
-   */
-  var options = 0 // options
-
-  /**
-   * The tooltip of the field is a small sentence that describe usage of the field
-   * It is the first line of the field help
-   * @return    the help of this field
-   */
-  var toolTip: String? = null // help text
-    internal set
-
-  private var index = 0 // The position in parent field array
-
-  /**
-   * Returns the alignment
-   */
-  var align = 0   // field alignment
-    private set
-
-  var posInArray = 0   // position in array of fields
-    private set
-
-  var list: VList? = null   // list
-    private set
-
-  /**
-   * Returns the containing block.
-   */
-  var block: VBlock? = null // containing block
-    set(block) {
-      field = block
-      dynAccess = IntArray(block!!.bufferSize)
-      foreground = arrayOfNulls(block.bufferSize)
-      background = arrayOfNulls(block.bufferSize)
-      setAccess(-1)
-    }
-
-  private var columns: Array<VColumn?>? = null // columns in block's tables
-
-  //  private   VFieldUI        ui;             // The UI manager
-  private var alias: VField? = null // The alias field
-
-  // changed?
-  var isChanged = false // changed by user / changes are done in the model
-    private set
-
-  var isChangedUI = false // changed by user / changes are in the ui -> update model
-
-  // UPDATE model before doing anything
-  var border = 0
-
-  // dynamic data
-  private var searchOperator = 0  // search operator
-
-  private lateinit var dynAccess: IntArray // dynamic access
-
-  // ####
-  private var fieldListener: EventListenerList? = null
-
-  // if there is only the model and no gui
-  // all the job use less memory and are faster
-  private var hasListener = false
-
-  var position: VPosition? = null
-    private set
-
-  var command: Array<VCommand>? = null
-
-  private lateinit var foreground: Array<VColor?> // foreground colors for this field.
-
-  private lateinit var background: Array<VColor?> // background colors for this field.
-
-  companion object {
-    /**
-     * @return a String with the current thread information for debugging
-     */
-    private fun threadInfo(): String = "Thread: ${Thread.currentThread()}".trimIndent()
-
-    const val MDL_FLD_COLOR = 1
-    const val MDL_FLD_IMAGE = 2
-    const val MDL_FLD_EDITOR = 3
-    const val MDL_FLD_TEXT = 4
-    const val MDL_FLD_ACTOR = 5
-  }
-
-  init {
-    setDimension(width, height)
   }
 }

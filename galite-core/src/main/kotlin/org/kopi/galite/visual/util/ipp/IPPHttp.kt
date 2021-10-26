@@ -20,6 +20,15 @@ package org.kopi.galite.visual.util.ipp
 
 class IPPHttp {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var ippHeader: IPPHttpHeader
+
+  var ipp: IPP
+    private set
+
   constructor(printerName: String, request: IPP) {
     ippHeader = IPPHttpHeader(printerName, request.getSize())
     ipp = request
@@ -38,13 +47,4 @@ class IPPHttp {
     ippHeader.write(os)
     ipp.write(os)
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var ippHeader: IPPHttpHeader
-
-  var ipp: IPP
-    private set
 }

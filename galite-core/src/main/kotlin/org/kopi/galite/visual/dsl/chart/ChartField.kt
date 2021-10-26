@@ -21,7 +21,7 @@ import java.io.Serializable
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.dsl.field.Field
 
 /**
  * A chart column.
