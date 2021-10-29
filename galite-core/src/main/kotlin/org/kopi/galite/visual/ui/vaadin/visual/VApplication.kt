@@ -346,7 +346,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override var dBContext: DBContext? = null
 
   override val userName: String
-    get() = dBContext!!.defaultConnection.userName
+    get() = dBContext!!.connection.userName
 
   override lateinit var defaultLocale: Locale
 
@@ -379,7 +379,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * The database URL.
    */
   val url: String
-    get() = dBContext!!.defaultConnection.url
+    get() = dBContext!!.connection.url
 
   /**
    * This methods is called at the beginning

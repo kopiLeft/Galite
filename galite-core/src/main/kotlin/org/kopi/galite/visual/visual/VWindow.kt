@@ -483,12 +483,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? = dBContext!!.defaultConnection.userName
+  open fun getUserName(): String? = dBContext!!.connection.userName
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int = dBContext!!.defaultConnection.getUserID()
+  open fun getUserID(): Int = dBContext!!.connection.getUserID()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING

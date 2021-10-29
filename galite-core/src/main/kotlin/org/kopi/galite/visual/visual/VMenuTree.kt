@@ -199,7 +199,7 @@ class VMenuTree constructor(ctxt: DBContext?,
   /**
    * Returns the ID of the current user
    */
-  override fun getUserID(): Int = dBContext!!.defaultConnection.getUserID()
+  override fun getUserID(): Int = dBContext!!.connection.getUserID()
 
   /**
    * Creates a new actor
