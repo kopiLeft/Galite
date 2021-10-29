@@ -130,6 +130,12 @@ class FormSample : Form() {
 
   val tb4ToTestListDomain = insertBlock(ListDomainTest(), p1)
 
+  val tb5ToTestAccessBlock = insertBlock(block(), p1) {
+    trigger(ACCESS) {
+      false
+    }
+  }
+
   val preform = trigger(INIT) {
     println("init form trigger works")
   }
@@ -247,6 +253,13 @@ class ListDomainTest : FormBlock(1, 1, "Test block") {
     columns(u.age) {
       priority = 1
     }
+  }
+}
+
+class block : FormBlock(1, 5, "Test block") {
+  val id = visit(domain = INT(20), at(1, 1)) {
+    label = "id"
+    help = "The user id"
   }
 }
 

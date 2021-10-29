@@ -25,13 +25,13 @@ class FormWithMultipleBlockTests : JApplicationTestBase() {
 
   @Test
   fun multipleBlockTest() {
-    val formModel = FormWithMultipleBlock.model
+    val formModel = FormWithMultipleBlock().also { it.model }
+    formModel.multipleBlock
+    assertEquals(formModel.multipleBlock.vBlock.bufferSize, 100)
+    assertEquals(formModel.multipleBlock.vBlock.displaySize, 100)
+    assertEquals(formModel.multipleBlock.vBlock.displayedFields, 1)
 
-    assertEquals(formModel.getBlock(1).bufferSize, 100)
-    assertEquals(formModel.getBlock(1).displaySize, 100)
-    assertEquals(formModel.getBlock(1).displayedFields, 1)
-
-    val nameField = formModel.getBlock(1).fields[1]
+    val nameField = formModel.multipleBlock.vBlock.fields[1]
     assertEquals(1, nameField.position!!.column)
     assertEquals(1, nameField.position!!.columnEnd)
     assertEquals(1, nameField.position!!.line)

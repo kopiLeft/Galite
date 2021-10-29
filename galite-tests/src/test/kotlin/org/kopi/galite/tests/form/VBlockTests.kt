@@ -36,11 +36,14 @@ import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
@@ -364,10 +367,10 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord multi block scenario test`() {
-    FormWithMultipleBlock.model
-    val error = assertThrows(AssertionError::class.java) { FormWithMultipleBlock.multipleBlock.vBlock.fetchNextRecord(0)}
+    val form = FormWithMultipleBlock().also { it.model }
+    val error = assertThrows(AssertionError::class.java) { form.multipleBlock.vBlock.fetchNextRecord(0)}
 
-    assertEquals(FormWithMultipleBlock.multipleBlock.vBlock.name + " is a multi block", error.message)
+    assertEquals(form.multipleBlock.vBlock.name + " is a multi block", error.message)
   }
 
   @Test
@@ -858,5 +861,260 @@ class VBlockTests : VApplicationTestBase() {
                    listInfoUser)
       SchemaUtils.drop(User)
     }
+  }
+
+  @Test
+  fun `setting block mode test`() {
+    val formSample = FormSample().also { it.model }
+
+    // set block to insert mode
+    formSample.tb1.vBlock.setMode(VConstants.MOD_INSERT)
+    assertEquals(VConstants.MOD_INSERT, formSample.tb1.vBlock.getMode())
+
+    // set block to update mode
+    formSample.tb1.vBlock.setMode(VConstants.MOD_UPDATE)
+    assertEquals(VConstants.MOD_UPDATE, formSample.tb1.vBlock.getMode())
+
+    // set block to query mode
+    formSample.tb1.vBlock.setMode(VConstants.MOD_QUERY)
+    assertEquals(VConstants.MOD_QUERY, formSample.tb1.vBlock.getMode())
+  }
+
+  @Test
+  fun `test isAccessible for the block`() {
+     val formSample = FormSample().also { it.model }
+
+    assertEquals(true, formSample.tb1.vBlock.isAccessible)
+    assertEquals(false, formSample.tb5ToTestAccessBlock.vBlock.isAccessible)
+  }
+
+  @Test
+  fun `test setColor for multi block fields`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+    val foregroundColor = VColor(250, 0, 0)
+    val backgroundColor = VColor(0, 153, 0)
+
+    multiBlock.multipleBlock.vBlock.setColor(1, foregroundColor, backgroundColor)
+
+    assertEquals(foregroundColor, multiBlock.multipleBlock.name.vField.getForeground(1))
+    assertEquals(backgroundColor, multiBlock.multipleBlock.name.vField.getBackground(1))
+  }
+
+  @Test
+  fun `test resetColor for multi block fields`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+    val foregroundColor = VColor(250, 0, 0)
+    val backgroundColor = VColor(0, 153, 0)
+
+    multiBlock.multipleBlock.vBlock.setColor(1, foregroundColor, backgroundColor)
+
+    assertEquals(foregroundColor, multiBlock.multipleBlock.name.vField.getForeground(1))
+    assertEquals(backgroundColor, multiBlock.multipleBlock.name.vField.getBackground(1))
+
+    multiBlock.multipleBlock.vBlock.resetColor(1)
+
+    assertEquals(null, multiBlock.multipleBlock.name.vField.getForeground(1))
+    assertEquals(null, multiBlock.multipleBlock.name.vField.getBackground(1))
+  }
+
+  @Test
+  fun `test numberOfFilledRecords in block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    multiBlock.multipleBlock.name[0] = "record 0"
+    multiBlock.multipleBlock.name[1] = "record 1"
+    assertEquals(2, multiBlock.multipleBlock.vBlock.numberOfFilledRecords)
+  }
+
+  @Test
+  fun `test leaveRecord in block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+    multiBlock.multipleBlock.name[0] = "record 0"
+    assertEquals(0, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.leaveRecord(true)
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test gotoLastRecord in the block throw exception`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    multiBlock.multipleBlock.vBlock.enter()
+
+    val error = assertThrows(VExecFailedException::class.java) { multiBlock.multipleBlock.vBlock.gotoLastRecord() }
+
+    assertEquals(MessageCode.getMessage("VIS-00015"), error.message)
+  }
+
+  @Test
+  fun `test gotoLastRecord in block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+    val indexOfLastEditedField = 5
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+    multiBlock.multipleBlock.name[indexOfLastEditedField] = "record 5"
+    multiBlock.multipleBlock.vBlock.gotoFirstField()
+    assertEquals(0, multiBlock.multipleBlock.vBlock.activeRecord)
+
+    multiBlock.multipleBlock.vBlock.gotoLastRecord()
+    assertEquals(indexOfLastEditedField, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+   @Test
+    fun `test gotoFirstRecord in block`() {
+      val multiBlock = FormWithMultipleBlock().also { it.model }
+      val indexOfLastEditedField = 5
+
+     assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+      multiBlock.multipleBlock.vBlock.enter()
+      multiBlock.multipleBlock.name[indexOfLastEditedField] = "record 5"
+      multiBlock.multipleBlock.vBlock.gotoLastRecord()
+      assertEquals(indexOfLastEditedField, multiBlock.multipleBlock.vBlock.activeRecord)
+
+      multiBlock.multipleBlock.vBlock.gotoFirstRecord()
+      assertEquals(0, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test isRecordInsertAllowed in the block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+    val formSample = FormSample().also { it.model.reset() }
+
+    assertEquals(true, multiBlock.multipleBlock.vBlock.isRecordInsertAllowed(0))
+
+    // block contains NO INSERT option
+    assertEquals(false, formSample.tb3ToTestBlockOptions.vBlock.isRecordInsertAllowed(0))
+  }
+
+  @Test
+  fun `test isRecordAccessible in the block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    // rec < 0
+    assertEquals(false, multiBlock.multipleBlock.vBlock.isRecordAccessible(-1))
+    // rec >= bufferSize
+    assertEquals(false, multiBlock.multipleBlock.vBlock.isRecordAccessible(200))
+
+    assertEquals(true, multiBlock.multipleBlock.vBlock.isRecordAccessible(0))
+  }
+
+  @Test
+  fun `test changeActiveRecord in the multi block with noMove option`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    multiBlock.noMoveMultiBlock.vBlock.enter()
+
+    val error = assertThrows(VExecFailedException::class.java) { multiBlock.noMoveMultiBlock.vBlock.changeActiveRecord(5) }
+
+    assertEquals(MessageCode.getMessage("VIS-00025"), error.message)
+  }
+
+  @Test
+  fun `test changeActiveRecord in the multi block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+    multiBlock.multipleBlock.vBlock.changeActiveRecord(5)
+
+    assertEquals(5, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test changeActiveRecord in the simple block when mode equals query`() {
+    val formSample = FormSample().also { it.model.reset() }
+
+    val error = assertThrows(VExecFailedException::class.java) { formSample.tb1.vBlock.changeActiveRecord(5) }
+
+    assertEquals(MessageCode.getMessage("VIS-00025"), error.message)
+  }
+
+  @Test
+  fun `test changeActiveRecord in the simple block when mode equals update`() {
+    val formSample = FormSample().also { it.model.reset() }
+
+    formSample.tb1.vBlock.setMode(VConstants.MOD_UPDATE)
+    transaction {
+      initSampleFormTables()
+      formSample.tb1.name.value = "AUDREY"
+      formSample.tb1.age.value = 26
+      formSample.tb1.vBlock.load()
+    }
+
+    formSample.tb1.vBlock.changeActiveRecord(0)
+    assertEquals(0, formSample.tb1.vBlock.activeRecord)
+
+    transaction {
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `test gotoNextRecord in block`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+    assertEquals(0, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.gotoNextRecord()
+    assertEquals(1, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test gotoNextRecord after editing record`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+    val indexOfLastEditedField = 5
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+    multiBlock.multipleBlock.name[indexOfLastEditedField] = "record 5"
+
+    multiBlock.multipleBlock.vBlock.gotoLastRecord()
+    assertEquals(indexOfLastEditedField, multiBlock.multipleBlock.vBlock.activeRecord)
+
+    multiBlock.multipleBlock.vBlock.gotoNextRecord()
+    assertEquals(indexOfLastEditedField + 1, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test gotoPrevRecord after editing record`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+    val indexOfLastEditedField = 5
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+    multiBlock.multipleBlock.name[indexOfLastEditedField] = "record 5"
+
+    multiBlock.multipleBlock.vBlock.gotoLastRecord()
+    assertEquals(indexOfLastEditedField, multiBlock.multipleBlock.vBlock.activeRecord)
+
+    multiBlock.multipleBlock.vBlock.gotoPrevRecord()
+    assertEquals(indexOfLastEditedField - 1, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test gotoRecord after editing record`() {
+    val multiBlock = FormWithMultipleBlock().also { it.model }
+
+    assertEquals(-1, multiBlock.multipleBlock.vBlock.activeRecord)
+    multiBlock.multipleBlock.vBlock.enter()
+
+    multiBlock.multipleBlock.vBlock.gotoRecord(9)
+    assertEquals(9, multiBlock.multipleBlock.vBlock.activeRecord)
+  }
+
+  @Test
+  fun `test gotoField after editing record`() {
+    val formSample = FormSample().also { it.model }
+
+    formSample.tb1.vBlock.enter()
+    assertEquals(formSample.tb1.name.vField, formSample.tb1.vBlock.activeField)
+
+    formSample.tb1.vBlock.gotoField(formSample.tb1.age.vField)
+    assertEquals(formSample.tb1.age.vField, formSample.tb1.vBlock.activeField)
   }
 }

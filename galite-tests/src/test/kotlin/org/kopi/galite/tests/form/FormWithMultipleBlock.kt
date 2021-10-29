@@ -21,17 +21,21 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 
-object FormWithMultipleBlock : Form() {
+class FormWithMultipleBlock : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
   val blockSample = insertBlock(BlockSample)
-  val multipleBlock = insertBlock(MultipleBlock)
+  val multipleBlock = insertBlock(MultipleBlock())
+  val noMoveMultiBlock = insertBlock(SecondMultiBlock()) {
+    options(BlockOption.NOMOVE)
+  }
 }
 
-object MultipleBlock : FormBlock(100, 100, "Test block") {
+class MultipleBlock : FormBlock(100, 100, "Test block") {
   val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"
@@ -43,6 +47,13 @@ object MultipleBlock : FormBlock(100, 100, "Test block") {
   }
 }
 
+class SecondMultiBlock : FormBlock(10, 10, "Test block") {
+  val name = visit(domain = STRING(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+  }
+}
+
 fun main() {
-  runForm(FormWithMultipleBlock)
+  runForm(FormWithMultipleBlock())
 }
