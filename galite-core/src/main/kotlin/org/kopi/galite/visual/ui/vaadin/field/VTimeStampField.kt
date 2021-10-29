@@ -17,12 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import kotlin.streams.toList
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.datetimepicker.DateTimePicker
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.timepicker.TimePicker
 
 /**
  * A timestamp field.
@@ -37,6 +41,17 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
 
   init {
     internalField.isAutoOpen = false
+
+    // Workaround for autoselection on focus
+    val children = internalField.children.toList()
+    val datePicker = (children.single { it is DatePicker } as DatePicker)
+    val timePicker = (children.single { it is TimePicker } as TimePicker)
+    datePicker.addFocusListener {
+      datePicker.element.executeJs("this.focusElement.inputElement.select()")
+    }
+    timePicker.addFocusListener {
+      timePicker.element.executeJs("this.focusElement.inputElement.select()")
+    }
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

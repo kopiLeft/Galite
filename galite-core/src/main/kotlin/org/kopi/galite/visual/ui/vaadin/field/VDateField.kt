@@ -33,6 +33,11 @@ class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
   init {
     internalField.isClearButtonVisible = true
     internalField.isAutoOpen = false
+
+    // Workaround for autoselection on focus
+    addFocusListener {
+      element.executeJs("this.$.input.inputElement.select()")
+    }
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
