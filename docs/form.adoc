@@ -1,7 +1,10 @@
 
 === Visual Galite Forms
 
-The aim of Galite is to enable you to create applications. An application is made up of forms. A *form* is a set of *pages* consisting of *blocks*. A *block* is nothing else than a table which is divided into columns (vertical) and rows (horizontal). A row is made up of *fields*, and each *field* contains a data value at the intersection of a row and a column that can be of different *Types*.
+The aim of Galite is to enable you to create applications.
+An application is made up of forms. A *form* is a set of *pages* consisting of *blocks*.
+A *block* is nothing else than a table which is divided into columns (vertical) and rows (horizontal).
+A row is made up of *fields*, and each *field* contains a data value at the intersection of a row and a column that can be of different *Types*.
 By the end of this chapter, you will learn how to create a form, but before, you need to learn how to create a field and how to form blocks.
 
 ==== Creating Form Fields
@@ -14,25 +17,25 @@ To define a field you can call one of the 4 functions `mustFill()`, `visit()`, `
 [source,kotlin]
 ----
 FieldDeclaration  :
-val fieldName = mustFill("FieldDomain", [FieldPosition]) {
+val fieldName = mustFill(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
-or
+|
 
-val fieldName = visit("FieldDomain", [FieldPosition]) {
+val fieldName = visit(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
-or
+|
 
-val fieldName = skipped("FieldDomain", [FieldPosition]) {
+val fieldName = skipped(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
-or
+|
 
-val fieldName = hidden("FieldDomain", [FieldPosition]) {
+val fieldName = hidden(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
@@ -42,7 +45,7 @@ FieldBody         : [FieldLabel] [FieldHelp] [FieldAlignment]
 ----
 
 ===== Field Access Modifiers
-An access modifier determines the way the application user will have to handle each field in a form as well as the field accessibility. This command is compulsory. There are 4 sorts of access modifier:
+An access modifier determines the way the application user will have to handle each field in a form as well as the field accessibility. There are 4 sorts of access modifier:
 
 *Syntax:*
 [source,kotlin]
@@ -81,6 +84,14 @@ val id = hidden(domain = INT(20)) {
 This entry defines the position of the field in the current block. HIDDEN fields does not have positions, and in multiple block (Defined in the  Blocks creation Section of this document) you may use the NO DETAIL Block option to pass positioning fields.
 There are two possibilities to define the field position.
 
+ * *Absolute Position With the function `at()`*
+
+You can define it according to one integer or more: ::
+
+ ** at(row)
+ ** at(row , column)
+ ** at(row, column..multifield)
+
 *Syntax:*
 [source,kotlin]
 ----
@@ -94,14 +105,6 @@ FieldPosition : at(row: Int  [,column: Int])
                 |
                 follow(otherField)
 ----
-
- * *Absolute Position With the function `at()`*
-
-You can define it according to one integer or more: ::
-
- ** at(row)
- ** at(row , column)
- ** at(row, column..multifield)
 
 *Example*
  	
@@ -170,7 +173,7 @@ val lesson = visit(domain = STRING(20), position = at(1, 1)) {
     label = "lesson"
     help =  "The lesson you would like to attend"
     ...
-  }
+}
 ----
 
 ===== Field Types
@@ -200,7 +203,7 @@ val day = mustFill(domain = Days, position = at(1, 1)) {
 }
 ----
 
-In this example, Days is a type you should have defined previously in type definition section of the form using standard types, CODE types and SELECT command ...
+In this example, Days is a type you should have defined previously using standard types, `Code` types and `SELECT` command ...
 
 ===== Field Alignment
 
@@ -254,7 +257,7 @@ In this example, you can drag pdf files and drop them in the field named "cv".
 
 ===== Field Options
  
-In this part of the field definition, you can use one or more option from the 10 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().
+In this part of the field definition, you can use one or more option from the 9 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().
 
  * NOECHO               : If this option is used, characters typed in the field will not be displayed and a star(*) will be displayed instead, this option is useful for password fields.
  * NOEDIT               : This option makes it impossible to change the data of the field or to overwrite it.
@@ -282,7 +285,7 @@ The columns method option is used to establish a connection between a certain co
 You may enter this option in order to specify which table and which column the field refers. +
 The same field can refer to more than one column.
  You can also use the key method option to specify a key column in the database or the nullable method option to specify an outer joint.+
-Two more option are available with the COLUMNS command, the index and the priority options.
+Two more option are available with the `columns` function, the index and the priority options.
 
 *Syntax:*
  	
@@ -309,7 +312,7 @@ Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]
 }
 ----
 
-NOTE: that a field can be connected to more than one table and column. In this case, the formula you will type will be:
+NOTE: that a field can be connected to more than one table and column. In this case, the statement you will type will be:
 
 *Example*
  	
@@ -321,7 +324,7 @@ val id = hidden(domain = INT(20)) {
     columns(I.NumInvoice, ID.Invoice)
 }
 ----
-In this example, I is the invoices table  and IP is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.
+In this example, `I` is the invoices table and `ID` is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.
 
  * *Indexes*
 
@@ -460,18 +463,19 @@ AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE
 
 ===== Standard Field Command
 
-The command QualifiedNames that we will can be Galite predefined commands or you can make new Actors and commands you can use in the field command definition.
-There are five ways in calling a standard command
+The command can be a Galite predefined command or you can make new Actors and commands you can use in the field command definition.
 
 Example:
 [source,kotlin]
 ----
 command(item = clear) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
     action = {
        ...
     }
 }
+
+val clear = actor()
 ----
 
 ===== Field Command using Modes
@@ -480,20 +484,18 @@ All the previous command definition ways can be preceded by one mode or more. Th
 
  * QUERY to start an inquiry within the database
  * INSERT to create a new row in the database
- * UPDATE to enter new information within a row 
-
-So you will have: ON Mode COMMAND, ON MODE QualifiedName ...
+ * UPDATE to enter new information within a row
 
 *Example*
  	
 [source,kotlin]
 ----
 command(item = insertMode) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.QUERY)
 }
 ----
 
-If you have entered a mode before the COMMAND, it means this COMMAND can only be invoked if the block is in the mode you have determined.
+If you have entered a mode for the `command`, it means this command can only be invoked if the block is in the mode you have determined.
 
 ===== Field Access modifiers using Modes
 
@@ -525,7 +527,7 @@ We have 12 method allow us to change the visibility of our field :
 }
 ----
 In this example, we have determined that the field will be invisible
-if the block is in the QUERY  or the INSERT mode.
+if the block is in the `QUERY` or the `INSERT` mode.
 
 ===== Field Triggers
 
@@ -573,7 +575,7 @@ Field Triggers are events that concern the fields behavior, here is a list of al
 
   * POSTINS    : is executed after inserting a row of the database
 
-  * POSTUPD    : is is executed after updating a row of the database
+  * POSTUPD    : is executed after updating a row of the database
 
 
 *Examples*
@@ -625,7 +627,7 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
 
 ===== Block Types
 
-There are actually two types of blocks in Visual Galite, the only difference between them in the definition syntax is the buffer Integer.
+There are actually two types of blocks in Galite, the only difference between them in the definition syntax is the buffer Integer.
 
  * single blocks
   
@@ -667,7 +669,7 @@ The first integer indicates the number of rows to be automatically memorized whi
  
 ===== Block Names
 
-The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock function.
+The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock class.
 
 *Example*
 [source,kotlin] 
@@ -677,19 +679,19 @@ class Degree : FormBlock(10, 5, "Degree Block")
 
 ===== Block Border
 
-You can insert the optional border statement that defines the Block's frame type into the init block. Besides, the Title of the block will appear only if the Block's Border type has been specified. There are actually four Border options defined into VConstants interface :
+You can insert the optional border statement that defines the Block's frame type into the init block. Besides, the Title of the block will appear only if the Block's Border type has been specified. There are actually four Border options defined into Border enumeration class :
 
-* BRD_LINE to frame the block with lines.
-* BRD_RAISED  to enhance a block by setting it on the foreground.
-* BRD_LOWERED to put it at the background.
-* BRD_ETCHED  to carve a frame in the form.
+* Border.LINE to frame the block with lines.
+* Border.RAISED  to enhance a block by setting it on the foreground.
+* Border.LOWERED to put it at the background.
+* Border.ETCHED  to carve a frame in the form.
 
 *Example*
 [source,kotlin]
 ----
 inner class Degree : FormBlock(10, 5, "Degree Block") {
     init {
-        border = VConstants.BRD_LINE
+        border = Border.LINE
     }
 }
 ----
@@ -730,7 +732,7 @@ This optional command is used to define the help text for each field of the bloc
 ----
 inner class Degree : FormBlock(10, 5, "Degree Block") {
     init {
-          border = VConstants.BRD_LINE
+          border = Border.LINE
           help = "test"
           ...
     }
@@ -848,7 +850,7 @@ This means that the command called is only accessible when the block is in the s
 [source,kotlin]
 ----
 command(item = Validate) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.QUERY)
     action = {
       validate ()
     }
@@ -937,7 +939,7 @@ Here is a list of all available block triggers or block events in Galite.
 object Degree : FormBlock(10, 5, "Degree block") {
 
   trigger(PREBLK, INIT) {
-   KOTLIN code
+   Kotlin-Code
   }
 
   trigger(PREINS) {
@@ -1190,7 +1192,7 @@ This means that the command called is only accessible when the block is in the s
 [source,kotlin]
 ----
 command(item = Validate) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.QUERY)
     action = {
       validate ()
     }

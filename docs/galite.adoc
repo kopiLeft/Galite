@@ -9,7 +9,7 @@
 [preface]
 Preface
 -------
-The Galite Project is a framework that lets you build business applications with few code. It's the successor of the Kopi project which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.
+The Galite Project is a framework that lets you build business applications with few code. It's the successor of the https://github.com/kopiLeft/Kopi[Kopi project] which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.
 
 Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.
 
@@ -18,7 +18,7 @@ image::./images/galite-architecture.png[650,650]
 
 The basic architecture of Visual Galite package is made of a three strongly independent parts:
 
-- DSL: The DSL is the Kotlin functions provided for the user to develop his application.
+- DSL: The DSL is the Kotlin functions provided for the user to develop an application.
 - Model: The model layer is a set of model classes responsible for structuring and processing data. Also, it contains a high specification interfaces that any UI implementation should respect.
 - UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop, etc.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).
 
@@ -410,7 +410,7 @@ In a visual context, the optional message allows to inform the user that the tra
 
 === The new Types
 
-Galite introduces 6 types to the basic types available in the java language :
+Galite introduces 5 types to the basic types available in the Kotlin language :
 
  * Date      : date values.
  * Month     : Years months values.

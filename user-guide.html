@@ -613,7 +613,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_preface">Preface</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Galite Project is a framework that lets you build business applications with few code. It&#8217;s the successor of the Kopi project which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.</p>
+<p>The Galite Project is a framework that lets you build business applications with few code. It&#8217;s the successor of the <a href="https://github.com/kopiLeft/Kopi">Kopi project</a> which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.</p>
 </div>
 <div class="paragraph">
 <p>Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.</p>
@@ -629,7 +629,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>DSL: The DSL is the Kotlin functions provided for the user to develop his application.</p>
+<p>DSL: The DSL is the Kotlin functions provided for the user to develop an application.</p>
 </li>
 <li>
 <p>Model: The model layer is a set of model classes responsible for structuring and processing data. Also, it contains a high specification interfaces that any UI implementation should respect.</p>
@@ -1215,7 +1215,7 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 <div class="sect2">
 <h3 id="_the_new_types">The new Types</h3>
 <div class="paragraph">
-<p>Galite introduces 6 types to the basic types available in the java language :</p>
+<p>Galite introduces 5 types to the basic types available in the Kotlin language :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1696,7 +1696,10 @@ In this example, we have used Exposed syntax to declare the select query from th
 <div class="sect2">
 <h3 id="_visual_galite_forms">Visual Galite Forms</h3>
 <div class="paragraph">
-<p>The aim of Galite is to enable you to create applications. An application is made up of forms. A <strong>form</strong> is a set of <strong>pages</strong> consisting of <strong>blocks</strong>. A <strong>block</strong> is nothing else than a table which is divided into columns (vertical) and rows (horizontal). A row is made up of <strong>fields</strong>, and each <strong>field</strong> contains a data value at the intersection of a row and a column that can be of different <strong>Types</strong>.
+<p>The aim of Galite is to enable you to create applications.
+An application is made up of forms. A <strong>form</strong> is a set of <strong>pages</strong> consisting of <strong>blocks</strong>.
+A <strong>block</strong> is nothing else than a table which is divided into columns (vertical) and rows (horizontal).
+A row is made up of <strong>fields</strong>, and each <strong>field</strong> contains a data value at the intersection of a row and a column that can be of different <strong>Types</strong>.
 By the end of this chapter, you will learn how to create a form, but before, you need to learn how to create a field and how to form blocks.</p>
 </div>
 <div class="sect3">
@@ -1711,25 +1714,25 @@ To define a field you can call one of the 4 functions <code>mustFill()</code>, <
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FieldDeclaration  :
-val fieldName = mustFill("FieldDomain", [FieldPosition]) {
+val fieldName = mustFill(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
-or
+|
 
-val fieldName = visit("FieldDomain", [FieldPosition]) {
+val fieldName = visit(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
-or
+|
 
-val fieldName = skipped("FieldDomain", [FieldPosition]) {
+val fieldName = skipped(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
-or
+|
 
-val fieldName = hidden("FieldDomain", [FieldPosition]) {
+val fieldName = hidden(FieldDomain, [FieldPosition]) {
     FieldBody
 }
 
@@ -1741,7 +1744,7 @@ FieldBody         : [FieldLabel] [FieldHelp] [FieldAlignment]
 <div class="sect4">
 <h5 id="_field_access_modifiers">Field Access Modifiers</h5>
 <div class="paragraph">
-<p>An access modifier determines the way the application user will have to handle each field in a form as well as the field accessibility. This command is compulsory. There are 4 sorts of access modifier:</p>
+<p>An access modifier determines the way the application user will have to handle each field in a form as well as the field accessibility. There are 4 sorts of access modifier:</p>
 </div>
 <div class="paragraph">
 <p><strong>Syntax:</strong></p>
@@ -1797,22 +1800,6 @@ val id = hidden(domain = INT(20)) {
 <p>This entry defines the position of the field in the current block. HIDDEN fields does not have positions, and in multiple block (Defined in the  Blocks creation Section of this document) you may use the NO DETAIL Block option to pass positioning fields.
 There are two possibilities to define the field position.</p>
 </div>
-<div class="paragraph">
-<p><strong>Syntax:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FieldPosition : at(row: Int  [,column: Int])
-                |
-                at(rowRange: IntRange,  [,column: Int])
-                |
-                at(row: Int  [,columnRange: IntRange])
-                |
-                at(rowRange: IntRange,  [,columnRange: IntRange])
-                |
-                follow(otherField)</code></pre>
-</div>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1839,6 +1826,22 @@ There are two possibilities to define the field position.</p>
 </div>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FieldPosition : at(row: Int  [,column: Int])
+                |
+                at(rowRange: IntRange,  [,column: Int])
+                |
+                at(row: Int  [,columnRange: IntRange])
+                |
+                at(rowRange: IntRange,  [,columnRange: IntRange])
+                |
+                follow(otherField)</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong></p>
@@ -1931,7 +1934,7 @@ you can put a long field in two or more columns in order to spare place as it is
     label = "lesson"
     help =  "The lesson you would like to attend"
     ...
-  }</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1969,7 +1972,7 @@ val age = visit(domain = INT(3), position = at(1, 2)) {
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, Days is a type you should have defined previously in type definition section of the form using standard types, CODE types and SELECT command &#8230;&#8203;</p>
+<p>In this example, Days is a type you should have defined previously using standard types, <code>Code</code> types and <code>SELECT</code> command &#8230;&#8203;</p>
 </div>
 </div>
 <div class="sect4">
@@ -2047,7 +2050,7 @@ ExtentionList       : extension : String [,ExtenstionList]</code></pre>
 <div class="sect4">
 <h5 id="_field_options">Field Options</h5>
 <div class="paragraph">
-<p>In this part of the field definition, you can use one or more option from the 10 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().</p>
+<p>In this part of the field definition, you can use one or more option from the 9 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2100,7 +2103,7 @@ ExtentionList       : extension : String [,ExtenstionList]</code></pre>
 You may enter this option in order to specify which table and which column the field refers.<br>
 The same field can refer to more than one column.
  You can also use the key method option to specify a key column in the database or the nullable method option to specify an outer joint.+
-Two more option are available with the COLUMNS command, the index and the priority options.</p>
+Two more option are available with the <code>columns</code> function, the index and the priority options.</p>
 </div>
 <div class="paragraph">
 <p><strong>Syntax:</strong></p>
@@ -2137,7 +2140,7 @@ Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]</code></pre>
 <div class="title">Note</div>
 </td>
 <td class="content">
-that a field can be connected to more than one table and column. In this case, the formula you will type will be:
+that a field can be connected to more than one table and column. In this case, the statement you will type will be:
 </td>
 </tr>
 </table>
@@ -2155,7 +2158,7 @@ that a field can be connected to more than one table and column. In this case, t
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, I is the invoices table  and IP is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.</p>
+<p>In this example, <code>I</code> is the invoices table and <code>ID</code> is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2323,8 +2326,7 @@ AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE</code></pre>
 <div class="sect4">
 <h5 id="_standard_field_command">Standard Field Command</h5>
 <div class="paragraph">
-<p>The command QualifiedNames that we will can be Galite predefined commands or you can make new Actors and commands you can use in the field command definition.
-There are five ways in calling a standard command</p>
+<p>The command can be a Galite predefined command or you can make new Actors and commands you can use in the field command definition.</p>
 </div>
 <div class="paragraph">
 <p>Example:</p>
@@ -2332,11 +2334,13 @@ There are five ways in calling a standard command</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = clear) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
     action = {
        ...
     }
-}</code></pre>
+}
+
+val clear = actor()</code></pre>
 </div>
 </div>
 </div>
@@ -2359,20 +2363,17 @@ There are five ways in calling a standard command</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>So you will have: ON Mode COMMAND, ON MODE QualifiedName &#8230;&#8203;</p>
-</div>
-<div class="paragraph">
 <p><strong>Example</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = insertMode) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.QUERY)
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you have entered a mode before the COMMAND, it means this COMMAND can only be invoked if the block is in the mode you have determined.</p>
+<p>If you have entered a mode for the <code>command</code>, it means this command can only be invoked if the block is in the mode you have determined.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2438,7 +2439,7 @@ There are five ways in calling a standard command</p>
 </div>
 <div class="paragraph">
 <p>In this example, we have determined that the field will be invisible
-if the block is in the QUERY  or the INSERT mode.</p>
+if the block is in the <code>QUERY</code> or the <code>INSERT</code> mode.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2509,7 +2510,7 @@ TrigerAction : {KOTLIN code}</code></pre>
 <p>POSTINS    : is executed after inserting a row of the database</p>
 </li>
 <li>
-<p>POSTUPD    : is is executed after updating a row of the database</p>
+<p>POSTUPD    : is executed after updating a row of the database</p>
 </li>
 </ul>
 </div>
@@ -2572,7 +2573,7 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
 <div class="sect4">
 <h5 id="_block_types">Block Types</h5>
 <div class="paragraph">
-<p>There are actually two types of blocks in Visual Galite, the only difference between them in the definition syntax is the buffer Integer.</p>
+<p>There are actually two types of blocks in Galite, the only difference between them in the definition syntax is the buffer Integer.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2636,7 +2637,7 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 <div class="sect4">
 <h5 id="_block_names">Block Names</h5>
 <div class="paragraph">
-<p>The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock function.</p>
+<p>The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock class.</p>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong></p>
@@ -2650,21 +2651,21 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 <div class="sect4">
 <h5 id="_block_border">Block Border</h5>
 <div class="paragraph">
-<p>You can insert the optional border statement that defines the Block&#8217;s frame type into the init block. Besides, the Title of the block will appear only if the Block&#8217;s Border type has been specified. There are actually four Border options defined into VConstants interface :</p>
+<p>You can insert the optional border statement that defines the Block&#8217;s frame type into the init block. Besides, the Title of the block will appear only if the Block&#8217;s Border type has been specified. There are actually four Border options defined into Border enumeration class :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>BRD_LINE to frame the block with lines.</p>
+<p>Border.LINE to frame the block with lines.</p>
 </li>
 <li>
-<p>BRD_RAISED  to enhance a block by setting it on the foreground.</p>
+<p>Border.RAISED  to enhance a block by setting it on the foreground.</p>
 </li>
 <li>
-<p>BRD_LOWERED to put it at the background.</p>
+<p>Border.LOWERED to put it at the background.</p>
 </li>
 <li>
-<p>BRD_ETCHED  to carve a frame in the form.</p>
+<p>Border.ETCHED  to carve a frame in the form.</p>
 </li>
 </ul>
 </div>
@@ -2675,7 +2676,7 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(10, 5, "Degree Block") {
     init {
-        border = VConstants.BRD_LINE
+        border = Border.LINE
     }
 }</code></pre>
 </div>
@@ -2724,7 +2725,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(10, 5, "Degree Block") {
     init {
-          border = VConstants.BRD_LINE
+          border = Border.LINE
           help = "test"
           ...
     }
@@ -2902,7 +2903,7 @@ BlockMode: "mode(" ModeName* ")"</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.QUERY)
     action = {
       validate ()
     }
@@ -3068,7 +3069,7 @@ In the last example, all the fields in the block will be either VISIT, SKIPPED o
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Degree : FormBlock(10, 5, "Degree block") {
 
   trigger(PREBLK, INIT) {
-   KOTLIN code
+   Kotlin-Code
   }
 
   trigger(PREINS) {
@@ -3401,7 +3402,7 @@ BlockMode: "mode(" ModeName* ")"</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.QUERY)
     action = {
       validate ()
     }
@@ -4835,7 +4836,7 @@ Vaadin, uses java as programming language to create web content and web componen
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-10-07 15:49:16 +0100
+Last updated 2021-10-29 14:55:05 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
