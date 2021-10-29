@@ -31,7 +31,6 @@ class DBContext {
   /** Connection currently opened */
   lateinit var connection: Connection
     private set
-  lateinit var defaultConnection: Connection //  The underlying default connection.
 
   /**
    * Create a connection. Connects to database and logs on.
