@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import kotlin.streams.toList
-
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -43,7 +41,7 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
     internalField.isAutoOpen = false
 
     // Workaround for autoselection on focus
-    val children = internalField.children.toList()
+    val children = internalField.children.toArray()
     val datePicker = (children.single { it is DatePicker } as DatePicker)
     val timePicker = (children.single { it is TimePicker } as TimePicker)
     datePicker.addFocusListener {

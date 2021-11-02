@@ -39,18 +39,11 @@ import org.kopi.galite.visual.form.VForm
 /**
  * This class represents a form field. It represents an editable element of a block
  *
- * @param ident                the ident of this field
+ * @param block                the form block containing this field
+ * @param domain               the domain of this field
  * @param fieldIndex           the index in parent array of fields
- * @param detailedPosition     the position within the block
- * @param label                the label (text on the left)
- * @param help                 the help text
- * @param align                the alignment of the text
- * @param options              the options of the field
- * @param columns              the column in the database
  * @param initialAccess        the initial access mode
- * @param commands             the commands accessible in this field
- * @param triggers             the triggers executed by this field
- * @param alias                the alias of this field
+ * @param position             the position within the block
  */
 open class FormField<T>(val block: FormBlock,
                         domain: Domain<T>,
@@ -61,13 +54,13 @@ open class FormField<T>(val block: FormBlock,
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var options: Int = 0
-  var columns: FormFieldColumns<T>? = null
+  private var options: Int = 0 // the options of the field
+  var columns: FormFieldColumns<T>? = null // the column in the database
   var access: IntArray = IntArray(3) { initialAccess }
   var dropList: MutableList<String>? = null
-  var commands: MutableList<Command> = mutableListOf()
-  var triggers = mutableListOf<Trigger>()
-  var alias: String? = null
+  var commands: MutableList<Command> = mutableListOf() // the commands accessible in this field
+  var triggers = mutableListOf<Trigger>() // the triggers executed by this field
+  var alias: String? = null // the alias of this field
   var initialValues = mutableMapOf<Int, T>()
   var value: T by this
 
@@ -364,6 +357,9 @@ open class FormField<T>(val block: FormBlock,
   val isInternal: Boolean
     get() = access[0] == VConstants.ACS_HIDDEN && access[1] == VConstants.ACS_HIDDEN && access[2] == VConstants.ACS_HIDDEN
 
+  /**
+   * Returns the ident of this field
+   */
   fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
 
   /**
