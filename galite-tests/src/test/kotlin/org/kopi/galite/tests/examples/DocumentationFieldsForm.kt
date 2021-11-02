@@ -145,7 +145,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
   }
 
-  inner class FiledsBlock() : FormBlock(1, 10, "Training") {
+  inner class FiledsBlock : FormBlock(1, 10, "Training") {
 
     /*** STRING ***/
     // test Convert Upper + style true --> don't work in swing
@@ -341,7 +341,7 @@ class DocumentationFieldsForm : DictionaryForm() {
    *
    * commandField to test Field Commands
    * ***/
-  inner class ColumnsBlock() : FormBlock(1, 10, "ColumnsBlock") {
+  inner class ColumnsBlock : FormBlock(1, 10, "ColumnsBlock") {
     val t = table(TestTable)
    // val t2 = table(TestTable2)
     val i = index(message = "this should be unique")
@@ -408,7 +408,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   }
 
   /*** Field Triggers ***/
-  inner class TriggersFieldBlock() : FormBlock(1, 10, "Training") {
+  inner class TriggersFieldBlock : FormBlock(1, 10, "Training") {
     init {
       options(BlockOption.NODELETE)
     }
@@ -527,7 +527,6 @@ class DocumentationFieldsForm : DictionaryForm() {
   }
 }
 
-
 fun main() {
   connectToDatabase()
   transaction {
@@ -600,9 +599,10 @@ object listDomain : ListDomain<String>(20) {
 
 object TestTable : Table("TESTTABLE1") {
   val id = integer("ID")
-  val name = varchar("NAME", 20).nullable()
+  val name = varchar("NAME", 20)//.nullable()
+  val age = integer("AGE").nullable()
 
-  override val primaryKey = PrimaryKey(TestTable.id, name = "TESTTABLE1_ID")
+  override val primaryKey = PrimaryKey(id, name = "TESTTABLE1_ID")
 }
 
 object TestTable2 : Table("TESTTABLE2") {

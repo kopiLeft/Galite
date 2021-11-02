@@ -35,7 +35,7 @@ import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
 
-// **> change doc for border & check result in kopi
+// **> for border  check result in kopi
 // **> Block Tables & Block Indexes see DocumentationFieldsForm
 
 class DocumentationBlockForm : DictionaryForm() {
@@ -172,7 +172,6 @@ class DocumentationBlockForm : DictionaryForm() {
       println("POSTDEL trigger !!")
     }
 
-
     // put values click on insert command then save
     trigger(PREINS) {
       println("PREINS trigger !!")
@@ -238,7 +237,6 @@ class DocumentationBlockForm : DictionaryForm() {
       false
     }
 
-
     command(item = list) {
       action = {
         recursiveQuery()
@@ -262,29 +260,27 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
 
-
   //simple block
-  inner class Block1() : FormBlock(1, 10, "Block1") {
-
+  inner class Block1 : FormBlock(1, 10, "Block1") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
   }
   //Multi block
-  inner class Block2() : FormBlock(2, 2, "Block2") {
+  inner class Block2 : FormBlock(2, 2, "Block2") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
   }
   /*** TEST Block Border ***/
   //test border = Border.LINE
-  inner class Block3() : FormBlock(2, 2, "Block3") {
+  inner class Block3 : FormBlock(2, 2, "Block3") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field border LINE"
     }
   }
   //test border = Border.RAISED
-  inner class Block4() : FormBlock(2, 2, "Block4") {
+  inner class Block4 : FormBlock(2, 2, "Block4") {
     init {
       border = Border.RAISED
     }
@@ -293,7 +289,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test border = Border.LOWERED
-  inner class Block5() : FormBlock(2, 2, "Block5") {
+  inner class Block5 : FormBlock(2, 2, "Block5") {
     init {
       border = Border.LOWERED
     }
@@ -302,7 +298,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test border = Border.ETCHED
-  inner class Block6() : FormBlock(2, 2, "Block6") {
+  inner class Block6 : FormBlock(2, 2, "Block6") {
     init {
       border = Border.ETCHED
     }
@@ -350,7 +346,7 @@ class DocumentationBlockForm : DictionaryForm() {
 
   /*** TEST Block Options ***/
   //test NOCHART option
-  inner class Block7() : FormBlock(2, 2, "Block7") {
+  inner class Block7 : FormBlock(2, 2, "Block7") {
     init {
       options(BlockOption.NOCHART)
     }
@@ -359,7 +355,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test NODETAIL option
-  inner class Block8() : FormBlock(2, 2, "Block8") {
+  inner class Block8 : FormBlock(2, 2, "Block8") {
     init {
       options(BlockOption.NODETAIL)
     }
@@ -368,7 +364,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test NODELETE option
-  inner class Block9() : FormBlock(2, 2, "Block9") {
+  inner class Block9 : FormBlock(2, 2, "Block9") {
     init {
       options(BlockOption.NODELETE)
     }
@@ -377,7 +373,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test NOINSERT option
-  inner class Block10() : FormBlock(2, 2, "Block10") {
+  inner class Block10 : FormBlock(2, 2, "Block10") {
     init {
       options(BlockOption.NOINSERT)
     }
@@ -386,7 +382,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test NOMOVE option
-  inner class Block11() : FormBlock(2, 2, "Block11") {
+  inner class Block11 : FormBlock(2, 2, "Block11") {
     init {
       options(BlockOption.NOMOVE)
     }
@@ -395,7 +391,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test ACCESS_ON_SKIPPED option
-  inner class Block12() : FormBlock(2, 2, "Block12") {
+  inner class Block12 : FormBlock(2, 2, "Block12") {
     init {
       options(BlockOption.ACCESS_ON_SKIPPED)
     }
@@ -404,7 +400,7 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
   //test UPDATE_INDEX option
-  inner class Block13() : FormBlock(2, 2, "Block13") {
+  inner class Block13 : FormBlock(2, 2, "Block13") {
     init {
       options(BlockOption.UPDATE_INDEX)
     }
@@ -414,7 +410,7 @@ class DocumentationBlockForm : DictionaryForm() {
   }
 
   /*** Block Triggers ***/
-  inner class TriggersBlock() : FormBlock(1, 10, "block Triggers") {
+  inner class TriggersBlock : FormBlock(1, 10, "block Triggers") {
     val t = table(TestTriggers)
 
     val id = visit(domain = INT(20), position = at(1, 1)) {
@@ -427,8 +423,6 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
 }
-
-
 
 fun main() {
   connectToDatabase()
