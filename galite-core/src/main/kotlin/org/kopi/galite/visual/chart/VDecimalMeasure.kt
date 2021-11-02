@@ -28,7 +28,7 @@ import org.kopi.galite.visual.visual.VColor
  * @param color The measure color.
  * @param maxScale The max scale to be used.
  */
-class VFixnumMeasure(ident: String, color: VColor?, private val maxScale: Int) : VMeasure(ident, color) {
+class VDecimalMeasure(ident: String, color: VColor?, private val maxScale: Int) : VMeasure(ident, color) {
 
   override fun toNumber(value: Any?): Number? {
     if (value == null) {

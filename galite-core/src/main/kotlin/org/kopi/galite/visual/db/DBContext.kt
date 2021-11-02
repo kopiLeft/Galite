@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual.db
 
+import org.jetbrains.exposed.sql.Schema
+
 /**
  * The database context
  */
@@ -29,7 +31,6 @@ class DBContext {
   /** Connection currently opened */
   lateinit var connection: Connection
     private set
-  lateinit var defaultConnection: Connection //  The underlying default connection.
 
   /**
    * Create a connection. Connects to database and logs on.
@@ -45,13 +46,48 @@ class DBContext {
                        url: String,
                        user: String,
                        password: String,
-                       lookupUserId: Boolean = true, // TODO
-                       schema: String? = null // TODO
+                       lookupUserId: Boolean = true,
+                       schema: Schema? = null
   ): Connection {
     this.connection = Connection(url = url,
                                  driver = driverName,
                                  userName = user,
                                  password = password,
+                                 lookupUserId = lookupUserId,
+                                 schema = schema)
+    return this.connection
+  }
+
+  /**
+   * Create a connection. Connects to database and logs on.
+   *
+   * @param     driverName      the class name of the JDBC driver to register.
+   * @param     url             the URL of the database to connect to
+   * @param     user            the name of the database user
+   * @param     password        the password of the database user
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the current database schema
+   */
+  fun createConnection(driverName: String,
+                       url: String,
+                       user: String,
+                       password: String,
+                       lookupUserId: Boolean = true,
+                       schema: String? = null
+  ): Connection  = createConnection(driverName, url, user, password, lookupUserId, schema?.let { Schema(schema) })
+
+  /**
+   * Creates a connection from JDBC Connection
+   *
+   * @param     connection      the JDBC connection
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the current database schema
+   */
+  fun createConnection(connection: java.sql.Connection,
+                       lookupUserId: Boolean,
+                       schema: Schema?
+  ): Connection {
+    this.connection = Connection(connection = connection,
                                  lookupUserId = lookupUserId,
                                  schema = schema)
     return this.connection
@@ -65,10 +101,22 @@ class DBContext {
    * @param     schema          the current database schema
    */
   fun createConnection(connection: java.sql.Connection,
-                       lookupUserId: Boolean, // TODO
-                       schema: String? // TODO
+                       lookupUserId: Boolean,
+                       schema: String?
+  ): Connection = createConnection(connection, lookupUserId, schema?.let { Schema(schema) })
+
+  /**
+   * Creates a connection from DataSource
+   *
+   * @param     dataSource      the dataSource
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the current database schema
+   */
+  fun createConnection(dataSource: javax.sql.DataSource,
+                       lookupUserId: Boolean,
+                       schema: Schema?
   ): Connection {
-    this.connection = Connection(connection = connection,
+    this.connection = Connection(dataSource = dataSource,
                                  lookupUserId = lookupUserId,
                                  schema = schema)
     return this.connection
@@ -82,14 +130,9 @@ class DBContext {
    * @param     schema          the current database schema
    */
   fun createConnection(dataSource: javax.sql.DataSource,
-                       lookupUserId: Boolean, // TODO
-                       schema: String? // TODO
-  ): Connection {
-    this.connection = Connection(dataSource = dataSource,
-                                 lookupUserId = lookupUserId,
-                                 schema = schema)
-    return this.connection
-  }
+                       lookupUserId: Boolean,
+                       schema: String?
+  ): Connection = createConnection(dataSource, lookupUserId, schema?.let { Schema(schema) })
 
   fun close() {
     // TODO

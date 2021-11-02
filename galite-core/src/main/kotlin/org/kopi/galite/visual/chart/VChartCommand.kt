@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ActionHandler
 import org.kopi.galite.visual.visual.VActor
@@ -35,8 +36,17 @@ class VChartCommand(private val chart: VChart, actor: VActor)
     }
   }
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
+  override fun executeVoidTrigger(trigger: Trigger?) {
     // TODO
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    VKT_Type    the number of the trigger
+   */
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    // DO NOTHING !
   }
 
   override fun performAction(action: Action, block: Boolean) {

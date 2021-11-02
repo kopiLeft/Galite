@@ -50,7 +50,7 @@ fun localizeWindows(url: String,
                     schema: String? = null,
                     output: String? = null) {
   val dBContext = DBContext().also {
-    it.defaultConnection = it.createConnection(driver, url, userName, password, false, schema)
+    it.createConnection(driver, url, userName, password, false, schema)
   }
   val modules = fetchModules()
   modules.forEach {

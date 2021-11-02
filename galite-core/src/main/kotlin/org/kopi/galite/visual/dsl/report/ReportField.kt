@@ -37,7 +37,8 @@ import org.kopi.galite.visual.visual.VCommand
  */
 class ReportField<T>(override val domain: Domain<T>,
                      internal val ident: String,
-                     val init: ReportField<T>.() -> Unit) : Field<T>(domain) {
+                     val init: ReportField<T>.() -> Unit,
+                     val source: String?) : Field<T>(domain) {
   /** the options of the field */
   internal var options: Int = 0
 

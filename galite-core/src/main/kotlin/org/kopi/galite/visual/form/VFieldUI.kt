@@ -20,6 +20,7 @@ package org.kopi.galite.visual.form
 
 import java.io.Serializable
 
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock.OrderModel
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.Action
@@ -678,10 +679,19 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   /**
    * Performs a void trigger
    *
-   * @param        VKT_Type        the number of the trigger
+   * @param        trigger    the trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    getBlock().executeVoidTrigger(trigger)
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    VKT_Type    the number of the trigger
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
-    getBlock().executeVoidTrigger(VKT_Type)
+    // DO NOTHING !
   }
 
   /**

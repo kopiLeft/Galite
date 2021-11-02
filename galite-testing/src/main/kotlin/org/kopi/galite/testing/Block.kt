@@ -24,6 +24,7 @@ import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._clickItem
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
@@ -36,10 +37,11 @@ import com.github.mvysny.kaributesting.v10._get
 fun FormBlock.enter(duration: Long = 50) {
   val block = findBlock()
 
+  // Click on the first field in the block
   if(block is DGridBlock) {
     block.grid._clickItem(0, block.grid.columns.first())
   } else {
-    block._find<Field>().first().focus()
+    block._find<Field>().first().wrappedField._click()
   }
 
   // Wait for async updates in transferFocus
@@ -76,8 +78,14 @@ fun FormBlock.findBlock(): DBlock {
   val blocks = mainWindow
     ._find<DBlock>()
 
-  return blocks.single {
+  val block = blocks.singleOrNull {
     it.model eq this.vBlock
+  }
+
+  if (block != null) {
+    return block
+  } else {
+    throw Exception("Block '$title' not found.")
   }
 }
 

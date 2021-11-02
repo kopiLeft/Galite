@@ -28,10 +28,10 @@ import org.kopi.galite.visual.type.Decimal
  * @param maxScale    The max scale to be used for the decimal value.
  * @param exactScale  Should we use the max scale column for decimal values having a minor scale ?
  */
-class VFixnumDimension(ident: String,
-                       format: VColumnFormat,
-                       private val maxScale: Int,
-                       private val exactScale: Boolean)
+class VDecimalDimension(ident: String,
+                        format: VColumnFormat?,
+                        private val maxScale: Int,
+                        private val exactScale: Boolean)
   : VDimension(ident, format) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS

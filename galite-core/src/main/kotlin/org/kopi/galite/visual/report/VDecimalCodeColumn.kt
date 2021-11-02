@@ -31,18 +31,18 @@ class VDecimalCodeColumn(ident: String?,
                          width: Int,
                          format: VCellFormat?,
                          names: Array<String>,
-                         // array of internal representations
-                         private val codes: Array<Decimal>)
-           : VCodeColumn(ident,
-                         type,
-                         source,
-                         options,
-                         align,
-                         groups,
-                         function,
-                         width,
-                         format,
-                         names) {
+                        // array of internal representations
+                         private val codes: Array<Decimal?>)
+          : VCodeColumn(ident,
+                        type,
+                        source,
+                        options,
+                        align,
+                        groups,
+                        function,
+                        width,
+                        format,
+                        names) {
   /**
    * Get the index of the value.
    */

@@ -94,4 +94,11 @@ abstract class VCodeColumn(ident: String?,
       label
     }
   }
+
+  fun initLabels(labels: Array<String>) {
+    names = labels.map {
+      this.width = max(this.width, it.length)
+      it
+    }.toTypedArray()
+  }
 }

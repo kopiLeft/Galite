@@ -105,8 +105,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   var chartType: VChartType? = null  // chart type
     private set
 
-  protected var VKT_Triggers = mutableListOf(IntArray(CConstants.TRG_TYPES.size)) // trigger list
-  protected val triggers = mutableMapOf<Int, Trigger>()
+  protected var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)) // trigger list
 
   protected var commands: Array<VCommand>? = null // commands
   private val activeCommands: ArrayList<VCommand> = ArrayList()
@@ -473,20 +472,20 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // TRIGGER HANDLING
   // --------------------------------------------------------------------
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    triggers[VKT_Type]?.action?.method?.invoke()
-    super.executeVoidTrigger(VKT_Type)
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
+    super.executeVoidTrigger(trigger)
   }
 
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  fun executeObjectTrigger(trigger: Trigger?): Any? {
+    return (trigger?.action?.method as () -> Any?).invoke()
   }
 
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+  fun executeBooleanTrigger(trigger: Trigger?): Boolean {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
+  fun executeIntegerTrigger(trigger: Trigger?): Int {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
@@ -494,8 +493,8 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * overridden by forms to implement triggers
    * default triggers
    */
-  protected fun execTrigger(block: Any, id: Int): Any? {
-    executeVoidTrigger(id)
+  protected fun execTrigger(block: Any, trigger: Trigger?): Any? {
+    executeVoidTrigger(trigger)
     return null
   }
 
@@ -516,7 +515,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   /**
    * Returns true if there is trigger associated with given event.
    */
-  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != 0
+  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != null
 
   /**
    * Returns the dimension column.

@@ -723,12 +723,12 @@ open class FormBlock(var buffer: Int,
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // BLOCK TRIGGERS
-        val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        val blockTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+
         triggers.forEach { trigger ->
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
-              blockTriggerArray[i] = i
-              super.triggers[i] = trigger
+              blockTriggerArray[i] = trigger
             }
           }
           super.VKT_Triggers[0] = blockTriggerArray
@@ -736,13 +736,12 @@ open class FormBlock(var buffer: Int,
 
         // FIELD TRIGGERS
         blockFields.forEach { field ->
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
 
           field.triggers.forEach { trigger ->
             for (i in VConstants.TRG_TYPES.indices) {
               if (trigger.events shr i and 1 > 0) {
-                fieldTriggerArray[i] = i
-                super.triggers[i] = trigger
+                fieldTriggerArray[i] = trigger
               }
             }
           }
@@ -751,7 +750,7 @@ open class FormBlock(var buffer: Int,
 
         // COMMANDS TRIGGERS
         blockCommands.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
           // TODO : Add commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
@@ -759,7 +758,7 @@ open class FormBlock(var buffer: Int,
         // FIELDS COMMANDS TRIGGERS
         val fieldsCommands = getFieldsCommands()
         fieldsCommands.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
           // TODO : Add field commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }

@@ -347,7 +347,7 @@ class TextField(val model: VField,
     } else if(!fieldParent.hasAction) {
       when (type) {
         Type.INTEGER -> VIntegerField(col, minval!!, maxval!!)
-        Type.DECIMAL -> VFixnumField(col, maxScale, minval, maxval, fraction)
+        Type.DECIMAL -> VDecimalField(col, maxScale, minval, maxval, fraction)
         Type.CODE -> VCodeField(enumerations)
         Type.TIME -> VTimeField()
         Type.TIMESTAMP -> VTimeStampField()

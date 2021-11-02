@@ -29,18 +29,18 @@ package org.kopi.galite.visual.chart
  * @param codes The column codes.
  */
 class VIntegerCodeDimension(ident: String,
-                            format: VColumnFormat,
+                            format: VColumnFormat?,
                             type: String,
                             source: String,
                             idents: Array<String>,
-                            private val codes: IntArray)
+                            private val codes: Array<Int?>)
   : VCodeDimension(ident, format, type, source, idents) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
   override fun getIndex(value: Any?): Int {
     if (fastIndex != -1) {
-      return (value as? Int)!!.toInt() - fastIndex
+      return (value as? Int)!!.toInt() - fastIndex!!
     }
 
     codes.forEachIndexed { index, code ->
@@ -54,7 +54,7 @@ class VIntegerCodeDimension(ident: String,
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
+  private var fastIndex: Int? = -1 // if array = {fastIndex, fastIndex + 1, ...}
 
   // --------------------------------------------------------------------
   // CONSTRUCTOR
@@ -62,7 +62,7 @@ class VIntegerCodeDimension(ident: String,
   init {
     fastIndex = codes[0]
     for (i in 1 until codes.size) {
-      if (codes[i] != fastIndex + i) {
+      if (codes[i] != fastIndex?.plus(i)) {
         fastIndex = -1
         break
       }
