@@ -219,8 +219,9 @@ abstract class Chart : Window() {
      */
     fun handleTriggers(triggers: MutableList<Trigger>) {
       // CHART TRIGGERS
+      val chartTriggerArray = arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)
       triggers.forEach { trigger ->
-        val chartTriggerArray = arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)
+
         for (i in VConstants.TRG_TYPES.indices) {
           if (trigger.events shr i and 1 > 0) {
             chartTriggerArray[i] = trigger

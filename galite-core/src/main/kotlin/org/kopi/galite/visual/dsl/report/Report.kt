@@ -228,14 +228,15 @@ abstract class Report : Window() {
     fun handleTriggers(triggers: MutableList<Trigger>) {
       // REPORT TRIGGERS
       super.VKT_Triggers = mutableListOf(arrayOfNulls(Constants.TRG_TYPES.size))
+      val reportTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
+
       triggers.forEach { trigger ->
-        val blockTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
         for (i in VConstants.TRG_TYPES.indices) {
           if (trigger.events shr i and 1 > 0) {
-            blockTriggerArray[i] = trigger
+            reportTriggerArray[i] = trigger
           }
         }
-        super.VKT_Triggers!![0] = blockTriggerArray
+        super.VKT_Triggers!![0] = reportTriggerArray
       }
 
       // FIELD TRIGGERS
