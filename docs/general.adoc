@@ -189,7 +189,7 @@ In addition to the predefined field types already available in Galite, you can d
 
 The code Filed can be defined with many types like Boolean, Int, Decimal, etc... These types enable you to have a list of item-value pairs, the items will be displayed in the field and the values will be assigned instead.
 
-*  *The Type CODE BOOL*
+*  *The boolean code domain*
 
 In a CODE BOOL or BOOLEAN you have to assign a Boolean value to the item you have entered. Boolean values are values like "True" or "False" and "Yes" or "No".
 
@@ -222,7 +222,7 @@ object Situation: CodeDomain<Boolean>() {
 
 ----
 
-* *The Type CODE INT*
+* *The integer code domain*
 
 In a CODE INT, you assign to each String item you have entered a INT value.
 
@@ -259,7 +259,7 @@ object Days: CodeDomain<Int>() {
 }
 ----
 
-* *The Type CODE DECIMAL*
+* *The decimal code domain*
 
 In a CODE DECIMAL, each item you have entered will get a DECIMAL value, i.e integers, fixed point numbers and fraction numbers.
 
@@ -290,7 +290,7 @@ object Accounting: CodeDomain<Decimal>() {
 }
 ----
 
-* *The Type CODE STRING*
+* *The string code domain*
 
 In a CODE STRING, each item you have entered will get a STRING value, this can be useful for shortcut of long strings for example.
 
