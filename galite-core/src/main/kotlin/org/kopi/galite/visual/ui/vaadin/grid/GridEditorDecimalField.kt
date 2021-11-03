@@ -15,29 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-package org.kopi.galite.visual.chart
-
-import org.kopi.galite.visual.type.Decimal
-import org.kopi.galite.visual.visual.VColor
+package org.kopi.galite.visual.ui.vaadin.grid
 
 /**
- * Represents a decimal measure.
- *
- * @param ident The measure identifier.
- * @param color The measure color.
- * @param maxScale The max scale to be used.
+ * Server side implementation of decimal grid editor field
  */
-class VFixnumMeasure(ident: String, color: VColor?, private val maxScale: Int) : VMeasure(ident, color) {
+class GridEditorDecimalField(
+        width: Int,
+        minValue: Double,
+        maxValue: Double,
+        maxScale: Int,
+        fraction: Boolean
+) : GridEditorTextField(width) {
 
-  override fun toNumber(value: Any?): Number? {
-    if (value == null) {
-      return null
+  override fun check(text: String): Boolean {
+    for (c in text) {
+      if (!(c >= '0' && c <= '9' || c == '.' || c == '-' || c == ' ' || c == ',' || c == '/')) {
+        return false
+      }
     }
-    return when (value) {
-      is Decimal -> value
-      is Number -> Decimal(value.toLong(), maxScale)
-      else -> null
-    }
+    return true
   }
 }

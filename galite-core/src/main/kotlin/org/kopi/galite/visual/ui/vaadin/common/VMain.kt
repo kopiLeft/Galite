@@ -24,6 +24,11 @@ import com.vaadin.flow.component.html.Div
  * The main window container.
  */
 class VMain : Div() {
+
+  init {
+    setId("main")
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -34,14 +39,5 @@ class VMain : Div() {
   fun setContent(content: Component?) {
     removeAll()
     add(content)
-  }
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates the main component instance.
-   */
-  init {
-    setId("main")
   }
 }

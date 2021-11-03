@@ -35,6 +35,8 @@ import org.kopi.galite.visual.visual.VlibProperties
 
 class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
+  private var value: Array<Month?> = arrayOfNulls(2 * bufferSize)
+
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -315,6 +317,4 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
       }
     }
   }
-
-  private var value: Array<Month?> = arrayOfNulls(2 * bufferSize)
 }

@@ -28,6 +28,12 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * Handles actions initialized by the user
  */
 abstract class WindowController : Serializable {
+
+  //------------------------------------------------------------------
+  // DATA MEMBERS
+  //------------------------------------------------------------------
+  private val builder = arrayOfNulls<WindowBuilder>(256)
+
   //------------------------------------------------------------------
   // UTILS
   //------------------------------------------------------------------
@@ -85,11 +91,6 @@ abstract class WindowController : Serializable {
    * @param model The [UWindow] model.
    */
   abstract fun doNotModal(model: Window)
-
-  //------------------------------------------------------------------
-  // DATA MEMBERS
-  //------------------------------------------------------------------
-  private val builder = arrayOfNulls<WindowBuilder>(256)
 
   companion object {
     /**

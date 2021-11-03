@@ -41,7 +41,7 @@ class FormWithReport : ReportSelectionForm() {
     icon = "report"  // icon is optional here
   }
 
-  val block = insertBlock(BlockSample, testPage) {
+  val block = testPage.insertBlock(BlockSample) {
     command(item = report) {
       action = {
         println("-----------Generating report-----------------")

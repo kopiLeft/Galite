@@ -38,7 +38,7 @@ import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.Type
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
@@ -51,8 +51,11 @@ import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findForms
+import org.kopi.galite.visual.ui.vaadin.visual.DActor
 
+import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 
@@ -110,7 +113,7 @@ class CommandsFormTests : GaliteVUITestBase() {
   fun `test report command and report groups`() {
     form.report.triggerCommand()
     val reportTable = _get<DReport>().getTable() as DTable
-    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VDecimalColumn }!!
 
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
@@ -364,7 +367,7 @@ class CommandsFormTests : GaliteVUITestBase() {
   fun `test dynamicReport command`() {
     form.dynamicReport.triggerCommand()
     val reportTable = _get<DReport>().getTable() as DTable
-    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VDecimalColumn }!!
 
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", "", ""),
@@ -589,6 +592,43 @@ class CommandsFormTests : GaliteVUITestBase() {
     form.helpForm.triggerCommand()
 
     _expectOne<DHelpViewer>()
+  }
+
+  /**
+   * click on dynamicReport button,
+   * check that the report is displayed
+   * click on close
+   * check that the report is closed
+   */
+  @Test
+  fun `test dynamicReport quit command`() {
+    form.dynamicReport.triggerCommand()
+
+    _expectOne<DReport>()
+    val actors = _find<DActor>()
+
+    actors.single { it.getModel().actorIdent == "Quit" }._clickAndWait()
+    _expectNone<DReport>()
+  }
+
+  /**
+   * Click on help command.
+   * Check that the help window is displayed
+   * click on close command,
+   * check that help windows is disappear
+   */
+  @Test
+  fun `test close helpForm command`() {
+    form.helpForm.triggerCommand()
+
+    _expectOne<DHelpViewer>()
+
+    val actors = _get<DHelpViewer>()._find<DActor>()
+
+    // quit command
+    actors.single { it.getModel().actorIdent == "Close" }._clickAndWait()
+
+    _expectNone<DHelpViewer>()
   }
 
   fun `test shortcut`() {

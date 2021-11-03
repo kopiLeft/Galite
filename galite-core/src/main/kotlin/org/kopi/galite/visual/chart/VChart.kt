@@ -89,6 +89,48 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     }
   }
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  private var cmdBarView: VCommand? = null
+  private var cmdColumnView: VCommand? = null
+  private var cmdLineView: VCommand? = null
+  private var cmdAreaView: VCommand? = null
+  private var cmdPieView: VCommand? = null
+
+  override lateinit var source: String
+  private var built = false
+  private var pageTitle = ""
+  var help: String? = null
+  var chartType: VChartType? = null  // chart type
+    private set
+
+  protected var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)) // trigger list
+
+  protected var commands: Array<VCommand>? = null // commands
+  private val activeCommands: ArrayList<VCommand> = ArrayList()
+  var printOptions: VPrintOptions = VPrintOptions()
+
+  /**
+   * The chart dimensions. The actual version supports only one dimension
+   */
+  protected lateinit var dimensions: Array<VDimension>
+
+  /**
+   * The chart measures.
+   */
+  protected lateinit var measures: Array<VMeasure>
+  private val rows: ArrayList<VRow> = ArrayList(500)
+
+  init {
+    if (context != null) {
+      dBContext = context.dBContext
+    }
+    init()
+    // localize the report using the default locale
+    localize(ApplicationContext.getDefaultLocale())
+  }
+
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -430,20 +472,20 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // TRIGGER HANDLING
   // --------------------------------------------------------------------
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    triggers[VKT_Type]?.action?.method?.invoke()
-    super.executeVoidTrigger(VKT_Type)
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
+    super.executeVoidTrigger(trigger)
   }
 
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  fun executeObjectTrigger(trigger: Trigger?): Any? {
+    return (trigger?.action?.method as () -> Any?).invoke()
   }
 
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+  fun executeBooleanTrigger(trigger: Trigger?): Boolean {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
+  fun executeIntegerTrigger(trigger: Trigger?): Int {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
@@ -451,8 +493,8 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * overridden by forms to implement triggers
    * default triggers
    */
-  protected fun execTrigger(block: Any, id: Int): Any? {
-    executeVoidTrigger(id)
+  protected fun execTrigger(block: Any, trigger: Trigger?): Any? {
+    executeVoidTrigger(trigger)
     return null
   }
 
@@ -473,7 +515,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   /**
    * Returns true if there is trigger associated with given event.
    */
-  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != 0
+  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != null
 
   /**
    * Returns the dimension column.
@@ -578,47 +620,4 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Adds a data row to this chart.
    */
   abstract fun add()
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var cmdBarView: VCommand? = null
-  private var cmdColumnView: VCommand? = null
-  private var cmdLineView: VCommand? = null
-  private var cmdAreaView: VCommand? = null
-  private var cmdPieView: VCommand? = null
-
-  override lateinit var source: String
-  private var built = false
-  private var pageTitle = ""
-  var help: String? = null
-  var chartType: VChartType? = null  // chart type
-    private set
-
-  protected var VKT_Triggers = mutableListOf(IntArray(CConstants.TRG_TYPES.size)) // trigger list
-  protected val triggers = mutableMapOf<Int, Trigger>()
-
-  protected var commands: Array<VCommand>? = null // commands
-  private val activeCommands: ArrayList<VCommand> = ArrayList()
-  var printOptions: VPrintOptions = VPrintOptions()
-
-  /**
-   * The chart dimensions. The actual version supports only one dimension
-   */
-  protected lateinit var dimensions: Array<VDimension>
-
-  /**
-   * The chart measures.
-   */
-  protected lateinit var measures: Array<VMeasure>
-  private val rows: ArrayList<VRow> = ArrayList(500)
-
-  init {
-    if (context != null) {
-      dBContext = context.dBContext
-    }
-    init()
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
-  }
 }

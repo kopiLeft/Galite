@@ -39,7 +39,7 @@ class VStringCodeColumn(ident: String?,
                         width: Int,
                         format: VCellFormat?,
                         names: Array<String>,
-                        private val codes: Array<String>)
+                        private val codes: Array<String?>)
           : VCodeColumn(ident,
                         type,
                         source,

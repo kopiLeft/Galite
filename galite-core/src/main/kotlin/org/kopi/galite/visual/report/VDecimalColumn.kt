@@ -20,7 +20,7 @@ package org.kopi.galite.visual.report
 
 import java.math.BigDecimal
 
-import org.kopi.galite.visual.form.VFixnumField
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
 
@@ -35,22 +35,27 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param     maxScale        The maximum of scale
  * @param     format          The format of the cells
  */
-class VFixnumColumn(ident: String?,
-                    options: Int,
-                    align: Int,
-                    groups: Int,
-                    function: VCalculateColumn?,
-                    digits: Int,
-                    maxScale: Int,
-                    format: VCellFormat?)
-    : VReportColumn(ident,
-                    options,
-                    align,
-                    groups,
-                    function,
-                    VFixnumField.computeWidth(digits, maxScale, null, null),
-                    1,
-                    format ?: VFixedFormat(maxScale, true)) {
+class VDecimalColumn(ident: String?,
+                     options: Int,
+                     align: Int,
+                     groups: Int,
+                     function: VCalculateColumn?,
+                     digits: Int,
+                     maxScale: Int,
+                     format: VCellFormat?)
+     : VReportColumn(ident,
+                     options,
+                     align,
+                     groups,
+                     function,
+                     VDecimalField.computeWidth(digits, maxScale, null, null),
+                     1,
+                     format ?: VFixedFormat(maxScale, true)) {
+
+  var formula: String? = null
+  var maxScale = maxScale
+    private set
+
   /**
    * Compare two objects.
    *
@@ -105,8 +110,4 @@ class VFixnumColumn(ident: String?,
     format = VFixedFormat(scale, false)
     maxScale = scale
   }
-
-  var formula: String? = null
-  var maxScale = maxScale
-    private set
 }

@@ -30,12 +30,12 @@ import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.list_Of_Tables
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
 import org.kopi.galite.visual.form.VConstants
@@ -214,7 +214,7 @@ class FormSample : Form() {
 
     init {
       command(item = graph) {
-        mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
         action = { }
       }
 

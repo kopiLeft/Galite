@@ -21,6 +21,16 @@ package org.kopi.galite.visual.ui.vaadin.base
  * Localized messages. Each message has it own unique key.
  */
 object LocalizedMessages {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var messages = mutableMapOf<String, Map<String, String>>()
+
+  init {
+    initProperties()
+  }
+
   //---------------------------------------------------
   // LOCALIZED MESSAGES
   //---------------------------------------------------
@@ -201,14 +211,5 @@ object LocalizedMessages {
       }
     }
     return sb.toString()
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var messages = mutableMapOf<String, Map<String, String>>()
-
-  init {
-    initProperties()
   }
 }

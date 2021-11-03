@@ -21,6 +21,19 @@ package org.kopi.galite.visual.db
 import java.sql.SQLException
 
 class DBForeignKeyException : DBConstraintException {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  var referencedTable: String? = null // The referenced table
+    private set
+
+  /**
+   * Returns the referencing table in this FK exception.
+   */
+  var referencingTable: String? = null // The referencing table
+    private set
+
   //---------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------
@@ -58,17 +71,4 @@ class DBForeignKeyException : DBConstraintException {
     referencedTable = referenced
     referencingTable = referencing
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  var referencedTable: String? = null // The referenced table
-    private set
-
-  /**
-   * Returns the referencing table in this FK exception.
-   */
-  var referencingTable: String? = null // The referencing table
-    private set
-
 }

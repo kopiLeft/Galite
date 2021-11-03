@@ -28,7 +28,6 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
-import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport

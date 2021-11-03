@@ -20,6 +20,8 @@ package org.kopi.galite.visual.util.ipp
 
 class DateValue : IPPValue {
 
+  private var value: ByteArray
+
   constructor(value: ByteArray) {
     this.value = value
   }
@@ -52,6 +54,4 @@ class DateValue : IPPValue {
     }
     println("")
   }
-
-  private var value: ByteArray
 }

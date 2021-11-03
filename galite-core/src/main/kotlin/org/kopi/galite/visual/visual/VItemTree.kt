@@ -27,6 +27,7 @@ import kotlin.system.exitProcess
 
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.dsl.common.Trigger
 
 /**
  * Represents a new instance of VItemTree.
@@ -57,6 +58,49 @@ class VItemTree(rootName: String?,
                 val nameLength: Int,
                 val localisedNameLength: Int,
                 val descriptionLength: Int) : VWindow() {
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  /**
+   * The root Item of this tree.
+   */
+  var root: TreeNode? = null
+    private set
+  private var rootItem: RootItem? = null
+  private val treeActors: Array<VActor?> = arrayOfNulls(10)
+  private var maxId = 0
+  private val rootName: String = rootName ?: "Items"
+
+  /**
+   * Returns true if the model is changed
+   */
+  var isChanged: Boolean = false
+
+  /**
+   * The removed items list.
+   */
+  val removedItems = mutableListOf<Item>()
+
+  init {
+    rootName?.let { setTitle(it) }
+    createActor(CMD_QUIT, "File", "Close", "quit", 0 /*KeyEvent.VK_ESCAPE*/, 0)
+    createActor(CMD_SELECT, "Edit", "Select", "done", KeyEvent.VK_ENTER, 0)
+    createActor(CMD_ADD, "Edit", "AddItem", "insertline", 0, 0)
+    createActor(CMD_REMOVE, "Edit", "RemoveItem", "deleteline", 0, 0)
+    createActor(CMD_EDIT, "Edit", "EditItem", "edit", 0, 0)
+    createActor(CMD_FOLD, "Edit", "Fold", "fold", KeyEvent.VK_ENTER, 0)
+    createActor(CMD_UNFOLD, "Edit", "Unfold", "unfold", KeyEvent.VK_ENTER, 0)
+    createActor(CMD_DEFAULT, "Edit", "Default", "top", 0, 0)
+    createActor(CMD_LOCALISE, "Edit", "Localise", "bold", 0, 0)
+    createActor(CMD_SAVE, "Edit", "Save", "save", 0, 0)
+    addActors(treeActors.requireNoNulls())
+    localizeActors(ApplicationContext.getDefaultLocale())
+    createTree()
+    if (isInsertMode) {
+      initMaxId()
+    }
+  }
 
   companion object {
     const val MAX_LENGTH = 32
@@ -191,6 +235,15 @@ class VItemTree(rootName: String?,
   }
 
   /**
+   * Performs a void trigger
+   *
+   * @param    trigger    the trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
+  }
+
+  /**
    * Refresh the item Tree view
    */
   fun refresh() {
@@ -244,48 +297,5 @@ class VItemTree(rootName: String?,
   fun getNextId(): Int {
     maxId++
     return maxId
-  }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  /**
-   * The root Item of this tree.
-   */
-  var root: TreeNode? = null
-    private set
-  private var rootItem: RootItem? = null
-  private val treeActors: Array<VActor?> = arrayOfNulls(10)
-  private var maxId = 0
-  private val rootName: String = rootName ?: "Items"
-
-  /**
-   * Returns true if the model is changed
-   */
-  var isChanged: Boolean = false
-
-  /**
-   * The removed items list.
-   */
-  val removedItems = mutableListOf<Item>()
-
-  init {
-    rootName?.let { setTitle(it) }
-    createActor(CMD_QUIT, "File", "Close", "quit", 0 /*KeyEvent.VK_ESCAPE*/, 0)
-    createActor(CMD_SELECT, "Edit", "Select", "done", KeyEvent.VK_ENTER, 0)
-    createActor(CMD_ADD, "Edit", "AddItem", "insertline", 0, 0)
-    createActor(CMD_REMOVE, "Edit", "RemoveItem", "deleteline", 0, 0)
-    createActor(CMD_EDIT, "Edit", "EditItem", "edit", 0, 0)
-    createActor(CMD_FOLD, "Edit", "Fold", "fold", KeyEvent.VK_ENTER, 0)
-    createActor(CMD_UNFOLD, "Edit", "Unfold", "unfold", KeyEvent.VK_ENTER, 0)
-    createActor(CMD_DEFAULT, "Edit", "Default", "top", 0, 0)
-    createActor(CMD_LOCALISE, "Edit", "Localise", "bold", 0, 0)
-    createActor(CMD_SAVE, "Edit", "Save", "save", 0, 0)
-    addActors(treeActors.requireNoNulls())
-    localizeActors(ApplicationContext.getDefaultLocale())
-    createTree()
-    if (isInsertMode) {
-      initMaxId()
-    }
   }
 }

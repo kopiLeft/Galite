@@ -36,6 +36,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
 
   init {
     isColumnReorderingAllowed = true
+    isAllRowsVisible = true
     buildRows()
     buildColumns()
     installFilters(model)

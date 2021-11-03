@@ -80,10 +80,18 @@ abstract class Form : Window() {
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
+   * @receiver                           the page containing the block
+   */
+  fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
+    this.form.insertBlock(block, this, init)
+
+  /**
+   * Adds a new block to this form.
+   *
+   * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
-  @Deprecated("Use FormPage.insertBlock(block)")
-  fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+  private fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
     }
@@ -99,7 +107,6 @@ abstract class Form : Window() {
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
-   * @param        formPage              the page containing the block
    */
   fun <T : FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
 
@@ -329,12 +336,11 @@ abstract class Form : Window() {
    */
   private fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
     // FORM TRIGGERS
-    val formTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+    val formTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
     triggers.forEach { trigger ->
       for (i in VConstants.TRG_TYPES.indices) {
         if (trigger.events shr i and 1 > 0) {
-          formTriggerArray[i] = i
-          formTriggers[i] = trigger
+          formTriggerArray[i] = trigger
         }
       }
       VKT_Triggers[0] = formTriggerArray
@@ -342,18 +348,9 @@ abstract class Form : Window() {
 
     // COMMANDS TRIGGERS
     this@Form.commands.forEach {
-      val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
       // TODO : Add commands triggers here
       VKT_Triggers.add(fieldTriggerArray)
     }
   }
 }
-
-/**
- * Adds a new block to this form.
- *
- * @param        block                 the block to insert
- * @receiver                           the page containing the block
- */
-fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
-  this.form.insertBlock(block, this, init)

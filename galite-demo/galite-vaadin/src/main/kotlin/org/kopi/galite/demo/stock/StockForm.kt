@@ -50,7 +50,7 @@ class StockForm : ReportSelectionForm() {
     icon = "report"  // icon is optional here
   }
 
-  val block = insertBlock(StockBlock(), page) {
+  val block = page.insertBlock(StockBlock()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)

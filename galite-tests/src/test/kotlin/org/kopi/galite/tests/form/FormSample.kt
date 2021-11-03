@@ -26,16 +26,15 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.Modes
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.FileHandler
 
 object User : Table() {
@@ -94,9 +93,9 @@ class FormSample : Form() {
   val p1 = page("test page")
   val p2 = page("test page2")
 
-  val tb1 = insertBlock(TestBlock(), p1) {
+  val tb1 = p1.insertBlock(TestBlock()) {
     command(item = graph) {
-      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
       }
@@ -111,9 +110,9 @@ class FormSample : Form() {
     }
   }
 
-  val tb2 = insertBlock(TestBlock(), p2) {
+  val tb2 = p2.insertBlock(TestBlock()) {
     command(item = graph) {
-      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
       }
@@ -121,15 +120,15 @@ class FormSample : Form() {
     }
   }
 
-  val tb3ToTestBlockOptions = insertBlock(TestBlock(), p1) {
+  val tb3ToTestBlockOptions = p1.insertBlock(TestBlock()) {
     options(BlockOption.NOINSERT)
   }
 
-  val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
-    blockVisibility(Access.SKIPPED, Modes.QUERY, Modes.INSERT)
+  val tb4ToTestChangeBlockAccess = p1.insertBlock(TestBlock()) {
+    blockVisibility(Access.SKIPPED, Mode.QUERY, Mode.INSERT)
   }
 
-  val tb4ToTestListDomain = insertBlock(ListDomainTest(), p1)
+  val tb4ToTestListDomain = p1.insertBlock(ListDomainTest())
 
   val preform = trigger(INIT) {
     println("init form trigger works")

@@ -372,9 +372,9 @@ abstract class VForm : VWindow, VConstants {
   }
 
   /**
-   * Returns true iff the form contents have been changed by the user.
+   * Returns true if the form contents have been changed by the user.
    *
-   * NOTE: TRG_CHANGED returns true iff form is considered changed
+   * NOTE: TRG_CHANGED returns true if form is considered changed
    */
   fun isChanged(): Boolean {
     return if (hasTrigger(VConstants.TRG_CHANGED)) {
@@ -397,7 +397,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * Resets form to initial state
    *
-   * NOTE: TRG_RESET returns true iff reset handled by trigger
+   * NOTE: TRG_RESET returns true if reset handled by trigger
    * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   override fun reset() {
@@ -459,27 +459,27 @@ abstract class VForm : VWindow, VConstants {
    * @return If there is trigger associated with event
    */
   protected fun hasTrigger(event: Int, index: Int = 0): Boolean {
-    return VKT_Triggers[index][event] != 0
+    return VKT_Triggers[index][event] != null
   }
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    formTriggers[VKT_Type]?.action?.method?.invoke()
-    super.executeVoidTrigger(VKT_Type)
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (formTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
+    super.executeVoidTrigger(trigger)
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    return (formTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
+  fun executeObjectTrigger(trigger: Trigger?): Any {
+    return (trigger?.action?.method as () -> Any).invoke()
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
-    return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
+  fun executeBooleanTrigger(trigger: Trigger?): Boolean {
+    return (trigger?.action?.method as () -> Boolean).invoke()
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  fun executeIntegerTrigger(trigger: Trigger?): Int {
+    return (trigger?.action?.method as () -> Int).invoke()
   }
 
   // ----------------------------------------------------------------------
@@ -825,8 +825,7 @@ abstract class VForm : VWindow, VConstants {
   internal lateinit var pages: Array<String>
   internal lateinit var pagesIdents: Array<String>
   internal var help: String? = null //the name of this field
-  internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
-  internal val formTriggers = mutableMapOf<Int, Trigger>()
+  internal val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
 
   // dynamic data
   private val blockMoveAllowed = true

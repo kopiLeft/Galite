@@ -28,6 +28,21 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param             document        the document containing the form localization
  */
 class FormLocalizer(document: Document) {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val root: Element = document.rootElement
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    if (root.name != "form") {
+      throw InconsistencyException("bad root element $root")
+    }
+  }
+
   /**
    * Returns the value of the title attribute.
    */
@@ -61,19 +76,5 @@ class FormLocalizer(document: Document) {
       }
     }
     throw InconsistencyException("page $ident not found")
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private val root: Element = document.rootElement
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
-  init {
-    if (root.name != "form") {
-      throw InconsistencyException("bad root element $root")
-    }
   }
 }

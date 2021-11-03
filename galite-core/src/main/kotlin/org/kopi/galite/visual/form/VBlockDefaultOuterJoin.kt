@@ -75,10 +75,10 @@ class VBlockDefaultOuterJoin(block: VBlock) {
               if(!isJoinedTable(field.getColumn(tableColumn)!!.column.table)) {
 
                 if (rootTable == table) {
-                  val joinTable = tables!![field.getColumn(tableColumn)!!.getTable()]
+                  val joinTable = tables!![field.getColumn(tableColumn)!!._getTable()]
 
                   // start of an outer join
-                  addToJoinedTables(field.getColumn(tableColumn)!!.getTable_())
+                  addToJoinedTables(field.getColumn(tableColumn)!!.getTable())
                   joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
                                                field.getColumn(j)!!.column,
                                                additionalConstraint)
@@ -91,7 +91,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   addToProcessedFields(i)
                 }
                 if (rootTable == table) {
-                  getJoinCondition(rootTable, field.getColumn(tableColumn)!!.getTable(), joinTables)
+                  getJoinCondition(rootTable, field.getColumn(tableColumn)!!._getTable(), joinTables)
                 }
               } else if (isJoinedTable(field.getColumn(j)!!.column.table)) { // FIXME!
                 // the table for this column is present in the outer join tree
@@ -114,10 +114,10 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                 }
               } else {
                 if (rootTable == table) {
-                  val joinTable = tables!![field.getColumn(j)!!.getTable()]
+                  val joinTable = tables!![field.getColumn(j)!!._getTable()]
 
                   // start of an outer join
-                  addToJoinedTables(field.getColumn(j)!!.getTable_())
+                  addToJoinedTables(field.getColumn(j)!!.getTable())
                   joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
                                                field.getColumn(j)!!.column,
                                                additionalConstraint)
@@ -130,7 +130,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   addToProcessedFields(i)
                 }
                 if (rootTable == table) {
-                  getJoinCondition(rootTable, field.getColumn(j)!!.getTable(), joinTables)
+                  getJoinCondition(rootTable, field.getColumn(j)!!._getTable(), joinTables)
                 }
               }
             }

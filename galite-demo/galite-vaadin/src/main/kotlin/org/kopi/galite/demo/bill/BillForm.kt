@@ -52,7 +52,7 @@ class BillForm : ReportSelectionForm() {
     help = "Autofill",
   )
 
-  val tb1 = insertBlock(BlockBill(), page) {
+  val tb1 = page.insertBlock(BlockBill()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)

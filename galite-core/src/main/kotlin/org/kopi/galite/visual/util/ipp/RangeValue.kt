@@ -21,6 +21,13 @@ package org.kopi.galite.visual.util.ipp
 class RangeValue : IPPValue {
 
   // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var lower: Int
+  private var upper: Int
+
+  // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
 
@@ -52,11 +59,4 @@ class RangeValue : IPPValue {
   }
 
   override fun toString(): String = "<$lower, $upper>"
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var lower: Int
-  private var upper: Int
 }

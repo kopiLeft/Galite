@@ -31,11 +31,11 @@ import org.kopi.galite.visual.visual.VColor
  * @param codes The integer codes.
  */
 class VIntegerCodeMeasure(ident: String,
-                          color: VColor,
+                          color: VColor?,
                           type: String,
                           source: String,
                           idents: Array<String>,
-                          private val codes: IntArray)
+                          private val codes: Array<Int?>)
   : VCodeMeasure(ident, color, type, source, idents) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS

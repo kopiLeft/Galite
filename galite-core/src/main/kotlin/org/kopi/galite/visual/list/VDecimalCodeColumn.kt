@@ -16,52 +16,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.chart
+package org.kopi.galite.visual.list
 
+import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VColor
 
 /**
- * Represents a code decimal measure.
- *
- * @param ident The measure identifier.
- * @param color The measure color.
- * @param type The measure type.
- * @param source The localization source.
- * @param idents The code identifiers.
- * @param codes The decimal codes.
+ * Represents a list column.
  */
-class VFixnumCodeMeasure(ident: String,
-                         color: VColor,
-                         type: String,
-                         source: String,
-                         idents: Array<String>,
-                         private val codes: Array<Decimal>)
-          : VCodeMeasure(ident,
-                         color,
-                         type,
-                         source,
-                         idents) {
-
+class VDecimalCodeColumn(title: String,
+                         column: Column<*>?,
+                         table: ColumnSet?,
+                         names: Array<String>,
+                         private val codes: Array<Decimal?>,
+                         sortAscending: Boolean)
+          : VCodeColumn(title,
+                        column,
+                        table,
+                        names,
+                        sortAscending) {
   // --------------------------------------------------------------------
-  // IMPLEMENTATIONS
+  // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getIndex(value: Any?): Int {
+  /**
+   * Returns the index.of given object
+   */
+  override fun getObjectIndex(value: Any): Int {
     codes.forEachIndexed { index, code ->
       if (value == code) {
         return index
       }
     }
-    throw InconsistencyException("Object not found $value, $ident")
+    throw InconsistencyException("bad code value " + value as Decimal)
   }
 
-  override fun toNumber(value: Any?): Number? {
-    codes.forEach { code ->
-      if (value == code) {
-        return code
-      }
-    }
-    return null
-  }
+  override fun getDataType(): KClass<*> = Decimal::class
 }

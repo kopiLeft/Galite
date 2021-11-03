@@ -32,11 +32,13 @@ class Command(val item: Actor, var mode: Int = VConstants.MOD_ANY) {
   var action: (() -> Unit)? = null
   lateinit var body: CommandBody
 
-  /** function to change the access mode of the command **/
-  fun mode(vararg access: Int) {
+  /**
+   * Changes the access mode of the command
+   **/
+  fun mode(vararg access: Mode) {
     mode = 0
     for (item in access) {
-      mode = mode or (1 shl item)
+      mode = mode or (1 shl item.value)
     }
   }
 

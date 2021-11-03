@@ -48,7 +48,7 @@ class FormFieldColumn<T>(val column: Column<*>,
   }
 
   /**
-   * TODO: Do we really need his method
+   * Initializes this form field column.
    */
   fun initialize() {
     val table = field.getTable(column.table)

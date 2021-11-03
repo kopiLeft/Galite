@@ -23,6 +23,7 @@ import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
+import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SqlLogger
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.exposedLogger
@@ -39,6 +40,16 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  */
 class Connection {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+
+  val url: String
+  val userName: String
+  val password: String?
+  var dbConnection: Database
+  var user: Int = 0
+
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
@@ -51,8 +62,10 @@ class Connection {
    */
   constructor(connection: Connection,
               lookupUserId: Boolean = true,
-              schema: String? = null) { // TODO
-    dbConnection = Database.connect({ connection }, databaseConfig = GaliteDatabaseConfig)
+              schema: Schema? = null) {
+    val configuration = databaseConfig(schema)
+
+    dbConnection = Database.connect({ connection }, databaseConfig = configuration)
     url = dbConnection.url
     userName = connection.metaData.userName
     password = null // already authenticated
@@ -74,12 +87,14 @@ class Connection {
               userName: String,
               password: String,
               lookupUserId: Boolean = true,
-              schema: String? = null) { // TODO
+              schema: Schema? = null) {
+    val configuration = databaseConfig(schema)
+
     dbConnection = Database.connect(url = url,
                                     driver = driver,
                                     user = userName,
                                     password = password,
-                                    databaseConfig = GaliteDatabaseConfig)
+                                    databaseConfig = configuration)
     this.url = url
     this.userName = userName
     this.password = password
@@ -97,9 +112,11 @@ class Connection {
   constructor(
     dataSource: javax.sql.DataSource,
     lookupUserId: Boolean = true,
-    schema: String? = null // TODO
+    schema: Schema? = null
   ) {
-    dbConnection = Database.connect(dataSource, databaseConfig = GaliteDatabaseConfig)
+    val configuration = databaseConfig(schema)
+
+    dbConnection = Database.connect(dataSource, databaseConfig = configuration)
     url = dbConnection.url
     userName = dataSource.connection.metaData.userName.orEmpty()
     this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
@@ -151,20 +168,11 @@ class Connection {
     // -2 do not lookup user ID
     private const val USERID_NO_LOOKUP = -2
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-
-  val url: String
-  val userName: String
-  val password: String?
-  var dbConnection: Database
-  var user: Int = 0
 }
 
-val GaliteDatabaseConfig = DatabaseConfig {
+fun databaseConfig(schema: Schema?): DatabaseConfig = DatabaseConfig {
   sqlLogger = Slf4jSqlInfoLogger
+  defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
 }
 
 object Slf4jSqlInfoLogger : SqlLogger {

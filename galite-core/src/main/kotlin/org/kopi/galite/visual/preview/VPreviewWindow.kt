@@ -42,7 +42,113 @@ import org.kopi.galite.visual.visual.WindowController
  */
 open class VPreviewWindow : VWindow() {
 
-  override val locale: Locale get() = ApplicationContext.getDefaultLocale()
+  // ---------------------------------------------------------------------
+  // DATA MEMBERS
+  // ---------------------------------------------------------------------
+  var currentPage = 0
+    private set
+  var numberOfPages = 0
+    private set
+  private var command: String? = null
+  var printJob: PrintJob? = null
+    private set
+  private var printFile: File? = null
+  private var imageFile: String? = null
+  var height = 0
+    private set
+  var width = 0
+    private set
+  private val previewListener: EventListenerList
+
+  init {
+    setTitle(VlibProperties.getString("Preview"))
+    addActors(arrayOf(
+      VActor("File",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "Close",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "quit",
+             KeyEvent.VK_ESCAPE,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PageFirst",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "pageFirst",
+             KeyEvent.VK_HOME,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PageLeft",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "pageLeft",
+             KeyEvent.VK_PAGE_UP,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PageRight",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "pageRight",
+             KeyEvent.VK_PAGE_DOWN,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PageLast",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "pageLast",
+             KeyEvent.VK_END,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PreviewFit",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "zoomoptimal",
+             KeyEvent.VK_F5,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PreviewFitWidth",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "zoomwidth",
+             KeyEvent.VK_F8,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PreviewFitHeight",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "zoomheight",
+             KeyEvent.VK_F9,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PreviewPlus",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "zoomplus",
+             KeyEvent.VK_F6,
+             0),
+      VActor("Action",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "PreviewMinus",
+             PREVIEW_LOCALIZATION_RESOURCE,
+             "zoomminus",
+             KeyEvent.VK_F7,
+             0)
+    ))
+
+    // localize the preview using the default locale
+    localize(Locale.getDefault())
+    getActor(CMD_QUIT).number = CMD_QUIT
+    getActor(CMD_FIRST).number = CMD_FIRST
+    getActor(CMD_LEFT).number = CMD_LEFT
+    getActor(CMD_RIGHT).number = CMD_RIGHT
+    getActor(CMD_LAST).number = CMD_LAST
+    getActor(CMD_ZOOM_FIT).number = CMD_ZOOM_FIT
+    getActor(CMD_ZOOM_FIT_W).number = CMD_ZOOM_FIT_W
+    getActor(CMD_ZOOM_FIT_H).number = CMD_ZOOM_FIT_H
+    getActor(CMD_ZOOM_PLUS).number = CMD_ZOOM_PLUS
+    getActor(CMD_ZOOM_MINUS).number = CMD_ZOOM_MINUS
+    previewListener = EventListenerList()
+  }
 
   companion object {
     private const val DEF_ZOOM_RATIO = 1.30f
@@ -69,6 +175,8 @@ open class VPreviewWindow : VWindow() {
       })
     }
   }
+
+  override val locale: Locale get() = ApplicationContext.getDefaultLocale()
 
   override fun getType(): Int = Constants.MDL_PREVIEW
 
@@ -286,113 +394,5 @@ open class VPreviewWindow : VWindow() {
 
   override fun getTitle(): String {
     return windowTitle.orEmpty()
-  }
-
-  // ---------------------------------------------------------------------
-  // DATA MEMBERS
-  // ---------------------------------------------------------------------
-  var currentPage = 0
-    private set
-  var numberOfPages = 0
-    private set
-  private var command: String? = null
-  var printJob: PrintJob? = null
-    private set
-  private var printFile: File? = null
-  private var imageFile: String? = null
-  var height = 0
-    private set
-  var width = 0
-    private set
-  private val previewListener: EventListenerList
-
-  init {
-    setTitle(VlibProperties.getString("Preview"))
-    addActors(arrayOf(
-            VActor("File",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "Close",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "quit",
-                   KeyEvent.VK_ESCAPE,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PageFirst",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "pageFirst",
-                   KeyEvent.VK_HOME,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PageLeft",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "pageLeft",
-                   KeyEvent.VK_PAGE_UP,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PageRight",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "pageRight",
-                   KeyEvent.VK_PAGE_DOWN,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PageLast",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "pageLast",
-                   KeyEvent.VK_END,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PreviewFit",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "zoomoptimal",
-                   KeyEvent.VK_F5,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PreviewFitWidth",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "zoomwidth",
-                   KeyEvent.VK_F8,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PreviewFitHeight",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "zoomheight",
-                   KeyEvent.VK_F9,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PreviewPlus",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "zoomplus",
-                   KeyEvent.VK_F6,
-                   0),
-            VActor("Action",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "PreviewMinus",
-                   PREVIEW_LOCALIZATION_RESOURCE,
-                   "zoomminus",
-                   KeyEvent.VK_F7,
-                   0)
-    ))
-
-    // localize the preview using the default locale
-    localize(Locale.getDefault())
-    getActor(CMD_QUIT).number = CMD_QUIT
-    getActor(CMD_FIRST).number = CMD_FIRST
-    getActor(CMD_LEFT).number = CMD_LEFT
-    getActor(CMD_RIGHT).number = CMD_RIGHT
-    getActor(CMD_LAST).number = CMD_LAST
-    getActor(CMD_ZOOM_FIT).number = CMD_ZOOM_FIT
-    getActor(CMD_ZOOM_FIT_W).number = CMD_ZOOM_FIT_W
-    getActor(CMD_ZOOM_FIT_H).number = CMD_ZOOM_FIT_H
-    getActor(CMD_ZOOM_PLUS).number = CMD_ZOOM_PLUS
-    getActor(CMD_ZOOM_MINUS).number = CMD_ZOOM_MINUS
-    previewListener = EventListenerList()
   }
 }

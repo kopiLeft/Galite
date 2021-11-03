@@ -94,7 +94,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       }
       model.list != null && model.list!!.action != null -> {
         // NEW SYNTAX
-        model.list!!.action!!()
+        model.list!!.action!!().model
       }
       else -> {
         null

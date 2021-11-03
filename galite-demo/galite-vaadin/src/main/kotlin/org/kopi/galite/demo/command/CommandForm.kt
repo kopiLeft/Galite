@@ -23,10 +23,10 @@ import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.Modes
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
 
@@ -92,7 +92,7 @@ class CommandForm : ReportSelectionForm() {
     icon = "report"  // icon is optional here
   }
 
-  val tb1 = insertBlock(BlockCommand(), page) {
+  val tb1 = page.insertBlock(BlockCommand()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
@@ -161,7 +161,7 @@ class BlockCommand : FormBlock(1, 10, "Commands") {
   }
 
   init {
-    blockVisibility(Access.VISIT, Modes.QUERY)
+    blockVisibility(Access.VISIT, Mode.QUERY)
   }
 }
 

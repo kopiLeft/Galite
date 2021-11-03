@@ -49,7 +49,7 @@ class ProviderForm : ReportSelectionForm() {
     help = "Autofill",
   )
 
-  val block = insertBlock(BlockProvider(), page) {
+  val block = page.insertBlock(BlockProvider()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)

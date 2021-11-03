@@ -41,6 +41,18 @@ class ConfirmNotification(title: String?,
                           parent: Component?)
   : AbstractNotification(title, message, locale, parent) {
 
+  //------------------------------------------------
+  // DATA MEMBERS
+  //------------------------------------------------
+  private lateinit var ok: Button
+  private lateinit var cancel: Button
+  private val listener: ComponentEventListener<ClickEvent<Button>>? = null
+
+  init {
+    Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)
+    Shortcuts.addShortcutListener(this, this::onArrowLeftEvent, Key.ARROW_LEFT)
+  }
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
@@ -69,17 +81,5 @@ class ConfirmNotification(title: String?,
 
   fun onArrowLeftEvent(keyDownEvent: ShortcutEvent?) {
     ok.focus()
-  }
-
-  //------------------------------------------------
-  // DATA MEMBERS
-  //------------------------------------------------
-  private lateinit var ok: Button
-  private lateinit var cancel: Button
-  private val listener: ComponentEventListener<ClickEvent<Button>>? = null
-
-  init {
-    Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)
-    Shortcuts.addShortcutListener(this, this::onArrowLeftEvent, Key.ARROW_LEFT)
   }
 }

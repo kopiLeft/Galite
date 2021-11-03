@@ -40,6 +40,39 @@ class WelcomeView(locale: Locale,
                   slogan: String?,
                   logo: String?,
                   href: String?) : AppLayout(), HasStyle, HasSize, LoginWindowListener {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var header: VHeader?
+  private var main: VMain?
+  private var loginWindow: VLoginWindow?
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  init {
+    className = Styles.WELCOME_VIEW
+    header = VHeader()
+    main = VMain()
+    loginWindow = VLoginWindow()
+    addToNavbar(header)
+    content = main
+    header!!.setMainMenu(VEmptyModuleList())
+    val content = VContent()
+    main!!.setContent(content)
+    val loginView = VLoginView()
+    loginView.setLoginWindow(loginWindow)
+    content.setContent(loginView)
+    setHref(href)
+    setResources(logo, slogan)
+    setTarget("_blank")
+    focus()
+    addLoginWindowListener(this)
+    setDefaultLocale(locale.toString())
+    setLanguages(locale, languages)
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -165,37 +198,5 @@ class WelcomeView(locale: Locale,
 
   fun unsetWaitInfo() {
     loginWindow!!.unsetWaitInfo()
-  }
-
-  //---------------------------------------------------
-// DATA MEMBERS
-//---------------------------------------------------
-  private var header: VHeader?
-  private var main: VMain?
-  private var loginWindow: VLoginWindow?
-
-  //---------------------------------------------------
-// CONSTRUCTOR
-//---------------------------------------------------
-  init {
-    className = Styles.WELCOME_VIEW
-    header = VHeader()
-    main = VMain()
-    loginWindow = VLoginWindow()
-    addToNavbar(header)
-    content = main
-    header!!.setMainMenu(VEmptyModuleList())
-    val content = VContent()
-    main!!.setContent(content)
-    val loginView = VLoginView()
-    loginView.setLoginWindow(loginWindow)
-    content.setContent(loginView)
-    setHref(href)
-    setResources(logo, slogan)
-    setTarget("_blank")
-    focus()
-    addLoginWindowListener(this)
-    setDefaultLocale(locale.toString())
-    setLanguages(locale, languages)
   }
 }

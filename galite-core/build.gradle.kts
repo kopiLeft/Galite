@@ -101,17 +101,17 @@ publishing {
         }
         developers {
           developer {
-            id.set("KopiLeft")
-            name.set("KopiLeft Team")
+            id.set("kopiLeft")
+            name.set("kopiLeft Team")
             organization.set("kopiLeft Services")
-            organizationUrl.set("https://www.kopileft.com")
+            organizationUrl.set("http://www.kopileft.com")
             email.set("office@kopileft.com")
           }
           developer {
-            id.set("KopiRight")
-            name.set("KopiRight Team")
-            organization.set("KopiRight")
-            organizationUrl.set("https://www.kopiright.com")
+            id.set("kopiRight")
+            name.set("kopiRight Team")
+            organization.set("kopiRight")
+            organizationUrl.set("http://www.kopiright.com")
             email.set("office@kopiright.fr")
           }
         }

@@ -44,7 +44,7 @@ class BillProductForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "report"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockBillProduct(), page) {
+  val tb1 = page.insertBlock(BlockBillProduct()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)

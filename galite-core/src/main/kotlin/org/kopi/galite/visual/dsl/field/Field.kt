@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.field
+package org.kopi.galite.visual.dsl.field
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
@@ -28,7 +28,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
  * @param domain the field's domain
  */
 abstract class Field<T>(open val domain: Domain<T>) {
-  /** Field's label */
+  /** Field's label (text on the left) */
   var label: String? = null
 
   /** Field's help that describes the expected value of an input field */

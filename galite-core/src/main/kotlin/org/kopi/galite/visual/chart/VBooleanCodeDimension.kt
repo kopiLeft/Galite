@@ -31,11 +31,11 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param codes     The boolean codes.
  */
 class VBooleanCodeDimension(ident: String,
-                            format: VColumnFormat,
+                            format: VColumnFormat?,
                             type: String,
                             source: String,
                             idents: Array<String>,
-                            private val codes: BooleanArray)
+                            private val codes: Array<Boolean?>)
   : VCodeDimension(ident, format, type, source, idents) {
 
   init {

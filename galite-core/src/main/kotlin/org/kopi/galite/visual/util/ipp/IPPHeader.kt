@@ -20,6 +20,15 @@ package org.kopi.galite.visual.util.ipp
 
 class IPPHeader() {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var majorVersion: Byte = 1
+  private var minorVersion: Byte = 1
+  var operationID: Short = 0
+  var requestID = 0
+
   constructor(inputStream: IPPInputStream) : this() {
     majorVersion = inputStream.readByte()
     minorVersion = inputStream.readByte()
@@ -75,13 +84,4 @@ class IPPHeader() {
     }
     return null
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var majorVersion: Byte = 1
-  private var minorVersion: Byte = 1
-  var operationID: Short = 0
-  var requestID = 0
 }

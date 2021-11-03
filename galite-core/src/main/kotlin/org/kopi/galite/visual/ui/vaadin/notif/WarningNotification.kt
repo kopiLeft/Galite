@@ -36,6 +36,11 @@ class WarningNotification(title: String?,
                           parent: Component?)
   : AbstractNotification(title, message, locale, parent) {
 
+  //--------------------------------------------------
+  // DATA MEMBERS
+  //--------------------------------------------------
+  private lateinit var close: Button
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
@@ -49,9 +54,4 @@ class WarningNotification(title: String?,
 
   override val iconName: VaadinIcon
     get() = VaadinIcon.EXCLAMATION_CIRCLE
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private lateinit var close: Button
 }

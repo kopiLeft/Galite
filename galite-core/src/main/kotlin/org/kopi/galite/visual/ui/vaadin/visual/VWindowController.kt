@@ -134,7 +134,6 @@ class VWindowController : WindowController() {
   /**
    * A modal view runner background task.
    */
-  /*package*/
   internal inner class ModalViewRunner(val model: VWindow) : Runnable {
 
     private var view: DWindow? = null

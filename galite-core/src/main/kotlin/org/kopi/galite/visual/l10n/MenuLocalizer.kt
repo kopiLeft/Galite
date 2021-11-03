@@ -29,10 +29,6 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param             ident           the identifier of the menu localization
  */
 class MenuLocalizer(document: Document, ident: String) {
-  /**
-   * Returns the value of the label attribute.
-   */
-  fun getLabel(): String = self.getAttributeValue("label")
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -51,4 +47,9 @@ class MenuLocalizer(document: Document, ident: String) {
     }
     self = Utils.lookupChild(root, "menu", "ident", ident)
   }
+
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getLabel(): String = self.getAttributeValue("label")
 }

@@ -32,14 +32,6 @@ import org.kopi.galite.visual.util.base.InconsistencyException
 class ListLocalizer(manager: LocalizationManager,
                     document: Document,
                     ident: String) : Localizer(manager) {
-  /**
-   * Returns the title of the specified item.
-   *
-   * @param             column          the identifier of the column
-   */
-  fun getColumnTitle(column: String): String =
-          Utils.lookupChild(self, "listdesc", "column", column).getAttributeValue("title")
-
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -59,4 +51,12 @@ class ListLocalizer(manager: LocalizationManager,
 
     self = Utils.lookupChild(type, "list")
   }
+
+  /**
+   * Returns the title of the specified item.
+   *
+   * @param             column          the identifier of the column
+   */
+  fun getColumnTitle(column: String): String =
+          Utils.lookupChild(self, "listdesc", "column", column).getAttributeValue("title")
 }

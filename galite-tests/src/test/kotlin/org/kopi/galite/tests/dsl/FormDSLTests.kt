@@ -29,12 +29,12 @@ import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.form.VConstants
 
 class FormDSLTests: VApplicationTestBase() {
@@ -60,7 +60,7 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.block.title, blockModel.title)
     assertEquals(form.block.buffer, blockModel.bufferSize)
     assertEquals(form.block.visible, blockModel.displaySize)
-    assertEquals(form.block.border, blockModel.border)
+    assertEquals(form.block.border.value, blockModel.border)
     assertEquals(2, blockModel.maxColumnPos)
     assertEquals(1, blockModel.maxRowPos)
     assertEquals(0, blockModel.pageNumber)
@@ -78,7 +78,7 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.block.idClt.help, model.toolTip)
     assertEquals(block, model.block)
     assertEquals(FieldAlignment.RIGHT.value, model.align)
-    assertEquals(form.block.border, model.border)
+    assertEquals(form.block.border.value, model.border)
     assertEquals(0, model.options)
     assertEquals(-1, model.posInArray)
     assertEquals(1, model.height)
@@ -113,7 +113,7 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(3, clientBlock.fields.size)
     assertEquals(form.clientBlock.buffer, clientBlock.bufferSize)
     assertEquals(form.clientBlock.visible, clientBlock.displaySize)
-    assertEquals(form.clientBlock.border, clientBlock.border)
+    assertEquals(form.clientBlock.border.value, clientBlock.border)
     assertEquals(form.clientBlock.title, clientBlock.title)
     assertEquals(1, clientBlock.maxColumnPos)
     assertEquals(3, clientBlock.maxRowPos)
@@ -123,7 +123,7 @@ class FormDSLTests: VApplicationTestBase() {
     //commandsBlock
     assertEquals(2, commandsBlock.fields.size)
     assertEquals(form.commandsBlock.visible, commandsBlock.displaySize)
-    assertEquals(form.commandsBlock.border, commandsBlock.border)
+    assertEquals(form.commandsBlock.border.value, commandsBlock.border)
     assertEquals(form.commandsBlock.title, commandsBlock.title)
     assertEquals(1, commandsBlock.maxColumnPos)
     assertEquals(1, commandsBlock.maxRowPos)
@@ -187,7 +187,7 @@ class FormDSLTests: VApplicationTestBase() {
     val nameClientModel =  clientBlock.fields[1]
 
     assertEquals(User.name.name, nameClientModel.getColumn(0)!!.name)
-    assertEquals(User, nameClientModel.getColumn(0)!!.getTable_())
+    assertEquals(User, nameClientModel.getColumn(0)!!.getTable())
     assertEquals(form.clientBlock.clientName.columns!!.priority, nameClientModel.getPriority())
     assertEquals(1, nameClientModel.getColumnCount())
   }
@@ -370,7 +370,7 @@ class FormWithMultipleBlock : Form() {
     }
 
     init {
-      border = VConstants.BRD_LINE
+      border = Border.LINE
     }
   }
 }

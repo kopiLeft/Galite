@@ -21,6 +21,14 @@ package org.kopi.galite.visual.util.ipp
 class ResolutionValue : IPPValue {
 
   // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var units: Byte
+  private var xres: Int
+  private var yres: Int
+
+  // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
 
@@ -54,12 +62,4 @@ class ResolutionValue : IPPValue {
                     "\txres : " + xres +
                     "\tyres : " + yres)
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var units: Byte
-  private var xres: Int
-  private var yres: Int
 }

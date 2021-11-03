@@ -26,6 +26,8 @@ import java.io.UnsupportedEncodingException
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
+import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTextColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -143,25 +145,14 @@ class VTextField(bufferSize: Int,
   }
 
   /**
-   * Returns the field value of the current record as an object
-   */
-  override fun getObjectImpl(r: Int): Any? {
-    TODO()
-  }
-
-  /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun hasLargeObject(r: Int): Boolean {
-    TODO()
-  }
+  override fun hasLargeObject(r: Int): Boolean = currentDialect !is PostgreSQLDialect
 
   /**
    * Warning:	This method will become inaccessible to kopi users in next release
    */
-  override fun hasBinaryLargeObject(r: Int): Boolean {
-    TODO()
-  }
+  override fun hasBinaryLargeObject(r: Int): Boolean = currentDialect !is PostgreSQLDialect
 
   /**
    * Returns the SQL representation of field value of given record.

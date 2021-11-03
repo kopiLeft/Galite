@@ -25,22 +25,7 @@ import com.vaadin.flow.component.Component
  * The login view containing the login panel box.
  */
 class VLoginView : VSimpleTable() {
-  //---------------------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------------------
-  /**
-   * Sets the login box window.
-   * @param loginWindow The login box window.
-   */
-  fun setLoginWindow(loginWindow: Component?) {
-    add(loginWindow!!)
-    lastTd?.setProperty("align", "center")
-    lastTd?.style?.set("vertical-align", "middle")
-  }
 
-  //---------------------------------------------------
-  // CONSTRUCTORS
-  //---------------------------------------------------
   /**
    * Creates the login view component.
    */
@@ -50,5 +35,18 @@ class VLoginView : VSimpleTable() {
     setCellPadding(0)
     setCellSpacing(0)
     element.setProperty("align", "center")
+  }
+
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  /**
+   * Sets the login box window.
+   * @param loginWindow The login box window.
+   */
+  fun setLoginWindow(loginWindow: Component?) {
+    add(loginWindow!!)
+    lastTd?.setProperty("align", "center")
+    lastTd?.style?.set("vertical-align", "middle")
   }
 }

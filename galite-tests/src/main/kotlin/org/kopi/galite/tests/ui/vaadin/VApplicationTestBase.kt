@@ -95,7 +95,7 @@ open class VApplicationTestBase : ApplicationTestBase() {
     ): DBContext? {
       return try {
         DBContext().apply {
-          this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)
+          createConnection(driver, database, username, password, true, schema)
         }
       } catch (exception: Throwable) {
         null

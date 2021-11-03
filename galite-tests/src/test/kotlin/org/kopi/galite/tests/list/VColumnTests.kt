@@ -28,7 +28,7 @@ class VColumnTests {
   fun vColumnTest() {
     val vcolumn = VColumn(2, "testName", false, true, Users.id)
 
-    assertEquals(2, vcolumn.getTable())
+    assertEquals(2, vcolumn._getTable())
     assertEquals("T2.testName", vcolumn.getQualifiedName())
   }
 }

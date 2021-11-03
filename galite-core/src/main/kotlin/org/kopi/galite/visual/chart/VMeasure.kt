@@ -29,8 +29,9 @@ import org.kopi.galite.visual.visual.VColor
 abstract class VMeasure protected constructor(ident: String, var color: VColor?) : VColumn(ident) {
   /**
    * Returns the number representation of the given value.
-   * @param value
-   * @return
+   *
+   * @param value the value
+   * @return he number representation of [value].
    */
   internal abstract fun toNumber(value: Any?): Number?
 }

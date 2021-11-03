@@ -95,7 +95,7 @@ class FormWithList : DictionaryForm() {
     icon = "save"  // icon is optional here
   }
 
-  val block3 = insertBlock(UsersBlock(), testPage1) {
+  val block3 = testPage1.insertBlock(UsersBlock()) {
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")
@@ -111,7 +111,7 @@ class FormWithList : DictionaryForm() {
     }
   }
 
-  val block = insertBlock(BlockWithManyTables(), testPage1) {
+  val block = testPage1.insertBlock(BlockWithManyTables()) {
     command(item = resetBlock) {
       action = {
         resetBlock()

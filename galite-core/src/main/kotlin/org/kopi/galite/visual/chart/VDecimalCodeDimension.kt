@@ -31,18 +31,18 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param idents        The column labels.
  * @param codes         The column codes.
  */
-class VFixnumCodeDimension(ident: String,
-                           isDimension: Boolean,
-                           format: VColumnFormat,
-                           type: String,
-                           source: String,
-                           idents: Array<String>,
-                           private val codes: Array<Decimal>)
-          : VCodeDimension(ident,
-                           format,
-                           type,
-                           source,
-                           idents) {
+class VDecimalCodeDimension(ident: String,
+                            isDimension: Boolean,
+                            format: VColumnFormat?,
+                            type: String,
+                            source: String,
+                            idents: Array<String>,
+                            private val codes: Array<Decimal?>)
+           : VCodeDimension(ident,
+                            format,
+                            type,
+                            source,
+                            idents) {
 
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS

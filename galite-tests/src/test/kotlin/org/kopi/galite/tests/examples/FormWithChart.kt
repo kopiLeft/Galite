@@ -25,10 +25,9 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 
@@ -52,7 +51,7 @@ object FormWithChart: Form() {
   val b = p1.insertBlock(Traineeship())
 
   val cmd = command(item = graph) {
-    mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+    mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
     action = {
       showChart(ChartSample())
     }

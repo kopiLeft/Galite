@@ -22,6 +22,8 @@ import org.kopi.galite.visual.visual.VActor
 
 abstract class VImportedBlock(form: VForm) : VBlock(form) {
 
+  override var actors: Array<VActor>? = null
+
   // ----------------------------------------------------------------------
   // ACTOR HANDLING
   // ----------------------------------------------------------------------
@@ -29,6 +31,4 @@ abstract class VImportedBlock(form: VForm) : VBlock(form) {
   override fun getActor(i: Int): VActor {
     return actors!![i]
   }
-
-  override var actors: Array<VActor>? = null
 }

@@ -19,7 +19,7 @@ package org.kopi.galite.visual.db
 
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
+import org.jetbrains.exposed.sql.javatime.timestamp
 
 object Modules : Table("MODULE") {
   val id = integer("ID").autoIncrement()

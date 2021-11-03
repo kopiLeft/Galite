@@ -29,6 +29,17 @@ import org.kopi.galite.visual.l10n.FieldLocalizer
  * @param ident The column identifier.
  */
 abstract class VColumn internal constructor(var ident: String) : Serializable {
+
+  /**
+   * The column label.
+   */
+  var label: String? = null
+
+  /**
+   * The column help.
+   */
+  var help: String? = null
+
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
@@ -65,14 +76,4 @@ abstract class VColumn internal constructor(var ident: String) : Serializable {
   protected open fun localize(loc: FieldLocalizer) {
     // by default nothing to do
   }
-
-  /**
-   * The column label.
-   */
-  var label: String? = null
-
-  /**
-   * The column help.
-   */
-  var help: String? = null
 }

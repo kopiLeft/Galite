@@ -18,7 +18,6 @@
 package org.kopi.galite.visual.dsl.report
 
 import java.io.IOException
-import java.lang.RuntimeException
 import java.util.Locale
 
 import org.kopi.galite.visual.domain.Domain
@@ -30,25 +29,14 @@ import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.MReport
-import org.kopi.galite.visual.report.VBooleanColumn
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
 import org.kopi.galite.visual.report.VDateColumn
-import org.kopi.galite.visual.report.VFixnumColumn
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VIntegerColumn
 import org.kopi.galite.visual.report.VMonthColumn
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
-import org.kopi.galite.visual.report.VStringColumn
-import org.kopi.galite.visual.report.VTimeColumn
-import org.kopi.galite.visual.report.VTimestampColumn
-import org.kopi.galite.visual.report.VWeekColumn
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
@@ -75,7 +63,7 @@ abstract class Report : Window() {
   inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
                                                 noinline init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = ReportField(domain, "ANM_${fields.size}", init)
+    val field = ReportField(domain, "ANM_${fields.size}", init, `access$sourceFile`)
     fields.add(field)
     return field
   }
@@ -198,29 +186,7 @@ abstract class Report : Window() {
         null
       }
 
-      when (it.domain.kClass) {
-        Int::class, Long::class ->
-          VIntegerColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        String::class ->
-          VStringColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
-                        it.domain.height ?: 0, format)
-        Decimal::class ->
-          VFixnumColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
-                        it.domain.height ?: 0, format)
-        Boolean::class ->
-          VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        Date::class, java.util.Date::class ->
-          VDateColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        Month::class ->
-          VMonthColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        Week::class ->
-          VWeekColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        Time::class ->
-          VTimeColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        Timestamp::class ->
-          VTimestampColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
-        else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
-      }.also { column ->
+      it.domain.buildReportFieldModel(it, function, format).also { column ->
         column.label = it.label ?: ""
         column.help = it.help
       }
@@ -261,37 +227,37 @@ abstract class Report : Window() {
      */
     fun handleTriggers(triggers: MutableList<Trigger>) {
       // REPORT TRIGGERS
-      super.VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
+      super.VKT_Triggers = mutableListOf(arrayOfNulls(Constants.TRG_TYPES.size))
+      val reportTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
+
       triggers.forEach { trigger ->
-        val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
         for (i in VConstants.TRG_TYPES.indices) {
           if (trigger.events shr i and 1 > 0) {
-            blockTriggerArray[i] = i
-            super.triggers[i] = trigger
+            reportTriggerArray[i] = trigger
           }
         }
-        super.VKT_Triggers!![0] = blockTriggerArray
+        super.VKT_Triggers!![0] = reportTriggerArray
       }
 
       // FIELD TRIGGERS
       fields.forEach {
-        val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+        val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
         if (it.computeTrigger != null) {
-          fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
+          fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!
         }
         if (it.formatTrigger != null) {
-          fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+          fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!
         }
         // TODO : Add field triggers here
         super.VKT_Triggers!!.add(fieldTriggerArray)
       }
 
       // TODO: for separator column
-      super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
+      super.VKT_Triggers!!.add(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
 
       // COMMANDS TRIGGERS
       commands?.forEach {
-        val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+        val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
         // TODO : Add commands triggers here
         super.VKT_Triggers!!.add(fieldTriggerArray)
       }
@@ -324,4 +290,8 @@ abstract class Report : Window() {
       // TODO
     }
   }
+
+  @PublishedApi
+  internal val `access$sourceFile`: String
+    get() = sourceFile
 }

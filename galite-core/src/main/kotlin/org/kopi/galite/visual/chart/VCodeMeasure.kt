@@ -30,10 +30,13 @@ import org.kopi.galite.visual.visual.VColor
  * @param idents  The string representations.
  */
 abstract class VCodeMeasure protected constructor(ident: String,
-                                                  color: VColor,
+                                                  color: VColor?,
                                                   private val type: String,
                                                   private val source: String,
                                                   private val idents: Array<String>) : VMeasure(ident, color) {
+
+  protected var names: Array<String?>? = null // array of external representations
+
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
@@ -60,5 +63,7 @@ abstract class VCodeMeasure protected constructor(ident: String,
     }
   }
 
-  protected var names: Array<String?>? = null // array of external representations
+  fun initLabels(labels: Array<String?>) {
+    this.names = labels
+  }
 }

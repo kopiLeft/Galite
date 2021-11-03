@@ -106,6 +106,9 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     } else {
       Autocomplete.OFF
     }
+
+    // Autoselection on focus
+    element.setProperty("autoselect", true)
   }
 
   var focusedTextField: InputTextField<*>? = null
@@ -682,18 +685,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     valueBeforeEdit = value
     // activate all actors related to this field.
     fieldConnector.setActorsEnabled(true)
-    // ensure the selection of the field content.
-    maybeSelectAll()
-  }
-
-  fun selectAll() {
-    //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
-    //  fun execute() {
-    //    if (focusedTextField == this@VInputTextField) {
-    //      super.selectAll()
-    //    }
-    //  }
-    //})
   }
 
   override fun onDetach(detachEvent: DetachEvent?) {
@@ -720,14 +711,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   //---------------------------------------------------
   // PRIVATE MEMBERS
   //---------------------------------------------------
-  /**
-   * Selects the content of this text input
-   */
-  private fun maybeSelectAll() {
-    if (value != null && value!!.isNotEmpty()) {
-      selectAll()
-    }
-  }
 
   /**
    * Sets the last focused input field.

@@ -25,6 +25,11 @@ open class VCommand(private var mode: Int,
                     val item: String,
                     internal val action: (() -> Unit)? = null) {
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var killed = false
+
   /**
    * Kill a command: this command will never been enabled again
    */
@@ -47,7 +52,7 @@ open class VCommand(private var mode: Int,
   }
 
   /**
-   * Returns true iff the command is active in given to mode.
+   * Returns true if the command is active in given to mode.
    *
    * @param    mode        the mode to test
    */
@@ -64,7 +69,7 @@ open class VCommand(private var mode: Int,
   fun getIdent(): String = item
 
   /**
-   * Returns true iff the command is active in given to mode.
+   * Returns true if the command is active in given to mode.
    *
    * @param    b            set to be active
    */
@@ -101,9 +106,4 @@ open class VCommand(private var mode: Int,
   open fun helpOnCommand(help: VHelpGenerator) {
     actor!!.helpOnCommand(help)
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private var killed = false
 }

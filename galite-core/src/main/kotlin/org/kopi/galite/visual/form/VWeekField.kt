@@ -22,7 +22,6 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
-import org.kopi.galite.visual.db.Query
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VWeekColumn
 import org.kopi.galite.visual.type.Week
@@ -31,6 +30,11 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
 class VWeekField(val bufferSize: Int) : VField(7, 1) {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var value: Array<Week?> = arrayOfNulls(2 * bufferSize)
 
   override fun hasAutofill(): Boolean = true
 
@@ -445,11 +449,6 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
       }
     }
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private var value: Array<Week?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     fun toText(value: Week?): String = value.toString()

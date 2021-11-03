@@ -27,6 +27,29 @@ import org.kopi.galite.visual.visual.VWindow
 
 abstract class VDictionaryForm : VForm, VDictionary {
 
+  // ----------------------------------------------------------------------
+  // QUERY SEARCH
+  // ----------------------------------------------------------------------
+
+  private var newRecord = false
+  private var lookup = false
+  private var closeOnSave = false
+  private var savedData: ArrayList<Any?>? = null
+  private var savedState: ArrayList<Int>? = null
+  private var block: VBlock? = null
+  /**
+   * The id of selected or new record
+   */
+  var iD = -1
+    private set
+
+  private var editID = -1
+
+  var isRecursiveQuery = false
+    private set
+
+  var isMenuQuery = false
+
   protected constructor(parent: DBContextHandler) : super(parent)
 
   protected constructor(parent: DBContext) : super(parent)
@@ -119,10 +142,6 @@ abstract class VDictionaryForm : VForm, VDictionary {
     return newRecord(parent)
   }
 
-  // ----------------------------------------------------------------------
-  // QUERY SEARCH
-  // ----------------------------------------------------------------------
-
   fun saveFilledField() {
     isRecursiveQuery = true
     savedData = arrayListOf()
@@ -192,25 +211,4 @@ abstract class VDictionaryForm : VForm, VDictionary {
       throw VRuntimeException(e)
     }
   }
-
-  // ----------------------------------------------------------------------
-  // QUERY SEARCH
-  // ----------------------------------------------------------------------
-  /**
-   * The id of selected or new record
-   */
-  var iD = -1
-    private set
-  private var editID = -1
-
-  var isRecursiveQuery = false
-    private set
-
-  var isMenuQuery = false
-  private var newRecord = false
-  private var lookup = false
-  private var closeOnSave = false
-  private var savedData: ArrayList<Any?>? = null
-  private var savedState: ArrayList<Int>? = null
-  private var block: VBlock? = null
 }

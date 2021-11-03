@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.report
 
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.print.DefaultPrintManager
 import org.kopi.galite.visual.print.PrintManager
 import org.kopi.galite.visual.visual.Action
@@ -27,10 +28,10 @@ import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.visual.VCommand
 import org.kopi.galite.visual.visual.VHelpGenerator
 
-class VReportCommand(val report: VReport,
-                     actor: VActor
-)
-  : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+class VReportCommand(
+  val report: VReport,
+  actor: VActor
+) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
   /**
    * Returns the actor
    */
@@ -102,6 +103,15 @@ class VReportCommand(val report: VReport,
       Constants.CMD_UNFOLD_COLUMN -> report.unfoldSelectedColumn()
       Constants.CMD_HELP -> report.showHelp()
     }
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    trigger    the  trigger
+   */
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    // DO NOTHING !
   }
 
   // ----------------------------------------------------------------------

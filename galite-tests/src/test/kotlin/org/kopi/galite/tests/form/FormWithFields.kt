@@ -30,8 +30,8 @@ class FormWithFields: Form() {
   override val title = "form with fields"
   val testPage = page("test page")
   val testPagse = page("test page")
-  val testBlock = insertBlock(BlockWithFields(), testPage)
-  val testBlocsk = insertBlock(BlockWithFields(), testPagse)
+  val testBlock = testPage.insertBlock(BlockWithFields())
+  val testBlocsk = testPagse.insertBlock(BlockWithFields())
 }
 
 class BlockWithFields : FormBlock(1, 1, "Test block") {

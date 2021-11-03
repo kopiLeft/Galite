@@ -22,7 +22,7 @@ import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
@@ -37,7 +37,8 @@ import org.kopi.galite.visual.visual.VCommand
  */
 class ReportField<T>(override val domain: Domain<T>,
                      internal val ident: String,
-                     val init: ReportField<T>.() -> Unit) : Field<T>(domain) {
+                     val init: ReportField<T>.() -> Unit,
+                     val source: String?) : Field<T>(domain) {
   /** the options of the field */
   internal var options: Int = 0
 
