@@ -179,7 +179,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
       if (newForm != null) {
         content.add(newForm)
       }
-      add(content)
+      add(field!!.widthStyler, content)
       addToFooter(close)
     }
 

@@ -22,6 +22,7 @@ import org.kopi.galite.visual.form.VListDialog
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -31,6 +32,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
+  internal var widthStyler = Div()
 
   init {
     isColumnReorderingAllowed = true
@@ -103,7 +105,8 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
       getColumnByKey(col.toString()).width = columnWidth.toString()+ "px"
       width += columnWidth
     }
-    setWidth(width + 20f, Unit.PIXELS)
+    widthStyler.setWidth(width + 20f, Unit.PIXELS)
+    widthStyler.setMinWidth(width + 20f, Unit.PIXELS)
   }
 
   /**
