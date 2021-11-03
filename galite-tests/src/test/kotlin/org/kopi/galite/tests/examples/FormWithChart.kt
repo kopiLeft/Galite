@@ -28,7 +28,6 @@ import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 

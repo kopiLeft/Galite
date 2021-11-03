@@ -50,19 +50,21 @@ class DocumentationChart : ReportSelectionForm() {
     icon =  "column_chart"  // icon is optional here
   }
 
-  val block2 = insertBlock(Block1()) {
-    command(item = graph) {
-      mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-      action = {
-        showChart(DocumentationChartC())
-      }
-    }
-  }
+  val block2 = insertBlock(Block1())
 
   //simple block
   inner class Block1 : FormBlock(1, 10, "Block1") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
+    }
+
+    init {
+      command(item = graph) {
+        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
+        action = {
+          showChart(DocumentationChartC())
+        }
+      }
     }
   }
 }

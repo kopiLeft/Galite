@@ -146,8 +146,8 @@ class ClientForm : ReportSelectionForm() {
   val clientsPage= page("Clients")
   val contactsPage= page("Contacts")
   val detailsPage= page("Details")
-  val clientsBlock = insertBlock(Clients(), clientsPage)
-  val salesBlock = insertBlock(Sales(), clientsPage)
+  val clientsBlock = clientsPage.insertBlock(Clients())
+  val salesBlock = clientsPage.insertBlock(Sales())
 
   inner class Clients : FormBlock(1, 100, "Clients") {
     val c = table(Client)

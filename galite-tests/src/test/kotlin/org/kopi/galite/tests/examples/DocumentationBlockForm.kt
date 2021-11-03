@@ -103,33 +103,33 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
 
-  val block1 = insertBlock(Block1()) {}
-  val block2 = insertBlock(Block2()) {}
+  val block1 = insertBlock(Block1())
+  val block2 = insertBlock(Block2())
   /*** TEST Block Border ***/
   //test border = Border.LINE
-  val block3 = insertBlock(Block3()) {}
+  val block3 = insertBlock(Block3())
   //test border = Border.RAISED
-  val block4 = insertBlock(Block4()) {}
+  val block4 = insertBlock(Block4())
   //test border = Border.LOWERED
-  val block5 = insertBlock(Block5()) {}
+  val block5 = insertBlock(Block5())
   //test border = Border.ETCHED
-  val block6 = insertBlock(Block6()) {}
+  val block6 = insertBlock(Block6())
 
   /*** TEST Block Options ***/
   //test NOCHART option
-  val block7 = insertBlock(Block7()) {}
+  val block7 = insertBlock(Block7())
   //test NODETAIL option
-  val block8 = insertBlock(Block8()) {}
+  val block8 = insertBlock(Block8())
   //test NODELETE option
-  val block9 = insertBlock(Block9()) {}
+  val block9 = insertBlock(Block9())
   //test NOINSERT option
-  val block10 = insertBlock(Block10()) {}
+  val block10 = insertBlock(Block10())
   //test NOMOVE option
-  val block11 = insertBlock(Block11()) {}
+  val block11 = insertBlock(Block11())
   //test ACCESS_ON_SKIPPED option
-  val block12 = insertBlock(Block12()) {}
+  val block12 = insertBlock(Block12())
   //test UPDATE_INDEX option
-  val block13 = insertBlock(Block13()) {}
+  val block13 = insertBlock(Block13())
 
   //test command access set access of block in mode insert and make command available in mode query and update
   val block14 = insertBlock(Block1()) {
@@ -150,115 +150,7 @@ class DocumentationBlockForm : DictionaryForm() {
   }
 
   //test triggers
-  val block16 = insertBlock(TriggersBlock()) {
-
-    // go to the block and enter field
-    trigger(PREQRY) {
-      println("PREQRY trigger !!")
-    }
-
-    // click on list
-    trigger(POSTQRY) {
-      println("POSTQRY trigger !!")
-    }
-
-    // click on list then delete
-    trigger(PREDEL) {
-      println("PREDEL trigger !!")
-    }
-
-    // click on list then delete
-    trigger(POSTDEL) {
-      println("POSTDEL trigger !!")
-    }
-
-    // put values click on insert command then save
-    trigger(PREINS) {
-      println("PREINS trigger !!")
-    }
-
-    // put values click on insert command then save
-    trigger(PREUPD) {
-      println("PREUPD trigger !!")
-    }
-
-    // click on list changes values then save
-    trigger(POSTUPD) {
-      println("POSTUPD trigger !!")
-    }
-
-    // enter values then insert command then save
-    trigger(PRESAVE) {
-      println("PRESAVE trigger !!")
-    }
-
-    // to check !
-    trigger(PREREC) {
-      println("PREREC trigger !!")
-    }
-
-    // to check !
-    trigger(POSTREC) {
-      println("POSTREC trigger !!")
-    }
-
-    // enter block
-    trigger(PREBLK) {
-      println("PREBLK trigger !!")
-    }
-
-    // leave block
-    trigger(POSTBLK) {
-      println("POSTBLK trigger !!")
-    }
-
-    // enter block enter values in fields then leave it
-    trigger(VALBLK) {
-      println("VALBLK trigger !!")
-    }
-
-    // to check !
-    trigger(VALREC) {
-      println("VALBLK trigger !!")
-    }
-
-    // click on insert command
-    trigger(DEFAULT) {
-      println("DEFAULT trigger !!")
-    }
-
-    // enter block
-    trigger(INIT) {
-      println("INIT trigger !!")
-    }
-
-    // check !
-    trigger(RESET) {
-      false
-    }
-
-    command(item = list) {
-      action = {
-        recursiveQuery()
-      }
-    }
-    command(item = InsertMode) {
-      action = {
-        insertMode()
-      }
-    }
-    command(item = saveBlock) {
-      action = {
-        saveBlock()
-      }
-    }
-
-    command(item = deleteBlock) {
-      action = {
-        deleteBlock()
-      }
-    }
-  }
+  val block16 = insertBlock(TriggersBlock())
 
   //simple block
   inner class Block1 : FormBlock(1, 10, "Block1") {
@@ -420,6 +312,116 @@ class DocumentationBlockForm : DictionaryForm() {
     val name = visit(domain = STRING(20), position = at(2, 1)) {
       label = "name"
       columns(t.INS)
+    }
+
+    init {
+
+      // go to the block and enter field
+      trigger(PREQRY) {
+        println("PREQRY trigger !!")
+      }
+
+      // click on list
+      trigger(POSTQRY) {
+        println("POSTQRY trigger !!")
+      }
+
+      // click on list then delete
+      trigger(PREDEL) {
+        println("PREDEL trigger !!")
+      }
+
+      // click on list then delete
+      trigger(POSTDEL) {
+        println("POSTDEL trigger !!")
+      }
+
+      // put values click on insert command then save
+      trigger(PREINS) {
+        println("PREINS trigger !!")
+      }
+
+      // put values click on insert command then save
+      trigger(PREUPD) {
+        println("PREUPD trigger !!")
+      }
+
+      // click on list changes values then save
+      trigger(POSTUPD) {
+        println("POSTUPD trigger !!")
+      }
+
+      // enter values then insert command then save
+      trigger(PRESAVE) {
+        println("PRESAVE trigger !!")
+      }
+
+      // to check !
+      trigger(PREREC) {
+        println("PREREC trigger !!")
+      }
+
+      // to check !
+      trigger(POSTREC) {
+        println("POSTREC trigger !!")
+      }
+
+      // enter block
+      trigger(PREBLK) {
+        println("PREBLK trigger !!")
+      }
+
+      // leave block
+      trigger(POSTBLK) {
+        println("POSTBLK trigger !!")
+      }
+
+      // enter block enter values in fields then leave it
+      trigger(VALBLK) {
+        println("VALBLK trigger !!")
+      }
+
+      // to check !
+      trigger(VALREC) {
+        println("VALBLK trigger !!")
+      }
+
+      // click on insert command
+      trigger(DEFAULT) {
+        println("DEFAULT trigger !!")
+      }
+
+      // enter block
+      trigger(INIT) {
+        println("INIT trigger !!")
+      }
+
+      // check !
+      trigger(RESET) {
+        false
+      }
+
+      command(item = list) {
+        action = {
+          recursiveQuery()
+        }
+      }
+      command(item = InsertMode) {
+        action = {
+          insertMode()
+        }
+      }
+      command(item = saveBlock) {
+        action = {
+          saveBlock()
+        }
+      }
+
+      command(item = deleteBlock) {
+        action = {
+          deleteBlock()
+        }
+      }
     }
   }
 }

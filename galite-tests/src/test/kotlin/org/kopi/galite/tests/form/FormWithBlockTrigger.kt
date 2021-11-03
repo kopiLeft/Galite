@@ -30,8 +30,8 @@ object FormWithBlockTrigger: Form() {
   override val title = "form for test"
   val testPage = page("test page")
   val menu = menu("Action")
-  val firstBlock = insertBlock(BlockWithTrigger1, testPage)
-  val secondVlock = insertBlock(BlockWithTrigger2, testPage)
+  val firstBlock = testPage.insertBlock(BlockWithTrigger1)
+  val secondVlock = testPage.insertBlock(BlockWithTrigger2)
 }
 
 object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {

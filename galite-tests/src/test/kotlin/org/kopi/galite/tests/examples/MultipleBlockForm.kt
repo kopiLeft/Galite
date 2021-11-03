@@ -27,7 +27,6 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
 
 class MultipleBlockForm : DictionaryForm() {
   override val locale = Locale.UK
@@ -151,7 +150,7 @@ class MultipleBlockForm : DictionaryForm() {
     }
   }
 
-  val block2 = insertBlock(Centers(), page1) {
+  val block2 = page1.insertBlock(Centers()) {
     command(item = resetBlock) {
       action = {
         resetBlock()
@@ -168,7 +167,11 @@ class MultipleBlockForm : DictionaryForm() {
       }
     }
   }
-  val block3 = insertBlock(SimpleBlock(), page2)
+  val block3 = page2.insertBlock(SimpleBlock()) {
+    command(resetBlock)  {
+
+    }
+  }
 
   class Centers : FormBlock(20, 20, "Centers") {
     val c = table(Center)

@@ -104,46 +104,9 @@ class DocumentationFieldsForm : DictionaryForm() {
     icon = "delete"
   }
 
-  val block = insertBlock(FiledsBlock()) {
-  }
-
-  val block2 = insertBlock(ColumnsBlock()) {
-    command(item = list) {
-      action = {
-        recursiveQuery()
-      }
-    }
-    command(item = saveBlock) {
-      action = {
-        insertMode()
-        saveBlock()
-      }
-    }
-  }
-
-  val block3 = insertBlock(TriggersFieldBlock()) {
-    command(item = list) {
-      action = {
-        recursiveQuery()
-      }
-    }
-    command(item = InsertMode) {
-      action = {
-        insertMode()
-      }
-    }
-    command(item = saveBlock) {
-      action = {
-        saveBlock()
-      }
-    }
-
-    command(item = deleteBlock) {
-      action = {
-        deleteBlock()
-      }
-    }
-  }
+  val block = insertBlock(FiledsBlock())
+  val block2 = insertBlock(ColumnsBlock())
+  val block3 = insertBlock(TriggersFieldBlock())
 
   inner class FiledsBlock : FormBlock(1, 10, "Training") {
 
@@ -405,6 +368,20 @@ class DocumentationFieldsForm : DictionaryForm() {
           }
         }
      */
+
+    init  {
+      command(item = list) {
+        action = {
+          recursiveQuery()
+        }
+      }
+      command(item = saveBlock) {
+        action = {
+          insertMode()
+          saveBlock()
+        }
+      }
+    }
   }
 
   /*** Field Triggers ***/
@@ -522,6 +499,30 @@ class DocumentationFieldsForm : DictionaryForm() {
       columns(t.UPD)
       trigger(PREDEL) {
         println("PREDEL trigger !!!")
+      }
+    }
+
+    init {
+      command(item = list) {
+        action = {
+          recursiveQuery()
+        }
+      }
+      command(item = InsertMode) {
+        action = {
+          insertMode()
+        }
+      }
+      command(item = saveBlock) {
+        action = {
+          saveBlock()
+        }
+      }
+
+      command(item = deleteBlock) {
+        action = {
+          deleteBlock()
+        }
       }
     }
   }

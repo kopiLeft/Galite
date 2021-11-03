@@ -50,18 +50,20 @@ class DocumentationReportTriggers : Form() {
 
     /** Calling reports **/
   // call report with  WindowController.windowController.doNotModal
-  val block2 = insertBlock(Block1()) {
-    command(item = report) {
-      action = {
-        WindowController.windowController.doNotModal(DocumentationReportTriggersR())
-      }
-    }
-  }
+  val block2 = insertBlock(Block1())
 
   //simple block
   inner class Block1 : FormBlock(1, 10, "Block1") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
+    }
+
+    init {
+      command(item = report) {
+        action = {
+          WindowController.windowController.doNotModal(DocumentationReportTriggersR())
+        }
+      }
     }
   }
 }

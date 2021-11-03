@@ -80,10 +80,18 @@ abstract class Form : Window() {
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
+   * @receiver                           the page containing the block
+   */
+  fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
+    this.form.insertBlock(block, this, init)
+
+  /**
+   * Adds a new block to this form.
+   *
+   * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
-  @Deprecated("Use FormPage.insertBlock(block)")
-  fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+  private fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
     }
@@ -99,7 +107,6 @@ abstract class Form : Window() {
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
-   * @param        formPage              the page containing the block
    */
   fun <T : FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
 
@@ -347,12 +354,3 @@ abstract class Form : Window() {
     }
   }
 }
-
-/**
- * Adds a new block to this form.
- *
- * @param        block                 the block to insert
- * @receiver                           the page containing the block
- */
-fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
-  this.form.insertBlock(block, this, init)

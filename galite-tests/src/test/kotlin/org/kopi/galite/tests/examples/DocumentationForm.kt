@@ -26,7 +26,6 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
 
 class DocumentationForm : DictionaryForm() {
 
@@ -116,8 +115,8 @@ class DocumentationForm : DictionaryForm() {
   val p2 = page("Page2")
   // insert blocks inside pages
   val block1 = p1.insertBlock(Block1())
-  val block2 = insertBlock(Block1(), p1) {}
-  val block3 = insertBlock(Block1(), p2) {}
+  val block2 = p1.insertBlock(Block1())
+  val block3 = p2.insertBlock(Block1())
 
   //simple block
   inner class Block1 : FormBlock(1, 10, "Block1") {

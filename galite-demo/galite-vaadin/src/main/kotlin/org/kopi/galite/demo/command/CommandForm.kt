@@ -92,7 +92,7 @@ class CommandForm : ReportSelectionForm() {
     icon = "report"  // icon is optional here
   }
 
-  val tb1 = insertBlock(BlockCommand(), page) {
+  val tb1 = page.insertBlock(BlockCommand()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)

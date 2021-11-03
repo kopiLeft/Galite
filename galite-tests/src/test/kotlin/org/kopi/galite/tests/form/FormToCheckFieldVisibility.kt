@@ -29,7 +29,7 @@ object FormToCheckFieldVisibility: Form() {
   override val locale = Locale.UK
   override val title = "form for test fields visibility"
   val testPage = page("test page")
-  val testBlock = insertBlock(blockToCheckFieldVisibility, testPage)
+  val testBlock = testPage.insertBlock(blockToCheckFieldVisibility)
 }
 
 object blockToCheckFieldVisibility : FormBlock(1, 1, "Test block") {

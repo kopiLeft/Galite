@@ -24,7 +24,6 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
-import org.kopi.galite.visual.dsl.form.insertBlock
 
 class FormWithAlignedBlockWithMultiplePages : Form() {
   override val locale = Locale.UK

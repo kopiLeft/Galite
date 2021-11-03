@@ -36,7 +36,6 @@ import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.insertBlock
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
 import org.kopi.galite.visual.form.VConstants

@@ -55,7 +55,7 @@ class ProductForm : ReportSelectionForm() {
     icon = "report"  // icon is optional here
   }
 
-  val block = insertBlock(BlockProduct(), page)
+  val block = page.insertBlock(BlockProduct())
 
   override fun createReport(): Report {
     return ProductReport()

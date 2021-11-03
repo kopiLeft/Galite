@@ -149,7 +149,7 @@ object FormWithNullableColumn : DictionaryForm() {
 
   val FormWithList = FormWithList()
 
-  val blockWithTwoTablesInnerJoin = insertBlock(FormWithTwoTablesInnerJoin(), p1) {
+  val blockWithTwoTablesInnerJoin = p1.insertBlock(FormWithTwoTablesInnerJoin()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -164,7 +164,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockWithTwoTablesLeftJoin = insertBlock(FormWithTwoTablesLeftJoin(), p1) {
+  val blockWithTwoTablesLeftJoin = p1.insertBlock(FormWithTwoTablesLeftJoin()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -179,7 +179,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockWithThreeTablesLeftJoin = insertBlock(FormWithThreeTablesLeftJoin(), p1) {
+  val blockWithThreeTablesLeftJoin = p1.insertBlock(FormWithThreeTablesLeftJoin()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -194,7 +194,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockWithThreeTablesInnerJoin = insertBlock(FormWithThreeTablesInnerJoin(), p1) {
+  val blockWithThreeTablesInnerJoin = p1.insertBlock(FormWithThreeTablesInnerJoin()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -209,7 +209,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockWithThreeTablesInnerJoinInOneField = insertBlock(FormWithThreeTablesInnerJoinInField(), p1) {
+  val blockWithThreeTablesInnerJoinInOneField = p1.insertBlock(FormWithThreeTablesInnerJoinInField()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -224,7 +224,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockWithThreeTablesLeftJoinInOneField = insertBlock(FormWithThreeTablesLeftJoinInField(), p1) {
+  val blockWithThreeTablesLeftJoinInOneField = p1.insertBlock(FormWithThreeTablesLeftJoinInField()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -239,7 +239,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockThreeTablesMiddleLeftJoinInOneField = insertBlock(FormThreeTablesMiddleLeftJoinInField(), p1) {
+  val blockThreeTablesMiddleLeftJoinInOneField = p1.insertBlock(FormThreeTablesMiddleLeftJoinInField()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -254,7 +254,7 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
-  val blockThreeTablesEndLeftJoinInOneField = insertBlock(FormThreeTablesEndLeftJoinInField(), p1) {
+  val blockThreeTablesEndLeftJoinInOneField = p1.insertBlock(FormThreeTablesEndLeftJoinInField()) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")

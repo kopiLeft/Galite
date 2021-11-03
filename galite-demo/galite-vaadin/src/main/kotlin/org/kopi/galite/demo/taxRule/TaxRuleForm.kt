@@ -92,7 +92,7 @@ class TaxRuleForm : ReportSelectionForm() {
     icon = "save"
   }
 
-  val block = insertBlock(TaxRuleBlock(), page) {
+  val block = page.insertBlock(TaxRuleBlock()) {
     command(item = saveBlock) {
       action = {
         println("-----------save-----------------" + informations.value)
