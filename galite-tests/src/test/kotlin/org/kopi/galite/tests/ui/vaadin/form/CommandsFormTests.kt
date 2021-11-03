@@ -325,7 +325,7 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     val columns = reportTable.columns
     val list = mutableListOf(*columns.toTypedArray())
-    val reportColumn = reportTable.model.accessibleColumns.single { it is VFixnumColumn }!!
+    val reportColumn = reportTable.model.accessibleColumns.single { it is VDecimalColumn }!!
 
     list.removeLast()
     reportTable.setColumnOrder(columns.last(), *(list).toTypedArray())
