@@ -45,8 +45,8 @@ class FormBlockIndex(val ident: String, val message: String, private val number:
     }
 
   operator fun plus(index: FormBlockIndex): FormBlockIndex =
-    FormBlockIndex("", "", -1).apply {
-      this.indices = (indices + index.indices).toMutableList()
+    FormBlockIndex("", "", -1).also {
+      it.indices = (indices + index.indices).toMutableList()
     }
 
   // ----------------------------------------------------------------------
