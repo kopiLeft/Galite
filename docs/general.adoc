@@ -25,9 +25,9 @@ Every form or report field in Galite have field type that can be one of the 11 r
 A STRING is used to enter characters which can be either letters, numbers or both. The width has always to be given. Moreover, you can optionally indicate how many rows it will contain and how many will finally be displayed on the form. If these optional arguments are used, you have to indicate the carriage return method by specifying either the FIXED ON or the FIXED OFF option. +
 There are also three other options you can use in order to modify the String's case :
 
-- Convert.NAME  (Converts the first letter of each word to capital letter)
-- Convert.UPPER (Convert the whole text to capital letters)
-- Convert.LOWER (Converts the whole text to normal letters)
+- Convert.NAME  (Converts the first letter of each word to capital letter) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L127-L130[Demo]]
+- Convert.UPPER (Convert the whole text to capital letters) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L119-L122[Demo]]
+- Convert.LOWER (Converts the whole text to normal letters) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L123-L126[Demo]]
 
 *Syntax:*
 
@@ -55,7 +55,7 @@ styled      :  true   // present rich text
                false  // present text area
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L113-L130[Demo]]
 
 [source,kotlin]
 ----
@@ -78,7 +78,7 @@ For example, you can write `STRING(40, 10, 4)` or `STRING(40)` but you have to w
 
 *Syntax:*
 
-[source,java]
+[source,kotlin]
 ----
 TextType      :
 TEXT(width: Integer ,height: Integer ,visible: Integer, [FixOption])
@@ -87,7 +87,7 @@ TEXT(width: Integer ,height: Integer ,visible: Integer, [FixOption])
                 FIXED.OFF
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L132-L148[Demo]]
 
 [source,kotlin]
 ----
@@ -111,8 +111,7 @@ This field type is used to insert an illustration or a picture. When introducing
 ImageType :
 IMAGE(width: Int, height: Int)
 ----
-
-*Example:*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L150-L153[Demo]]
 
 [source,kotlin]
 ----
@@ -142,7 +141,7 @@ DECIMAL(width: Int, scale: Int) {
 }
 ----
 
-*Example:*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L155-L161[Demo]]
 
 [source,kotlin]
 ----
@@ -169,7 +168,7 @@ INT(width: Int) {
 }
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L163-L169[Demo]]
 
 [source,kotlin]
 ----
@@ -209,7 +208,7 @@ CodeBooleanList : CodeBoolean  [CodeBooleanList]
 CodeBoolean     : code : String "keyOf" value : Boolean
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L560-L565[Demo]]
 
 [source,kotlin]
 ----
@@ -242,7 +241,7 @@ CodeIntegerList : CodeInteger  [CodeIntegerList]
 CodeInteger     : code : String "keyOf" value : Int
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L567-L577[Demo]]
 
 [source,kotlin]
 ----
@@ -278,7 +277,7 @@ CodeFixedList : CodeFixed  [CodeFixedList]
 
 CodeFixed     : code : String "keyOf" value : Decimal
 ----
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L579-L584[Demo]]
 
 [source,kotlin]
 ----
@@ -309,7 +308,7 @@ CodeStringType : CodeString  [CodeStringType]
 
 CodeString     : code : String "keyOf" value : String
 ----
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L585-L590[Demo]]
 
 [source,kotlin]
 ----
@@ -343,7 +342,7 @@ ListColumns : ListColumn  [ListColumns]
 ListColumn  : SimpleName "keyOf" TableName.columnName
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L592-L599[Demo]]
 
 [source,kotlin]
 ----

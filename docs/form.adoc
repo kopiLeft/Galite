@@ -59,21 +59,21 @@ AccessModifier:   mustFill()
                   hidden()
 ----
 
- * mustFill : As indicated, a MUSTFILL field has to be filled by the user.
- * visit    : A VISIT field is a field which the user can fill if he wants to.
- * skipped  : A SKIPPED field is a field which is displayed on the form but which the user can not overwrite. A field is skipped if the user needs to know the information written in it.
- * hidden   : A HIDDEN field that is not displayed on the form as the information it provides is of no importance for the user, this kind of fields is usually used for database table join operations or for ID fields.
+* mustFill : As indicated, a MUSTFILL field has to be filled by the user.
+* visit    : A VISIT field is a field which the user can fill if he wants to.
+* skipped  : A SKIPPED field is a field which is displayed on the form but which the user can not overwrite. A field is skipped if the user needs to know the information written in it.
+* hidden   : A HIDDEN field that is not displayed on the form as the information it provides is of no importance for the user, this kind of fields is usually used for database table join operations or for ID fields.
 
 As the user moves from a field to another when filling the form, the current field is always colored in red.
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L194-L214[Demo]]
+
 [source,kotlin]
 ----
 val password = mustFill(domain = STRING(20), position = at(2, 1)) {
   ...
 }
-   
+
 val id = hidden(domain = INT(20)) {
   ...
 }
@@ -84,13 +84,13 @@ val id = hidden(domain = INT(20)) {
 This entry defines the position of the field in the current block. HIDDEN fields does not have positions, and in multiple block (Defined in the  Blocks creation Section of this document) you may use the NO DETAIL Block option to pass positioning fields.
 There are two possibilities to define the field position.
 
- * *Absolute Position With the function `at()`*
+* *Absolute Position With the function `at()`*
 
 You can define it according to one integer or more: ::
 
- ** at(row)
- ** at(row , column)
- ** at(row, column..multifield)
+** at(row)
+** at(row , column)
+** at(row, column..multifield)
 
 *Syntax:*
 [source,kotlin]
@@ -106,26 +106,26 @@ FieldPosition : at(row: Int  [,column: Int])
                 follow(otherField)
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L211-L214[Demo]]
+
 [source,kotlin]
 ----
 val name = visit(domain = STRING(20), position = at(1, 1..4)) {
   ...
 }
 ----
-The first integer indicates the row number while the second defines the column. 
+The first integer indicates the row number while the second defines the column.
 In fact, Galite automatically divides up the window in rows and columns when setting up a form. +
- When defining the width of a column, thus,
+When defining the width of a column, thus,
 it always adopts the width of the longest field. Since the form wide is not unlimited,
 you can put a long field in two or more columns in order to spare place as it is the case in the example above.
 
- * *Relative Position With follow*
+* *Relative Position With follow*
 
 You can also make use of the following structure : `follow(otherField)`
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L203-L206[Demo]]
+
 [source,kotlin]
 ----
 val age = visit(domain = INT(3), position = follow(name)) {
@@ -146,7 +146,8 @@ FieldLabel : label = "NAME OF THE FIELD"
 
 If you don't want your field to have a label, you can set the property label to empty.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L200-L202[Demo]]
+
 [source,kotlin]
 ----
 val secondName = visit(domain = STRING(20), position = at(1, 1)) {
@@ -160,13 +161,13 @@ val secondName = visit(domain = STRING(20), position = at(1, 1)) {
 this property is used to insert an explanation text for the application user in order to help him filling in the form. This Help text will then be displayed when the user places the mouse on the field.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 HelpText:   help = "HELP TEXT"
 ----
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L210-L213[Demo]]
+
 [source,kotlin]
 ----
 val lesson = visit(domain = STRING(20), position = at(1, 1)) {
@@ -180,7 +181,8 @@ val lesson = visit(domain = STRING(20), position = at(1, 1)) {
 
 The field type is a required entry, you may enter a predefined field type :
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L113-L192[Demo]]
+
 [source,kotlin]
 ----
 val name = visit(domain = STRING(20), position = at(1, 1)) {
@@ -194,7 +196,8 @@ val age = visit(domain = INT(3), position = at(1, 2)) {
 
 You can also use self defined field types that you have previously defined in the type definition section of your form.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L171-L192[Demo]]
+
 [source,kotlin]
 ----
 val day = mustFill(domain = Days, position = at(1, 1)) {
@@ -213,7 +216,8 @@ This property is used to define the localization of the field's content inside t
 * FieldAlignment.LEFT the value is displayed at the left inside the field
 * FieldAlignment.CENTER the value is centered in the field
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L216-L231[Demo]]
+
 [source,kotlin]
 ----
 val name = visit(domain = STRING(20), position = at(1, 1)) {
@@ -232,7 +236,8 @@ This command is used to make a field accept to drop files into it, meaning you c
 DroppableDefinition : "droppable" ExtensionList
 ExtentionList       : extension : String [,ExtenstionList]
 ----
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L234-L249[Demo]]
+
 [source,kotlin]
 ----
 val cv = visit(domain = STRING(20), position = at(4, 1)) {
@@ -256,20 +261,21 @@ val cv = visit(domain = STRING(20), position = at(4, 1)) {
 In this example, you can drag pdf files and drop them in the field named "cv".
 
 ===== Field Options
- 
+
 In this part of the field definition, you can use one or more option from the 9 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().
 
- * NOECHO               : If this option is used, characters typed in the field will not be displayed and a star(*) will be displayed instead, this option is useful for password fields.
- * NOEDIT               : This option makes it impossible to change the data of the field or to overwrite it.
- * SORTABLE             : This option adds two opposed arrows icons(up and down) just before the field, clicking on the icon changes the way data are sorted in the field, you can click the icon three times to have ascending sort, descending sort and default sort, 
- * TRANSIENT            : This option make the field transient, meaning that the system can no trail it, if a transaction  calls this field and then this transaction is aborted, the field will not be able to backup or roll-back to its original value, besides this option makes changes ignored for this field.
- * NO DELETE ON UPDATE  : If the field is a lookup is a column of a lookup table, using this option prevent the system to clear the field when inserting new rows or updating rows.
- * NO DETAIL            : If the block is in detailed, using this option on a field make it invisible in the detail.
- * NO CHART             : If the block is multiple, using this option on a field exclude it from the chart. 
- * QUERY UPPER          : Whatever the string you input, this option will make Galite transform it to capital letters.
- * QUERY LOWER          : the opposite of the previous option it transform strings to lower case.
+* NOECHO               : If this option is used, characters typed in the field will not be displayed and a star(*) will be displayed instead, this option is useful for password fields. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L252-L256[Demo]]
+* NOEDIT               : This option makes it impossible to change the data of the field or to overwrite it. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L257-L261[Demo]]
+* SORTABLE             : This option adds two opposed arrows icons(up and down) just before the field, clicking on the icon changes the way data are sorted in the field, you can click the icon three times to have ascending sort, descending sort and default sort. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L262-L266[Demo]]
+* TRANSIENT            : This option make the field transient, meaning that the system can no trail it, if a transaction  calls this field and then this transaction is aborted, the field will not be able to backup or roll-back to its original value, besides this option makes changes ignored for this field. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L272-L276[Demo]]
+* NO DELETE ON UPDATE  : If the field is a lookup is a column of a lookup table, using this option prevent the system to clear the field when inserting new rows or updating rows. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L252-L256[Demo]]
+* NO DETAIL            : If the block is in detailed, using this option on a field make it invisible in the detail. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L277-L281[Demo]]
+* NO CHART             : If the block is multiple, using this option on a field exclude it from the chart. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L282-L286[Demo]]
+* QUERY UPPER          : Whatever the string you input, this option will make Galite transform it to capital letters. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L287-L291[Demo]]
+* QUERY LOWER          : the opposite of the previous option it transform strings to lower case. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L292-L296[Demo]]
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L251-L296[Demo]]
+
 [source,kotlin]
 ----
 val password = mustFill(domain = STRING(20), position = at(2, 1)) {
@@ -284,11 +290,11 @@ val password = mustFill(domain = STRING(20), position = at(2, 1)) {
 The columns method option is used to establish a connection between a certain column in the database with the field.Once such connection established, the field will have a direct access to the database column allowing insertions, modification ...+
 You may enter this option in order to specify which table and which column the field refers. +
 The same field can refer to more than one column.
- You can also use the key method option to specify a key column in the database or the nullable method option to specify an outer joint.+
+You can also use the key method option to specify a key column in the database or the nullable method option to specify an outer joint.+
 Two more option are available with the `columns` function, the index and the priority options.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 FieldColumns :
@@ -301,8 +307,8 @@ ColumnsBody  : [ColumnIndex] [ColumnPriority]
 ColumnList   : Column  [, Column ]
 Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]
 ----
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L312-L319[Demo]]
+
 [source,kotlin]
 ----
  val id = hidden(domain = INT(20)) {
@@ -314,8 +320,8 @@ Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]
 
 NOTE: that a field can be connected to more than one table and column. In this case, the statement you will type will be:
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L341-L345[Demo]]
+
 [source,kotlin]
 ----
 val id = hidden(domain = INT(20)) {
@@ -326,14 +332,14 @@ val id = hidden(domain = INT(20)) {
 ----
 In this example, `I` is the invoices table and `ID` is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.
 
- * *Indexes*
+* *Indexes*
 
 This option is used to define a value in the database which is to remain unique so that it can not appear anymore in another field of the same column. you need to use the index method to declare an index in Galite.
 
 Let’s sum up with the following syntax:
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ColumnIndex : "val i = index(message : String)"
@@ -341,10 +347,10 @@ ColumnIndex : "val i = index(message : String)"
 
 If two or more fields are given the same index value, it means that two similar combinations of these field values will not be accepted.
 
-For example, two different lessons cannot be given in the same room. In this case, the three fields, namely the fields "professor", "time" and "lesson" are to be attributed the same index. Thus, at least one of the three values needs to be changed so that the combination can be accepted by the machine. 
+For example, two different lessons cannot be given in the same room. In this case, the three fields, namely the fields "professor", "time" and "lesson" are to be attributed the same index. Thus, at least one of the three values needs to be changed so that the combination can be accepted by the machine.
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L320-L330[Demo]]
+
 [source,kotlin]
 ----
 val i = index(message = "this should be unique")
@@ -375,8 +381,8 @@ val time = mustFill(domain = STRING(20), position = at(3, 1)) {
 
 However, this example would implicate a professor can give two different lessons at the same time. In order to avoid such errors, you can attribute one field two or more indexes. So you can associate the two fields "professor" and "time" together. Thus, you will have:
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L348-L370[Demo]]
+
 [source,kotlin]
 ----
 mustFill(domain = LONG(20)) {
@@ -406,10 +412,10 @@ mustFill(domain = STRING(20)) {
 
 The index value is ascendant. When attributing an index value to a field combination, you shall always take the value nexting that you have taken the last.
 
- * *Priority*
+* *Priority*
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ColumnPriority:   "priority = Integer"
@@ -418,21 +424,33 @@ This option is used in order to define the column order within a list when this 
 
 We shall notice that negative values are also permitted in this option. However, the minus sign ("-") standing before the number does not have any influence over its value but simply indicates the way all the information will be sorted out within a column. Actually, the different fields are always sorted in the ascending way, i.e from A to Z in case of an alphabetical text and from 1 to x+1 for numbers. Now, if the integer is preceded by a minus, the column content will be sorted in the other way round.
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L314-L330[Demo]]
+
 [source,kotlin]
 ----
-val i = index(message = "this should be unique")"
-
 val surname = mustFill(domain = STRING(20), position = at(1, 1)) {
     label = "Surname"
     column(User.Surname)  {
         priority = 3
     }
 }
+
+val name = mustFill(domain = STRING(20), position = at(1, 2)) {
+    label = "Name"
+    column(User.Name)  {
+        priority = 4
+    }
+}
+
+val birthDate = mustFill(domain = DATE, position = at(2, 1)) {
+    label = "Date of Birth"
+    column(User.Surname)  {
+        priority = 1
+    }
+}
 ----
 
-If columns "Surname", "Name" and "Date of Birth" are 
+If columns "Surname", "Name" and "Date of Birth" are
 respectively given the priorities 3,4 and 1, "Name" will come
 first and will be followed by "Surname" and "Date of Birth".
 The same order applies with the values 3, -4 and 1, with the only
@@ -445,7 +463,7 @@ Moreover, two columns with the same priority will be displayed according to the 
 Once you have defined the columns , you may define the field commands.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ModeAndCommands :
@@ -465,29 +483,34 @@ AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE
 
 The command can be a Galite predefined command or you can make new Actors and commands you can use in the field command definition.
 
-Example:
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L332-L339[Demo]]
+
 [source,kotlin]
 ----
-command(item = clear) {
+val commandField = visit(domain = STRING(20), position = at(2, 1)) {
+  label = "field contains command"
+
+  command(item = autoFill) {
     mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
     action = {
-       ...
+      ...
     }
+  }
 }
 
-val clear = actor()
+val autoFill = actor()
 ----
 
 ===== Field Command using Modes
 
 All the previous command definition ways can be preceded by one mode or more. There are three sorts of mode which are to be sorted according to the following hierarchy:
 
- * QUERY to start an inquiry within the database
- * INSERT to create a new row in the database
- * UPDATE to enter new information within a row
+* QUERY to start an inquiry within the database
+* INSERT to create a new row in the database
+* UPDATE to enter new information within a row
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L332-L339[Demo]]
+
 [source,kotlin]
 ----
 command(item = insertMode) {
@@ -503,20 +526,21 @@ This method type is used to change the access to the field using the block Mode.
 
 We have 12 method allow us to change the visibility of our field :
 
- * onQueryHidden()              : in mode Query set field to Hidden access
- * onQuerySkipped()             : in mode Query set field to Skipped access
- * onQueryVisit()               : in mode Query set field to Visit access
- * onQueryMustFill()            : in mode Query set field to MustFill access
- * onInsertHidden()             : in mode Insert set field to Hidden access
- * onInsertSkipped()            : in mode Insert set field to Skipped access
- * onInsertVisit()              : in mode Insert set field to Visit access
- * onInsertMustFill()           : in mode Insert set field to MustFill access
- * onUpdateHidden()             : in mode Update set field to Hidden access
- * onUpdateSkipped()            : in mode Update set field to Skipped access
- * onUpdateVisit()              : in mode Update set field to Visit access
- * onUpdateMustFill()           : in mode Update set field to MustFill access
+* onQueryHidden()              : in mode Query set field to Hidden access
+* onQuerySkipped()             : in mode Query set field to Skipped access
+* onQueryVisit()               : in mode Query set field to Visit access
+* onQueryMustFill()            : in mode Query set field to MustFill access
+* onInsertHidden()             : in mode Insert set field to Hidden access
+* onInsertSkipped()            : in mode Insert set field to Skipped access
+* onInsertVisit()              : in mode Insert set field to Visit access
+* onInsertMustFill()           : in mode Insert set field to MustFill access
+* onUpdateHidden()             : in mode Update set field to Hidden access
+* onUpdateSkipped()            : in mode Update set field to Skipped access
+* onUpdateVisit()              : in mode Update set field to Visit access
+* onUpdateMustFill()           : in mode Update set field to MustFill access
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/form/FormToCheckFieldVisibility.kt#L43-L79[Demo]]
+
 [source,kotlin]
 ----
  val file = visit(domain = STRING(25), position = at(3, 1)) {
@@ -531,7 +555,7 @@ if the block is in the `QUERY` or the `INSERT` mode.
 
 ===== Field Triggers
 
-Triggers are events that you can use to execute actions when they occur, there are field triggers, block triggers and form triggers that you can use following this syntax : 
+Triggers are events that you can use to execute actions when they occur, there are field triggers, block triggers and form triggers that you can use following this syntax :
 
 *Syntax*
 [source,kotlin]
@@ -545,40 +569,41 @@ TrigerAction : {KOTLIN code}
 
 Field Triggers are events that concern the fields behavior, here is a list of all Galite field triggers available :
 
-  * PREFLD     : is executed upon entry of field
+* PREFLD     : is executed upon entry of field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L393-L400[Demo]]
 
-  * POSTFLD    : is executed upon exit of field
-  
-  * POSTCHG    : is executed on field content change 
+* POSTFLD    : is executed upon exit of field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L401-L407[Demo]]
 
-  * PREVAL     : is executed before validating any new entry
+* POSTCHG    : is executed on field content change [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L409-L415[Demo]]
 
-  * VALFLD     : is executed after field change and validation
+* PREVAL     : is executed before validating any new entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L417-L423[Demo]]
 
-  * VALIDATE   : this is the same trigger as VALFLD
+* VALFLD     : is executed after field change and validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L425-L431[Demo]]
 
-  * DEFAULT    : Defines the default value of the field to be set if the setDefault() method is called (this method is automatically called when the user choose the insert command)
+* VALIDATE   : this is the same trigger as VALFLD [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L433-L439[Demo]]
 
-  * FORMAT     : Not defined actually
+* DEFAULT    : Defines the default value of the field to be set if the setDefault() method is called (this method is automatically called when the user choose the insert command) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L441-L447[Demo]]
 
-  * ACCESS     : ACCESS is a special trigger that defines how a field can be accessed. This trigger must return one of these values ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL.
+* FORMAT     : Not defined actually
 
-  * VALUE      : equates the value of two fields
+* ACCESS     : ACCESS is a special trigger that defines how a field can be accessed. This trigger must return one of these values ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L450-L454[Demo]]
 
-  * AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field 
+* VALUE      : equates the value of two fields [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L456-L462[Demo]]
 
-  * PREINS     : is executed before inserting a row of the database
+* AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L464-L470[Demo]]
 
-  * PREUPD     : is executed before updating a row of the database
+* PREINS     : is executed before inserting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L472-L482[Demo]]
 
-  * PREDEL     : is executed before deleting a row of the database
+* PREUPD     : is executed before updating a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L472-L482[Demo]]
 
-  * POSTINS    : is executed after inserting a row of the database
+* PREDEL     : is executed before deleting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L484-L494[Demo]]
 
-  * POSTUPD    : is executed after updating a row of the database
+* POSTINS    : is executed after inserting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L484-L494[Demo]]
+
+* POSTUPD    : is executed after updating a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L496-L503[Demo]]
 
 
-*Examples*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L387-L503[Demo]]
+
 [source,kotlin]
 ----
 val age = visit(domain = INT(3), position = follow(name)) {
@@ -618,22 +643,23 @@ BlockDefinition :
 class Block: FormBlock(buffer: Int, rows: Int, blockName : String) {
     BlockBody
 }
-  
+
 BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
-                  [blockOptions] [blockTables]  
+                  [blockOptions] [blockTables]
                   [blocIndices] [blockCommands] [blockTriggers] blockFields
-                  [blockContextFooter]                     
+                  [blockContextFooter]
 ----
 
 ===== Block Types
 
 There are actually two types of blocks in Galite, the only difference between them in the definition syntax is the buffer Integer.
 
- * single blocks
-  
+* single blocks
+
 A single block is a block in which only one single row of a database table is displayed on the form. Each time, the computer will memorize only one entire row and a certain quantity of ID numbers through which it will retrieve another rows from the database if you want to view them.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L155-L160[Demo]]
+
 [source,kotlin]
 ----
 class BlockCommand : FormBlock(1, 5, "Commands") {
@@ -652,7 +678,8 @@ The first integer indicates the block type. In case of a single block, the first
 
 A multiple block is a block in which more than one row are displayed on the form. These rows are retrieved all at once from the database and are memorized by the computer. Actually, you can define the number of the displayed rows which can be less than this of the memorized rows. In this case, there will be no need anymore to retrieve the hidden rows from the database when you want to view them.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L161-L166[Demo]]
+
 [source,kotlin]
 ----
 class BlockCommand : FormBlock(10, 5, "Commands") {
@@ -666,13 +693,14 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 }
 ----
 The first integer indicates the number of rows to be automatically memorized while the second defines the number of displayed rows. Notice the first integer value must always be greater than 1.
- 
+
 ===== Block Names
 
 The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock class.
 
-*Example*
-[source,kotlin] 
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L161-L166[Demo]]
+
+[source,kotlin]
 ----
 class Degree : FormBlock(10, 5, "Degree Block")
 ----
@@ -681,12 +709,13 @@ class Degree : FormBlock(10, 5, "Degree Block")
 
 You can insert the optional border statement that defines the Block's frame type into the init block. Besides, the Title of the block will appear only if the Block's Border type has been specified. There are actually four Border options defined into Border enumeration class :
 
-* Border.LINE to frame the block with lines.
-* Border.RAISED  to enhance a block by setting it on the foreground.
-* Border.LOWERED to put it at the background.
-* Border.ETCHED  to carve a frame in the form.
+* Border.LINE to frame the block with lines. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L168-L173[Demo]]
+* Border.RAISED  to enhance a block by setting it on the foreground. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L174-L182[Demo]]
+* Border.LOWERED to put it at the background. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L183-L191[Demo]]
+* Border.ETCHED  to carve a frame in the form. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L192-L200[Demo]]
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L168-L173[Demo]]
+
 [source,kotlin]
 ----
 inner class Degree : FormBlock(10, 5, "Degree Block") {
@@ -705,7 +734,8 @@ As for the pair fields, the one in the left is the source block field while the 
 For Example, let us suppose we have a multiple block Prices with 4 columns,
 with column 3 filled with Quantities and Column 4 with Prices, we also have a single block TotalPriceswith two fields totalQuantity and totalPrices, we want these fields to be aligned with the correct fields of the Prices block, so we specify that the totalQuantity field is aligned with the field quantity of the block Prices, same thing for totalPrice field it's aligned with the price field of the block Prices:
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L202-L237[Demo]]
+
 [source,kotlin]
 ----
 val targetBlock = insertBlock(Prices())
@@ -727,7 +757,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 This optional command is used to define the help text for each field of the block. You need to set the value of help property.
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 inner class Degree : FormBlock(10, 5, "Degree Block") {
@@ -742,13 +772,13 @@ inner class Degree : FormBlock(10, 5, "Degree Block") {
 ===== Block Options
 You need to use options function in your block to specify block options. you can find the list of available options in BlockOption class :
 
- * NOCHART : Disables the chart(grid) rendering of a multiple bloc to make it look like a single block.Only possible on multiple blocks displaying only one row, Besides the fields must be positioned with the AT command.
- * NODETAIL : Disables the positioning of fields and displays the block as a chart (grid), Only possible on multiple blocks, the fields should not be positioned with the AT command.
- * NODELETE :  Prevent the user from removing fields content.
- * NOINSERT :  Prevent the user from inserting data in fields.
- * NOMOVE   :  Prevent the user from moving between records.
- * ACCESS_ON_SKIPPED : Makes the block accessible even if or its fields have SKIPPED access.
- * UPDATE_INDEX : If used, saving a block would delete all its rows and reinsert them one by one, by doing so, you can update the table rows even when you change the index fields without worrying about the "row already exist exception".
+* NOCHART : Disables the chart(grid) rendering of a multiple bloc to make it look like a single block.Only possible on multiple blocks displaying only one row, Besides the fields must be positioned with the AT command. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L240-L248[Demo]]
+* NODETAIL : Disables the positioning of fields and displays the block as a chart (grid), Only possible on multiple blocks, the fields should not be positioned with the AT command. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L249-L257[Demo]]
+* NODELETE :  Prevent the user from removing fields content. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L258-L266[Demo]]
+* NOINSERT :  Prevent the user from inserting data in fields. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L267-L275[Demo]]
+* NOMOVE   :  Prevent the user from moving between records. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L276-L284[Demo]]
+* ACCESS_ON_SKIPPED : Makes the block accessible even if or its fields have SKIPPED access. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L285-L293[Demo]]
+* UPDATE_INDEX : If used, saving a block would delete all its rows and reinsert them one by one, by doing so, you can update the table rows even when you change the index fields without worrying about the "row already exist exception". [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L294-L302[Demo]]
 
 [source,kotlin]
 ----
@@ -761,18 +791,18 @@ inner class Degree : FormBlock(10, 5, "Degree Block") {
 ----
 
 ===== Block Tables
- 
+
 When making use of this section, you have to type the function table and enter the table name, assign this function to an variable. This variable will further be used as a shorthand in place of the complete table name in order to access to the table. These names refer to certain tables in the database whereby the first table is the one on which the user will work. The remaining tables are the so-called "look-up tables", i.e tables that are associated with the first one.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 BlockTables:   table(vararg ExposedTables)
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L305-L306[Demo]]
+
 [source,kotlin]
 ----
 inner class School : FormBlock(1, 1, "School") {
@@ -791,14 +821,14 @@ when bringing in changes in the principal table.
 If you plan to enter one index or more when defining your fields, you also have to define one index text or more which will appear if you make a mistake by entering an indexed data or a data combination twice. This command can be followed by an error message contained in a string.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 BlockIndices:   "index("  message : String  ")" [BlockIndices]*
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L310[Demo]]
+
 [source,kotlin]
 ----
 inner class Degree : FormBlock(1, 1, "Degree") {
@@ -810,13 +840,13 @@ inner class Degree : FormBlock(1, 1, "Degree") {
 
 Block commands are commands accessible only from the block where they are called. There are Three ways to call block commands:
 
- * *Calling A Standard Command*
+* *Calling A Standard Command*
 
 Structure of command:
 
 [source,kotlin]
 ----
-"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }
+"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }"
 
 Example
 command(item = Validate) {
@@ -826,13 +856,13 @@ command(item = Validate) {
 }
 ----
 
- *  *Calling The Block Commands With Modes*
+*  *Calling The Block Commands With Modes*
 
-Blocks have 3 possible Modes: 
+Blocks have 3 possible Modes:
 
- * QUERY  : When querying the database
- * INSERT : When inserting a new row in the database
- * UPDATE : When updating rows in the database
+* QUERY  : When querying the database
+* INSERT : When inserting a new row in the database
+* UPDATE : When updating rows in the database
 
 You can combine these modes with the previous block command structure to have more control over your command
 Use the mode function inside you command body declaration to set the modes :
@@ -846,7 +876,8 @@ BlockMode: "mode(" ModeName* ")"
 ----
 This means that the command called is only accessible when the block is in the specified Mode.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L134-L145[Demo]]
+
 [source,kotlin]
 ----
 command(item = Validate) {
@@ -857,18 +888,19 @@ command(item = Validate) {
 }
 ----
 
- * *Calling The Block Commands With Modes And An Access Modifier*
+* *Calling The Block Commands With Modes And An Access Modifier*
 
 in Galite, a field can have different access types or modifiers, here is the definition of the four available access modifiers listed by ascending level.
- 
- * HIDDEN : HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
- * SKIPPED : SKIPPED fields are read only fields, you can read the value but you can't modify it.
- * VISIT : fields with this access type are accessible, can be modified but not necessary.
- * MUSTFILL : MUSTFILL fields are accessible fields that the user must fill with a value.
-  
+
+* HIDDEN : HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
+* SKIPPED : SKIPPED fields are read only fields, you can read the value but you can't modify it.
+* VISIT : fields with this access type are accessible, can be modified but not necessary.
+* MUSTFILL : MUSTFILL fields are accessible fields that the user must fill with a value.
+
 In the block command section, you can set the highest access level for the block fields according to the mode in wich the block would be ording to the mode in which the block would be.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L147-L150[Demo]]
+
 [source,kotlin]
 ----
 blockVisibility(Access.SKIPPED, Modes.QUERY, Modes.UPDATE)
@@ -893,38 +925,38 @@ The block triggers are the same as form triggers on the block level. There are a
 ----
 
 Concerning the trigger action, which is the action to execute when the trigger is activated they can by :
- ** {KOTLIN code}
+** {KOTLIN code}
 
 
 Here is a list of all available block triggers or block events in Galite.
 
- ** PREQRY  : executed before querying the database
- ** POSTQRY : executed after querying the database
- ** PREDEL  : executed before a row is deleted
- ** POSTDEL : executed after a row is deleted
- ** PREINS  : executed before a row is inserted
- ** POSTINS : executed after a row is inserted
- ** PREUPD  : executed before a row is updated
- ** POSTUPD : executed after a row is updated
- ** PRESAVE : executed before saving a row
- ** PREREC  : executed upon record entry		
- ** POSTREC : executed upon record exit
- ** PREBLK  : executed upon block entry
- ** POSTBLK : executed upon block exit
- ** VALBLK  : executed upon block validation
- ** VALREC  : executed upon record validation
- ** DEFAULT : is executed when the block is in the InsertMode. This trigger becomes active when the user presses the key F4. It will then enable the system to load standard values which will be proposed to the user if he wishes to enter new data.
- ** INIT    : executed upon block initialization
- ** RESET   : executed upon Reset command (ResetForm)
- ** CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way : 
+** PREQRY  : executed before querying the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L319-L322[Demo]]
+** POSTQRY : executed after querying the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L324-L327[Demo]]
+** PREDEL  : executed before a row is deleted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L329-L332[Demo]]
+** POSTDEL : executed after a row is deleted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L334-L337[Demo]]
+** PREINS  : executed before a row is inserted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L339-L342[Demo]]
+** POSTINS : executed after a row is inserted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L344-L347[Demo]]
+** PREUPD  : executed before a row is updated [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L349-L352[Demo]]
+** POSTUPD : executed after a row is updated [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L354-L357[Demo]]
+** PRESAVE : executed before saving a row [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L359-L362[Demo]]
+** PREREC  : executed upon record entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L560-L565[Demo]]
+** POSTREC : executed upon record exit [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L364-L367[Demo]]
+** PREBLK  : executed upon block entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L369-L372[Demo]]
+** POSTBLK : executed upon block exit [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L374-L377[Demo]]
+** VALBLK  : executed upon block validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L379-L382[Demo]]
+** VALREC  : executed upon record validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L384-L387[Demo]]
+** DEFAULT : is executed when the block is in the InsertMode. This trigger becomes active when the user presses the key F4. It will then enable the system to load standard values which will be proposed to the user if he wishes to enter new data. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L389-L392[Demo]]
+** INIT    : executed upon block initialization [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L394-L397[Demo]]
+** RESET   : executed upon Reset command (ResetForm) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L399-L402[Demo]]
+** CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way :
 ----
  trigger(CHANGED) {
    return false;
  }
 ----
 
- ** ACCESS  : defines whether a block can or not be accessed, it must always return a boolean value
- 
+** ACCESS  : defines whether a block can or not be accessed, it must always return a boolean value
+
 ----
   trigger(ACCESS) {
     return Block.getMode() == MOD_QUERY
@@ -932,8 +964,9 @@ Here is a list of all available block triggers or block events in Galite.
     this block is only accessible on query mode
   }
 ----
- 
-*Examples*
+
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L319-L402[Demo]]
+
 [source,kotlin]
 ----
 object Degree : FormBlock(10, 5, "Degree block") {
@@ -949,13 +982,14 @@ object Degree : FormBlock(10, 5, "Degree block") {
   ...
 }
 ----
- 
+
 ===== Block Fields Declaration
 
 In this section, all you have to do is to write at least on block field definition that begins with an access modifier and ends with brace "}", you can enter as much fields as you may need
 following the field definition we saw in the previous chapter.
 
-*Examples*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L210-L217[Demo]]
+
 [source,kotlin]
 ----
 val name = visit(domain = STRING(25), position = at(1, 2)) {
@@ -964,22 +998,22 @@ val name = visit(domain = STRING(25), position = at(1, 2)) {
       columns(c.name)
 }
 ----
- 
-==== Creating Forms 
+
+==== Creating Forms
 
 There are actually two types of forms in Galite, normal forms and BLOC INSERT forms which are special forms containing blocks that you may insert in other forms. +
 A form begins always with FORM and ends with END FORM, while a BLOC INSERT form begins with BLOC INSERT and ends with END INSERT.
 
 In Galite to create a form you need to extend from this list off classes :
 
- ** Form  : Represents a form.
- ** ReportSelectionForm : Represents a report selection form.
- ** DictionaryForm : Represents a dictionary form.
+** Form  : Represents a form.
+** ReportSelectionForm : Represents a report selection form.
+** DictionaryForm : Represents a dictionary form.
 
 When creating a form, you will have to include the block and the field definitions. Moreover, you will have to define the menus as well as the different commands. Finally, you can also define some form triggers. Concretely, the structure is the following:
 
 *Syntax:*
-[source,kotlin] 
+[source,kotlin]
 ----
 FormDef :
           FormName ":" QualifiedName [,QualifiedName]*
@@ -1003,7 +1037,8 @@ This is an optional step in which you may define the language of your forms menu
 ----
 "locale =" formLocalization : String
 ----
-*Example:*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L32-L33[Demo]]
+
 [source,kotlin]
 ----
 class LecturersForm : Form() {
@@ -1021,8 +1056,8 @@ Every form have can have a title (optional).
 "title =" formTitle : String
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L34-L35[Demo]]
+
 [source,kotlin]
 ----
 class LecturersForm : Form() {
@@ -1035,14 +1070,14 @@ class LecturersForm : Form() {
 Defining a menu means adding an entry to the menu bar in the top of the form, you can add actors to this menu later by specifying the menu name in the actor definition.
 
 *Syntax:*
- 	
+
 [source,kotlin]
-----  
+----
 MenuDefinition: "menu (" label : String ")"
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L37-L38[Demo]]
+
 [source,kotlin]
 ----
 class ListLecturersForm : ReportSelectionForm() {
@@ -1060,7 +1095,7 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
 
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ActorDefinition:  "actor"(
@@ -1074,8 +1109,8 @@ ActorDefinition:  "actor"(
                   }
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L40-L49[Demo]]
+
 [source,kotlin]
 ----
 
@@ -1099,10 +1134,10 @@ class ListLecturersForm : ReportSelectionForm() {
 ===== Types Definition
 
 After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use SELECT commands
-to customize these new types. 
+to customize these new types.
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L51-L71[Demo]]
+
 [source,kotlin]
 ----
 class ListLecturersForm : ReportSelectionForm() {
@@ -1135,10 +1170,10 @@ class ListLecturersForm : ReportSelectionForm() {
 In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
 every command have a effective ray of action (VField, VBlock, VForm)
 
- * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm. 
+* Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm.
 
 Command Defined in this section can be form level commands, block level commands or field level commands, this will depend on the action called by the command and where the command is actualy called.
- 
+
 *Syntax*
 [source,kotlin]
 ----
@@ -1147,7 +1182,8 @@ cmdDef  : "command (" SimpleItemName  ")" { commandBody }
 commandBody: { KOTLIN statements }
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L73-L80[Demo]]
+
 Writing the action's body :
 
 [source,kotlin]
@@ -1161,21 +1197,21 @@ command(item = PrintBlock) {
 
 ----
 
-After the different definitions we have made (types, menus, actors,commands), we need to begin the declaration of our form.Here, we will set up the structure and the behaviour of the form throw 4 sections :
+After the different definitions we have made (types, menus, actors, commands), we need to begin the declaration of our form.Here, we will set up the structure and the behaviour of the form throw 4 sections :
 
- * Form Options
- * Form Commands
- * Form Triggers
- * Blocks
+* Form Options
+* Form Commands
+* Form Triggers
+* Blocks
 
 ===== Form Commands Declaration
 
 There still one more think to know about form command declaration, in fact, you can also control the accessibility to a command by the Mode of the form.+
 A form have 3 possible Modes :
 
- * QUERY  : When inquiring the database
- * INSERT : When inserting a row in the database
- * UPDATE : When updating a row in the database
+* QUERY  : When inquiring the database
+* INSERT : When inserting a row in the database
+* UPDATE : When updating a row in the database
 
 The Syntax to use command with modes is the following :
 
@@ -1188,7 +1224,8 @@ BlockMode: "mode(" ModeName* ")"
 ----
 This means that the command called is only accessible when the block is in the specified Mode.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L73-L80[Demo]]
+
 [source,kotlin]
 ----
 command(item = Validate) {
@@ -1209,20 +1246,21 @@ FormEventList:  FormEvent [,FormEvent]*
 ----
 
 Galite actually defines 6 Form Triggers or Form Events :
- 
- * INIT      : executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
- * PREFORM   : executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
- * POSTFORM  : executed when closing the form
- * QUITFORM  : actually not available
- * RESET     : executed upon ResetForm command
- * CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way : 
+
+* INIT      : executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L83-L86[Demo]]
+* PREFORM   : executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L88-L91[Demo]]
+* POSTFORM  : executed when closing the form [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L93-L96[Demo]]
+* QUITFORM  : actually not available [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L98-L102[Demo]]
+* RESET     : executed upon ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L104-L107[Demo]]
+* CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way : [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L109-L112[Demo]]
 ----
 val postform = trigger(POSTFORM) {
   println("post form trigger works")
 }
 ----
 
-*Examples*
+*Examples* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L82-L112[Demo]]
+
 ----
 val preform = trigger(INIT) {
     println("init form trigger works")
@@ -1233,12 +1271,13 @@ val initialisation = trigger(INIT, PREFORM) {
 }
 ----
 
-===== Form Pages 
+===== Form Pages
 
 You can create Pages in your form using the page function after the trigger declaration section,this is optional and will create a Tab for each page you create under the form's toolbar.
 You can put as much blocks you want in each page, the same goes for form without pages.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L113-L119[Demo]]
+
 ----
 val p1 = page("Page1")
 ----

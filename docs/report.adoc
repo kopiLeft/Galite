@@ -23,7 +23,8 @@ ReportFieldDef: "field(" FieldType ")" {
 GroupCommands : "group =" field
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L153-L172[Demo]]
+
 [source,kotlin]
 ----
 val name = field(STRING(20)) {
@@ -55,7 +56,8 @@ val age = field(INT(3)) {
 
 The field label is the name that will be shown in the dynamic report, you can define a label by setting the label variable using String value.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L153-L154[Demo]]
+
 [source,kotlin]
 ----
 val name = field(STRING(20)) {
@@ -72,13 +74,14 @@ val ID = field(INT(3)) {
     label = ""
     ...
 }
----- 
+----
 
 ===== Report Field Help Text
 
 Help variable is used to insert an explanation text for the application user. This Help text will then be displayed when the user places the mouse on the report field.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L153-L155[Demo]]
+
 [source,kotlin]
 ----
 val name = field(STRING(20)) {
@@ -92,7 +95,8 @@ val name = field(STRING(20)) {
 
 The field type is a required entry, you may enter a predefined field type as parameter for the field function :
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L153-L185[Demo]]
+
 [source,kotlin]
 ----
 val name = field(STRING(20)) {
@@ -123,11 +127,12 @@ In this example, Objects is a type you should have defined previously in type de
 
 This command is used to define the localization of the field's content inside the field. There are three types of alignment.
 
-* ALIGN RIGHT the value is displayed at the right inside the field
-* ALIGN LEFT the value is displayed at the left inside the field
-* ALIGN CENTER the value is centered in the field
+* ALIGN RIGHT the value is displayed at the right inside the field [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L163-L172[Demo]]
+* ALIGN LEFT the value is displayed at the left inside the field [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L152-L161[Demo]]
+* ALIGN CENTER the value is centered in the field [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L174-L180[Demo]]
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L152-L180[Demo]]
+
 [source,kotlin]
 ----
 val Name = field(STRING(10)) {
@@ -141,7 +146,8 @@ val Name = field(STRING(10)) {
 There is actually only one option for the dynamic report fields in Galite: the HIDDEN OPTION , if this option is used on a field, he will not be visible the the report.
 This options have to be used on the last visible field of the report to avoid rendering bugs.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggersR.kt#L41-L45[Demo]]
+
 [source,kotlin]
 ----
 val Name = field(STRING(10)) {
@@ -156,7 +162,8 @@ The field Name will not be visible on the report.
 
 You can create clickable groups in your report by using the keyword GROUP in you field followed by the field you want to be grouped by the actual field.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L152-L180[Demo]]
+
 [source,kotlin]
 ----
 val Customers = field(STRING(5)) {
@@ -209,8 +216,8 @@ TrigerAction : compute | format { KOTLIN code }
 
 Here is the two triggers available for report fields :
 
- * FORMAT  : applay style on the field content example change it to uppercase.
- * COMPUTE : executed when the report is displayed and can be used to compute expressions on the report columns and show the result.
+ * FORMAT  : applay style on the field content example change it to uppercase. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggersR.kt#L47-L65[Demo]]
+ * COMPUTE : executed when the report is displayed and can be used to compute expressions on the report columns and show the result. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggersR.kt#L67-L105[Demo]]
 
 *Example*
 [source,kotlin]
@@ -267,7 +274,8 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 
 This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.
 
-*Example:*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L44-L45[Demo]]
+
 [source,kotlin]
 ----
 override val locale = Locale.UK
@@ -277,10 +285,10 @@ override val locale = Locale.UK
 
 To set you report title you need to override the title variable of Report class.
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L46-L47[Demo]]
+
 [source,kotlin]
-----  
+----
 class ClientR : Report() {
     override val locale = Locale.UK
 
@@ -317,14 +325,14 @@ class OrdersReport : Report() {
 Defining a menu means adding an entry to the menu bar in the top of the report, you can add actors to this menu later by specifying the menu name in the actor definition.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 MenuDefinition: val SimpleName = "menu (" label : String ")"
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L49-L50[Demo]]
+
 [source,kotlin]
 ----
 
@@ -343,9 +351,9 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
 
 
 *Syntax:*
- 	
+
 [source,kotlin]
-----  
+----
 ActorDefinition:
 actor("ident =" SimpleName,
       "menu =" SimpleName,
@@ -357,8 +365,8 @@ actor("ident =" SimpleName,
 }
 ----
 
-*Example*
- 	
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L52-L111[Demo]]
+
 [source,kotlin]
 ----
 
@@ -385,7 +393,7 @@ class ListLecturersR : Report() {
 ===== Report Types Definition
 
 After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use the LIST and SELECT commands
-to customize these new types. 
+to customize these new types.
 
 *Syntax:*
 ----
@@ -393,7 +401,7 @@ TypeDefinition:  "object" SimplName":" CodeDomain<FieldType>() {[TypeList] } | "
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 class LisLecturersR : Report() {
@@ -426,8 +434,8 @@ class LisLecturersR : Report() {
 In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
 every command have an effective ray of action (VRField, VReport)
 
- * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VRField or VReport. 
- 
+ * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VRField or VReport.
+
 *Syntax*
 [source,kotlin]
 ----
@@ -436,7 +444,8 @@ cmdDef  : "command (" SimpleItemName  ")" { commandBody }
 commandBody: { KOTLIN statements }
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportR.kt#L113-L150[Demo]]
+
 Writing the action's body :
 
 [source,kotlin]
@@ -460,11 +469,11 @@ ReportEventList:  ReportEvent [,FormEvent]*
 
 Galite actually defines 2 report Triggers or report Events :
 
- * PREREPORT  : executed before the report is displayed.
- * POSTREPORT : executed after the report is closed.
+ * PREREPORT  : executed before the report is displayed. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggersR.kt#L126-L128[Demo]]
+ * POSTREPORT : executed after the report is closed. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggersR.kt#L130-L132[Demo]]
 
 *Example*
-[source, java]
+[source,kotlin]
 ----
 class SimpleReport : Report() {
   override val locale = Locale.UK
@@ -482,19 +491,20 @@ class SimpleReport : Report() {
 }
 ----
 
-===== Report Fields Declaration 
+===== Report Fields Declaration
 
-As you already know, a dynamic report is based on field that will be shown as report columns, in this section you have to write at least on field definition or more following 
+As you already know, a dynamic report is based on field that will be shown as report columns, in this section you have to write at least on field definition or more following
 the definition and the structure we saw in the previous chapter.
 
-===== Report data initialization:
+===== Report data initialization
 
 You can define the report initial data in the constructor of your report class.
 You can use Exposed Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields
 
 For example here is  a dynamic report named UserList with 3 fields (FirstName, LastName, Age), we will retrieve data from the `User` table on the database. Then affect the query result to our report to create rows.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggersR.kt#L134-L154[Demo]]
+
 [source,kotlin]
 ----
 class UserList : Report() {
@@ -520,7 +530,8 @@ A report is always called from a form, if the caller form extends from the Dicti
  * Add the CreateReport command to the caller form
  * Implement the createReport abstract method :
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReport.kt#L36-L40[Demo]]
+
 [source,kotlin]
 ----
 override fun createReport(): Report() {
@@ -528,7 +539,7 @@ override fun createReport(): Report() {
 }
 ----
 
-Otherwise you can create a normal form or block command that executes the following code :
+Otherwise you can create a normal form or block command that executes the following code : [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationReportTriggers.kt#L62-L66[Demo]]
 
 [source,kotlin]
 ----
