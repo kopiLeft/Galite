@@ -84,13 +84,13 @@ val id = hidden(domain = INT(20)) {
 This entry defines the position of the field in the current block. HIDDEN fields does not have positions, and in multiple block (Defined in the  Blocks creation Section of this document) you may use the NO DETAIL Block option to pass positioning fields.
 There are two possibilities to define the field position.
 
-* *Absolute Position With the function `at()`*
+ * *Absolute Position With the function `at()`*
 
 You can define it according to one integer or more: ::
 
-** at(row)
-** at(row , column)
-** at(row, column..multifield)
+ ** at(row)
+ ** at(row , column)
+ ** at(row, column..multifield)
 
 *Syntax:*
 [source,kotlin]
@@ -120,7 +120,7 @@ When defining the width of a column, thus,
 it always adopts the width of the longest field. Since the form wide is not unlimited,
 you can put a long field in two or more columns in order to spare place as it is the case in the example above.
 
-* *Relative Position With follow*
+ * *Relative Position With follow*
 
 You can also make use of the following structure : `follow(otherField)`
 
@@ -332,7 +332,7 @@ val id = hidden(domain = INT(20)) {
 ----
 In this example, `I` is the invoices table and `ID` is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.
 
-* *Indexes*
+ * *Indexes*
 
 This option is used to define a value in the database which is to remain unique so that it can not appear anymore in another field of the same column. you need to use the index method to declare an index in Galite.
 
@@ -412,7 +412,7 @@ mustFill(domain = STRING(20)) {
 
 The index value is ascendant. When attributing an index value to a field combination, you shall always take the value nexting that you have taken the last.
 
-* *Priority*
+ * *Priority*
 
 *Syntax:*
 
@@ -569,37 +569,37 @@ TrigerAction : {KOTLIN code}
 
 Field Triggers are events that concern the fields behavior, here is a list of all Galite field triggers available :
 
-* PREFLD     : is executed upon entry of field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L393-L400[Demo]]
+  * PREFLD     : is executed upon entry of field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L393-L400[Demo]]
 
-* POSTFLD    : is executed upon exit of field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L401-L407[Demo]]
+  * POSTFLD    : is executed upon exit of field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L401-L407[Demo]]
 
-* POSTCHG    : is executed on field content change [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L409-L415[Demo]]
+  * POSTCHG    : is executed on field content change [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L409-L415[Demo]]
 
-* PREVAL     : is executed before validating any new entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L417-L423[Demo]]
+  * PREVAL     : is executed before validating any new entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L417-L423[Demo]]
 
-* VALFLD     : is executed after field change and validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L425-L431[Demo]]
+  * VALFLD     : is executed after field change and validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L425-L431[Demo]]
 
-* VALIDATE   : this is the same trigger as VALFLD [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L433-L439[Demo]]
+  * VALIDATE   : this is the same trigger as VALFLD [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L433-L439[Demo]]
 
-* DEFAULT    : Defines the default value of the field to be set if the setDefault() method is called (this method is automatically called when the user choose the insert command) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L441-L447[Demo]]
+  * DEFAULT    : Defines the default value of the field to be set if the setDefault() method is called (this method is automatically called when the user choose the insert command) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L441-L447[Demo]]
 
-* FORMAT     : Not defined actually
+  * FORMAT     : Not defined actually
 
-* ACCESS     : ACCESS is a special trigger that defines how a field can be accessed. This trigger must return one of these values ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L450-L454[Demo]]
+  * ACCESS     : ACCESS is a special trigger that defines how a field can be accessed. This trigger must return one of these values ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L450-L454[Demo]]
 
-* VALUE      : equates the value of two fields [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L456-L462[Demo]]
+  * VALUE      : equates the value of two fields [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L456-L462[Demo]]
 
-* AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L464-L470[Demo]]
+  * AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L464-L470[Demo]]
 
-* PREINS     : is executed before inserting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L472-L482[Demo]]
+  * PREINS     : is executed before inserting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L472-L482[Demo]]
 
-* PREUPD     : is executed before updating a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L472-L482[Demo]]
+  * PREUPD     : is executed before updating a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L472-L482[Demo]]
 
-* PREDEL     : is executed before deleting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L484-L494[Demo]]
+  * PREDEL     : is executed before deleting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L484-L494[Demo]]
 
-* POSTINS    : is executed after inserting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L484-L494[Demo]]
+  * POSTINS    : is executed after inserting a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L484-L494[Demo]]
 
-* POSTUPD    : is executed after updating a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L496-L503[Demo]]
+  * POSTUPD    : is executed after updating a row of the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L496-L503[Demo]]
 
 
 *Example* [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L387-L503[Demo]]
@@ -654,7 +654,7 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
 
 There are actually two types of blocks in Galite, the only difference between them in the definition syntax is the buffer Integer.
 
-* single blocks
+ * single blocks
 
 A single block is a block in which only one single row of a database table is displayed on the form. Each time, the computer will memorize only one entire row and a certain quantity of ID numbers through which it will retrieve another rows from the database if you want to view them.
 
@@ -772,13 +772,13 @@ inner class Degree : FormBlock(10, 5, "Degree Block") {
 ===== Block Options
 You need to use options function in your block to specify block options. you can find the list of available options in BlockOption class :
 
-* NOCHART : Disables the chart(grid) rendering of a multiple bloc to make it look like a single block.Only possible on multiple blocks displaying only one row, Besides the fields must be positioned with the AT command. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L240-L248[Demo]]
-* NODETAIL : Disables the positioning of fields and displays the block as a chart (grid), Only possible on multiple blocks, the fields should not be positioned with the AT command. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L249-L257[Demo]]
-* NODELETE :  Prevent the user from removing fields content. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L258-L266[Demo]]
-* NOINSERT :  Prevent the user from inserting data in fields. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L267-L275[Demo]]
-* NOMOVE   :  Prevent the user from moving between records. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L276-L284[Demo]]
-* ACCESS_ON_SKIPPED : Makes the block accessible even if or its fields have SKIPPED access. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L285-L293[Demo]]
-* UPDATE_INDEX : If used, saving a block would delete all its rows and reinsert them one by one, by doing so, you can update the table rows even when you change the index fields without worrying about the "row already exist exception". [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L294-L302[Demo]]
+ * NOCHART : Disables the chart(grid) rendering of a multiple bloc to make it look like a single block.Only possible on multiple blocks displaying only one row, Besides the fields must be positioned with the AT command. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L240-L248[Demo]]
+ * NODETAIL : Disables the positioning of fields and displays the block as a chart (grid), Only possible on multiple blocks, the fields should not be positioned with the AT command. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L249-L257[Demo]]
+ * NODELETE :  Prevent the user from removing fields content. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L258-L266[Demo]]
+ * NOINSERT :  Prevent the user from inserting data in fields. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L267-L275[Demo]]
+ * NOMOVE   :  Prevent the user from moving between records. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L276-L284[Demo]]
+ * ACCESS_ON_SKIPPED : Makes the block accessible even if or its fields have SKIPPED access. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L285-L293[Demo]]
+ * UPDATE_INDEX : If used, saving a block would delete all its rows and reinsert them one by one, by doing so, you can update the table rows even when you change the index fields without worrying about the "row already exist exception". [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L294-L302[Demo]]
 
 [source,kotlin]
 ----
@@ -840,7 +840,7 @@ inner class Degree : FormBlock(1, 1, "Degree") {
 
 Block commands are commands accessible only from the block where they are called. There are Three ways to call block commands:
 
-* *Calling A Standard Command*
+ * *Calling A Standard Command*
 
 Structure of command:
 
@@ -888,14 +888,14 @@ command(item = Validate) {
 }
 ----
 
-* *Calling The Block Commands With Modes And An Access Modifier*
+ * *Calling The Block Commands With Modes And An Access Modifier*
 
 in Galite, a field can have different access types or modifiers, here is the definition of the four available access modifiers listed by ascending level.
 
-* HIDDEN : HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
-* SKIPPED : SKIPPED fields are read only fields, you can read the value but you can't modify it.
-* VISIT : fields with this access type are accessible, can be modified but not necessary.
-* MUSTFILL : MUSTFILL fields are accessible fields that the user must fill with a value.
+ * HIDDEN : HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
+ * SKIPPED : SKIPPED fields are read only fields, you can read the value but you can't modify it.
+ * VISIT : fields with this access type are accessible, can be modified but not necessary.
+ * MUSTFILL : MUSTFILL fields are accessible fields that the user must fill with a value.
 
 In the block command section, you can set the highest access level for the block fields according to the mode in wich the block would be ording to the mode in which the block would be.
 
@@ -925,37 +925,37 @@ The block triggers are the same as form triggers on the block level. There are a
 ----
 
 Concerning the trigger action, which is the action to execute when the trigger is activated they can by :
-** {KOTLIN code}
+ ** {KOTLIN code}
 
 
 Here is a list of all available block triggers or block events in Galite.
 
-** PREQRY  : executed before querying the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L319-L322[Demo]]
-** POSTQRY : executed after querying the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L324-L327[Demo]]
-** PREDEL  : executed before a row is deleted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L329-L332[Demo]]
-** POSTDEL : executed after a row is deleted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L334-L337[Demo]]
-** PREINS  : executed before a row is inserted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L339-L342[Demo]]
-** POSTINS : executed after a row is inserted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L344-L347[Demo]]
-** PREUPD  : executed before a row is updated [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L349-L352[Demo]]
-** POSTUPD : executed after a row is updated [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L354-L357[Demo]]
-** PRESAVE : executed before saving a row [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L359-L362[Demo]]
-** PREREC  : executed upon record entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L560-L565[Demo]]
-** POSTREC : executed upon record exit [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L364-L367[Demo]]
-** PREBLK  : executed upon block entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L369-L372[Demo]]
-** POSTBLK : executed upon block exit [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L374-L377[Demo]]
-** VALBLK  : executed upon block validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L379-L382[Demo]]
-** VALREC  : executed upon record validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L384-L387[Demo]]
-** DEFAULT : is executed when the block is in the InsertMode. This trigger becomes active when the user presses the key F4. It will then enable the system to load standard values which will be proposed to the user if he wishes to enter new data. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L389-L392[Demo]]
-** INIT    : executed upon block initialization [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L394-L397[Demo]]
-** RESET   : executed upon Reset command (ResetForm) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L399-L402[Demo]]
-** CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way :
+ ** PREQRY  : executed before querying the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L319-L322[Demo]]
+ ** POSTQRY : executed after querying the database [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L324-L327[Demo]]
+ ** PREDEL  : executed before a row is deleted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L329-L332[Demo]]
+ ** POSTDEL : executed after a row is deleted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L334-L337[Demo]]
+ ** PREINS  : executed before a row is inserted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L339-L342[Demo]]
+ ** POSTINS : executed after a row is inserted [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L344-L347[Demo]]
+ ** PREUPD  : executed before a row is updated [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L349-L352[Demo]]
+ ** POSTUPD : executed after a row is updated [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L354-L357[Demo]]
+ ** PRESAVE : executed before saving a row [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L359-L362[Demo]]
+ ** PREREC  : executed upon record entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationFieldsForm.kt#L560-L565[Demo]]
+ ** POSTREC : executed upon record exit [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L364-L367[Demo]]
+ ** PREBLK  : executed upon block entry [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L369-L372[Demo]]
+ ** POSTBLK : executed upon block exit [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L374-L377[Demo]]
+ ** VALBLK  : executed upon block validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L379-L382[Demo]]
+ ** VALREC  : executed upon record validation [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L384-L387[Demo]]
+ ** DEFAULT : is executed when the block is in the InsertMode. This trigger becomes active when the user presses the key F4. It will then enable the system to load standard values which will be proposed to the user if he wishes to enter new data. [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L389-L392[Demo]]
+ ** INIT    : executed upon block initialization [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L394-L397[Demo]]
+ ** RESET   : executed upon Reset command (ResetForm) [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationBlockForm.kt#L399-L402[Demo]]
+ ** CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way :
 ----
  trigger(CHANGED) {
    return false;
  }
 ----
 
-** ACCESS  : defines whether a block can or not be accessed, it must always return a boolean value
+ ** ACCESS  : defines whether a block can or not be accessed, it must always return a boolean value
 
 ----
   trigger(ACCESS) {
@@ -1006,9 +1006,9 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 
 In Galite to create a form you need to extend from this list off classes :
 
-** Form  : Represents a form.
-** ReportSelectionForm : Represents a report selection form.
-** DictionaryForm : Represents a dictionary form.
+ ** Form  : Represents a form.
+ ** ReportSelectionForm : Represents a report selection form.
+ ** DictionaryForm : Represents a dictionary form.
 
 When creating a form, you will have to include the block and the field definitions. Moreover, you will have to define the menus as well as the different commands. Finally, you can also define some form triggers. Concretely, the structure is the following:
 
@@ -1170,7 +1170,7 @@ class ListLecturersForm : ReportSelectionForm() {
 In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
 every command have a effective ray of action (VField, VBlock, VForm)
 
-* Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm.
+ * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm.
 
 Command Defined in this section can be form level commands, block level commands or field level commands, this will depend on the action called by the command and where the command is actualy called.
 
@@ -1199,19 +1199,19 @@ command(item = PrintBlock) {
 
 After the different definitions we have made (types, menus, actors, commands), we need to begin the declaration of our form.Here, we will set up the structure and the behaviour of the form throw 4 sections :
 
-* Form Options
-* Form Commands
-* Form Triggers
-* Blocks
+ * Form Options
+ * Form Commands
+ * Form Triggers
+ * Blocks
 
 ===== Form Commands Declaration
 
 There still one more think to know about form command declaration, in fact, you can also control the accessibility to a command by the Mode of the form.+
 A form have 3 possible Modes :
 
-* QUERY  : When inquiring the database
-* INSERT : When inserting a row in the database
-* UPDATE : When updating a row in the database
+ * QUERY  : When inquiring the database
+ * INSERT : When inserting a row in the database
+ * UPDATE : When updating a row in the database
 
 The Syntax to use command with modes is the following :
 
@@ -1247,12 +1247,12 @@ FormEventList:  FormEvent [,FormEvent]*
 
 Galite actually defines 6 Form Triggers or Form Events :
 
-* INIT      : executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L83-L86[Demo]]
-* PREFORM   : executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L88-L91[Demo]]
-* POSTFORM  : executed when closing the form [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L93-L96[Demo]]
-* QUITFORM  : actually not available [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L98-L102[Demo]]
-* RESET     : executed upon ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L104-L107[Demo]]
-* CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way : [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L109-L112[Demo]]
+ * INIT      : executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L83-L86[Demo]]
+ * PREFORM   : executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L88-L91[Demo]]
+ * POSTFORM  : executed when closing the form [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L93-L96[Demo]]
+ * QUITFORM  : actually not available [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L98-L102[Demo]]
+ * RESET     : executed upon ResetForm command [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L104-L107[Demo]]
+ * CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way : [https://github.com/kopiLeft/Galite/blob/4fc3a05e9e88b65b7133ba71ffa6aeb2eb53f9ab/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationForm.kt#L109-L112[Demo]]
 ----
 val postform = trigger(POSTFORM) {
   println("post form trigger works")

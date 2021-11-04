@@ -157,8 +157,8 @@ TrigerAction : color | format { KOTLIN code }
 
 Here is the two triggers available for chart fields (dimensions & measures) :
 
-* FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.visual.chart.VColumnFormat instance. This trigger is not available for measures. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L97-L106[Demo]]
-* COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.visual.VColor instance. This trigger is not available for dimensions. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L75-L78[Demo]]
+ * FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.visual.chart.VColumnFormat instance. This trigger is not available for measures. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L97-L106[Demo]]
+ * COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.visual.VColor instance. This trigger is not available for dimensions. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L75-L78[Demo]]
 
 *Example*
 [source,kotlin]
@@ -484,9 +484,9 @@ You should note that calling setType will create the data series and refresh the
 
 A chart is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :
 
-  * Change DictionaryForm to ChartSelectionForm
-  * Add the CreateChart command to the caller form
-  * Use showChart method :
+ * Change DictionaryForm to ChartSelectionForm
+ * Add the CreateChart command to the caller form
+ * Use showChart method :
 
 *Example*
 [source,kotlin]
