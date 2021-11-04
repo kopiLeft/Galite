@@ -20,7 +20,7 @@ package org.kopi.galite.visual.dsl.form
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 
 /**
- * A binding to database. This is a position given by x and y location
+ * A form block index used to check unique index on some fields.
  *
  * @param ident                  the identifier of the index
  * @param message                the error message in the default locale
