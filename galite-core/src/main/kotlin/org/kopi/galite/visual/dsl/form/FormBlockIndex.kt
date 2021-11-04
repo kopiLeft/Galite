@@ -24,14 +24,30 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
  *
  * @param ident                  the identifier of the index
  * @param message                the error message in the default locale
- * @param indexNumber            the number of this index
+ * @param number                 the number of this index
  */
-class FormBlockIndex(val ident: String, val message: String, indexNumber: Int) {
-  var indexNumber = 0
+class FormBlockIndex(val ident: String, val message: String, private val number: Int) {
 
-  init {
-    this.indexNumber = this.indexNumber or (1 shl indexNumber)
-  }
+  /**
+   * Represents a combination of a list of [FormBlockIndex].
+   */
+  var indices: MutableList<FormBlockIndex> = mutableListOf(this)
+
+  val indexNumber: Int
+    get() {
+      var index = 0
+
+      indices.forEach {
+        index = index or (1 shl it.number)
+      }
+
+      return index
+    }
+
+  operator fun plus(index: FormBlockIndex): FormBlockIndex =
+    FormBlockIndex("", "", -1).apply {
+      this.indices = (indices + index.indices).toMutableList()
+    }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
