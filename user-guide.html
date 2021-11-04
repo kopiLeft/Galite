@@ -2226,28 +2226,34 @@ val time = mustFill(domain = STRING(20), position = at(3, 1)) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">mustFill(domain = LONG(20)) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val lessonIndex = index("Lesson should be unique")
+val timeIndex = index("Time should be unique")
+
+mustFill(domain = LONG(20)) {
   label = "Lesson"
   help = "The lesson you have to attend to"
   column(LEC.Lesson) {
-    index = 0
+    index = lessonIndex
   }
 }
 
 visit(domain = LONG(10)) {
   label = "Lecturer"
   column(T.Lecturer) {
-    index = 1
+    index = lessonIndex + timeIndex
   }
 }
 
 mustFill(domain = STRING(20)) {
   label = "Time"
   column(LEC.Time) {
-    index = 1
+    index = timeIndex
   }
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>In this case, notice that the "Lecturer" field has been associated with two indexes: lessonIndex and timeIndex.</p>
 </div>
 <div class="paragraph">
 <p>The index value is ascendant. When attributing an index value to a field combination, you shall always take the value nexting that you have taken the last.</p>
