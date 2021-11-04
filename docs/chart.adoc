@@ -19,7 +19,8 @@ To create a dimension field you need to use dimension function and specify the t
 ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L90-L111[Demo]]
+
 [source,kotlin]
 ----
 val city = dimension(STRING(10)) {
@@ -47,7 +48,8 @@ ChartDimensionDef: "measure(" DimensionType ")" {[DimensionLabel] [HelpText] Dim
 
 The label is the name that will be shown in the chart, you can define a label by setting the label value.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L92-L93[Demo]]
+
 [source,kotlin]
 ----
 val Name = dimension(STRING(10)) {
@@ -65,7 +67,8 @@ val ID = dimension(STRING(10)) {
 
 Help variable  is used to insert an explanation text for the application user . This Help text will then be displayed when the user places the mouse on the chart measure or dimension.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L94-L95[Demo]]
+
 [source,kotlin]
 ----
 val Name = dimension(STRING(10)) {
@@ -78,7 +81,8 @@ val Name = dimension(STRING(10)) {
 
 The dimension type is a required entry, you may enter a predefined dimension type :
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L90-L111[Demo]]
+
 [source,kotlin]
 ----
 val Name = dimension(STRING(10)) {
@@ -112,7 +116,8 @@ Measure "Measure name" is not numeric.
 
 The measure type can be defined with different ways :
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L82-L88[Demo]]
+
 [source,kotlin]
 ----
 val Name = measure(INT(5)) {
@@ -152,8 +157,8 @@ TrigerAction : color | format { KOTLIN code }
 
 Here is the two triggers available for chart fields (dimensions & measures) :
 
- * FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.visual.chart.VColumnFormat instance. This trigger is not available for measures.
- * COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.visual.VColor instance. This trigger is not available for dimensions.
+ * FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.visual.chart.VColumnFormat instance. This trigger is not available for measures. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L97-L106[Demo]]
+ * COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.visual.VColor instance. This trigger is not available for dimensions. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L75-L78[Demo]]
 
 *Example*
 [source,kotlin]
@@ -199,7 +204,8 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 
 This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.
 
-*Example:*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L44-L45[Demo]]
+
 [source,kotlin]
 ----
 override val locale = Locale.UK
@@ -209,7 +215,7 @@ override val locale = Locale.UK
 
 To set you chart title you need to override the title variable of Chart class.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L46-L47[Demo]]
  	
 [source,kotlin]
 ----  
@@ -231,7 +237,8 @@ override val help = helpText :String
 ----
 Actually every chart has a help menu that tries to describe the structure of the chart by giving information about its commands and fields in a document, the help text will be on the top of this help menu document.
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L48-L49[Demo]]
+
 [source,kotlin]
 ----
 class OrderedChart: Chart() {
@@ -253,7 +260,7 @@ Defining a menu means adding an entry to the menu bar in the top of the chart, y
 MenuDefinition: val SimpleName = "menu (" label : String ")"
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L51-L52[Demo]]
  	
 [source,kotlin]
 ----
@@ -287,7 +294,7 @@ ActorDefinition:  "actor("
                        }
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L55-L63[Demo]]
  	
 [source,kotlin]
 ----
@@ -364,7 +371,7 @@ cmdDef: "command (" SimpleItemName  ")" { commandBody }
 cmdBody: { KOTLIN statements }
 ----
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L65-L70[Demo]]
 
 Calling a local action :
 
@@ -389,13 +396,14 @@ ChartEventList:    ChartEvent*
 
 Galite actually defines 4 chart Triggers or chart Events :
 
- * PRECHART  : executed before the chart is displayed.
- * INIT      : executed at chart initialization.
- * CHARTTYPE : executed after the chart initialization. This trigger should return org.kopi.galite.visual.chart.VChartType and will a fixed type for the chart.
- * POSTCHART : executed after the chart is closed.
+ * PRECHART  : executed before the chart is displayed. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L114-L117[Demo]]
+ * INITCHART : executed at chart initialization. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L124-L127[Demo]]
+ * CHARTTYPE : executed after the chart initialization. This trigger should return org.kopi.galite.visual.chart.VChartType and will a fixed type for the chart. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L129-L143[Demo]]
+ * POSTCHART : executed after the chart is closed. [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L124-L127[Demo]]
 
-*Example*
-[source, java]
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L113-L143[Demo]]
+
+[source,kotlin]
 ----
 class OrderedChart: Chart() {
   override val locale = Locale.UK
@@ -423,7 +431,8 @@ You can fill the chart's lines or rows in the constructor of you chart class.
 All you need to do is importing your data (from a variable, file, database query using Exposed...) , declaring a row in the chart then add the `add()` function to add the row to the chart.
 For example here we have added three dimension and for each dimension we have to specify 2 measures
 
-*Example*
+*Example* [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L145-L171[Demo]]
+
 [source,kotlin]
 ----
 init {
@@ -454,7 +463,7 @@ Galite offers five predefined chart types :
   * Line charts
   * Area charts
   
-The chart type can be defined by calling the setType(VChartType) method. The VChartType class contains the five definitions described above :
+The chart type can be defined by calling the setType(VChartType) method. The VChartType class contains the five definitions described above : [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChartC.kt#L129-L143[Demo]]
 
   * VChartType.PIE
   * VChartType.BAR
@@ -487,7 +496,7 @@ override fun createChart() {
 }
 ----
 
-Otherwise you can create a normal form or block command that executes the following code :
+Otherwise you can create a normal form or block command that executes the following code : [https://github.com/kopiLeft/Galite/blob/893c18ebdcd52797c4c196cd48a29aa958cca1c1/galite-tests/src/test/kotlin/org/kopi/galite/tests/examples/DocumentationChart.kt#L62-L67[Demo]]
 
 [source,kotlin]
 ----
