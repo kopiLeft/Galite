@@ -18,12 +18,9 @@
 package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.Serializable
-import java.util.*
 
 import org.kopi.galite.visual.form.VBlock
-
-import com.vaadin.flow.data.binder.PropertyDefinition
-import com.vaadin.flow.function.ValueProvider
+import org.kopi.galite.visual.form.VField
 
 /**
  * An item sorter implementation for the grid block. Constructs a DefaultItemSorter using the default `Comparator`
@@ -31,85 +28,54 @@ import com.vaadin.flow.function.ValueProvider
  */
 class DGridBlockItemSorter(
         private val model: VBlock
-) : ValueProvider<DGridBlockContainer.GridBlockItem?, Any> {
-
-  private var sortPropertyIds: Array<Any>? = null
-  private var sortDirections: BooleanArray? = null
-  private var container: PropertyDefinition<DGridBlockContainer.GridBlockItem?, Any>? = null
-  private val propertyValueComparator: Comparator<Any?> = DefaultPropertyValueComparator()
-
-  // --------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------
-  override fun apply(source: DGridBlockContainer.GridBlockItem?): Any {
-    TODO("Not yet implemented")
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see com.vaadin.data.util.ItemSorter#compare(java.lang.Object,
-   * java.lang.Object)
-   */
-  fun compare(o1: Any, o2: Any): Int {
-    val rec1 = model.getSortedPosition(o1 as Int)
-    val rec2 = model.getSortedPosition(o2 as Int)
-    return if (isSortedRecordFilled(rec1) && isSortedRecordFilled(rec2)) {
-      if (sortPropertyIds!!.isEmpty()) {
-        rec1.compareTo(rec2) // keep the records order
-      } else {
-        compareProperties(rec1, rec2)
-      }
-    } else if (!isSortedRecordFilled(rec1) && !isSortedRecordFilled(rec2)) {
-      rec1.compareTo(rec2) // keep the records order
-    } else if (isSortedRecordFilled(rec1)) {
-      -1 // empty records are always at the bottom
-    } else {
-      1 // empty records are always at the bottom
-    }
-  }
-
-  protected fun isSortedRecordFilled(rec: Int): Boolean {
-    return (model.isRecordChanged(model.getDataPosition(rec))
-            || model.isRecordFetched(model.getDataPosition(rec)))
-  }
+) {
 
   /**
-   * Compare the properties values.
-   * @param o1 The first item.
-   * @param o2 The second item.
-   * @return The comparison result.
-   */
-  protected fun compareProperties(o1: Any?, o2: Any?): Int {
-    TODO()
-  }
-
-  /**
-   * Provides a default comparator used for comparing [Property] values.
-   * The `DefaultPropertyValueComparator` assumes all objects it
+   * Provides a default comparator used for comparing grid values.
+   * The `DefaultComparator` assumes all objects it
    * compares can be cast to Comparable.
    *
    */
-  class DefaultPropertyValueComparator : Comparator<Any?>, Serializable {
-    override fun compare(o1: Any?, o2: Any?): Int {
-      var result = 0
+  class DefaultComparator(val model: VBlock, val field: VField) : Comparator<DGridBlockContainer.GridBlockItem?>, Serializable {
 
-      // Normal non-null comparison
-      result = if (o1 != null && o2 != null) {
-        // Assume the objects can be cast to Comparable, throw
-        // ClassCastException otherwise.
-        (o1 as Comparable<Any?>).compareTo(o2)
-      } else if (o1 == o2) {
-        // Objects are equal if both are null
-        0
+    override fun compare(o1: DGridBlockContainer.GridBlockItem?, o2: DGridBlockContainer.GridBlockItem?): Int {
+      val ascendantSortDirection = o1!!.record > o2!!.record
+      val (rec1, rec2) = if (ascendantSortDirection) {
+        model.getSortedPosition(o1.record) to model.getSortedPosition(o2.record)
       } else {
-        if (o1 == null) {
-          -1 // null is less than non-null
-        } else {
-          1 // non-null is greater than null
-        }
+        model.getSortedPosition(o2.record) to model.getSortedPosition(o1.record)
       }
-      return result
+      val item1 = DGridBlockContainer.GridBlockItem(o1.record).getValue(field)
+      val item2 = DGridBlockContainer.GridBlockItem(o2.record).getValue(field)
+
+      return if (isSortedRecordFilled(rec1) && isSortedRecordFilled(rec2)) {
+        // Normal non-null comparison
+        if (item1 != null && item2 != null) {
+          // Assume the objects can be cast to Comparable, throw
+          // ClassCastException otherwise.
+          (item1 as Comparable<Any?>).compareTo(item2)
+        } else if (item1 == item2) {
+          // Objects are equal if both are null
+          0
+        } else {
+          if (item1 == null) {
+            -1 // null is less than non-null
+          } else {
+            1 // non-null is greater than null
+          }
+        }
+      } else if (!isSortedRecordFilled(rec1) && !isSortedRecordFilled(rec2)) {
+        rec1.compareTo(rec2) // keep the records order
+      } else if (isSortedRecordFilled(rec1)) {
+        -1 // empty records are always at the bottom
+      } else {
+        1 // empty records are always at the bottom
+      }
+    }
+
+    private fun isSortedRecordFilled(rec: Int): Boolean {
+      return (model.isRecordChanged(model.getDataPosition(rec))
+              || model.isRecordFetched(model.getDataPosition(rec)))
     }
   }
 }

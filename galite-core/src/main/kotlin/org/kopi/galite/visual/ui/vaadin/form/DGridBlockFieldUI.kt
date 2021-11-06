@@ -75,7 +75,7 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
                                       help: String?,
                                       index: Int,
                                       model: VBlock.OrderModel): UChartLabel {
-    return DGridEditorLabel(text, help)
+    return DGridEditorLabel(text, help, index, model)
   }
 
   override fun createFieldHandler(): FieldHandler = DGridBlockFieldHandler(this)

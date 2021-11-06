@@ -240,10 +240,10 @@ fun addProducts() {
 }
 
 fun addSales() {
-  addSale(1, 0, 1)
-  addSale(1, 1, 1)
-  addSale(1, 2, 2)
-  addSale(1, 3, 3)
+  addSale(1, 0, 1, 1)
+  addSale(1, 1, 1, 2)
+  addSale(1, 2, 2, 6)
+  addSale(1, 3, 3, 3)
 }
 
 fun addProduct(id: Int, description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
@@ -258,8 +258,9 @@ fun addProduct(id: Int, description: String, category: Int, taxName: String, dep
   }
 }
 
-fun addSale(client: Int, product: Int, qty: Int) {
+fun addSale(client: Int, product: Int, qty: Int, i: Int) {
   Purchase.insert {
+    it[id] = i
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty

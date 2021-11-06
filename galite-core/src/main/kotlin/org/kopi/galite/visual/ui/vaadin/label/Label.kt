@@ -51,11 +51,6 @@ open class Label : VAnchorPanel(), HasEnabled {
       field = value
     }
 
-  /**
-   * Is it a sortable label ?
-   */
-  var sortable = false
-
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
