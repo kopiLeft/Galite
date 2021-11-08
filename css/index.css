@@ -18,6 +18,13 @@
 /*
  * index style
  */
+
+* {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
 body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
@@ -107,4 +114,167 @@ body {
 
 #section {
     color: #466e71;
+}
+
+/* General */
+
+.section{
+    max-width: 100vw;
+    background-color: #336791;
+}
+
+/* Main section */
+
+#main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: #28afce solid 5px;
+    padding: 10rem 0 ;
+}
+.main-logo{
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 2rem;
+}
+.main-paragraph{
+    display: block;
+    max-height: 70%;
+    max-width: 50%;
+    text-align: center;
+    text-justify: distribute-all-lines;
+    font-size: 17px;
+    font-weight: 400;
+    padding: 0 1.8rem;
+    margin-bottom: 3rem;
+}
+.main-actions{
+    display: block;
+    margin: 0 auto;
+    align-items: center;
+}
+.main-actions > .btn:not(:last-child){
+    margin-right: 1.5rem;
+}
+
+@media screen and (max-width: 900px) {
+    .main-paragraph{
+        max-height: 90%;
+        max-width: 75%;
+        font-size: 16px;
+        padding: 0 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .main-actions > .btn:not(:last-child){
+        margin-bottom: 1rem;
+        margin-right: 0;
+    }
+    .main-actions > .btn{
+        display: block;
+    }
+}
+
+/* Buttons */
+
+.btn{
+    padding: 1rem 2rem ;
+    border-radius: 40% /100%;
+    font-size: 17px;
+    white-space: nowrap;
+    color: black;
+}
+.btn:hover{
+    cursor: pointer;
+}
+.btn-outline--primary{
+    background: transparent;
+    border: 2px #28afce solid ;
+    padding: 0.9rem 2rem ;
+}
+.btn-outline--secondary{
+    background: transparent;
+    border: 2px #466e71 solid;
+    padding: 0.9rem 2rem ;
+}
+.btn--primary{
+    background-color: #28afce;
+    color: #fff !important;
+}
+.btn--secondary{
+    background-color: #466e71 ;
+    color: #fff !important;
+}
+
+a.btn{
+    text-decoration: none;
+}
+a.btn:visited{
+    color:inherit;
+}
+
+/* Features sections */
+
+#features-section{
+    height: auto;
+    background-color: #f6f6f6;
+    padding:5rem 0;
+}
+.features-box{
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: start;
+}
+.feature{
+    max-width: 33%;
+    display: inline-block;
+    padding: 0 1.8rem;
+}
+.feature-title{
+    color: #28afce;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.feature-paragraph{
+    color: black;
+
+    display: block;
+    text-align: center;
+    font-size: medium;
+    font-weight: 300;
+}
+
+@media screen and (max-width: 900px) {
+    .features-box{
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature{
+        display: block;
+        margin-bottom: 1rem;
+        max-width: 70%;
+    }
+
+}
+
+/* Footer */
+
+footer{
+    background-color: #155195;
+    padding: 3rem;
+    color: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.footer-actions{
+    display: flex;
+    flex-direction: row;
+}
+.footer-copyright{
+    text-align: center;
 }
