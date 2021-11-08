@@ -28,6 +28,7 @@ import org.kopi.galite.tests.db.createDBSchemaTables
 import org.kopi.galite.tests.db.dropDBSchemaTables
 import org.kopi.galite.tests.db.insertIntoUsers
 import org.kopi.galite.tests.db.TEST_DB_USER
+import org.kopi.galite.tests.db.connectToDatabase
 import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
@@ -158,5 +159,45 @@ fun addTrainer(firstName: String, lastName: String) {
     it[id] = trainerSequence.nextIntVal()
     it[trainerFirstName] = firstName
     it[trainerLastName] = lastName
+  }
+}
+
+fun initDocumentationData() {
+  connectToDatabase()
+  dropDocumentationTables()
+  transaction {
+    SchemaUtils.create(TestTable, TestTable2, TestTriggers)
+    SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
+    TestTable.insert {
+      it[id] = 1
+      it[name] = "TEST-1"
+    }
+    TestTable.insert {
+      it[id] = 2
+      it[name] = "TEST-2"
+    }
+    TestTable.insert {
+      it[id] = 3
+      it[name] = "NAME"
+      it[lastName] = "lastname"
+    }
+    TestTable2.insert {
+      it[id] = 1
+      it[name] = "T"
+      it[refTable1] = 1
+    }
+    TestTriggers.insert {
+      it[id] = 1
+      it[INS] = "INS-1"
+      it[UPD] = "UPD-1"
+    }
+  }
+}
+
+fun dropDocumentationTables() {
+  connectToDatabase()
+  transaction {
+    SchemaUtils.drop(TestTable, TestTable2, TestTriggers)
+    SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
   }
 }
