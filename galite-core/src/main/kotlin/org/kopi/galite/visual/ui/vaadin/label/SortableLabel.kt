@@ -17,9 +17,100 @@
  */
 package org.kopi.galite.visual.ui.vaadin.label
 
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+
 /**
  * The sortable label component.
  */
 open class SortableLabel(text: String?) : Label() {
- // TODO
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val listeners = mutableListOf<SortableLabelListener>()
+  private val sortIconNone = Icon(VaadinIcon.SORT)
+  private val sortIconAsc = Icon(VaadinIcon.CARET_UP)
+  private val sortIconDesc = Icon(VaadinIcon.CARET_DOWN)
+  private val sortIcon = Div(sortIconNone)
+  private var sortMode = 0
+
+  /**
+   * Switches the sort image.
+   */
+  protected open fun switchSortImage() {
+    sortMode++
+    if (sortMode > SORT_DESC) {
+      sortMode = SORT_NONE
+    }
+
+    when (sortMode) {
+      SORT_NONE -> {
+        setIcon(sortIconNone)
+      }
+      SORT_ASC -> {
+        setIcon(sortIconAsc)
+      }
+      SORT_DESC -> {
+        setIcon(sortIconDesc)
+      }
+    }
+  }
+
+  private fun setIcon(icon: Icon) {
+    sortIcon.removeAll()
+    sortIcon.add(icon)
+  }
+
+  /**
+   * Registers a new sortable label listener
+   * @param l The listener to be registered.
+   */
+  open fun addSortableLabelListener(l: SortableLabelListener) {
+    listeners.add(l)
+  }
+
+  /**
+   * Removes a new sortable label listener
+   * @param l The listener to be removed.
+   */
+  open fun removeSortableLabelListener(l: SortableLabelListener?) {
+    listeners.remove(l)
+  }
+
+  /**
+   * Is it a sortable label ?
+   */
+  var sortable = false
+    set(value) {
+      field = value
+
+      if (value) {
+        addStyleDependentName("sortable")
+        add(sortIcon)
+        sortIcon.addClickListener {
+          // switch sort
+          switchSortImage()
+
+          // fire event.
+          fireOnSort()
+        }
+      }
+    }
+
+  /**
+   * Fires a sort event.
+   */
+  protected open fun fireOnSort() {
+    for (l in listeners) {
+      l.onSort()
+    }
+  }
+
+  /**
+   * Constants defining the current direction of the sort.
+   */
+  var SORT_NONE = 0
+  var SORT_ASC = 1
+  var SORT_DESC = 2
 }

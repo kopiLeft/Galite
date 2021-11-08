@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import kotlin.streams.toList
+
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.form.Alignment
 import org.kopi.galite.visual.form.VActorField
@@ -49,6 +51,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.internal.ExecutionContext
+import com.vaadin.flow.data.provider.Query
 
 /**
  * Grid based chart block implementation.
@@ -101,9 +104,9 @@ open class DGridBlock(parent: DForm, model: VBlock)
   private var doNotCancelEditor = true // TODO
 
   private var filterRow: HeaderRow? = null
-
+  private lateinit var sortableHeaders: MutableMap<Grid.Column<*>, DGridEditorLabel>
+  var lastSortOrder: List<GridSortOrder<DGridBlockContainer.GridBlockItem>>? = null
   lateinit var editor: Editor<DGridBlockContainer.GridBlockItem>
-
   val isEditorInitialized get() = ::editor.isInitialized
 
   override fun setSortedRecords(sortedRecords: IntArray) {
@@ -402,17 +405,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   /**
-   * Clears the grid sort order
-   */
-  protected fun clearSortOrder() {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (::grid.isInitialized) {
-        grid.clearSortOrder()
-      }
-    })*/
-  }
-
-  /**
    * Cancels the grid editor
    */
   protected fun cancelEditor() {
@@ -447,8 +439,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
     access(currentUI) {
       if (::grid.isInitialized) {
         cancelEditor()
-        clearSortOrder()
-        containerDatasource.doSort()
         contentChanged()
         if (model.activeRecord != -1) {
           editRecord(model.activeRecord)
@@ -461,15 +451,34 @@ open class DGridBlock(parent: DForm, model: VBlock)
           event: SortEvent<Grid<DGridBlockContainer.GridBlockItem>, GridSortOrder<DGridBlockContainer.GridBlockItem>>?,
   ) {
     if (event!!.isFromClient) {
-      cancelEditor()
-      // update model sorted records
-      /*for (i in 0 until containerDatasource.allItemIds.size()) { TODO
-        model.sortedRecords[i] = containerDatasource.allItemIds[i]
-      }*/
+      // Sort records
+      if(event.sortOrder.isNotEmpty()) {
+        sort(event.sortOrder)
+      } else {
+        sort(lastSortOrder!!)
+      }
+
+      lastSortOrder = event.sortOrder
     }
   }
 
+  fun sort(sortOrder: List<GridSortOrder<DGridBlockContainer.GridBlockItem>>) {
+    sortOrder.forEach {
+      sortableHeaders[it.sorted]?.let { label ->
+        label.model?.sortColumn(label.fieldIndex!!)
+      }
+    }
+  }
 
+  private fun getActualItems(): List<DGridBlockContainer.GridBlockItem> {
+    val dataProvider = grid.dataProvider as ListDataProvider
+    val totalSize = dataProvider.items.size
+    val dataCommunicator = grid.dataCommunicator
+    val stream = dataProvider.fetch(
+      Query(0, totalSize, dataCommunicator.backEndSorting, dataCommunicator.inMemorySorting, dataProvider.filter)
+    )
+    return stream.toList()
+  }
 
   fun columnResize(event: ColumnResizeEvent<DGridBlockContainer.GridBlockItem>?) {
     // on column resize, we cancel editor to be resized
@@ -517,6 +526,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   protected fun configure() {
     val binder: Binder<DGridBlockContainer.GridBlockItem> = Binder()
 
+    sortableHeaders = mutableMapOf()
     editor.binder = binder
 
     grid.addItemClickListener {
@@ -539,15 +549,25 @@ open class DGridBlock(parent: DForm, model: VBlock)
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
         if (columnView.hasDisplays()) {
+          val label = columnView.editorField.label
           val column = grid.addColumn { columnView.editorField.format(it.getValue(field)) }
                   .setKey(i.toString())
-                  .setHeader(columnView.editorField.label)
+                  .setHeader(label)
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
 
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
+          if(field.isSortable()) {
+            val comparator = DGridBlockItemSorter.DefaultComparator(model, field)
+
+            column.setComparator(comparator)
+
+            if(label != null) {
+              sortableHeaders[column] = label
+            }
+          }
           val width =
                   when (field) {
                     is VBooleanField -> 46 // boolean field length
@@ -687,7 +707,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
           // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            editor.editItem(grid.dataCommunicator.getItem(itemToBeEdited!!))
+            editor.editItem(getActualItems().single { it.record == record })
           }
         }
       }
