@@ -58,7 +58,9 @@ class DGridBlockItemSorter(
           // Objects are equal if both are null
           0
         } else {
-          if (item1 == null) {
+          val item = if (ascendantSortDirection) item2 else item1
+
+          if (item == null) {
             -1 // null is less than non-null
           } else {
             1 // non-null is greater than null
