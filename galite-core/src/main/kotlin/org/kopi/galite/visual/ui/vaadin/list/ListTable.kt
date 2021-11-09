@@ -63,7 +63,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   /**
    * Install filters on all properties.
    */
-  fun installFilters(model: VListDialog?) {
+  fun installFilters(model: VListDialog) {
     val filterRow = appendHeaderRow()
 
     filterRow.also { element.classList.add("list-filter") }
@@ -83,7 +83,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
       cell.setComponent(filterField)
       filterField
     }
-    (dataProvider as ListDataProvider).filter = ListFilter(filterFields, true, false)
+    (dataProvider as ListDataProvider).filter = ListFilter(filterFields, model, true, false)
 
     element.classList.add("filtered")
   }
@@ -93,7 +93,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
    * @param o The object to be formatted.
    * @return The formatted property object.
    */
-  protected fun formatObject(o: Any?, col: Int): String {
+  private fun formatObject(o: Any?, col: Int): String {
     return model.columns[col]!!.formatObject(o).toString()
   }
 

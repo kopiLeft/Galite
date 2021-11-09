@@ -340,6 +340,8 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun filterShown() {
+    val dataProvider = grid.dataProvider as ListDataProvider
+
     if (filterRow != null) {
       access {
         grid.element.themeList.remove("hidden-filter")
@@ -351,23 +353,25 @@ open class DGridBlock(parent: DForm, model: VBlock)
     access {
       filterRow = grid.appendHeaderRow()
       filterRow.also { element.classList.add("block-filter") }
-      grid.columns.forEachIndexed { index, column ->
+      val filterFields = grid.columns.mapIndexed { index, column ->
         val cell = filterRow!!.getCell(column)
         val filter = TextField()
         val search = Icon(VaadinIcon.SEARCH)
+        val field = (column.editorComponent as GridEditorField<*>).dGridEditorField.getModel()
         filter.setWidthFull()
 
         filter.suffixComponent = search
         filter.className = "block-filter-text"
         filter.addValueChangeListener {
-          val field = (column.editorComponent as GridEditorField<*>).dGridEditorField.getModel()
-
-          (grid.dataProvider as ListDataProvider).filter = DGridBlockFilter(field, filter.value, true, false)
+          dataProvider.refreshAll()
         }
 
         filter.valueChangeMode = ValueChangeMode.EAGER
         cell.setComponent(filter)
+
+        FilterField(field, filter)
       }
+      dataProvider.filter = DGridBlockFilter(filterFields, true, false)
     }
   }
 
