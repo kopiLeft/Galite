@@ -63,25 +63,28 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   /**
    * Install filters on all properties.
    */
-  fun installFilters(model: VListDialog?) {
+  fun installFilters(model: VListDialog) {
     val filterRow = appendHeaderRow()
 
     filterRow.also { element.classList.add("list-filter") }
-    this.columns.forEachIndexed { index, column ->
+    val filterFields = this.columns.mapIndexed { _, column ->
       val cell = filterRow.getCell(column)
-      val filter = TextField()
-      filter.setWidthFull()
+      val filterField = TextField()
       val search = Icon(VaadinIcon.SEARCH)
 
-      filter.suffixComponent = search
-      filter.className = "filter-text"
-      filter.addValueChangeListener {
-        (dataProvider as ListDataProvider).filter = ListFilter(index, filter.value, true, false)
+      filterField.setWidthFull()
+      filterField.suffixComponent = search
+      filterField.className = "filter-text"
+      filterField.addValueChangeListener {
+        (dataProvider as ListDataProvider).refreshAll()
       }
 
-      filter.valueChangeMode = ValueChangeMode.EAGER
-      cell.setComponent(filter)
+      filterField.valueChangeMode = ValueChangeMode.EAGER
+      cell.setComponent(filterField)
+      filterField
     }
+    (dataProvider as ListDataProvider).filter = ListFilter(filterFields, model, true, false)
+
     element.classList.add("filtered")
   }
 
@@ -90,7 +93,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
    * @param o The object to be formatted.
    * @return The formatted property object.
    */
-  protected fun formatObject(o: Any?, col: Int): String {
+  private fun formatObject(o: Any?, col: Int): String {
     return model.columns[col]!!.formatObject(o).toString()
   }
 
