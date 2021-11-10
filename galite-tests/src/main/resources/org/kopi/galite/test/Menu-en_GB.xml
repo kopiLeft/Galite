@@ -14,4 +14,8 @@
     <module ident="2006" label="Form to test triggers" />
     <module ident="2007" label="DOCUMENTATION FORMS" />
     <module ident="2008" label="Form to test form fields" />
+    <module ident="2009" label="Form to test form blocks" />
+    <module ident="2010" label="Form tests" />
+    <module ident="2011" label="Form to test simple report" />
+    <module ident="2012" label="Form to test report triggers" />
 </modules>

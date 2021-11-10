@@ -48,7 +48,7 @@ import org.kopi.galite.visual.visual.FileHandler
 
 class DocumentationFieldsForm : DictionaryForm() {
   override val locale = Locale.UK
-  override val title = "Commands Form"
+  override val title = "Form to test fields"
 
   val action = menu("Action")
 

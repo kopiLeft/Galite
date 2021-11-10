@@ -34,5 +34,9 @@ fun initModules() {
     insertIntoModule("2006", "org/kopi/galite/test/Menu", 105, "2000", FormToTestTriggers::class)
     insertIntoModule("2007", "org/kopi/galite/test/Menu", 200)
     insertIntoModule("2008", "org/kopi/galite/test/Menu", 201, "2007", DocumentationFieldsForm::class)
+    insertIntoModule("2009", "org/kopi/galite/test/Menu", 202, "2007", DocumentationBlockForm::class)
+    insertIntoModule("2010", "org/kopi/galite/test/Menu", 203, "2007", DocumentationForm::class)
+    insertIntoModule("2011", "org/kopi/galite/test/Menu", 204, "2007", DocumentationReport::class)
+    insertIntoModule("2012", "org/kopi/galite/test/Menu", 205, "2007", DocumentationReportTriggers::class)
   }
 }

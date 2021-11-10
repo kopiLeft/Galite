@@ -201,3 +201,39 @@ fun dropDocumentationTables() {
     SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
   }
 }
+
+fun initReportDocumentationData() {
+  dropReportDocumentationTables()
+  connectToDatabase()
+  transaction {
+    SchemaUtils.create(TestTable, TestTriggers)
+    SchemaUtils.createSequence(Sequence("TESTTABLE1ID"))
+    SchemaUtils.createSequence(Sequence("TRIGGERSID"))
+    TestTable.insert {
+      it[id] = 1
+      it[name] = "Ahmed"
+      it[lastName] = "Malouli"
+      it[age] = 40
+    }
+    TestTable.insert {
+      it[id] = 2
+      it[name] = "Ahmed"
+      it[lastName] = "Cherif"
+      it[age] = 30
+    }
+    TestTable.insert {
+      it[id] = 3
+      it[name] = "SALAH"
+      it[lastName] = "MOUELHI"
+      it[age] = 30
+    }
+  }
+}
+
+fun dropReportDocumentationTables() {
+  connectToDatabase()
+  transaction {
+    SchemaUtils.drop(TestTable, TestTriggers)
+    SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TRIGGERSID"))
+  }
+}

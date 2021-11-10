@@ -54,10 +54,10 @@ class DocumentationReport : ReportSelectionForm() {
     icon = "report"
   }
 
-  val block2 = insertBlock(Block1())
+  val block = insertBlock(Block())
 
-  //simple block
-  inner class Block1 : FormBlock(1, 10, "Block1") {
+  // simple block
+  inner class Block : FormBlock(1, 10, "Block1") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
@@ -65,7 +65,7 @@ class DocumentationReport : ReportSelectionForm() {
     init {
       command(item = report) {
         action = {
-          createReport(this@Block1)
+          createReport(this@Block)
         }
       }
     }
@@ -73,26 +73,6 @@ class DocumentationReport : ReportSelectionForm() {
 }
 
 fun main() {
-  connectToDatabase()
-  transaction {
-    SchemaUtils.create(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TESTTABLE1ID"))
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TRIGGERSID"))
-    TestTable.insert {
-      it[id] = 1
-      it[name] = "Test-1"
-      it[age] = 40
-    }
-    TestTable.insert {
-      it[id] = 2
-      it[name] = "Test-1"
-      it[age] = 30
-    }
-    TestTable.insert {
-      it[id] = 3
-      it[name] = "TEST-2"
-      it[age] = 30
-    }
-  }
+  initReportDocumentationData()
   runForm(formName = DocumentationReport())
 }

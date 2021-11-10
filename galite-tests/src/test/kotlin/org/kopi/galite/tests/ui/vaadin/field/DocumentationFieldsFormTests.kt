@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
-
 import java.util.stream.Collectors
 
 import kotlin.test.assertEquals
@@ -61,6 +60,8 @@ import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.testing.expectInformationNotification
+import org.kopi.galite.visual.ui.vaadin.form.DBlock
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -73,9 +74,7 @@ import com.github.mvysny.kaributesting.v10.getSuggestionItems
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.provider.SortDirection
-import org.kopi.galite.testing.expectInformationNotification
 
 class DocumentationFieldsFormTests : GaliteVUITestBase() {
   val form = DocumentationFieldsForm().also { it.model }
@@ -498,11 +497,10 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test ACCESS trigger`() {
-    // TriggersFieldBlock in the 8th block in the form
-    val field =  _find<VerticalLayout> {classes = "k-block" }[8]._get<Div> { classes = "skipped"}
-
+    val blocks = _find<DBlock>()
+    val block = blocks.single { it.model.title == "Block to test: Field Triggers" }
     // the visibility of the filed is changed to skipped by the ACCESS trigger
-    assertFalse(field.isEnabled)
+    assertFalse(block._get<Div> { classes = "skipped"}.isEnabled)
   }
 
   @Test
@@ -550,7 +548,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
   }
 
   @Test
-  fun `test PREUPD trigger`() {
+  fun `test PREUPD and POSTUPD trigger`() {
     transaction {
       initDocumentationData()
     }
@@ -562,25 +560,12 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.triggersFieldsBlock.preUpdTriggerField.edit("a")
     form.saveBlock.triggerCommand()
 
+    // POSTUPD : click on list command then save command and assert that POSTUPD trigger show an Information Notification
+    expectInformationNotification("POSTUPD Trigger")
+
     transaction {
       assertEquals("PREUPD Trigger", TestTriggers.selectAll().last()[TestTriggers.UPD])
     }
-  }
-
-  @Test
-  fun `test POSTUPD trigger`() {
-    transaction {
-      initDocumentationData()
-    }
-
-    form.triggersFieldsBlock.enter()
-    form.list.triggerCommand()
-    form.triggersFieldsBlock.preUpdTriggerField.click()
-    form.triggersFieldsBlock.preUpdTriggerField.edit("a")
-    form.saveBlock.triggerCommand()
-
-    // POSTUPD : click on list command then save command and assert that POSTUPD trigger show an Information Notification
-    expectInformationNotification("POSTUPD Trigger")
   }
 
   @Test

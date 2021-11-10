@@ -31,12 +31,12 @@ import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.visual.VColor
 
 /**
-* test locale, title, help for chart
+ * test locale, title, help for chart
  * test menu
  * test actor
  * test command
  * create measure & dimension
- * test trigger field : color & format ( uperCase, lowerCase)
+ * test trigger field : color & format ( upperCase, lowerCase)
  * test chart triggers : init, preChar, postChart, type
  * test data initialization
  */
