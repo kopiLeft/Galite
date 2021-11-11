@@ -24,17 +24,14 @@ import kotlin.test.assertTrue
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.form.Border
-import org.kopi.galite.visual.dsl.form.FieldAlignment
-import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
-import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.dsl.form.*
 import org.kopi.galite.visual.form.VConstants
 
 class FormDSLTests: VApplicationTestBase() {
@@ -46,6 +43,7 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(form.locale, model.locale)
     assertEquals(form.title, model.getTitle())
   }
+
 
   @Test
   fun `test a simple form block`() {
@@ -159,6 +157,40 @@ class FormDSLTests: VApplicationTestBase() {
         assertFalse(clientBlock.hasTrigger(i))
       }
     }
+  }
+
+  @Test
+  fun `test block indexes`() {
+    val form = MultipleBlockForm()
+    val formModel = form.model
+
+    assertEquals(formModel.blocks.get(1).getFieldIndex(formModel.blocks.get(1).idField), form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField))
+
+  }
+
+  @Test
+  fun `test Form Coordinate Position`() {
+    val firstCoordinatePosition = FormCoordinatePosition(1,2,3,4)
+    val secondCoordinatePosition = FormCoordinatePosition(5)
+    val thirdCoordinatePosition = FormCoordinatePosition(1,2)
+    val fourthCoordinatePosition = FormCoordinatePosition(1,2,3,4,5)
+
+    // first coordinate position
+    assertEquals(firstCoordinatePosition.getPositionModel().chartPos, -1)
+    assertEquals(firstCoordinatePosition.getPositionModel().column, 3)
+    assertEquals(firstCoordinatePosition.getPositionModel().line, 1)
+    // second coordinate position
+    assertEquals(secondCoordinatePosition.getPositionModel().chartPos, 5)
+    assertEquals(secondCoordinatePosition.getPositionModel().column, -1)
+    assertEquals(secondCoordinatePosition.getPositionModel().line, -1)
+    // third coordinate position
+    assertEquals(thirdCoordinatePosition.getPositionModel().chartPos, -1)
+    assertEquals(thirdCoordinatePosition.getPositionModel().column, 2)
+    assertEquals(thirdCoordinatePosition.getPositionModel().line, 1)
+    // second coordinate position
+    assertEquals(fourthCoordinatePosition.getPositionModel().chartPos, 5)
+    assertEquals(fourthCoordinatePosition.getPositionModel().column, 3)
+    assertEquals(fourthCoordinatePosition.getPositionModel().line, 1)
   }
 
   @Test
@@ -354,3 +386,47 @@ class FormWithMultipleBlock : Form() {
     }
   }
 }
+
+class FormWithBlockCommand : Form() {
+  override val locale = Locale.UK
+  override val title = "Form with block commands"
+  val reset = menu("reset")
+  val edit = menu("edit")
+
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
+
+  val resetForm = actor(
+          ident = "resetForm",
+          menu = reset,
+          label = "resetForm",
+          help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = "break"
+  }
+  val testActor = Actor("Test", edit, label ="Test", help="Test Command",0)
+
+  val block = insertBlock(BlockWithCommands()){
+    command(item = testActor) {
+      action = {
+        println("Block with commands")
+      }
+    }
+  }
+
+  inner class BlockWithCommands : FormBlock(10, 5, "Block with Commands") {
+    val field1 = hidden(domain = INT(30)) {
+      label = "Field 1"
+    }
+    val field2 = skipped(domain = STRING(30), position = at(1, 1)) {
+      label = "Field 2"
+    }
+
+  }
+}
+

@@ -27,8 +27,12 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.chart.ChartDimension
+import org.kopi.galite.visual.visual.VColor
+import kotlin.math.pow
+import kotlin.test.assertIs
 
-class ChartDSLTests: VApplicationTestBase() {
+class ChartDSLTests : VApplicationTestBase() {
 
   @Test
   fun `test generated model from a basic chart`() {
@@ -54,6 +58,11 @@ class ChartDSLTests: VApplicationTestBase() {
     assertEquals(chart.population.label, populationMeasure.label)
     assertEquals(chart.population.help, populationMeasure.help)
     assertEquals(chart.population.ident, populationMeasure.ident)
+
+    chart.area.color {
+      VColor.BLACK
+    }
+    assertEquals(chart.area.model.color, VColor.BLACK)
   }
 
   @Test
@@ -65,6 +74,31 @@ class ChartDSLTests: VApplicationTestBase() {
     assertEquals(chart.city.label, dimension.label)
     assertEquals(chart.city.help, dimension.help)
     assertEquals(chart.city.ident, dimension.ident)
+
+    chart.city.add("Tunis") {
+      this[chart.population] = 638845
+    }
+    chart.city.add("Sousse") {
+      this[chart.population] = 271428
+    }
+    assertEquals(chart.city.values.size, 2)
+  }
+
+  @Test
+  fun `test chart dimension data`() {
+    val chart = BasicChart()
+
+    chart.city.add("Tunis") {
+      this[chart.population] = 638845
+    }
+    chart.city.add("Sousse") {
+      this[chart.population] = 271428
+    }
+
+    assertEquals(chart.city.values.get(0).getMeasureLabels(), listOf("population"))
+    assertEquals(chart.city.values.get(1).getMeasureLabels(), listOf("population"))
+    assertEquals(chart.city.values.get(0).getMeasureValues(), listOf(638845))
+    assertEquals(chart.city.values.get(1).getMeasureValues(), listOf(271428))
   }
 
   @Test
@@ -84,7 +118,7 @@ class ChartDSLTests: VApplicationTestBase() {
   }
 }
 
-class BasicChart: Chart() {
+class BasicChart : Chart() {
   override val locale = Locale.UK
   override val title = "Area/population per city"
   override val help = "This chart presents the area/population per city"
