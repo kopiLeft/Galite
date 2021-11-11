@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VColumnFormat
+import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
@@ -29,6 +30,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.visual.VColor
+import org.jetbrains.exposed.sql.insert
 
 /**
  * test locale, title, help for chart
@@ -52,20 +54,36 @@ class DocumentationChartC :  Chart() {
   val action = menu("Action")
 
   //chart actor
-  val actorTest = actor(
-    ident = "report",
+  val chartActor = actor(
+    ident = "chart",
     menu = action,
     label = "chart cmd",
     help = "chart cmd",
   ) {
     key = Key.F8
-    icon = "report"
+    icon = "list"
+  }
+
+  val quit = actor(
+    ident = "Quit",
+    menu = action,
+    label = "Quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+
+  val quitCmd = command(item = quit) {
+    action = {
+      model.close()
+    }
   }
 
   // chart command
-  val chartCmd = command(item = actorTest) {
+  val chartCmd = command(item = chartActor) {
     action = {
-      println("------------------ chart command -----------------")
+      this@DocumentationChartC.model.notice("chart command")
     }
   }
 
@@ -113,17 +131,32 @@ class DocumentationChartC :  Chart() {
 /** Chart Triggers Declaration **/
   // trigger INIT
   val init = trigger(INITCHART) {
-    println("INIT Chart")
+  transaction {
+    TestTriggers.insert {
+      it[id] = 5
+      it[INS] = "INIT Trigger"
+    }
+  }
   }
 
   // trigger PRECHART
   val preChart = trigger(PRECHART) {
-    println("PRECHART Chart")
+    transaction {
+      TestTriggers.insert {
+        it[id] = 6
+        it[INS] = "PRECHART Trigger"
+      }
+    }
   }
 
   // trigger POSTCHART
   val postChart = trigger(POSTCHART) {
-    println("POSTCHART Chart")
+    transaction {
+      TestTriggers.insert {
+        it[id] = 7
+        it[INS] = "POSTCHART Trigger"
+      }
+    }
   }
 
   // // trigger type : change chart type
@@ -144,6 +177,8 @@ class DocumentationChartC :  Chart() {
 
   /** Chart data initialization **/
   init {
+    initDocumentationData()
+
     month.add(Month(2021, 10)) {
       this[area] = Decimal("34600")
       this[population] = 1056247

@@ -38,5 +38,6 @@ fun initModules() {
     insertIntoModule("2010", "org/kopi/galite/test/Menu", 203, "2007", DocumentationForm::class)
     insertIntoModule("2011", "org/kopi/galite/test/Menu", 204, "2007", DocumentationReport::class)
     insertIntoModule("2012", "org/kopi/galite/test/Menu", 205, "2007", DocumentationReportTriggers::class)
+    insertIntoModule("2013", "org/kopi/galite/test/Menu", 206, "2007", DocumentationChart::class)
   }
 }

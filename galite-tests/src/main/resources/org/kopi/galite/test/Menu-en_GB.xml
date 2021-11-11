@@ -18,4 +18,5 @@
     <module ident="2010" label="Form tests" />
     <module ident="2011" label="Form to test simple report" />
     <module ident="2012" label="Form to test report triggers" />
+    <module ident="2013" label="Form to test chart" />
 </modules>
