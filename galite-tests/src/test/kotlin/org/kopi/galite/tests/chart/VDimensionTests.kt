@@ -17,66 +17,69 @@
 
 package org.kopi.galite.tests.chart
 
-import org.junit.BeforeClass
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.visual.chart.*
-import org.kopi.galite.visual.domain.BOOL
-import org.kopi.galite.visual.domain.DECIMAL
-import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.chart.ChartDimension
-import org.kopi.galite.visual.dsl.chart.DimensionData
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
-import java.util.*
-import kotlin.test.assertEquals
 
 class VDimensionTests {
-    @Test
-    fun personalizedVDimension(){
-        class TestDimension(ident: String): VDimension(ident, null){
-            override fun toString(value: Any?): String {
-                return value.toString()
-            }
-        }
-        val testDimension:TestDimension = TestDimension("TestIdent")
 
-        assertEquals("null", testDimension.format(null))
-        assertEquals("5", testDimension.format(5))
-        assertEquals("1.618", testDimension.format(1.618))
-        assertEquals("String", testDimension.format("String"))
-    }
-    @Test
-    fun vWeekDimensionTest(){
-        val vWeekDimension: VWeekDimension = VWeekDimension("vweek", null)
-
-        assertEquals(CConstants.EMPTY_TEXT, vWeekDimension.format(null))
-        assertEquals("18.1", vWeekDimension.format(Week(70)))
+  @Test
+  fun personalizedVDimension() {
+    class TestDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
+      override fun toString(value: Any?): String {
+        return value.toString()
+      }
     }
 
-    @Test
-    fun vTimestampDimensionTest(){
-        val vTimestampDimension: VTimestampDimension = VTimestampDimension("vtsd", null)
+    val dimensionWithoutFormat = TestDimension("DimensionWithoutFormat",null)
 
-        assertEquals(CConstants.EMPTY_TEXT, vTimestampDimension.format(null))
-        assertEquals("2021-01-01 00:00:00.000000", vTimestampDimension.format(Timestamp("2021-01-01 00:00:00")))
-    }
-    @Test
-    fun vTimeDimensionTest(){
-        val vTimeDimension: VTimeDimension = VTimeDimension("vtd", null)
+    assertEquals(dimensionWithoutFormat.format(null), "null")
+    assertEquals(dimensionWithoutFormat.format(5), "5")
+    assertEquals(dimensionWithoutFormat.format("String"), "String")
+    assertEquals(dimensionWithoutFormat.format(1.618), "1.618")
 
-        assertEquals(CConstants.EMPTY_TEXT, vTimeDimension.format(null))
-        assertEquals("23:30",vTimeDimension.format(Time(23,30,0)))
-    }
-    @Test
-    fun vStringDimensionTest(){
-        val vStringDimension: VStringDimension = VStringDimension("vsd", null)
+    val dimensionWithFormat = TestDimension("DimensionWithFormat", VColumnFormat())
 
-        assertEquals(CConstants.EMPTY_TEXT, vStringDimension.format(null))
-        assertEquals("String", vStringDimension.format("String"))
-        assertEquals("5", vStringDimension.format(5))
-    }
+    assertEquals(dimensionWithFormat.format(null), CConstants.EMPTY_TEXT)
+    assertEquals(dimensionWithFormat.format(5), "5")
+    assertEquals(dimensionWithFormat.format("String"), "String")
+    assertEquals(dimensionWithFormat.format(1.618), "1.618")
+  }
 
+  @Test
+  fun vWeekDimensionTest() {
+    val vWeekDimension = VWeekDimension("VWeekDimension", null)
+
+    assertEquals(vWeekDimension.format(null), CConstants.EMPTY_TEXT)
+    assertEquals(vWeekDimension.format(Week(70)), "18.1")
+  }
+
+  @Test
+  fun vTimestampDimensionTest() {
+    val vTimestampDimension = VTimestampDimension("VTimestampDimension", null)
+
+    assertEquals(vTimestampDimension.format(null), CConstants.EMPTY_TEXT)
+    assertEquals(vTimestampDimension.format(Timestamp("2021-01-01 00:00:00")), "2021-01-01 00:00:00.000000")
+  }
+
+  @Test
+  fun vTimeDimensionTest() {
+    val vTimeDimension = VTimeDimension("VTimeDimension", null)
+
+    assertEquals(vTimeDimension.format(null), CConstants.EMPTY_TEXT)
+    assertEquals(vTimeDimension.format(Time(23, 30, 0)), "23:30")
+  }
+
+  @Test
+  fun vStringDimensionTest() {
+    val vStringDimension = VStringDimension("VStringDimension", null)
+
+    assertEquals(vStringDimension.format(null), CConstants.EMPTY_TEXT)
+    assertEquals(vStringDimension.format("String"), "String")
+    assertEquals(vStringDimension.format(5), "5")
+  }
 }

@@ -222,7 +222,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
   }
 
   @Test
-  fun InnerLeftInnerJoinFourTables() {
+  fun innerLeftInnerJoinFourTables() {
     FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockFourTablesInnerLeftInnerJoin
 
@@ -244,7 +244,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
   }
 
   @Test
-  fun InnerJoinNoJoinTwoTables() {
+  fun innerJoinNoJoinTwoTables() {
     FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesInnerJoinNoJoin
 
@@ -263,7 +263,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
   }
 
   @Test
-  fun NoJoinInnerJoinTwoTables() {
+  fun noJoinInnerJoinTwoTables() {
     FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesNoJoinInnerJoin
 
@@ -282,7 +282,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
   }
 
   @Test
-  fun LeftJoinNoJoinTwoTables() {
+  fun leftJoinNoJoinTwoTables() {
     FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesLeftJoinNoJoin
 
@@ -301,7 +301,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
   }
 
   @Test
-  fun NoJoinLeftJoinTwoTables() {
+  fun noJoinLeftJoinTwoTables() {
     FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesNoJoinLeftJoin
 

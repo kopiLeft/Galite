@@ -17,27 +17,33 @@
 
 package org.kopi.galite.tests.base
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.visual.base.ExtendedChoiceFormat
-import kotlin.test.assertEquals
+import org.kopi.galite.visual.base.ExtendedMessageFormat
 
 class ExtendedChoiceFormatTests {
 
-    val extendedChoiceFormat = ExtendedChoiceFormat(limits= doubleArrayOf(0.0,0.5,1.0), arrayOf<String>("zero", "half", "one"), true)
+  val extendedChoiceFormat = ExtendedChoiceFormat(doubleArrayOf(0.0, 0.5, 1.0), arrayOf("zero", "half", "one"), true)
 
-    @Test
-    fun testFormat(){
-        assertEquals("one", extendedChoiceFormat.format(1.0))
-        assertEquals("one", extendedChoiceFormat.format(1))
-        assertEquals("half", extendedChoiceFormat.format(0.5))
-        assertEquals("zero", extendedChoiceFormat.format(0))
-        assertEquals("zero", extendedChoiceFormat.format(0.0))
-    }
-    @Test
-    fun testFormatObject(){
-        // internally .format will call .formatObject if the value isn't a Number
-        assertEquals("one", extendedChoiceFormat.format("1.0"))
-        assertEquals("one", extendedChoiceFormat.format("0.0"))
-        assertEquals("one", extendedChoiceFormat.format(object {val name="test"}))
-    }
+  @Test
+  fun testFormat() {
+    assertEquals(extendedChoiceFormat.format(1.0), "one")
+    assertEquals(extendedChoiceFormat.format(1), "one")
+    assertEquals(extendedChoiceFormat.format(0.5), "half")
+    assertEquals(extendedChoiceFormat.format(0), "zero")
+    assertEquals(extendedChoiceFormat.format(0.0), "zero")
+    assertEquals(extendedChoiceFormat.format(2.0), "one")
+    assertEquals(extendedChoiceFormat.format(3.0), "one")
+  }
+
+  @Test
+  fun testFormatObject() {
+    // internally .format will call .formatObject if the value isn't a Number
+    assertEquals(extendedChoiceFormat.format("1.0"), "one")
+    assertEquals(extendedChoiceFormat.format("0.0"), "one")
+    assertEquals(extendedChoiceFormat.format(object {}), "one")
+    assertEquals(extendedChoiceFormat.format(ExtendedMessageFormat.NULL_REPRESENTATION), "zero")
+  }
 }
