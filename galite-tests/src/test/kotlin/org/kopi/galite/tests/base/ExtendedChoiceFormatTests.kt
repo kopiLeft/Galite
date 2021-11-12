@@ -29,21 +29,21 @@ class ExtendedChoiceFormatTests {
 
   @Test
   fun testFormat() {
-    assertEquals(extendedChoiceFormat.format(1.0), "one")
-    assertEquals(extendedChoiceFormat.format(1), "one")
-    assertEquals(extendedChoiceFormat.format(0.5), "half")
-    assertEquals(extendedChoiceFormat.format(0), "zero")
-    assertEquals(extendedChoiceFormat.format(0.0), "zero")
-    assertEquals(extendedChoiceFormat.format(2.0), "one")
-    assertEquals(extendedChoiceFormat.format(3.0), "one")
+    assertEquals("one", extendedChoiceFormat.format(1.0))
+    assertEquals("one", extendedChoiceFormat.format(1))
+    assertEquals("half", extendedChoiceFormat.format(0.5))
+    assertEquals("zero", extendedChoiceFormat.format(0))
+    assertEquals("zero", extendedChoiceFormat.format(0.0))
+    assertEquals("one", extendedChoiceFormat.format(2.0))
+    assertEquals("one", extendedChoiceFormat.format(3.0))
   }
 
   @Test
   fun testFormatObject() {
     // internally .format will call .formatObject if the value isn't a Number
-    assertEquals(extendedChoiceFormat.format("1.0"), "one")
-    assertEquals(extendedChoiceFormat.format("0.0"), "one")
-    assertEquals(extendedChoiceFormat.format(object {}), "one")
-    assertEquals(extendedChoiceFormat.format(ExtendedMessageFormat.NULL_REPRESENTATION), "zero")
+    assertEquals("one", extendedChoiceFormat.format("1.0"),)
+    assertEquals("one", extendedChoiceFormat.format("0.0"),)
+    assertEquals("one", extendedChoiceFormat.format(object {}),)
+    assertEquals("zero", extendedChoiceFormat.format(ExtendedMessageFormat.NULL_REPRESENTATION))
   }
 }
