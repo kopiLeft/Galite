@@ -22,7 +22,7 @@ import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
@@ -44,7 +44,7 @@ class VWindowController : WindowController() {
   override fun doModal(model: VWindow): Boolean {
     return try {
       val viewStarter = ModalViewRunner(model)
-      startAndWait(model as Object) {
+      startAndWaitAndPush(model as Object) {
         viewStarter.run()
       }
       if (viewStarter.getView() == null) false else viewStarter.getView()!!.returnCode == VWindow.CDE_VALIDATE
