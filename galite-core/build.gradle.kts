@@ -78,6 +78,9 @@ dependencies {
 
   // Javax activation
   implementation("javax.activation", "activation", "1.1.1")
+
+  //FullCalendar for Flow dependency
+  implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 }
 
 dependencyManagement {
