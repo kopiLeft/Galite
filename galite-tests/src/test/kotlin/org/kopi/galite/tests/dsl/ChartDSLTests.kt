@@ -27,10 +27,7 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.visual.VColor
-import kotlin.math.pow
-import kotlin.test.assertIs
 
 class ChartDSLTests : VApplicationTestBase() {
 

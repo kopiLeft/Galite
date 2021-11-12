@@ -36,11 +36,13 @@ import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
@@ -931,5 +933,76 @@ class VBlockTests : VApplicationTestBase() {
                    listInfoUser)
       SchemaUtils.drop(User)
     }
+  }
+
+//  @Test
+//  fun `getActiveCommand test`(){
+//    formMultiple.model
+//    val model = formMultiple.multipleBlock.vBlock
+//
+//    assertEquals(model.getActiveCommands().size, 1)
+//    assertEquals(model.getActiveCommands().get(0)?.actor, formMultiple.saveBlock.model)
+//  }
+  @Test
+  fun `setMode test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+
+    model.setMode(VConstants.MOD_INSERT)
+    assertEquals(model.getMode(), VConstants.MOD_INSERT)
+    assertTrue(model.fields.all { it ->
+        for(counter in 1..model.recordCount) {
+          if (it.getAccess(counter) != VConstants.MOD_INSERT)
+            false
+        }
+        true
+    })
+
+  }
+
+  @Test
+  fun `setColor test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+    val recordId = model.recordCount
+
+    model.setColor(recordId, VColor.BLACK, VColor.WHITE)
+    assertTrue(model.fields.all{
+      it.getForeground(recordId) == VColor.BLACK && it.getBackground(recordId) == VColor.WHITE
+    })
+  }
+
+  @Test
+  fun `resetColor test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+    val recordId = model.recordCount
+
+    model.resetColor(recordId)
+    assertTrue(model.fields.all{
+      it.getForeground(recordId) == null && it.getBackground(recordId) == null
+    })
+  }
+
+  @Test
+  fun `sort test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+
+    transaction {
+      initMultipleBlockFormTables()
+      // sorting without column
+      model.sort(-1,1)
+      // verify the results
+
+      println(model.sortedRecords.toString())
+      // sorting using the first column
+      model.sort(1,-1)
+      // verify the results
+      for (field in model.fields){
+        field
+      }
+    }
+
   }
 }

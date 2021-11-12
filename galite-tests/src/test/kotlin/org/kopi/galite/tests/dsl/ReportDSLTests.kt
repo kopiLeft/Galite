@@ -26,7 +26,6 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.dsl.report.ReportRow
 
 class ReportDSLTests : VApplicationTestBase() {
 
@@ -77,6 +76,7 @@ class ReportDSLTests : VApplicationTestBase() {
     val reportModel = report.model
 
     assertEquals(report.reportRows.size, 3)
+
     report.add {
       this[report.id] = 1
       this[report.firstName] = "client 4"

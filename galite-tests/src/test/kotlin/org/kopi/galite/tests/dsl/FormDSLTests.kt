@@ -165,7 +165,6 @@ class FormDSLTests: VApplicationTestBase() {
     val formModel = form.model
 
     assertEquals(formModel.blocks.get(1).getFieldIndex(formModel.blocks.get(1).idField), form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField))
-
   }
 
   @Test
@@ -429,4 +428,3 @@ class FormWithBlockCommand : Form() {
 
   }
 }
-

@@ -17,18 +17,20 @@
 
 package org.kopi.galite.tests.dsl
 
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.field.Field
-import kotlin.test.assertEquals
 
 class FieldDSLTests: VApplicationTestBase(){
 
     @Test
     fun checkLength(){
         val testField = TestField(Domain<String>(6,20,10))
+
         assertEquals(testField.checkLength("Galite"),true)
         assertEquals(testField.checkLength("Galite+"),false)
         assertEquals(testField.checkLength(""),true)

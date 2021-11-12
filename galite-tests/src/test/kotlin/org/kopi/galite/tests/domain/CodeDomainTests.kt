@@ -18,26 +18,19 @@
 package org.kopi.galite.tests.domain
 
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
+import java.util.Locale
 import org.junit.Test
-import org.kopi.galite.visual.chart.VChartType
-import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.chart.VIntegerCodeMeasure
 import org.kopi.galite.visual.chart.VStringCodeDimension
-import org.kopi.galite.visual.domain.*
+import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FormBlock
-import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.form.VPosition
 import org.kopi.galite.visual.form.VStringCodeField
 import org.kopi.galite.visual.report.VStringCodeColumn
-import org.kopi.galite.visual.type.Decimal
-import org.kopi.galite.visual.visual.VColor
-import java.util.*
-import kotlin.test.assertIs
 
 /**
  * Contains tests of code-domain creation and manipulation
@@ -76,6 +69,7 @@ class CodeDomainTests {
     fun buildFormFieldModel() {
         val testForm = TestForm()
         val vField = testForm.block.field1.domain.buildFormFieldModel(testForm.block.field1)
+
         assertIs<VStringCodeField>(vField)
         assertIs<CodeDomain<String>>(testForm.block.field1.domain)
     }
@@ -84,6 +78,7 @@ class CodeDomainTests {
     fun buildReportFieldModel() {
         val testReport = TestReport()
         val vReportField = testReport.testField.domain.buildReportFieldModel(testReport.testField, null, null)
+
         assertIs<VStringCodeColumn>(vReportField)
         assertIs<CodeDomain<String>>(testReport.testField.domain)
     }
@@ -105,10 +100,7 @@ class CodeDomainTests {
         assertIs<VIntegerCodeMeasure>(vDimension)
         assertIs<CodeDomain<String>>(testChart.dimensionTest.domain)
     }
-
-
 }
-
 
 class StringType : CodeDomain<String>() {
     init {

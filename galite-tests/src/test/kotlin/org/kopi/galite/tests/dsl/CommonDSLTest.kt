@@ -17,16 +17,23 @@
 
 package org.kopi.galite.tests.dsl
 
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+
 import org.junit.Test
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.AutoComplete
 import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.dsl.common.*
+import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.dsl.common.Command
+import org.kopi.galite.visual.dsl.common.FieldList
+import org.kopi.galite.visual.dsl.common.ListDescription
+import org.kopi.galite.visual.dsl.common.Menu
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_ANY
 import org.kopi.galite.visual.list.VList
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
+
 
 class CommonDSLTests: VApplicationTestBase() {
 
@@ -35,6 +42,7 @@ class CommonDSLTests: VApplicationTestBase() {
         val menu = Menu("Test")
         val actor = Actor("TActor", menu, "Test Actor","Test Actor",0)
         val command = Command(actor)
+
         assertEquals(command.mode, MOD_ANY) // default mode is MOD_ANY
 
         command.mode(Mode.INSERT)
@@ -72,7 +80,6 @@ class CommonDSLTests: VApplicationTestBase() {
         assertEquals(vListColumn.column, Training.trainingName)
         assertEquals(vListColumn.title, "Training Title")
     }
-
 }
 
 class TrainingList: ListDomain<Int>(20) {
@@ -93,4 +100,3 @@ class TrainingList: ListDomain<Int>(20) {
         "TS" keyOf Training.ts
     }
 }
-
