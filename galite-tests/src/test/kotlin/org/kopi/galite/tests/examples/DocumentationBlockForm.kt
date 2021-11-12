@@ -306,7 +306,7 @@ class DocumentationBlockForm : DictionaryForm() {
   }
 
   // test NOINSERT option
-  inner class NoInsertBlock : FormBlock(2, 2, "NOINSERT Block") {
+  inner class NoInsertBlock : FormBlock(1, 1, "NOINSERT Block") {
     init {
       border = Border.LINE
       options(BlockOption.NOINSERT)
@@ -563,6 +563,5 @@ class DocumentationBlockForm : DictionaryForm() {
 }
 
 fun main() {
-  initDocumentationData()
   runForm(formName = DocumentationBlockForm())
 }

@@ -16,8 +16,6 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
-import java.util.stream.Collectors
-
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -111,13 +109,13 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test Convert Name`() {
-    val text = "INPUT"
+    val text = "INPUT TEXT"
     val field = form.fieldsTypesBlock.string4.findField()
 
     form.fieldsTypesBlock.string4.edit(text)
     form.fieldsTypesBlock.string2.click()
 
-    assertEquals(text.first() + (text.substring(1,text.length)).toLowerCase(), field._value)
+    assertEquals("Input Text", field._value)
   }
 
   @Test
@@ -183,22 +181,22 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
   @Test
   fun `test codeDomain`() {
     val booleanCodeField = _find<VCodeField> {}[0]
-    val booleanList = BoolCode.codes.stream().map { it.label }.collect(Collectors.toList())
+    val booleanList = BoolCode.codes.map { it.label }.toList()
 
     assertCollectionsEquals(booleanList, booleanCodeField.content.getSuggestionItems())
 
     val intCodeField = _find<VCodeField> {}[1]
-    val intList = IntCode.codes.stream().map { it.label }.collect(Collectors.toList())
+    val intList = IntCode.codes.map { it.label }.toList()
 
     assertCollectionsEquals(intList, intCodeField.content.getSuggestionItems())
 
     val decimalCodeField = _find<VCodeField> {}[2]
-    val decimalList = DecimalCode.codes.stream().map { it.label }.collect(Collectors.toList())
+    val decimalList = DecimalCode.codes.map { it.label }.toList()
 
     assertCollectionsEquals(decimalList, decimalCodeField.content.getSuggestionItems())
 
     val stringCodeField = _find<VCodeField> {}[3]
-    val stringList = StringCode.codes.stream().map { it.label }.collect(Collectors.toList())
+    val stringList = StringCode.codes.map { it.label }.toList()
 
     assertCollectionsEquals(stringList, stringCodeField.content.getSuggestionItems())
   }

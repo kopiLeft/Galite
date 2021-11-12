@@ -163,7 +163,6 @@ fun addTrainer(firstName: String, lastName: String) {
 }
 
 fun initDocumentationData() {
-  connectToDatabase()
   dropDocumentationTables()
   transaction {
     SchemaUtils.create(TestTable, TestTable2, TestTriggers)
@@ -195,7 +194,6 @@ fun initDocumentationData() {
 }
 
 fun dropDocumentationTables() {
-  connectToDatabase()
   transaction {
     SchemaUtils.drop(TestTable, TestTable2, TestTriggers)
     SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
@@ -204,7 +202,6 @@ fun dropDocumentationTables() {
 
 fun initReportDocumentationData() {
   dropReportDocumentationTables()
-  connectToDatabase()
   transaction {
     SchemaUtils.create(TestTable, TestTriggers)
     SchemaUtils.createSequence(Sequence("TESTTABLE1ID"))
@@ -231,7 +228,6 @@ fun initReportDocumentationData() {
 }
 
 fun dropReportDocumentationTables() {
-  connectToDatabase()
   transaction {
     SchemaUtils.drop(TestTable, TestTriggers)
     SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TRIGGERSID"))

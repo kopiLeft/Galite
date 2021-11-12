@@ -51,9 +51,9 @@ import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._size
 import com.github.mvysny.kaributesting.v10._value
 import com.github.mvysny.kaributesting.v10.expectRow
+import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
@@ -69,62 +69,45 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
   }
 
   @Test
-  fun `test simple block`() {
-    // Enter simple block
-    form.simpleBlock.enter()
-    val blockCaption = _find<VerticalLayout> {classes = "caption-container" }[0]._get<H4> { classes = "block-title" }
+  fun `test titles of form blocks`() {
+    val simpleBlockCaption = _find<VerticalLayout> {classes = "caption-container" }[0]._get<H4> { classes = "block-title" }
+    assertEquals(form.simpleBlock.title, simpleBlockCaption.text)
 
-    assertEquals(form.simpleBlock.title, blockCaption.text)
+    val multiBlockCaption = _find<VerticalLayout> {classes = "caption-container" }[1]._get<H4> { classes = "block-title" }
+    assertEquals(form.multiBlock.title, multiBlockCaption.text)
+
+    val lineBorderBlockCaption = _find<VerticalLayout> {classes = "caption-container" }[2]._get<H4> { classes = "block-title" }
+    assertEquals(form.lineBorderBlock.title, lineBorderBlockCaption.text)
+
+    val lineRaisedBlockCaption = _find<VerticalLayout> {classes = "caption-container" }[3]._get<H4> { classes = "block-title" }
+    assertEquals(form.raisedBorderBlock.title, lineRaisedBlockCaption.text)
+
+    val loweredBorderBlockCaption = _find<VerticalLayout> {classes = "caption-container" }[4]._get<H4> { classes = "block-title" }
+    assertEquals(form.loweredBorderBlock.title, loweredBorderBlockCaption.text)
+
+    val etchedBorderBlockCaption = _find<VerticalLayout> {classes = "caption-container" }[5]._get<H4> { classes = "block-title" }
+    assertEquals(form.etchedBorderBlock.title, etchedBorderBlockCaption.text)
   }
 
-  @Test
-  fun `test multi block`() {
-    // Enter multi block
-    form.multiBlock.enter()
-    val blockCaption = _find<VerticalLayout> {classes = "caption-container" }[1]._get<H4> { classes = "block-title" }
-
-    assertEquals(form.multiBlock.title, blockCaption.text)
-
-    val block = form.multiBlock.findMultipleBlock()
-
-    assertEquals(form.multiBlock.buffer, block.grid._size())
-
-    for(i in 0 until block.grid._size()) {
-      block.grid.expectRow(i, "")
-    }
-  }
-
-  @Test
+ /* @Test
   fun `test LINE Border block`() {
-    form.lineBorderBlock.enter()
-    val blockCaption = _find<VerticalLayout> {classes = "caption-container" }[2]._get<H4> { classes = "block-title" }
+    TODO
+  }*/
 
-    assertEquals(form.lineBorderBlock.title, blockCaption.text)
-  }
-
-  @Test
+  /*@Test
   fun `test RAISED Border block`() {
-    form.raisedBorderBlock.enter()
-    val blockCaption = _find<VerticalLayout> {classes = "caption-container" }[3]._get<H4> { classes = "block-title" }
+    TODO
+  }*/
 
-    assertEquals(form.raisedBorderBlock.title, blockCaption.text)
-  }
-
-  @Test
+  /*@Test
   fun `test LOWERED Border block`() {
-    form.loweredBorderBlock.enter()
-    val blockCaption = _find<VerticalLayout> {classes = "caption-container" }[4]._get<H4> { classes = "block-title" }
+    TODO
+  }*/
 
-    assertEquals(form.loweredBorderBlock.title, blockCaption.text)
-  }
-
-  @Test
+ /* @Test
   fun `test ETCHED Border block`() {
-    form.etchedBorderBlock.enter()
-    val blockCaption = _find<VerticalLayout> {classes = "caption-container" }[5]._get<H4> { classes = "block-title" }
-
-    assertEquals(form.etchedBorderBlock.title, blockCaption.text)
-  }
+    TODO
+  }*/
 
   @Test
   fun `test NOINSERT block`() {
