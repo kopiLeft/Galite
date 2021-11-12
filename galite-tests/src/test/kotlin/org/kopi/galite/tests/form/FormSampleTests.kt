@@ -41,13 +41,4 @@ class FormSampleTests: JApplicationTestBase() {
     assertArrayEquals(intArrayOf(1, 1, 4), formSample.tb4ToTestChangeBlockAccess.password.access)
     assertArrayEquals(intArrayOf(1, 1, 2), formSample.tb4ToTestChangeBlockAccess.age.access)
   }
-//
-//  @Test
-//  fun `test ListDomain`(){
-//    var form = FormSample()
-//    val formModel = form.model
-//
-//    assertEquals(formModel.blocks.get(5).fields.get(0), form.formBlocks.get(5).vBlock.fields.get(0))
-//    assertEquals()
-//  }
 }

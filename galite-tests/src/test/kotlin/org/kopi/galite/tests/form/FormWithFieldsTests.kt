@@ -28,12 +28,4 @@ class FormWithFieldsTests: JApplicationTestBase() {
     val formModel = FormWithFields().model
     assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
   }
-
-  @Test
-  fun `X`(){
-    val form = FormWithFields()
-    val formModel = form.model
-
-    //form.testBlock.
-  }
 }
