@@ -43,32 +43,32 @@ class CommonDSLTests : VApplicationTestBase() {
     val actor = Actor("TActor", menu, "Test Actor", "Test Actor", 0)
     val command = Command(actor)
 
-    assertEquals(command.mode, MOD_ANY) // default mode is MOD_ANY
+    assertEquals(MOD_ANY, command.mode) // default mode is MOD_ANY
 
     command.mode(Mode.INSERT)
-    assertEquals(command.mode, 2) // mode = 0 | 1 << 1
+    assertEquals(2, command.mode) // mode = 0 | 1 << 1
 
     command.mode(Mode.INSERT, Mode.UPDATE)
-    assertEquals(command.mode, 6) // mode = 0 | 1 << 1 | 1 << 2
+    assertEquals(6, command.mode) // mode = 0 | 1 << 1 | 1 << 2
 
     command.mode(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
-    assertEquals(command.mode, 7) // mode = 0 | 1 << 1 | 1 << 2 || 1 << 0
+    assertEquals(7, command.mode) // mode = 0 | 1 << 1 | 1 << 2 || 1 << 0
   }
 
   @Test
   fun `test FieldList`() {
     val fieldList = FieldList<String>("String", Training, null, mutableListOf(), 0, 0, false)
 
-    assertEquals(fieldList.hasAction(), false)
-    assertEquals(fieldList.hasShortcut(), false)
+    assertEquals(false, fieldList.hasAction())
+    assertEquals(false, fieldList.hasShortcut())
 
     val vFieldList = fieldList.buildListModel("Source")
 
     assertIs<VList>(vFieldList)
-    assertEquals(vFieldList.action, null)
-    assertEquals(vFieldList.autocompleteLength, 0)
-    assertEquals(vFieldList.autocompleteType, 0)
-    assertEquals(vFieldList.table, Training)
+    assertEquals(null, vFieldList.action)
+    assertEquals(0, vFieldList.autocompleteLength)
+    assertEquals(0, vFieldList.autocompleteType)
+    assertEquals(Training, vFieldList.table)
   }
 
   @Test
@@ -77,8 +77,8 @@ class CommonDSLTests : VApplicationTestBase() {
     val listDescription = ListDescription("Training Title", Training.trainingName, trainingListDomain)
     val vListColumn = listDescription.buildModel()
 
-    assertEquals(vListColumn.column, Training.trainingName)
-    assertEquals(vListColumn.title, "Training Title")
+    assertEquals(Training.trainingName, vListColumn.column)
+    assertEquals("Training Title", vListColumn.title)
   }
 }
 

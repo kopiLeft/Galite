@@ -130,18 +130,18 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(null, commandsBlock.alignment)
   }
 
- /* @Test
-  fun `test access fields values`() {
-    val form = FormWithMultipleBlock()
-    val formModel = form.model
-    val clientBlock = formModel.blocks[0]
-    val commandsBlock = formModel.blocks[1]
+  /* @Test
+   fun `test access fields values`() {
+     val form = FormWithMultipleBlock()
+     val formModel = form.model
+     val clientBlock = formModel.blocks[0]
+     val commandsBlock = formModel.blocks[1]
 
-    assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0].access) // Mustfill field
-    assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1].access) // Visit field
-    assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0].access) // Hidden field
-    assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1].access) // Skipped field
-  }*/
+     assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0].access) // Mustfill field
+     assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1].access) // Visit field
+     assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0].access) // Hidden field
+     assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1].access) // Skipped field
+   }*/
 
   @Test
   fun `test block triggers`() {
@@ -164,7 +164,7 @@ class FormDSLTests: VApplicationTestBase() {
     val form = MultipleBlockForm()
     val formModel = form.model
 
-    assertEquals(formModel.blocks.get(1).getFieldIndex(formModel.blocks.get(1).idField), form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField))
+    assertEquals(form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField), formModel.blocks.get(1).getFieldIndex(formModel.blocks.get(1).idField))
   }
 
   @Test
@@ -175,21 +175,21 @@ class FormDSLTests: VApplicationTestBase() {
     val fourthCoordinatePosition = FormCoordinatePosition(1,2,3,4,5)
 
     // first coordinate position
-    assertEquals(firstCoordinatePosition.getPositionModel().chartPos, -1)
-    assertEquals(firstCoordinatePosition.getPositionModel().column, 3)
-    assertEquals(firstCoordinatePosition.getPositionModel().line, 1)
+    assertEquals(-1, firstCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(3, firstCoordinatePosition.getPositionModel().column)
+    assertEquals(1, firstCoordinatePosition.getPositionModel().line)
     // second coordinate position
-    assertEquals(secondCoordinatePosition.getPositionModel().chartPos, 5)
-    assertEquals(secondCoordinatePosition.getPositionModel().column, -1)
-    assertEquals(secondCoordinatePosition.getPositionModel().line, -1)
+    assertEquals(5, secondCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(-1, secondCoordinatePosition.getPositionModel().column)
+    assertEquals(-1, secondCoordinatePosition.getPositionModel().line)
     // third coordinate position
-    assertEquals(thirdCoordinatePosition.getPositionModel().chartPos, -1)
-    assertEquals(thirdCoordinatePosition.getPositionModel().column, 2)
-    assertEquals(thirdCoordinatePosition.getPositionModel().line, 1)
+    assertEquals(-1, thirdCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(2, thirdCoordinatePosition.getPositionModel().column)
+    assertEquals(1, thirdCoordinatePosition.getPositionModel().line)
     // second coordinate position
-    assertEquals(fourthCoordinatePosition.getPositionModel().chartPos, 5)
-    assertEquals(fourthCoordinatePosition.getPositionModel().column, 3)
-    assertEquals(fourthCoordinatePosition.getPositionModel().line, 1)
+    assertEquals(5, fourthCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(3, fourthCoordinatePosition.getPositionModel().column)
+    assertEquals(1, fourthCoordinatePosition.getPositionModel().line)
   }
 
   @Test
@@ -318,17 +318,17 @@ class FormWithMultipleBlock : Form() {
   val edit = menu("edit")
 
   val autoFill = actor(
-    ident = "Autofill",
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
   )
 
   val resetForm = actor(
-    ident = "resetForm",
-    menu = reset,
-    label = "resetForm",
-    help = "Reset Form",
+          ident = "resetForm",
+          menu = reset,
+          label = "resetForm",
+          help = "Reset Form",
   ) {
     key = Key.F7
     icon = "break"

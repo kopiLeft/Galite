@@ -75,7 +75,7 @@ class ReportDSLTests : VApplicationTestBase() {
     val report = ReportWithData()
     val reportModel = report.model
 
-    assertEquals(report.reportRows.size, 3)
+    assertEquals(3, report.reportRows.size)
 
     report.add {
       this[report.id] = 1
@@ -84,11 +84,11 @@ class ReportDSLTests : VApplicationTestBase() {
       this[report.ageClt] = 20
     }
 
-    assertEquals(report.reportRows.size, 4)
-    assertEquals(report.reportRows[1].getValueOf(report.id), 2)
-    assertEquals(report.reportRows[1].getValueOf(report.firstName), "client 1")
-    assertEquals(report.reportRows[1].getValueOf(report.addressClt), "Bizerte")
-    assertEquals(report.reportRows[1].getValueOf(report.ageClt), 20)
+    assertEquals(4, report.reportRows.size)
+    assertEquals(2, report.reportRows[1].getValueOf(report.id))
+    assertEquals("client 1", report.reportRows[1].getValueOf(report.firstName))
+    assertEquals("Bizerte", report.reportRows[1].getValueOf(report.addressClt))
+    assertEquals(20, report.reportRows[1].getValueOf(report.ageClt))
 
   }
 

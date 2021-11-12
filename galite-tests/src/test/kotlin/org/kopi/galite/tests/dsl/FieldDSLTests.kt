@@ -31,9 +31,9 @@ class FieldDSLTests : VApplicationTestBase() {
   fun checkLength() {
     val testField = TestField(Domain<String>(6, 20, 10))
 
-    assertEquals(testField.checkLength("Galite"), true)
-    assertEquals(testField.checkLength("Galite+"), false)
-    assertEquals(testField.checkLength(""), true)
+    assertEquals(true, testField.checkLength("Galite"))
+    assertEquals(false, testField.checkLength("Galite+"))
+    assertEquals(true, testField.checkLength(""))
   }
 }
 
