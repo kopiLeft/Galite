@@ -35,68 +35,68 @@ import org.kopi.galite.visual.form.VConstants.Companion.MOD_ANY
 import org.kopi.galite.visual.list.VList
 
 
-class CommonDSLTests: VApplicationTestBase() {
+class CommonDSLTests : VApplicationTestBase() {
 
-    @Test
-    fun `test Command mode function`(){
-        val menu = Menu("Test")
-        val actor = Actor("TActor", menu, "Test Actor","Test Actor",0)
-        val command = Command(actor)
+  @Test
+  fun `test Command mode function`() {
+    val menu = Menu("Test")
+    val actor = Actor("TActor", menu, "Test Actor", "Test Actor", 0)
+    val command = Command(actor)
 
-        assertEquals(command.mode, MOD_ANY) // default mode is MOD_ANY
+    assertEquals(command.mode, MOD_ANY) // default mode is MOD_ANY
 
-        command.mode(Mode.INSERT)
-        assertEquals(command.mode,2) // mode = 0 | 1 << 1
+    command.mode(Mode.INSERT)
+    assertEquals(command.mode, 2) // mode = 0 | 1 << 1
 
-        command.mode(Mode.INSERT, Mode.UPDATE)
-        assertEquals(command.mode, 6) // mode = 0 | 1 << 1 | 1 << 2
+    command.mode(Mode.INSERT, Mode.UPDATE)
+    assertEquals(command.mode, 6) // mode = 0 | 1 << 1 | 1 << 2
 
-        command.mode(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
-        assertEquals(command.mode, 7) // mode = 0 | 1 << 1 | 1 << 2 || 1 << 0
-    }
+    command.mode(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
+    assertEquals(command.mode, 7) // mode = 0 | 1 << 1 | 1 << 2 || 1 << 0
+  }
 
-    @Test
-    fun `test FieldList`(){
-        val fieldList = FieldList<String>("String", Training, null, mutableListOf(),0 ,0, false)
+  @Test
+  fun `test FieldList`() {
+    val fieldList = FieldList<String>("String", Training, null, mutableListOf(), 0, 0, false)
 
-        assertEquals(fieldList.hasAction(), false)
-        assertEquals(fieldList.hasShortcut(), false)
+    assertEquals(fieldList.hasAction(), false)
+    assertEquals(fieldList.hasShortcut(), false)
 
-        val vFieldList = fieldList.buildListModel("Source")
+    val vFieldList = fieldList.buildListModel("Source")
 
-        assertIs<VList>(vFieldList)
-        assertEquals(vFieldList.action, null)
-        assertEquals(vFieldList.autocompleteLength,0)
-        assertEquals(vFieldList.autocompleteType,0)
-        assertEquals(vFieldList.table,Training)
-    }
+    assertIs<VList>(vFieldList)
+    assertEquals(vFieldList.action, null)
+    assertEquals(vFieldList.autocompleteLength, 0)
+    assertEquals(vFieldList.autocompleteType, 0)
+    assertEquals(vFieldList.table, Training)
+  }
 
-    @Test
-    fun `test ListDescription`(){
-        var trainingListDomain = TrainingList()
-        val listDescription = ListDescription("Training Title", Training.trainingName, trainingListDomain)
-        val vListColumn = listDescription.buildModel()
+  @Test
+  fun `test ListDescription`() {
+    var trainingListDomain = TrainingList()
+    val listDescription = ListDescription("Training Title", Training.trainingName, trainingListDomain)
+    val vListColumn = listDescription.buildModel()
 
-        assertEquals(vListColumn.column, Training.trainingName)
-        assertEquals(vListColumn.title, "Training Title")
-    }
+    assertEquals(vListColumn.column, Training.trainingName)
+    assertEquals(vListColumn.title, "Training Title")
+  }
 }
 
-class TrainingList: ListDomain<Int>(20) {
+class TrainingList : ListDomain<Int>(20) {
 
-    override val table = Training
+  override val table = Training
 
-    val autoComplete = complete(AutoComplete.LEFT, 1)
+  val autoComplete = complete(AutoComplete.LEFT, 1)
 
-    init {
-        "ID" keyOf Training.id
-        "Name" keyOf Training.trainingName
-        "type" keyOf Training.type
-        "UNIT_PRICE" keyOf Training.price
-        "ACTIVE" keyOf Training.active
-        "PHOTO" keyOf Training.photo
-        "INFORMATION" keyOf Training.informations
-        "UC" keyOf Training.uc
-        "TS" keyOf Training.ts
-    }
+  init {
+    "ID" keyOf Training.id
+    "Name" keyOf Training.trainingName
+    "type" keyOf Training.type
+    "UNIT_PRICE" keyOf Training.price
+    "ACTIVE" keyOf Training.active
+    "PHOTO" keyOf Training.photo
+    "INFORMATION" keyOf Training.informations
+    "UC" keyOf Training.uc
+    "TS" keyOf Training.ts
+  }
 }

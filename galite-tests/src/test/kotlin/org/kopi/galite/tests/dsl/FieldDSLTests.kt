@@ -25,20 +25,20 @@ import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.field.Field
 
-class FieldDSLTests: VApplicationTestBase(){
+class FieldDSLTests : VApplicationTestBase() {
 
-    @Test
-    fun checkLength(){
-        val testField = TestField(Domain<String>(6,20,10))
+  @Test
+  fun checkLength() {
+    val testField = TestField(Domain<String>(6, 20, 10))
 
-        assertEquals(testField.checkLength("Galite"),true)
-        assertEquals(testField.checkLength("Galite+"),false)
-        assertEquals(testField.checkLength(""),true)
-    }
+    assertEquals(testField.checkLength("Galite"), true)
+    assertEquals(testField.checkLength("Galite+"), false)
+    assertEquals(testField.checkLength(""), true)
+  }
 }
 
-class TestField<String>(domain: Domain<String>): Field<String>(domain){
-    override fun genLocalization(writer: LocalizationWriter) {
-        return;
-    }
+class TestField<String>(domain: Domain<String>) : Field<String>(domain) {
+  override fun genLocalization(writer: LocalizationWriter) {
+    return;
+  }
 }
