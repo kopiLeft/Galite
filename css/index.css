@@ -22,8 +22,6 @@
 /* General */
 
 * {
-  border: none;
-  padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
@@ -75,7 +73,6 @@ body {
 .btn {
   border-radius: 40% /100%;
   padding: 1rem 2rem;
-  color: black;
   border: 2px #466e71 solid;
   font-size: 17px;
 }
@@ -144,20 +141,28 @@ footer {
     padding: 0 0.5rem;
     margin-bottom: 2rem;
   }
+
   .main-actions > .btn:not(:last-child) {
     margin-bottom: 1rem;
     margin-right: 0;
   }
+
   .main-actions > .btn {
     display: block;
   }
+
   .features-box {
     flex-direction: column;
     align-items: center;
   }
+
   .feature {
     display: block;
     margin-bottom: 1rem;
     max-width: 70%;
+  }
+
+  .main-logo {
+    width: 200px;
   }
 }
