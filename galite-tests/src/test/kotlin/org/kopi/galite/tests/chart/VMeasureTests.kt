@@ -20,6 +20,7 @@ package org.kopi.galite.tests.chart
 import kotlin.test.assertEquals
 
 import java.util.Locale
+
 import org.junit.Test
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VDecimalCodeMeasure
@@ -40,28 +41,28 @@ class VMeasureTests {
   fun vDecimalCodeMeasure() {
     val vDecimalCodeMeasure = chart.decimalCodeMeasure.model as VDecimalCodeMeasure
 
-    assertEquals(vDecimalCodeMeasure.label, chart.decimalCodeMeasure.label)
+    assertEquals(chart.decimalCodeMeasure.label, vDecimalCodeMeasure.label)
   }
 
   @Test
   fun vDecimalMeasure() {
     val vDecimalMeasure = chart.decimalMeasure.model as VDecimalMeasure
 
-    assertEquals(vDecimalMeasure.label, chart.decimalMeasure.label)
+    assertEquals(chart.decimalMeasure.label, vDecimalMeasure.label)
   }
 
   @Test
   fun vIntegerCodeMeasure() {
     val vIntegerCodeMeasure = chart.integerCodeMeasure.model as VIntegerCodeMeasure
 
-    assertEquals(vIntegerCodeMeasure.label, chart.integerCodeMeasure.label)
+    assertEquals(chart.integerCodeMeasure.label, vIntegerCodeMeasure.label)
   }
 
   @Test
   fun vIntegerMeasure() {
     val vIntegerMeasure = chart.integerMeasure.model as VIntegerMeasure
 
-    assertEquals(vIntegerMeasure.label, chart.integerMeasure.label)
+    assertEquals(chart.integerMeasure.label, vIntegerMeasure.label)
   }
 }
 
@@ -110,17 +111,5 @@ class TestChart : Chart() {
 
   val type = trigger(CHARTTYPE) {
     VChartType.BAR
-  }
-
-  init {
-    integerDimension.add("First Integer") {
-      this[integerMeasure] = 15
-      this[integerCodeMeasure] = 1
-    }
-
-    decimalDimension.add("First Decimal") {
-      this[decimalMeasure] = Decimal(15.0)
-      this[decimalCodeMeasure] = Decimal(0.0)
-    }
   }
 }

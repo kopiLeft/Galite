@@ -20,7 +20,13 @@ package org.kopi.galite.tests.chart
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.visual.chart.*
+import org.kopi.galite.visual.chart.CConstants
+import org.kopi.galite.visual.chart.VColumnFormat
+import org.kopi.galite.visual.chart.VDimension
+import org.kopi.galite.visual.chart.VStringDimension
+import org.kopi.galite.visual.chart.VTimeDimension
+import org.kopi.galite.visual.chart.VTimestampDimension
+import org.kopi.galite.visual.chart.VWeekDimension
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week

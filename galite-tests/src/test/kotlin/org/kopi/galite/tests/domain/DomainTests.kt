@@ -42,58 +42,49 @@ class DomainTests {
     @Test
     fun buildFormFieldTest() {
         val block = FormBlock(1, 1, "TestBlock", "Test")
-
         val intDomain = Domain<Int>(10, 10, 10)
-
         val intFormField = FormField(block, intDomain, 0, 0)
 
         block.initDomain(intDomain)
         assertIs<VIntegerField>(intDomain.buildFormFieldModel(intFormField))
 
         val stringDomain = Domain<String>(10, 10, 10)
-
         val stringFormField = FormField(block, stringDomain, 0, 0)
 
         block.initDomain(stringDomain)
         assertIs<VStringField>(stringDomain.buildFormFieldModel(stringFormField))
 
         val decimalDomain = Domain<Decimal>(10, 10, 10)
-
         val decimalFormField = FormField(block, decimalDomain, 0, 0)
 
         block.initDomain(decimalDomain)
         assertIs<VDecimalField>(decimalDomain.buildFormFieldModel(decimalFormField))
 
         val booleanDomain = Domain<Boolean>(10, 10, 10)
-
         val booleanFormField = FormField(block, booleanDomain, 0, 0)
 
         block.initDomain(booleanDomain)
         assertIs<VBooleanField>(booleanDomain.buildFormFieldModel(booleanFormField))
 
         val dateDomain = Domain<Date>(10, 10, 10)
-
         val dateFormField = FormField(block, dateDomain, 0, 0)
 
         block.initDomain(dateDomain)
         assertIs<VDateField>(dateDomain.buildFormFieldModel(dateFormField))
 
         val monthDomain = Domain<Month>(10, 10, 10)
-
         val monthFormField = FormField(block, monthDomain, 0, 0)
 
         block.initDomain(monthDomain)
         assertIs<VMonthField>(monthDomain.buildFormFieldModel(monthFormField))
 
         val weekDomain = Domain<Week>(10, 10, 10)
-
         val weekFormField = FormField(block, weekDomain, 0, 0)
 
         block.initDomain(weekDomain)
         assertIs<VWeekField>(weekDomain.buildFormFieldModel(weekFormField))
 
         val timeDomain = Domain<Time>(10, 10, 10)
-
         val timeFormField = FormField(block, timeDomain, 0, 0)
 
         block.initDomain(timeDomain)
