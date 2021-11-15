@@ -17,7 +17,8 @@
 
 package org.kopi.galite.tests.dsl
 
-import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
@@ -31,9 +32,9 @@ class FieldDSLTests : VApplicationTestBase() {
   fun checkLength() {
     val testField = TestField(Domain<String>(6, 20, 10))
 
-    assertEquals(true, testField.checkLength("Galite"))
-    assertEquals(false, testField.checkLength("Galite+"))
-    assertEquals(true, testField.checkLength(""))
+    assertTrue(testField.checkLength("Galite"))
+    assertFalse(testField.checkLength("Galite+"))
+    assertTrue(testField.checkLength(""))
   }
 }
 

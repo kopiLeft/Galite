@@ -30,11 +30,16 @@ import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Actor
-import org.kopi.galite.visual.dsl.form.*
+import org.kopi.galite.visual.dsl.form.Border
+import org.kopi.galite.visual.dsl.form.FieldAlignment
+import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
+import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
 
-class FormDSLTests: VApplicationTestBase() {
+class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test generated model from a basic form`() {
     val form = BasicForm()
@@ -163,16 +168,17 @@ class FormDSLTests: VApplicationTestBase() {
   fun `test block indexes`() {
     val form = MultipleBlockForm()
     val formModel = form.model
+    val index = form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField)
 
-    assertEquals(form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField), formModel.blocks.get(1).getFieldIndex(formModel.blocks.get(1).idField))
+    assertEquals(index, formModel.blocks[1].getFieldIndex(formModel.blocks[1].idField))
   }
 
   @Test
   fun `test Form Coordinate Position`() {
-    val firstCoordinatePosition = FormCoordinatePosition(1,2,3,4)
+    val firstCoordinatePosition = FormCoordinatePosition(1, 2, 3, 4)
     val secondCoordinatePosition = FormCoordinatePosition(5)
-    val thirdCoordinatePosition = FormCoordinatePosition(1,2)
-    val fourthCoordinatePosition = FormCoordinatePosition(1,2,3,4,5)
+    val thirdCoordinatePosition = FormCoordinatePosition(1, 2)
+    val fourthCoordinatePosition = FormCoordinatePosition(1, 2, 3, 4, 5)
 
     // first coordinate position
     assertEquals(-1, firstCoordinatePosition.getPositionModel().chartPos)
@@ -197,8 +203,8 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val idClientModel =  clientBlock.fields[0]
-    val nameClientModel =  clientBlock.fields[1]
+    val idClientModel = clientBlock.fields[0]
+    val nameClientModel = clientBlock.fields[1]
 
     assertTrue(nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
 
@@ -215,7 +221,7 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel =  clientBlock.fields[1]
+    val nameClientModel = clientBlock.fields[1]
 
     assertEquals(User.name.name, nameClientModel.getColumn(0)!!.name)
     assertEquals(User, nameClientModel.getColumn(0)!!.getTable())
@@ -253,7 +259,7 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val fileModel =  clientBlock.fields[2]
+    val fileModel = clientBlock.fields[2]
 
     assertEquals(1, fileModel.command!!.size)
 
@@ -269,8 +275,8 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel =  clientBlock.fields[1]
-    val fileModel =  clientBlock.fields[2]
+    val nameClientModel = clientBlock.fields[1]
+    val fileModel = clientBlock.fields[2]
 
     assertEquals(FieldOption.QUERY_LOWER.value, nameClientModel.options)
     assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)
@@ -318,17 +324,17 @@ class FormWithMultipleBlock : Form() {
   val edit = menu("edit")
 
   val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
   )
 
   val resetForm = actor(
-          ident = "resetForm",
-          menu = reset,
-          label = "resetForm",
-          help = "Reset Form",
+    ident = "resetForm",
+    menu = reset,
+    label = "resetForm",
+    help = "Reset Form",
   ) {
     key = Key.F7
     icon = "break"
@@ -365,10 +371,12 @@ class FormWithMultipleBlock : Form() {
         action = {}
       }
     }
+
     init {
       trigger(PREBLK, INIT) {}
     }
   }
+
   inner class CommandsBlock : FormBlock(10, 5, "CommandsBlock") {
     override val help = "Information about the commands"
     val idCmd = hidden(domain = INT(30)) {
@@ -383,48 +391,5 @@ class FormWithMultipleBlock : Form() {
     init {
       border = Border.LINE
     }
-  }
-}
-
-class FormWithBlockCommand : Form() {
-  override val locale = Locale.UK
-  override val title = "Form with block commands"
-  val reset = menu("reset")
-  val edit = menu("edit")
-
-  val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
-  )
-
-  val resetForm = actor(
-          ident = "resetForm",
-          menu = reset,
-          label = "resetForm",
-          help = "Reset Form",
-  ) {
-    key = Key.F7
-    icon = "break"
-  }
-  val testActor = Actor("Test", edit, label ="Test", help="Test Command",0)
-
-  val block = insertBlock(BlockWithCommands()){
-    command(item = testActor) {
-      action = {
-        println("Block with commands")
-      }
-    }
-  }
-
-  inner class BlockWithCommands : FormBlock(10, 5, "Block with Commands") {
-    val field1 = hidden(domain = INT(30)) {
-      label = "Field 1"
-    }
-    val field2 = skipped(domain = STRING(30), position = at(1, 1)) {
-      label = "Field 2"
-    }
-
   }
 }

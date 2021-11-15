@@ -17,16 +17,18 @@
 
 package org.kopi.galite.tests.domain
 
+import java.util.Locale
+
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-import java.util.Locale
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.chart.VIntegerCodeMeasure
 import org.kopi.galite.visual.chart.VStringCodeDimension
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.form.VStringCodeField
@@ -35,8 +37,7 @@ import org.kopi.galite.visual.report.VStringCodeColumn
 /**
  * Contains tests of code-domain creation and manipulation
  */
-class CodeDomainTests {
-
+class CodeDomainTests: VApplicationTestBase() {
 
   /**
    * Tests the creation of a domain of a type code.
@@ -50,12 +51,11 @@ class CodeDomainTests {
         "cde2" keyOf 2L
       }
     }
-
     // Creating an instance of the domain IntTestType
     val domain = IntTestType()
-
     // test code values
     val codes = domain.codes
+
     assertEquals(2, codes.size)
     assertEquals("id$0", codes[0].ident)
     assertEquals("cde1", codes[0].label)
@@ -68,37 +68,42 @@ class CodeDomainTests {
   @Test
   fun buildFormFieldModel() {
     val testForm = TestForm()
-    val vField = testForm.block.field1.domain.buildFormFieldModel(testForm.block.field1)
+    val model = testForm.model
+    val block = model.blocks.single()
+    val field = block.fields.single()
 
-    assertIs<VStringCodeField>(vField)
+    assertIs<VStringCodeField>(field)
     assertIs<CodeDomain<String>>(testForm.block.field1.domain)
   }
 
   @Test
   fun buildReportFieldModel() {
     val testReport = TestReport()
-    val vReportField = testReport.testField.domain.buildReportFieldModel(testReport.testField, null, null)
+    val model = testReport.model
+    val reportColumn = model.getColumn(0)
 
-    assertIs<VStringCodeColumn>(vReportField)
+    assertIs<VStringCodeColumn>(reportColumn)
     assertIs<CodeDomain<String>>(testReport.testField.domain)
   }
 
   @Test
   fun buildDimensionModel() {
     val testChart = TestChart()
-    val vDimension = testChart.dimensionTest.domain.buildDimensionModel(testChart.dimensionTest, null)
+    val model = testChart.model
+    val dimension = model.getDimension(0)
 
-    assertIs<VStringCodeDimension>(vDimension)
+    assertIs<VStringCodeDimension>(dimension)
     assertIs<CodeDomain<String>>(testChart.dimensionTest.domain)
   }
 
   @Test
   fun buildMeasureModel() {
     val testChart = TestChart()
-    val vDimension = testChart.measureTest.domain.buildMeasureModel(testChart.measureTest, null)
+    val model = testChart.model
+    val measure = model.getMeasure(0)
 
-    assertIs<VIntegerCodeMeasure>(vDimension)
-    assertIs<CodeDomain<String>>(testChart.dimensionTest.domain)
+    assertIs<VIntegerCodeMeasure>(measure)
+    assertIs<IntegerType>(testChart.measureTest.domain)
   }
 }
 
@@ -117,20 +122,19 @@ class IntegerType : CodeDomain<Int>() {
   }
 }
 
-class TestBlock(buffer: Int, visible: Int, title: String) : FormBlock(buffer, visible, title) {
-  val field1 = visit(StringType(), at(1, 1)) {
-    label = "Initial field"
+class TestForm : Form() {
+  override val locale: Locale = Locale.UK
+  override val title: String = "Test Form"
+  val block = insertBlock(TestBlock())
+
+  inner class TestBlock : FormBlock(1, 1, "Test Block") {
+    val field1 = visit(StringType(), at(1, 1)) {
+      label = "Initial field"
+    }
   }
 }
 
-class TestForm() : DictionaryForm() {
-  override val locale: Locale = Locale.UK
-  override val title: String = "Test Form"
-  val block = insertBlock(TestBlock(1, 1, "Test Block"))
-}
-
-class TestReport() : Report() {
-
+class TestReport : Report() {
   override val locale = Locale.UK
   override val title = "Test Report"
 
@@ -149,16 +153,5 @@ class TestChart : Chart() {
 
   val dimensionTest = dimension(StringType()) {
     label = "Test Dimension"
-
-  }
-
-  init {
-    dimensionTest.add("OK") {
-      this[measureTest] = 100
-    }
-    dimensionTest.add("Nope") {
-      this[measureTest] = 200
-    }
-
   }
 }

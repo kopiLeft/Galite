@@ -18,12 +18,12 @@
 package org.kopi.galite.tests.dsl
 
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 
 import org.junit.Test
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.domain.AutoComplete
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
@@ -33,7 +33,6 @@ import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_ANY
 import org.kopi.galite.visual.list.VList
-
 
 class CommonDSLTests : VApplicationTestBase() {
 
@@ -59,8 +58,8 @@ class CommonDSLTests : VApplicationTestBase() {
   fun `test FieldList`() {
     val fieldList = FieldList<String>("String", Training, null, mutableListOf(), 0, 0, false)
 
-    assertEquals(false, fieldList.hasAction())
-    assertEquals(false, fieldList.hasShortcut())
+    assertFalse(fieldList.hasAction())
+    assertFalse(fieldList.hasShortcut())
 
     val vFieldList = fieldList.buildListModel("Source")
 
@@ -73,7 +72,7 @@ class CommonDSLTests : VApplicationTestBase() {
 
   @Test
   fun `test ListDescription`() {
-    var trainingListDomain = TrainingList()
+    val trainingListDomain = TrainingList()
     val listDescription = ListDescription("Training Title", Training.trainingName, trainingListDomain)
     val vListColumn = listDescription.buildModel()
 
@@ -83,20 +82,5 @@ class CommonDSLTests : VApplicationTestBase() {
 }
 
 class TrainingList : ListDomain<Int>(20) {
-
   override val table = Training
-
-  val autoComplete = complete(AutoComplete.LEFT, 1)
-
-  init {
-    "ID" keyOf Training.id
-    "Name" keyOf Training.trainingName
-    "type" keyOf Training.type
-    "UNIT_PRICE" keyOf Training.price
-    "ACTIVE" keyOf Training.active
-    "PHOTO" keyOf Training.photo
-    "INFORMATION" keyOf Training.informations
-    "UC" keyOf Training.uc
-    "TS" keyOf Training.ts
-  }
 }

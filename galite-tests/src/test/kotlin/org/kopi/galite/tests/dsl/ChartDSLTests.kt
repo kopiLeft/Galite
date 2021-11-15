@@ -27,7 +27,6 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.visual.VColor
 
 class ChartDSLTests : VApplicationTestBase() {
 
@@ -55,11 +54,6 @@ class ChartDSLTests : VApplicationTestBase() {
     assertEquals(chart.population.label, populationMeasure.label)
     assertEquals(chart.population.help, populationMeasure.help)
     assertEquals(chart.population.ident, populationMeasure.ident)
-
-    chart.area.color {
-      VColor.BLACK
-    }
-    assertEquals(VColor.BLACK, chart.area.model.color)
   }
 
   @Test
@@ -68,16 +62,9 @@ class ChartDSLTests : VApplicationTestBase() {
     val model = chart.model
     val dimension = model.getDimension(0)
 
-    assertEquals(dimension.label, chart.city.label)
-    assertEquals(dimension.help, chart.city.help)
-    assertEquals(dimension.ident, chart.city.ident)
-
-    chart.city.add("Tunis") {
-      this[chart.population] = 638845
-    }
-    chart.city.add("Sousse") {
-      this[chart.population] = 271428
-    }
+    assertEquals(chart.city.label, dimension.label)
+    assertEquals(chart.city.help, dimension.help)
+    assertEquals(chart.city.ident, dimension.ident)
     assertEquals(2, chart.city.values.size)
   }
 
@@ -85,17 +72,10 @@ class ChartDSLTests : VApplicationTestBase() {
   fun `test chart dimension data`() {
     val chart = BasicChart()
 
-    chart.city.add("Tunis") {
-      this[chart.population] = 638845
-    }
-    chart.city.add("Sousse") {
-      this[chart.population] = 271428
-    }
-
-    assertEquals(listOf("population"), chart.city.values.get(0).getMeasureLabels())
-    assertEquals(listOf("population"), chart.city.values.get(1).getMeasureLabels())
-    assertEquals(listOf(638845), chart.city.values.get(0).getMeasureValues())
-    assertEquals(listOf(271428), chart.city.values.get(1).getMeasureValues())
+    assertEquals(listOf("population"), chart.city.values[0].getMeasureLabels())
+    assertEquals(listOf("population"), chart.city.values[1].getMeasureLabels())
+    assertEquals(listOf(638845), chart.city.values[0].getMeasureValues())
+    assertEquals(listOf(271428), chart.city.values[1].getMeasureValues())
   }
 
   @Test
@@ -134,5 +114,14 @@ class BasicChart : Chart() {
 
   val type = trigger(CHARTTYPE) {
     VChartType.BAR
+  }
+
+  init{
+    city.add("Tunis") {
+      this[population] = 638845
+    }
+    city.add("Sousse") {
+      this[population] = 271428
+    }
   }
 }
