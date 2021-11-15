@@ -17,7 +17,10 @@
 package org.kopi.galite.tests.form
 
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -35,6 +38,7 @@ import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.visual.MessageCode
+
 
 class VFieldTests : JApplicationTestBase() {
 
@@ -376,5 +380,55 @@ class VFieldTests : JApplicationTestBase() {
     FormSample.tb4ToTestListDomain.age.vField.enumerateValue(true)
 
     assertEquals(20, FormSample.tb4ToTestListDomain.age.value)
+  }
+
+  @Test
+  fun `fetchColumn existing column scenario test` () {
+    val field = FormSample.tb1.blockFields[0].vField
+
+    assertEquals(0, field.fetchColumn(User))
+  }
+
+  @Test
+  fun `fetchColumn not existing column scenario test` () {
+    val field = FormSample.tb1.blockFields[4].vField
+
+    assertEquals(-1, field.fetchColumn(User))
+  }
+
+  @Test
+  fun `enter test valid scenario` () {
+    val field = FormSample.tb1.blockFields[3].vField
+
+    field.block?.enter()
+    field.block?.activeField?.leave(false)
+    field.enter()
+    assertEquals(field, field.block?.activeField)
+    assertTrue(field.hasFocus())
+  }
+
+  @Test
+  fun `enter test invalid scenario` () {
+    val field = FormSample.tb1.blockFields[3].vField
+
+    field.block?.enter()
+    assertFails { field.enter() }
+  }
+
+  @Test
+  fun `leave test valid scenario` () {
+    val field = FormSample.tb1.blockFields[3].vField // 3rd field in the first visible field
+
+    field.block?.enter()
+    field.leave(false)
+    assertNotEquals(field, field.block?.activeField)
+  }
+
+  @Test
+  fun `leave test invalid scenario` () {
+    val field = FormSample.tb1.blockFields[4].vField
+
+    field.block?.enter()
+    assertFails { field.leave(false) }
   }
 }
