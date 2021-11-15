@@ -18,6 +18,8 @@ package org.kopi.galite.tests.form
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -36,11 +38,10 @@ import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VQueryNoRowException
-import org.kopi.galite.visual.form.VSkipRecordException
+import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
@@ -930,6 +931,163 @@ class VBlockTests : VApplicationTestBase() {
                           ),
                    listInfoUser)
       SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `getActiveCommand test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+    model.setCommandsEnabled(true)
+    assertEquals(1, model.getActiveCommands().size)
+    assertEquals(formMultiple.saveBlock.model, model.getActiveCommands().get(0)?.actor)
+  }
+
+  @Test
+  fun `setMode test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+
+    model.setMode(VConstants.MOD_INSERT)
+    assertEquals(model.getMode(), VConstants.MOD_INSERT)
+    assertTrue(model.fields.all { it ->
+      for(counter in 1..model.recordCount) {
+        if (it.getAccess(counter) != VConstants.MOD_INSERT)
+          false
+      }
+      true
+    })
+  }
+
+  @Test
+  fun `setColor test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+    val recordId = model.recordCount
+
+    model.setColor(recordId, VColor.BLACK, VColor.WHITE)
+    assertTrue(model.fields.filter { !it.isInternal() }.all{
+      it.getForeground(recordId) == VColor.BLACK && it.getBackground(recordId) == VColor.WHITE
+    })
+  }
+
+  @Test
+  fun `resetColor test`(){
+    formMultiple.model
+    val model = formMultiple.multipleBlock.vBlock
+    val recordId = model.recordCount
+
+    model.resetColor(recordId)
+    assertTrue(model.fields.filter { !it.isInternal() }.all{
+      it.getForeground(recordId) == null && it.getBackground(recordId) == null
+    })
+  }
+
+  @Test
+  fun `leave test`(){
+    val formSample = FormSample().also { it.model }
+    val blockModel = formSample.tb1.vBlock
+
+    transaction {
+      initSampleFormTables()
+      blockModel.enter()
+      formSample.model.getActiveBlock()?.leave(false)
+      assertNotEquals(formSample.model.getActiveBlock(), blockModel)
+      assertNotEquals(formSample.tb1.blockFields[3].vField, blockModel.activeField)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `sort test`(){
+    formMultiple.model
+    val blockModel = formMultiple.multipleBlock.vBlock
+
+    transaction {
+      initMultipleBlockFormTables()
+      blockModel.load()
+      val loadedRecordsNumber = blockModel.numberOfFilledRecords
+
+      blockModel.sort(-1,1) // sorting without column
+      assertTrue(blockModel.sortedRecords.indices.all { blockModel.sortedRecords[it] == it })
+      blockModel.sort(4,-1) // sorting using the center name column
+      assertFalse(blockModel.sortedRecords.slice(0..loadedRecordsNumber-1).indices.all { blockModel.sortedRecords[it] == it })
+      SchemaUtils.drop(Training, Center)
+      SchemaUtils.dropSequence(centerSequence)
+    }
+  }
+
+  @Test
+  fun `getNumberOfValidRecord test`(){
+    val formSample = FormSample().also { it.model }
+    val blockModel = formSample.tb1.vBlock
+
+    transaction {
+      initSampleFormTables()
+      assertEquals(1, blockModel.numberOfValidRecord)
+      assertEquals(1, blockModel.numberOfFilledRecords)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `enter test`(){
+    val formSample = FormSample().also { it.model }
+    val blockModel = formSample.tb1.vBlock
+
+    transaction {
+      initSampleFormTables()
+      blockModel.enter()
+      assertEquals(blockModel, formSample.model.getActiveBlock())
+      assertEquals(blockModel.activeField, formSample.tb1.blockFields[3].vField)
+      SchemaUtils.drop(User)
+    }
+  }
+
+  @Test
+  fun `getReportSearchColumns test`(){
+    val formSample = FormSample().also { it.model }
+    assertEquals(listOf(formSample.tb1.name.columns?.getColumnsModels()?.get(0)?.column,
+            formSample.tb1.age.columns?.getColumnsModels()?.get(0)?.column,
+            formSample.tb1.job.columns?.getColumnsModels()?.get(0)?.column,
+            formSample.tb1.cv.columns?.getColumnsModels()?.get(0)?.column,
+            formSample.tb1.id.columns?.getColumnsModels()?.get(0)?.column),
+            formSample.tb1.vBlock.getReportSearchColumns())
+  }
+
+  @Test
+  fun `trailRecord test`(){
+    FormWithList.model
+    val singleBlockModel = FormWithList.block3.vBlock
+
+    transaction {
+      FormWithList.block3.load()
+
+      singleBlockModel.trailRecord(0)
+      assertTrue(singleBlockModel.isRecordTrailed(0))
+
+      singleBlockModel.trailRecord(singleBlockModel.currentRecord)
+      assertTrue(singleBlockModel.isRecordTrailed(singleBlockModel.currentRecord))
+    }
+  }
+
+  @Test
+  fun `abortTrail test`(){
+    FormWithList.model
+    val singleBlockModel = FormWithList.block3.vBlock
+
+    transaction {
+      FormWithList.block3.load()
+
+      singleBlockModel.trailRecord(0)
+      assertTrue(singleBlockModel.isRecordTrailed(0))
+
+      singleBlockModel.trailRecord(singleBlockModel.currentRecord)
+      assertTrue(singleBlockModel.isRecordTrailed(singleBlockModel.currentRecord))
+
+      singleBlockModel.abortTrail()
+      assertFalse(singleBlockModel.isRecordTrailed(0))
+      assertFalse(singleBlockModel.isRecordTrailed(singleBlockModel.currentRecord))
     }
   }
 }
