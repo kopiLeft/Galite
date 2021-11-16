@@ -38,7 +38,9 @@ import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
-import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VQueryNoRowException
+import org.kopi.galite.visual.form.VSkipRecordException
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VColor
@@ -935,9 +937,10 @@ class VBlockTests : VApplicationTestBase() {
   }
 
   @Test
-  fun `getActiveCommand test`(){
+  fun `getActiveCommands test`(){
     formMultiple.model
     val model = formMultiple.multipleBlock.vBlock
+
     model.setCommandsEnabled(true)
     assertEquals(1, model.getActiveCommands().size)
     assertEquals(formMultiple.saveBlock.model, model.getActiveCommands().get(0)?.actor)
@@ -950,7 +953,7 @@ class VBlockTests : VApplicationTestBase() {
 
     model.setMode(VConstants.MOD_INSERT)
     assertEquals(model.getMode(), VConstants.MOD_INSERT)
-    assertTrue(model.fields.all { it ->
+    assertTrue(model.fields.all {
       for(counter in 1..model.recordCount) {
         if (it.getAccess(counter) != VConstants.MOD_INSERT)
           false
@@ -1047,6 +1050,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `getReportSearchColumns test`(){
     val formSample = FormSample().also { it.model }
+
     assertEquals(listOf(formSample.tb1.name.columns?.getColumnsModels()?.get(0)?.column,
             formSample.tb1.age.columns?.getColumnsModels()?.get(0)?.column,
             formSample.tb1.job.columns?.getColumnsModels()?.get(0)?.column,
