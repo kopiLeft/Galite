@@ -31,12 +31,12 @@
 /*
  * List Table header styles
  */
-:host([theme="k-listdialog-table"]) [part~="cell"] {
+:host([theme="k-listdialog-table"]) [part~="cell"]:not(tr:nth-child(2) th) {
     padding: 8px 12px 8px 12px !important;
-     font-family: Arial, sans-serif !important;
-     font-weight: 400 !important;
-     font-style: normal !important;
-     font-size: 12px !important;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
 }
 
 :host([theme="k-listdialog-table"]) [part~="cell"] :hover {
@@ -59,18 +59,8 @@ vaadin-grid-cell-content, .k-listdialog {
     padding: 0;
 }
 
-.filter-text {
-    border-right: 1px solid #ddd;
-}
-
-.filter-text {
-    padding: 0 !important;
-    border-right: 1px solid #ddd;
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
-    --lumo-text-field-size: none;
+tr:nth-child(2) th {
+  padding: 0px !important;
 }
 
 :host([theme="k-listdialog-container"]) [part="header"] {

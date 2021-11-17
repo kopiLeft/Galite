@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
+import com.vaadin.flow.data.value.ValueChangeMode
+
 /**
  * Server side implementation of decimal grid editor field
  */
@@ -27,6 +29,13 @@ class GridEditorDecimalField(
         maxScale: Int,
         fraction: Boolean
 ) : GridEditorTextField(width) {
+
+  init {
+    wrappedField.valueChangeMode = ValueChangeMode.EAGER
+    wrappedField.element.addEventListener("keypress") {
+      wrappedField.value = wrappedField.value.replace("[^\\d.,/-]".toRegex(), "")
+    }
+  }
 
   override fun check(text: String): Boolean {
     for (c in text) {

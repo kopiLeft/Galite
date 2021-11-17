@@ -17,16 +17,17 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.BlurNotifier
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
+
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.FocusNotifier
-import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.html.Input
 
 /**
  * A field that wraps an input button as an element.
  */
-class VInputButtonField(size: Int) : InputTextField<TextField>(TextField()),
-  ComponentEventListener<FocusNotifier.FocusEvent<TextField>> {
+class VInputButtonField(size: Int) : InputTextField<Input>(VInputText()),
+  ComponentEventListener<FocusNotifier.FocusEvent<Input>> {
 
   init {
     setInputType("button")
@@ -38,13 +39,7 @@ class VInputButtonField(size: Int) : InputTextField<TextField>(TextField()),
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<TextField>>) {}
-
-  override fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<TextField>>) {}
-
-  override fun setFocus(focused: Boolean) {}
-
-  override fun onComponentEvent(event: FocusNotifier.FocusEvent<TextField>?) {
+  override fun onComponentEvent(event: FocusNotifier.FocusEvent<Input>?) {
     connector.fieldParent.actionPerformed()
   }
 

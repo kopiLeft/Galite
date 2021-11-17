@@ -20,6 +20,7 @@ package org.kopi.galite.visual.ui.vaadin.grid
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 import org.kopi.galite.visual.ui.vaadin.base.runAfterGetValue
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
@@ -28,7 +29,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.html.Div
 
 /**
  * A text field used as editor
@@ -37,13 +38,14 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  internal val wrappedField = TextField()
+  internal val wrappedField = VInputText()
+  internal val container = Div(wrappedField)
 
   override fun onAttach(attachEvent: AttachEvent?) {
     super.onAttach(attachEvent)
-    className = "editor-field"
+    wrappedField.className = "editor-field"
     wrappedField.setWidthFull()
-    wrappedField.maxLength = width
+    wrappedField.element.setAttribute("maxlength", width.toString())
     wrappedField.addValueChangeListener {
       if(!check(it.value.orEmpty())) {
         value = it.oldValue
@@ -51,7 +53,8 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
       setModelValue(value, it.isFromClient)
     }
     createNavigationActions()
-    wrappedField.isAutoselect = true
+    //wrappedField.isAutoselect = true
+
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
@@ -59,7 +62,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
   }
 
   override fun initContent(): Component {
-    return wrappedField
+    return container
   }
 
   override fun getValue(): String = wrappedField.value
@@ -89,7 +92,8 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
     autofillIcon.addClickListener {
       dGridEditorField.onAutofill()
     }
-    wrappedField.suffixComponent = autofillIcon
+    autofillIcon.className = "fa"
+    container.add(autofillIcon)
   }
 
   /**

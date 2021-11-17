@@ -47,7 +47,8 @@ summary, time, mark, audio, video {
 	position: relative;
 }
 
-.k-block .simple ::part(input-field) {
+input.k-textinput {
+    border : 0;
     border-bottom: #dadada 1px solid;
     border-radius: unset;
 }
@@ -56,18 +57,13 @@ summary, time, mark, audio, video {
 	padding: 0;
 }
 
-.k-textinput::part(input-field):hover, .textarea::part(input-field):hover {
+input.k-textinput:hover, .textarea::part(input-field):hover {
 	background: #d9f0f8;
 }
 
-/**
- * remove a gray background when hover on TextField
- */
-.k-textinput::part(input-field)::after {
-    background: none;
-}
-
-.k-block .simple ::part(input-field):focus-within, .kopi .k-textareainput:focus {
+.k-block .simple input.k-textinput:focus-within,
+.k-block .simple ::part(input-field):focus-within,
+.kopi .k-textareainput:focus {
 	background: none;
 	border-bottom: #009bd4 1px solid;
 }
@@ -75,7 +71,7 @@ summary, time, mark, audio, video {
 /**
  * remove background of TextField
  */
-::part(input-field) {
+input.k-textinput {
     box-shadow: none;
     background-color: white;
 }

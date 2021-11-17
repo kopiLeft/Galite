@@ -37,11 +37,11 @@ import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.H4
-import com.vaadin.flow.component.textfield.TextField
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
@@ -125,7 +125,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
       block.grid.expectRow(index, *row)
     }
 
-    val filter = _find<TextField> { classes = "block-filter-text" }
+    val filter = _find<VInputText> { classes = "block-filter-text" }
 
     filter[0]._value = "2"
     waitAndRunUIQueue(500)

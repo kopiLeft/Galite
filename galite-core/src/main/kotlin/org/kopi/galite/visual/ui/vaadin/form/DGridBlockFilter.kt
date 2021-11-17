@@ -18,8 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.form
 
 import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.function.SerializablePredicate
 
 class DGridBlockFilter(
@@ -112,6 +112,6 @@ class DGridBlockFilter(
   }
 }
 
-class FilterField(val model: VField, private val textField: TextField) {
+class FilterField(val model: VField, private val textField: VInputText) {
   val value: String get() = textField.value
 }

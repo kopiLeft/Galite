@@ -30,7 +30,12 @@
 
 :host([theme~="galite-combobox"]) [part="input-field"] {
     border-bottom: #dadada 1px solid;
-    max-height: 30px;
+    max-height: 24px;
+}
+
+:host([theme~="galite-combobox"]) [part="input-field"]:focus-within {
+    background: none;
+    border-bottom: #009bd4 1px solid;
 }
 
 [part~='input-field']::after {

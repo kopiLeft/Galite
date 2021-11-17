@@ -20,11 +20,11 @@ package org.kopi.galite.visual.ui.vaadin.list
 import java.util.Locale
 
 import org.kopi.galite.visual.form.VListDialog
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.function.SerializablePredicate
 
-class ListFilter(private val filterFields: List<TextField>,
+class ListFilter(private val filterFields: List<VInputText>,
                  private val model: VListDialog,
                  private val ignoreCase: Boolean,
                  private val onlyMatchPrefix: Boolean) : SerializablePredicate<List<Any?>> {

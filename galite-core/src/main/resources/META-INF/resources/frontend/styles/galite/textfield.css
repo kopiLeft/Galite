@@ -19,7 +19,7 @@
 /**
  * Main style for input text field.
  */
-.k-textinput::part(input-field), .k-textareainput {
+input.k-textinput, .k-textareainput {
     color: #000000;
     font-weight: 500 !important;
     font-style: normal !important;
@@ -29,7 +29,21 @@
     position: relative;
 }
 
-.k-textinput::part(input-field) {
+/**
+ * Remove arrows from number field.
+ */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.k-textinput {
     max-height: 40px;
 }
 
@@ -38,24 +52,6 @@
  */
 .k-textinput-blink::part(input-field) {
     border-bottom: #fd2020 1px solid;
-}
-
-.k-textinput {
-    padding: 0;
-    --lumo-text-field-size: 15px;
-}
-
-.k-textinput::part(input-field) {
-    height: 100%;
-    padding: 0;
-}
-
-/**
- * Autofill icon styles
- */
-.k-textinput iron-icon {
-    color: #009bd4;
-    margin-top: -5px;
 }
 
 /**
@@ -171,14 +167,12 @@
 /**
  * Autofill icon styles for grid editors.
  */
-.v-grid-editor-cells > div .fa {
+div > .editor-field + .fa {
     color: #009bd4;
     font-size: 1.2em !important;
-    margin-left: -10px;
+    margin-left: -22px;
     position: relative;
     z-index: 8;
-    height: 20px;
-    width: 10px;
 }
 
 /**
@@ -247,4 +241,16 @@
 
 .transform-none::part(value) {
     text-transform: none;
+}
+
+/**
+ * Autofill icon styles for simple block.
+ */
+.k-textfield .fa {
+    color: #009bd4;
+    margin-top: -5px;
+    font-size: 1.2em !important;
+    margin-left: -22px;
+    position: relative;
+    z-index: 8;
 }

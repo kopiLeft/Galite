@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.list
 
 import org.kopi.galite.visual.form.VListDialog
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
@@ -26,7 +27,6 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 
@@ -69,18 +69,21 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     filterRow.also { element.classList.add("list-filter") }
     val filterFields = this.columns.mapIndexed { _, column ->
       val cell = filterRow.getCell(column)
-      val filterField = TextField()
+      val container = Div()
+      val filterField = VInputText()
       val search = Icon(VaadinIcon.SEARCH)
+      search.className = "fa"
 
       filterField.setWidthFull()
-      filterField.suffixComponent = search
+      container.add(filterField)
+      container.add(search)
       filterField.className = "filter-text"
       filterField.addValueChangeListener {
         (dataProvider as ListDataProvider).refreshAll()
       }
 
       filterField.valueChangeMode = ValueChangeMode.EAGER
-      cell.setComponent(filterField)
+      cell.setComponent(container)
       filterField
     }
     (dataProvider as ListDataProvider).filter = ListFilter(filterFields, model, true, false)

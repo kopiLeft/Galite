@@ -19,6 +19,8 @@ package org.kopi.galite.visual.ui.vaadin.grid
 
 import java.lang.NumberFormatException
 
+import com.vaadin.flow.data.value.ValueChangeMode
+
 /**
  * An integer field for grid inline edit
  *
@@ -29,10 +31,14 @@ import java.lang.NumberFormatException
 class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) : GridEditorTextField(width) {
 
   init {
-    wrappedField.pattern = "[0-9]*"
-    wrappedField.isPreventInvalidInput = true
+   // wrappedField.isPreventInvalidInput = true
     wrappedField.element.setProperty("min", minValue.toDouble())
     wrappedField.element.setProperty("max", maxValue.toDouble())
+
+    wrappedField.valueChangeMode = ValueChangeMode.EAGER
+    wrappedField.element.addEventListener("keypress") {
+      wrappedField.value = wrappedField.value.replace("[^\\d.-]".toRegex(), "")
+    }
   }
 
   override fun check(text: String): Boolean {

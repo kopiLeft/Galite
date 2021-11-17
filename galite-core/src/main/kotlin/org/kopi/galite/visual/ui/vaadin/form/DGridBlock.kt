@@ -33,6 +33,7 @@ import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.ColumnResizeEvent
@@ -42,9 +43,9 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.component.grid.editor.EditorImpl
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 import com.vaadin.flow.data.provider.ListDataProvider
@@ -353,21 +354,25 @@ open class DGridBlock(parent: DForm, model: VBlock)
     access {
       filterRow = grid.appendHeaderRow()
       filterRow.also { element.classList.add("block-filter") }
-      val filterFields = grid.columns.mapIndexed { index, column ->
+      val filterFields = grid.columns.mapIndexed { _, column ->
         val cell = filterRow!!.getCell(column)
-        val filter = TextField()
+        val container = Div()
+        val filter = VInputText()
         val search = Icon(VaadinIcon.SEARCH)
+        search.className = "fa"
         val field = (column.editorComponent as GridEditorField<*>).dGridEditorField.getModel()
         filter.setWidthFull()
 
-        filter.suffixComponent = search
+        container.add(filter)
+        container.add(search)
+
         filter.className = "block-filter-text"
         filter.addValueChangeListener {
           dataProvider.refreshAll()
         }
 
         filter.valueChangeMode = ValueChangeMode.EAGER
-        cell.setComponent(filter)
+        cell.setComponent(container)
 
         FilterField(field, filter)
       }

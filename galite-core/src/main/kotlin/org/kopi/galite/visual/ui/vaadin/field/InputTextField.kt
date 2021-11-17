@@ -333,7 +333,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   protected fun updateMaxLength(maxLength: Int) {
     // TODO: do we need this?
     if (maxLength >= 0) {
-      element.setProperty("maxlength", maxLength.toDouble())
+      element.setAttribute("maxlength", maxLength.toString())
     } else {
       element.removeAttribute("maxLength")
     }

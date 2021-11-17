@@ -70,8 +70,7 @@ open class DTextField(
       ScannerTransformer(this)
     }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
-
-    field.inputField.addTextValueChangeListener {
+    field.inputField.addBlurListener {
       if(it.isFromClient) {
         valueChanged()
       }

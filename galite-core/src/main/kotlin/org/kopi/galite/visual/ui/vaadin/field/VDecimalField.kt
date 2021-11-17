@@ -17,7 +17,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.TextField
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
+
+import com.vaadin.flow.component.html.Input
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A decimal field.
@@ -27,4 +30,11 @@ class VDecimalField(col: Int,
                     minval: Double?,
                     maxval: Double?,
                     fraction: Boolean)
-  : InputTextField<TextField>(TextField())
+  : InputTextField<Input>(VInputText()) {
+    init {
+      internalField.valueChangeMode = ValueChangeMode.EAGER
+      internalField.element.addEventListener("keypress") {
+        internalField.value = internalField.value.replace("[^\\d.,/-]".toRegex(), "")
+      }
+    }
+  }

@@ -31,13 +31,13 @@ import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.visual.ui.vaadin.form.DTextField
 import org.kopi.galite.visual.ui.vaadin.form.KeyNavigator
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
-import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 
 /**
@@ -162,13 +162,16 @@ class TextField(val model: VField,
     inputField = createTextField()
     inputField.isEnabled = enabled
     add(inputField)
-    if (hasAutofill) {
+    val types = listOf(Type.CODE, Type.TIME, Type.TIMESTAMP,Type.DATE)
+
+    if (hasAutofill && !types.contains(type)) {
       autofill = IronIcons.ARROW_DROP_DOWN.create()
-      autofill!!.style["cursor"] = "pointer" // TODO: move to css
+      autofill?.className = "fa"
       autofill!!.addClickListener {
         fireAutofill()
       }
-      inputField.suffixComponent = autofill
+      add(autofill)
+
       autofill!!.isVisible = false
       var focused = false
       inputField.addFocusListener {
@@ -352,7 +355,7 @@ class TextField(val model: VField,
         Type.TIME -> VTimeField()
         Type.TIMESTAMP -> VTimeStampField()
         Type.DATE -> VDateField()
-        else -> InputTextField(TextField())
+        else -> InputTextField(VInputText())
       }
     } else {
       VInputButtonField(size)

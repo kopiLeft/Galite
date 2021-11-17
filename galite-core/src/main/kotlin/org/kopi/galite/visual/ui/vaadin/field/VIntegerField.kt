@@ -17,24 +17,31 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.TextField
+import org.kopi.galite.visual.ui.vaadin.base.VInputText
+
+import com.vaadin.flow.component.html.Input
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * An integer field.
  */
-class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
+class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<Input>(VInputText()) {
 
   init {
-    internalField.pattern = "[0-9]*"
-    internalField.isPreventInvalidInput = true
+   // internalField.isPreventInvalidInput = true
     internalField.element.setProperty("min", minval)
     internalField.element.setProperty("max", maxval)
     this.width = width.toString()
+
+    internalField.valueChangeMode = ValueChangeMode.EAGER
+    internalField.element.addEventListener("keypress") {
+      internalField.value = internalField.value.replace("[^\\d.-]".toRegex(), "")
+    }
   }
 
   override fun setMaxLength(maxLength: Int) {
-    internalField.maxLength = maxLength
+    internalField.element.setAttribute("maxlength", maxLength.toString())
   }
 
-  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
+  override fun getMaxLength(): Double = internalField.element.getAttribute("maxlength").toDouble()
 }

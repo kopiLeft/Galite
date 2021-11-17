@@ -110,36 +110,49 @@
 }
 
 /*
- * multiple block Style
+ * Multiple block Style
+ * Filter style
  */
-.editor-field > vaadin-text-field {
-    border-left: 1px solid #ddd;
-    padding: 0;
-}
-
-.block-filter-text {
-    padding: 0;
-    border-bottom: #a3a3a3 1px solid !important;
-    --lumo-text-field-size: var(--lumo-size-xxs);
-    height: 100%;
-}
-
-.block-filter-text::part(input-field) {
-    height: 100%;
-}
-
-.block-filter-text > iron-icon {
-        font-size: 10px
-}
-
-.editor-field {
+div .editor-field, div .block-filter-text, div .filter-text {
+    border: 0;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    line-height: 1.2em;
+    transition: 0.4s;
+    color: #000000;
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    padding: 4px;
     border-left: 2px solid #dadada;
-    padding: 0;
-    height: 100%;
-    --lumo-text-field-size: var(--lumo-size-xxs);
 }
 
-.editor-field::part(input-field) {
-    height: 100%;
-    padding: 0;
+.block-filter-text, div .filter-text {
+    padding: 3px 22px 5px 0px !important;
+}
+
+div .filter-text {
+    background: white;
+}
+
+div .editor-field:hover {
+	background: #d9f0f8 !important;
+}
+
+div .editor-field:focus {
+	background: none;
+	border-bottom: #009bd4 1px solid;
+}
+
+/**
+ * Search icon styles for grid editors.
+ * Search icon styles for list.
+ */
+div > .block-filter-text + .fa, div > .filter-text + .fa {
+    margin-left: -22px;
+    font-size: 10px;
+    color: #dadada;
 }
