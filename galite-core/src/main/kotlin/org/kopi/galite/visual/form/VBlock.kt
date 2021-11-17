@@ -327,6 +327,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.toLowerCase())
 
+  val acceptedFlavors: MutableSet<String> get() = dropListMap.keys
+
   fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()])
 
   // ----------------------------------------------------------------------

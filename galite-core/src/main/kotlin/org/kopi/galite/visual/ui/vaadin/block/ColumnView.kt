@@ -20,7 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.block
 import org.kopi.galite.visual.ui.vaadin.base.VConstants
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.field.FieldListener
-import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.label.Label
 
 /**
@@ -28,7 +27,7 @@ import org.kopi.galite.visual.ui.vaadin.label.Label
  * in a block model. This will collect all field connector that represents
  * the same field but in different records.
  */
-class ColumnView(val block: DBlock) {
+class ColumnView(val block: Block) {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -687,6 +686,6 @@ class ColumnView(val block: DBlock) {
    * Disables all blocks actors
    */
   fun disableAllBlocksActors() {
-    (block.parent.content).disableAllBlocksActors()
+    block.form.disableAllBlocksActors()
   }
 }

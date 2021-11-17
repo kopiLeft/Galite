@@ -24,7 +24,7 @@ import com.vaadin.flow.component.Component
 /**
  * A block layout that contains a single component inside.
  */
-class SingleComponentBlockLayout(val block: DGridBlock) : SimpleBlockLayout(1, 1) {
+class SingleComponentBlockLayout(override val block: DGridBlock) : SimpleBlockLayout(1, 1, block) {
 
   init {
     className = "multiple"

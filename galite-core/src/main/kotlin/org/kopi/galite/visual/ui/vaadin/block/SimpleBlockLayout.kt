@@ -35,7 +35,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param col The column number.
  * @param line The row number.
  */
-open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
+open class SimpleBlockLayout(col: Int, line: Int, open val block: Block) : AbstractBlockLayout(col, line) {
   var align: BlockAlignment? = null
   private var follows: MutableList<Component>? = null
   private var followsAligns: MutableList<ComponentConstraint>? = null
@@ -66,11 +66,11 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     val constraints = ComponentConstraint(x, y, width, height, alignRight, useAll)
 
     if (parent.get() is DGridMultiBlock) { // TODO
-      getBlock().isLayoutBelongsToGridDetail = true
+      block.isLayoutBelongsToGridDetail = true
       if (component != null) {
         if (component is DField) {
           val columnView: ColumnView = if (constraints.width < 0 || component is DActorField) {
-            ColumnView(getBlock()).also { columnView ->
+            ColumnView(block).also { columnView ->
               columnView.label = null
               columnView.addField(component)
               if (blockInDetailMode()) {
@@ -79,7 +79,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
               }
             }
           } else {
-            ColumnView(getBlock()).also { columnView ->
+            ColumnView(block).also { columnView ->
               // Label
               columnView.label = component.label
               if (blockInDetailMode()) {
@@ -94,7 +94,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
             }
           }
 
-          getBlock().addField(columnView)
+          block.addField(columnView)
         }
       }
     } else if (component != null) {
@@ -107,7 +107,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         // an actor field has no label too.
         // we treat this cases separately
         val columnView: ColumnView = if (constraints.width < 0 || component is DActorField) {
-          ColumnView(getBlock()).also { columnView ->
+          ColumnView(block).also { columnView ->
             columnView.label = null
             columnView.addField(component)
             if (blockInDetailMode()) {
@@ -116,7 +116,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
             }
           }
         } else {
-          ColumnView(getBlock()).also { columnView ->
+          ColumnView(block).also { columnView ->
             // Label
             columnView.label = component.label
             if (blockInDetailMode()) {
@@ -131,7 +131,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
           }
         }
 
-        getBlock().addField(columnView)
+        block.addField(columnView)
       } else if (component is Label) {
         add(component, constraints)
       }
@@ -258,15 +258,13 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     return allocatedWidth
   }
 
-  fun getBlock(): DBlock = parent.get() as DBlock
-
   /**
    * Returns if the block is in detail mode
    *
    * @return True if the block is in detail mode.
    */
   fun blockInDetailMode(): Boolean {
-    return getBlock().noChart
+    return block.noChart
   }
 
   override fun clear() {
