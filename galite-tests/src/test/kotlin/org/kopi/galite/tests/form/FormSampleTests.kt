@@ -21,6 +21,9 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
@@ -29,6 +32,27 @@ import org.kopi.galite.visual.form.VForm
 
 
 class FormSampleTests: JApplicationTestBase() {
+
+  fun initSampleFormTables() {
+    SchemaUtils.create(User)
+    User.insert {
+      it[id] = 1
+      it[name] = "Test User"
+      it[age] = 20
+      it[ts] = 0
+      it[uc] = 0
+      it[job] = "job"
+    }
+    User.insert {
+      it[id] = 2
+      it[name] = "Test User 2"
+      it[age] = 20
+      it[ts] = 0
+      it[uc] = 0
+      it[job] = "job"
+    }
+  }
+
   @Test
   fun sourceFormTest() {
     val formModel = FormSample().model
@@ -50,20 +74,24 @@ class FormSampleTests: JApplicationTestBase() {
 
   @Test
   fun `prepareForm test`() {
-    val formModel = FormSample().model
+    val form = FormSample()
+    val formModel = form.model
 
+    assertNull(formModel.getActiveBlock())
+    assertNull(formModel.getActiveBlock()?.getActiveCommands())
     formModel.prepareForm()
-    assertNotNull(formModel.getActiveBlock())
+    assertEquals(form.tb1.vBlock, formModel.getActiveBlock())
     assertNotNull(formModel.getActiveBlock()?.getActiveCommands())
   }
 
   @Test
   fun `reset test`() {
-    val formModel = FormSample().model
+    val form = FormSample()
+    val formModel = form.model
 
     formModel.reset()
     assertTrue(formModel.blocks.all { it.getMode() == VConstants.MOD_QUERY })
-    assertNotNull(formModel.getActiveBlock())
+    assertEquals(form.tb1.vBlock, formModel.getActiveBlock())
   }
 
   @Test
@@ -72,7 +100,7 @@ class FormSampleTests: JApplicationTestBase() {
     val formModel = form.model
 
     formModel.prepareForm() // internally will invoke setCommandsEnabled(true)
-    assertTrue(formModel.blocks.any{
+    assertTrue(formModel.blocks.any {
       it.getActiveCommands().isNotEmpty()
     })
   }
@@ -119,46 +147,85 @@ class FormSampleTests: JApplicationTestBase() {
 
   @Test
   fun `commitTrail test`() {
-    val form = FormSample()
+    val form = FormSample().also {
+      it.tb1.age.value = 20
+    }
     val formModel = form.model
 
-    formModel.commitTrail()
-    assertTrue(formModel.blocks.all {
-      for (i in 0 until it.bufferSize) {
-        if (!it.isRecordTrailed(i))
-        {
-          false
+    transaction {
+      initSampleFormTables()
+      form.tb1.load()
+      assertTrue(formModel.blocks.any {
+        for (i in 0 until it.bufferSize) {
+          if (it.isRecordTrailed(i))
+          {
+            return@any true
+          }
         }
-      }
-      true
-    })
+        return@any false
+      })
+      formModel.commitTrail()
+      assertTrue(formModel.blocks.all {
+        for (i in 0 until it.bufferSize) {
+          if (it.isRecordTrailed(i))
+          {
+            return@all false
+          }
+        }
+        return@all true
+      })
+      SchemaUtils.drop(User)
+    }
   }
 
   @Test
   fun `abortTrail test`() {
-    val form = FormSample()
+    val form = FormSample().also {
+      it.tb1.age.value = 20
+    }
     val formModel = form.model
 
-    formModel.abortTrail()
-    assertTrue(formModel.blocks.all {
-      for (i in 0 until it.bufferSize) {
-        if (it.isRecordTrailed(i))
-        {
-          false
+    transaction {
+      initSampleFormTables()
+      form.tb1.load()
+      assertTrue(formModel.blocks.any {
+        for (i in 0 until it.bufferSize) {
+          if (it.isRecordTrailed(i))
+          {
+            return@any true
+          }
         }
-      }
-      true
-    })
+        return@any false
+      })
+      formModel.abortTrail()
+      assertTrue(formModel.blocks.all {
+        for (i in 0 until it.bufferSize) {
+          if (it.isRecordTrailed(i))
+          {
+            return@all false
+          }
+        }
+        return@all true
+      })
+      SchemaUtils.drop(User)
+    }
   }
 
   @Test
   fun `getDefaultActor test`() {
-    val form = FormSample()
-    val formModel = form.model
+    val formWithDefaultActors = FormSample()
+    val forWithDefaultActorsModel = formWithDefaultActors.model
 
-    assertNull(formModel.getDefaultActor(VForm.CMD_NEWITEM))
-    assertNotNull(formModel.getDefaultActor(VForm.CMD_AUTOFILL))
-    assertNull(formModel.getDefaultActor(VForm.CMD_EDITITEM))
-    assertNotNull(formModel.getDefaultActor(VForm.CMD_EDITITEM_S))
+    assertNotNull(forWithDefaultActorsModel.getDefaultActor(VForm.CMD_NEWITEM))
+    assertNotNull(forWithDefaultActorsModel.getDefaultActor(VForm.CMD_AUTOFILL))
+    assertNotNull(forWithDefaultActorsModel.getDefaultActor(VForm.CMD_EDITITEM))
+    assertNotNull(forWithDefaultActorsModel.getDefaultActor(VForm.CMD_EDITITEM_S))
+    val formWithoutDefaultActors = FormWithFields()
+    val formWithoutDefaultActorsModel = formWithoutDefaultActors.model
+
+    assertNull(formWithoutDefaultActorsModel.getDefaultActor(VForm.CMD_NEWITEM))
+    assertNull(formWithoutDefaultActorsModel.getDefaultActor(VForm.CMD_AUTOFILL))
+    assertNull(formWithoutDefaultActorsModel.getDefaultActor(VForm.CMD_EDITITEM))
+    assertNull(formWithoutDefaultActorsModel.getDefaultActor(VForm.CMD_EDITITEM_S))
   }
 }

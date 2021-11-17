@@ -64,6 +64,27 @@ class FormSample : Form() {
           help = "Autofill",
   )
 
+  val editItemShortcut = actor(
+          ident = "EditItem_S",
+          menu = edit,
+          label = "Edit Item Shortcut",
+          help = "Edit Item Shortcut",
+  )
+
+  val editItem = actor(
+          ident = "EditItem",
+          menu = edit,
+          label = "Edit Item",
+          help = "Edit Item",
+  )
+
+  val newItem = actor(
+          ident = "NewItem",
+          menu = edit,
+          label = "New Item",
+          help = "New Item",
+  )
+
   val graph = actor(
           ident = "graph",
           menu = action,
