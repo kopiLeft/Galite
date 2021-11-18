@@ -73,23 +73,21 @@ class ReportDSLTests : VApplicationTestBase() {
   @Test
   fun `test report rows`() {
     val report = ReportWithData()
-    report.model.initReport()
-    val reportModel = report.model.model
-
-    assertEquals(4, reportModel.getVisibleRowCount())
 
     report.add {
       this[report.id] = 1
-      this[report.firstName] = "client 4"
-      this[report.addressClt] = "Nabeul"
-      this[report.ageClt] = 20
+      this[report.firstName] = "client Test"
+      this[report.addressClt] = "Test"
+      this[report.ageClt] = 10
     }
+    report.model.initReport()
+    val reportModel = report.model.model
 
-    assertEquals(4, reportModel.getVisibleRowCount())
-    assertEquals(2, reportModel.getRow(2)?.getValueAt(0))
-    assertEquals("client 1", reportModel.getRow(2)?.getValueAt(1))
-    assertEquals("Bizerte", reportModel.getRow(2)?.getValueAt(2))
-    assertEquals(20, reportModel.getRow(2)?.getValueAt(3))
+    assertEquals(5, reportModel.getVisibleRowCount())
+    assertEquals(1, reportModel.getRow(2)?.getValueAt(0))
+    assertEquals("client Test", reportModel.getRow(2)?.getValueAt(1))
+    assertEquals("Test", reportModel.getRow(2)?.getValueAt(2))
+    assertEquals(10, reportModel.getRow(2)?.getValueAt(3))
   }
 
   /* @Test
