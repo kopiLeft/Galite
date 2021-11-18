@@ -541,7 +541,7 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
-   * Adds a field drop list. A check if performed to test if the dropped extension
+   * Adds a field drop list. A check is performed to test if the dropped extension
    * id associated to another field. In this case, the conflicted drop extension is
    * returned. otherwise null is returned.
    */

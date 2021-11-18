@@ -58,7 +58,7 @@ class SingleComponentBlockLayout(override val block: DGridBlock) : SimpleBlockLa
     super.addComponent(component, x, y, width, height, alignRight, useAll)
   }
 
-  override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
+  override fun setBlockAlignment(original: Component, targetBlockName: String, targets: IntArray, isChart: Boolean) {
     // not supported feature
   }
 }
