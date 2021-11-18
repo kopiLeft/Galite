@@ -108,6 +108,7 @@ object LocalizedProperties {
       properties["escape"] = "Echappe"
       // actors menu tooltip
       properties["actorsMenuHelp"] = "Affiche le menu associé à ce formulaire"
+      properties["TODAY"] = "Aujourd'hui"
       return properties
     }
 
@@ -160,6 +161,7 @@ object LocalizedProperties {
       properties["escape"] = "Escape"
       // actors menu tooltip
       properties["actorsMenuHelp"] = "Displays the menu associated with this form"
+      properties["TODAY"] = "Today"
       return properties
     }
 
@@ -212,6 +214,7 @@ object LocalizedProperties {
       properties["escape"] = "ESC"
       // actors menu tooltip
       properties["actorsMenuHelp"] = "Zeigt das Menü mit diesem Formular verknüpft"
+      properties["TODAY"] = "HEUTE"
       return properties
     }
 
@@ -265,6 +268,7 @@ object LocalizedProperties {
       properties["escape"] = "Escape"
       // actors menu tooltip
       properties["actorsMenuHelp"] = "يعرض القائمة المقترنة مع هذه النافذة"
+      properties["TODAY"] = "اليوم"
       return properties
     }
 }
