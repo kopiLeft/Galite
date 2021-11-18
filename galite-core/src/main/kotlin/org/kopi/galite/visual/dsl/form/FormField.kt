@@ -120,9 +120,7 @@ open class FormField<T>(val block: FormBlock,
       error("The field is droppable but its type is not supported as a drop target.")
     } else {
       val flavor = block.addDropList(droppables, this)
-      if (flavor == null) {
-        block.blockFields.add(this)
-      } else {
+      if (flavor != null) {
         error("The extension is already defined as a drop target for this field. ")
       }
     }
