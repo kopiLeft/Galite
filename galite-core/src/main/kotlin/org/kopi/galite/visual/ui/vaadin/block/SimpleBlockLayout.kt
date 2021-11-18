@@ -285,13 +285,13 @@ open class SimpleBlockLayout(col: Int, line: Int, open val block: Block) : Abstr
    * @param targets The alignment targets.
    * @param isChart Is the original block chart ?
    */
-  open fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
+  open fun setBlockAlignment(original: Component, targetBlockName: String, targets: IntArray, isChart: Boolean) {
     align = BlockAlignment()
 
     align!!.isChart = isChart
     align!!.targets = targets
     align!!.ori = original
 
-    alignPane = AlignPanel(align)
+    alignPane = AlignPanel(align, targetBlockName)
   }
 }

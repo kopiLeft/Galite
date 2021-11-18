@@ -404,6 +404,7 @@ open class DBlock(val parent: DForm,
     val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos, this)
     if (model.alignment != null) {
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
+                               model.name,
                                model.alignment!!.targets,
                                model.alignment!!.isChart())
     }
