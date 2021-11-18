@@ -64,6 +64,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   private var currentPage = -1
   private var pages: Array<Page<*>?> = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
+  private val tabs: MutableList<Tab> = mutableListOf()
   private var tabPanel: Tabs? = null
   private var listeners: MutableList<FormListener> = mutableListOf()
   private var lastSelected: Tab? = null
@@ -88,6 +89,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
       tabPanel!!.className = Styles.FORM_TAB_PANEL
       for (i in pages.indices) {
         val tab = createTabLabel(titles[i])
+        tabs.add(tab)
         tabsToPages[tab] = pages[i]!!
         tabPanel!!.add(tab)
         tab.isEnabled = false
@@ -130,9 +132,9 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   private fun selectPage(page: Int) {
     if(tabPanel != null) {
+      tabs[page].isEnabled = true
       tabPanel!!.selectedIndex = page
       lastSelected = tabPanel!!.selectedTab
-      lastSelected!!.isEnabled = true
     }
   }
 
@@ -141,9 +143,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param title The page title.
    * @return The page tab
    */
-  private fun createTabLabel(title: String): Tab = Tab(
-          if (title.endsWith("<CENTER>")) title.substring(0, title.length - 8) else title
-  )
+  private fun createTabLabel(title: String): Tab =
+          Tab(if (title.endsWith("<CENTER>")) title.substring(0, title.length - 8) else title)
 
   /**
    * Adds a block to this form.
@@ -184,7 +185,10 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   fun gotoPage(i: Int) {
     currentPage = i
-    lastSelected?.let { tabsToPages[it]!!.isVisible = false }
+    lastSelected?.let {
+      tabsToPages[it]!!.isVisible = false
+      it.isSelected = false
+    }
     lastSelected?.removeClassName("selected-tab")
     pages[i]!!.isVisible = true
     selectPage(i)
@@ -273,7 +277,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param page The page index.
    */
   fun setEnabled(enabled: Boolean, page: Int) {
-    tabsToPages.keys.elementAtOrNull(page)?.isEnabled = enabled
+    tabs.getOrNull(page)?.isEnabled = enabled
   }
 
   /**

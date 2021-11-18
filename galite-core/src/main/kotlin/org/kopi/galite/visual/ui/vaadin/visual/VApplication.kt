@@ -100,6 +100,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
   var currentUI: UI? = null
+    get() = field ?: UI.getCurrent()
   private val configProperties: ResourceBundle? =
     try {
       ResourceBundle.getBundle(resourceFile)
@@ -201,7 +202,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param notification The notification to be shown
    */
   protected open fun showNotification(notification: AbstractNotification) {
-    access(currentUI) {
+    accessAndPush(currentUI) {
       notification.show()
     }
   }
@@ -211,7 +212,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param notification The notification to be shown
    */
   protected open fun showNotification(notification: AbstractNotification, lock: Object) {
-    BackgroundThreadHandler.startAndWait(lock, currentUI) {
+    BackgroundThreadHandler.startAndWaitAndPush(lock, currentUI) {
       notification.show()
     }
   }
@@ -234,6 +235,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
           // show welcome screen
           gotoWelcomeView()
         }
+        currentUI?.push()
       }
     })
     showNotification(dialog)
@@ -299,7 +301,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       add(mainWindow)
     } catch (e: SQLException) { // sets the error if any problem occur.
       welcomeView!!.setError(e.message)
-    } finally { //push();
+    } finally {
+      currentUI?.push()
     }
   }
 

@@ -46,7 +46,9 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 
 @CssImport("./styles/galite/block.css")
-open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
+open class DBlock(val parent: DForm,
+                  final override val model: VBlock)
+  : Block(if (model.isDroppable) DBlockDropHandler(model) else null, parent.content), UBlock {
 
   protected var formView: DForm = parent
   protected lateinit var columnViews: Array<VFieldUI?>
@@ -76,12 +78,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
 
     rebuildCachedInfos()
     createFields()
-
-    if (model.isDroppable) {
-      //TODO()
-      //setDropHandler(DBlockDropHandler(model))
-      //setDragStartMode(DragStartMode.HTML5)
-    }
 
     // fire record info change event
     // this is needed to notify view side with the record
@@ -405,9 +401,10 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
 
   override fun createLayout(): BlockLayout {
     // label + field => 2 + lines
-    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
+    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos, this)
     if (model.alignment != null) {
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
+                               model.name,
                                model.alignment!!.targets,
                                model.alignment!!.isChart())
     }

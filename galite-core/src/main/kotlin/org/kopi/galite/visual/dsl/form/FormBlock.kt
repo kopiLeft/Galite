@@ -75,7 +75,6 @@ open class FormBlock(var buffer: Int,
   private lateinit var commands: Array<Command?>
   private val triggers = mutableListOf<Trigger>()
   var dropListMap = HashMap<String, String>()
-  var dropList : MutableList<String>? = null
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
@@ -219,21 +218,7 @@ open class FormBlock(var buffer: Int,
     val field = NullableFormField(this, domain, blockFields.size, access, position)
     field.init()
     field.initialize(this)
-    if (dropList == null) {
-      blockFields.add(field)
-    } else {
-      if (domain.kClass != String::class
-              && domain.kClass != Image::class) {
-        error("The field is droppable but its type is not supported as a drop target.")
-      } else {
-        val flavor = addDropList(dropList!!, field)
-        if (flavor == null) {
-          blockFields.add(field)
-        } else {
-          error("The extension is already defined as a drop target for this field. ")
-        }
-      }
-    }
+    blockFields.add(field)
     return field as FormField<T?>
   }
 
@@ -555,7 +540,12 @@ open class FormBlock(var buffer: Int,
       Commands.queryMove(vBlock)
   }
 
-  fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {
+  /**
+   * Adds a field drop list. A check is performed to test if the dropped extension
+   * id associated to another field. In this case, the conflicted drop extension is
+   * returned. otherwise null is returned.
+   */
+  fun addDropList(dropList: Array<out String>, field: FormField<*>): String? {
     for (i in dropList.indices) {
       val extension = dropList[i].toLowerCase()
       if (dropListMap[extension] != null) {
@@ -801,6 +791,7 @@ open class FormBlock(var buffer: Int,
           it.ident
         }.toTypedArray()
         alignment = align?.getBlockAlignModel()
+        dropListMap = this@FormBlock.dropListMap
       }
     }.also {
       vBlock = it

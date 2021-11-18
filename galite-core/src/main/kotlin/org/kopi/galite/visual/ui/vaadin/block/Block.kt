@@ -23,7 +23,7 @@ import org.kopi.galite.visual.form.BlockListener
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.VConstants
 import org.kopi.galite.visual.ui.vaadin.field.CheckTypeException
-import org.kopi.galite.visual.ui.vaadin.form.DBlock
+import org.kopi.galite.visual.ui.vaadin.form.DBlockDropHandler
 import org.kopi.galite.visual.ui.vaadin.form.Form
 import org.kopi.galite.visual.ui.vaadin.form.Page
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
@@ -36,7 +36,6 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.component.dnd.DragSource
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
@@ -45,14 +44,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * This UI component supports only laying components for simple
  * layout view.
  */
-abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnabled {
+abstract class Block(private val dropHandler: DBlockDropHandler?,
+                     val form: Form) : VerticalLayout(), HasEnabled {
 
   /** The block layout. */
   var layout: BlockLayout? = null
   var caption: H4? = null
   private val listeners = mutableListOf<BlockListener>()
   private var fields = mutableListOf<ColumnView>()
-  private var dndWrapper: DragSource<*>? = null
+  private var dropWrapper: BlockDropWrapper? = null
   var activeField: ColumnView? = null
   var detailMode = false
   private var oldActiveRecord = 0
@@ -342,10 +342,14 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   fun buildLayout() {
     if (layout == null) {
       layout = createLayout()
-      setContent(layout as Component)
+      if (dropHandler != null) {
+        dropWrapper = BlockDropWrapper(layout as Component, dropHandler)
+        setContent(dropWrapper!!)
+      } else {
+        setContent(layout as Component)
+      }
     }
   }
-
 
   /**
    * Appends the given field to the block field list.
@@ -480,7 +484,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * Sets the block content.
    * @param content The block content.
    */
-  protected open fun setContent(content: Component) {
+  open fun setContent(content: Component) {
     removeAll()
     add(content)
   }
@@ -1594,7 +1598,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * Notifies the form that the active record of this block has changed.
    */
   protected open fun fireActiveRecordChanged() {
-    ((this as DBlock).parent.content).setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, getRecordCount())
+    form.setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, getRecordCount())
   }
 
   /**

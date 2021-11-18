@@ -34,7 +34,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
  *
  * @param align The alignment info
  */
-class AlignPanel(var align: BlockAlignment?) : Div() {
+class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -87,6 +87,7 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
 
       grid.width = "calc($gridBlockWidth)"
       grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
+      grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS)
       grid.setSelectionMode(Grid.SelectionMode.NONE)
       gridBlock.columns.forEachIndexed { index, column ->
         grid.addComponentColumn { it[index] ?: Div() }
@@ -98,15 +99,21 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
         val align = aligns!![i]
 
         if (align.x != -1) {
-          if (getOverlappingComponent(i, align.x, align.y) != null) {
-            val overlap = components!![i]
-            if (overlap is Label) {
-              val field = getFieldOf(overlap)
+          val overlap = getOverlappingComponent(i, align.x, align.y)
+          if (overlap != null) {
+            val component = components!![i]
+            if (component is Label) {
+              val field = getFieldOf(component)
               field?.let {
-                addTooltipToField(overlap, it)
+                addTooltipToField(component, it)
               }
+            } else if (component is DField && component.label == overlap) {
+              component.label?.let {
+                addTooltipToField(it, component)
+              }
+              alignedGridComponents[align.y][align.x] = component
             } else {
-              Exception("Overlapping components at position ${align.x}, ${align.y}").printStackTrace()
+              Exception("Block $targetBlockName : Overlapping components at position ${align.x}, ${align.y}").printStackTrace()
             }
           } else {
             alignedGridComponents[align.y][align.x] = components!![i]

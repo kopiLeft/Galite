@@ -84,7 +84,7 @@ class DGridMultiBlock(parent: DForm,
 
   override fun addToDetail(comp: UComponent?, constraint: Alignment) {
     if (detail == null) {
-      detail = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
+      detail = SimpleBlockLayout(2 * maxColumnPos, maxRowPos, this)
       setContent(detail!!)
       // detail.addStyleName("grid-detail") TODO
     }

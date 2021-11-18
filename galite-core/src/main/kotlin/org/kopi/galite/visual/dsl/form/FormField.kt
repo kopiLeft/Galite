@@ -35,6 +35,7 @@ import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.type.Image
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -57,7 +58,6 @@ open class FormField<T>(val block: FormBlock,
   private var options: Int = 0 // the options of the field
   var columns: FormFieldColumns<T>? = null // the column in the database
   var access: IntArray = IntArray(3) { initialAccess }
-  var dropList: MutableList<String>? = null
   var commands: MutableList<Command> = mutableListOf() // the commands accessible in this field
   var triggers = mutableListOf<Trigger>() // the triggers executed by this field
   var alias: String? = null // the alias of this field
@@ -115,7 +115,15 @@ open class FormField<T>(val block: FormBlock,
   }
 
   fun droppable(vararg droppables : String) {
-    this.block.dropList?.addAll(droppables)
+    if (domain.kClass != String::class
+      && domain.kClass != Image::class) {
+      error("The field is droppable but its type is not supported as a drop target.")
+    } else {
+      val flavor = block.addDropList(droppables, this)
+      if (flavor != null) {
+        error("The extension is already defined as a drop target for this field. ")
+      }
+    }
   }
 
   /**
