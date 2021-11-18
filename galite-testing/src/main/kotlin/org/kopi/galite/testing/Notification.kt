@@ -73,8 +73,6 @@ fun expectErrorNotification(message: String, close: Boolean = true) {
  */
 fun expectInformationNotification(message: String, close: Boolean = true) {
   val notificationFooter = _get<InformationNotification>().footer
-
-  val informationPopUp = _get<InformationNotification>()
   val informationMessage = _get<InformationNotification>()
     ._get<HorizontalLayout> { classes = "k-notification-content"}
     ._get<VSpan> { classes = "k-notification-message"  }

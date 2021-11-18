@@ -472,6 +472,11 @@ class DocumentationBlockForm : DictionaryForm() {
         false
       }
 
+      // check !
+      trigger(CHANGED) {
+        true
+      }
+
       command(item = list) {
         action = {
           recursiveQuery()

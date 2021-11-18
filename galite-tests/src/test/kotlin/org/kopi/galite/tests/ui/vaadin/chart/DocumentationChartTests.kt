@@ -19,6 +19,7 @@ package org.kopi.galite.tests.ui.vaadin.chart
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.select
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
@@ -28,7 +29,6 @@ import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.tests.examples.TestTriggers
 import org.kopi.galite.visual.ui.vaadin.visual.DActor
-import org.jetbrains.exposed.sql.select
 import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.tests.examples.DocumentationChart
 import org.kopi.galite.tests.examples.initDocumentationData
@@ -57,7 +57,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
   }
 
   @Test
-  fun `test chat command`() {
+  fun `test chart command`() {
     // Trigger the graph command
     simpleChart.graph.triggerCommand()
     //click on chart command to see information notification
@@ -70,7 +70,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
   }
 
   @Test
-  fun `test INIT trigger`() {
+  fun `test INITCHART trigger`() {
     // Trigger the graph command
     simpleChart.graph.triggerCommand()
 
@@ -78,7 +78,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
     transaction {
       val value = TestTriggers.select{TestTriggers.id eq 5 }.last()[TestTriggers.INS]
 
-      assertEquals("INIT Trigger", value)
+      assertEquals("INITCHART Trigger", value)
     }
   }
 

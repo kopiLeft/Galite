@@ -28,7 +28,6 @@ import org.kopi.galite.tests.db.createDBSchemaTables
 import org.kopi.galite.tests.db.dropDBSchemaTables
 import org.kopi.galite.tests.db.insertIntoUsers
 import org.kopi.galite.tests.db.TEST_DB_USER
-import org.kopi.galite.tests.db.connectToDatabase
 import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {

@@ -134,7 +134,7 @@ class DocumentationChartC :  Chart() {
   transaction {
     TestTriggers.insert {
       it[id] = 5
-      it[INS] = "INIT Trigger"
+      it[INS] = "INITCHART Trigger"
     }
   }
   }

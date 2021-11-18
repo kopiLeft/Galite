@@ -19,8 +19,8 @@ package org.kopi.galite.tests.ui.vaadin.field
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
-import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -35,6 +35,7 @@ import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.expectErrorNotification
+import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
@@ -42,24 +43,23 @@ import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.BoolCode
 import org.kopi.galite.tests.examples.DecimalCode
 import org.kopi.galite.tests.examples.DocumentationFieldsForm
+import org.kopi.galite.tests.examples.initDocumentationData
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.examples.IntCode
 import org.kopi.galite.tests.examples.StringCode
 import org.kopi.galite.tests.examples.TestTable
 import org.kopi.galite.tests.examples.TestTable2
 import org.kopi.galite.tests.examples.TestTriggers
-import org.kopi.galite.tests.examples.initDocumentationData
-import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 import org.kopi.galite.visual.ui.vaadin.field.VPasswordField
+import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.testing.expectInformationNotification
-import org.kopi.galite.visual.ui.vaadin.form.DBlock
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -580,19 +580,6 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
     // PREDEL : click on list command then deleteBlock command and assert that PREDEL trigger show an Information Notification
     expectInformationNotification("PREDEL Trigger")
-  }
-
-  @Test
-  fun `test POSTDEL trigger`() {
-    form.triggersFieldsBlock.enter()
-    form.deleteBlock.triggerCommand()
-
-    expectConfirmNotification(true)
-
-    val field = form.lastBlock.postDelTriggerField.findField()
-
-    // POSTDEL : click on deleteBlock command and assert that that POSTDEL trigger change the field value of lastBlock
-    assertEquals("POSTDEL Trigger", field.value)
   }
 
   companion object {

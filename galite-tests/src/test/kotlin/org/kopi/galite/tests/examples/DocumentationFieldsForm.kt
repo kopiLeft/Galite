@@ -590,14 +590,6 @@ class DocumentationFieldsForm : DictionaryForm() {
       }
     }
 
-    // test POSTDEL : click on list command then delete
-    val postDelTriggerField = visit(domain = STRING(20), position = at(4, 4)) {
-      label = "POSTDEL Trigger Field"
-      trigger(POSTDEL) {
-        lastBlock.postDelTriggerField.value = "POSTDEL Trigger"
-      }
-    }
-
     val uc = hidden(domain = INT(20)) { columns(t.uc) }
     val ts = hidden(domain = INT(20)) { columns(t.ts) }
 
@@ -634,9 +626,6 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
     val postUpdTriggerField = visit(domain = STRING(20), position = at(1, 2)) {
       label = "POSTUPD Trigger Field"
-    }
-    val postDelTriggerField = visit(domain = STRING(20), position = at(1, 3)) {
-      label = "POSTDEL Trigger Field"
     }
   }
 }
