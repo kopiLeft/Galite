@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -943,7 +944,7 @@ class VBlockTests : VApplicationTestBase() {
 
     model.setCommandsEnabled(true)
     assertEquals(1, model.getActiveCommands().size)
-    assertEquals(formMultiple.saveBlock.model, model.getActiveCommands().get(0)?.actor)
+    assertEquals(formMultiple.saveBlock.model, model.getActiveCommands()[0]?.actor)
   }
 
   @Test
@@ -952,13 +953,14 @@ class VBlockTests : VApplicationTestBase() {
     val model = formMultiple.multipleBlock.vBlock
 
     model.setMode(VConstants.MOD_INSERT)
-    assertEquals(model.getMode(), VConstants.MOD_INSERT)
+    assertEquals(VConstants.MOD_INSERT, model.getMode())
+    // all fields are configured with onInsertHidden()
     assertTrue(model.fields.all {
-      for(counter in 1..model.recordCount) {
-        if (it.getAccess(counter) != VConstants.MOD_INSERT)
-          false
+      for(counter in 0..model.recordCount) {
+        if (it.getAccess(counter) != VConstants.ACS_HIDDEN)
+        return@all false
       }
-      true
+      return@all true
     })
   }
 
@@ -991,14 +993,9 @@ class VBlockTests : VApplicationTestBase() {
     val formSample = FormSample().also { it.model }
     val blockModel = formSample.tb1.vBlock
 
-    transaction {
-      initSampleFormTables()
-      blockModel.enter()
-      formSample.model.getActiveBlock()?.leave(false)
-      assertNotEquals(formSample.model.getActiveBlock(), blockModel)
-      assertNotEquals(formSample.tb1.blockFields[3].vField, blockModel.activeField)
-      SchemaUtils.drop(User)
-    }
+    formSample.model.getActiveBlock()?.leave(false)
+    assertNotEquals(formSample.model.getActiveBlock(), blockModel)
+    assertNull(blockModel.activeField)
   }
 
   @Test
@@ -1022,14 +1019,16 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getNumberOfValidRecord test`(){
-    val formSample = FormSample().also { it.model }
-    val blockModel = formSample.tb1.vBlock
+    formMultiple.model
+    val blockModel = formMultiple.multipleBlock.vBlock
 
     transaction {
-      initSampleFormTables()
-      assertEquals(1, blockModel.numberOfValidRecord)
-      assertEquals(1, blockModel.numberOfFilledRecords)
-      SchemaUtils.drop(User)
+      initMultipleBlockFormTables()
+      formMultiple.multipleBlock.load()
+      assertEquals(20, blockModel.numberOfValidRecord)
+      assertEquals(3, blockModel.numberOfFilledRecords)
+      SchemaUtils.drop(Training, Center)
+      SchemaUtils.dropSequence(centerSequence)
     }
   }
 
@@ -1038,13 +1037,9 @@ class VBlockTests : VApplicationTestBase() {
     val formSample = FormSample().also { it.model }
     val blockModel = formSample.tb1.vBlock
 
-    transaction {
-      initSampleFormTables()
-      blockModel.enter()
-      assertEquals(blockModel, formSample.model.getActiveBlock())
-      assertEquals(blockModel.activeField, formSample.tb1.blockFields[3].vField)
-      SchemaUtils.drop(User)
-    }
+    blockModel.enter()
+    assertEquals(blockModel, formSample.model.getActiveBlock())
+    assertEquals(blockModel.activeField, formSample.tb1.blockFields[3].vField) // fields 1s -> 3rd are hidden
   }
 
   @Test
@@ -1067,9 +1062,6 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       FormWithList.block3.load()
 
-      singleBlockModel.trailRecord(0)
-      assertTrue(singleBlockModel.isRecordTrailed(0))
-
       singleBlockModel.trailRecord(singleBlockModel.currentRecord)
       assertTrue(singleBlockModel.isRecordTrailed(singleBlockModel.currentRecord))
     }
@@ -1083,14 +1075,10 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       FormWithList.block3.load()
 
-      singleBlockModel.trailRecord(0)
-      assertTrue(singleBlockModel.isRecordTrailed(0))
-
       singleBlockModel.trailRecord(singleBlockModel.currentRecord)
       assertTrue(singleBlockModel.isRecordTrailed(singleBlockModel.currentRecord))
 
       singleBlockModel.abortTrail()
-      assertFalse(singleBlockModel.isRecordTrailed(0))
       assertFalse(singleBlockModel.isRecordTrailed(singleBlockModel.currentRecord))
     }
   }

@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.Column
@@ -38,7 +39,6 @@ import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.visual.MessageCode
-
 
 class VFieldTests : JApplicationTestBase() {
 
@@ -398,10 +398,12 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `enter test valid scenario` () {
-    val field = FormSample.tb1.blockFields[3].vField
 
+    val field = FormSample.tb1.blockFields[4].vField
+    assertNotEquals(field, field.block?.activeField)
     field.block?.enter()
     field.block?.activeField?.leave(false)
+    assertNull(field.block?.activeField)
     field.enter()
     assertEquals(field, field.block?.activeField)
     assertTrue(field.hasFocus())
@@ -422,6 +424,7 @@ class VFieldTests : JApplicationTestBase() {
     field.block?.enter()
     field.leave(false)
     assertNotEquals(field, field.block?.activeField)
+    assertNull(field.block?.activeField)
   }
 
   @Test

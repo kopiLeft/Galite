@@ -23,35 +23,13 @@ import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 
-
 class FormSampleTests: JApplicationTestBase() {
-
-  fun initSampleFormTables() {
-    SchemaUtils.create(User)
-    User.insert {
-      it[id] = 1
-      it[name] = "Test User"
-      it[age] = 20
-      it[ts] = 0
-      it[uc] = 0
-      it[job] = "job"
-    }
-    User.insert {
-      it[id] = 2
-      it[name] = "Test User 2"
-      it[age] = 20
-      it[ts] = 0
-      it[uc] = 0
-      it[job] = "job"
-    }
-  }
 
   @Test
   fun sourceFormTest() {
@@ -99,7 +77,12 @@ class FormSampleTests: JApplicationTestBase() {
     val form = FormSample()
     val formModel = form.model
 
-    formModel.prepareForm() // internally will invoke setCommandsEnabled(true)
+    formModel.setCommandsEnabled(false)
+    assertTrue(formModel.blocks.all {
+      it.getActiveCommands().isEmpty()
+    })
+    formModel.blocks[0].enter()
+    formModel.setCommandsEnabled(true)
     assertTrue(formModel.blocks.any {
       it.getActiveCommands().isNotEmpty()
     })
@@ -109,10 +92,10 @@ class FormSampleTests: JApplicationTestBase() {
   fun `gotoPage test`() {
     val form = FormSample()
     val formModel = form.model
-    val targetPage = 0
+    val targetPage = 1
 
     formModel.gotoPage(targetPage)
-    assertEquals(form.formBlocks[0].vBlock, formModel.getActiveBlock())
+    assertEquals(form.formBlocks[2].vBlock, formModel.getActiveBlock())
   }
 
   @Test
@@ -143,72 +126,6 @@ class FormSampleTests: JApplicationTestBase() {
 
     formModel.enterBlock()
     assertEquals(form.formBlocks[0].vBlock, formModel.getActiveBlock())
-  }
-
-  @Test
-  fun `commitTrail test`() {
-    val form = FormSample().also {
-      it.tb1.age.value = 20
-    }
-    val formModel = form.model
-
-    transaction {
-      initSampleFormTables()
-      form.tb1.load()
-      assertTrue(formModel.blocks.any {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@any true
-          }
-        }
-        return@any false
-      })
-      formModel.commitTrail()
-      assertTrue(formModel.blocks.all {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@all false
-          }
-        }
-        return@all true
-      })
-      SchemaUtils.drop(User)
-    }
-  }
-
-  @Test
-  fun `abortTrail test`() {
-    val form = FormSample().also {
-      it.tb1.age.value = 20
-    }
-    val formModel = form.model
-
-    transaction {
-      initSampleFormTables()
-      form.tb1.load()
-      assertTrue(formModel.blocks.any {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@any true
-          }
-        }
-        return@any false
-      })
-      formModel.abortTrail()
-      assertTrue(formModel.blocks.all {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@all false
-          }
-        }
-        return@all true
-      })
-      SchemaUtils.drop(User)
-    }
   }
 
   @Test
