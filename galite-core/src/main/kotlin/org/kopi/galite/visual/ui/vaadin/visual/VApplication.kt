@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.sql.SQLException
+import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
 import java.util.MissingResourceException
@@ -62,6 +63,8 @@ import org.kopi.galite.visual.visual.WindowController
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.datetimepicker.DateTimePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -124,6 +127,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
+
+    /*removeAll()
+    val o = DateTimePicker().also {
+      it.addValueChangeListener {
+        val  u =5
+      }
+    }
+    add(o)
+
+    add(Button("OK"){
+      o.value = LocalDateTime.now()
+    } )*/
   }
 
   // ---------------------------------------------------------------------

@@ -2,8 +2,8 @@
 
 <modules>
     <!--Clients-->
-    <module ident="1000" label="CLIENTS" help="Clients management" />
-    <module ident="1001" label="Client form" help="Clients management" />
+    <module ident="100070" label="CLIENTS" help="Clients management" />
+    <module ident="100071" label="Client form" help="Clients management" />
     <!--Commands-->
     <module ident="2000" label="COMMANDS" help="Commands management" />
     <module ident="2001" label="Commands form" help="Commands management" />

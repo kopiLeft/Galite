@@ -418,7 +418,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
      * Returns the number of pages.
      */
     public int getPageCount() {
-        return getModel().pages.length;
+        return getModel().getPages().length;
     }
 
     /**
@@ -427,7 +427,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
      * @param    index        the index of the specified page
      */
     public String getPageTitle(int index) {
-        return getModel().pages[index];
+        return getModel().getPages()[index];
     }
 
     /**

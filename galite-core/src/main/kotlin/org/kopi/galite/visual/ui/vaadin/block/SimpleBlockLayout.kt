@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.form.DActorField
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DField
@@ -137,7 +138,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       }
     }
 
-    if(component is Grid<*>) { // TODO
+    if(component !is Label && component !is Field) {
       add(component, constraints)
     }
   }

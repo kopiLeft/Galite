@@ -156,7 +156,7 @@ open class FormBlock(var buffer: Int,
    */
   inline fun <reified T> mustFill(domain: Domain<T>,
                                   position: FormPosition,
-                                  init: MustFillFormField<T>.() -> Unit): FormField<T> {
+                                  init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
     initDomain(domain)
     val field = MustFillFormField(this, domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
     field.init()
@@ -705,105 +705,117 @@ open class FormBlock(var buffer: Int,
     (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
+  // ----------------------------------------------------------------------
+  // BLOCK MODEL
+  // ----------------------------------------------------------------------
+
   /** The block model */
-  lateinit var vBlock: VBlock
+  open lateinit var vBlock: VBlock
 
   /** Returns block model */
-  fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
+  open fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
+    val blockModel = BlockModel(vForm, source)
 
-    fun getFieldsCommands(): List<Command> {
-      return blockFields.mapNotNull {
-        it.commands
-      }.flatten()
+    vBlock = blockModel
+
+    return blockModel
+  }
+
+  inner class BlockModel(vForm: VForm, source: String? = null): VBlock(vForm) {
+
+    init {
+      initializeBlock(source)
     }
 
-    return object : VBlock(vForm) {
-      /**
-       * Handling triggers
-       */
-      fun handleTriggers(triggers: MutableList<Trigger>) {
-        // BLOCK TRIGGERS
-        val blockTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-
-        triggers.forEach { trigger ->
-          for (i in VConstants.TRG_TYPES.indices) {
-            if (trigger.events shr i and 1 > 0) {
-              blockTriggerArray[i] = trigger
-            }
-          }
-          super.VKT_Triggers[0] = blockTriggerArray
-        }
-
-        // FIELD TRIGGERS
-        blockFields.forEach { field ->
-          val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-
-          field.triggers.forEach { trigger ->
-            for (i in VConstants.TRG_TYPES.indices) {
-              if (trigger.events shr i and 1 > 0) {
-                fieldTriggerArray[i] = trigger
-              }
-            }
-          }
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
-
-        // COMMANDS TRIGGERS
-        blockCommands.forEach {
-          val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-          // TODO : Add commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
-
-        // FIELDS COMMANDS TRIGGERS
-        val fieldsCommands = getFieldsCommands()
-        fieldsCommands.forEach {
-          val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-          // TODO : Add field commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
+    override fun setInfo(form: VForm) {
+      blockFields.forEach {
+        it.setInfo(super.source, form)
       }
-
-      override fun setInfo(form: VForm) {
-        blockFields.forEach {
-          it.setInfo(super.source, form)
-        }
-      }
-
-      init {
-        handleTriggers(this@FormBlock.triggers)
-        super.source = source ?: sourceFile
-        super.title = this@FormBlock.title
-        super.help = this@FormBlock.help
-        super.bufferSize = buffer
-        super.displaySize = visible
-        super.pageNumber = this@FormBlock.pageNumber
-        super.border = this@FormBlock.border.value
-        super.maxRowPos = this@FormBlock.maxRowPos
-        super.maxColumnPos = this@FormBlock.maxColumnPos
-        super.displayedFields = this@FormBlock.displayedFields
-        super.commands = blockCommands.map { command ->
-          command.buildModel(this, form.actors)
-        }.toTypedArray()
-        super.name = ident
-        super.options = blockOptions
-        super.access = this@FormBlock.access
-        super.tables = blockTables.map {
-          it.table
-        }.toTypedArray()
-        fields = blockFields.map { formField ->
-          formField.vField
-        }.toTypedArray()
-        super.indices = this@FormBlock.indices.map {
-          it.message
-        }.toTypedArray()
-        super.indicesIdents = this@FormBlock.indices.map {
-          it.ident
-        }.toTypedArray()
-        alignment = align?.getBlockAlignModel()
-      }
-    }.also {
-      vBlock = it
     }
+  }
+
+  fun VBlock.initializeBlock(source: String?) {
+    handleTriggers(this@FormBlock.triggers)
+    this.source = source ?: sourceFile
+    this.title = this@FormBlock.title
+    this.help = this@FormBlock.help
+    this.bufferSize = buffer
+    this.displaySize = visible
+    this.pageNumber = this@FormBlock.pageNumber
+    this.border = this@FormBlock.border.value
+    this.maxRowPos = this@FormBlock.maxRowPos
+    this.maxColumnPos = this@FormBlock.maxColumnPos
+    this.displayedFields = this@FormBlock.displayedFields
+    this.commands = blockCommands.map { command ->
+      command.buildModel(this, form.actors)
+    }.toTypedArray()
+    this.name = ident
+    this.options = blockOptions
+    this.access = this@FormBlock.access
+    this.tables = blockTables.map {
+      it.table
+    }.toTypedArray()
+    fields = blockFields.map { formField ->
+      formField.vField
+    }.toTypedArray()
+    this.indices = this@FormBlock.indices.map {
+      it.message
+    }.toTypedArray()
+    this.indicesIdents = this@FormBlock.indices.map {
+      it.ident
+    }.toTypedArray()
+    alignment = align?.getBlockAlignModel()
+  }
+
+  /**
+   * Handling triggers
+   */
+  fun VBlock.handleTriggers(triggers: MutableList<Trigger>) {
+    // BLOCK TRIGGERS
+    val blockTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+
+    triggers.forEach { trigger ->
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          blockTriggerArray[i] = trigger
+        }
+      }
+      this.VKT_Triggers[0] = blockTriggerArray
+    }
+
+    // FIELD TRIGGERS
+    blockFields.forEach { field ->
+      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+
+      field.triggers.forEach { trigger ->
+        for (i in VConstants.TRG_TYPES.indices) {
+          if (trigger.events shr i and 1 > 0) {
+            fieldTriggerArray[i] = trigger
+          }
+        }
+      }
+      this.VKT_Triggers.add(fieldTriggerArray)
+    }
+
+    // COMMANDS TRIGGERS
+    blockCommands.forEach {
+      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+      // TODO : Add commands triggers here
+      this.VKT_Triggers.add(fieldTriggerArray)
+    }
+
+    // FIELDS COMMANDS TRIGGERS
+    val fieldsCommands = getFieldsCommands()
+    fieldsCommands.forEach {
+      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+      // TODO : Add field commands triggers here
+      this.VKT_Triggers.add(fieldTriggerArray)
+    }
+  }
+
+  fun getFieldsCommands(): List<Command> {
+    return blockFields.map {
+      it.commands
+    }.flatten()
   }
 }

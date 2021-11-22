@@ -20,6 +20,7 @@ package org.kopi.galite.visual.ui.vaadin.wait
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.dialog.GeneratedVaadinDialog
@@ -73,6 +74,7 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
     popup.removeAll()
     popup.add(this)
     popup.open()
+    UI.getCurrent().page
   }
 
   /**

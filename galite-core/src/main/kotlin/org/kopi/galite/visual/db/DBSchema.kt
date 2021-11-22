@@ -136,6 +136,8 @@ object Dummy : Table("DUMMY") {
 }
 
 val FAVORITENId = Sequence("FAVORITENId")
+val MODULEId = Sequence("MODULEId")
+val BENUTZERRECHTEId = Sequence("BENUTZERRECHTEId")
 
 val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
                             Favorites, Users, Groups, References, Dummy)

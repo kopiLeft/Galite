@@ -17,20 +17,28 @@
 package org.kopi.galite.demo.client
 
 import java.util.Locale
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.time
+import org.jetbrains.exposed.sql.javatime.timestamp
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
+import org.kopi.galite.demo.database.Task
+import org.kopi.galite.demo.database.Task.autoIncrement
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.FullCalendarBlock
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -38,7 +46,7 @@ import org.kopi.galite.visual.visual.VExecFailedException
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
-  override val title = "Clients"
+  override val title = "Tasks"
   val action = menu("Action")
   val quit = actor(
     ident = "quit",
@@ -144,99 +152,66 @@ class ClientForm : ReportSelectionForm() {
     }
   }
 
-  val clientsPage= page("Clients")
+  val clientsPage= page("Developers")
   val contactsPage= page("Contacts")
   val detailsPage= page("Details")
-  val clientsBlock = clientsPage.insertBlock(Clients())
+  val clientsBlock = clientsPage.insertBlock(Tasks())
   val salesBlock = clientsPage.insertBlock(Sales())
 
-  inner class Clients : FormBlock(1, 100, "Clients") {
-    val c = table(Client)
 
-    val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
-      label = "ID"
-      help = "The client id"
-      columns(c.idClt)
-      value = 1
-    }
-    val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
-      label = "First Name"
-      help = "The client first name"
-      columns(c.firstNameClt)
-    }
-    val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
-      label = "Last name"
-      help = "The client last name"
-      columns(c.lastNameClt)
-    }
-    val ageClt = visit(domain = INT(3), position = at(2, 3)) {
-      label = "Age"
-      help = "The client age"
-      columns(c.ageClt)
-    }
-    val email = visit(domain = STRING(25), position = at(3, 1)) {
-      label = "Email"
-      help = "The mail adress"
-      columns(c.mail)
-    }
-    val addressClt = visit(domain = STRING(20), position = at(3, 2)) {
-      label = "Address"
-      help = "The client address"
-      columns(c.addressClt)
-    }
-    val countryClt = visit(domain = STRING(12), position = at(4, 1)) {
-      label = "Country"
-      help = "The client country"
-      columns(c.countryClt)
-    }
-    val cityClt = visit(domain = STRING(12), position = at(4, 2)) {
-      label = "City"
-      help = "The client city"
-      columns(c.cityClt)
-    }
-    val zipCodeClt = visit(domain = INT(12), position = follow(cityClt)) {
-      label = "Zip code"
-      help = "The client zip code"
-      columns(c.zipCodeClt)
-    }
-    val active = visit(domain = BOOL, position = at(5, 1)) {
-      label = "Active ?"
-      help = "Is the user active?"
-      columns(c.activeClt)
-    }
 
-    val PostqryTrigger = trigger(POSTQRY) {
-      salesBlock.idClt[0] = idClt.value
-      salesBlock.load()
-    }
 
-    init {
-      command(item = report) {
-        action = {
-          createReport(this@Clients)
-        }
+  inner class Tasks : FullCalendarBlock("Tasks") {
+    val t = table(Task)
+
+    val id = hidden(INT(20)) { columns(t.id) }
+    val uc = hidden(domain = INT(20)) { columns(t.uc) }
+    val ts = hidden(domain = INT(20)) { columns(t.ts) }
+
+    val date = date(position = at(1, 1)) {
+      label = "Date"
+      columns(t.date)
+    }
+    val from = fromTime(position = at(2, 1)) {
+      label = "From"
+      columns(t.from)
+    }
+    val to = toTime(position = at(3, 1)) {
+      label = "To"
+      columns(t.to)
+    }
+    val text = mustFill(domain = STRING(50), position = at(4, 1)) {
+      label = "Text"
+      columns(t.text) {
+        priority = 1
       }
-      command(item = dynamicReport) {
-        action = {
-          createDynamicReport()
-        }
+    }
+  }
+
+  inner class Clients : FullCalendarBlock("Tasks") {
+    val t = table(org.kopi.galite.demo.database.Task)
+
+    val id = hidden(INT(20)) { columns(t.id) }
+    val uc = hidden(domain = INT(20)) { columns(t.uc) }
+    val ts = hidden(domain = INT(20)) { columns(t.ts) }
+
+    val from = from(position = at(1, 1)) {
+      label = "From"
+      columns(t.from)
+    }
+    val to = to(position = at(2, 1)) {
+      label = "To"
+      columns(t.to)
+    }
+    val description1 = mustFill(domain = STRING(20), position = at(3, 1)) {
+      label = "description1"
+      columns(t.description1) {
+        priority = 1
       }
-      command(item = graph) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-        action = {
-          showChart(ChartSample())
-        }
-      }
-      command(item = list) {
-        action = {
-          recursiveQuery()
-        }
-      }
-      command(item = saveBlock) {
-        action = {
-          saveBlock()
-        }
-      }
+    }
+    val description2 = mustFill(domain = TEXT(20, 5), position = at(4, 1)) {
+      label = "description2"
+      columns(t.description2)
     }
   }
 

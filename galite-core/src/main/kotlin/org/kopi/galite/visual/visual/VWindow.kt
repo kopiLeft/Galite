@@ -292,7 +292,8 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    */
   fun localizeActors(manager: LocalizationManager) {
     actors.forEach {
-      if(ApplicationContext.getDefaultLocale() != locale || !it!!.userActor) {
+      val k =ApplicationContext.getDefaultLocale()
+      if(k != locale || !it!!.userActor) {
         it!!.localize(manager)
       }
     }

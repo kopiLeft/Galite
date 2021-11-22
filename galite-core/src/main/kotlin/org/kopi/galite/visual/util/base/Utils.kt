@@ -20,6 +20,7 @@ package org.kopi.galite.visual.util.base
 
 import java.util.Timer
 import java.util.TimerTask
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 
 /**
  * This class defines several utilities methods used in source code
@@ -111,9 +112,11 @@ open class Utils {
      * @param task    the task to execute.
      */
     fun doAfter(delay: Long, task: () -> Unit) {
+      val ui = BackgroundThreadHandler.locateUI()
       Timer().schedule(
         object : TimerTask() {
           override fun run() {
+            BackgroundThreadHandler.setUI(ui)
             task()
           }
         },

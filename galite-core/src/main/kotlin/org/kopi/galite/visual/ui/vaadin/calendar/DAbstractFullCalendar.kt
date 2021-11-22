@@ -19,11 +19,19 @@ package org.kopi.galite.visual.ui.vaadin.calendar
 
 import java.time.LocalDate
 
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.visual.Action
+
 import org.vaadin.stefan.fullcalendar.CalendarViewImpl
+import org.vaadin.stefan.fullcalendar.Entry
 import org.vaadin.stefan.fullcalendar.FullCalendar
 import org.vaadin.stefan.fullcalendar.FullCalendarBuilder
 
-import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -34,14 +42,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param type The data series model.
  */
 @CssImport("./styles/galite/fullcalendar.css")
-abstract class DAbstractFullCalendar protected constructor(private val type: CalendarViewImpl) : VerticalLayout() {
+abstract class DAbstractFullCalendar protected constructor(protected val model: VFullCalendarBlock, private val type: CalendarViewImpl) : VerticalLayout() {
 
   protected val calendar: FullCalendar = FullCalendarBuilder.create().build()
-  private val datePicker = DatePicker()
+  protected val datePicker = DatePicker(LocalDate.now())
   protected val header = HorizontalLayout()
 
   init {
-    super.setSizeFull()
+    width = "150vh"
+    height = "70vh"
     calendar.setSizeFull()
     calendar.changeView(type)
     // adding data to full calendar
@@ -49,10 +58,46 @@ abstract class DAbstractFullCalendar protected constructor(private val type: Cal
     // adding header to full calendar
     setHeader()
     // adding full calendar to layout
-    super.add(calendar)
+    add(calendar)
+
+    addAllEntries()
 
     // adding listener
-    setDateListener()
+    setDateListeners()
+    addEntryListeners()
+  }
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
+
+
+
+  fun addAllEntries() {
+    access(currentUI) {
+      val queryList = model.getEntries(Date(datePicker.value))
+
+      queryList?.forEach { e ->
+        val entry = FullCalendarEntry(e.values[model.idField] as Int)
+        entry.title = e.description
+        val start = e.start.sqlTimestamp.toLocalDateTime()
+        entry.setStart(start, calendar.timezone)
+        val end = e.end.sqlTimestamp.toLocalDateTime()
+        entry.setEnd(end, calendar.timezone)
+        entry.color = VFullCalendarEntry.color
+        calendar.addEntries(entry)
+      }
+    }
+  }
+
+  class FullCalendarEntry(val record: Int) : Entry()
+
+  fun removeAllEntries() {
+    access(currentUI) {
+      calendar.removeAllEntries()
+    }
   }
 
   /**
@@ -70,17 +115,23 @@ abstract class DAbstractFullCalendar protected constructor(private val type: Cal
   /**
    * Adding listener on date picker allow user to navigation to a specific date
    */
-  fun setDateListener() {
-    datePicker.addValueChangeListener { event: AbstractField.ComponentValueChangeEvent<DatePicker?, LocalDate?> ->
-      if (event.value != null) {
+  private fun setDateListeners() {
+    datePicker.addValueChangeListener { event ->
+      if (event.isFromClient) {
         calendar.gotoDate(event.value)
+        removeAllEntries()
+        addAllEntries()
       }
     }
   }
 
-  fun addEntryListener() {
+  private fun addEntryListeners() {
     calendar.addEntryClickedListener {
-      // TODO
+      model.form.performAsyncAction(object : Action("entry clicked") {
+        override fun execute() {
+          model.doNotModalBlock((it.entry as FullCalendarEntry).record)
+        }
+      })
     }
   }
 

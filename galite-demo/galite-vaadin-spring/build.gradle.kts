@@ -64,6 +64,7 @@ dependencies {
   // Exposed dependencies
   implementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 
+  implementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.POSTGRES_NG)
   implementation("com.h2database", "h2", Versions.H2)
 
   // EnhancedDialog dependency

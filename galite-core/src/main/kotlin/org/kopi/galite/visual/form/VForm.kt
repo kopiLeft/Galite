@@ -818,8 +818,8 @@ abstract class VForm : VWindow, VConstants {
   // static (from DSL) data
   override var source: String? = null // qualified name of source file
   lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String>
-  internal lateinit var pagesIdents: Array<String>
+  var pages: Array<String> = arrayOf()
+  var pagesIdents: Array<String> = arrayOf()
   internal var help: String? = null //the name of this field
   internal val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
 

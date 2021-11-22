@@ -19,6 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.AttachEvent
@@ -72,7 +73,7 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
     val ori = align!!.block.layout
     if (ori == null) {
       return
-    } else if (ori is SingleComponentBlockLayout) { // FIXME
+    } else if (ori is SingleComponentBlockLayout && ori.block is DGridBlock) { // FIXME
       // block contains a VAADIN grid inside
       // -> we align according to grid column position
       val gridBlock = ori.block.grid

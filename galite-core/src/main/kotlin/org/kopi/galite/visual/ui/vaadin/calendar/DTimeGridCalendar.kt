@@ -17,47 +17,30 @@
  */
 package org.kopi.galite.visual.ui.vaadin.calendar
 
-import java.time.LocalDate
 import java.time.DayOfWeek
-import java.time.LocalTime
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 
 import org.vaadin.stefan.fullcalendar.CalendarViewImpl
 import org.vaadin.stefan.fullcalendar.Entry
 
 /**
  * Creates a new time grid full calendar
- * @param dataSeries The type of the full calendar.
+ * @param model the full calendar block model.
  */
-class DTimeGridCalendar (private val dataSeries: Array<Array<*>>) : DAbstractFullCalendar(CalendarViewImpl.TIME_GRID_WEEK) {
+class DTimeGridCalendar(model: VFullCalendarBlock)
+  : DAbstractFullCalendar(model, CalendarViewImpl.TIME_GRID_WEEK) {
+
   init {
     calendar.setNowIndicatorShown(true)
     calendar.setFirstDay(DayOfWeek.MONDAY)
   }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun build() {
-    val data = arrayOf(Task(LocalDate.of(2021, 11, 17), LocalDate.of(2021, 11, 17), LocalTime.of(10, 0, 0), LocalTime.of(10, 30, 0), "desc 1", "desc 2"),
-                       Task(LocalDate.of(2021, 11, 17), LocalDate.of(2021, 11, 17), LocalTime.of(17, 0, 0), LocalTime.of(17, 30, 0), "desc 1", "desc 2"),
-                       Task(LocalDate.of(2021, 11, 19), LocalDate.of(2021, 11, 19), LocalTime.of(16, 0, 0), LocalTime.of(17, 30, 0), "desc 1", "desc 2"),
-    )
-    // to change with dataSeries !!
-    data.forEach { task ->
-
-      val entry = Entry()
-      entry.title = task.description1 + "-" + task.description2
-      entry.setStart(task.startDate.atTime(task.startTime), calendar.timezone)
-      entry.setEnd(task.endDate.atTime(task.endTime), calendar.timezone)
-      entry.color = "#ff3333"
-
-      calendar.addEntries(entry)
-    }
+    // TODO
   }
 }
-
-class Task(val startDate: LocalDate,
-           val endDate: LocalDate,
-           val startTime : LocalTime,
-           val endTime : LocalTime,
-           val description1 : String,
-           val description2 : String)

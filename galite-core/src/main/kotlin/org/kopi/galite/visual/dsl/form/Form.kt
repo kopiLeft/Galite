@@ -18,6 +18,7 @@ package org.kopi.galite.visual.dsl.form
 
 import java.io.IOException
 import java.util.Locale
+import org.kopi.galite.visual.cross.VFullCalendarForm
 
 import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Action
@@ -29,7 +30,10 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VDefaultActor
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.WindowController
 
@@ -39,7 +43,7 @@ import org.kopi.galite.visual.visual.WindowController
 abstract class Form : Window() {
 
   /** Form's blocks. */
-  val formBlocks = mutableListOf<FormBlock>()
+  var formBlocks = mutableListOf<FormBlock>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
@@ -292,7 +296,7 @@ abstract class Form : Window() {
   // ----------------------------------------------------------------------
   override val model: VForm by lazy { FormModel() }
 
-  inner class FormModel: VForm() {
+  open inner class FormModel: VForm() {
     override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale()
 
     override fun init() {
@@ -301,6 +305,11 @@ abstract class Form : Window() {
   }
 
   protected fun VForm.initialize() {
+    buildForm()
+    buildBlocks()
+  }
+
+  protected fun VForm.buildForm() {
     source = sourceFile
     setTitle(title)
     pages = this@Form.pages.map {
@@ -317,18 +326,6 @@ abstract class Form : Window() {
     }.toTypedArray()
 
     this.handleTriggers(triggers)
-
-    blocks = formBlocks.map { formBlock ->
-      formBlock.getBlockModel(this, source).also { vBlock ->
-        vBlock.setInfo(formBlock.pageNumber, this)
-        vBlock.initIntern()
-        formBlock.blockFields.forEach { formField ->
-          formField.initialValues.forEach {
-            formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
-          }
-        }
-      }
-    }.toTypedArray()
   }
 
   /**
@@ -352,5 +349,26 @@ abstract class Form : Window() {
       // TODO : Add commands triggers here
       VKT_Triggers.add(fieldTriggerArray)
     }
+  }
+
+  private fun VForm.buildBlocks() {
+    val blocks = formBlocks.map { buildBlock(it) }
+      .toTypedArray()
+
+    this.blocks = blocks
+  }
+
+  private fun VForm.buildBlock(formBlock: FormBlock): VBlock {
+    val vBlock = formBlock.getBlockModel(this, source)
+
+    vBlock.setInfo(formBlock.pageNumber, this)
+    vBlock.initIntern()
+    formBlock.blockFields.forEach { formField ->
+      formField.initialValues.forEach {
+        formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+      }
+    }
+
+    return vBlock
   }
 }
