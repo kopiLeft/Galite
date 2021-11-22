@@ -17,35 +17,50 @@
 package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.enter
+import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findBlock
+import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.findForm
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
-import org.junit.Assert.assertFalse
-import org.kopi.galite.testing.expect
-import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ui.vaadin.form.DForm
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
+import org.kopi.galite.visual.ui.vaadin.main.VWindowsMenuItem
 
-import com.github.mvysny.kaributesting.v10.expectRow
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.html.H4
-import com.vaadin.flow.component.textfield.TextField
+import com.github.mvysny.kaributesting.v10._click
+import com.github.mvysny.kaributesting.v10._expect
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
+import com.github.mvysny.kaributesting.v10.expectRow
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.H4
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.tabs.Tab
+import com.vaadin.flow.component.textfield.TextField
 
 class MultipleBlockFormTests : GaliteVUITestBase() {
 
@@ -60,11 +75,40 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test list command`() {
-    //TODO
-    /*
-      check that the list dialog is displayed & that contain a correct data,
-      then chose a row and check that first and second block contains data
-     */
+    multipleForm.list.triggerCommand()
+
+    // Check that the list dialog contains a grid
+    val listDialog = _get<DListDialog>()
+    listDialog._expectOne<Grid<*>>()
+
+    // Check that the grid data is correct
+    val grid = _get<DListDialog>()._get<ListTable>()
+
+    grid.expect(arrayOf(
+            arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
+            arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
+            arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
+            arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4"),
+    ))
+
+    // Choose first row
+    grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(1))
+
+    waitAndRunUIQueue(100)
+
+    val field = multipleForm.block.trainingID.findField()
+    val block = multipleForm.block2.findBlock() as DGridBlock
+    val form = multipleForm.findForm()
+
+    // Dialog is closed and row data are filled into the form
+    assertFalse(listDialog.isOpened)
+    assertEquals("2", field.value)
+    // verify that the focus is still in the first block
+    assertEquals(multipleForm.block.vBlock.name, form.vForm.getActiveBlock()?.name)
+    assertEquals(multipleForm.block.vBlock.title, form.vForm.getActiveBlock()?.title)
+    val data = arrayOf("Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", "2001")
+
+    block.grid.expectRow(0, *data)
   }
 
   /**
@@ -201,18 +245,42 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test add command`() {
-    //TODO
-    /*
-      in the second block click on add commands
-     */
+    multipleForm.query.triggerCommand()
+
+    // Check that the list dialog contains a grid
+    val listDialog = _get<DListDialog>()
+    listDialog._expectOne<Grid<*>>()
+
+    // Check that the grid data is correct
+    val grid = _get<DListDialog>()._get<ListTable>()
+
+    // Choose first row
+    grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(0))
+
+    waitAndRunUIQueue(100)
+
+    multipleForm.open()
+    multipleForm.block2.editRecord(0)
+    multipleForm.add.triggerCommand()
+    val block = multipleForm.block2.findBlock() as DGridBlock
+
+    // the added row will take the position of the current focused record
+    assertEquals(0, block.editor.item.record)
   }
 
   @Test
   fun `test tabs command`() {
-    //TODO
-    /*
-      click on the second tabs and display new page
-     */
+    multipleForm.open()
+    val form = multipleForm.findForm()
+    val targetPage = 1
+    val tabsBeforeChangingPage = _find<Tab>{}
+
+    assertFalse(tabsBeforeChangingPage[targetPage].isSelected)
+    form.gotoPage(targetPage)
+
+    val tabsAfterChangingPage = _find<Tab>{}
+
+    assertTrue(tabsAfterChangingPage[targetPage].isSelected)
   }
 
   @Test
@@ -236,6 +304,56 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     }
 
     assertEquals(1, block.editor.item.record)
+  }
+
+  @Test
+  fun `test the shortcut help button`() {
+    multipleForm.open()
+    val button = _get<Button> { classes = "actors-rootNavigationItem" }
+
+    button.click()
+    _expect<Dialog> {  }
+    val dialog = _get<Dialog> {}
+
+    assertNotNull(dialog)
+
+    val navigationColumns = _find<VerticalLayout> { classes= "actor-navigationColumn" }
+
+    assertEquals(2, navigationColumns.size)
+    assertEquals(2, navigationColumns[0].children.count())
+    assertEquals(10, navigationColumns[1].children.count())
+  }
+
+  @Test
+  fun `test the switch window button`() {
+    // multiple form is opened, open a second form: multipleBlockSaveForm
+    multipleBlockSaveForm.open()
+    // get back to multiple form and verify that the form is visible
+    val windowsDiv = _get<Div> { id = "windows" }
+
+    windowsDiv._click()
+    _expect<EnhancedDialog> {  }
+
+    var windowsContainer = _get<VerticalLayout> { classes = "window-items-container" }
+    var windowsItems = windowsContainer._find<VWindowsMenuItem> { classes = "item" }
+
+    assertEquals(2, windowsItems.size)
+    windowsItems[0].click()
+
+    val form = multipleForm.findForm()
+    val visibleForm = _get<DForm> {  }
+
+    assertEquals(form, visibleForm)
+    assertFails { multipleBlockSaveForm.findForm() }
+
+    // get back to multipleBlockSaveForm
+    windowsDiv._click()
+    _expect<EnhancedDialog> {  }
+    windowsContainer = _get<VerticalLayout> { classes = "window-items-container" }
+    windowsItems = windowsContainer._find<VWindowsMenuItem> { classes = "item" }
+    assertEquals(2, windowsItems.size)
+    windowsItems[1].click()
+    assertFails { multipleForm.findForm() }
   }
 
   companion object {
