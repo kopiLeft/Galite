@@ -91,6 +91,42 @@ class ListTests: GaliteVUITestBase() {
     assertEquals("informations training 2", formWithList.block.informations.findField().value)
   }
 
+  @Test
+  fun `test list command with reordered results`() {
+    // Login
+    login()
+
+    // Opens a form that contain a list command
+    formWithList.open()
+
+    // Trigger the report command
+    formWithList.list.triggerCommand()
+
+    // Check that the list dialog is displayed
+    _expectOne<DListDialog>()
+
+    // Check that the list dialog contains a grid
+    val listDialog = _get<DListDialog>()
+
+    listDialog._expectOne<Grid<*>>()
+    val grid = _get<DListDialog>()._get<ListTable>()
+
+    // Change the columns order
+    grid.setColumnOrder(grid.columns.reversed())
+    val data = arrayOf(
+      arrayOf("informations training 1", "yes", "1.149,240", "Java", "training 1", "1"),
+      arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
+      arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
+      arrayOf("informations training 4", "yes", "3.129,700", "Galite", "training 4", "4"),
+    )
+
+    // Check that the grid data is correct
+    grid.expectRows(data.size)
+    data.forEachIndexed { index, it ->
+      grid.expectRow(index, *it)
+    }
+  }
+
   companion object {
     @BeforeClass
     @JvmStatic

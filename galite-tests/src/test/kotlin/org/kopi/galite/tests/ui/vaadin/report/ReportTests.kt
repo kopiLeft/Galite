@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.report
 
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 import org.junit.BeforeClass
 import org.junit.Test
@@ -30,17 +31,19 @@ import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
 import org.kopi.galite.visual.ui.vaadin.report.DReport
+import org.kopi.galite.visual.ui.vaadin.visual.DownloaderDialog
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Anchor
 
 class ReportTests: GaliteVUITestBase() {
 
   private val formWithReport = FormWithReport().also { it.model } // initialize the model
-  private val simpleReport = SimpleReport()
+  private val simpleReport = SimpleReport().also { it.model }
   private val mainWindow get() = _get<MainWindow>()
   private val windowCaption get() =
     mainWindow
@@ -80,6 +83,105 @@ class ReportTests: GaliteVUITestBase() {
     }
   }
 
+  @Test
+  fun `test export CSV`() {
+    // Login
+    login()
+
+    // Opens a form that contain a report command
+    formWithReport.open()
+
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.csv.triggerCommand()
+
+    _expectOne<DownloaderDialog>()
+    val downloadDialog = _get<DownloaderDialog>()
+
+    assertTrue(downloadDialog.isOpened)
+    val anchor = downloadDialog._get<Anchor> {  }
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".csv"))
+  }
+
+  @Test
+  fun `test export XLS`() {
+    // Login
+    login()
+
+    // Opens a form that contain a report command
+    formWithReport.open()
+
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.xls.triggerCommand()
+    // Trigger the command and check that the downloaderDialog is opened
+    _expectOne<DownloaderDialog>()
+    val downloadDialog = _get<DownloaderDialog>()
+
+    assertTrue(downloadDialog.isOpened)
+    val anchor = downloadDialog._get<Anchor> {  }
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".xls"))
+  }
+
+  @Test
+  fun `test export XLSX`() {
+    // Login
+    login()
+
+    // Opens a form that contain a report command
+    formWithReport.open()
+
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.xlsx.triggerCommand()
+    // Trigger the command and check that the downloaderDialog is opened
+    _expectOne<DownloaderDialog>()
+    val downloadDialog = _get<DownloaderDialog>()
+
+    assertTrue(downloadDialog.isOpened)
+    val anchor = downloadDialog._get<Anchor> {  }
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".xlsx"))
+  }
+
+  @Test
+  fun `test export PDF`() {
+    // Login
+    login()
+
+    // Opens a form that contain a report command
+    formWithReport.open()
+
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.pdf.triggerCommand()
+    // Trigger the command and check that the downloaderDialog is opened
+    _expectOne<DownloaderDialog>()
+    val downloadDialog = _get<DownloaderDialog>()
+
+    assertTrue(downloadDialog.isOpened)
+    val anchor = downloadDialog._get<Anchor> {  }
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".pdf"))
+  }
   companion object {
     @BeforeClass
     @JvmStatic
