@@ -35,7 +35,10 @@ import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
+import com.github.mvysny.kaributools.setSortOrder
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridSortOrder
+import com.vaadin.flow.data.provider.SortDirection
 
 class ListTests: GaliteVUITestBase() {
 
@@ -92,7 +95,7 @@ class ListTests: GaliteVUITestBase() {
   }
 
   @Test
-  fun `test list command with reordered results`() {
+  fun `test list command with reordered columns`() {
     // Login
     login()
 
@@ -118,6 +121,42 @@ class ListTests: GaliteVUITestBase() {
       arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
       arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
       arrayOf("informations training 4", "yes", "3.129,700", "Galite", "training 4", "4"),
+    )
+
+    // Check that the grid data is correct
+    grid.expectRows(data.size)
+    data.forEachIndexed { index, it ->
+      grid.expectRow(index, *it)
+    }
+  }
+
+  @Test
+  fun `test list command with sorted rows`() {
+    // Login
+    login()
+
+    // Opens a form that contain a list command
+    formWithList.open()
+
+    // Trigger the report command
+    formWithList.list.triggerCommand()
+
+    // Check that the list dialog is displayed
+    _expectOne<DListDialog>()
+
+    // Check that the list dialog contains a grid
+    val listDialog = _get<DListDialog>()
+
+    listDialog._expectOne<Grid<*>>()
+    val grid = _get<DListDialog>()._get<ListTable>()
+
+    // Sort (desc) the rows by the id column using
+    grid.setSortOrder(listOf(GridSortOrder(grid.columns[0], SortDirection.DESCENDING)))
+    val data = arrayOf(
+      arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4"),
+      arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
+      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
+      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
     )
 
     // Check that the grid data is correct
