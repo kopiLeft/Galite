@@ -18,11 +18,6 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.tests.db.connectToDatabase
-
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -35,20 +30,22 @@ import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
 
-// **> for border  check result in kopi
-// **> Block Tables & Block Indexes see DocumentationFieldsForm
+/*** Block Tables & Block Indexes  ***/
+// See [DocumentationFieldsForm]
 
 class DocumentationBlockForm : DictionaryForm() {
   override val locale = Locale.UK
+  override val title = "Form to test Blocks"
 
-  override val title = "Commands Form"
   val action = menu("Action")
+
   val autoFill = actor(
     ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
   )
+
   val list = actor(
     ident = "list",
     menu = action,
@@ -58,6 +55,7 @@ class DocumentationBlockForm : DictionaryForm() {
     key = Key.F2
     icon = "list"
   }
+
   val saveBlock = actor(
     ident = "saveBlock",
     menu = action,
@@ -68,7 +66,7 @@ class DocumentationBlockForm : DictionaryForm() {
     icon = "save"
   }
 
-  val InsertMode = actor(
+  val insertMode = actor(
     ident = "Insert",
     menu = action,
     label = "Insert",
@@ -79,14 +77,15 @@ class DocumentationBlockForm : DictionaryForm() {
   }
 
   val deleteBlock = actor(
-    ident = "deleteBlock",
+    ident = "delete Block",
     menu = action,
-    label = "deleteBlock",
+    label = "delete Block",
     help = " deletes block",
   ) {
     key = Key.F4
     icon = "delete"
   }
+
   val resetForm = actor(
     ident = "reset",
     menu = action,
@@ -103,107 +102,132 @@ class DocumentationBlockForm : DictionaryForm() {
     }
   }
 
-  val block1 = insertBlock(Block1())
-  val block2 = insertBlock(Block2())
-  /*** TEST Block Border ***/
-  //test border = Border.LINE
-  val block3 = insertBlock(Block3())
-  //test border = Border.RAISED
-  val block4 = insertBlock(Block4())
-  //test border = Border.LOWERED
-  val block5 = insertBlock(Block5())
-  //test border = Border.ETCHED
-  val block6 = insertBlock(Block6())
+  /*** Block Types ***/
+  val simpleBlock = insertBlock(SimpleBlock())
+  val multiBlock = insertBlock(MultiBlock())
+  /*** Block Border ***/
+  // test border = Border.LINE
+  val lineBorderBlock = insertBlock(LineBorderBlock())
+  // test border = Border.RAISED
+  val raisedBorderBlock = insertBlock(RaisedBorderBlock())
+  // test border = Border.LOWERED
+  val loweredBorderBlock = insertBlock(LoweredBorderBlock())
+  // test border = Border.ETCHED
+  val etchedBorderBlock = insertBlock(EtchedBorderBlock())
 
-  /*** TEST Block Options ***/
-  //test NOCHART option
-  val block7 = insertBlock(Block7())
-  //test NODETAIL option
-  val block8 = insertBlock(Block8())
-  //test NODELETE option
-  val block9 = insertBlock(Block9())
-  //test NOINSERT option
-  val block10 = insertBlock(Block10())
-  //test NOMOVE option
-  val block11 = insertBlock(Block11())
-  //test ACCESS_ON_SKIPPED option
-  val block12 = insertBlock(Block12())
-  //test UPDATE_INDEX option
-  val block13 = insertBlock(Block13())
+  /*** Block Options ***/
+  // test NOCHART option
+  val noChartBlock = insertBlock(NoChartBlock())
+  // test NODETAIL option
+  val noDetailBlock = insertBlock(NoDetailBlock())
+  // test NODELETE option
+  val noDeleteBlock = insertBlock(NoDeleteBlock())
+  // test NOINSERT option
+  val noInsertBlock = insertBlock(NoInsertBlock())
+  // test NOMOVE option
+  val noMoveBlock = insertBlock(NoMoveBlock())
+  // test ACCESS_ON_SKIPPED option
+  val accessOnSkippedBlock = insertBlock(AccessOnSkippedBlock())
+  // test UPDATE_INDEX option
+  val updateIndexBlock = insertBlock(UpdateIndexBlock())
 
-  //test command access set access of block in mode insert and make command available in mode query and update
-  val block14 = insertBlock(Block1()) {
+  // test command access
+  val commandAccessBlock = insertBlock(CommandAccessBlock()) {
     trigger(INIT) {
       vBlock.setMode(VConstants.MOD_INSERT)
     }
+
     command(item = list) {
       mode(Mode.UPDATE, Mode.QUERY)
       action = {
         recursiveQuery()
       }
     }
+
+    command(item = deleteBlock) {
+      action = {
+        deleteBlock()
+      }
+    }
   }
 
-  // modify block visibility to skipped // **> check if we need to add mode ANY also if we can put visibility without Mode !!!
-  val block15 = insertBlock(Block1()) {
+ // modify block visibility to skipped in mode Query and Insert
+  val visibilityBlock = insertBlock(ChangeVisibilityBlock()) {
     blockVisibility(Access.SKIPPED, Mode.QUERY, Mode.INSERT)
   }
 
-  //test triggers
-  val block16 = insertBlock(TriggersBlock())
+  // test triggers
+  val triggersBlock = insertBlock(TriggersBlock())
+  val triggersMultiBlock = insertBlock(TriggersMultiBlock())
+  val lastBlock = insertBlock(LastBlock())
 
-  //simple block
-  inner class Block1 : FormBlock(1, 10, "Block1") {
+  /*** Block Types ***/
+  // Simple block
+  inner class SimpleBlock : FormBlock(1, 10, "Simple Block") {
+    init {
+      border = Border.LINE
+    }
+
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
   }
-  //Multi block
-  inner class Block2 : FormBlock(2, 2, "Block2") {
+  // Multi block
+  inner class MultiBlock : FormBlock(2, 2, "Multi Block") {
+    init {
+      border = Border.LINE
+    }
+
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
   }
-  /*** TEST Block Border ***/
-  //test border = Border.LINE
-  inner class Block3 : FormBlock(2, 2, "Block3") {
+
+  /*** Block Border ***/
+  // test border = Border.LINE
+  inner class LineBorderBlock : FormBlock(2, 2, "Line Border Block") {
+    init {
+      border = Border.LINE
+    }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field border LINE"
+      label = "field"
     }
   }
-  //test border = Border.RAISED
-  inner class Block4 : FormBlock(2, 2, "Block4") {
+
+  // test border = Border.RAISED
+  inner class RaisedBorderBlock : FormBlock(2, 2, "Raised Border Block") {
     init {
       border = Border.RAISED
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field border RAISED"
+      label = "field"
     }
   }
-  //test border = Border.LOWERED
-  inner class Block5 : FormBlock(2, 2, "Block5") {
+
+  // test border = Border.LOWERED
+  inner class LoweredBorderBlock : FormBlock(2, 2, "Lowered Border Block") {
     init {
       border = Border.LOWERED
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field border LOWERED"
+      label = "field"
     }
   }
-  //test border = Border.ETCHED
-  inner class Block6 : FormBlock(2, 2, "Block6") {
+
+  // test border = Border.ETCHED
+  inner class EtchedBorderBlock : FormBlock(2, 2, "Etched Border Block") {
     init {
       border = Border.ETCHED
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field border ETCHED"
+      label = "field"
     }
   }
 
-  /*** TEST Block Alignment ***/
-
-  class TestAlign : FormBlock(10, 8, "Test block") {
-
+  /*** Block Alignment ***/
+  class TestAlign : FormBlock(10, 8, "Align block") {
     init {
+      border = Border.LINE
       options(BlockOption.NODETAIL)
     }
 
@@ -211,189 +235,236 @@ class DocumentationBlockForm : DictionaryForm() {
       label = "Description"
       help = "The description of product"
     }
+
     val reference = visit(domain = STRING(20), position = at(2, 1)) {
       label = "Reference"
       help = "The reference of product"
     }
+
     val quantity = visit(domain = INT(20), position = at(3, 1)) {
       label = "quantity"
       help = "The quantity"
     }
+
     val price = visit(domain = STRING(20), position = at(4, 1)) {
       label = "Price"
       help = "The price"
     }
   }
+
   val targetBlock = insertBlock(TestAlign())
-  val TotalPrices = block(1, 1, "Total", "Total block") {
+  val totalPrices = block(1, 1, "Total", "Total block") {
 
     val totalQuantity = visit(INT(20), position = at(1, 1)) {
       label = "Total"
       help = "Total"
     }
+
     val totalPrice = visit(INT(7), position = at(1, 2)) {}
 
     align(targetBlock, totalQuantity to targetBlock.quantity, totalPrice to targetBlock.price)
   }
 
-  /*** TEST Block Options ***/
-  //test NOCHART option
-  inner class Block7 : FormBlock(2, 2, "Block7") {
+  /*** Block Options ***/
+  // test NOCHART option
+  inner class NoChartBlock : FormBlock(2, 2, "NOCHART Block") {
     init {
+      border = Border.LINE
       options(BlockOption.NOCHART)
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block7 NOCHART"
+      label = "field"
     }
   }
-  //test NODETAIL option
-  inner class Block8 : FormBlock(2, 2, "Block8") {
+
+  // test NODETAIL option
+  inner class NoDetailBlock : FormBlock(2, 2, "NODETAIL Block") {
     init {
+      border = Border.LINE
       options(BlockOption.NODETAIL)
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block8 NODETAIL"
+      label = "field"
     }
   }
-  //test NODELETE option
-  inner class Block9 : FormBlock(2, 2, "Block9") {
+
+  // test NODELETE option
+  inner class NoDeleteBlock : FormBlock(2, 2, "NODELETE Block") {
     init {
+      border = Border.LINE
       options(BlockOption.NODELETE)
+
+      command(item = deleteBlock) {
+        action = {
+          deleteBlock()
+        }
+      }
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block9 NODELETE"
+      label = "field"
     }
   }
-  //test NOINSERT option
-  inner class Block10 : FormBlock(2, 2, "Block10") {
+
+  // test NOINSERT option
+  inner class NoInsertBlock : FormBlock(2, 2, "NOINSERT Block") {
     init {
+      border = Border.LINE
       options(BlockOption.NOINSERT)
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block10 NOINSERT"
+      label = "field"
     }
   }
-  //test NOMOVE option
-  inner class Block11 : FormBlock(2, 2, "Block11") {
+
+  // test NOMOVE option
+  inner class NoMoveBlock : FormBlock(2, 2, "NOMOVE Block") {
     init {
+      border = Border.LINE
       options(BlockOption.NOMOVE)
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block11 NOMOVE"
+      label = "field"
     }
   }
-  //test ACCESS_ON_SKIPPED option
-  inner class Block12 : FormBlock(2, 2, "Block12") {
+
+  // test ACCESS_ON_SKIPPED option
+  inner class AccessOnSkippedBlock : FormBlock(2, 2, "ACCESS_ON_SKIPPED Block") {
     init {
+      border = Border.LINE
       options(BlockOption.ACCESS_ON_SKIPPED)
     }
-    val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block12 ACCESS_ON_SKIPPED"
+    val field = skipped(domain = INT(20), position = at(1, 1)) {
+      label = "field"
     }
   }
-  //test UPDATE_INDEX option
-  inner class Block13 : FormBlock(2, 2, "Block13") {
+
+  // test UPDATE_INDEX option
+  inner class UpdateIndexBlock : FormBlock(2, 2, "UPDATE_INDEX Block") {
     init {
+      border = Border.LINE
       options(BlockOption.UPDATE_INDEX)
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field Block13 UPDATE_INDEX"
+      label = "field"
     }
   }
 
-  /*** Block Triggers ***/
-  inner class TriggersBlock : FormBlock(1, 10, "block Triggers") {
+  /*** Simple Block Triggers ***/
+  inner class TriggersBlock : FormBlock(1, 10, "Simple block Triggers") {
     val t = table(TestTriggers)
 
-    val id = visit(domain = INT(20), position = at(1, 1)) {
-      label = "id"
-      columns(t.id)
+    val id = hidden(domain = INT(20)) { columns(t.id) }
+    val uc = hidden(domain = INT(20)) { columns(t.uc) }
+    val ts = hidden(domain = INT(20)) { columns(t.ts) }
+
+    val preQueryTrigger = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "PREQUERY Trigger"
     }
-    val name = visit(domain = STRING(20), position = at(2, 1)) {
-      label = "name"
+
+    val postQueryTrigger = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "POSYQUERY Trigger"
+    }
+
+    val preInsTrigger = visit(domain = STRING(20), position = at(1, 3)) {
+      label = "PREINS Trigger"
       columns(t.INS)
     }
 
+    val preUpdTrigger = visit(domain = STRING(20), position = at(1, 4)) {
+      label = "PREUPD Trigger"
+      columns(t.UPD)
+    }
+
+    val preBlkTrigger = visit(domain = STRING(20), position = at(2, 1)) {
+      label = "PREBLK Trigger"
+    }
+
+    val postBlkTrigger = visit(domain = STRING(20), position = at(2, 2)) {
+      label = "POSTBLK Trigger"
+    }
+
+    val validateBlkTrigger = visit(domain = STRING(20), position = at(2, 3)) {
+      label = "VALBLK Trigger"
+    }
+
+    val defaultBlkTrigger = visit(domain = STRING(20), position = at(2, 4)) {
+      label = "DEFAULT blockTrigger"
+    }
+    val initBlkTrigger = visit(domain = STRING(20), position = at(3, 1)) {
+      label = "INIT block Trigger"
+    }
+
     init {
+      border = Border.LINE
 
-      // go to the block and enter field
+      // test PREQRY trigger : click on list and check preQueryTrigger field
       trigger(PREQRY) {
-        println("PREQRY trigger !!")
+        preQueryTrigger.value = "PREQRY trigger"
       }
 
-      // click on list
+      // test POSTQRY trigger : click on list and check postQueryTrigger field
       trigger(POSTQRY) {
-        println("POSTQRY trigger !!")
+        postQueryTrigger.value = "POSTQRY trigger"
       }
 
-      // click on list then delete
+      // test PREDEL : click on list then delete
       trigger(PREDEL) {
-        println("PREDEL trigger !!")
+        vBlock.form.notice("PREDEL Trigger")
       }
 
-      // click on list then delete
+      // test POSTDEL : click on deleteBlock command and assert that that POSTDEL trigger change the field value of lastBlock
       trigger(POSTDEL) {
-        println("POSTDEL trigger !!")
+       lastBlock.postDelTrigger.value = "POSTDEL Trigger"
       }
 
-      // put values click on insert command then save
+      // test PREINS : put values click on insert command then save
       trigger(PREINS) {
-        println("PREINS trigger !!")
+        preInsTrigger.value = "PREINS Trigger"
       }
 
-      // put values click on insert command then save
+      // test POSTINS : put values click on insert command then save
+      trigger(POSTINS) {
+        lastBlock.postInsTrigger.value = "POSTINS Trigger"
+      }
+
+      // test PREUPD : put values click on insert command then save
       trigger(PREUPD) {
-        println("PREUPD trigger !!")
+        preUpdTrigger.value = "PREUPD Trigger"
       }
 
-      // click on list changes values then save
+      // test POSTUPD : click on list changes values then save
       trigger(POSTUPD) {
-        println("POSTUPD trigger !!")
+        vBlock.form.notice("POSTUPD Trigger")
       }
 
-      // enter values then insert command then save
+      // test PRESAVE : enter values then click on insert command then save
       trigger(PRESAVE) {
-        println("PRESAVE trigger !!")
+        vBlock.form.notice("PRESAVE Trigger")
       }
 
-      // to check !
-      trigger(PREREC) {
-        println("PREREC trigger !!")
-      }
-
-      // to check !
-      trigger(POSTREC) {
-        println("POSTREC trigger !!")
-      }
-
-      // enter block
+      // test PREBLK : enter block, check preBlkTrigger field
       trigger(PREBLK) {
-        println("PREBLK trigger !!")
+        preBlkTrigger.value = "PREBLK Trigger"
       }
 
-      // leave block
+      // test POSTBLK : leave block, check postBlkTrigger field
       trigger(POSTBLK) {
-        println("POSTBLK trigger !!")
+        postBlkTrigger.value = "POSTBLK Trigger"
       }
 
-      // enter block enter values in fields then leave it
+      // test VALBLK : enter block then leave it and check validateBlkTrigger field
       trigger(VALBLK) {
-        println("VALBLK trigger !!")
+        validateBlkTrigger.value = "VALBLK Trigger"
       }
 
-      // to check !
-      trigger(VALREC) {
-        println("VALBLK trigger !!")
-      }
-
-      // click on insert command
+      // test DEFAULT : click on insert command
       trigger(DEFAULT) {
-        println("DEFAULT trigger !!")
+        defaultBlkTrigger.value = "DEFAULT Trigger"
       }
 
-      // enter block
+      // test INIT : enter block
       trigger(INIT) {
-        println("INIT trigger !!")
+        initBlkTrigger.value = "INIT Trigger"
       }
 
       // check !
@@ -401,16 +472,23 @@ class DocumentationBlockForm : DictionaryForm() {
         false
       }
 
+      // check !
+      trigger(CHANGED) {
+        true
+      }
+
       command(item = list) {
         action = {
           recursiveQuery()
         }
       }
-      command(item = InsertMode) {
+
+      command(item = insertMode) {
         action = {
           insertMode()
         }
       }
+
       command(item = saveBlock) {
         action = {
           saveBlock()
@@ -424,19 +502,71 @@ class DocumentationBlockForm : DictionaryForm() {
       }
     }
   }
-}
 
-fun main() {
-  connectToDatabase()
-  transaction {
-    SchemaUtils.create(TestTriggers)
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TRIGGERSID"))
-    TestTriggers.insert {
-      it[id] = 1
-      it[INS] = "INS-1"
-      it[UPD] = "UPD-1"
+  /*** Multi Block Triggers ***/
+  inner class TriggersMultiBlock : FormBlock(10, 10, "Multi block Triggers") {
+    val preRecTrigger = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "PREREC Trigger"
+    }
+
+    val postRecTrigger = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "POSTREC Trigger"
+    }
+
+    val valRecTrigger = visit(domain = STRING(20), position = at(1, 3)) {
+      label = "VALREC Trigger"
+    }
+
+    init {
+      border = Border.LINE
+
+      // test PREREC : enter block
+      trigger(PREREC) {
+        preRecTrigger.value = "PREREC Trigger"
+      }
+
+      // test POSTREC : enter block, then go to second record
+      trigger(POSTREC) {
+        postRecTrigger.value = "POSTREC Trigger"
+      }
+
+      // test VALREC : enter block, then leave it and check valRecTrigger field
+      trigger(VALREC) {
+        valRecTrigger.value = "VALREC Trigger"
+      }
     }
   }
 
+  inner class CommandAccessBlock : FormBlock(1, 10, "Block to test command access") {
+    init {
+      border = Border.LINE
+    }
+
+    val field = visit(domain = INT(20), position = at(1, 1)) {
+      label = "field"
+    }
+  }
+
+  inner class ChangeVisibilityBlock : FormBlock(1, 10, "Block to test visibility") {
+    init {
+      border = Border.LINE
+    }
+
+    val field = visit(domain = INT(20), position = at(1, 1)) {
+      label = "field"
+    }
+  }
+
+  inner class LastBlock : FormBlock(1, 10, "Last block") {
+    val postDelTrigger = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "post Del Trigger"
+    }
+    val postInsTrigger = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "POSTINS Trigger Field"
+    }
+  }
+}
+
+fun main() {
   runForm(formName = DocumentationBlockForm())
 }

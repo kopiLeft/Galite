@@ -21,19 +21,13 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
-class DocumentationChart : ReportSelectionForm() {
+class DocumentationChart : Form() {
 
   override val locale = Locale.UK
-  /** Calling reports **/
-  // call report
-  override fun createReport(): Report {
-    return DocumentationReportR()
-  }
 
   override val title = "Test Report Form"
 
@@ -50,10 +44,10 @@ class DocumentationChart : ReportSelectionForm() {
     icon =  "column_chart"  // icon is optional here
   }
 
-  val block2 = insertBlock(Block1())
+  val simpleBlock = insertBlock(SimpleBlock())
 
   //simple block
-  inner class Block1 : FormBlock(1, 10, "Block1") {
+  inner class SimpleBlock : FormBlock(1, 10, "Simple Block") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
