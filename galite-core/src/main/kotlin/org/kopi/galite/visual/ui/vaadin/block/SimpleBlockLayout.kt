@@ -18,15 +18,14 @@
 package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.form.DActorField
-import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.form.DGridMultiBlock
 import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout.FormItem
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -137,7 +136,7 @@ open class SimpleBlockLayout(col: Int, line: Int, open val block: Block) : Abstr
       }
     }
 
-    if(component is Grid<*>) { // TODO
+    if(component !is Label && component !is Field) {
       add(component, constraints)
     }
   }

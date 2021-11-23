@@ -27,6 +27,7 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldException
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.util.PrintJob
@@ -56,10 +57,10 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     model.addFormListener(this)
     content.addFormListener(this)
     getModel()!!.setDisplay(this)
-    val blockCount = vForm.getBlockCount()
+    val blockCount = vForm!!.getBlockCount()
     blockViews = arrayOfNulls(blockCount)
     for (i in 0 until blockCount) {
-      val blockModel = vForm.getBlock(i)
+      val blockModel = vForm!!.getBlock(i)
       if (!blockModel.isInternal) {
         val blockView = createViewForBlock(blockModel)
         blockViews[i] = blockView
@@ -80,7 +81,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    */
   protected fun createViewForBlock(blockModel: VBlock): DBlock {
     val blockView: DBlock
-    if (!blockModel.isMulti()) {
+    if (blockModel is VFullCalendarBlock) {
+      blockView = DFullCalendarBlock(this, blockModel)
+    } else if (!blockModel.isMulti()) {
       blockView = DBlock(this, blockModel)
     } else {
       if (blockModel.noChart() && blockModel.noDetail()) {
@@ -107,14 +110,14 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @return The number of pages.
    */
   val pageCount: Int
-    get() = vForm.pages.size
+    get() = vForm!!.pages.size
 
   /**
    * Returns the title of the specified page.
    * @return The title of the specified page.
    */
   fun getPageTitle(index: Int): String {
-    return vForm.pages[index]
+    return vForm!!.pages[index]
   }
 
   override fun reportError(e: VRuntimeException) {
@@ -150,9 +153,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    */
   override fun release() {
     if (vForm != null) {
-      vForm.removeFormListener(this)
+      vForm!!.removeFormListener(this)
       for (i in blockViews.indices) {
-        vForm.getBlock(i).removeBlockListener(blockListener)
+        vForm!!.getBlock(i).removeBlockListener(blockListener)
       }
     }
     super.release()
@@ -177,19 +180,19 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * Returns the [VForm] model.
    * @return The [VForm] model.
    */
-  val vForm: VForm
-    get() = super.getModel() as VForm
+  val vForm: VForm?
+    get() = getModel() as? VForm
 
   override fun run() {
-    vForm.prepareForm()
+    vForm!!.prepareForm()
 
     // initialize the access of the blocks
-    val blockcount = vForm.getBlockCount()
+    val blockcount = vForm!!.getBlockCount()
 
     for (i in 0 until blockcount) {
-      vForm.getBlock(i).updateBlockAccess()
+      vForm!!.getBlock(i).updateBlockAccess()
     }
-    vForm.executeAfterStart()
+    vForm!!.executeAfterStart()
   }
 
   override fun onPageSelection(page: Int) {
@@ -199,7 +202,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     if (currentPage != page) {
       performAsyncAction(object : Action("setSelectedIndex") {
         override fun execute() {
-          vForm.gotoPage(page)
+          vForm!!.gotoPage(page)
         }
       })
     }
@@ -208,7 +211,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   override fun gotoNextPosition() {
     performAsyncAction(object : Action("gotoNextPosition") {
       override fun execute() {
-        vForm.getActiveBlock()!!.gotoNextRecord()
+        vForm!!.getActiveBlock()!!.gotoNextRecord()
       }
     })
   }
@@ -216,7 +219,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   override fun gotoPrevPosition() {
     performAsyncAction(object : Action("gotoPrevPosition") {
       override fun execute() {
-        vForm.getActiveBlock()!!.gotoPrevRecord()
+        vForm!!.getActiveBlock()!!.gotoPrevRecord()
       }
     })
   }
@@ -224,7 +227,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   override fun gotoLastPosition() {
     performAsyncAction(object : Action("gotoLastPosition") {
       override fun execute() {
-        vForm.getActiveBlock()!!.gotoLastRecord()
+        vForm!!.getActiveBlock()!!.gotoLastRecord()
       }
     })
   }
@@ -232,7 +235,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   override fun gotoFirstPosition() {
     performAsyncAction(object : Action("gotoFirstPosition") {
       override fun execute() {
-        vForm.getActiveBlock()!!.gotoFirstRecord()
+        vForm!!.getActiveBlock()!!.gotoFirstRecord()
       }
     })
   }
@@ -240,7 +243,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   override fun gotoPosition(posno: Int) {
     performAsyncAction(object : Action("gotoPosition") {
       override fun execute() {
-        vForm.getActiveBlock()!!.gotoRecord(posno - 1)
+        vForm!!.getActiveBlock()!!.gotoRecord(posno - 1)
       }
     })
   }
@@ -271,7 +274,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   }
 
   override fun getBlockView(block: VBlock?): UBlock? {
-    val blocks: Array<VBlock> = vForm.blocks
+    val blocks: Array<VBlock> = vForm!!.blocks
     for (i in blocks.indices) {
       if (block == blocks[i]) {
         return blockViews[i]
@@ -319,7 +322,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
         }
         //enable/disable tab of pages
         val pageNumber = block.pageNumber
-        val blocks = vForm.blocks
+        val blocks = vForm!!.blocks
         if (newAccess) {
           content.setEnabled(true, pageNumber)
         } else {

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
+import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
@@ -74,6 +75,7 @@ class VWindowController : WindowController() {
           if (model is VPreviewWindow
             || model is VHelpViewer
             || model is VMenuTree
+            || model is VFullCalendarForm
           ) {
             showNotModalPopupWindow(view, model.getTitle())
           } else {

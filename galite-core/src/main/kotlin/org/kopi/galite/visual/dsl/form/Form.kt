@@ -301,6 +301,11 @@ abstract class Form : Window() {
   }
 
   protected fun VForm.initialize() {
+    buildForm()
+    buildBlocks()
+  }
+
+  private fun VForm.buildForm() {
     source = sourceFile
     setTitle(title)
     pages = this@Form.pages.map {
@@ -317,18 +322,6 @@ abstract class Form : Window() {
     }.toTypedArray()
 
     this.handleTriggers(triggers)
-
-    blocks = formBlocks.map { formBlock ->
-      formBlock.getBlockModel(this, source).also { vBlock ->
-        vBlock.setInfo(formBlock.pageNumber, this)
-        vBlock.initIntern()
-        formBlock.blockFields.forEach { formField ->
-          formField.initialValues.forEach {
-            formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
-          }
-        }
-      }
-    }.toTypedArray()
   }
 
   /**
@@ -352,5 +345,26 @@ abstract class Form : Window() {
       // TODO : Add commands triggers here
       VKT_Triggers.add(fieldTriggerArray)
     }
+  }
+
+  private fun VForm.buildBlocks() {
+    val blocks = formBlocks.map { buildBlock(it) }
+      .toTypedArray()
+
+    this.blocks = blocks
+  }
+
+  private fun VForm.buildBlock(formBlock: FormBlock): VBlock {
+    val vBlock = formBlock.getBlockModel(this, source)
+
+    vBlock.setInfo(formBlock.pageNumber, this)
+    vBlock.initIntern()
+    formBlock.blockFields.forEach { formField ->
+      formField.initialValues.forEach {
+        formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+      }
+    }
+
+    return vBlock
   }
 }
