@@ -59,9 +59,10 @@ class VDimensionTests {
   @Test
   fun vWeekDimensionTest() {
     val vWeekDimension = VWeekDimension("VWeekDimension", null)
+    val week = Week(70)
 
     assertEquals(CConstants.EMPTY_TEXT, vWeekDimension.format(null))
-    assertEquals("18.1", vWeekDimension.format(Week(70)))
+    assertEquals(week.toString(), vWeekDimension.format(week))
   }
 
   @Test

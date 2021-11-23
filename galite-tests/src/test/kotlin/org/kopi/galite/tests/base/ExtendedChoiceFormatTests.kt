@@ -44,6 +44,8 @@ class ExtendedChoiceFormatTests {
     assertEquals("one", extendedChoiceFormat.format("1.0"),)
     assertEquals("one", extendedChoiceFormat.format("0.0"),)
     assertEquals("one", extendedChoiceFormat.format(object {}),)
+    assertEquals("one", extendedChoiceFormat.format(true))
+    assertEquals("zero", extendedChoiceFormat.format(false))
     assertEquals("zero", extendedChoiceFormat.format(ExtendedMessageFormat.NULL_REPRESENTATION))
   }
 }
