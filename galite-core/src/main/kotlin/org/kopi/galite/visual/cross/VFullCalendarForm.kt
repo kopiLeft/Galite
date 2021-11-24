@@ -35,7 +35,6 @@ abstract class VFullCalendarForm : VForm() {
   }
 
   companion object {
-
     const val QUIT_ICON = "quit"
   }
 

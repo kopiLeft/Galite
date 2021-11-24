@@ -82,23 +82,25 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   }
 
   private fun addAllEntries() {
-    access(currentUI) {
-      val queryList = model.getEntries(Date(datePicker.value))
+    model.form.performAsyncAction(object : Action("Fetch entries") {
+      override fun execute() {
+        val queryList = model.getEntries(Date(datePicker.value))
 
-      queryList?.forEach { e ->
-        val record = e.values[model.idField] as Int
-        val entry = FullCalendarEntry(record)
-        val start = e.start.sqlTimestamp.toLocalDateTime()
-        val end = e.end.sqlTimestamp.toLocalDateTime()
+        queryList?.forEach { e ->
+          val record = e.values[model.idField] as Int
+          val entry = FullCalendarEntry(record)
+          val start = e.start.sqlTimestamp.toLocalDateTime()
+          val end = e.end.sqlTimestamp.toLocalDateTime()
 
-        entry.title = e.description
-        entry.setStart(start, calendar.timezone)
-        entry.setEnd(end, calendar.timezone)
-        entry.color = Utils.toString(e.getColor(record))
+          entry.title = e.description
+          entry.setStart(start, calendar.timezone)
+          entry.setEnd(end, calendar.timezone)
+          entry.color = Utils.toString(e.getColor(record))
 
-        calendar.addEntries(entry)
+          calendar.addEntries(entry)
+        }
       }
-    }
+    })
   }
 
   /**

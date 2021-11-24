@@ -73,9 +73,22 @@ open class FullCalendarBlock(title: String,
     }
   }
 
+  /**
+   * Creates and returns a time mustfill field.
+   *
+   * @param init    initialization method to initialize the field.
+   * @return a mustfill field.
+   */
   fun fromTime(position: FormPosition, init: MustFillFormField<Time>.() -> Unit): MustFillFormField<Time> =
     fromTime(Domain(), position, init)
 
+  /**
+   * Creates and returns a time mustfill field.
+   *
+   * @param domain  the domain of the field.
+   * @param init    initialization method to initialize the field.
+   * @return a mustfill field.
+   */
   inline fun <reified T: Time> fromTime(domain: Domain<T>,
                                         position: FormPosition,
                                         init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
@@ -85,10 +98,22 @@ open class FullCalendarBlock(title: String,
     }
   }
 
+  /**
+   * Creates and returns a time mustfill field.
+   *
+   * @param init    initialization method to initialize the field.
+   * @return a mustfill field.
+   */
   fun toTime(position: FormPosition, init: MustFillFormField<Time>.() -> Unit): MustFillFormField<Time> =
     toTime(Domain(), position, init)
 
-
+  /**
+   * Creates and returns a time mustfill field.
+   *
+   * @param domain  the domain of the field.
+   * @param init    initialization method to initialize the field.
+   * @return a mustfill field.
+   */
   inline fun <reified T: Time> toTime(domain: Domain<T>,
                                       position: FormPosition,
                                       init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {

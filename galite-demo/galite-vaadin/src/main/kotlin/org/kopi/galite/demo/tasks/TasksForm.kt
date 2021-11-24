@@ -39,25 +39,6 @@ class TasksForm : Form() {
     key = Key.ESCAPE          // key is optional here
     icon = "quit"  // icon is optional here
   }
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
-  }
-
-  val list = actor(
-          ident = "list",
-          menu = action,
-          label = "list",
-          help = "Display List",
-  ) {
-    key = Key.F10
-    icon = "list"  // icon is optional here
-  }
 
   val autoFill = actor(
     ident = "Autofill",

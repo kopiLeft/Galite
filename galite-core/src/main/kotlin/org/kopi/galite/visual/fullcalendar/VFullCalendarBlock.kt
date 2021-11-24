@@ -191,8 +191,6 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
         .orderBy(*orderBys.toTypedArray())
     }
 
-
-
     for (result in query) {
       /* don't show record with ID = 0 */
       if (result[idColumn] == 0) {
