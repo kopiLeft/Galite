@@ -86,7 +86,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
       override fun execute() {
         val queryList = model.getEntries(Date(datePicker.value))
 
-        queryList?.forEach { e ->
+        val entries = queryList?.map { e ->
           val record = e.values[model.idField] as Int
           val entry = FullCalendarEntry(record)
           val start = e.start.sqlTimestamp.toLocalDateTime()
@@ -97,7 +97,13 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           entry.setEnd(end, calendar.timezone)
           entry.color = Utils.toString(e.getColor(record))
 
-          calendar.addEntries(entry)
+          entry
+        }
+
+        if (entries != null) {
+          access(currentUI) {
+            calendar.addEntries(entries)
+          }
         }
       }
     })
