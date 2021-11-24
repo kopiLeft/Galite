@@ -167,10 +167,11 @@ class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test block indexes`() {
     val form = MultipleBlockForm()
-    val index = form.block.indices[0]
+    val model = form.model
+    val index = form.block2.indices[0]
 
-    assertEquals(index, form.block.blockFields[0].columns?.index)
-    assertEquals(index, form.block.blockFields[1].columns?.index)
+    assertEquals(index, form.block2.blockFields[0].columns?.index)
+    assertEquals(index, form.block2.blockFields[1].columns?.index)
   }
 
   @Test
