@@ -1443,7 +1443,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // - inserted to get information about the usage of this code
           // - can be removed if the method checkBlock is removed
           if (ApplicationContext.getDefaults() != null
-                  && ApplicationContext.getDefaults().isDebugModeEnabled) {
+                  && ApplicationContext.getDefaults()!!.isDebugModeEnabled) {
             if ((form.getDisplay() as UForm).runtimeDebugInfo != null) {
               (form.getDisplay() as UForm).runtimeDebugInfo!!.printStackTrace()
             }

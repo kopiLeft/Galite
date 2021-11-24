@@ -27,33 +27,54 @@ import org.kopi.galite.visual.util.mailer.Mailer
 
 class VerifyConfiguration private constructor() {
 
-  fun verifyConfiguration(smtpServer: String, failureRecipient: String, applicationName: String) {
+  fun verifyConfiguration(smtpServer: String?, failureRecipient: String, applicationName: String) {
     val buffer = StringWriter()
     val writer = PrintWriter(buffer)
     var configurationError = false
     var hostname: String
 
+    val failureSender = try {
+      ApplicationConfiguration.getConfiguration()!!.getStringFor("debugging.mail.sender")
+    } catch (e: PropertyException) {
+      throw Exception("Couldn't find the debugging mail sender while sending an error report mail", e)
+    }
+
     // get Hostname
     try {
-      val inetAddress = InetAddress.getLocalHost()
-
-      hostname = inetAddress.canonicalHostName
+      val inetAdress = InetAddress.getLocalHost()
+      hostname = inetAdress.canonicalHostName
       writer.println(formatMessage("Getting hostname ", false))
     } catch (e: UnknownHostException) {
-      hostname = "unknown"
+      hostname = "unkown"
       writer.println(formatMessage("Getting hostname ", true))
       e.printStackTrace(writer)
       writer.println()
       configurationError = true
     }
 
-    // check that -ea is on
-    var isAssertOn: Boolean
-
+    // check that -ea is on 
+    var isAssertOn = false
     assert(true.also { isAssertOn = it })
     writer.println(formatMessage("java called with option -ea", !isAssertOn))
     configurationError = configurationError || !isAssertOn
 
+    // check tmp-directory (exists, writable)
+    // !!! todo
+
+    // check print-server (exits)
+    // !!! todo
+
+    // check fax-server (exits)
+    // !!! todo
+
+    // check mail-server
+    // NOT useful (how to mail this error?)
+
+    // check gs-server (works)
+    // !!! todo
+
+    // check aspell-server (works)
+    // !!! todo
     if (configurationError) {
       Mailer.sendMail(smtpServer,
                       failureRecipient,  // recipient
@@ -66,13 +87,13 @@ class VerifyConfiguration private constructor() {
                               + "@"
                               + hostname,
                       buffer.toString(),
-                      TODO())
+                      failureSender)
     }
   }
 
   companion object {
     private fun formatMessage(message: String, fail: Boolean): String {
-      val result: String = if (message.length >= 70) {
+      val result = if (message.length >= 70) {
         message.substring(0, 70)
       } else {
         message + STR_BASIC.substring(0, 70 - message.length)

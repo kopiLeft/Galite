@@ -29,6 +29,7 @@ import org.kopi.galite.visual.visual.ApplicationConfiguration
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.FileHandler
 import org.kopi.galite.visual.visual.ImageHandler
+import org.kopi.galite.visual.visual.PropertyException
 import org.kopi.galite.visual.visual.UIFactory
 import org.kopi.galite.visual.visual.WindowController
 import org.kopi.vkopi.lib.ui.swing.chart.DChart
@@ -103,7 +104,7 @@ open class JApplicationTestBase : ApplicationTestBase() {
                 override val applicationName get(): String = "MyApp"
                 override val informationText get(): String = "info"
                 override val logFile get(): String = ""
-                override val debugMailRecipient get(): String = ""
+                override val debugMailRecipient get(): String = "mail@adress"
                 override fun getSMTPServer(): String = ""
                 override val faxServer get(): String = ""
                 override val dictionaryServer get(): String = ""
@@ -111,10 +112,21 @@ open class JApplicationTestBase : ApplicationTestBase() {
                 override fun logErrors(): Boolean = true
                 override fun debugMessageInTransaction(): Boolean = true
                 override val RExec get(): Rexec = TODO()
-                override fun getStringFor(var1: String): String = TODO()
-                override fun getIntFor(var1: String): Int {
-                  val var2 = this.getStringFor(var1)
-                  return var2.toInt()
+                override fun getStringFor(key: String): String {
+                  // In a real application you can read these properties from database.
+                  // Select from some table the value where property name equals to key.
+                  return when (key) {
+                    "debugging.mail.cc" -> "mail@adress"
+                    "debugging.mail.bcc" -> "mail@adress"
+                    "debugging.mail.sender" -> "mail@adress"
+                    else -> {
+                      throw PropertyException("Property $key not found")
+                    }
+                  }
+                }
+                override fun getIntFor(key: String): Int {
+                  val value = this.getStringFor(key)
+                  return value.toInt()
                 }
 
                 override fun getBooleanFor(var1: String): Boolean {

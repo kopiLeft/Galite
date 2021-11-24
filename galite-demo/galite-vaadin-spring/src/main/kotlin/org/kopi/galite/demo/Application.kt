@@ -24,6 +24,7 @@ import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.visual.PropertyException
 import org.kopi.galite.visual.visual.Registry
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -71,7 +72,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
   }
 
   override val isNoBugReport: Boolean
-    get() = true
+    get() = false
 
   init {
     ApplicationConfiguration.setConfiguration(ConfigurationManager)
@@ -92,14 +93,25 @@ object ConfigurationManager : ApplicationConfiguration() {
   override fun logErrors(): Boolean = true
   override fun debugMessageInTransaction(): Boolean = true
   override val RExec get(): Rexec = TODO()
-  override fun getStringFor(var1: String): String = TODO()
-  override fun getIntFor(var1: String): Int {
-    val var2 = this.getStringFor(var1)
-    return var2.toInt()
+  override fun getStringFor(key: String): String {
+    // In a real application you can read these properties from database.
+    // Select from some table the value where property name equals to key.
+    return when (key) {
+      "debugging.mail.cc" -> "mail@adress"
+      "debugging.mail.bcc" -> "mail@adress"
+      "debugging.mail.sender" -> "mail@adress"
+      else -> {
+        throw PropertyException("Property $key not found")
+      }
+    }
+  }
+  override fun getIntFor(key: String): Int {
+    val value = this.getStringFor(key)
+    return value.toInt()
   }
 
-  override fun getBooleanFor(var1: String): Boolean {
-    return java.lang.Boolean.valueOf(this.getStringFor(var1))
+  override fun getBooleanFor(key: String): Boolean {
+    return java.lang.Boolean.valueOf(this.getStringFor(key))
   }
 
   override fun isUnicodeDatabase(): Boolean = false

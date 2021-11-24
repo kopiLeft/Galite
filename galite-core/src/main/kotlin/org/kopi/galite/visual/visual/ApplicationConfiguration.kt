@@ -120,9 +120,12 @@ abstract class ApplicationConfiguration {
   /**
    * Reads the value of the property
    *
+   * For example you can read these properties from database.
+   * Select from some table the value where property name equals to [key].
+   *
    * @return the property
    */
-  abstract fun getStringFor(key: String): String?
+  abstract fun getStringFor(key: String): String
 
   abstract fun getBooleanFor(key: String): Boolean
 
