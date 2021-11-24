@@ -70,7 +70,7 @@ open class FormBlock(var buffer: Int,
   open val help: String? = null
   private var blockOptions: Int = 0
   private var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  private var indices: MutableList<FormBlockIndex> = mutableListOf()
+  var indices: MutableList<FormBlockIndex> = mutableListOf()
   internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
   private lateinit var commands: Array<Command?>
   private val triggers = mutableListOf<Trigger>()

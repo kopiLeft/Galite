@@ -16,12 +16,12 @@
  */
 package org.kopi.galite.tests.dsl
 
-import java.util.Locale
-import java.awt.event.KeyEvent
-
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.assertEquals
+
+import java.util.Locale
+import java.awt.event.KeyEvent
 
 import org.junit.Test
 import org.kopi.galite.tests.examples.MultipleBlockForm
@@ -167,10 +167,10 @@ class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test block indexes`() {
     val form = MultipleBlockForm()
-    val formModel = form.model
-    val index = form.block2.vBlock.getFieldIndex(form.block2.CenterId.vField)
+    val index = form.block.indices[0]
 
-    assertEquals(index, formModel.blocks[1].getFieldIndex(formModel.blocks[1].idField))
+    assertEquals(index, form.block.blockFields[0].columns?.index)
+    assertEquals(index, form.block.blockFields[1].columns?.index)
   }
 
   @Test
