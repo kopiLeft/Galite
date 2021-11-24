@@ -46,6 +46,8 @@ dependencies {
   implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
   // Iron Icons
   implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
+  //FullCalendar for Flow dependency
+  implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 
   // Itext dependency
   implementation("com.lowagie", "itext", Versions.ITEXT)
@@ -53,10 +55,8 @@ dependencies {
   // Jdom dependency
   implementation("org.jdom", "jdom2", Versions.JDOM)
 
-  //Apache POI
+  // Apache POI dependencies
   implementation("org.apache.poi", "poi", Versions.APACHE_POI)
-
-  // Apache OOxml
   implementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 
   // Graphbuilder dependency
@@ -73,14 +73,11 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
+  // Javax dependencies
+  implementation("javax.activation", "activation", "1.1.1")
+  implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
-
-  // Javax activation
-  implementation("javax.activation", "activation", "1.1.1")
-
-  //FullCalendar for Flow dependency
-  implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 }
 
 dependencyManagement {
