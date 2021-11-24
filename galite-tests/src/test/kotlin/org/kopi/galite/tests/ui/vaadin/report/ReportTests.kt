@@ -39,6 +39,9 @@ import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Anchor
+import com.vaadin.flow.component.html.Div
+import org.junit.Before
+import org.kopi.galite.testing.waitAndRunUIQueue
 
 class ReportTests: GaliteVUITestBase() {
 
@@ -50,14 +53,14 @@ class ReportTests: GaliteVUITestBase() {
       ._get<VWindowContainer>()
       ._get<VCaption>()
 
+  @Before
+  fun `login to the App`() {
+    login()
+    formWithReport.open()
+  }
+
   @Test
   fun `test simple report`() {
-    // Login
-    login()
-
-    // Opens a form that contain a report command
-    formWithReport.open()
-
     // Trigger the report command
     formWithReport.report.triggerCommand()
 
@@ -85,102 +88,94 @@ class ReportTests: GaliteVUITestBase() {
 
   @Test
   fun `test export CSV`() {
-    // Login
-    login()
-
-    // Opens a form that contain a report command
-    formWithReport.open()
-
     // Trigger the report command
     formWithReport.report.triggerCommand()
 
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.csv.triggerCommand()
+    waitAndRunUIQueue(100)
 
     _expectOne<DownloaderDialog>()
     val downloadDialog = _get<DownloaderDialog>()
 
     assertTrue(downloadDialog.isOpened)
     val anchor = downloadDialog._get<Anchor> {  }
+    val div = downloadDialog._get<Div> { classes = "download-file-title" }
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".csv"))
+    assertTrue(div.text.contains(simpleReport.title))
+    assertTrue(div.text.endsWith(".csv"))
   }
 
   @Test
   fun `test export XLS`() {
-    // Login
-    login()
-
-    // Opens a form that contain a report command
-    formWithReport.open()
-
     // Trigger the report command
     formWithReport.report.triggerCommand()
 
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.xls.triggerCommand()
-    // Trigger the command and check that the downloaderDialog is opened
+    waitAndRunUIQueue(100)
+
     _expectOne<DownloaderDialog>()
     val downloadDialog = _get<DownloaderDialog>()
 
     assertTrue(downloadDialog.isOpened)
     val anchor = downloadDialog._get<Anchor> {  }
+    val div = downloadDialog._get<Div> { classes = "download-file-title" }
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".xls"))
+    assertTrue(div.text.contains(simpleReport.title))
+    assertTrue(div.text.endsWith(".xls"))
   }
 
   @Test
   fun `test export XLSX`() {
-    // Login
-    login()
-
-    // Opens a form that contain a report command
-    formWithReport.open()
-
     // Trigger the report command
     formWithReport.report.triggerCommand()
 
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.xlsx.triggerCommand()
-    // Trigger the command and check that the downloaderDialog is opened
+    waitAndRunUIQueue(100)
+
     _expectOne<DownloaderDialog>()
     val downloadDialog = _get<DownloaderDialog>()
 
     assertTrue(downloadDialog.isOpened)
     val anchor = downloadDialog._get<Anchor> {  }
+    val div = downloadDialog._get<Div> { classes = "download-file-title" }
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".xlsx"))
+    assertTrue(div.text.contains(simpleReport.title))
+    assertTrue(div.text.endsWith(".xlsx"))
   }
 
   @Test
   fun `test export PDF`() {
-    // Login
-    login()
-
-    // Opens a form that contain a report command
-    formWithReport.open()
-
     // Trigger the report command
     formWithReport.report.triggerCommand()
 
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.pdf.triggerCommand()
-    // Trigger the command and check that the downloaderDialog is opened
+    waitAndRunUIQueue(100)
+
     _expectOne<DownloaderDialog>()
     val downloadDialog = _get<DownloaderDialog>()
 
     assertTrue(downloadDialog.isOpened)
     val anchor = downloadDialog._get<Anchor> {  }
+    val div = downloadDialog._get<Div> { classes = "download-file-title" }
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".pdf"))
+    assertTrue(div.text.contains(simpleReport.title))
+    assertTrue(div.text.endsWith(".pdf"))
   }
   companion object {
     @BeforeClass

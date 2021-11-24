@@ -39,10 +39,18 @@ import com.github.mvysny.kaributools.setSortOrder
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.data.provider.SortDirection
+import org.junit.Before
+import org.junit.Ignore
 
 class ListTests: GaliteVUITestBase() {
 
   private val formWithList = CommandsForm().also { it.model } // initialize the model
+
+  @Before
+  fun `login to the App`() {
+    login()
+    formWithList.open()
+  }
 
   /**
    * Checks that the list dialog is displayed and contains a correct data,
@@ -50,12 +58,6 @@ class ListTests: GaliteVUITestBase() {
    */
   @Test
   fun `test list command`() {
-    // Login
-    login()
-
-    // Opens a form that contain a list command
-    formWithList.open()
-
     // Trigger the report command
     formWithList.list.triggerCommand()
 
@@ -96,12 +98,6 @@ class ListTests: GaliteVUITestBase() {
 
   @Test
   fun `test list command with reordered columns`() {
-    // Login
-    login()
-
-    // Opens a form that contain a list command
-    formWithList.open()
-
     // Trigger the report command
     formWithList.list.triggerCommand()
 
@@ -114,9 +110,19 @@ class ListTests: GaliteVUITestBase() {
     listDialog._expectOne<Grid<*>>()
     val grid = _get<DListDialog>()._get<ListTable>()
 
+    var data = arrayOf(
+      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
+      arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
+      arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4")
+    )
+    // verify the data before reordering
+    data.forEachIndexed { index, it ->
+      grid.expectRow(index, *it)
+    }
     // Change the columns order
     grid.setColumnOrder(grid.columns.reversed())
-    val data = arrayOf(
+    data = arrayOf(
       arrayOf("informations training 1", "yes", "1.149,240", "Java", "training 1", "1"),
       arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
       arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
@@ -130,14 +136,9 @@ class ListTests: GaliteVUITestBase() {
     }
   }
 
+  @Ignore
   @Test
   fun `test list command with sorted rows`() {
-    // Login
-    login()
-
-    // Opens a form that contain a list command
-    formWithList.open()
-
     // Trigger the report command
     formWithList.list.triggerCommand()
 
@@ -149,10 +150,19 @@ class ListTests: GaliteVUITestBase() {
 
     listDialog._expectOne<Grid<*>>()
     val grid = _get<DListDialog>()._get<ListTable>()
+    var data = arrayOf(
+            arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
+            arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
+            arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
+            arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4"),
+    )
 
+    data.forEachIndexed { index, it ->
+      grid.expectRow(index, *it)
+    }
     // Sort (desc) the rows by the id column using
     grid.setSortOrder(listOf(GridSortOrder(grid.columns[0], SortDirection.DESCENDING)))
-    val data = arrayOf(
+    data = arrayOf(
       arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4"),
       arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
       arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
