@@ -19,11 +19,18 @@ package org.kopi.galite.visual.ui.vaadin.calendar
 
 import java.time.LocalDate
 
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.visual.Action
 import org.vaadin.stefan.fullcalendar.CalendarViewImpl
+import org.vaadin.stefan.fullcalendar.Entry
 import org.vaadin.stefan.fullcalendar.FullCalendar
 import org.vaadin.stefan.fullcalendar.FullCalendarBuilder
 
-import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -34,32 +41,79 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param type The data series model.
  */
 @CssImport("./styles/galite/fullcalendar.css")
-abstract class DAbstractFullCalendar protected constructor(private val type: CalendarViewImpl) : VerticalLayout() {
+open class DAbstractFullCalendar protected constructor(protected val model: VFullCalendarBlock,
+                                                       private val type: CalendarViewImpl)
+  : VerticalLayout() {
 
   protected val calendar: FullCalendar = FullCalendarBuilder.create().build()
-  private val datePicker = DatePicker()
+  protected val datePicker = DatePicker(LocalDate.now())
   protected val header = HorizontalLayout()
+  protected var currentUI: UI? = null
 
   init {
-    super.setSizeFull()
+    width = "150vh"
+    height = "70vh"
     calendar.setSizeFull()
     calendar.changeView(type)
     // adding data to full calendar
-    build()
+    addAllEntries()
     // adding header to full calendar
     setHeader()
     // adding full calendar to layout
-    super.add(calendar)
+    add(calendar)
 
     // adding listener
-    setDateListener()
+    setDateListeners()
+    addEntryListeners()
+  }
+
+  /**
+   * Refresh full calendar data.
+   */
+  fun refreshEntries() {
+    removeAllEntries()
+    addAllEntries()
+  }
+
+  fun goToDate(date: Date) {
+    access(currentUI) {
+      calendar.gotoDate(LocalDate.of(date.year, date.month, date.day))
+    }
+  }
+
+  private fun addAllEntries() {
+    model.form.performAsyncAction(object : Action("Fetch entries") {
+      override fun execute() {
+        val queryList = model.getEntries(Date(datePicker.value))
+
+        val entries = queryList?.map { e ->
+          val record = e.values[model.idField] as Int
+          val entry = FullCalendarEntry(record)
+          val start = e.start.sqlTimestamp.toLocalDateTime()
+          val end = e.end.sqlTimestamp.toLocalDateTime()
+
+          entry.title = e.description
+          entry.setStart(start, calendar.timezone)
+          entry.setEnd(end, calendar.timezone)
+          entry.color = Utils.toString(e.getColor(record))
+
+          entry
+        }
+
+        if (entries != null) {
+          access(currentUI) {
+            calendar.addEntries(entries)
+          }
+        }
+      }
+    })
   }
 
   /**
    * Adding button that redirect user to current day in the full calendar
    * Adding date picker that allow user to choice date
    */
-  fun setHeader() {
+  private fun setHeader() {
     header.setId("fullCalendar-header")
     datePicker.setId("fullCalendar-date-picker")
 
@@ -70,22 +124,37 @@ abstract class DAbstractFullCalendar protected constructor(private val type: Cal
   /**
    * Adding listener on date picker allow user to navigation to a specific date
    */
-  fun setDateListener() {
-    datePicker.addValueChangeListener { event: AbstractField.ComponentValueChangeEvent<DatePicker?, LocalDate?> ->
-      if (event.value != null) {
-        calendar.gotoDate(event.value)
+  private fun setDateListeners() {
+    datePicker.addValueChangeListener { event ->
+      if (event.isFromClient) {
+        model.form.performAsyncAction(object : Action("Selected date changed") {
+          override fun execute() {
+            model.dateChanged(Date(event.oldValue), Date(event.value))
+          }
+        })
       }
     }
   }
 
-  fun addEntryListener() {
+  private fun addEntryListeners() {
     calendar.addEntryClickedListener {
-      // TODO
+      model.form.performAsyncAction(object : Action("entry clicked") {
+        override fun execute() {
+          model.doNotModalBlock((it.entry as FullCalendarEntry).record)
+        }
+      })
     }
   }
 
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  abstract fun build()
+  private fun removeAllEntries() {
+    access(currentUI) {
+      calendar.removeAllEntries()
+    }
+  }
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
+
+  class FullCalendarEntry(val record: Int) : Entry()
 }

@@ -163,6 +163,25 @@ class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp, Instant>
       return Timestamp(cal.timeInMillis)
     }
 
+    fun from(date: Date, time: Time): Timestamp =
+      Timestamp(toCalendar(date.year, date.month, date.day, time.hours, time.minutes, time.seconds))
+
+    /**
+     * create an instance of calendar to represent datetime.
+     */
+    private fun toCalendar(year: Int, month: Int, day: Int, hours: Int, minutes: Int, seconds: Int): GregorianCalendar {
+      val calendar = GregorianCalendar()
+
+      calendar.clear()
+      calendar[Calendar.YEAR] = year
+      calendar[Calendar.MONTH] = month - 1
+      calendar[Calendar.DAY_OF_MONTH] = day
+      calendar[Calendar.HOUR_OF_DAY] = hours
+      calendar[Calendar.MINUTE] = minutes
+      calendar[Calendar.SECOND] = seconds
+      return calendar
+    }
+
     // --------------------------------------------------------------------
     // DATA MEMBERS
     // --------------------------------------------------------------------

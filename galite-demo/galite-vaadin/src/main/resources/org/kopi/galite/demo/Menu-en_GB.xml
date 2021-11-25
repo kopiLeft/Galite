@@ -23,4 +23,7 @@
     <!--Providers-->
     <module ident="7000" label="PROVIDERS" help="Providers management" />
     <module ident="7001" label="Providers form" help="Providers management" />
+    <!--Tasks-->
+    <module ident="8000" label="TASKS" help="Tasks" />
+    <module ident="8001" label="Tasks form" help="Form showing tasks in a full calendar" />
 </modules>

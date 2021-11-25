@@ -26,6 +26,7 @@ import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.locateUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
@@ -40,6 +41,7 @@ import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.MessageCode
@@ -73,6 +75,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   //--------------------------------------------------------------
   private val waitInfoHandler: WaitInfoHandler = WaitInfoHandler()
   private val messageHandler: MessageHandler = MessageHandler()
+  protected var currentUI: UI? = null
 
   /**
    * `true` if an action is being performed.
@@ -244,7 +247,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       val currentThread = Thread(actionRunner)
       // Force the current UI in case the thread is started before attaching the window to the UI.
       if (currentUI == null) {
-        currentUI = BackgroundThreadHandler.locateUI()
+        currentUI = locateUI()
       }
       currentThread.start()
     }
@@ -625,12 +628,19 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // DATA MEMBERS
     //-----------------------------------------------------------
     private val waitIndicator = WaitWindow()
+    private var finished = false
+    var delay: Long = 10
 
     //-----------------------------------------------------------
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
+    /**
+     * Shows the wait indicator only if task takes more than some [delay].
+     *
+     * @param message message to show
+     */
     override fun setWaitInfo(message: String?) {
-      access(currentUI) {
+      schedule {
         synchronized(waitIndicator) {
           waitIndicator.setText(message)
           if (!waitIndicator.isOpened) {
@@ -641,7 +651,29 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       }
     }
 
+    /**
+     * Executes the [task] only if it takes more than a specified [delay] in milliseconds.
+     *
+     * @param task the task to be executed.
+     */
+    private fun schedule(task: () -> Unit) {
+      val ui = currentUI ?: locateUI()
+
+      finished = false
+      doAfter(delay) {
+        access(ui) {
+          if (!finished) {
+            task()
+          }
+        }
+      }
+    }
+
     override fun unsetWaitInfo() {
+      synchronized(finished) {
+        finished = true
+       }
+
       access(currentUI) {
         synchronized(waitIndicator) {
           if (waitIndicator.isOpened) {
@@ -653,7 +685,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       }
     }
   }
-  var currentUI: UI? = null
 
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui

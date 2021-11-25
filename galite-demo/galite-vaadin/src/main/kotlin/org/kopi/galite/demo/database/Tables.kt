@@ -18,6 +18,7 @@ package org.kopi.galite.demo.database
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.timestamp
 
 object Client : Table("CLIENTS") {
   val idClt = integer("ID").autoIncrement()
@@ -101,6 +102,19 @@ object Bill : Table("BILLS") {
   val refCmd = integer("COMMAND_REFERENCE").references(Command.numCmd)
 
   override val primaryKey = PrimaryKey(numBill)
+}
+
+object Task : Table("Task") {
+  val id = integer("ID").autoIncrement()
+  val date = date("DATE")
+  val from = timestamp("FROM")
+  val to = timestamp("TO")
+  val description1 = varchar("DESCRIPTION_1", 20)
+  val description2 = varchar("DESCRIPTION_2", 20)
+  val uc = integer("UC").autoIncrement()
+  val ts = integer("TS").autoIncrement()
+
+  override val primaryKey = PrimaryKey(id)
 }
 
 object TaxRule : Table("TAX_RULE") {
