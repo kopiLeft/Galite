@@ -45,7 +45,7 @@ class VerifyConfiguration private constructor() {
       hostname = inetAdress.canonicalHostName
       writer.println(formatMessage("Getting hostname ", false))
     } catch (e: UnknownHostException) {
-      hostname = "unkown"
+      hostname = "unknown"
       writer.println(formatMessage("Getting hostname ", true))
       e.printStackTrace(writer)
       writer.println()

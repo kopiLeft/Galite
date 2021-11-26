@@ -74,7 +74,7 @@ dependencies {
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
   // Javax dependencies
-  implementation("javax.activation", "activation", "1.1.1")
+  implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
   implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)

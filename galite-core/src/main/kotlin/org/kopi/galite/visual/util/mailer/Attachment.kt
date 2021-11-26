@@ -65,5 +65,4 @@ class Attachment(private val name: String, type: String?, input: InputStream) : 
     // ----------------------------------------------------------------------
     private const val DEFAULT_TYPE = "application/octet-stream"
   }
-
 }

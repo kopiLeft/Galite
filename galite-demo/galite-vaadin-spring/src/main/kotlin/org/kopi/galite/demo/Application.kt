@@ -72,7 +72,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
   }
 
   override val isNoBugReport: Boolean
-    get() = false
+    get() = true
 
   init {
     ApplicationConfiguration.setConfiguration(ConfigurationManager)
