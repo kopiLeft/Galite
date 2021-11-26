@@ -195,9 +195,9 @@ abstract class VForm : VWindow, VConstants {
     super.addActors(actorDefs)
   }
 
-  fun setTextOnFieldLeave(): Boolean = false
+  open fun setTextOnFieldLeave(): Boolean = false
 
-  fun forceCheckList(): Boolean = true
+  open fun forceCheckList(): Boolean = true
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -442,7 +442,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  protected fun callTrigger(event: Int, index: Int = 0): Any? {
+  internal fun callTrigger(event: Int, index: Int = 0): Any? {
     return when (VConstants.TRG_TYPES[event]) {
       VConstants.TRG_VOID -> {
         executeVoidTrigger(VKT_Triggers[index][event])
@@ -457,7 +457,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * @return If there is trigger associated with event
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean {
+  internal fun hasTrigger(event: Int, index: Int = 0): Boolean {
     return VKT_Triggers[index][event] != null
   }
 
@@ -820,7 +820,7 @@ abstract class VForm : VWindow, VConstants {
   lateinit var blocks: Array<VBlock>
   internal lateinit var pages: Array<String>
   internal lateinit var pagesIdents: Array<String>
-  internal var help: String? = null //the name of this field
+  internal var help: String? = null
   internal val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
 
   // dynamic data

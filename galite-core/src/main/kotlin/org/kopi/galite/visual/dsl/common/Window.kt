@@ -17,11 +17,14 @@
  */
 package org.kopi.galite.visual.dsl.common
 
+import java.awt.Frame
 import java.io.File
 import java.util.Locale
 
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.WindowController
 
 /**
  * This class represents the definition of a window
@@ -115,6 +118,171 @@ abstract class Window {
     commands.add(command)
     return command
   }
+
+  // ----------------------------------------------------------------------
+  // DISPLAY INTERFACE
+  // ----------------------------------------------------------------------
+  /**
+   * doModal
+   * modal call to this form
+   * @exception        VException        an exception may be raised by triggers
+   */
+  open fun doModal(f: Frame?): Boolean = WindowController.windowController.doModal(this)
+
+  /**
+   * doModal
+   * modal call to this form
+   * @exception        VException        an exception may be raised by triggers
+   */
+  open fun doModal(f: VWindow?): Boolean = WindowController.windowController.doModal(this)
+
+  /**
+   * doModal
+   * modal call to this form
+   * @exception        VException        an exception may be raised by triggers
+   */
+  open fun doModal(): Boolean = WindowController.windowController.doModal(this)
+
+  /**
+   * doNotModal
+   * no modal call to this form
+   * @exception        VException        an exception may be raised by triggers
+   */
+  fun doNotModal() {
+    WindowController.windowController.doNotModal(this)
+  }
+
+  // ----------------------------------------------------------------------
+  // INFORMATION HANDLING
+  // ----------------------------------------------------------------------
+
+  open fun notice(message: String) = model.notice(message)
+
+  fun error(message: String?) = model.error(message)
+
+  /**
+   * Displays a warning message.
+   */
+  fun warn(message: String) = model.warn(message)
+
+  /**
+   * Displays an ask dialog box
+   */
+  fun ask(message: String): Boolean = model.ask(message)
+
+  /**
+   * Displays an ask dialog box
+   */
+  fun ask(message: String, yesIsDefault: Boolean): Boolean = model.ask(message, yesIsDefault)
+
+  /**
+   * Sets a the text to be appended to the title.
+   */
+  fun appendToTitle(text: String) {
+    model.appendToTitle(text)
+  }
+
+  val formTitle: String get() = model.getTitle()
+
+  // ----------------------------------------------------------------------
+  // UTILS
+  // ----------------------------------------------------------------------
+  /**
+   * Set information text
+   */
+  fun setInformationText(text: String?) {
+    model.setInformationText(text)
+  }
+
+  /**
+   * setProgressDialog
+   */
+  fun setProgressDialog(message: String, currentJob: Int) {
+    model.setProgressDialog(message, currentJob)
+  }
+
+  fun setTotalJobs(totalJobs: Int) {
+    model.setTotalJobs(totalJobs)
+  }
+
+  fun setCurrentJob(currentJob: Int) {
+    model.setCurrentJob(currentJob)
+  }
+
+  fun unsetProgressDialog() {
+    model.unsetProgressDialog()
+  }
+
+  fun updateWaitDialogMessage(message: String) {
+    model.updateWaitDialogMessage(message)
+  }
+
+  /**
+   * setWaitInfo
+   */
+  fun setWaitDialog(message: String, maxtime: Int) {
+    model.setWaitDialog(message, maxtime)
+  }
+
+  /**
+   * change mode to free state
+   */
+  fun unsetWaitDialog() {
+    model.unsetWaitDialog()
+  }
+
+  /**
+   * setWaitInfo
+   */
+  fun setWaitInfo(message: String?) {
+    model.setWaitInfo(message)
+  }
+
+  /**
+   * change mode to free state
+   */
+  open fun unsetWaitInfo() {
+    model.unsetWaitInfo()
+  }
+
+  // ----------------------------------------------------------------------
+  // MESSAGES HANDLING
+  // ----------------------------------------------------------------------
+  /**
+   * Formats the message having the given identifier from the given source.
+   *
+   * @param     ident the message identifier
+   * @return    the requested message
+   */
+  protected fun formatMessage(ident: String): String? = model.formatMessage(ident, null)
+
+  /**
+   * Formats the message having the given identifier from the given source.
+   *
+   * @param     ident the message identifier
+   * @param     param message parameter
+   * @return    the requested message
+   */
+  protected fun formatMessage(ident: String, param: Any?): String? = model.formatMessage(ident, param)
+
+  /**
+   * Formats the message having the given identifier from the given source.
+   *
+   * @param     ident  the message identifier
+   * @param     param1 the first message parameter
+   * @param     param1 the second message parameter
+   * @return    the requested message
+   */
+  protected fun formatMessage(ident: String, param1: Any, param2: Any): String? = model.formatMessage(ident, param1, param2)
+
+  /**
+   * Formats the message having the given identifier from the given source.
+   *
+   * @param     ident  the message identifier
+   * @param     params the message parameters
+   * @return    the requested message
+   */
+  protected fun formatMessage(ident: String, params: Array<Any?>?): String? = model.formatMessage(ident, params)
 
   abstract fun genLocalization(destination: String? = null, locale: Locale? = this.locale)
 

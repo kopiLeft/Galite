@@ -502,7 +502,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * @param     param2 the second message parameter
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, param1: Any?, param2: Any? = null): String? =
+  internal fun formatMessage(ident: String, param1: Any?, param2: Any? = null): String? =
           formatMessage(ident, arrayOf(param1, param2))
 
   /**
@@ -512,7 +512,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * @param     params the message parameters
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, params: Array<Any?>): String? {
+  internal fun formatMessage(ident: String, params: Array<Any?>): String? {
     return if (source != null) {
       Message.getMessage(source!!, ident, params)
     } else {

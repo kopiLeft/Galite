@@ -17,6 +17,7 @@
 
 package org.kopi.galite.visual.dsl.chart
 
+import java.io.File
 import java.io.IOException
 import java.util.Locale
 
@@ -129,6 +130,17 @@ abstract class Chart : Window() {
 
 
   open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+
+
+  /**
+   * Exports the chart to the given format.
+   * @param file The destination file.
+   * @param type The export type.
+   * @throws IOException I/O errors.
+   */
+  fun export(file: File, type: Int) {
+    model.export(file, type)
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   // CHART TRIGGERS EVENTS

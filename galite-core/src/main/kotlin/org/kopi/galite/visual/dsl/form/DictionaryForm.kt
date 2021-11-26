@@ -70,10 +70,6 @@ abstract class DictionaryForm : Form() {
       model.dBContext = value
     }
 
-  fun doNotModal() {
-    model.doNotModal()
-  }
-
   /**
    * create a report for this form
    */
@@ -89,6 +85,11 @@ abstract class DictionaryForm : Form() {
   override val model: VDictionaryForm by lazy { DictionaryFormModel() }
 
   inner class DictionaryFormModel: VDictionaryForm() {
+
+    override fun setTextOnFieldLeave(): Boolean = this@DictionaryForm.setTextOnFieldLeave()
+
+    override fun forceCheckList(): Boolean = this@DictionaryForm.forceCheckList()
+
     override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
     override fun init() {
       initialize()

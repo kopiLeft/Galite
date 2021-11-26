@@ -46,6 +46,10 @@ abstract class ReportSelectionForm : DictionaryForm() {
   inner class ReportSelectionFormModel: VReportSelectionForm() {
     override val locale get() = this@ReportSelectionForm.locale ?: ApplicationContext.getDefaultLocale()
 
+    override fun setTextOnFieldLeave(): Boolean = this@ReportSelectionForm.setTextOnFieldLeave()
+
+    override fun forceCheckList(): Boolean = this@ReportSelectionForm.forceCheckList()
+
     override fun init() {
       initialize()
     }

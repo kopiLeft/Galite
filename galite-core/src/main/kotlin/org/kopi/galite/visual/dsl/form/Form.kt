@@ -186,16 +186,138 @@ abstract class Form : Window() {
     Commands.quitForm(model)
   }
 
+  fun showChart(chart: Chart) {
+    WindowController.windowController.doNotModal(chart)
+  }
+
+  open fun setTextOnFieldLeave(): Boolean = false
+
+  open fun forceCheckList(): Boolean = true
+
+  // ----------------------------------------------------------------------
+  // Navigation
+  // ----------------------------------------------------------------------
+  /**
+   * GOTO PAGE [page]
+   * @exception        org.kopi.galite.visual.visual.VException
+   */
+  open fun gotoPage(page: Int) {
+    model.gotoPage(page)
+  }
+
   /**
    * GOTO BLOCK
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.visual.VException
    */
   fun gotoBlock(target: VBlock) {
     model.gotoBlock(target)
   }
 
-  fun showChart(chart: Chart) {
-    WindowController.windowController.doNotModal(chart)
+  /**
+   * Go to the next block
+   * @exception        org.kopi.galite.visual.visual.VException
+   */
+  fun gotoNextBlock() {
+    model.gotoNextBlock()
+  }
+
+  fun enterBlock() {
+    model.enterBlock()
+  }
+
+  /**
+   * Returns true if the form contents have been changed by the user.
+   *
+   * NOTE: Trigger [CHANGED] returns true if form is considered changed.
+   */
+  fun isChanged(): Boolean = model.isChanged()
+
+
+  /**
+   * Resets form to initial state
+   *
+   * NOTE: Trigger [RESET] returns true if reset handled by trigger
+   * @exception        org.kopi.galite.visual.visual.VException
+   */
+  fun reset() {
+    model.reset()
+  }
+
+  /**
+   * create a list of items and return id of selected one or -1
+   *
+   * @param        showUniqueItem        open a list if there is only one item also
+   * @exception        org.kopi.galite.visual.visual.VException
+   */
+  fun singleMenuQuery(parent: Window, showUniqueItem: Boolean): Int = model.singleMenuQuery(parent.model, showUniqueItem)
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  protected open fun callTrigger(event: FormTriggerEvent<*>, index: Int): Any? = model.callTrigger(event.event, index)
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  protected open fun callTrigger(event: FormTriggerEvent<*>): Any? = model.callTrigger(event.event)
+
+  /**
+   * @return If there is trigger associated with event
+   */
+  protected open fun hasTrigger(event: FormTriggerEvent<*>): Boolean = model.hasTrigger(event.event, 0)
+
+  /**
+   * @return If there is trigger associated with event
+   */
+  protected open fun hasTrigger(event: FormTriggerEvent<*>, index: Int): Boolean = model.hasTrigger(event.event, index)
+
+  // ----------------------------------------------------------------------
+  // UTILS
+  // ----------------------------------------------------------------------
+
+  /**
+   * setBlockRecords
+   * inform user about nb records fetched and current one
+   */
+  open fun setFieldSearchOperator(op: Int) {
+    model.setFieldSearchOperator(op)
+  }
+
+  /**
+   * Returns the number of blocks.
+   */
+  open fun getBlockCount(): Int = formBlocks.size
+
+  /**
+   * Returns the block with given index.
+   * @param        index                the index of the specified block
+   */
+  open fun getBlock(index: Int): FormBlock? = getFormElement(model.getBlock(index).name)
+
+  /**
+   * return a Block from its name
+   * @param        name                name of the block
+   * @return    the first block with this name, or null if the block is not found.
+   */
+  open fun getBlock(name: String): FormBlock? = getFormElement(model.getBlock(name)?.name)
+
+  /**
+   * Returns the current block
+   */
+  open fun getActiveBlock(): FormBlock? = getFormElement(model.getActiveBlock()?.name)
+
+  /**
+   * Sets the current block
+   */
+  open fun setActiveBlock(block: FormBlock) {
+    model.setActiveBlock(block.vBlock)
+  }
+
+  /**
+   * Launch file preview
+   */
+  fun documentPreview(file: String) {
+    model.documentPreview(file)
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -251,7 +373,7 @@ abstract class Form : Window() {
   /**
    * Get block
    */
-  open fun getFormElement(ident: String?): FormElement? {
+  open fun getFormElement(ident: String?): FormBlock? {
     formBlocks.forEach { formBlock ->
       if (formBlock.ident == ident || formBlock.shortcut == ident) {
         return formBlock
@@ -294,6 +416,10 @@ abstract class Form : Window() {
 
   inner class FormModel: VForm() {
     override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale()
+
+    override fun setTextOnFieldLeave(): Boolean = this@Form.setTextOnFieldLeave()
+
+    override fun forceCheckList(): Boolean = this@Form.forceCheckList()
 
     override fun init() {
       initialize()
