@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.vaadin.textfieldformatter.NumeralFieldFormatter
+
 /**
  * Server side implementation of decimal grid editor field
  */
@@ -27,6 +30,12 @@ class GridEditorDecimalField(
         maxScale: Int,
         fraction: Boolean
 ) : GridEditorTextField(width) {
+
+  init {
+    val dfs = org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols.get(MainWindow.locale)
+
+    NumeralFieldFormatter("", dfs!!.decimalSeparator.toString(), maxScale).extend(wrappedField)
+  }
 
   override fun check(text: String): Boolean {
     for (c in text) {

@@ -39,6 +39,7 @@ object Versions {
   const val IRON_ICONS = "2.0.1"
   const val JAVAX_SERVLET_API = "4.0.1"
   const val FULL_CALENDAR = "3.1.0"
+  const val TEXT_FIELD_FORMATTER = "5.2.0"
 
   const val JFREE_CHART = "1.0.19"
   const val WYSIWYG_EJAVA = "2.0.1"

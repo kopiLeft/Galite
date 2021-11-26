@@ -17,7 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.vaadin.textfieldformatter.NumeralFieldFormatter
+
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.UI
 
 /**
  * A decimal field.
@@ -27,4 +31,10 @@ class VDecimalField(col: Int,
                     minval: Double?,
                     maxval: Double?,
                     fraction: Boolean)
-  : InputTextField<TextField>(TextField())
+  : InputTextField<TextField>(TextField()) {
+  init {
+    val dfs = org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols.get(MainWindow.locale)
+
+    NumeralFieldFormatter("", dfs!!.decimalSeparator.toString(), maxScale).extend(internalField)
+  }
+}

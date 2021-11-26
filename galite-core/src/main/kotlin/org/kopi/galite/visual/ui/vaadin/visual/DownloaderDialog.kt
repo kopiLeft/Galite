@@ -31,7 +31,6 @@ import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.server.InputStreamFactory
 import com.vaadin.flow.server.StreamResource
 
@@ -52,21 +51,25 @@ class DownloaderDialog(file: File, name: String, locale: String): Dialog() {
     })
     val download = Anchor(href, "")
     val buttons = Div()
-    val title = Div()
 
-    title.className ="download-file-title"
-    buttons.className = "download-file-buttons"
     download.element.setAttribute("download", true)
     downloadButton.isDisableOnClick = true
 
-    title.text = LocalizedProperties.getString(locale, "downloadText") + ": $name"
     closeButton.addClickListener {
       close()
     }
 
     download.add(downloadButton)
     buttons.add(download, closeButton)
-    add(VerticalLayout(title, buttons))
+    add(buttons)
+
+    downloadButton.style["visibility"] = "hidden"
+    closeButton.style["visibility"] = "hidden"
+
+    addAttachListener {
+      downloadButton.clickInClient()
+      closeButton.clickInClient()
+    }
   }
 
   private fun createFileInputStream(path: String): InputStream? {

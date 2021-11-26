@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import org.vaadin.textfieldformatter.NumeralFieldFormatter
+
 import com.vaadin.flow.component.textfield.TextField
 
 /**
@@ -25,7 +27,7 @@ import com.vaadin.flow.component.textfield.TextField
 class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
 
   init {
-    internalField.pattern = "[0-9]*"
+    NumeralFieldFormatter("", "", 0).extend(internalField)
     internalField.isPreventInvalidInput = true
     internalField.element.setProperty("min", minval)
     internalField.element.setProperty("max", maxval)

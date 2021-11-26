@@ -62,6 +62,7 @@ import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
+import com.vaadin.flow.server.VaadinSession
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -512,11 +513,11 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * while in a transaction.
    */
   private fun debugMessageInTransaction(): Boolean =
-          try {
-            ApplicationContext.getDefaults().debugMessageInTransaction()
-          } catch (e: PropertyException) {
-            false
-          }
+    try {
+      ApplicationContext.getDefaults().debugMessageInTransaction()
+    } catch (e: PropertyException) {
+      false
+    }
 
   /**
    * Returns the current application instance.
@@ -672,7 +673,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     override fun unsetWaitInfo() {
       synchronized(finished) {
         finished = true
-       }
+      }
 
       access(currentUI) {
         synchronized(waitIndicator) {
@@ -890,7 +891,15 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
 
   override fun fileProduced(file: File, name: String) {
     access(currentUI) {
-      val downloaderDialog = DownloaderDialog(file, name, application.defaultLocale.toString())
+      var resourceName = name.trim()
+
+      resourceName = resourceName.replace("[^a-zA-Z0-9\\._]+".toRegex(), " ")
+
+      if (VaadinSession.getCurrent().browser.isFirefox) {
+        resourceName = resourceName.replace("\\s".toRegex(), "_")
+      }
+
+      val downloaderDialog = DownloaderDialog(file, resourceName, application.defaultLocale.toString())
 
       downloaderDialog.open()
     }

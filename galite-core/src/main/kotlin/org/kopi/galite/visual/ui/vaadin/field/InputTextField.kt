@@ -17,10 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.text.DecimalFormatSymbols
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.block.Block
@@ -510,17 +508,17 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     if (hasAutocomplete /*&& !connector.isQueryingForSuggestions() TODO*/) {
       when (event.key) {
         Key.ARROW_DOWN,
-            Key.PAGE_DOWN,
-            Key.ARROW_UP,
-            Key.PAGE_UP,
-            Key.ARROW_LEFT,
-            Key.ARROW_RIGHT,
-            Key.ENTER,
-            Key.TAB,
-            Key.SHIFT,
-            Key.CONTROL,
-            Key.ALT,
-            Key.ESCAPE -> {
+        Key.PAGE_DOWN,
+        Key.ARROW_UP,
+        Key.PAGE_UP,
+        Key.ARROW_LEFT,
+        Key.ARROW_RIGHT,
+        Key.ENTER,
+        Key.TAB,
+        Key.SHIFT,
+        Key.CONTROL,
+        Key.ALT,
+        Key.ESCAPE -> {
         }
         else -> refreshSuggestions()
       }
@@ -562,8 +560,9 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   protected fun maybeReplaceDecimalSeparator() {
     if (validationStrategy is DecimalValidator && value!!.contains(".")) {
-      val dfs: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale(MainWindow.locale)) // TODO
-      if (dfs.decimalSeparator != '.') {
+      val dfs = org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols.get(MainWindow.locale)
+
+      if (dfs!!.decimalSeparator != '.') {
         value = value?.replace('.', dfs.decimalSeparator)
       }
     }
