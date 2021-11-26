@@ -513,7 +513,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   private fun debugMessageInTransaction(): Boolean =
           try {
-            ApplicationContext.getDefaults().debugMessageInTransaction()
+            ApplicationContext.getDefaults()!!.debugMessageInTransaction()
           } catch (e: PropertyException) {
             false
           }

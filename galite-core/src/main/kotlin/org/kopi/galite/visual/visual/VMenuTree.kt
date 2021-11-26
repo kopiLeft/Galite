@@ -253,10 +253,9 @@ class VMenuTree constructor(ctxt: DBContext?,
         versionArray.forEach {
           version += "\n" + it
         }
-        val informationText: String
 
-        informationText = try {
-          ApplicationContext.getDefaults().informationText
+        val informationText = try {
+          ApplicationContext.getDefaults()!!.informationText
         } catch (e: PropertyException) {
           e.printStackTrace()
           ""

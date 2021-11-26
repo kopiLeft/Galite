@@ -53,9 +53,11 @@ import org.kopi.galite.visual.visual.Message
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.MessageListener
 import org.kopi.galite.visual.visual.PrinterManager
+import org.kopi.galite.visual.visual.PropertyException
 import org.kopi.galite.visual.visual.Registry
 import org.kopi.galite.visual.visual.UIFactory
 import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.visual.VerifyConfiguration
 import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.WindowController
 
@@ -278,7 +280,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
           getInitParameter("allowQuit") == null ||
                   java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
 
-  override lateinit var applicationConfiguration: ApplicationConfiguration
+  override var applicationConfiguration: ApplicationConfiguration? = null
 
   override lateinit var printManager: PrintManager
 
@@ -399,8 +401,17 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   /**
    * Verifies the configuration settings.
    */
-  fun verifyConfiguration() {
-
+  open fun verifyConfiguration() {
+    val verifyConfiguration: VerifyConfiguration = VerifyConfiguration.verifyConfiguration
+    try {
+      verifyConfiguration.verifyConfiguration(
+        ApplicationConfiguration.getConfiguration()!!.getSMTPServer(),
+        ApplicationConfiguration.getConfiguration()!!.debugMailRecipient,
+        ApplicationConfiguration.getConfiguration()!!.applicationName
+      )
+    } catch (e: PropertyException) {
+      e.printStackTrace()
+    }
   }
 
   /**
