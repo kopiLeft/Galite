@@ -496,7 +496,7 @@ class TextField(val model: VField,
    */
   internal fun fireNextEntry() {
     for (l in textFieldListeners) {
-      l.previousEntry()
+      l.nextEntry()
     }
   }
 

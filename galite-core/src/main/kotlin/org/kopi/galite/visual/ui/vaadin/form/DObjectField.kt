@@ -18,6 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.form
 
 import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.block.ColumnView
+import org.kopi.galite.visual.ui.vaadin.field.ObjectField
 import org.kopi.galite.visual.ui.vaadin.field.ObjectFieldListener
 import org.kopi.galite.visual.visual.Action
 
@@ -36,6 +38,12 @@ abstract class DObjectField(model: VFieldUI,
                             align: Int,
                             options: Int,
                             detail: Boolean) : DField(model, label, align, options, detail), ObjectFieldListener {
+
+  override var columnView: ColumnView? = null
+    set(value) {
+      (wrappedField as ObjectField<*>).columnView = value
+      field = value
+    }
 
   // --------------------------------------------------
   // UI MANAGEMENT

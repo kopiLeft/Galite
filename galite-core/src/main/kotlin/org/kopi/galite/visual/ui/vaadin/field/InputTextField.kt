@@ -21,6 +21,8 @@ import java.text.DecimalFormatSymbols
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
+import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.block.Block
@@ -57,7 +59,7 @@ import com.vaadin.flow.shared.Registration
 open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
-      HasAutocomplete, HasPrefixAndSuffix
+      HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
@@ -73,6 +75,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private var currentText: String? = null
   //private var oracle: SuggestOracle? = null
   //private var display: SuggestionDisplay? = null
+  override val keyNavigators: MutableMap<String, ShortcutAction<*>> = mutableMapOf()
 
   // not really used.
   private var limit = 20
