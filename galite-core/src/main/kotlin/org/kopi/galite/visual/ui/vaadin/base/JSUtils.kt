@@ -16,6 +16,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
+import org.kopi.galite.visual.ui.vaadin.field.VDateField
+import org.kopi.galite.visual.ui.vaadin.field.VTimeField
+import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.KeyModifier
 
@@ -28,7 +32,7 @@ fun Component.addJSKeyDownListener(shortCuts: MutableMap<String, ShortcutAction<
   element.executeJs(jsCall)
 }
 
-private fun keysConditions(shortCuts: MutableMap<String, ShortcutAction<*>>): String {
+private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutAction<*>>): String {
   var first = true
 
   return buildString {
@@ -45,13 +49,22 @@ private fun keysConditions(shortCuts: MutableMap<String, ShortcutAction<*>>): St
       val conditions = "$keyConditions $modifiersConditions"
 
       if (first) {
-        append("if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', this.value); event.preventDefault();}")
+        append("if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()}); event.preventDefault();}")
       } else {
-        append("else if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', this.value); event.preventDefault();}")
+        append("else if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()}); event.preventDefault();}")
       }
 
       first = false
     }
+  }
+}
+
+fun Component.inputValueExpression(): String {
+  return when (this) {
+    is VTimeField -> "this.focusElement.inputElement.value"
+    is VDateField -> "this.$.input.inputElement.value"
+    is VTimeStampField -> "this.__datePicker.$.input.inputElement.value + ' ' + this.__timePicker.focusElement.inputElement.value"
+    else -> "this.value"
   }
 }
 
