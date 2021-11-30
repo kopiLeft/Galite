@@ -113,7 +113,7 @@ class DecimalFormatSymbols(var currencySymbol: String?,
 
     val GB = DecimalFormatSymbols( "£",
                                   "GBP",
-                                  ',',//'.', for test !!
+                                  '.',
                                   '#',
                                   "E",
                                   ',',

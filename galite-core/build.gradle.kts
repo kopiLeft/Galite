@@ -82,8 +82,6 @@ dependencies {
   //FullCalendar for Flow dependency
   implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 
-  //TextField Formatter
-  implementation("org.vaadin", "textfieldformatter", Versions.TEXT_FIELD_FORMATTER)
 }
 
 dependencyManagement {
