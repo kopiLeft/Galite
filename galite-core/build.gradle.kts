@@ -81,7 +81,6 @@ dependencies {
 
   //FullCalendar for Flow dependency
   implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
-
 }
 
 dependencyManagement {

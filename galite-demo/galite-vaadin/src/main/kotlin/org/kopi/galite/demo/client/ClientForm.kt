@@ -159,10 +159,10 @@ class ClientForm : ReportSelectionForm() {
       columns(c.idClt)
       value = 1
     }
-    val fstnameClt = visit(domain = DECIMAL(5,2), position = at(2, 1)) {
-      label = "Decimal"
+    val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
+      label = "First Name"
       help = "The client first name"
-     // columns(c.firstNameClt)
+      columns(c.firstNameClt)
     }
     val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
       label = "Last name"
