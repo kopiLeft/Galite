@@ -22,8 +22,6 @@ import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
-import org.kopi.galite.visual.ui.vaadin.block.Block
-import org.kopi.galite.visual.ui.vaadin.form.Form
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Component
@@ -160,37 +158,6 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
       return true
     }
     return false
-  }
-
-  /**
-   * Cleans the dirty values of this window
-   */
-  open fun cleanDirtyValues(active: Block) {
-    cleanDirtyValues(active, true)
-  }
-
-  /**
-   * Cleans the dirty values of this window
-   */
-  open fun cleanDirtyValues(active: Block?, transferFocus: Boolean) {
-    if (this.content is Form) {
-      (this.content as Form).cleanDirtyValues(active, transferFocus)
-    }
-  }
-
-  /**
-   * Sets the actor having the given number to be enabled or disabled.
-   * @param actor The actor connector instance.
-   * @param enabled The enabled status.
-   */
-  open fun setActorEnabled(actor: Component, enabled: Boolean) {
-    for (child in children) {
-      if (child is Actor) {
-        if (child == actor) {
-          child.isEnabled = enabled
-        }
-      }
-    }
   }
 
   override fun focus() {

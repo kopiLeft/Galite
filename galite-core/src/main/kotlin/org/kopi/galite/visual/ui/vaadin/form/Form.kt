@@ -42,11 +42,6 @@ import com.vaadin.flow.component.tabs.Tabs
 class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
 
   /**
-   * The form locale.
-   */
-  var locale: String? = null
-
-  /**
    * The current position
    */
   var currentPosition = 0
@@ -56,11 +51,6 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   var totalPositions = 0
 
-  /**
-   * The blocks components data.
-   */
-  var blocksData: MutableMap<Component, BlockComponentData> = mutableMapOf()
-
   private var currentPage = -1
   private var pages: Array<Page<*>?> = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
@@ -68,8 +58,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   private var tabPanel: Tabs? = null
   private var listeners: MutableList<FormListener> = mutableListOf()
   private var lastSelected: Tab? = null
-  private var fireSelectionEvent = true
-  private var blockInfo: PositionPanel = PositionPanel()
+  private var blockInfo = PositionPanel()
 
   init {
     className = Styles.FORM
@@ -154,8 +143,6 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param isChart Is it a chart block ?
    */
   fun addBlock(block: Block, page: Int, isFollow: Boolean, isChart: Boolean) {
-    blocksData[block] = BlockComponentData(isFollow, isChart, page)
-
     val hAlign = if (isChart) {
       JustifyContentMode.CENTER
     } else {
@@ -421,23 +408,5 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   fun setCurrentPosition(current: Int, total: Int) {
     setPosition(current, total)
-  }
-
-  /**
-   * Cleans the dirty values of this form.
-   */
-  fun cleanDirtyValues(active: Block?, transferFocus: Boolean = true) {
-    active?.cleanDirtyValues(active, transferFocus)
-  }
-
-  /**
-   * Disables all block actors
-   */
-  fun disableAllBlocksActors() {
-    for (child in children) {
-      if (child is Block) {
-        child.setColumnViewsActorsEnabled(false)
-      }
-    }
   }
 }

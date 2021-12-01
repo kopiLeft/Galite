@@ -140,8 +140,6 @@ class DActor(private var model: VActor)
   fun shortcutActionPerformed() {
     // fire the actor action
     if (isEnabled) {
-      // clean all dirty values in the client side of the parent window.
-      /*getWindow().cleanDirtyValues(getBlock()) TODO */
       val lasFocusedField = (findMainWindow()?.currentWindow as? Window)?.lasFocusedField
       var valueChanged: (() -> Unit)? = null
 

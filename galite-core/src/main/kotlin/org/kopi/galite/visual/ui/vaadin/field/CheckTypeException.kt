@@ -63,6 +63,5 @@ class CheckTypeException(
     field.setBlink(false)
     field.setFocus(true)
     field.setCheckingValue(false)
-    field.fieldConnector.isChanged = true
   }
 }
