@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.dependency.JsModule
@@ -33,12 +34,16 @@ class VDecimalField(col: Int,
                     fraction: Boolean)
   : InputTextField<TextField>(TextField()) {
   init {
-    val dfs = org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols.get(MainWindow.locale)
+    internalField.pattern = "[0-9-.,]*"
+    internalField.isPreventInvalidInput = true
+    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
-    internalField.element.executeJs(
-      "addCheckDecimalListeners($0, $1);",
-      internalField.element,
-      dfs!!.decimalSeparator.toString()
-    )
+    if (dfs!!.decimalSeparator != '.') {
+      internalField.element.executeJs(
+        "addCheckDecimalListeners($0, $1);",
+        internalField.element,
+        dfs.decimalSeparator.toString()
+      )
+    }
   }
 }

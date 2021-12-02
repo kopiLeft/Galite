@@ -160,3 +160,27 @@ pre {
     background: none;
     border-bottom: #009bd4 1px solid;
 }
+
+.download-file-buttons, .k-upload-buttons {
+    width: 100%;
+    text-align: center;
+}
+
+.download-file-buttons vaadin-button, .k-upload-buttons .k-input-button {
+	display: inline-block;
+	margin: 18px 8px 0 auto;
+	background: #009bd4;
+	color: #ffffff;
+	font-family: Arial, sans-serif !important;
+	font-weight: 500 !important;
+	font-style: normal !important;
+	font-size: 1.2em !important;
+	min-width: 128px;
+}
+
+.download-file-title {
+  font-family: Arial, sans-serif !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  font-size: 18px !important;
+}

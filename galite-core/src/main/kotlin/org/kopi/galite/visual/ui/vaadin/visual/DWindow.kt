@@ -513,11 +513,11 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * while in a transaction.
    */
   private fun debugMessageInTransaction(): Boolean =
-    try {
-      ApplicationContext.getDefaults().debugMessageInTransaction()
-    } catch (e: PropertyException) {
-      false
-    }
+          try {
+            ApplicationContext.getDefaults().debugMessageInTransaction()
+          } catch (e: PropertyException) {
+            false
+          }
 
   /**
    * Returns the current application instance.
@@ -891,7 +891,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
 
   override fun fileProduced(file: File, name: String) {
     access(currentUI) {
-      var resourceName = name.trim()
+      var resourceName = name.trim { it <= ' ' }
 
       resourceName = resourceName.replace("[^a-zA-Z0-9\\._]+".toRegex(), " ")
 

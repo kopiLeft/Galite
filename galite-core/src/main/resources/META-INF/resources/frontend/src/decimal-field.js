@@ -17,7 +17,8 @@
 
 window.addCheckDecimalListeners = function(inputField, separator) {
     inputField.addEventListener("keyup", event => {
-      inputField.value = inputField.value.replace(/[^0-9.,]/g, '').replace(/(\..*?)\..*/g);
-      inputField.value = inputField.value.replace(".", separator);
+    if(inputField.value.includes(".")) {
+        inputField.value = inputField.value.replace(".", separator);
+    }
     })
 };

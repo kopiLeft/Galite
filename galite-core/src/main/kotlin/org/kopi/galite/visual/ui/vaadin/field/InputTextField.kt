@@ -25,6 +25,7 @@ import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
@@ -508,17 +509,17 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     if (hasAutocomplete /*&& !connector.isQueryingForSuggestions() TODO*/) {
       when (event.key) {
         Key.ARROW_DOWN,
-        Key.PAGE_DOWN,
-        Key.ARROW_UP,
-        Key.PAGE_UP,
-        Key.ARROW_LEFT,
-        Key.ARROW_RIGHT,
-        Key.ENTER,
-        Key.TAB,
-        Key.SHIFT,
-        Key.CONTROL,
-        Key.ALT,
-        Key.ESCAPE -> {
+            Key.PAGE_DOWN,
+            Key.ARROW_UP,
+            Key.PAGE_UP,
+            Key.ARROW_LEFT,
+            Key.ARROW_RIGHT,
+            Key.ENTER,
+            Key.TAB,
+            Key.SHIFT,
+            Key.CONTROL,
+            Key.ALT,
+            Key.ESCAPE -> {
         }
         else -> refreshSuggestions()
       }
@@ -560,7 +561,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   protected fun maybeReplaceDecimalSeparator() {
     if (validationStrategy is DecimalValidator && value!!.contains(".")) {
-      val dfs = org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols.get(MainWindow.locale)
+      val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
       if (dfs!!.decimalSeparator != '.') {
         value = value?.replace('.', dfs.decimalSeparator)
