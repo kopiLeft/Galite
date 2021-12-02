@@ -535,7 +535,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
       )
       e.printStackTrace()
     }
-    if (ApplicationContext.getDefaults().isDebugModeEnabled) {
+    if (ApplicationContext.getDefaults()!!.isDebugModeEnabled) {
       error("FATAL ERROR: " + reason.message)
       reason.printStackTrace(System.err)
     } else {
