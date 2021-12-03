@@ -170,6 +170,8 @@ interface VConstants : Constants {
     // PREDEFINED COMMANDS
     // ---------------------------------------------------------------------
     const val CMD_QUIT = 0
+    const val CMD_SAVE = 1
+    const val CMD_DELETE = 2
 
     // ---------------------------------------------------------------------
     // TRIGGER INFO

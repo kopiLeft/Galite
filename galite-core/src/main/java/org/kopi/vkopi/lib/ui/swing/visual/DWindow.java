@@ -271,7 +271,6 @@ public abstract class DWindow extends JPanel implements UWindow {
    */
   protected void close(int code) {
     VWindow     model = this.model; //destroyed in release()
-    Frame       frame = getFrame();
 
     try {
       if (!SwingUtilities.isEventDispatchThread()) {
@@ -281,7 +280,7 @@ public abstract class DWindow extends JPanel implements UWindow {
       if (model != null) {
         release();
       }
-      disposeAfterLostFocus(frame);
+      dispose();
       if (model != null) {
         // !! lackner 30.07.2003 why must the model be destroy
         model.destroyModel();
@@ -958,6 +957,12 @@ public abstract class DWindow extends JPanel implements UWindow {
     self = null;
   }
 
+  @Override
+  public void dispose() {
+    Frame       frame = getFrame();
+
+    disposeAfterLostFocus(frame);
+  }
 
   /**
    * !!WORK AROUND 2003.0905 for Focus System of JDK 1.4.2 (also 1.4.1,1.4.0)

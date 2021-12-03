@@ -1041,7 +1041,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Goto first accessible field in current record
    * @exception VException      an exception may occur in field.leave()
    */
-  fun gotoFirstField() {
+  open fun gotoFirstField() {
     assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
@@ -1842,6 +1842,34 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       pos += incr
     }
     throw VExecFailedException()
+  }
+
+  /**
+   * Sets the block into insert mode.
+   * @exception        VException        an exception may occur during DB access
+   */
+  open fun insertMode() {
+    assert(!isMulti()) { "The command InsertMode can be used only with a single block." }
+    assert(getMode() != VConstants.MOD_INSERT) {
+      "The block $name is already in INSERT mode."
+    }
+
+    if (getMode() == VConstants.MOD_UPDATE
+      && isChanged
+      && !form.ask(Message.getMessage("confirm_insert_mode"))
+    ) {
+      return
+    }
+
+    val changed: Boolean = isRecordChanged(0)
+
+    setMode(VConstants.MOD_INSERT)
+    setDefault()
+    setRecordFetched(0, false)
+    setRecordChanged(0, changed)
+    if (!isMulti() && form.getActiveBlock() == this) {
+      gotoFirstUnfilledField()
+    }
   }
 
   /**
@@ -2726,7 +2754,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     callTrigger(VConstants.TRG_INIT)
   }
 
-  fun initIntern() {
+  open fun initIntern() {
     for (i in fields.indices) {
       fields[i].block = this
     }

@@ -584,6 +584,20 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
         public void filterShown() {
         }
 
+        @Override
+        public void goToDate(Date date) {}
+
+        @Override
+        public Date getSelectedDate() {
+            return null;
+        }
+
+        @Override
+        public void refreshEntries() {}
+
+        @Override
+        public void enter() {}
+
         public UBlock getCurrentDisplay() {
             // use another listener:
             return null;

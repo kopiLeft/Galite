@@ -20,6 +20,7 @@ package org.kopi.galite.visual.form
 import java.sql.SQLException
 
 import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.DBInterruptionException
 import org.kopi.galite.visual.db.transaction
@@ -347,29 +348,9 @@ object Commands : VConstants {
    * Sets the block into insert mode.
    * @exception        VException        an exception may occur during DB access
    */
+  @Deprecated("Use VBlock.insertMode() instead", ReplaceWith("b.insertMode()"))
   fun insertMode(b: VBlock) {
-    assert(!b.isMulti()) { "The command InsertMode can be used only with a single block." }
-    assert(b.getMode() != VConstants.MOD_INSERT) {
-      "The block " + b.name + " is already in INSERT mode."
-    }
-
-    if (b.getMode() == VConstants.MOD_UPDATE
-            && b.isChanged
-            && !b.form.ask(Message.getMessage("confirm_insert_mode"))) {
-      return
-    }
-
-    b.apply {
-      val changed: Boolean = isRecordChanged(0)
-
-      setMode(VConstants.MOD_INSERT)
-      setDefault()
-      setRecordFetched(0, false)
-      setRecordChanged(0, changed)
-      if (!isMulti() && form.getActiveBlock() == this) {
-        gotoFirstUnfilledField()
-      }
-    }
+    b.insertMode()
   }
 
   /**
@@ -445,6 +426,11 @@ object Commands : VConstants {
   private fun saveDone(b: VBlock, single: Boolean) {
     val form: VForm = b.form
     val mode: Int = b.getMode()
+
+    if(form is VFullCalendarForm) {
+      form.close(VWindow.CDE_HIDE)
+      return
+    }
 
     if (form is VDictionaryForm) {
       if ((form).isNewRecord()) {
@@ -531,6 +517,12 @@ object Commands : VConstants {
     } catch (e: VException) {
       throw e
     }
+
+    if(b.form is VFullCalendarForm) {
+      form.close(VWindow.CDE_HIDE)
+      return
+    }
+
     if (b.form is VDictionaryForm && (b.form as VDictionaryForm).isRecursiveQuery) {
       b.form.reset()
       return

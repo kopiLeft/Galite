@@ -29,6 +29,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.bill.BillForm
@@ -100,6 +101,9 @@ fun createApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.create(table)
   }
+  listOfSequences.forEach {
+    SchemaUtils.createSequence(it)
+  }
 }
 
 /**
@@ -109,11 +113,16 @@ fun dropApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.drop(table)
   }
+  listOfSequences.forEach {
+    SchemaUtils.dropSequence(it)
+  }
 }
 
 val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
                                             Bill, TaxRule, Command, BillProduct, Purchase,
                                             Task)
+
+val listOfSequences = listOf(TASKId)
 
 fun initModules() {
   transaction {
@@ -335,13 +344,14 @@ fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref:
 }
 
 fun addTasks() {
-  addTask(LocalDate.of(2021, 11, 24), LocalTime.of(10, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
-  addTask(LocalDate.of(2021, 11, 24), LocalTime.of(17, 0, 0), LocalTime.of(17, 30, 0), "Codage", "desc 2")
-  addTask(LocalDate.of(2021, 11, 26), LocalTime.of(16, 0, 0), LocalTime.of(17, 30, 0), "Validation", "desc 2")
+  addTask(LocalDate.of(2021, 12, 1), LocalTime.of(10, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
+  addTask(LocalDate.of(2021, 12, 1), LocalTime.of(17, 0, 0), LocalTime.of(17, 30, 0), "Codage", "desc 2")
+  addTask(LocalDate.of(2021, 12, 4), LocalTime.of(16, 0, 0), LocalTime.of(17, 30, 0), "Validation", "desc 2")
 }
 
 fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: String, description2: String) {
   Task.insert {
+    it[id] = TASKId.nextIntVal()
     it[Task.date] = date
     it[Task.from] = LocalDateTime.of(date, from).atZone(ZoneId.systemDefault()).toInstant()
     it[Task.to] = LocalDateTime.of(date, to).atZone(ZoneId.systemDefault()).toInstant()

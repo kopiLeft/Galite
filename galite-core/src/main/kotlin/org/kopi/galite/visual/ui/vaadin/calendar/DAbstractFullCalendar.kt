@@ -21,6 +21,7 @@ import java.time.LocalDate
 
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.visual.Action
@@ -63,7 +64,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     add(calendar)
 
     // adding listener
-    setDateListeners()
+    setDatePickerListeners()
     addEntryListeners()
   }
 
@@ -75,16 +76,26 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     addAllEntries()
   }
 
+  fun getSelectedDate() : Date {
+    return Date(datePicker.value)
+  }
+
   fun goToDate(date: Date) {
     access(currentUI) {
       calendar.gotoDate(LocalDate.of(date.year, date.month, date.day))
     }
   }
 
+  fun enter() {
+    access(currentUI) {
+      datePicker.focus()
+    }
+  }
+
   private fun addAllEntries() {
     model.form.performAsyncAction(object : Action("Fetch entries") {
       override fun execute() {
-        val queryList = model.getEntries(Date(datePicker.value))
+        val queryList = model.fetchEntries(Date(datePicker.value))
 
         val entries = queryList?.map { e ->
           val record = e.values[model.idField] as Int
@@ -124,7 +135,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   /**
    * Adding listener on date picker allow user to navigation to a specific date
    */
-  private fun setDateListeners() {
+  private fun setDatePickerListeners() {
     datePicker.addValueChangeListener { event ->
       if (event.isFromClient) {
         model.form.performAsyncAction(object : Action("Selected date changed") {
@@ -137,10 +148,43 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   }
 
   private fun addEntryListeners() {
+    // Edit entry
     calendar.addEntryClickedListener {
       model.form.performAsyncAction(object : Action("entry clicked") {
         override fun execute() {
-          model.doNotModalBlock((it.entry as FullCalendarEntry).record)
+          model.openForEdit((it.entry as FullCalendarEntry).record)
+        }
+      })
+    }
+    calendar.addEntryResizedListener {
+      model.form.performAsyncAction(object : Action("entry time edited") {
+        override fun execute() {
+          val newEntry = it.applyChangesOnEntry()
+          val newStart = Timestamp.from(newEntry.start)
+          val newEnd = Timestamp.from(newEntry.end)
+
+
+          model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
+        }
+      })
+    }
+    calendar.addEntryDroppedListener {
+      model.form.performAsyncAction(object : Action("entry time edited") {
+        override fun execute() {
+          val newEntry = it.applyChangesOnEntry()
+          val newStart = Timestamp.from(newEntry.start)
+          val newEnd = Timestamp.from(newEntry.end)
+
+          model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
+        }
+      })
+    }
+
+    // Insert new entry
+    calendar.addTimeslotsSelectedListener {
+      model.form.performAsyncAction(object : Action("new entry") {
+        override fun execute() {
+          model.openForEdit(Timestamp.from(it.startDateTime), Timestamp.from(it.endDateTime))
         }
       })
     }

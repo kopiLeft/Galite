@@ -30,6 +30,7 @@ import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.visual.VDefaultActor
+import org.kopi.galite.visual.visual.VException
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -175,6 +176,29 @@ open class FullCalendarBlock(title: String,
     }
   }
 
+  /**
+   * Sets the block into insert mode.
+   * @exception        VException        an exception may occur during DB access
+   */
+  override fun insertMode() {
+    vBlock.insertMode()
+  }
+
+  fun goToDate(date: Date) {
+    model.goToDate(date)
+  }
+
+  fun getSelectedDate(): Date? = model.getSelectedDate()
+
+  /**
+   * Refreshes the full calendar block data.
+   */
+  fun refreshEntries() {
+    model.refreshEntries()
+  }
+
+  val model: VFullCalendarBlock get() = (vBlock as VFullCalendarBlock)
+
   // ----------------------------------------------------------------------
   // BLOCK MODEL
   // ----------------------------------------------------------------------
@@ -211,6 +235,8 @@ open class FullCalendarBlock(title: String,
 
         override val locale: Locale?
           get() = form.locale
+        override val fullCalendarBlock: VFullCalendarBlock
+          get() = this@FullCalendarBlockModel
 
         override fun init() {
 

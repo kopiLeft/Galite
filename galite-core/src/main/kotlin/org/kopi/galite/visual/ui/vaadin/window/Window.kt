@@ -20,6 +20,7 @@ package org.kopi.galite.visual.ui.vaadin.window
 import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findDialog
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
@@ -143,18 +144,10 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @return `true` if the caption is set.
    */
   private fun maybeSetPopupWindowCaption(caption: String): Boolean {
-    var parent: PopupWindow? = null
-
-    getParent().ifPresent { popupContent ->
-      parent = if(popupContent is PopupWindow) {
-        popupContent
-      } else {
-        popupContent.parent.orElseGet(null) as? PopupWindow
-      }
-    }
+    val parent = findDialog()
 
     if (parent != null) {
-      parent!!.setCaption(caption)
+      parent.setCaption(caption)
       return true
     }
     return false

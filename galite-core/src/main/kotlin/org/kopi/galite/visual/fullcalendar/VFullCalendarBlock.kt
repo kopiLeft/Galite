@@ -27,7 +27,7 @@ import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.DBInterruptionException
 import org.kopi.galite.visual.db.transaction
-import org.kopi.galite.visual.form.FullCalendarBlockListener
+import org.kopi.galite.visual.form.BlockListener
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
@@ -46,7 +46,7 @@ import org.kopi.galite.visual.visual.VExecFailedException
 
 abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
-  private var fullCalendarForm: VFullCalendarForm? = null
+  var fullCalendarForm: VFullCalendarForm = buildFullCalendarForm()
   var dateField: VDateField? = null
   var fromTimeField: VTimeField? = null
   var toTimeField: VTimeField? = null
@@ -60,11 +60,15 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
   abstract fun buildFullCalendarForm() : VFullCalendarForm
 
-  fun addFullCalendarBlockListener(fbl: FullCalendarBlockListener?) {
-    blockListener.add(FullCalendarBlockListener::class.java, fbl)
-  }
+  override fun initIntern() { }
 
-  fun getEntries(date: Date): List<VFullCalendarEntry>? {
+  /**
+   * Fetch full calendar entries from database. This will select all entries between
+   * the first day and the last day of a specific [date].
+   *
+   * @param date the date
+   */
+  fun fetchEntries(date: Date): List<VFullCalendarEntry>? {
     var entries: List<VFullCalendarEntry>?
 
     try {
@@ -253,42 +257,110 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
     return entries
   }
 
-  fun doNotModalBlock(record: Int) {
-    fullCalendarForm = buildFullCalendarForm()
-
-    form.transaction(Message.getMessage("loading_record")) {
-      fullCalendarForm!!.blocks[0].fetchRecord(record)
-    }
-    fullCalendarForm!!.doNotModal()
+  fun openForEdit(startDateTime: Timestamp, endDateTime: Timestamp) {
+    set(startDateTime, endDateTime)
+    fullCalendarForm.doNotModal()
+    fullCalendarForm.block.insertMode()
   }
 
-  fun dateChanged(oldDate: Date, newDate: Date) {
-    gotoDate(newDate)
+  internal fun openForEdit(record: Int, newStart: Timestamp, newEnd: Timestamp) {
+    fetchRecordInBlock(record)
+    set(newStart, newEnd)
+    fullCalendarForm.doNotModal()
+  }
+
+  internal fun openForEdit(record: Int) {
+    fetchRecordInBlock(record)
+    fullCalendarForm.doNotModal()
+  }
+
+  private fun fetchRecordInBlock(record: Int) {
+    form.transaction(Message.getMessage("loading_record")) {
+      fullCalendarForm.block.fetchRecord(record)
+    }
+  }
+
+  fun set(startDateTime: Timestamp, endDateTime: Timestamp) {
+    if (dateField != null) {
+      dateField!!.setDate(Date(startDateTime.toCalendar()))
+      fromTimeField!!.setTime(Time(startDateTime.toCalendar()))
+      toTimeField!!.setTime(Time(endDateTime.toCalendar()))
+    } else {
+      fromField!!.setTimestamp(startDateTime)
+      toField!!.setTimestamp(endDateTime)
+    }
+  }
+
+  internal fun dateChanged(oldDate: Date, newDate: Date) {
+    goToDate(newDate)
 
     if(Week(oldDate) != Week(newDate)) {
       refreshEntries()
     }
   }
 
-  private fun gotoDate(date: Date) {
+  fun goToDate(date: Date) {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] == FullCalendarBlockListener::class.java) {
-        (listeners[i + 1] as FullCalendarBlockListener).goToDate(date)
+      if (listeners[i] == BlockListener::class.java) {
+        (listeners[i + 1] as BlockListener).goToDate(date)
       }
       i -= 2
     }
   }
 
-  private fun refreshEntries() {
+  override fun insertMode() {
+    fullCalendarForm.doNotModal()
+    fullCalendarForm.block.insertMode()
+  }
+
+  /**
+   * Goto first accessible field in current record
+   * @exception VException      an exception may occur in field.leave()
+   */
+  override fun gotoFirstField() {
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    enterDateSelector()
+  }
+
+  fun enterDateSelector() {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] == FullCalendarBlockListener::class.java) {
-        (listeners[i + 1] as FullCalendarBlockListener).refreshEntries()
+      if (listeners[i] == BlockListener::class.java) {
+        (listeners[i + 1] as BlockListener).enter()
+      }
+      i -= 2
+    }
+  }
+
+  fun getSelectedDate(): Date? {
+    val listeners = blockListener.listenerList
+    var i = listeners.size - 2
+
+    while (i >= 0) {
+      if (listeners[i] == BlockListener::class.java) {
+        return (listeners[i + 1] as BlockListener).getSelectedDate()
+      }
+      i -= 2
+    }
+
+    return Date.now()
+  }
+
+  /**
+   * Refreshes the full calendar block data.
+   */
+  fun refreshEntries() {
+    val listeners = blockListener.listenerList
+    var i = listeners.size - 2
+
+    while (i >= 0) {
+      if (listeners[i] == BlockListener::class.java) {
+        (listeners[i + 1] as BlockListener).refreshEntries()
       }
       i -= 2
     }

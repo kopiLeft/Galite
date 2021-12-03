@@ -25,6 +25,7 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
@@ -447,8 +448,8 @@ open class DBlock(val parent: DForm,
 
   override fun getDisplayLine(): Int = getDisplayLine(model.activeRecord)
 
-  override fun getRecordFromDisplayLine(displayLine: Int): Int {
-    return model.getDataPosition(displayToSortedRec[displayLine])
+  override fun getRecordFromDisplayLine(line: Int): Int {
+    return model.getDataPosition(displayToSortedRec[line])
   }
 
   override fun add(comp: UComponent?, constraints: Alignment) {
@@ -482,6 +483,13 @@ open class DBlock(val parent: DForm,
     return layout
   }
 
+  fun release() {
+    columnViews.forEach {
+      it?.model?.removeFieldListener(it.fieldHandler)
+      it?.model?.removeFieldChangeListener(it.fieldHandler)
+    }
+  }
+
   //---------------------------------------------------
   // BLOCKLISTENER IMPLEMENTATION
   //---------------------------------------------------
@@ -512,6 +520,11 @@ open class DBlock(val parent: DForm,
   override fun filterHidden() {}
 
   override fun filterShown() {}
+
+  override fun refreshEntries() {}
+  override fun getSelectedDate(): Date? = null
+  override fun goToDate(date: Date) {}
+  override fun enter() {}
 
   override fun getCurrentDisplay(): UBlock? = this
 }

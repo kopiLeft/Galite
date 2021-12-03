@@ -27,6 +27,8 @@
   <actor ident="Unfold" label="Open" help="Open the menu" />
   <actor ident="Information" label="Information" help="Information" />
   <actor ident="Help" label="Help" help="Open the help window" />
+  <actor ident="EditItem" label="Edit" help="Edit the selected item" />
+  <actor ident="EditItem_S" label="Edit" help="Edit the selected item" />
   <actor ident="Default" label="Default" help="Set as default" />
   <actor ident="Select" label="Select" help="Select element" />
   <actor ident="AddItem" label="Add" help="Add a new item" />
