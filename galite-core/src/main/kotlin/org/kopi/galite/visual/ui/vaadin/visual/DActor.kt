@@ -143,19 +143,12 @@ class DActor(private var model: VActor)
       // clean all dirty values in the client side of the parent window.
       /*getWindow().cleanDirtyValues(getBlock()) TODO */
       val lasFocusedField = (findMainWindow()?.currentWindow as? Window)?.lasFocusedField
-      var valueChanged: (() -> Unit)? = null
 
       val field = if (lasFocusedField != null) {
         // fires text change event for grid editors
         when (lasFocusedField) {
-          is TextField -> {
-            valueChanged = { lasFocusedField.inputField.fieldConnector.valueChanged() }
-            lasFocusedField.inputField
-          }
-          is DGridEditorField<*> -> {
-            valueChanged = { lasFocusedField.valueChanged(lasFocusedField.editor.value?.toString()) }
-            (lasFocusedField.editor as? GridEditorTextField)?.wrappedField
-          }
+          is TextField -> lasFocusedField.inputField
+          is DGridEditorField<*> -> (lasFocusedField.editor as? GridEditorTextField)?.wrappedField
           else -> null
         }
       } else {
@@ -166,7 +159,13 @@ class DActor(private var model: VActor)
         model.performAction()
       } else {
         field.runAfterGetValue {
-          valueChanged?.let { it() }
+
+          if (lasFocusedField is TextField) {
+            lasFocusedField.inputField.fieldConnector.valueChanged()
+          } else if (lasFocusedField is DGridEditorField<*>) {
+            lasFocusedField.valueChanged(lasFocusedField.editor.value?.toString())
+          }
+
           model.performAction()
         }
       }

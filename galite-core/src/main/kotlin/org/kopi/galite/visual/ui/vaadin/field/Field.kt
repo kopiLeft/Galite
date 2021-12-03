@@ -103,7 +103,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    */
   var index = 0
 
-  var columnView: ColumnView? = null
+  open var columnView: ColumnView? = null
 
   lateinit var wrappedField: AbstractField<*>
 
