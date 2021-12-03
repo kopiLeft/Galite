@@ -17,18 +17,17 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.text.DecimalFormatSymbols
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
-
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
@@ -565,8 +564,9 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   protected fun maybeReplaceDecimalSeparator() {
     if (validationStrategy is DecimalValidator && value!!.contains(".")) {
-      val dfs: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale(MainWindow.locale)) // TODO
-      if (dfs.decimalSeparator != '.') {
+      val dfs = DecimalFormatSymbols.get(MainWindow.locale)
+
+      if (dfs!!.decimalSeparator != '.') {
         value = value?.replace('.', dfs.decimalSeparator)
       }
     }

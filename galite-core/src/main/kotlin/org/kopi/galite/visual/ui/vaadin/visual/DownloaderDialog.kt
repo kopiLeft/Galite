@@ -67,6 +67,14 @@ class DownloaderDialog(file: File, name: String, locale: String): Dialog() {
     download.add(downloadButton)
     buttons.add(download, closeButton)
     add(VerticalLayout(title, buttons))
+
+    downloadButton.style["visibility"] = "hidden"
+    closeButton.style["visibility"] = "hidden"
+
+    addAttachListener {
+      downloadButton.clickInClient()
+      closeButton.clickInClient()
+    }
   }
 
   private fun createFileInputStream(path: String): InputStream? {

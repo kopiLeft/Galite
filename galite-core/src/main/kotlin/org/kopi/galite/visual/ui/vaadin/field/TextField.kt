@@ -36,6 +36,7 @@ import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
@@ -55,6 +56,7 @@ import com.vaadin.flow.data.binder.Binder
   CssImport("./styles/galite/textfield.css"),
   CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field")
 ])
+@JsModule("./src/text-field.js")
 class TextField(val model: VField,
                 val noEcho: Boolean,
                 val scanner: Boolean,
@@ -169,24 +171,12 @@ class TextField(val model: VField,
         fireAutofill()
       }
       inputField.suffixComponent = autofill
-      autofill!!.isVisible = false
-      var focused = false
-      inputField.addFocusListener {
-        focused = true
-        autofill?.isVisible = true
-      }
-      inputField.addBlurListener {
-        focused = false
-        autofill?.isVisible = false
-      }
-      inputField.element.addEventListener("mouseover") {
-        autofill?.isVisible = true
-      }
-      inputField.element.addEventListener("mouseout") {
-        if (!focused) {
-          autofill?.isVisible = false
-        }
-      }
+
+      autofill!!.element.executeJs(
+        "addAutofillListeners($0, $1);",
+        inputField.element,
+        autofill!!.element
+      )
     }
   }
 

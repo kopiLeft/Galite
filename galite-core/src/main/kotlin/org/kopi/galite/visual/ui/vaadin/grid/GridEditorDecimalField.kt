@@ -17,9 +17,15 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
+import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
+
+import com.vaadin.flow.component.dependency.JsModule
+
 /**
  * Server side implementation of decimal grid editor field
  */
+@JsModule("./src/decimal-field.js")
 class GridEditorDecimalField(
         width: Int,
         minValue: Double,
@@ -27,6 +33,20 @@ class GridEditorDecimalField(
         maxScale: Int,
         fraction: Boolean
 ) : GridEditorTextField(width) {
+
+  init {
+    wrappedField.pattern = "[0-9-,.]*"
+    wrappedField.isPreventInvalidInput = true
+    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
+
+    if (dfs!!.decimalSeparator != '.') {
+      wrappedField.element.executeJs(
+        "addCheckDecimalListeners($0, $1);",
+        wrappedField.element,
+        dfs.decimalSeparator.toString()
+      )
+    }
+  }
 
   override fun check(text: String): Boolean {
     for (c in text) {
