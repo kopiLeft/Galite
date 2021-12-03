@@ -13,6 +13,7 @@ import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -37,6 +38,8 @@ class PivotTable : SplitLayout {
     set(value) {
       field = value
     }
+
+  private lateinit var data: List<List<String>>
 
   private var leftLayoutWidth: String = "15%"
   private var rightLayoutWidth: String = "85%"
@@ -191,7 +194,12 @@ class PivotTable : SplitLayout {
     return rightLayout
   }
 
-  private fun initGrid(): Grid<List<String>> {
+  private fun initGrid(): Grid<List<String>>? {
+    initGridData()
+    if (this::data.isInitialized == false) {
+      rightLayout.add(Div(Label("No data provided")))
+    }
+
     val initialGrid = rightLayout.children.toList().firstOrNull { it::class.java == Grid::class.java }
     // remove the old grid to be changed with a new one
     // as cleaning the grid Headers Rows is not possible
@@ -209,6 +217,7 @@ class PivotTable : SplitLayout {
   private fun updateGridLayout() {
     // Resetting the grid data to match the selected and cross Fields
     initGridData()
+    grid.setItems(data)
 
     val gridColumns = mutableListOf<Grid.Column<List<String>>>()
     val numberOfInitialCrossFields = 2.0.pow(crossFields.size).toInt()
@@ -275,20 +284,27 @@ class PivotTable : SplitLayout {
   }
 
   private fun initGridData() {
+    // TODO: make the function check if the data was provided already
+    //  instead of making fake rows
     val dataRowSize = 2.0.pow(crossFields.size).toInt()
-    val data = (1..10).map {
-      listOf(*(1..selectedFields.size).map { "${selectedFields[it - 1]}_v" }.toTypedArray(),
+    val rowsNumber =  2.0.pow(selectedFields.size).toInt()
+
+    val rows = (1..rowsNumber).map { rowIndex ->
+      val row = mutableListOf<String>(*(1..selectedFields.size).map { "${selectedFields[it-1]}_v" }.toTypedArray(),
             "",
             *(1..dataRowSize).map { "field $it" }.toTypedArray()
       )
+      for( index in 1..selectedFields.size) {
+        val headersNumber = rowsNumber / 2.0.pow(index-1).toInt()
+        row.set(index -1, "${selectedFields[index -1]}_v_${(rowIndex-1) / headersNumber  /* 2.0.pow(index-1).toInt()*/}")
+      }
+      row
     }
-    grid.setItems(data)
+    data = rows
   }
-
 }
 
-private val rowHeaderClassGenerator = SerializableFunction<List<String>, String> { "row-header " }
-
+private val rowHeaderClassGenerator = SerializableFunction<List<String>, String> { "row-header" }
 
 // using a typealias to enable easier modification of column type in the future
 typealias Column = String
