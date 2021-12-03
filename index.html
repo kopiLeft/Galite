@@ -10,9 +10,7 @@
     <main id="main">
       <img src="images/logo_galite.png" class="main-logo" />
       <h3 class="main-paragraph">
-        Opensource framework that allows users to build business applications
-        made of forms, reports and charts using a simple and creative
-        syntax based on a domain specific language.
+        An opensource framework that allows developers to build applications with forms, reports and charts using a simple syntax
       </h3>
       <div class="main-actions">
         <a class="btn" href="https://kopileft.github.io/Galite/user-guide.html">
@@ -31,24 +29,73 @@
         <div class="feature">
           <h2 class="feature-title">Generic</h2>
           <p class="feature-paragraph">
-            Make it easy to build a full fledged application based on business
-            requirement without the need of creating tailor components.
+            Build a full fledged application based for different business types.
           </p>
         </div>
         <div class="feature">
           <h2 class="feature-title">Extendible</h2>
           <p class="feature-paragraph">
-            It provide a collections of component that can be combined in order
-            to build application in a timely manner.
+            Utilize the components collections to lower application development.
           </p>
         </div>
         <div class="feature">
           <h2 class="feature-title">Developer friendly</h2>
           <p class="feature-paragraph">
-            Galite provide a domain specific language that is easy to use in
-            combination with the Koltin programming language.
+            Use kotlin in combination with a domain specific language for highly productive development. 
           </p>
         </div>
+      </div>
+    </section>
+    <section id="dsl-section">
+      <div class="dsl-code">
+        <pre>
+          <code>
+            class ClientForm : Form() {
+              override val locale = Locale.UK
+              override val title = "form-title"
+              val action = menu("Action")
+
+              val helpForm = actor(
+                  ident = "helpForm",
+                  menu = action,
+                  label = "Help",
+                  help = " Help"
+              ) {
+                  key = Key.F1   // key is optional here
+                  icon = "help"  // icon is optional here
+              }
+
+              val helpCmd = command(item = helpForm) {
+                  action = {
+                  showHelp()
+                  }
+              }
+
+              val clientsPage= page("Clients")
+              val block = clientsPage.insertBlock(Clients())
+            }
+          </code>
+        </pre>
+      </div>
+      <div class="dsl-details">
+          <h2 class="dsl-title">
+            DSL BASED FRAMEWORK
+          </h2>
+          <p class="dsl-paragraph">
+            Galite provide a DSL layer for developer to use. It make generating application from model very easy. Using few lines of code, Galite generate a nice user interface with backend fully managed.          </p>
+      </div>
+    </section>
+    <section id="ui-section">
+      <div class="ui-screenshots">
+
+      </div>
+      <div class="ui-details">
+        <h2 class="ui-title">
+          FLEXIBLE USER INTERFACE
+        </h2>
+        <p class="ui-paragraph">
+          Galite support more then one user interface implementation, it can be combined with swing or vaadin framework.
+        </p>
       </div>
     </section>
     <footer id="footer">
