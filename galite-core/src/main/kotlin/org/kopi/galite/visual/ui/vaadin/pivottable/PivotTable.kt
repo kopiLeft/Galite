@@ -1,4 +1,20 @@
-package org.kopi.galite.visual.ui.vaadin.field
+/*
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package org.kopi.galite.visual.ui.vaadin.pivottable
 
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
@@ -16,63 +32,34 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.splitlayout.SplitLayout
-import com.vaadin.flow.function.SerializableFunction
 import kotlin.math.pow
 import kotlin.streams.toList
 
 @CssImport("./styles/galite/pivottable.css")
-class PivotTable : SplitLayout {
+class PivotTable(leftWidth: String = "15%", rightWidth: String = "85%") : SplitLayout() {
   private var fields = mutableListOf<PivotTableColumn>()
-    get() = field
-    set(value) {
-      field = value
-    }
   private var selectedFields = mutableListOf<PivotTableColumn>()
-    get() = field
-    set(value) {
-      field = value
-    }
   private var crossFields = mutableListOf<PivotTableColumn>()
-    get() = field
-    set(value) {
-      field = value
-    }
-
   private lateinit var data: List<List<String>>
   private lateinit var pivotTableData: PivotTableData
   private lateinit var pivotTableHeader: MutableList<PivotTableHeader>
-
-  private var leftLayoutWidth: String = "15%"
-  private var rightLayoutWidth: String = "85%"
-
   private lateinit var rightLayout: VerticalLayout
   lateinit var grid: Grid<List<String>>
-
-  constructor(): super()
-
-  constructor(leftWidth: String= "15%", rightWidth:String = "85%"): this() {
-    leftLayoutWidth = leftWidth
-    rightLayoutWidth = rightWidth
-  }
-
-  constructor(allFields:Collection<PivotTableColumn>, selectedFields:Collection<PivotTableColumn>, crossFields:Collection<PivotTableColumn>) : this () {
-    this.fields = allFields.toMutableList()
-    this.selectedFields = selectedFields.toMutableList()
-    this.crossFields = crossFields.toMutableList()
-  }
+  private val layout = VerticalLayout()
+  private val topLayout = VerticalLayout()
 
   init {
-    this.setHeightFull()
-    this.setWidthFull()
-    this.addToPrimary(initLeftLayout())
-    this.addToSecondary(initRightLayout())
+    addToPrimary(initLeftLayout())
+    addToSecondary(initRightLayout())
+    layout.width = leftWidth
+    rightLayout.width = rightWidth
+    setHeightFull()
+    setWidthFull()
+
   }
 
   private fun initLeftLayout(): VerticalLayout {
-    val layout = VerticalLayout()
-    val topLayout = VerticalLayout()
 
-    layout.width = "15%"
     topLayout.isSpacing = true
     topLayout.isPadding = true
     topLayout.isMargin = true
@@ -122,7 +109,6 @@ class PivotTable : SplitLayout {
 
   private fun initRightLayout(): VerticalLayout {
     rightLayout = VerticalLayout()
-    rightLayout.width = "85%"
 
     val fieldsContainer = HorizontalLayout()
 
@@ -197,7 +183,7 @@ class PivotTable : SplitLayout {
 
   private fun initGrid(): Grid<List<String>>? {
     initGridData()
-    if (this::data.isInitialized == false) {
+    if (!this::data.isInitialized) {
       rightLayout.add(Div(Label("No data provided")))
     }
 
@@ -229,9 +215,9 @@ class PivotTable : SplitLayout {
       val column = grid.addColumn {
         it[index - 1]
       }
-      .setHeader("${selectedFields[index - 1]}_header")
-      .setTextAlign(ColumnTextAlign.CENTER)
-      .setClassNameGenerator(rowHeaderClassGenerator)
+              .setHeader("${selectedFields[index - 1]}_header")
+              .setTextAlign(ColumnTextAlign.CENTER)
+              .setClassNameGenerator(ColumnStyleGenerator())
       column.isVisible = true
       column.isResizable = true
       gridColumns.add(column)
@@ -291,9 +277,9 @@ class PivotTable : SplitLayout {
     val rowsNumber =  2.0.pow(selectedFields.size).toInt()
 
     val rows = (1..rowsNumber).map { rowIndex ->
-      val row = mutableListOf<String>(*(1..selectedFields.size).map { "${selectedFields[it-1]}_v" }.toTypedArray(),
-            "",
-            *(1..dataRowSize).map { "field $it" }.toTypedArray()
+      val row = mutableListOf(*(1..selectedFields.size).map { "${selectedFields[it-1]}_v" }.toTypedArray(),
+              "",
+              *(1..dataRowSize).map { "field $it" }.toTypedArray()
       )
       for( index in 1..selectedFields.size) {
         val headersNumber = rowsNumber / 2.0.pow(index-1).toInt()
@@ -386,10 +372,8 @@ class PivotTable : SplitLayout {
   }
 }
 
-private val rowHeaderClassGenerator = SerializableFunction<List<String>, String> { "row-header" }
-
 // Using a typealias to enable easier modification of column type in the future
 typealias PivotTableColumn = String
 
-class PivotTableData(val value: String, var children: Collection<PivotTableData>,val isLast:Boolean)
-class PivotTableHeader(val value:String, val children: Collection<PivotTableHeader>,val isLast:Boolean)
+class PivotTableData(val value: String, var children: Collection<PivotTableData>, val isLast: Boolean)
+class PivotTableHeader(val value:String, val children: Collection<PivotTableHeader>, val isLast: Boolean)
