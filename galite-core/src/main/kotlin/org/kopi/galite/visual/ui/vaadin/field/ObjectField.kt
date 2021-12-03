@@ -17,7 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Key
@@ -26,12 +28,13 @@ import com.vaadin.flow.component.KeyModifier
 /**
  * The Object field component.
  */
-abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
+abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private val listeners = mutableListOf<ObjectFieldListener>()
+  override val keyNavigators = mutableMapOf<String, ShortcutAction<*>>()
 
   /**
    * Creates a new `ObjectField` instance.
@@ -41,6 +44,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
     element.setAttribute("hideFocus", "true")
     element.setProperty("outline", "0px")
     NavigationHandler().createNavigatorKeys()
+    addJSKeyDownListener(keyNavigators)
     //sinkEvents(Event.ONKEYDOWN) TODO
   }
 
@@ -157,7 +161,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
   /**
    * The object field key navigator.
    */
-  private inner class KeyNavigator(
+  inner class KeyNavigator(
     field: ObjectField<*>,
     key: Key,
     modifiers: Array<out KeyModifier>,
@@ -167,7 +171,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun performAction() {
+    override fun performAction(eagerValue: String?) {
       navigationAction()
     }
   }
@@ -205,8 +209,10 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
      * @param navigationAction lambda representing the action to perform
      */
     protected fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
-      KeyNavigator(this@ObjectField, key, modifiers, navigationAction)
-        .registerShortcut()
+      val navigator = KeyNavigator(this@ObjectField, key, modifiers, navigationAction)
+      val keyNavigator = navigator.getKey()
+
+      keyNavigators[keyNavigator] = navigator
     }
   }
 }

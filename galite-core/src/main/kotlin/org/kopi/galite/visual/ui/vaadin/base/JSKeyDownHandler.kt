@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,26 +14,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.field
+package org.kopi.galite.visual.ui.vaadin.base
 
-import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.ClientCallable
 
-/**
- * An integer field.
- */
-class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
+interface JSKeyDownHandler {
+  val keyNavigators: MutableMap<String, ShortcutAction<*>>?
 
-  init {
-    internalField.pattern = "[0-9-]*"
-    internalField.isPreventInvalidInput = true
-    internalField.element.setProperty("min", minval)
-    internalField.element.setProperty("max", maxval)
-    this.width = width.toString()
+  @ClientCallable
+  fun onKeyDown(key: String, value: String?) {
+    val action = keyNavigators?.get(key)
+
+    action?.performAction(value)
   }
-
-  override fun setMaxLength(maxLength: Int) {
-    internalField.maxLength = maxLength
-  }
-
-  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
 }

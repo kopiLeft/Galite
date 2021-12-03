@@ -215,8 +215,8 @@ open class DTextField(
    * @param s The text to be checked.
    * @param changed Is value changed ?
    */
-  private fun checkText(s: String, changed: Boolean) {
-    val text = transformer!!.toModel(s)
+  private fun checkText(s: String?, changed: Boolean) {
+    val text = transformer!!.toModel(s ?: "")
     if (!transformer!!.checkFormat(text)) {
       return
     }

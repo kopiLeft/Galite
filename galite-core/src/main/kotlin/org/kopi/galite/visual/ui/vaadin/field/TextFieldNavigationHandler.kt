@@ -19,6 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -131,8 +132,10 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
     vararg modifiers: KeyModifier,
     navigationAction: () -> Unit,
   ) {
-    KeyNavigator(field, key, modifiers, navigationAction)
-      .registerShortcut()
+    val keyNavigator = KeyNavigator(field, key, modifiers, navigationAction)
+    val navigatorKey = keyNavigator.getKey()
+
+    field.keyNavigators[navigatorKey] = keyNavigator
   }
 
   companion object {
@@ -150,7 +153,9 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
       isMulti: Boolean
     ): TextFieldNavigationHandler {
       val handler = TextFieldNavigationHandler(isMulti)
+
       handler.createNavigatorKeys(field)
+      field.addJSKeyDownListener(field.keyNavigators)
       return handler
     }
   }

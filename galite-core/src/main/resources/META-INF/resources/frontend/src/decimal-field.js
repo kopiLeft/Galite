@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,26 +14,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.TextField
-
-/**
- * An integer field.
- */
-class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
-
-  init {
-    internalField.pattern = "[0-9-]*"
-    internalField.isPreventInvalidInput = true
-    internalField.element.setProperty("min", minval)
-    internalField.element.setProperty("max", maxval)
-    this.width = width.toString()
-  }
-
-  override fun setMaxLength(maxLength: Int) {
-    internalField.maxLength = maxLength
-  }
-
-  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
-}
+window.addCheckDecimalListeners = function(inputField, separator) {
+    inputField.addEventListener("keyup", event => {
+    if(inputField.value.includes(".")) {
+        inputField.value = inputField.value.replace(".", separator);
+    }
+    })
+};

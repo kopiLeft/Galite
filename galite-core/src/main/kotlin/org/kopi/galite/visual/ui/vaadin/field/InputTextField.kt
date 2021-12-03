@@ -17,15 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.text.DecimalFormatSymbols
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
+import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
+import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
@@ -56,7 +57,7 @@ import com.vaadin.flow.shared.Registration
 open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
-      HasAutocomplete, HasPrefixAndSuffix
+      HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
@@ -70,6 +71,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private var currentText: String? = null
   //private var oracle: SuggestOracle? = null
   //private var display: SuggestionDisplay? = null
+  override val keyNavigators: MutableMap<String, ShortcutAction<*>> = mutableMapOf()
   private var hasAutocomplete = false
   private var align: String? = null
   private var isCheckingValue = false
@@ -248,11 +250,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @param validationStrategy The text validation strategy.
    */
   fun setTextValidator(validationStrategy: TextValidator?) {
-    autocomplete = if (hasAutocomplete) {
-      Autocomplete.ON
-    } else {
-      Autocomplete.OFF
-    }
     this.validationStrategy = validationStrategy
   }
 
@@ -383,8 +380,9 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   protected fun maybeReplaceDecimalSeparator() {
     if (validationStrategy is DecimalValidator && value!!.contains(".")) {
-      val dfs: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale(MainWindow.locale)) // TODO
-      if (dfs.decimalSeparator != '.') {
+      val dfs = DecimalFormatSymbols.get(MainWindow.locale)
+
+      if (dfs!!.decimalSeparator != '.') {
         value = value?.replace('.', dfs.decimalSeparator)
       }
     }

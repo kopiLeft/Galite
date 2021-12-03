@@ -18,7 +18,6 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
-import org.kopi.galite.visual.ui.vaadin.base.runAfterGetValue
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -40,11 +39,16 @@ class KeyNavigator(field: InputTextField<*>,
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun performAction() {
-    field.runAfterGetValue {
+  override fun performAction(eagerValue: String?) {
+    val oldValue = field.value
+
+    // first sends the text value to model if changed
+    if(oldValue != eagerValue) {
+      // Synchronize with server side
+      field.value = eagerValue
       field.fieldConnector.valueChanged()
-      internalPerformAction()
     }
+    internalPerformAction()
   }
 
   /**
