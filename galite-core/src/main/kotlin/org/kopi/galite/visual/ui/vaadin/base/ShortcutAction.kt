@@ -68,7 +68,6 @@ abstract class ShortcutAction<T: Component>(
       return "$stringKeys-$modifierMask"
     }
 
-
     /**
      * Creates the modifier mask of this shortcut action.
      * @return The modifier mask to be used.

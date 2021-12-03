@@ -18,8 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import java.util.Locale
-import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 
+import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 import org.kopi.galite.visual.ui.vaadin.form.DRichTextEditor
