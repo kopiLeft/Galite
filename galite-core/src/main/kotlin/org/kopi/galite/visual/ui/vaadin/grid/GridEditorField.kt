@@ -107,21 +107,6 @@ abstract class GridEditorField<T> protected constructor() : AbstractCompositeFie
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  /**
-   * Sets the navigation delegation mode of this editor field.
-   * @param navigationDelegationMode The navigation delegation mode.
-   */
-  fun setNavigationDelegationMode(navigationDelegationMode: Field.NavigationDelegationMode) {
-    // state.navigationDelegationMode = navigationDelegationMode TODO
-  }
-
-  /**
-   * Adds the given actors list to the editor fields actors.
-   * @param actors The list of field actors.
-   */
-  fun addActors(actors: Collection<Actor>) {
-    this.actors .addAll(actors)
-  }
 
   /**
    * Sets the color properties of this editor field.

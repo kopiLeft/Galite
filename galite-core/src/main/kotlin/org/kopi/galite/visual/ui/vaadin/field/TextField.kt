@@ -180,9 +180,9 @@ class TextField(val model: VField,
     }
   }
 
-  val maxLength: Int get() = col * rows
+  private val maxLength: Int get() = col * rows
 
-  fun setFieldType() {
+  private fun setFieldType() {
     // set field type according to the model
     when (model) {
       is VStringField -> {
@@ -334,7 +334,7 @@ class TextField(val model: VField,
         // if fixed new line mode is used, we remove scroll bar from text area
         it.setFixedNewLine(!dynamicNewLine)
       }
-    } else if(!fieldParent.hasAction) {
+    } else if(!fieldParent.model.hasAction()) {
       when (type) {
         Type.INTEGER -> VIntegerField(col, minval!!, maxval!!)
         Type.DECIMAL -> VDecimalField(col, maxScale, minval, maxval, fraction)
@@ -427,40 +427,6 @@ class TextField(val model: VField,
 
   override fun setValue(value: Any?) {
     inputField.setValue(value)
-  }
-
-  /**
-   * Communicates the widget text to server side.
-   */
-  internal fun sendTextToServer() {
-    // TODO
-  }
-
-  /**
-   * Sends the dirty values to the server side.
-   * @param values The field values per record.
-   */
-  internal fun sendDirtyValuesToServer(values: Map<Int?, String?>?) {
-    // TODO
-  }
-
-  /**
-   * Marks the connector to be dirty for the given record.
-   * This means that before performing any action, the value of this field
-   * for the given record should be communicated to the server.
-   * @param rec The active record.
-   * @param value The new field value.
-   */
-  internal fun markAsDirty(rec: Int, value: String?) {
-    (parent.get() as Field).markAsDirty(rec, value)
-  }
-
-  /**
-   * Returns `true` if the last communicated value is different from the widget value.
-   * @return `true` if the last communicated value is different from the widget value.
-   */
-  internal fun needsSynchronization(): Boolean {
-    return lastCommunicatedValue != value
   }
 
   /**

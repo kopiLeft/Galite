@@ -196,9 +196,6 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   }
 
   override fun onPageSelection(page: Int) {
-    // communicates the dirty values before leaving page
-    content.cleanDirtyValues(null)
-    content.disableAllBlocksActors()
     if (currentPage != page) {
       performAsyncAction(object : Action("setSelectedIndex") {
         override fun execute() {

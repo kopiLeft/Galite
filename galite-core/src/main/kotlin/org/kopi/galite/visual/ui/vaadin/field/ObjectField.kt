@@ -20,10 +20,7 @@ package org.kopi.galite.visual.ui.vaadin.field
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
-import org.kopi.galite.visual.ui.vaadin.block.ColumnView
 
-import com.vaadin.flow.component.BlurNotifier
-import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -36,8 +33,6 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  var columnView: ColumnView? = null
-
   private val listeners = mutableListOf<ObjectFieldListener>()
   override val keyNavigators = mutableMapOf<String, ShortcutAction<*>>()
 
@@ -49,8 +44,6 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
     element.setAttribute("hideFocus", "true")
     element.setProperty("outline", "0px")
     NavigationHandler().createNavigatorKeys()
-    addFocusListener(::onFocus)
-    addBlurListener(::onBlur)
     addJSKeyDownListener(keyNavigators)
     //sinkEvents(Event.ONKEYDOWN) TODO
   }
@@ -137,14 +130,6 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
     }
   }
 
-  open fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<T>>) {
-    columnView!!.setAsActiveField()
-  }
-
-  open fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<T>>) {
-    columnView!!.unsetAsActiveField()
-  }
-
   /**
    * Returns `true` if this object field is `null`.
    * @return `true` if this object field is `null`.
@@ -203,18 +188,18 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
      * Creates the navigation actions.
      */
     fun createNavigatorKeys() {
-      addKeyNavigator(Key.ENTER) { columnView!!.gotoNextField() }
-      addKeyNavigator(Key.TAB) { columnView!!.gotoNextField() }
-      addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { columnView!!.gotoPrevField() }
+      addKeyNavigator(Key.ENTER) { fireGotoNextField() }
+      addKeyNavigator(Key.TAB) { fireGotoNextField() }
+      addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { fireGotoPrevField() }
       addKeyNavigator(Key.ENTER, KeyModifier.of("Shift")) { fireGotoNextBlock() }
-      addKeyNavigator(Key.PAGE_UP) { columnView!!.gotoPrevRecord() }
-      addKeyNavigator(Key.PAGE_DOWN) { columnView!!.gotoNextRecord() }
-      addKeyNavigator(Key.HOME) { columnView!!.gotoFirstRecord() }
-      addKeyNavigator(Key.END) { columnView!!.gotoLastRecord() }
-      addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { columnView!!.gotoPrevField() }
-      addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { columnView!!.gotoNextField() }
-      addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Control")) { columnView!!.gotoPrevRecord() }
-      addKeyNavigator(Key.ARROW_DOWN, KeyModifier.of("Control")) { columnView!!.gotoNextRecord() }
+      addKeyNavigator(Key.PAGE_UP) { fireGotoPrevRecord() }
+      addKeyNavigator(Key.PAGE_DOWN) { fireGotoNextRecord() }
+      addKeyNavigator(Key.HOME) { fireGotoFirstRecord() }
+      addKeyNavigator(Key.END) { fireGotoLastRecord() }
+      addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { fireGotoPrevField() }
+      addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { fireGotoNextField() }
+      addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Control")) { fireGotoPrevRecord() }
+      addKeyNavigator(Key.ARROW_DOWN, KeyModifier.of("Control")) { fireGotoNextRecord() }
     }
 
     /**

@@ -361,7 +361,6 @@ class DBlockDropHandler(private val block: VBlock) {
 
     private val MIMETYPES_FILE_TYPEMAP = MimetypesFileTypeMap()
     const val MAX_SIZE_TO_WAIT = 50 * 1024 * 1024
-    private const val serialVersionUID = 3924306391945432925L
 
     init {
       // missing PNG files in initial map

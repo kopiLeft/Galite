@@ -46,7 +46,6 @@ class ConfirmNotification(title: String?,
   //------------------------------------------------
   private lateinit var ok: Button
   private lateinit var cancel: Button
-  private val listener: ComponentEventListener<ClickEvent<Button>>? = null
 
   init {
     Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)

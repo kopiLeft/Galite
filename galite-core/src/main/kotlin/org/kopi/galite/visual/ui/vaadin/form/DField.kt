@@ -26,8 +26,9 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.field.AbstractField
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.visual.Action
@@ -64,9 +65,13 @@ abstract class DField(internal var model: VFieldUI,
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
   protected var mouseInside = false // private events
+  /**
+   * The visible field height needed to create layout.
+   */
+  val visibleHeight: Int
 
   init {
-    addFieldListener(this)
+    className = Styles.FIELD
     visibleHeight = when {
       getModel() is VStringField -> {
         (getModel() as VStringField).getVisibleHeight()
@@ -82,15 +87,20 @@ abstract class DField(internal var model: VFieldUI,
         getModel().height
       }
     }
-    hasAction = model.hasAction()
     label!!.hasAction = model.hasAction()
-    noChart = getModel().noChart()
-    noDetail = getModel().noDetail()
-    navigationDelegationMode = _getNavigationDelegationMode()
-    defaultAccess = getModel().getDefaultAccess()
-    index = model.index
-    hasPreFieldTrigger = getModel().hasTrigger(VConstants.TRG_PREFLD)
-    addActors(getActors())
+  }
+
+  fun setFieldContent(component: AbstractField<*>) {
+    wrappedField = component
+    wrappedField.addClickListener {
+      // no click event is for rich text field and action fields
+      /*if (hasAction || content is RichTextField) { TODO
+        return
+      }*/
+      (model.blockView as DBlock).setActiveRecordFromDisplay(position) // TODO: do we need this?
+      onClick()
+    }
+    add(component)
   }
 
   //----------------------------------------------------------------------
@@ -120,7 +130,7 @@ abstract class DField(internal var model: VFieldUI,
    */
   override var position: Int = 0
 
-  override fun getModel(): VField {
+  final override fun getModel(): VField {
     return model.model
   }
 
@@ -175,10 +185,8 @@ abstract class DField(internal var model: VFieldUI,
   override fun updateAccess() {
     access(currentUI) {
       access = getAccess()
-      dynAccess = access
       updateStyles(access)
       isVisible = access != VConstants.ACS_HIDDEN
-      isActionEnabled = access >= VConstants.ACS_VISIT
       update(label)
     }
   }
@@ -221,70 +229,6 @@ abstract class DField(internal var model: VFieldUI,
     }
   }
 
-  /**
-   * Returns the navigation delegation to server mode.
-   * For POSTFLD AND PREFLD triggers we always delegate the navigation to server.
-   * For POSTCHG, PREVAL, VALFLD and FORMAT triggers we delegate the navigation to server if
-   * the field value has changed.
-   * @return The navigation delegation to server mode.
-   */
-  private fun _getNavigationDelegationMode(): NavigationDelegationMode {
-    return when {
-      getModel().hasTrigger(VConstants.TRG_POSTFLD) -> {
-        NavigationDelegationMode.ALWAYS
-      }
-      getModel().hasTrigger(VConstants.TRG_PREFLD) -> {
-        NavigationDelegationMode.ALWAYS
-      }
-      getModel().block!!.hasTrigger(VConstants.TRG_PREREC) -> {
-        NavigationDelegationMode.ALWAYS
-      }
-      getModel().block!!.hasTrigger(VConstants.TRG_POSTREC) -> {
-        NavigationDelegationMode.ALWAYS
-      }
-      getModel().block!!.hasTrigger(VConstants.TRG_VALREC) -> {
-        NavigationDelegationMode.ALWAYS
-      }
-      getModel().list != null -> {
-        NavigationDelegationMode.ONVALUE
-      }
-      getModel().hasTrigger(VConstants.TRG_POSTCHG) -> {
-        NavigationDelegationMode.ONCHANGE
-      }
-      getModel().hasTrigger(VConstants.TRG_PREVAL) -> {
-        NavigationDelegationMode.ONCHANGE
-      }
-      getModel().hasTrigger(VConstants.TRG_VALFLD) -> {
-        NavigationDelegationMode.ONCHANGE
-      }
-      getModel().hasTrigger(VConstants.TRG_FORMAT) -> {
-        NavigationDelegationMode.ONCHANGE
-      }
-      else -> {
-        NavigationDelegationMode.NONE
-      }
-    }
-  }
-
-  /**
-   * Returns the actors associated with this field.
-   * @return The actors associated with this field.
-   */
-  private fun getActors(): Collection<Actor> {
-    val actors: MutableSet<Actor>
-    actors = HashSet<Actor>()
-    for (cmd in model.getAllCommands()) {
-      if (cmd != null) {
-        // for field commands this is needed to have the actor model instance
-        cmd.setEnabled(false)
-        if (cmd.actor != null) {
-          actors.add(cmd.actor!!.getDisplay() as Actor)
-        }
-      }
-    }
-    return actors
-  }
-
   //-------------------------------------------------
   // ABSTRACT METHODS
   //-------------------------------------------------
@@ -301,6 +245,8 @@ abstract class DField(internal var model: VFieldUI,
    * @param blink The blink ability.
    */
   abstract override fun setBlink(blink: Boolean)
+
+  abstract fun valueChanged()
 
   //-------------------------------------------------
   // PROTECTED UTILS
@@ -490,6 +436,19 @@ abstract class DField(internal var model: VFieldUI,
       }
     }
   }
+
+  /**
+   * Tells the server side the the action field should be performed
+   */
+  fun actionPerformed() {
+    if (model.hasAction() && access >= VConstants.ACS_VISIT) {
+      fireAction()
+    }
+  }
+
+  //---------------------------------------------------
+  // NAVIGATION
+  //---------------------------------------------------
 
   override fun gotoNextField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
