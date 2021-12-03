@@ -1,8 +1,5 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
-import kotlin.math.pow
-import kotlin.streams.toList
-
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dnd.DragSource
@@ -20,26 +17,30 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.splitlayout.SplitLayout
 import com.vaadin.flow.function.SerializableFunction
+import kotlin.math.pow
+import kotlin.streams.toList
 
 @CssImport("./styles/galite/pivottable.css")
 class PivotTable : SplitLayout {
-  private var fields = mutableListOf<Column>()
+  private var fields = mutableListOf<PivotTableColumn>()
     get() = field
     set(value) {
       field = value
     }
-  private var selectedFields = mutableListOf<Column>()
+  private var selectedFields = mutableListOf<PivotTableColumn>()
     get() = field
     set(value) {
       field = value
     }
-  private var crossFields = mutableListOf<Column>()
+  private var crossFields = mutableListOf<PivotTableColumn>()
     get() = field
     set(value) {
       field = value
     }
 
   private lateinit var data: List<List<String>>
+  private lateinit var pivotTableData: PivotTableData
+  private lateinit var pivotTableHeader: MutableList<PivotTableHeader>
 
   private var leftLayoutWidth: String = "15%"
   private var rightLayoutWidth: String = "85%"
@@ -54,7 +55,7 @@ class PivotTable : SplitLayout {
     rightLayoutWidth = rightWidth
   }
 
-  constructor(allFields:Collection<Column>, selectedFields:Collection<Column>, crossFields:Collection<Column>) : this () {
+  constructor(allFields:Collection<PivotTableColumn>, selectedFields:Collection<PivotTableColumn>, crossFields:Collection<PivotTableColumn>) : this () {
     this.fields = allFields.toMutableList()
     this.selectedFields = selectedFields.toMutableList()
     this.crossFields = crossFields.toMutableList()
@@ -92,7 +93,7 @@ class PivotTable : SplitLayout {
     bottomLayout.style.set("border", "1px solid #505050")
     bottomLayout.style.set("border-collapse","collapse")
 
-    val buttons = listOf(Button("age"))
+    val buttons = listOf(Button("age"), Button("course"))
 
     buttons.map { DragSource.create(it) }.forEach {
       it.effectAllowed = EffectAllowed.MOVE
@@ -132,7 +133,7 @@ class PivotTable : SplitLayout {
     fieldsContainer.style.set("border", "1px solid #505050")
     fieldsContainer.style.set("border-collapse","collapse")
 
-    val fieldsButtons = arrayOf(Button("nickname"), Button("year"), Button("address"), Button("salary"))
+    val fieldsButtons = arrayOf(Button("nickname"), Button("address"), Button("salary"))
 
     fieldsButtons.map { DragSource.create(it) }.forEach {
       it.effectAllowed = EffectAllowed.MOVE
@@ -149,7 +150,7 @@ class PivotTable : SplitLayout {
     fieldsSelectedContainer.style.set("border", "1px solid #505050")
     fieldsSelectedContainer.style.set("border-collapse","collapse")
 
-    val selectButtons = arrayOf(Button("name"))
+    val selectButtons = arrayOf(Button("name"), Button("year"))
 
     selectButtons.map { DragSource.create(it) }.forEach {
       it.effectAllowed = EffectAllowed.MOVE
@@ -296,15 +297,99 @@ class PivotTable : SplitLayout {
       )
       for( index in 1..selectedFields.size) {
         val headersNumber = rowsNumber / 2.0.pow(index-1).toInt()
-        row.set(index -1, "${selectedFields[index -1]}_v_${(rowIndex-1) / headersNumber  /* 2.0.pow(index-1).toInt()*/}")
+        row.set(index -1, "${selectedFields[index -1]}_v_${(rowIndex-1) / headersNumber  }")
       }
-      row
+      row.toList()
     }
     data = rows
+/*
+    val dataColumnsSize = 2.0.pow(crossFields.size).toInt()
+
+  // PIVOT TABLE HEADERS
+    val headersSize = crossFields.size
+    val headersStack = mutableListOf<PivotTableHeader>()
+
+    for (i in 1..headersSize) {
+      if(i == 1) {
+        pivotTableHeader = mutableListOf<PivotTableHeader>()
+        for (j in 1..2) {
+          val curr = PivotTableHeader("${crossFields[i-1]}_{j}", mutableListOf(), i == headersSize)
+          pivotTableHeader.add(curr)
+          if (i != headersSize) {
+            headersStack.add(curr)
+          }
+        }
+      } else {
+        for( header in headersStack) {
+          for (j in 1..2) {
+            val curr = PivotTableHeader("${crossFields[i-1]}_{j}", mutableListOf(), i == headersSize)
+            if (i != headersSize) {
+              headersStack.add(curr)
+            }
+          }
+          headersStack.remove(header)
+        }
+      }
+    }
+//    println(pivotTableHeader)
+
+    // PIVOT TABLE DATA
+    val pivotTableRows = mutableListOf<List<PivotTableColumn>>()
+    val rowsStack = mutableListOf<PivotTableData>()
+
+    for( i in 1..selectedFields.size) {
+
+      if(i == 1) {
+        pivotTableData = PivotTableData(selectedFields[i -1], mutableListOf(), i == selectedFields.size)
+        if (i != selectedFields.size)
+          rowsStack.add(pivotTableData)
+      } else {
+        if (rowsStack.size != 0){
+
+
+        for( row in rowsStack) {
+          row.children = (1..2).map { PivotTableData(selectedFields[i - 1],
+                  if (i != selectedFields.size) mutableListOf() else (1..dataColumnsSize).map{ PivotTableData("data_${it}", listOf(), true)}.toMutableList(), i == selectedFields.size) }
+          row.children.forEach{
+            if (it.isLast == false){
+              rowsStack.add(it)
+            }
+          }
+          rowsStack.remove(row)
+        }
+        }
+      }
+    }
+
+    val stack = mutableListOf<PivotTableData>()
+    stack.add(pivotTableData)
+    val row = mutableListOf<PivotTableColumn>()
+    while (stack.size != 0) {
+      val curr = stack.removeAt(stack.size -1)
+      if (curr.isLast) {
+        for(child in children) {
+          pivotTableRows.add(row.plus(child) as List<PivotTableColumn>)
+        }
+        if (row.size >= 1) {
+          row.removeAt(row.size -1)
+        }
+      }else {
+        row.add(curr.value)
+        for(child in curr.children) {
+          stack.add(child)
+        }
+      }
+    }*/
+//    data = rows
+
+//    println(pivotTableData)
   }
 }
 
 private val rowHeaderClassGenerator = SerializableFunction<List<String>, String> { "row-header" }
 
-// using a typealias to enable easier modification of column type in the future
-typealias Column = String
+// Using a typealias to enable easier modification of column type in the future
+typealias PivotTableColumn = String
+
+class PivotTableData(val value: String, var children: Collection<PivotTableData>,val isLast:Boolean)
+class PivotTableHeader(val value:String, val children: Collection<PivotTableHeader>,val isLast:Boolean)
