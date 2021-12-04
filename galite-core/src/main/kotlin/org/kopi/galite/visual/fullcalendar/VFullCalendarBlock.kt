@@ -259,8 +259,7 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
   fun openForEdit(startDateTime: Timestamp, endDateTime: Timestamp) {
     set(startDateTime, endDateTime)
-    fullCalendarForm.doNotModal()
-    fullCalendarForm.block.insertMode()
+    insertMode()
   }
 
   internal fun openForEdit(record: Int, newStart: Timestamp, newEnd: Timestamp) {
@@ -312,8 +311,9 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
   }
 
   override fun insertMode() {
-    fullCalendarForm.doNotModal()
     fullCalendarForm.block.insertMode()
+    fullCalendarForm.doNotModal()
+    fullCalendarForm.block.gotoFirstUnfilledField()
   }
 
   /**

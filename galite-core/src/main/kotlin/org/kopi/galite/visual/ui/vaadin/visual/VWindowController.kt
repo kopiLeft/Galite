@@ -94,6 +94,8 @@ class VWindowController : WindowController() {
       val view: DWindow = window as DWindow
       val model: VWindow? = window.getModel()
 
+      view.run()
+
       if (!view.isAttached && model != null) {
         val application = getApplication()
         if (application != null) {
