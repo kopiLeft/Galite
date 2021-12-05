@@ -27,7 +27,7 @@
 }
 
 body {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", "Open Sans", "Helvetica Neue", Helvetica, Arial;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -46,7 +46,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-bottom: #28afce solid 5px;
   padding: 10rem 0;
 }
 
@@ -56,9 +55,9 @@ body {
 }
 
 .main-paragraph {
-  max-width: 50%;
+  max-width: 30%;
   text-align: center;
-  font-size: 17px;
+  font-size: 24px;
   font-weight: 400;
   padding: 0 1.8rem;
   margin-bottom: 3rem;
@@ -71,21 +70,37 @@ body {
 /* Buttons */
 
 .btn {
-  border-radius: 40% /100%;
-  padding: 1rem 2rem;
-  border: 2px #466e71 solid;
+  padding: 0.7rem 1.3rem;
   font-size: 17px;
 }
 
 .btn:hover {
   cursor: pointer;
-  background-color: #28afce;
+  border-color:#466E71;
+  background-color: #466E71;
   color: #fff !important;
-  border-color: #28afce;
+}
+
+.btn-primary {
+  background-color: #28afce;
+  border: 2px solid #28afce;
+  color: #fff !important;
+}
+
+.btn-secondary {
+  border: 2px solid #28afce;
+  color: black;
+}
+
+.btn-tertiary {
+  background-color: #e5e5e5;
+  border: 2px solid #e5e5e5;
+  color: black;
 }
 
 a.btn {
   text-decoration: none;
+  color: black;
 }
 
 a.btn:visited {
@@ -95,12 +110,15 @@ a.btn:visited {
 /* Features sections */
 
 #features-section {
-  background-color: #f6f6f6;
-  padding: 5rem 0;
+  background: url(../images/wave.png) no-repeat;
+  background-position: 0px -7.5rem;
+  background-size: cover;
+  background-clip: border-box;
+  padding: 12rem 0 7rem 0;
 }
 
 .features-box {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   display: flex;
 }
@@ -111,24 +129,111 @@ a.btn:visited {
 }
 
 .feature-title {
-  color: #28afce;
+  color: #fff;
   text-align: center;
   margin-bottom: 1rem;
+  font-size: 20px;
+  text-transform: uppercase;
+  word-wrap: none;
 }
 
 .feature-paragraph {
   text-align: center;
+  color: #ededed;
+  font-size: 18px;
+}
+
+/* DSL */
+
+#dsl-section {
+  display: flex;
+  width: 100vw;
+}
+
+#second-wave {
+  background-image: url(../images/second_wave.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 300px;
+  margin-top: -145px;
+}
+
+.dsl-code {
+  display: block;
+  width: 100%;
+}
+
+.dsl-details {
+  width: 50%;
+  padding: 5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dsl-title {
+  font-size: 24px;
+  color: #29afce;
+  margin-bottom: 1.5rem;
+}
+
+.dsl-paragraph {
+  font-size: 18px;
+  max-width: 60%;
+  max-height: 70%;
+  text-justify: newspaper;
+  text-align: justify;
+}
+
+/* UI */
+
+#ui-section {
+  display: flex;
+  padding: 5rem 10rem;
+}
+
+.ui-screenshots > img {
+  width: 40vw;
+  height: auto;
+}
+
+.ui-details {
+  width: 50vw;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.ui-title {
+  font-size: 24px;
+  color: #29afce;
+  margin-bottom: 1.5rem;
+}
+
+.ui-paragraph {
+  font-size: 18px;
+  width: 50%;
+  text-justify: newspaper;
+  text-align: justify;
 }
 
 /* Footer */
 
 footer {
-  background-color: #155195;
+  background-color: #2e3338;
   padding: 3rem;
   color: #f6f6f6;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.footer-copyright {
+  font-size: 18px;
 }
 
 /* Mobile Responsive */
@@ -164,5 +269,66 @@ footer {
 
   .main-logo {
     width: 200px;
+  }
+  
+  #dsl-section {
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+  }
+
+  .dsl-details {
+    width: 100%;
+    padding: 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dsl-title {
+    font-size: 24px;
+    color: #29afce;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .dsl-paragraph {
+    font-size: 18px;
+    max-width: 70%;
+    max-height: 70%;
+    text-justify: newspaper;
+    text-align: justify;
+  }
+  
+  #ui-section {
+    flex-direction: column;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ui-screenshots > img {
+    width: 80vw;
+    height: auto;
+  }
+  
+  .ui-details {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+  }
+  
+  .ui-title {
+    font-size: 24px;
+    color: #29afce;
+    margin-bottom: 1.5rem;
+  }
+  
+  .ui-paragraph {
+    font-size: 18px;
+    width: 80%;
+    text-justify: newspaper;
+    text-align: justify;
   }
 }
