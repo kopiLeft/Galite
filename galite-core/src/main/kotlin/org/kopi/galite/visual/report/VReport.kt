@@ -142,7 +142,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
 
   /**
    * initialise fields
-   * @exception        org.kopi.galite.visual.VException        may be raised by triggers
+   * @exception        org.kopi.galite.visual.visual.VException        may be raised by triggers
    */
   protected abstract fun init()
 
