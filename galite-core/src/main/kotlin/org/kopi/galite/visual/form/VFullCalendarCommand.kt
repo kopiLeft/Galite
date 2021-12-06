@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.form
 
+import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ActionHandler
@@ -26,10 +27,11 @@ import org.kopi.galite.visual.visual.VCommand
 import org.kopi.galite.visual.visual.VHelpGenerator
 import org.kopi.galite.visual.visual.VWindow
 
-class VFormCommand(
-  val form: VForm,
-  actor: VActor
-) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+class VFullCalendarCommand(
+  val form: VFullCalendarForm,
+  actor: VActor,
+  mode: Int
+) : VCommand(mode, null, actor, actor.number, actor.actorIdent), ActionHandler {
   /**
    * Returns the actor
    */
@@ -70,7 +72,9 @@ class VFormCommand(
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
     when (VKT_Type) {
-      VConstants.CMD_QUIT -> form.close(VWindow.CDE_QUIT)
+      VConstants.CMD_QUIT -> form.close(VWindow.CDE_HIDE)
+      VConstants.CMD_SAVE -> form.save()
+      VConstants.CMD_DELETE -> form.delete()
       // TODO
     }
   }

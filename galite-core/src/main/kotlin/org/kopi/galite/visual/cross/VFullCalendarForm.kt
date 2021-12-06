@@ -16,19 +16,26 @@
  */
 package org.kopi.galite.visual.cross
 
+import kotlin.jvm.Throws
+
 import java.awt.event.KeyEvent
 
 import org.kopi.galite.visual.dsl.common.Trigger
+import org.kopi.galite.visual.form.Commands
+import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDefaultFormActor
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.form.VFormCommand
+import org.kopi.galite.visual.form.VFullCalendarCommand
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.visual.WindowController
 
 abstract class VFullCalendarForm : VForm() {
-  private lateinit var actorsDef: Array<VActor?>
-  private var number = 0
+  private var actorsDef = mutableListOf<VActor>()
+  private var commandsDef = mutableListOf<VCommand>()
 
   init {
     initDefaultActors()
@@ -37,15 +44,28 @@ abstract class VFullCalendarForm : VForm() {
 
   companion object {
     const val QUIT_ICON = "quit"
+    const val SAVE_ICON = "save"
+    const val DELETE_ICON = "delete"
   }
+
+  val block: VBlock get() = blocks[0]
 
   // ----------------------------------------------------------------------
   // Default Actors
   // ----------------------------------------------------------------------
   private fun initDefaultActors() {
-    actorsDef = arrayOfNulls(1)
     createActor("File", "Quit", QUIT_ICON, KeyEvent.VK_ESCAPE, 0, VConstants.CMD_QUIT)
-    addActors(actorsDef.requireNoNulls())
+    createActor("File", "Save", SAVE_ICON, 0, 0, VConstants.CMD_SAVE, mode(VConstants.MOD_INSERT, VConstants.MOD_UPDATE))
+    createActor("File", "Delete", DELETE_ICON, 0, 0, VConstants.CMD_DELETE, mode(VConstants.MOD_UPDATE))
+    addActors(actorsDef.toTypedArray())
+  }
+
+  fun mode(vararg access: Int): Int {
+    var mode = 0
+    for (item in access) {
+      mode = mode or (1 shl item)
+    }
+    return mode
   }
 
   // ----------------------------------------------------------------------
@@ -56,25 +76,63 @@ abstract class VFullCalendarForm : VForm() {
                           iconIdent: String,
                           key: Int,
                           modifier: Int,
-                          trigger: Int) {
-    actorsDef[number] = VDefaultFormActor(menuIdent, actorIdent, iconIdent, key, modifier)
-    actorsDef[number]!!.number = trigger
-    number++
+                          trigger: Int,
+                          mode: Int = 0xFFFF) {
+    val actorDef = VDefaultFormActor(menuIdent, actorIdent, iconIdent, key, modifier)
+
+    actorDef.number = trigger
+    actorsDef.add(actorDef)
+    commandsDef.add(VFullCalendarCommand(this, actorDef, mode))
+  }
+
+  // ----------------------------------------------------------------------
+  // DISPLAY INTERFACE
+  // ----------------------------------------------------------------------
+
+  /**
+   * doNotModal
+   * no modal call to this form
+   * @exception        VException        an exception may be raised by triggers
+   */
+  @Throws(VException::class)
+  override fun doNotModal() {
+    if(getDisplay() == null) {
+      WindowController.windowController.doNotModal(this)
+    } else {
+      WindowController.windowController.doNotModal(getDisplay()!!)
+    }
   }
 
   // ----------------------------------------------------------------------
   // Default Commands
   // ----------------------------------------------------------------------
   private fun initDefaultCommands() {
-    val commands = (actorsDef.indices).map { i ->
-      VFormCommand(this, actorsDef[i]!!)
-    }
-    super.commands = commands.toTypedArray()
+    super.commands = arrayOf()
+    block.commands = block.commands?.plus(commandsDef.toTypedArray()) ?: commandsDef.toTypedArray()
 
-    commands.forEach {
+    commandsDef.forEach {
       val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-      VKT_Triggers.add(fieldTriggerArray)
+      block.VKT_Triggers.add(fieldTriggerArray)
     }
+  }
+
+  /**
+   * close the form
+   */
+  override fun close(code: Int) {
+    if (block.isCurrentRecordFetched()) {
+      fullCalendarBlock.refreshEntries()
+    }
+
+    super.close(code)
+  }
+
+  fun save() {
+    Commands.saveBlock(block)
+  }
+
+  fun delete() {
+    Commands.deleteBlock(block)
   }
 
   abstract val fullCalendarBlock: VFullCalendarBlock

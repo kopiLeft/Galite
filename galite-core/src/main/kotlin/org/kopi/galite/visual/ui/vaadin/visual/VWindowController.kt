@@ -27,6 +27,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWai
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VHelpViewer
 import org.kopi.galite.visual.visual.VMenuTree
@@ -88,6 +89,32 @@ class VWindowController : WindowController() {
     }
   }
 
+  override fun doNotModal(window: UWindow) {
+    try {
+      val view: DWindow = window as DWindow
+      val model: VWindow? = window.getModel()
+
+      view.run()
+
+      if (!view.isAttached && model != null) {
+        val application = getApplication()
+        if (application != null) {
+          if (model is VPreviewWindow
+            || model is VHelpViewer
+            || model is VMenuTree
+            || model is VFullCalendarForm
+          ) {
+            showNotModalPopupWindow(view, model.getTitle())
+          } else {
+            application.addWindow(view, model.getTitle())
+          }
+        }
+      }
+    } catch (e: VException) {
+      throw VRuntimeException(e.message, e)
+    }
+  }
+
   override fun doNotModal(model: Window) {
     doNotModal(model.model)
   }
@@ -105,10 +132,10 @@ class VWindowController : WindowController() {
           title: String,
   ) {
     val popup = PopupWindow(getApplication()?.mainWindow)
-    popup.isModal = false
-    popup.setContent(view)
-    popup.setCaption(title) // put popup title
     accessAndPush {
+      popup.isModal = false
+      popup.setContent(view)
+      popup.setCaption(title) // put popup title
       popup.open()
 
       // Focus on a field inside a popup is not working.

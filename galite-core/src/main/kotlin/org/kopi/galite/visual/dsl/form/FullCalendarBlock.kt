@@ -19,6 +19,7 @@ package org.kopi.galite.visual.dsl.form
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -167,9 +168,32 @@ open class FullCalendarBlock(title: String,
     }
   }
 
+  /**
+   * Sets the block into insert mode.
+   * @exception        VException        an exception may occur during DB access
+   */
+  override fun insertMode() {
+    vBlock.insertMode()
+  }
+
+  fun goToDate(date: Date) {
+    model.goToDate(date)
+  }
+
+  fun getSelectedDate(): Date? = model.getSelectedDate()
+
+  /**
+   * Refreshes the full calendar block data.
+   */
+  fun refreshEntries() {
+    model.refreshEntries()
+  }
+
   // ----------------------------------------------------------------------
   // BLOCK MODEL
   // ----------------------------------------------------------------------
+
+  val model: VFullCalendarBlock get() = (vBlock as VFullCalendarBlock)
 
   /** Returns block model */
   override fun getBlockModel(vForm: VForm, source: String?): VBlock {

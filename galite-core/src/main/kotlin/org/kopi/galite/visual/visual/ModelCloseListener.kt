@@ -22,4 +22,5 @@ import java.util.EventListener
 
 interface ModelCloseListener : EventListener {
   fun modelClosed(type: Int)
+  fun dispose()
 }

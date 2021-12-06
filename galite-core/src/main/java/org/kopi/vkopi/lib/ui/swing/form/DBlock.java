@@ -37,6 +37,7 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.ViewBlockAlignment;
+import org.kopi.galite.visual.type.Date;
 import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VExecFailedException;
@@ -495,6 +496,20 @@ public class DBlock extends JPanel implements UBlock {
   public void filterHidden() {}
 
   public void filterShown() {}
+
+  @Override
+  public void goToDate(Date date) {}
+
+  @Override
+  public Date getSelectedDate() {
+    return null;
+  }
+
+  @Override
+  public void enter() {}
+
+  @Override
+  public void refreshEntries() {}
 
   public boolean inDetailMode() {
     return false;

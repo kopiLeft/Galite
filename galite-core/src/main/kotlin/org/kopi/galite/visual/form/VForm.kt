@@ -231,7 +231,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  private fun initActors() {
+  open fun initActors() {
     for (i in blocks.indices) {
       addActors(blocks[i].actors)
     }

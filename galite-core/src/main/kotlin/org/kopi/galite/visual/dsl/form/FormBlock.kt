@@ -445,7 +445,6 @@ open class FormBlock(var buffer: Int,
    * Saves current block (insert or update)
    */
   fun saveBlock() {
-    vBlock.validate()
     Commands.saveBlock(vBlock)
   }
 
@@ -468,7 +467,7 @@ open class FormBlock(var buffer: Int,
    * Sets the block into insert mode.
    * @exception        VException        an exception may occur during DB access
    */
-  fun insertMode() {
+  open fun insertMode() {
     Commands.insertMode(vBlock)
   }
 
