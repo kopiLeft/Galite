@@ -28,6 +28,7 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldException
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.util.PrintJob
@@ -155,7 +156,10 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     if (vForm != null) {
       vForm!!.removeFormListener(this)
       for (i in blockViews.indices) {
-        vForm!!.getBlock(i).removeBlockListener(blockListener)
+        val block = vForm!!.getBlock(i)
+
+        block.removeBlockListener(blockListener)
+        (block.display as? DBlock)?.release()
       }
     }
     super.release()
@@ -312,6 +316,10 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockClosed() {}
     override fun blockChanged() {}
     override fun blockCleared() {}
+    override fun refreshEntries() {}
+    override fun getSelectedDate(): Date? = null
+    override fun goToDate(date: Date) {}
+    override fun enter() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
       access(currentUI) {
         if (pageCount == 1) {

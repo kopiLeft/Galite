@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.visual.form.FullCalendarBlockListener
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
@@ -26,16 +25,12 @@ import org.kopi.galite.visual.ui.vaadin.calendar.DTimeGridCalendar
 /**
  * Full Calendar based block implementation.
  */
-class DFullCalendarBlock(parent: DForm, model: VFullCalendarBlock) : DBlock(parent, model), FullCalendarBlockListener {
+class DFullCalendarBlock(parent: DForm, model: VFullCalendarBlock) : DBlock(parent, model) {
 
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
   lateinit var timeGridCalendar: DTimeGridCalendar
-
-  init {
-    model.addFullCalendarBlockListener(this)
-  }
 
   // --------------------------------------------------
   // IMPLEMENTATIONS
@@ -52,16 +47,21 @@ class DFullCalendarBlock(parent: DForm, model: VFullCalendarBlock) : DBlock(pare
 
   override fun refresh(force: Boolean) {
     super.refresh(force)
-    //timeGridCalendar.removeAllEntries() TODO
-    //timeGridCalendar.addAllEntries()
+    // refreshEntries() TODO
   }
 
   override fun refreshEntries() {
     timeGridCalendar.refreshEntries()
   }
 
+  override fun getSelectedDate(): Date = timeGridCalendar.getSelectedDate()
+
   override fun goToDate(date: Date) {
     timeGridCalendar.goToDate(date)
+  }
+
+  override fun enter() {
+    timeGridCalendar.enter()
   }
 
   override fun createLayout(): BlockLayout {

@@ -29,6 +29,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPu
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.locateUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findDialog
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
@@ -39,7 +40,6 @@ import org.kopi.galite.visual.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
-import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.visual.Action
@@ -257,39 +257,26 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   /**
    * Disposes the window. Finalize and close this window.
    */
-  private fun dispose() {
+  override fun dispose() {
     // close the window by removing it from the application.
     // this should not be called in a separate transaction.
     val mainWindow = findMainWindow()
 
     access(currentUI) {
-      if(!closeIfIsPopup(this)) {
+      if(!closeIfIsPopup()) {
         mainWindow?.removeWindow(this)
       }
     }
   }
 
   /**
-   * Close [window] if it is a popup window
+   * Close this window if it is a popup window
    *
-   * @param window window to close
-   * @return true is [window] is a popup and it was closed
+   * @return true if this window is in a popup and it was closed
    */
-  private fun closeIfIsPopup(window: Component): Boolean {
+  private fun closeIfIsPopup(): Boolean {
     var closed  = false
-    var popupWindow: PopupWindow? = null
-
-    if(window is PopupWindow) {
-      popupWindow = window
-    } else {
-      window.parent.ifPresent {
-        it.parent.ifPresent { windowContainer ->
-          if (windowContainer is PopupWindow) {
-            popupWindow = windowContainer
-          }
-        }
-      }
-    }
+    val popupWindow = findDialog()
 
     popupWindow?.let {
       it.close() // fire close event
