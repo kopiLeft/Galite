@@ -81,7 +81,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     val s = (s as? String).orEmpty()

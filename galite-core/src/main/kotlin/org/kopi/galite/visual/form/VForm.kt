@@ -302,7 +302,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   /**
    * GOTO PAGE X
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
   fun gotoPage(target: Int) {
     var block: VBlock? = null
@@ -321,7 +321,7 @@ abstract class VForm : VWindow, VConstants {
 
   /**
    * GOTO BLOCK
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
   fun gotoBlock(target: VBlock) {
     activeBlock?.leave(true)
@@ -331,7 +331,7 @@ abstract class VForm : VWindow, VConstants {
 
   /**
    * Go to the next block
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
   fun gotoNextBlock() {
     assert(activeBlock != null) { threadInfo() + "Active block is null" }
@@ -397,7 +397,7 @@ abstract class VForm : VWindow, VConstants {
    * Resets form to initial state
    *
    * NOTE: TRG_RESET returns true if reset handled by trigger
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
   override fun reset() {
     if (hasTrigger(VConstants.TRG_RESET)) {
@@ -430,7 +430,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * create a list of items and return id of selected one or -1
    * @param        showUniqueItem        open a list if there is only one item also
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formatters
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by string formatters
    */
   fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
     dBContext = parent.dBContext

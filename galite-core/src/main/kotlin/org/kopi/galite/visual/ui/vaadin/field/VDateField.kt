@@ -41,14 +41,10 @@ class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
-      val formatter = DateTimeFormatter.ofPattern(
-        "[dd.MM.yyyy]"
-                + "[dd.MM.yyyy]"
-                + "[dd/MM/yyyy]"
-                + "[dd/MM/yyyy]"
-      )
-      LocalDate.parse(newPresentationValue, formatter)
+    val date = TimestampValidator.parseDate(newPresentationValue.orEmpty())
+
+    content.value = if(date != null) {
+      LocalDate.of(date.year, date.month, date.day)
     } else {
       null
     }

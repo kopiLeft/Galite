@@ -53,17 +53,9 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
-      val formatter = DateTimeFormatter.ofPattern(
-         "[yyyy-MM-dd HH:mm:ss]"
-                + "[dd.MM.yyyy HH:mm]"
-                + "[dd.MM.yyyy HH:mm:ss]"
-                + "[dd/MM/yyyy HH:mm]"
-                + "[dd/MM/yyyy HH:mm:ss]"
-      )
-      LocalDateTime.parse(newPresentationValue, formatter)
-    } else {
-      null
-    }
+    content.value = TimestampValidator
+      .parseTimestamp(newPresentationValue.orEmpty())
+      ?.sqlTimestamp
+      ?.toLocalDateTime()
   }
 }

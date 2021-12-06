@@ -109,7 +109,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   private fun format(s: Any?): String? =
-    if(s is LocalDate) {
+    if (s is LocalDate) {
       s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     } else {
       s?.toString()
