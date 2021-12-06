@@ -23,6 +23,7 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDefaultFormActor
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VFormCommand
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VActor
 
 abstract class VFullCalendarForm : VForm() {
@@ -75,4 +76,6 @@ abstract class VFullCalendarForm : VForm() {
       VKT_Triggers.add(fieldTriggerArray)
     }
   }
+
+  abstract val fullCalendarBlock: VFullCalendarBlock
 }

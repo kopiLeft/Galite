@@ -52,7 +52,7 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithOneSimpleBlock()
     val model = form.model
 
-    assertCollectionsEquals(form.formBlocks, mutableListOf(form.block))
+    assertCollectionsEquals(form.blocks, mutableListOf(form.block))
     assertEquals(1, model.blocks.size)
 
     val blockModel = model.blocks.single()
@@ -101,7 +101,7 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
 
-    assertCollectionsEquals(form.formBlocks, mutableListOf(form.clientBlock, form.commandsBlock))
+    assertCollectionsEquals(form.blocks, mutableListOf(form.clientBlock, form.commandsBlock))
     assertEquals(2, formModel.blocks.size)
 
     val clientBlock = formModel.blocks[0]

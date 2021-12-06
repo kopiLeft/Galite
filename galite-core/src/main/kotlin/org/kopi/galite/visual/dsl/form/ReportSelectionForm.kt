@@ -18,8 +18,6 @@ package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
  * Represents a report selection form.
@@ -29,7 +27,7 @@ abstract class ReportSelectionForm : DictionaryForm() {
   /**
    * create a report for this form
    */
-  protected abstract fun createReport(): Report
+  abstract fun createReport(): Report
 
   /**
    * create a report for this form
@@ -41,17 +39,5 @@ abstract class ReportSelectionForm : DictionaryForm() {
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
-  override val model: VReportSelectionForm by lazy { ReportSelectionFormModel() }
-
-  inner class ReportSelectionFormModel: VReportSelectionForm() {
-    override val locale get() = this@ReportSelectionForm.locale ?: ApplicationContext.getDefaultLocale()
-
-    override fun init() {
-      initialize()
-    }
-
-    override fun createReport(): VReport {
-      return this@ReportSelectionForm.createReport().model
-    }
-  }
+  override val model: VReportSelectionForm by lazy { ReportSelectionFormModel(this) }
 }

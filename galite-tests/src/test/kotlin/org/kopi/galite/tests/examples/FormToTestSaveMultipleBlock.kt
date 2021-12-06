@@ -26,7 +26,6 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm() {

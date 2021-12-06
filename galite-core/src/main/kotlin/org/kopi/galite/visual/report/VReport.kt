@@ -107,10 +107,6 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
     if (ctxt != null) {
       dBContext = ctxt.dBContext
     }
-    init()
-
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
   }
 
   override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_REPORT

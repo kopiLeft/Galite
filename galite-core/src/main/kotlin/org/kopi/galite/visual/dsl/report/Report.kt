@@ -26,18 +26,8 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.report.Constants
-import org.kopi.galite.visual.report.MReport
-import org.kopi.galite.visual.report.VCalculateColumn
-import org.kopi.galite.visual.report.VCellFormat
-import org.kopi.galite.visual.report.VDateColumn
-import org.kopi.galite.visual.report.VDecimalColumn
-import org.kopi.galite.visual.report.VIntegerColumn
-import org.kopi.galite.visual.report.VMonthColumn
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.report.VSeparatorColumn
-import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -167,127 +157,17 @@ abstract class Report : Window() {
     (writer as ReportLocalizationWriter).genReport(title, help, fields, menus, actors)
   }
 
-  // TODO add Decimal types
-  fun MReport.addReportColumns() {
-    val userFields = fields.map {
-      if (it.group != null) {
-        it.groupID = fields.indexOf(it.group)
-      }
-
-      val function: VCalculateColumn? = if (it.computeTrigger != null) {
-        it.computeTrigger!!.action.method() as VCalculateColumn
-      } else {
-        null
-      }
-
-      val format: VCellFormat? = if (it.formatTrigger != null) {
-        it.formatTrigger!!.action.method() as VCellFormat
-      } else {
-        null
-      }
-
-      it.domain.buildReportFieldModel(it, function, format).also { column ->
-        column.label = it.label ?: ""
-        column.help = it.help
-      }
-    }
-    columns = (userFields + VSeparatorColumn()).toTypedArray()
-  }
-
-  private fun MReport.addReportLines() {
-    reportRows.forEach {
-      val list = fields.map { field ->
-        it.data[field]
-      }
-
-      // Last null value is added for the separator column
-      addLine((list + listOf(null)).toTypedArray())
-    }
-  }
-
-  fun initFields() {
-    fields.forEach {
-      it.initialize()
-    }
-  }
-
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
   override val model: VReport by lazy {
     initFields()
-    ReportModel()
+    ReportModel(this)
   }
 
-  inner class ReportModel: VReport() {
-    override val locale: Locale get() = this@Report.locale ?: ApplicationContext.getDefaultLocale()
-
-    /**
-     * Handling triggers
-     */
-    fun handleTriggers(triggers: MutableList<Trigger>) {
-      // REPORT TRIGGERS
-      super.VKT_Triggers = mutableListOf(arrayOfNulls(Constants.TRG_TYPES.size))
-      val reportTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
-
-      triggers.forEach { trigger ->
-        for (i in VConstants.TRG_TYPES.indices) {
-          if (trigger.events shr i and 1 > 0) {
-            reportTriggerArray[i] = trigger
-          }
-        }
-        super.VKT_Triggers!![0] = reportTriggerArray
-      }
-
-      // FIELD TRIGGERS
-      fields.forEach {
-        val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
-        if (it.computeTrigger != null) {
-          fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!
-        }
-        if (it.formatTrigger != null) {
-          fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!
-        }
-        // TODO : Add field triggers here
-        super.VKT_Triggers!!.add(fieldTriggerArray)
-      }
-
-      // TODO: for separator column
-      super.VKT_Triggers!!.add(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
-
-      // COMMANDS TRIGGERS
-      commands?.forEach {
-        val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
-        // TODO : Add commands triggers here
-        super.VKT_Triggers!!.add(fieldTriggerArray)
-      }
-    }
-
-    override fun init() {
-      setTitle(title)
-      super.setPageTitle(title)
-      help = this@Report.help
-      this.addActors(this@Report.actors.map { actor ->
-        actor.buildModel(sourceFile)
-      }.toTypedArray())
-      this.commands = this@Report.commands.map { command ->
-        command.buildModel(this, actors)
-      }.toTypedArray()
-
-      source = sourceFile
-
-      if (reportCommands) {
-        addDefaultReportCommands()
-      }
-
-      super.model.addReportColumns()
-      super.model.addReportLines()
-
-      handleTriggers(this@Report.triggers)
-    }
-
-    override fun add() {
-      // TODO
+  fun initFields() {
+    fields.forEach {
+      it.initialize()
     }
   }
 

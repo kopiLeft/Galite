@@ -75,7 +75,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
   fun `test changeBlock command`() {
     var blockCaption = _get<H4> { classes = "block-title" }
 
-    assertEquals(multipleForm.formBlocks[1].title, blockCaption.text)
+    assertEquals(multipleForm.blocks[1].title, blockCaption.text)
     multipleForm.changeBlock.triggerCommand()
     // Check that the list dialog is displayed
     _expectOne<DListDialog>()
@@ -88,8 +88,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val grid = _get<DListDialog>()._get<ListTable>()
 
     grid.expect(arrayOf(
-      arrayOf(multipleForm.formBlocks[1].title),
-      arrayOf(multipleForm.formBlocks[2].title)
+      arrayOf(multipleForm.blocks[1].title),
+      arrayOf(multipleForm.blocks[2].title)
     ))
 
     // Choose second row
@@ -101,7 +101,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     // Dialog is closed and the block title is correct
     assertFalse(listDialog.isOpened)
-    assertEquals(multipleForm.formBlocks[2].title, blockCaption.text)
+    assertEquals(multipleForm.blocks[2].title, blockCaption.text)
   }
 
   /**

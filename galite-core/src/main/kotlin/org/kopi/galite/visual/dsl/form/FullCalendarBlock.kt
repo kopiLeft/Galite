@@ -16,20 +16,12 @@
  */
 package org.kopi.galite.visual.dsl.form
 
-import java.util.Locale
-
-import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.form.VTimeField
-import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.visual.VDefaultActor
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -181,61 +173,10 @@ open class FullCalendarBlock(title: String,
 
   /** Returns block model */
   override fun getBlockModel(vForm: VForm, source: String?): VBlock {
-    val fullCalendarModel = FullCalendarBlockModel(vForm, source)
+    val fullCalendarModel = FullCalendarBlockModel(vForm, this, source)
 
     vBlock = fullCalendarModel
 
     return fullCalendarModel
-  }
-
-
-  inner class FullCalendarBlockModel(vForm: VForm, source: String? = null): VFullCalendarBlock(vForm) {
-
-    init {
-      initializeBlock(source)
-      dateField = this@FullCalendarBlock.dateField?.vField as? VDateField
-      fromTimeField = this@FullCalendarBlock.fromTimeField?.vField as? VTimeField
-      toTimeField = this@FullCalendarBlock.toTimeField?.vField as? VTimeField
-      fromField = this@FullCalendarBlock.fromField?.vField as? VTimestampField
-      toField = this@FullCalendarBlock.toField?.vField as? VTimestampField
-    }
-
-    override fun setInfo(form: VForm) {
-      blockFields.forEach {
-        it.setInfo(super.source, form)
-      }
-    }
-
-    override fun buildFullCalendarForm(): VFullCalendarForm {
-      return object : VFullCalendarForm() {
-
-        override val locale: Locale?
-          get() = form.locale
-
-        override fun init() {
-
-          val vSimpleBlock = BlockModel(this, source)
-          vSimpleBlock.setInfo(pageNumber, this)
-          vSimpleBlock.initIntern()
-
-          val defaultActors = form.actors.filter { actor ->
-            actor is VDefaultActor &&
-                    (actor.code == CMD_AUTOFILL
-                            || actor.code == CMD_EDITITEM
-                            || actor.code == CMD_EDITITEM_S
-                            || actor.code == CMD_NEWITEM)
-
-          }.toTypedArray()
-          addActors(defaultActors.requireNoNulls())
-
-          dBContext = vSimpleBlock.dBContext
-          blocks = arrayOf(vSimpleBlock)
-          source = vSimpleBlock.source
-          setTitle(vSimpleBlock.title)
-          pages = arrayOf()
-          pagesIdents = arrayOf()
-        }
-      }
-    }
   }
 }
