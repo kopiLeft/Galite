@@ -147,7 +147,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var maxColumnPos = 0
   var displayedFields = 0
   private var isFilterVisible = false
-  protected var dropListMap = HashMap<String, String>()
+  internal var dropListMap = HashMap<String, String>()
 
   // dynamic data
   var activeRecord = 0 // current record

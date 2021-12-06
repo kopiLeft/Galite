@@ -127,6 +127,7 @@ fun VBlock.initializeBlock(block: FormBlock, source: String?) {
     it.ident
   }.toTypedArray()
   alignment = block.align?.getBlockAlignModel()
+  dropListMap = block.dropListMap
 }
 
 /**
