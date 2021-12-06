@@ -163,7 +163,6 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val newStart = Timestamp.from(newEntry.start)
           val newEnd = Timestamp.from(newEntry.end)
 
-
           model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
         }
       })

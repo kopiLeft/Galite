@@ -56,7 +56,7 @@ abstract class VFullCalendarForm : VForm() {
   private fun initDefaultActors() {
     createActor("File", "Quit", QUIT_ICON, KeyEvent.VK_ESCAPE, 0, VConstants.CMD_QUIT)
     createActor("File", "Save", SAVE_ICON, 0, 0, VConstants.CMD_SAVE, mode(VConstants.MOD_INSERT, VConstants.MOD_UPDATE))
-    createActor("File", "Delete", DELETE_ICON, 0, 0, VConstants.CMD_DELETE, mode(VConstants.MOD_UPDATE) )
+    createActor("File", "Delete", DELETE_ICON, 0, 0, VConstants.CMD_DELETE, mode(VConstants.MOD_UPDATE))
     addActors(actorsDef.toTypedArray())
   }
 
