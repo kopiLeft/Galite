@@ -30,6 +30,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.locateUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.download.Downloader
 import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
@@ -899,9 +900,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
         resourceName = resourceName.replace("\\s".toRegex(), "_")
       }
 
-      val downloaderDialog = DownloaderDialog(file, resourceName, application.defaultLocale.toString())
+      val downloader = Downloader(file, resourceName, this)
 
-      downloaderDialog.open()
+      downloader.download()
     }
   }
 }

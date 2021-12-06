@@ -15,25 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.visual
+package org.kopi.galite.visual.ui.vaadin.download
 
 import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Paths
 
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.server.InputStreamFactory
-import com.vaadin.flow.server.StreamResource
 
 /**
  * A Dialog that allows a user to download a file produced in the server.
@@ -42,48 +35,24 @@ import com.vaadin.flow.server.StreamResource
  * @param name the file name
  */
 class DownloaderDialog(file: File, name: String, locale: String): Dialog() {
-  private val downloadButton =
-    Button(LocalizedProperties.getString(locale, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
+  private val downloadButton = DownloadButton(file, name, locale)
   private val closeButton = Button(LocalizedProperties.getString(locale, "CLOSE"), Icon(VaadinIcon.CLOSE_CIRCLE))
 
   init {
-    val href = StreamResource(name, InputStreamFactory {
-      createFileInputStream(file.absolutePath)
-    })
-    val download = Anchor(href, "")
     val buttons = Div()
     val title = Div()
 
     title.className ="download-file-title"
     buttons.className = "download-file-buttons"
-    download.element.setAttribute("download", true)
-    downloadButton.isDisableOnClick = true
+    closeButton.style["visibility"] = "hidden"
 
     title.text = LocalizedProperties.getString(locale, "downloadText") + ": $name"
+
     closeButton.addClickListener {
       close()
     }
 
-    download.add(downloadButton)
-    buttons.add(download, closeButton)
+    buttons.add(downloadButton, closeButton)
     add(VerticalLayout(title, buttons))
-
-    downloadButton.style["visibility"] = "hidden"
-    closeButton.style["visibility"] = "hidden"
-
-    addAttachListener {
-      downloadButton.clickInClient()
-      closeButton.clickInClient()
-    }
-  }
-
-  private fun createFileInputStream(path: String): InputStream? {
-    return try {
-      Files.newInputStream(Paths.get(path))
-    } catch (e: IOException) {
-      throw RuntimeException(e)
-    } catch (e: InterruptedException) {
-      throw RuntimeException(e)
-    }
   }
 }
