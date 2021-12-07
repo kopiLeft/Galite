@@ -25,7 +25,7 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -128,7 +128,7 @@ class CommandForm : ReportSelectionForm() {
   }
 }
 
-class BlockCommand : FormBlock(1, 10, "Commands") {
+class BlockCommand : Block(1, 10, "Commands") {
   val u = table(Command)
   val v = table(Client)
 

@@ -89,8 +89,6 @@ class VBlockTests : VApplicationTestBase() {
     }
     Center.insert {
       it[id] = 1
-      it[uc] = 0
-      it[ts] = 0
       it[refTraining] = 1
       it[centerName] = "center 1"
       it[address] = "adresse 1"
@@ -98,8 +96,6 @@ class VBlockTests : VApplicationTestBase() {
     }
     Center.insert {
       it[id] = 2
-      it[uc] = 0
-      it[ts] = 0
       it[refTraining] = 1
       it[centerName] = "center 2"
       it[address] = "adresse 2"
@@ -107,8 +103,6 @@ class VBlockTests : VApplicationTestBase() {
     }
     Center.insert {
       it[id] = 3
-      it[uc] = 0
-      it[ts] = 0
       it[refTraining] = 1
       it[centerName] = "center 3"
       it[address] = "adresse 3"
@@ -153,6 +147,85 @@ class VBlockTests : VApplicationTestBase() {
       }
     }
     assertEquals("VIS-00014: ID should be unique", vExecFailedException.message)
+  }
+  fun addCenterIndicesData(id: Int, center: String, address: String, mail: String) {
+    transaction {
+      Center.insert {
+        it[Center.id] = id
+        it[refTraining] = 1
+        it[centerName] = center
+        it[Center.address] = address
+        it[Center.mail] = mail
+      }
+    }
+  }
+
+  @Test
+  fun checkCombinedUniqueIndexTest() {
+    var i = 0
+    formMultiple.model
+
+    try {
+      transaction {
+        SchemaUtils.create(Training)
+        SchemaUtils.create(Center)
+        Training.insert {
+          it[id] = 1
+          it[trainingName] = "trainingName"
+          it[type] = 1
+          it[price] = Decimal("1149.24").value
+          it[active] = true
+        }
+      }
+
+      // Failing senario should throw exception for Index 0
+      addCenterIndicesData(i++, "1", "1", "2")
+      formMultiple.multipleBlock.centerName[0] = "1"
+      formMultiple.multipleBlock.address[0] = "1"
+      formMultiple.multipleBlock.mail[0] = "6"
+      val vExecFailedException = assertFailsWith<VExecFailedException> {
+        transaction {
+          formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+        }
+      }
+      assertEquals("VIS-00014: Index 0", vExecFailedException.message)
+
+
+      // Failing senario should throw exception for Index 1
+      addCenterIndicesData(i++, "2", "8", "3")
+      formMultiple.multipleBlock.centerName[0] = "7"
+      formMultiple.multipleBlock.address[0] = "8"
+      formMultiple.multipleBlock.mail[0] = "3"
+      val vExecFailedException2 = assertFailsWith<VExecFailedException> {
+        transaction {
+          formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+        }
+      }
+      assertEquals("VIS-00014: Index 1", vExecFailedException2.message)
+
+      // Should works without throwing exception
+      addCenterIndicesData(i++, "9", "7", "88")
+      formMultiple.multipleBlock.centerName[0] = "9"
+      formMultiple.multipleBlock.address[0] = "12"
+      formMultiple.multipleBlock.mail[0] = "13"
+      transaction {
+        formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+      }
+
+      // Should works without throwing exception
+      addCenterIndicesData(i++, "14", "16", "9")
+      formMultiple.multipleBlock.centerName[0] = "15"
+      formMultiple.multipleBlock.address[0] = "17"
+      formMultiple.multipleBlock.mail[0] = "9"
+      transaction {
+        formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+      }
+    } finally {
+      transaction {
+        SchemaUtils.drop(Center)
+        SchemaUtils.drop(Training)
+      }
+    }
   }
 
   @Test

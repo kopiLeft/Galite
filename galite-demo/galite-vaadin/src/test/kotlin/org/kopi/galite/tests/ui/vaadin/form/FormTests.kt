@@ -106,8 +106,8 @@ class FormTests: GaliteVUITestBase() {
     val data = arrayOf(
       arrayOf("1", "description Product 0", "1", "263,00000"),
       arrayOf("2", "description Product 1", "1", "314,00000"),
-      arrayOf("3", "description Product 2", "2", "180,00000"),
-      arrayOf("4", "description Product 3", "3", "65,00000")
+      arrayOf("6", "description Product 2", "2", "180,00000"),
+      arrayOf("3", "description Product 3", "3", "65,00000")
     )
 
     data.forEachIndexed { index, row ->

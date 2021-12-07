@@ -22,7 +22,7 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
 object FormWithBlockTrigger: Form() {
 
@@ -34,7 +34,7 @@ object FormWithBlockTrigger: Form() {
   val secondVlock = testPage.insertBlock(BlockWithTrigger2)
 }
 
-object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {
+object BlockWithTrigger1 : Block(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -51,7 +51,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {
   }
 }
 
-object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
+object BlockWithTrigger2 : Block(1, 1, "Test", "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

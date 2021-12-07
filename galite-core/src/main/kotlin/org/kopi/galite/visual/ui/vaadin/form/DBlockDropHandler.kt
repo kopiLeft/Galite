@@ -24,6 +24,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.lang.Exception
 
 import javax.activation.MimetypesFileTypeMap
 
@@ -33,46 +34,38 @@ import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.visual.VException
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.dnd.DragSource
+import com.vaadin.flow.component.upload.Receiver
+import com.vaadin.flow.component.upload.receivers.MultiFileBuffer
 import com.vaadin.flow.server.StreamVariable
 
 /**
- * The `DBlockDropHandler` is the block implementation
- * of the [DropHandler] specifications.
+ * The `DBlockDropHandler` Is handling drop on a block.
  *
  * @param block The block model.
  */
-class DBlockDropHandler(private val block: VBlock,
-                        component: Component)
-  : DragSource<Component> by DragSource.configure(component) {
+class DBlockDropHandler(private val block: VBlock) {
 
   //---------------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------------
-  private var fileList: ArrayList<File>? = null
+  private var fileList: MutableList<File>? = null
   private var filesCount = 0
+  private var isUploadStarted = false
+  internal val streamHandler = StreamHandler()
 
-  //---------------------------------------------------
-  // DROPTARGETLISTENER IMPLEMENTATION
-  //---------------------------------------------------
-  /*fun drop(event: DragAndDropEvent) { TODO
-    if (isAccepted(event.getTransferable() as WrapperTransferable)) {
-      if (isChartBlockContext) {
-        fileList = ArrayList()
-        filesCount = (event.getTransferable() as WrapperTransferable).getFiles().length
-        for (i in 0 until filesCount) {
-          (event.getTransferable() as WrapperTransferable).getFiles().get(i).setStreamVariable(
-                  StreamHandler())
-        }
-      } else {
-        (event.getTransferable() as WrapperTransferable).getFiles().get(0).setStreamVariable(StreamHandler())
-      }
+  fun onStart() {
+    if (!isUploadStarted) {
+      fileList = mutableListOf()
+      isUploadStarted = true
     }
-  }*/
+  }
 
-  // val acceptCriterion: AcceptCriterion TODO
-  //   get() = AcceptAll.get() TODO
+  fun onFinish(buffer: Receiver) {
+    if(buffer is MultiFileBuffer) {
+      filesCount = buffer.files.size
+    }
+    isUploadStarted = false
+  }
 
   //---------------------------------------------------------
   // UTILS
@@ -88,7 +81,7 @@ class DBlockDropHandler(private val block: VBlock,
         if (isChartBlockContext) {
           fileList!!.add(file)
           if (fileList!!.size == filesCount) {
-            handleDrop(fileList)
+            handleDrop(fileList!!)
           }
         } else {
           handleDrop(file, getExtension(file))
@@ -101,54 +94,11 @@ class DBlockDropHandler(private val block: VBlock,
   }
 
   /**
-   * Returns `true` is the data flavor is accepted.
-   * @param transferable The [WrapperTransferable] instance.
-   * @return `true` is the data flavor is accepted.
+   * Returns the accepted flavors for drop operation.
+   *
+   * @return the set of accepted flavors for drop operation.
    */
-  /*private fun isAccepted(transferable: WrapperTransferable): Boolean { TODO
-    val flavors: ArrayList<Html5File>
-    flavors = ArrayList<Html5File>()
-    for (i in 0 until transferable.getFiles().length) {
-      flavors.add(transferable.getFiles().get(i))
-    }
-    return if (isChartBlockContext) {
-      isAccepted(flavors)
-    } else {
-      if (flavors.size > 1) {
-        false
-      } else {
-        isAccepted(getExtension(flavors[0]))
-      }
-    }
-  }*/
-
-  /**
-   * Returns `true` is the given data flavor is accepted for drop operation.
-   * @param flavor The data flavor.
-   * @return `true` is the given data flavor is accepted for drop operation.
-   */
-  private fun isAccepted(flavor: String?): Boolean {
-    return flavor != null && flavor.isNotEmpty() && block.isAccepted(flavor)
-  }
-
-  /**
-   * A List of flavors is accepted if all elements
-   * of the list are accepted and have the same extension
-   * @param flavors The data flavors.
-   * @return `true` when the drop operation succeeded.
-   */
-  /*private fun isAccepted(flavors: ArrayList<Html5File>): Boolean { TODO
-    var oldFlavor: String? = null
-    for (i in flavors.indices) {
-      val newFlavor: String = getExtension(flavors[i])
-      if (oldFlavor != null && newFlavor != oldFlavor
-              || !isAccepted(newFlavor)) {
-        return false
-      }
-      oldFlavor = newFlavor
-    }
-    return true
-  }*/
+  internal val acceptedFlavors: MutableSet<String> get() = block.acceptedFlavors
 
   /**
    * Handles drop action for multiple files in a chart block.
@@ -156,8 +106,8 @@ class DBlockDropHandler(private val block: VBlock,
    * @return `true` when the drop operation succeeded.
    * @throws VException Visual errors.
    */
-  private fun handleDrop(files: ArrayList<File>?): Boolean {
-    for (i in files!!.indices) {
+  private fun handleDrop(files: MutableList<File>): Boolean {
+    for (i in files.indices) {
       val file = files[i]
       if (!handleDrop(file, getExtension(file))) {
         return false
@@ -240,7 +190,7 @@ class DBlockDropHandler(private val block: VBlock,
    * Returns `true` is the context block is chart block.
    * @return `true` is the context block is chart block.
    */
-  private val isChartBlockContext: Boolean
+  internal val isChartBlockContext: Boolean
     get() = block.noDetail() || block.isMulti() && !block.isDetailMode
 
   //---------------------------------------------------
@@ -250,52 +200,47 @@ class DBlockDropHandler(private val block: VBlock,
    * The `StreamHandler` is the block drop target handler
    * of the [StreamVariable] specifications.
    */
-  private inner class StreamHandler : StreamVariable {
+  inner class StreamHandler {
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun getOutputStream(): OutputStream = bas
 
-    override fun listenProgress(): Boolean = true
-
-    override fun onProgress(event: StreamVariable.StreamingProgressEvent) {
-      if (event.contentLength > 50 * 1024 * 1024) {
+    fun onProgress(bytesReceived: Long, contentLength: Long) {
+      if (contentLength > MAX_SIZE_TO_WAIT) {
         // show progress bar only for file larger than 50 MB
-        block.form.setCurrentJob(event.bytesReceived.toInt())
+        block.form.setCurrentJob(bytesReceived.toInt())
       }
     }
 
-    override fun streamingStarted(event: StreamVariable.StreamingStartEvent) {
-      if (event.contentLength > 50 * 1024 * 1024) {
-        block.form.setProgressDialog("", java.lang.Long.valueOf(event.getContentLength()).toInt())
+    fun streamingStarted(contentLength: Long) {
+      if (contentLength > MAX_SIZE_TO_WAIT) {
+        block.form.setProgressDialog("", java.lang.Long.valueOf(contentLength).toInt())
       }
     }
 
-    override fun streamingFinished(event: StreamVariable.StreamingEndEvent) {
+    fun streamingFinished(fileName: String, mimeType: String, contentLength: Long, bas: ByteArrayOutputStream) {
       try {
         val out: FileOutputStream
-        val temp = createTempFile(event.fileName)
+        val temp = createTempFile(fileName)
         out = FileOutputStream(temp)
         bas.writeTo(out)
         acceptDrop(temp)
       } catch (e: IOException) {
         acceptDrop(null)
       } finally {
-        if (event.contentLength > 50 * 1024 * 1024) {
+        if (contentLength > MAX_SIZE_TO_WAIT) {
           block.form.unsetProgressDialog()
         }
       }
     }
 
-    override fun streamingFailed(event: StreamVariable.StreamingErrorEvent) {
-      event.exception.printStackTrace(System.err)
+    fun streamingFailed(fileName: String, mimeType: String, contentLength: Long, exception: Exception) {
+      exception.printStackTrace(System.err)
       Thread {
-        block.form.error(event.exception.message)
-        // BackgroundThreadHandler.updateUI() TODO
+        block.form.error(exception.message)
       }.start()
     }
-
-    override fun isInterrupted(): Boolean = false
 
     /**
      * Creates a temporary file.
@@ -339,11 +284,6 @@ class DBlockDropHandler(private val block: VBlock,
       }
       return "" // empty name.
     }
-
-    //---------------------------------------
-    // DATA MEMBERS
-    //---------------------------------------
-    private val bas = ByteArrayOutputStream()
   }
 
   companion object {
@@ -420,7 +360,7 @@ class DBlockDropHandler(private val block: VBlock,
     }
 
     private val MIMETYPES_FILE_TYPEMAP = MimetypesFileTypeMap()
-    private const val serialVersionUID = 3924306391945432925L
+    const val MAX_SIZE_TO_WAIT = 50 * 1024 * 1024
 
     init {
       // missing PNG files in initial map

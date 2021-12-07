@@ -27,7 +27,6 @@ import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -43,6 +42,7 @@ import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.TestFieldsForm
 import org.kopi.galite.tests.examples.Trainer
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
@@ -257,7 +257,7 @@ class FormToTestFormPopUp: Form() {
     }
   }
 
-  inner class UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
+  inner class UsersListBlock : Block(1, 1, "UsersListBlock") {
     val user = mustFill(domain = UsersList(), position = at(1, 1)) {
       label = "user"
       help = "The user"
@@ -301,7 +301,7 @@ class FormInPopUp : DictionaryForm() {
 
   val block = insertBlock(UsersBlock()) {}
 
-  inner class UsersBlock : FormBlock(1, 1, "Test block") {
+  inner class UsersBlock : Block(1, 1, "Test block") {
     val shortName = visit(domain = STRING(20), position = at(1, 1)) {
       label = "Kurzname"
       help = "Kurzname"

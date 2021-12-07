@@ -25,7 +25,7 @@ import org.kopi.galite.visual.type.Type0
  * This class represents a nullable form field(visit, skipped and hidden).
  *
  */
-class NullableFormField<T>(block: FormBlock,
+class NullableFormField<T>(block: Block,
                            domain: Domain<T>,
                            fieldIndex: Int,
                            initialAccess: Int,

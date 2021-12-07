@@ -36,6 +36,7 @@ import org.kopi.galite.visual.visual.ApplicationContext;
 import org.kopi.galite.visual.visual.Executable;
 import org.kopi.galite.visual.visual.FileHandler;
 import org.kopi.galite.visual.visual.ImageHandler;
+import org.kopi.galite.visual.visual.ModelCloseListener;
 import org.kopi.galite.visual.visual.Module;
 import org.kopi.galite.visual.visual.PrinterManager;
 import org.kopi.galite.visual.visual.PropertyException;
@@ -119,7 +120,14 @@ public abstract class JApplication implements Application {
 
         module = Module.Companion.startForm(context, form, "initial form");
         if (module instanceof VWindow) {
-          ((VWindow) module).addModelCloseListener(type -> exitWithError(type));
+          ((VWindow) module).addModelCloseListener(new ModelCloseListener() {
+            @Override
+            public void modelClosed(int type) {
+              exitWithError(type);
+            }
+            @Override
+            public void dispose() {}
+          });
         } else {
           exitWithError(1);
         }

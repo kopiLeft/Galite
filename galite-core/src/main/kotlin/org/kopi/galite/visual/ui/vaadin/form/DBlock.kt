@@ -25,7 +25,7 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
@@ -34,6 +34,10 @@ import org.kopi.galite.visual.visual.VExecFailedException
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 
@@ -46,25 +50,33 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 
 @CssImport("./styles/galite/block.css")
-open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
+open class DBlock(val parent: DForm,
+                  final override val model: VBlock)
+  : Block(if (model.isDroppable) DBlockDropHandler(model) else null, parent.content), UBlock {
 
-  protected var formView: DForm = parent
+  protected val formView = parent
   protected lateinit var columnViews: Array<VFieldUI?>
-
   protected var maxRowPos: Int = model.maxRowPos
   protected var maxColumnPos: Int = model.maxColumnPos
   protected var displayedFields: Int = model.displayedFields
+  protected val sortedRecToDisplay: IntArray
+  protected val displayToSortedRec: IntArray
+  protected var sortedToprec = 0 // first record displayed
+  protected var currentUI: UI? = null
+  /**
+   * Some browsers fires extra scroll event with wrong scroll position
+   * when a chart block field is clicked. This flag is used to prevent
+   * these events from propagation to the block UI and thus block view refresh
+   * with wrong top scroll record.
+   */
+  private var activeRecordSetFromDisplay = false
 
   init {
     maxRowPos = model.maxRowPos
     maxColumnPos = model.maxColumnPos
     displayedFields = model.displayedFields
-    formView = parent
     model.addBlockListener(this)
-    setBufferSize(model.bufferSize, model.displaySize)
-    setSortedRecords(model.sortedRecords)
-    noMove = model.noMove()
-    noChart = model.noChart()
+    addRecordPositionPanel(parent.content)
 
     if (model.isMulti()) {
       sortedRecToDisplay = IntArray(model.bufferSize)
@@ -76,12 +88,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
 
     rebuildCachedInfos()
     createFields()
-
-    if (model.isDroppable) {
-      //TODO()
-      //setDropHandler(DBlockDropHandler(model))
-      //setDragStartMode(DragStartMode.HTML5)
-    }
 
     // fire record info change event
     // this is needed to notify view side with the record
@@ -116,7 +122,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
   /**
    * Rebuilds cached information
    */
-  override fun rebuildCachedInfos() {
+  fun rebuildCachedInfos() {
     var cnt = 0
     var i = 0
 
@@ -167,6 +173,14 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
 
   protected open fun createFieldDisplay(index: Int, model: VField): VFieldUI {
     return DFieldUI(this, model, index)
+  }
+
+  /**
+   * Enters to the given record.
+   * @param recno The new record.
+   */
+  protected open fun enterRecord(recno: Int) {
+    refresh(true)
   }
 
   /**
@@ -257,13 +271,65 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
         }
       }
     }
-    // Consider the model active record changes.
-    access(currentUI) {
-      fireActiveRecordChanged(model.activeRecord)
+  }
+
+  fun onValueChange(event: HasValue.ValueChangeEvent<Int>) {
+    // when active record is set from the display. It means that
+    // one block field has fired a click event. Extra scroll event
+    // are blocked cause some FF version fire scroll events with
+    // wrong scroll position and force UI to refresh and change its
+    // content.
+    if (activeRecordSetFromDisplay) {
+      activeRecordSetFromDisplay = false
+    } else {
+      setScrollPos(event.value)
     }
   }
 
-  var currentUI: UI? = null
+  fun addRecordPositionPanel(form: Form) {
+    if (model.isMulti() && model.noChart()) {
+      Shortcuts.addShortcutListener(this,
+                                    { _ -> form.showBlockInfo() },
+                                    Key.KEY_I,
+                                    KeyModifier.of("Alt"))
+    }
+  }
+
+  /**
+   * Sets the block active record from a given display line.
+   * @param displayLine The display line.
+   */
+  open fun setActiveRecordFromDisplay(displayLine: Int) {
+    activeRecordSetFromDisplay = true
+    fireActiveRecordChanged()
+    refresh(false)
+  }
+
+  /**
+   * Notifies the form that the active record of this block has changed.
+   */
+  protected open fun fireActiveRecordChanged() {
+    form.setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, model.recordCount)
+  }
+
+  /**
+   * Returns the sorted position of the given record.
+   * @param rec The concerned record.
+   * @return The sorted position of the record.
+   */
+  private fun getSortedPosition(rec: Int): Int = model.getSortedPosition(rec)
+
+  /**
+   * Returns the current record.
+   * @return The current record.
+   */
+  protected open fun getCurrentRecord(): Int {
+    var current = 1
+    if (model.isMulti()) {
+      current = model.activeRecord + 1
+    }
+    return current
+  }
 
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
@@ -275,19 +341,18 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
           foreground: String?,
           background: String?,
   ) {
-    cachedColors.add(CachedColor(col, rec, foreground, background))
+    // no client side cache
   }
 
   /**
    * Performs a scroll action.
    * @exception        VException an exception may be raised record.leave()
    */
-  override fun setScrollPos(value: Int) {
+  fun setScrollPos(value: Int) {
     // Can not be called in event dispatch thread
     // Scrollbar timer is not stop if you click on one of the two buttons
     var value = value
-    assert(value < model.bufferSize //getRecordSize
-    )
+    assert(value < model.bufferSize) //getRecordSize
     if (sortedToprec != value) {
       var recno = 0 //temp sortedToprec
       while (value > 0) {
@@ -376,7 +441,9 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     val pos: Int = model.getSortedPosition(recno)
     return if (pos < 0) {
       -1
-    } else sortedRecToDisplay[pos]
+    } else {
+      sortedRecToDisplay[pos]
+    }
   }
 
   override fun getDisplayLine(): Int = getDisplayLine(model.activeRecord)
@@ -405,14 +472,22 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
 
   override fun createLayout(): BlockLayout {
     // label + field => 2 + lines
-    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
+    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos, this)
     if (model.alignment != null) {
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
+                               model.name,
                                model.alignment!!.targets,
                                model.alignment!!.isChart())
     }
 
     return layout
+  }
+
+  fun release() {
+    columnViews.forEach {
+      it?.model?.removeFieldListener(it.fieldHandler)
+      it?.model?.removeFieldChangeListener(it.fieldHandler)
+    }
   }
 
   //---------------------------------------------------
@@ -439,13 +514,17 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
   override fun recordInfoChanged(rec: Int, info: Int) {}
 
   override fun orderChanged() {
-    fireOrderChanged(model.sortedRecords)
     refresh(true)
   }
 
   override fun filterHidden() {}
 
   override fun filterShown() {}
+
+  override fun refreshEntries() {}
+  override fun getSelectedDate(): Date? = null
+  override fun goToDate(date: Date) {}
+  override fun enter() {}
 
   override fun getCurrentDisplay(): UBlock? = this
 }

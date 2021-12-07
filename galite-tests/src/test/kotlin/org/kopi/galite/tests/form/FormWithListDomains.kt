@@ -33,7 +33,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.visual.FileHandler
 
@@ -88,7 +88,7 @@ class FileFilter : FileHandler.FileFilter {
     get() = "XLS/XLSX"
 }
 
-class UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
+class UsersListBlock : Block(1, 1, "UsersListBlock") {
   val user = mustFill(domain = UsersList(), position = at(1, 1)) {
     label = "user"
     help = "The user"
@@ -188,7 +188,7 @@ class SomeDictionnaryForm : DictionaryForm() {
     }
   }
 
-  inner class UsersBlock : FormBlock(1, 1, "Test block") {
+  inner class UsersBlock : Block(1, 1, "Test block") {
     val u = table(Users)
     val unique = index(message = "ID should be unique")
 

@@ -77,7 +77,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {
@@ -88,7 +88,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   }
 
   internal fun parseTimestamp(rec: Int, s: String) {
-    val timestamp = s.split("[ T]".toRegex(), 2).toTypedArray()
+    val timestamp = s.split("[ T]".toRegex(), 2)
     val date = parseDate(timestamp[0])
     val time = parseTime(timestamp[1])
     setTimestamp(rec, Timestamp("$date $time"))
@@ -348,7 +348,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     return if (value[r] == null) {
       VConstants.EMPTY_TEXT
     } else {
-      val text = value[r].toString()
+      val text = value[r]!!.toString()
       // this is work around to display the timestamp in yyyy-MM-dd hh:mm:ss format
       // The proper way is to change the method Timestamp#toString(Locale) but this
       // will affect the SQL representation of the timestamp value.

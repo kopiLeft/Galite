@@ -24,9 +24,8 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm() {
@@ -61,7 +60,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
   val block = insertBlock(Trainee())
   val multipleBlock = insertBlock(Centers())
 
-  inner class Trainee: FormBlock(1, 1, "Training") {
+  inner class Trainee: Block(1, 1, "Training") {
     val t = table(Training)
 
     val trainingID = visit(domain = INT(25), position = at(1, 1)) {
@@ -87,8 +86,10 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     }
   }
 
-  inner class Centers : FormBlock(20, 20, "Centers") {
+  inner class Centers : Block(20, 20, "Centers") {
     val c = table(Center)
+    val index0 = index(message = "Index 0")
+    val index1 = index(message = "Index 1")
 
     val centerId = hidden(domain = INT(20)) {
       label = "center id"
@@ -113,17 +114,23 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     val centerName = visit(domain = STRING(20), position = at(1, 1)) {
       label = "center name"
       help = "center name"
-      columns(c.centerName)
+      columns(c.centerName) {
+        index = index0
+      }
     }
     val address = visit(domain = STRING(20), position = at(1, 2)) {
       label = "address"
       help = "address"
-      columns(c.address)
+      columns(c.address) {
+        index = index0 + index1
+      }
     }
     val mail = visit(domain = STRING(20), position = at(1, 3)) {
       label = "mail"
       help = "mail"
-      columns(c.mail)
+      columns(c.mail) {
+        index = index1
+      }
     }
 
     init {

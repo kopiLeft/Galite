@@ -267,6 +267,10 @@
   <property key="RemoveConfiguration-help" value="Effacer une configuration enregistrée." />
   <property key="AddConfiguration" value="Enregister" />
   <property key="AddConfiguration-help" value="Enregister une nouvelle configuration." />
+  <property key="Save" value="Sauver" />
+  <property key="Save-help" value="Enregistre les modifications dans la base." />
+  <property key="Delete" value="Effacer" />
+  <property key="Delete-help" value="Efface cet enregistrement de la base." />
   <property key="LoadConfiguration" value="Charger" />
   <property key="LoadConfiguration" value="Charger une configuration enregistrée." />
   <property key="Options" value="Change les options d'affichages" />

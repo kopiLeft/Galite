@@ -17,10 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.list
 
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.ApplicationContext
@@ -29,13 +27,9 @@ import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.progressbar.ProgressBar
 
 /**
  * A list dialog
@@ -53,7 +47,6 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
   private var lastActiveWindow: Window? = null
   protected val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
   private var content: VerticalLayout = VerticalLayout()
-  protected var widthStyler = Div()
   protected var pattern: String? = null
   /**
    * This is used to display a new button under the dialog.
@@ -79,48 +72,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
   fun showListDialog() {
     // setNewText(newText) TODO
     // now show the list dialog
-    openAndExpand()
-  }
-
-  private fun openAndExpand() {
-    val ui = UI.getCurrent()
-    var width = ""
-    val progress = Dialog(ProgressBar().also { it.isIndeterminate = true })
-    val tableHeight = "400px"
-
     super.open()
-
-    progress.isCloseOnOutsideClick = false
-    progress.isCloseOnEsc = false
-
-    if(table!!.headerComponents.isNotEmpty()) {
-      height = "0px"
-      progress.open()
-    } else {
-      table!!.height = tableHeight
-    }
-
-    table!!.headerComponents.first().element.addAttachListener {
-      Thread {
-        table!!.headerComponents.forEach { header ->
-          val headerWidth = Utils.getWidth(header.parent.get().element, ui)
-
-          if (width == "") {
-            width = headerWidth.orEmpty()
-          } else if (headerWidth != null && headerWidth.isNotEmpty()) {
-            width = "$width + $headerWidth"
-          }
-        }
-
-        accessAndPush(ui) {
-          widthStyler.width = "calc(calc($width) + 20px)"
-          widthStyler.minWidth = "calc(calc($width) + 20px)"
-          progress.close()
-          height = null
-          table!!.height = tableHeight
-        }
-      }.start()
-    }
   }
 
   override fun open() {
@@ -227,7 +179,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
       if (newForm != null) {
         content.add(newForm)
       }
-      add(widthStyler, content)
+      add(field!!.widthStyler, content)
       addToFooter(close)
     }
 

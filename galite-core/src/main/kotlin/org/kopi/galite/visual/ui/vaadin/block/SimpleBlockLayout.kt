@@ -17,16 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.block
 
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.ui.vaadin.form.DActorField
-import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DField
-import org.kopi.galite.visual.ui.vaadin.form.DGridMultiBlock
-import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.formlayout.FormLayout.FormItem
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -35,7 +28,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param col The column number.
  * @param line The row number.
  */
-open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
+open class SimpleBlockLayout(col: Int, line: Int, open val block: Block) : AbstractBlockLayout(col, line) {
   var align: BlockAlignment? = null
   private var follows: MutableList<Component>? = null
   private var followsAligns: MutableList<ComponentConstraint>? = null
@@ -65,79 +58,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   ) {
     val constraints = ComponentConstraint(x, y, width, height, alignRight, useAll)
 
-    if (parent.get() is DGridMultiBlock) { // TODO
-      getBlock().isLayoutBelongsToGridDetail = true
-      if (component != null) {
-        if (component is DField) {
-          val columnView: ColumnView = if (constraints.width < 0 || component is DActorField) {
-            ColumnView(getBlock()).also { columnView ->
-              columnView.label = null
-              columnView.addField(component)
-              if (blockInDetailMode()) {
-                columnView.detailLabel = null
-                columnView.setDetailDisplay(component)
-              }
-            }
-          } else {
-            ColumnView(getBlock()).also { columnView ->
-              // Label
-              columnView.label = component.label
-              if (blockInDetailMode()) {
-                columnView.detailLabel = component.label
-              }
-
-              // Field
-              columnView.addField(component)
-              if (blockInDetailMode()) {
-                columnView.setDetailDisplay(component)
-              }
-            }
-          }
-
-          getBlock().addField(columnView)
-        }
-      }
-    } else if (component != null) {
-      if (component is FormItem) {
-        components!![x][y] = component
-      } else if (component is DField) {
-        add(component, constraints)
-
-        // a follow field has no label
-        // an actor field has no label too.
-        // we treat this cases separately
-        val columnView: ColumnView = if (constraints.width < 0 || component is DActorField) {
-          ColumnView(getBlock()).also { columnView ->
-            columnView.label = null
-            columnView.addField(component)
-            if (blockInDetailMode()) {
-              columnView.detailLabel = null
-              columnView.setDetailDisplay(component)
-            }
-          }
-        } else {
-          ColumnView(getBlock()).also { columnView ->
-            // Label
-            columnView.label = component.label
-            if (blockInDetailMode()) {
-              columnView.detailLabel = component.label
-            }
-
-            // Field
-            columnView.addField(component)
-            if (blockInDetailMode()) {
-              columnView.setDetailDisplay(component)
-            }
-          }
-        }
-
-        getBlock().addField(columnView)
-      } else if (component is Label) {
-        add(component, constraints)
-      }
-    }
-
-    if(component is Grid<*>) { // TODO
+    if (component != null) {
       add(component, constraints)
     }
   }
@@ -208,7 +129,6 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       val content = HorizontalLayout(field, info)
 
       content.className = "info-content"
-      val formItem = object : FormItem(content) {}
 
       setComponent(content,
                    aligns!![x][y]!!.x,
@@ -226,7 +146,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
    * Returns the component height.
    * @return The component height.
    */
-  protected fun getComponentHeight(comp: Component) = if (comp is VField) comp.height else 1
+  protected fun getComponentHeight(comp: Component): Int = if (comp is DField) comp.visibleHeight else 1
 
   /**
    * Returns the allocated height for the given column and row.
@@ -258,17 +178,6 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     return allocatedWidth
   }
 
-  fun getBlock(): DBlock = parent.get() as DBlock
-
-  /**
-   * Returns if the block is in detail mode
-   *
-   * @return True if the block is in detail mode.
-   */
-  fun blockInDetailMode(): Boolean {
-    return getBlock().noChart
-  }
-
   override fun clear() {
     TODO("Not yet implemented")
   }
@@ -287,13 +196,13 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
    * @param targets The alignment targets.
    * @param isChart Is the original block chart ?
    */
-  open fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
+  open fun setBlockAlignment(original: Component, targetBlockName: String, targets: IntArray, isChart: Boolean) {
     align = BlockAlignment()
 
     align!!.isChart = isChart
     align!!.targets = targets
     align!!.ori = original
 
-    alignPane = AlignPanel(align)
+    alignPane = AlignPanel(align, targetBlockName)
   }
 }

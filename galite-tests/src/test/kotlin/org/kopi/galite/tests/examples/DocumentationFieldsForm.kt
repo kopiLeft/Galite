@@ -19,12 +19,7 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 import java.io.File
 
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.tests.db.connectToDatabase
-
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Convert
@@ -37,11 +32,11 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
@@ -49,15 +44,14 @@ import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.FileHandler
 
 /*** Field Access modifiers using Modes ***/
-// **> FormToCheckFieldVisibility
-// **> trigger ACTION does not exist in doc !
-
+// See [FormToCheckFieldVisibility]
 
 class DocumentationFieldsForm : DictionaryForm() {
   override val locale = Locale.UK
+  override val title = "Form to test fields"
 
-  override val title = "Commands Form"
   val action = menu("Action")
+
   val autoFill = actor(
     ident = "Autofill",
     menu = action,
@@ -74,6 +68,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     key = Key.F2
     icon = "list"
   }
+
   val saveBlock = actor(
     ident = "saveBlock",
     menu = action,
@@ -84,7 +79,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     icon = "save"
   }
 
-  val InsertMode = actor(
+  val insertMode = actor(
     ident = "Insert",
     menu = action,
     label = "Insert",
@@ -104,44 +99,75 @@ class DocumentationFieldsForm : DictionaryForm() {
     icon = "delete"
   }
 
-  val block = insertBlock(FiledsBlock())
-  val block2 = insertBlock(ColumnsBlock())
-  val block3 = insertBlock(TriggersFieldBlock())
+  val serialQuery = actor(
+    ident = "serialQuery",
+    menu = action,
+    label = "serialQuery",
+    help = "serial query",
+  ) {
+    key = Key.F6
+    icon = "serialquery"
+  }
 
-  inner class FiledsBlock : FormBlock(1, 10, "Training") {
+  val fieldsTypesBlock = insertBlock(FieldsTypesBlock())
+  val fieldsAccessBlock = insertBlock(FieldsAccessBlock())
+  val fieldsAlignmentBlock = insertBlock(FieldsAlignmentBlock())
+  val fieldsOptionsBlock = insertBlock(FieldsOptionsBlock())
+  val queryBlock = insertBlock(QueryBlock()) {
+    command(item = serialQuery) {
+      action = {
+        serialQuery()
+      }
+    }
+  }
+  val sortableMultiBlock = insertBlock(SortableMultiBlock())
+  val priorityAndIndexBlock = insertBlock(ColumnsBlock())
+  val innerJoinBlock = insertBlock(InnerJoinBlock())
+  val triggersFieldsBlock = insertBlock(TriggersFieldBlock())
+  val lastBlock = insertBlock(LastBlock())
+
+  inner class FieldsTypesBlock : Block(1, 10, "Block to test fields types") {
+    init {
+      border = Border.LINE
+    }
 
     /*** STRING ***/
     // test Convert Upper + style true --> don't work in swing
     /*val string1 = visit(domain = STRING(10, Convert.UPPER, true), position = at(1, 1)) {
-      label = "string1"
+      label = "string 1"
     }*/
 
     // test Convert Upper + style false
     val string2 = visit(domain = STRING(10, Convert.UPPER, false), position = at(2, 1)) {
-      label = "string2"
-    }
-    // test Convert Lower + Fixed ON + specify width, height, visibleHeight --> More doc on option fixed ON OFF !!!
-    val string3 = visit(domain = STRING(40, 10, 4, Fixed.ON, Convert.LOWER), position = at(3, 1)) {
-      label = "string3"
-    }
-    // test Convert Lower + Fixed OFF + specify width, height, visibleHeight
-   val string4 = visit(domain = STRING(40, 10, 4, Fixed.OFF, Convert.NAME), position = at(3, 2)) {
-      label = "string4"
+      label = "string 2"
     }
 
-    /*** TEXT ***/ //--> set Documentation example!!!
+    // test Convert Lower + Fixed ON + specify width, height, visibleHeight
+    val string3 = visit(domain = STRING(40, 10, 4, Fixed.ON, Convert.LOWER), position = at(3, 1)) {
+      label = "string 3"
+    }
+
+    // test Convert Lower + Fixed OFF + specify width, height, visibleHeight
+    val string4 = visit(domain = STRING(40, 10, 4, Fixed.OFF, Convert.NAME), position = at(3, 2)) {
+      label = "string 4"
+    }
+
+    /*** TEXT ***/
     // test Fixed ON + styled = true
     val text1 = visit(domain = TEXT(80, 50, 2, Fixed.ON, styled = true), position = at(6, 1)) {
-      label = "text1"
+      label = "text 1"
     }
+
     // test Fixed OFF + styled = true
     val text2 = visit(domain = TEXT(80, 50, 2, Fixed.OFF, styled = true), position = at(6, 2)) {
-      label = "text2"
+      label = "text 2"
     }
+
     // test Fixed ON + styled = false
     val text3 = visit(domain = TEXT(80, 50, 2, Fixed.ON, styled = false), position = at(6, 3)) {
-      label = "text3"
+      label = "text 3"
     }
+
     // test Fixed OFF + styled = false
     val text = visit(domain = TEXT(80, 50, 2, Fixed.OFF, styled = false), position = at(6, 4)) {
       label = "text"
@@ -153,7 +179,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
 
     /*** DECIMAL ***/
-    //test decimal field + min and max value
+    // test decimal field + min and max value
     val decimal = visit(domain = DECIMAL(width = 10, scale = 5), position = at(9, 1)) {
       label = "decimal"
       minValue = Decimal.valueOf("1.9")
@@ -161,7 +187,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
 
     /*** INT ***/
-    //test int field + min and max value
+    // test int field + min and max value
     val int = visit(domain = INT(3), position = at(10, 1)) {
       label = "int"
       minValue = 1
@@ -169,71 +195,34 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
 
     /*** CODE ***/
-    //test boolean
-    val booleanCodeField = visit(domain = boolCode, position = at(11, 1)) {
-      label = "booleanCodeField"
+    // test boolean
+    val booleanCodeField = visit(domain = BoolCode, position = at(11, 1)) {
+      label = "booleanCode Field"
     }
-    //test int
-    val intCodeField = visit(domain = intCode, position = at(11, 2)) {
-      label = "intCodeField"
+
+    // test int
+    val intCodeField = visit(domain = IntCode, position = at(11, 2)) {
+      label = "intCode Field"
     }
-    //test decimal
-    val decimalCodeField = visit(domain = decimalCode, position = at(11, 3)) {
-      label = "decimalCodeField"
+
+    // test decimal
+    val decimalCodeField = visit(domain = DecimalCode, position = at(11, 3)) {
+      label = "decimalCode Field"
     }
-    //test string
-    val stringCodeField = visit(domain = stringCode, position = at(11, 4)) {
-      label = "stringCodeField"
+
+    // test string
+    val stringCodeField = visit(domain = StringCode, position = at(11, 4)) {
+      label = "stringCode Field"
     }
 
     /*** LIST ***/
-    val ListField = visit(domain = listDomain, position = at(12, 1)) {
-      label = "ListField"
+    val listField = visit(domain = ListDomain, position = at(12, 1)) {
+      label = "List Field"
     }
-
-    /*** Creating Form Fields Field Access Modifiers ***/
-    //mustfill
-    val mustfillField = mustFill(domain = INT(5), position = at(13, 1)) {
-      label = "mustfillField"
-    }
-    //visit
-    val visitField = visit(domain = INT(5), position = at(13, 2)) {
-      label = "visitField"
-    }
-    //skipped + test follow
-    val skippedField = skipped(domain = INT(5), follow(visitField)) {
-      label = "skippedField"
-    }
-    //hidden
-    val hiddenField = hidden(domain = INT(5)) {
-      label = "hiddenField"
-    }
-    //test filed position --> at(row, column..multifield)
-    val multifield = visit(domain = STRING(20), position = at(14, 1..9)) {
-      label = "multifield"
-    }
-
-    /*** Field Alignment ***/
-    //test alignment Left
-    val alignmentLeft = visit(domain = STRING(20), position = at(15, 1)) {
-      label = "alignmentLeft"
-      align = FieldAlignment.LEFT
-    }
-    //test alignment Right
-    val alignmentRight= visit(domain = STRING(20), position = at(15, 2)) {
-      label = "alignmentRight"
-      align = FieldAlignment.RIGHT
-    }
-    //test alignment Center
-    val alignmentCenter = visit(domain = STRING(20), position = at(15, 3)) {
-      label = "alignmentCenter"
-      align = FieldAlignment.CENTER
-    }
-
 
     /*** Field Drop files ***/
-    val dropFile = visit(domain = STRING(20), position = at(16, 1)) {
-      label = "Cv"
+    val dropFile = visit(domain = STRING(20), position = at(13, 1)) {
+      label = "drop File"
       droppable("pdf")
       trigger(ACTION) {
         FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
@@ -247,129 +236,199 @@ class DocumentationFieldsForm : DictionaryForm() {
         })
       }
     }
+  }
 
-    /*** Field Options ***/ // ---> Fix doc choise to write NOECHO or NO ECHO same in FieldOption.kt
-    //test NOECHO
-    val NOECHO = visit(domain = STRING(20), position = at(17, 1)) {
-      label = "NOECHO"
+  /*** Block to test fields Access and multiField ***/
+  inner class FieldsAccessBlock : Block(1, 10, "Block to test fields Access and multiField") {
+    init {
+      border = Border.LINE
+    }
+
+    /*** Creating Form Fields Field Access Modifiers ***/
+    // mustfill
+    val mustfillField = visit(domain = INT(5), position = at(1, 1)) {
+      label = "mustfill Field"
+      trigger(VALUE) { 10 }
+    }
+
+    // visit
+    val visitField = visit(domain = INT(5), position = at(1, 2)) {
+      label = "visit Field"
+    }
+
+    // skipped + test follow
+    val skippedField = skipped(domain = INT(5), follow(visitField)) {
+      label = "skipped Field"
+    }
+
+    // hidden
+    val hiddenField = hidden(domain = INT(5)) {
+      label = "hidden Field"
+    }
+
+    /*** multiField ***/
+    // test filed position --> at(row, column..multiField)
+    val multiField = visit(domain = STRING(20), position = at(2, 1..3)) {
+      label = "multi Field"
+    }
+  }
+
+  /*** Block to test fields Alignment ***/
+  inner class FieldsAlignmentBlock : Block(1, 10, "Block to test fields Alignment") {
+    init {
+      border = Border.LINE
+    }
+
+    /*** Field Alignment ***/
+    // test alignment Left
+    val alignmentLeft = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "alignment Left"
+      align = FieldAlignment.LEFT
+    }
+
+    // test alignment Right
+    val alignmentRight = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "alignment Right"
+      align = FieldAlignment.RIGHT
+    }
+
+    // test alignment Center
+    val alignmentCenter = visit(domain = STRING(20), position = at(1, 3)) {
+      label = "alignment Center"
+      align = FieldAlignment.CENTER
+    }
+  }
+
+  /*** Block to test fields Options ***/
+  inner class FieldsOptionsBlock : Block(1, 10, "Block to test fields Options") {
+    init {
+      border = Border.LINE
+    }
+    /*** Field Options ***/
+    // test NOECHO
+    val noEcho = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "no Echo"
       options(FieldOption.NOECHO)
     }
-    //test NOECHO
-    val NOEDIT = visit(domain = STRING(20), position = at(17, 2)) {
-      label = "NOEDIT"
+
+    // test NOEDIT
+    val noEdit = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "no Edit"
       options(FieldOption.NOEDIT)
     }
-    //test SORTABLE
-    val SORTABLE = visit(domain = STRING(20), position = at(17, 3)) {
-      label = "SORTABLE"
-      options(FieldOption.SORTABLE)
-    }
-    //test TRANSIENT
-    val TRANSIENT = visit(domain = STRING(20), position = at(17, 4)) {
-      label = "TRANSIENT"
+
+    // test TRANSIENT
+    val transient = visit(domain = STRING(20), position = at(1, 3)) {
+      label = "Transient"
       options(FieldOption.TRANSIENT)
     }
-    //test NO DELETE ON UPDATE
-    val NODELETEONUPDATE = visit(domain = STRING(20), position = at(17, 5)) {
-      label = "NO DELETE ON UPDATE"
+
+    // test NO DELETE ON UPDATE
+    val noDeleteOnUpdate = visit(domain = STRING(20), position = at(1,4)) {
+      label = "No Delete On Update"
       options(FieldOption.NO_DELETE_ON_UPDATE)
     }
-    //test NO DETAIL
-    val NODETAIL = visit(domain = STRING(20), position = at(17, 6)) {
-      label = "NO DETAIL"
+
+    // test NO DETAIL
+    val noDetail = visit(domain = STRING(20), position = at(1, 5)) {
+      label = "no Detail"
       options(FieldOption.NO_DETAIL)
     }
-    //test NO CHART
-    val NOCHART = visit(domain = STRING(20), position = at(17, 7)) {
-      label = "NO CHART"
+
+    // test NO CHART
+    val noChart = visit(domain = STRING(20), position = at(1, 6)) {
+      label = "no Chart"
       options(FieldOption.NO_CHART)
     }
-    //test QUERY UPPER
-    val QUERYUPPER = visit(domain = STRING(20), position = at(17, 8)) {
-      label = "QUERY UPPER"
+  }
+
+  inner class SortableMultiBlock : Block(10, 10, "Block to test : SORTABLE field options") {
+    init {
+      border = Border.LINE
+    }
+
+    // test SORTABLE
+    val sortable = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "Sortable"
+      options(FieldOption.SORTABLE)
+    }
+  }
+
+  /*** BLOCK to test Field Options :
+   * QUERY UPPER
+   * QUERY LOWER
+   */
+  inner class QueryBlock : Block(1, 10, "Block to test QUERY UPPER and QUERY LOWER field options") {
+    init {
+      border = Border.LINE
+    }
+    val t = table(TestTable)
+
+    val id = hidden(domain = INT(25)) {
+      label = "ID"
+      columns(t.id)
+    }
+
+    // test QUERY UPPER
+    val queryUpper = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "query Upper"
+      columns(t.name)
       options(FieldOption.QUERY_UPPER)
     }
-    //test QUERY UPPER
-    val QUERYLOWER = visit(domain = STRING(20), position = at(17, 9)) {
-      label = "QUERY LOWER"
+
+    // test QUERY LOWER
+    val queryLower = visit(domain = STRING(20), position = at(2, 1)) {
+      label = "query Lower"
+      columns(t.lastName)
       options(FieldOption.QUERY_LOWER)
     }
   }
 
   /*** BLOCK to test Field Columns + Field Commands
-   * put columns priority to 1 and indexTest to 9 and click on list
-   * then put columns priority to 9 and indexTest to 1 and click on list to see the different
-   * put value in indexTest field and click save then put same value and save to test the index
+   * put id field priority to 1 and name field to 9 and click on list
+   * then put id field priority to 9 and name field to 1 and click on list to see the different
+   * put value in name field and click save then put same value and save to test the index
    * add twoColumns column and list to test inner join
    *
    * commandField to test Field Commands
    * ***/
-  inner class ColumnsBlock : FormBlock(1, 10, "ColumnsBlock") {
+  inner class ColumnsBlock : Block(1, 10, "Block to test: columns, priority, index and command Field") {
     val t = table(TestTable)
-   // val t2 = table(TestTable2)
+
     val i = index(message = "this should be unique")
 
     /*** Field Columns ***/
-    //test columns()
-    val columns = visit(domain = INT(20), position = at(1, 1)) {
-      label = "columns"
+    // test columns() et priority
+    val id = visit(domain = INT(20), position = at(1, 1)) {
+      label = "id"
+      help = "field to test priority"
       columns(t.id) {
-        priority= 1
+        priority = 1
       }
     }
-    //test index + property
-    val indexTest = visit(domain = STRING(20), position = at(1, 2)) {
-      label = "indexTest"
+
+    // test index et priority
+    val name = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "name"
+      help = "field to test index"
       columns(t.name) {
         index = i
         priority = 9
       }
-      trigger(PREVAL) {
-        println("PREVAL Trigger !!")
-      }
     }
 
     val commandField = visit(domain = STRING(20), position = at(2, 1)) {
-      label = "indexTest"
+      label = "commandField"
 
       command(item = autoFill) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY) // --> to set in Doc !!!
+        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
         action = {}
       }
     }
 
-    //test join two columns()
-  /*  val twoColumns = visit(domain = INT(20), position = at(1, 3)) {
-      label = "two columns"
-      columns(t.id, t2.refTable1)
-    }*/
-
-
-    /* --> dont work index = number !!!
-        mustFill(domain = LONG(20)) {
-          label = "Lesson"
-          help = "The lesson you have to attend to"
-          column(LEC.Lesson) {
-            index = 0
-          }
-        }
-
-        visit(domain = LONG(10)) {
-          label = "Lecturer"
-          column(T.Lecturer) {
-            index = 1
-          }
-        }
-
-        mustFill(domain = STRING(20)) {
-          label = "Time"
-          column(LEC.Time) {
-            index = 1
-          }
-        }
-     */
-
     init  {
+      border = Border.LINE
+
       command(item = list) {
         action = {
           recursiveQuery()
@@ -384,131 +443,165 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
   }
 
-  /*** Field Triggers ***/
-  inner class TriggersFieldBlock : FormBlock(1, 10, "Training") {
+  /*** BLOCK to test Inner join
+   * add twoColumns column and list to test inner join
+   * ***/
+  inner class InnerJoinBlock : Block(1, 10, "Block to test: Inner join") {
     init {
-      options(BlockOption.NODELETE)
-    }
-    val t = table(TestTriggers)
-    //test PREFLD
-    val PREFLD = visit(domain = INT(20), position = at(1, 1)) {
-      label = "PREFLD"
-      columns(t.id)
-      trigger(PREFLD) {
-        println("PREFLD Trigger !!")
-      }
-    }
-    //test POSTFLD
-    val POSTFLD = visit(domain = INT(20), position = at(1, 2)) {
-      label = "POSTFLD"
-      trigger(POSTFLD) {
-        println("POSTFLD Trigger !!")
-      }
-    }
+      border = Border.LINE
 
-    //test POSTCHG
-    val POSTCHG = visit(domain = INT(20), position = at(1, 3)) {
-      label = "POSTCHG"
-      trigger(POSTCHG) {
-        println("POSTCHG Trigger !!")
-      }
-    }
-
-    //test PREVAL put value in this field then click on save actor
-    val PREVAL = visit(domain = STRING(20), position = at(1, 4)) {
-      label = "PREVAL"
-      trigger(PREVAL) {
-        println("PREVAL Trigger !!")
-      }
-    }
-
-    //test VALFLD put value in this field then leave the field
-    val VALFLD = visit(domain = STRING(20), position = at(1, 5)) {
-      label = "VALFLD"
-      trigger(VALFLD) {
-        println("VALFLD Trigger !!")
-      }
-    }
-
-    //test VALIDATE put value in this field then leave the field **> problem same value as VALFLD !!!
-    val VALIDATE = visit(domain = STRING(20), position = at(1, 6)) {
-      label = "VALIDATE"
-      trigger(VALIDATE) {
-        println("VALIDATE Trigger !!")
-      }
-    }
-
-    //test DEFAULT you need to click insert button first
-    val DEFAULTTrigger = visit(domain = STRING(20), position = at(1, 7)) {
-      label = "DEFAULTTrigger"
-      trigger(DEFAULT) {
-        this.value = "DEFAULT VALUE"
-      }
-    }
-    //FORMAT : Not defined actually
-
-    //test ACCESS change the visibility of the filed to skipped
-    val ACCESSTrriger = visit(domain = STRING(20), position = at(2, 1)) {
-      label = "ACCESSTrriger"
-      trigger(ACCESS) { Access.SKIPPED }
-    }
-
-    //test VALUE
-    val VALUETrriger = visit(domain = STRING(20), position = at(2, 2)) {
-      label = "VALUE"
-      trigger(VALUE) {
-        "VALUE"
-      }
-    }
-
-    //test AUTOLEAVE **> to check in kopi !!!
-    val AUTOLEAVE = visit(domain = STRING(20), position = at(2, 3)) {
-      label = "AUTOLEAVE"
-      trigger(AUTOLEAVE) {
-        true
-      }
-    }
-
-    //test PREINS & POSTINS---> put value click on insert command then save command
-    val PREINSPOSTINSTrigger = visit(domain = STRING(20), position = at(2, 4)) {
-      label = "PREINS/POSTINS"
-      columns(t.INS)
-      trigger(PREINS) {
-        println("PREINS trigger !!!")
-      }
-      trigger(POSTINS) {
-        println("POSTINS trigger !!!")
-      }
-    }
-
-    //test PREUPD & POSTUPD--->  click on list command then update this field and click on save
-    val PrePostUpd = visit(domain = STRING(20), position = at(2, 5)) {
-      label = "PREUPD/POSTUPD"
-      columns(t.UPD)
-      trigger(PREUPD) {
-        println("PREUPD trigger !!!")
-      }
-      trigger(POSTUPD) {
-        println("POSTUPD trigger !!!")
-      }
-    }
-
-    //test PREDEL--->  click on list command then delete
-    val PREDELTrigger = visit(domain = STRING(20), position = at(2, 6)) {
-      label = "PREDEL"
-      columns(t.UPD)
-      trigger(PREDEL) {
-        println("PREDEL trigger !!!")
-      }
-    }
-
-    init {
       command(item = list) {
         action = {
           recursiveQuery()
         }
       }
-      command(item = InsertMode) {
+    }
+
+    val t = table(TestTable)
+    val t2 = table(TestTable2)
+
+    // test join two columns()
+    val innerJoinColumns = visit(domain = INT(20), position = at(1, 3)) {
+      label = "inner join columns"
+      columns(t.id, t2.refTable1)
+    }
+  }
+
+  /*** Field Triggers ***/
+  inner class TriggersFieldBlock : Block(1, 10, "Block to test: Field Triggers") {
+    val t = table(TestTriggers)
+
+    val id = hidden(domain = INT(20)) {
+      label = "ID"
+      columns(t.id)
+    }
+
+    // test PREFLD : enter field to call PREFLD trigger
+    val preFldTriggerField = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "PREFLD Trigger Field"
+      trigger(PREFLD) {
+        this.value = "PREFLD Trigger"
+      }
+    }
+
+    // test POSTFLD : enter field then leave it to call POSTFLD trigger
+    val postFldTriggerField = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "POSTFLD Trigger Field"
+      trigger(POSTFLD) {
+        this.value = "POSTFLD Trigger"
+      }
+    }
+
+    // test POSTCHG : enter field put value then leave it to call POSTCHG trigger (executed after changes in field)
+    val postChgTriggerField = visit(domain = STRING(20), position = at(1, 3)) {
+      label = "POSTCHG Trigger Field"
+      trigger(POSTCHG) {
+        this.value = "POSTCHG Trigger"
+      }
+    }
+
+    // test PREVAL : put value in this field then leave it to call PREVAL trigger (executed before validate field)
+    val preValTriggerField = visit(domain = STRING(20), position = at(1, 4)) {
+      label = "PREVAL Trigger Field"
+      trigger(PREVAL) {
+        this.value = "PREVAL Trigger"
+      }
+    }
+
+    // test VALFLD : put value in this field then leave it to call PREVAL trigger (executed when validates the field)
+    val valFldTriggerField = visit(domain = STRING(20), position = at(2, 1)) {
+      label = "VALFLD Trigger Field"
+      trigger(VALFLD) {
+        this.value = "VALFLD Trigger"
+      }
+    }
+
+    // test VALIDATE : put value in this field then leave it to call VALIDATE trigger (executed when validates the field)
+    val validateTriggerField = visit(domain = STRING(20), position = at(2, 2)) {
+      label = "VALIDATE Trigger Field"
+      trigger(VALIDATE) {
+        this.value = "VALIDATE Trigger"
+      }
+    }
+
+    // test DEFAULT : click on insert button first to call DEFAULT trigger
+    val defaultTriggerField  = visit(domain = STRING(20), position = at(2, 3)) {
+      label = "DEFAULT Trigger Field"
+      trigger(DEFAULT) {
+        this.value = "DEFAULT Trigger"
+      }
+    }
+
+    // FORMAT trigger : Not defined actually
+
+    // test ACCESS : the visibility of the filed is changed to skipped
+    val accessTriggerField  = visit(domain = STRING(20), position = at(3, 1)) {
+      label = "ACCESS Trigger Field"
+      trigger(ACCESS) { Access.SKIPPED }
+    }
+
+    // test VALUE : the field contains a default value
+    val valueTriggerField = visit(domain = STRING(20), position = at(3, 2)) {
+      label = "VALUE Trigger Field"
+      trigger(VALUE) {
+        "VALUE Trigger"
+      }
+    }
+
+    // test AUTOLEAVE
+    val autoleaveTriggerField = visit(domain = STRING(20), position = at(3, 3)) {
+      label = "AUTOLEAVE Trigger Field"
+      trigger(AUTOLEAVE) {
+        true
+      }
+    }
+
+    // test PREINS : click on insertMode command then save command and check value in database
+    // test POSTINS : click on insertMode command then save command and check lastBlock
+    val preInsTriggerField = visit(domain = STRING(20), position = at(4, 1)) {
+      label = "PREINS Trigger Field"
+      columns(t.INS)
+      trigger(PREINS) {
+        this.value = "PREINS Trigger"
+      }
+      trigger(POSTINS) {
+        lastBlock.postInsTriggerField.value = "POSTINS Trigger"
+      }
+    }
+
+    // test PREUPD : click on list command then save command and assert that PREUPD trigger change the field value
+    // test POSTUPD : click on list command then save command and assert that POSTUPD trigger change the field value of the lastBlock
+    val preUpdTriggerField = visit(domain = STRING(20), position = at(4, 2)) {
+      label = "PREUPD Trigger Field"
+      columns(t.UPD)
+      trigger(PREUPD) {
+        this.value = "PREUPD Trigger"
+      }
+      trigger(POSTUPD) {
+        vBlock.form.notice("POSTUPD Trigger")
+      }
+    }
+
+   // test PREDEL : click on list command then delete
+    val preDelTriggerField = visit(domain = STRING(20), position = at(4, 3)) {
+     label = "PREDEL Trigger Field"
+      trigger(PREDEL) {
+        vBlock.form.notice("PREDEL Trigger")
+      }
+    }
+
+    val uc = hidden(domain = INT(20)) { columns(t.uc) }
+    val ts = hidden(domain = INT(20)) { columns(t.ts) }
+
+    init {
+      border = Border.LINE
+
+      command(item = list) {
+        action = {
+          recursiveQuery()
+        }
+      }
+      command(item = insertMode) {
         action = {
           insertMode()
         }
@@ -526,45 +619,25 @@ class DocumentationFieldsForm : DictionaryForm() {
       }
     }
   }
-}
 
-fun main() {
-  connectToDatabase()
-  transaction {
-    SchemaUtils.create(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TESTTABLE1ID"))
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TRIGGERSID"))
-    TestTable.insert {
-      it[id] = 1
-      it[name] = "TEST-1"
+  inner class LastBlock : Block(1, 10, "LastBlock") {
+    val postInsTriggerField = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "POSTINS Trigger Field"
     }
-    TestTable.insert {
-      it[id] = 2
-      it[name] = "TEST-2"
-    }
-    TestTable2.insert {
-      it[id] = 1
-      it[name] = "T"
-      it[refTable1] = 1
-    }
-    TestTriggers.insert {
-      it[id] = 1
-      it[INS] = "INS-1"
-      it[UPD] = "UPD-1"
+    val postUpdTriggerField = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "POSTUPD Trigger Field"
     }
   }
-
-  runForm(formName = DocumentationFieldsForm())
 }
 
-object boolCode: CodeDomain<Boolean>() {
+object BoolCode: CodeDomain<Boolean>() {
   init {
     "married" keyOf true
     "single" keyOf false
   }
 }
 
-object intCode: CodeDomain<Int>() {
+object IntCode: CodeDomain<Int>() {
   init {
     "Sunday" keyOf 1
     "Monday" keyOf 2
@@ -576,20 +649,20 @@ object intCode: CodeDomain<Int>() {
   }
 }
 
-object decimalCode: CodeDomain<Decimal>() {
+object DecimalCode: CodeDomain<Decimal>() {
   init {
     "piece" keyOf Decimal.valueOf("1.00")
     "per cent" keyOf Decimal.valueOf("0.01")
   }
 }
-object stringCode: CodeDomain<String>() {
+object StringCode: CodeDomain<String>() {
   init {
     "JDK" keyOf "Java Development Kit"
     "JRE" keyOf "Java Runtime Environment"
   }
 }
 
-object listDomain : ListDomain<String>(20) {
+object ListDomain : ListDomain<String>(20) {
   override val table = TestTable
 
   init {
@@ -601,6 +674,7 @@ object listDomain : ListDomain<String>(20) {
 object TestTable : Table("TESTTABLE1") {
   val id = integer("ID")
   val name = varchar("NAME", 20)//.nullable()
+  val lastName = varchar("LASTNAME", 20).nullable()
   val age = integer("AGE").nullable()
 
   override val primaryKey = PrimaryKey(id, name = "TESTTABLE1_ID")
@@ -614,8 +688,15 @@ object TestTable2 : Table("TESTTABLE2") {
 
 object TestTriggers : Table("TRIGGERS") {
   val id = integer("ID")
+  val uc = integer("UC").default(0)
+  val ts = integer("TS").default(0)
   val INS = varchar("INS", 20).nullable()
   val UPD = varchar("UPD", 20).nullable()
 
   override val primaryKey = PrimaryKey(TestTable.id, name = "TRIGGERS_ID")
+}
+
+fun main() {
+  initDocumentationData()
+  runForm(formName = DocumentationFieldsForm())
 }

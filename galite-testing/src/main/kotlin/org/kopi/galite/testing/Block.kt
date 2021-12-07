@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
@@ -34,7 +34,7 @@ import com.github.mvysny.kaributesting.v10._get
  *
  * @receiver the block to go to.
  */
-fun FormBlock.enter(duration: Long = 50) {
+fun Block.enter(duration: Long = 50) {
   val block = findBlock()
 
   // Click on the first field in the block
@@ -55,7 +55,7 @@ fun FormBlock.enter(duration: Long = 50) {
  *
  * @param record the record number to edit. It starts from 0.
  */
-fun FormBlock.editRecord(record: Int, duration: Long = 50) {
+fun Block.editRecord(record: Int, duration: Long = 50) {
   val block = findBlock()
 
   if(block is DGridBlock) {
@@ -73,7 +73,7 @@ fun FormBlock.editRecord(record: Int, duration: Long = 50) {
 /**
  * Finds the Vaadin block component of this form block.
  */
-fun FormBlock.findBlock(): DBlock {
+fun Block.findBlock(): DBlock {
   val mainWindow = _get<MainWindow>()
   val blocks = mainWindow
     ._find<DBlock>()
@@ -92,7 +92,7 @@ fun FormBlock.findBlock(): DBlock {
 /**
  * Finds the Vaadin block component of this multiple-block.
  */
-fun FormBlock.findMultipleBlock(): DGridBlock =
+fun Block.findMultipleBlock(): DGridBlock =
         (findBlock() as? DGridBlock) ?: throw Exception("$ident is not a multiple block")
 
 infix fun VBlock.eq(block: VBlock): Boolean {

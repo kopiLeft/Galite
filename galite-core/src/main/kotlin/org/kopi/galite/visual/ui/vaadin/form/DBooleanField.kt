@@ -56,6 +56,7 @@ class DBooleanField(
   // --------------------------------------------------
   init {
     field.addValueChangeListener(this)
+    field.addObjectFieldListener(this)
     setFieldContent(field)
   }
   // --------------------------------------------------

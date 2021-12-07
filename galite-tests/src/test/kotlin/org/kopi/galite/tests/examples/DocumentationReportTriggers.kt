@@ -18,14 +18,10 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.tests.db.connectToDatabase
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.visual.WindowController
 
@@ -50,10 +46,10 @@ class DocumentationReportTriggers : Form() {
 
     /** Calling reports **/
   // call report with  WindowController.windowController.doNotModal
-  val block2 = insertBlock(Block1())
+  val simpleBlock = insertBlock(SimpleBlock())
 
   //simple block
-  inner class Block1 : FormBlock(1, 10, "Block1") {
+  inner class SimpleBlock : Block(1, 10, "Simple Block") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
@@ -69,27 +65,6 @@ class DocumentationReportTriggers : Form() {
 }
 
 fun main() {
-  connectToDatabase()
-  transaction {
-    SchemaUtils.create(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TESTTABLE1ID"))
-    SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("TRIGGERSID"))
-    TestTable.insert {
-      it[id] = 1
-      it[name] = "Test-1"
-      it[age] = 40
-    }
-    TestTable.insert {
-      it[id] = 2
-      it[name] = "Test-1"
-      it[age] = 30
-    }
-    TestTable.insert {
-      it[id] = 3
-      it[name] = "TEST-2"
-      it[age] = 30
-    }
-  }
-
+  initReportDocumentationData()
   runForm(formName = DocumentationReportTriggers())
 }

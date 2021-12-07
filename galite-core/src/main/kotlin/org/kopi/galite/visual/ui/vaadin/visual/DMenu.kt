@@ -202,6 +202,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun modelClosed(type: Int) {}
+  override fun dispose() {}
   override fun setWaitDialog(message: String, maxtime: Int) {}
   override fun unsetWaitDialog() {}
   override fun setWaitInfo(message: String?) {

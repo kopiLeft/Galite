@@ -31,7 +31,7 @@ interface UMultiBlock : UBlock {
   /**
    * Switches view between list and detail mode.
    * @param row The selected record.
-   * @throws org.kopi.galite.visual.VException Switch operation may fail.
+   * @throws org.kopi.galite.visual.visual.VException Switch operation may fail.
    */
   fun switchView(row: Int)
 

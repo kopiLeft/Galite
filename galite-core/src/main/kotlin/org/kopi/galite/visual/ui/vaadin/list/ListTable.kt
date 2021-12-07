@@ -19,9 +19,10 @@ package org.kopi.galite.visual.ui.vaadin.list
 
 import org.kopi.galite.visual.form.VListDialog
 
-import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -31,14 +32,13 @@ import com.vaadin.flow.data.value.ValueChangeMode
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
-
-  val headerComponents = mutableListOf<Component>()
+  internal var widthStyler = Div()
 
   init {
     isColumnReorderingAllowed = true
-    isAllRowsVisible = true
     buildRows()
     buildColumns()
+    setTableWidth(model)
     installFilters(model)
   }
 
@@ -55,8 +55,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     for(col in 0 until model.getColumnCount()) {
       addColumn {
         formatObject(it[col], col)
-      }.setHeader(Span(model.getColumnName(col)).also { headerComponents.add(it) })
-              .setAutoWidth(true)
+      }.setHeader(Span(model.getColumnName(col)))
               .setKey(col.toString())
     }
   }
@@ -64,25 +63,28 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   /**
    * Install filters on all properties.
    */
-  fun installFilters(model: VListDialog?) {
+  fun installFilters(model: VListDialog) {
     val filterRow = appendHeaderRow()
 
     filterRow.also { element.classList.add("list-filter") }
-    this.columns.forEachIndexed { index, column ->
+    val filterFields = this.columns.mapIndexed { _, column ->
       val cell = filterRow.getCell(column)
-      val filter = TextField()
-      filter.setWidthFull()
+      val filterField = TextField()
       val search = Icon(VaadinIcon.SEARCH)
 
-      filter.suffixComponent = search
-      filter.className = "filter-text"
-      filter.addValueChangeListener {
-        (dataProvider as ListDataProvider).filter = ListFilter(index, filter.value, true, false)
+      filterField.setWidthFull()
+      filterField.suffixComponent = search
+      filterField.className = "filter-text"
+      filterField.addValueChangeListener {
+        (dataProvider as ListDataProvider).refreshAll()
       }
 
-      filter.valueChangeMode = ValueChangeMode.EAGER
-      cell.setComponent(filter)
+      filterField.valueChangeMode = ValueChangeMode.EAGER
+      cell.setComponent(filterField)
+      filterField
     }
+    (dataProvider as ListDataProvider).filter = ListFilter(filterFields, model, true, false)
+
     element.classList.add("filtered")
   }
 
@@ -91,8 +93,39 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
    * @param o The object to be formatted.
    * @return The formatted property object.
    */
-  protected fun formatObject(o: Any?, col: Int): String {
+  private fun formatObject(o: Any?, col: Int): String {
     return model.columns[col]!!.formatObject(o).toString()
+  }
+
+  /**
+   * Calculates the table width based on its content.
+   * @param model The data model.
+   */
+  internal fun setTableWidth(model: VListDialog) {
+    var width = 0
+    for (col in 0 until model.getColumnCount()) {
+      val columnWidth = getColumnWidth(model, col) + 36
+      getColumnByKey(col.toString()).width = columnWidth.toString()+ "px"
+      width += columnWidth
+    }
+    widthStyler.setWidth(width + 20f, Unit.PIXELS)
+    widthStyler.setMinWidth(width + 20f, Unit.PIXELS)
+  }
+
+  /**
+   * Calculates the column width based on the column rows content.
+   * @param model The list data model.
+   * @param col The column index.
+   * @return The estimated column width.
+   */
+  private fun getColumnWidth(model: VListDialog, col: Int): Int {
+    var width: Int
+    width = 0
+    for (row in 0 until model.count) {
+      val value = model.columns[col]!!.formatObject(model.getValueAt(row, col)).toString()
+      width = width.coerceAtLeast(value.length.coerceAtLeast(model.titles[col]!!.length))
+    }
+    return 8 * width
   }
 
   val selectedItem: List<Any?> get() = asSingleSelect().value

@@ -19,12 +19,17 @@ package org.kopi.galite.demo.database
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.bill.BillForm
@@ -34,10 +39,12 @@ import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
+import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.UserRights
 import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.db.databaseConfig
 import org.kopi.galite.visual.db.list_Of_Tables
 import org.kopi.galite.visual.db.sequencesList
 import org.kopi.galite.visual.type.Decimal
@@ -53,9 +60,14 @@ const val testPassword = "admin"
 fun connectToDatabase(url: String = testURL,
                       driver: String = testDriver,
                       user: String = testUser,
-                      password: String = testPassword
+                      password: String = testPassword,
+                      schema: String? = null
 ) {
-  Database.connect(url, driver = driver, user = user, password = password)
+  if (schema != null) {
+    Database.connect(url, driver = driver, user = user, password = password, databaseConfig = databaseConfig(Schema(schema)))
+  } else {
+    Database.connect(url, driver = driver, user = user, password = password)
+  }
 }
 
 /**
@@ -77,6 +89,7 @@ fun initDatabase() {
     addCmds()
     addBillPrdts()
     addBills()
+    addTasks()
   }
   initModules()
 }
@@ -88,6 +101,9 @@ fun createApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.create(table)
   }
+  listOfSequences.forEach {
+    SchemaUtils.createSequence(it)
+  }
 }
 
 /**
@@ -97,10 +113,16 @@ fun dropApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.drop(table)
   }
+  listOfSequences.forEach {
+    SchemaUtils.dropSequence(it)
+  }
 }
 
 val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
-                                            Bill, TaxRule, Command, BillProduct, Purchase)
+                                            Bill, TaxRule, Command, BillProduct, Purchase,
+                                            Task)
+
+val listOfSequences = listOf(TASKId)
 
 fun initModules() {
   transaction {
@@ -119,6 +141,8 @@ fun initModules() {
     insertIntoModule("6001", "org/kopi/galite/demo/Menu", 601, "6000", TaxRuleForm::class)
     insertIntoModule("7000", "org/kopi/galite/demo/Menu", 700)
     insertIntoModule("7001", "org/kopi/galite/demo/Menu", 701, "7000", ProviderForm::class)
+    insertIntoModule("8000", "org/kopi/galite/demo/Menu", 800)
+    insertIntoModule("8001", "org/kopi/galite/demo/Menu", 801, "8000", TasksForm::class)
   }
 }
 
@@ -240,10 +264,10 @@ fun addProducts() {
 }
 
 fun addSales() {
-  addSale(1, 0, 1)
-  addSale(1, 1, 1)
-  addSale(1, 2, 2)
-  addSale(1, 3, 3)
+  addSale(1, 0, 1, 1)
+  addSale(1, 1, 1, 2)
+  addSale(1, 2, 2, 6)
+  addSale(1, 3, 3, 3)
 }
 
 fun addProduct(id: Int, description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
@@ -258,8 +282,9 @@ fun addProduct(id: Int, description: String, category: Int, taxName: String, dep
   }
 }
 
-fun addSale(client: Int, product: Int, qty: Int) {
+fun addSale(client: Int, product: Int, qty: Int, i: Int) {
   Purchase.insert {
+    it[id] = i
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
@@ -315,6 +340,23 @@ fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref:
     it[dateBill] = date
     it[amountWithTaxes] = amount
     it[refCmd] = ref
+  }
+}
+
+fun addTasks() {
+  addTask(LocalDate.of(2021, 12, 1), LocalTime.of(10, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
+  addTask(LocalDate.of(2021, 12, 1), LocalTime.of(17, 0, 0), LocalTime.of(17, 30, 0), "Codage", "desc 2")
+  addTask(LocalDate.of(2021, 12, 4), LocalTime.of(16, 0, 0), LocalTime.of(17, 30, 0), "Validation", "desc 2")
+}
+
+fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: String, description2: String) {
+  Task.insert {
+    it[id] = TASKId.nextIntVal()
+    it[Task.date] = date
+    it[Task.from] = LocalDateTime.of(date, from).atZone(ZoneId.systemDefault()).toInstant()
+    it[Task.to] = LocalDateTime.of(date, to).atZone(ZoneId.systemDefault()).toInstant()
+    it[Task.description1] = description1
+    it[Task.description2] = description2
   }
 }
 

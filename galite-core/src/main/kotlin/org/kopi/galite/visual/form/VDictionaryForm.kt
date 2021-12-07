@@ -59,7 +59,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
   fun editWithID(parent: VWindow, id: Int): Int {
     dBContext = parent.dBContext
@@ -73,7 +73,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
   fun openForQuery(parent: VWindow): Int {
     dBContext = parent.dBContext
@@ -85,7 +85,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   /**
    * create a new record and returns id
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
   fun newRecord(parent: VWindow): Int {
     newRecord = true
@@ -170,7 +170,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   /**
    *
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
   override fun reset() {
     if (isRecursiveQuery) {

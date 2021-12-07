@@ -36,10 +36,6 @@
     width: 100%;
 }
 
-#resizerContainer {
-	overflow: hidden;
-}
-
 .k-popup-window~::part(dialog-content) {
 	overflow: hidden;
 }

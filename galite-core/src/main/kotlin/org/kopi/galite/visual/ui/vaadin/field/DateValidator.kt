@@ -95,7 +95,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
      * @param in
      * @return
      */
-    private fun stringToInt(`in`: String): Int =
+    internal fun stringToInt(`in`: String): Int =
             try {
               Integer.valueOf(`in`).toInt()
             } catch (e: Exception) {
@@ -109,7 +109,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
      * @param y The year
      * @return `true` if the given parameters corresponds to a valid date.
      */
-    private fun isDate(d: Int, m: Int, y: Int): Boolean {
+    internal fun isDate(d: Int, m: Int, y: Int): Boolean {
       return if (y < 1 || m < 1 || m > 12 || d < 1) {
         false
       } else {

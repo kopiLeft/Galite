@@ -31,12 +31,10 @@ import com.vaadin.flow.data.provider.InMemoryDataProvider
  * Data source container for grid block
  * TODO: Implement it, it shouldn't be abstract
  */
-abstract class DGridBlockContainer(
-        private val model: VBlock
-) : InMemoryDataProvider<DGridBlockContainer.GridBlockItem?>
-/*Sortable,
-Filterable,
-SimpleFilterable TODO */ {
+abstract class DGridBlockContainer(model: VBlock) : InMemoryDataProvider<DGridBlockContainer.GridBlockItem?>
+  /*Sortable,
+    Filterable,
+    SimpleFilterable TODO */ {
 
   private val propertyIds: MutableList<Int>
   protected val allItemIds: List<Int>

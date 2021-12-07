@@ -65,7 +65,8 @@ class MainWindowTests: GaliteVUITestBase() {
         "BILLS", "Bills form", "Bills products",
         "STOCKS", "Stocks",
         "TAX RULES", "Tax rules",
-        "PROVIDERS", "Providers form"
+        "PROVIDERS", "Providers form",
+        "TASKS", "Tasks form"
       ),
       clientsModules
     )
