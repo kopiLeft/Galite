@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FullCalendarBlock
+import org.kopi.galite.visual.dsl.form.FullCalendar
 import org.kopi.galite.visual.dsl.form.Key
 
 class TasksForm : Form() {
@@ -70,7 +70,7 @@ class TasksForm : Form() {
 
   val tasksBlock = insertBlock(Tasks())
 
-  inner class Tasks : FullCalendarBlock("Tasks") {
+  inner class Tasks : FullCalendar("Tasks") {
     val t = table(Task)
 
     val id = hidden(INT(20)) { columns(t.id) }
