@@ -38,7 +38,6 @@ import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
-import org.kopi.galite.visual.form.VConstants
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"

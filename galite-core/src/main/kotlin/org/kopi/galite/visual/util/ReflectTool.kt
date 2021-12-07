@@ -31,7 +31,7 @@ import org.kopi.galite.visual.dsl.form.FormField
 
 /**
  * Class of reflection tools. It contains methods which access
- * elements defined using Galite DSL like formBlocks' fields,
+ * elements defined using Galite DSL like blocks' fields,
  * indices, actors, etc.. inorder to get information about
  * these components like their names
  */

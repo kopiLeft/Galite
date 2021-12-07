@@ -35,7 +35,6 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.VException
 
@@ -49,45 +48,32 @@ import org.kopi.galite.visual.visual.VException
  * @param        ident                 the simple identifier of this block
  * @param        shortcut              the shortcut of this block
  * @param        title                 the title of the block
- * @param        border                the border of the block
- * @param        align                 the type of alignment in form
- * @param        help                  the help
- * @param        blockOptions          the block options
- * @param        tables                the tables accessed on the database
- * @param        indices               the indices for database
- * @param        access                the access mode
- * @param        commands              the commands associated with this block
- * @param        triggers              the triggers executed by this form
- * @param        fields                the objects that populate the block
  */
 open class FormBlock(var buffer: Int,
                      var visible: Int,
                      val title: String,
                      ident: String? = null)
   : FormElement(ident), VConstants {
-  var border: Border = Border.NONE
-  var align: FormBlockAlign? = null
-  open val help: String? = null
-  private var blockOptions: Int = 0
-  private var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  private var indices: MutableList<FormBlockIndex> = mutableListOf()
-  internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
-  private lateinit var commands: Array<Command?>
-  private val triggers = mutableListOf<Trigger>()
-  var dropListMap = HashMap<String, String>()
-  private var maxRowPos = 0
-  private var maxColumnPos = 0
-  private var displayedFields = 0
+
+  internal var options: Int = 0 // the block options
+  internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
+  internal val dropListMap = HashMap<String, String>()
+  internal var maxRowPos = 0
+  internal var maxColumnPos = 0
+  internal var displayedFields = 0
+
+  val fields = mutableListOf<FormField<*>>() // the block's fields.
+  val tables: MutableList<FormBlockTable> = mutableListOf() // the tables accessed on the database
+  val indices: MutableList<FormBlockIndex> = mutableListOf() // the indices for database
+  val triggers = mutableListOf<Trigger>() // the triggers executed by this form
+  val commands = mutableListOf<Command>() // the commands associated with this block
+  val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
+
+  var border: Border = Border.NONE // the border of the block
+  var align: FormBlockAlign? = null // the type of alignment in form
+  open val help: String? = null // the help
+
   lateinit var form: Form
-
-  /** Block's fields. */
-  val blockFields = mutableListOf<FormField<*>>()
-
-  /** Block's commands. */
-  private val blockCommands = mutableListOf<Command>()
-
-  /** Domains of fields added to this block. */
-  val ownDomains = mutableListOf<Domain<*>>()
 
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
@@ -140,7 +126,9 @@ open class FormBlock(var buffer: Int,
    */
   fun <T : Table> table(table: T): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
-    blockTables.add(formBlockTable)
+
+    tables.add(formBlockTable)
+
     return table
   }
 
@@ -157,10 +145,10 @@ open class FormBlock(var buffer: Int,
                                   position: FormPosition,
                                   init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
     initDomain(domain)
-    val field = MustFillFormField(this, domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
+    val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position)
     field.init()
     field.initialize(this)
-    blockFields.add(field)
+    fields.add(field)
     return field
   }
 
@@ -215,10 +203,10 @@ open class FormBlock(var buffer: Int,
                                    access: Int,
                                    position: FormPosition? = null): FormField<T?> {
     initDomain(domain)
-    val field = NullableFormField(this, domain, blockFields.size, access, position)
+    val field = NullableFormField(this, domain, fields.size, access, position)
     field.init()
     field.initialize(this)
-    blockFields.add(field)
+    fields.add(field)
     return field as FormField<T?>
   }
 
@@ -317,7 +305,7 @@ open class FormBlock(var buffer: Int,
   fun command(item: Actor, init: Command.() -> Unit): Command {
     val command = Command(item)
     command.init()
-    blockCommands.add(command)
+    commands.add(command)
     return command
   }
 
@@ -345,7 +333,7 @@ open class FormBlock(var buffer: Int,
    */
   fun options(vararg options: BlockOption) {
     options.forEach { blockOption ->
-      blockOptions = blockOptions or blockOption.value
+      this.options = this.options or blockOption.value
     }
   }
 
@@ -381,11 +369,11 @@ open class FormBlock(var buffer: Int,
   fun align(targetBlock: FormBlock, vararg positions: Pair<FormField<*>, FormField<*>>) {
     val targets = ArrayList<Int>()
 
-    blockFields.forEach { field ->
+    fields.forEach { field ->
       if(positions.toMap().contains(field)) {
         val targetField = positions.toMap()[field]
 
-        targets.add(targetBlock.blockFields.indexOf(targetField))
+        targets.add(targetBlock.fields.indexOf(targetField))
       }
     }
 
@@ -403,7 +391,7 @@ open class FormBlock(var buffer: Int,
     this.form = window as Form
     val bottomRight = Point(0, 0)
 
-    blockFields.forEach { field ->
+    fields.forEach { field ->
       if (field.position != null) {
         field.position!!.createRBPoint(bottomRight, field)
       }
@@ -429,7 +417,7 @@ open class FormBlock(var buffer: Int,
     pos!!.setChartPosition(++displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = blockOptions and option == option
+  fun hasOption(option: Int): Boolean = options and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
@@ -440,7 +428,7 @@ open class FormBlock(var buffer: Int,
    * Returns the form block table
    */
   fun getTable(table: Table): FormBlockTable {
-    return blockTables.find { it.table == table }
+    return tables.find { it.table == table }
             ?: throw Exception("The table ${table.tableName} is not defined in this block")
   }
 
@@ -449,7 +437,7 @@ open class FormBlock(var buffer: Int,
    *
    */
   fun getTableNum(table: FormBlockTable): Int {
-    val indexOfTable = blockTables.indexOf(table)
+    val indexOfTable = tables.indexOf(table)
     return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
   }
 
@@ -691,7 +679,7 @@ open class FormBlock(var buffer: Int,
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
+    (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, fields)
   }
 
   // ----------------------------------------------------------------------
@@ -703,108 +691,10 @@ open class FormBlock(var buffer: Int,
 
   /** Returns block model */
   open fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
-    val blockModel = BlockModel(vForm, source)
+    val blockModel = BlockModel(vForm, this, source)
 
     vBlock = blockModel
 
     return blockModel
-  }
-
-  inner class BlockModel(vForm: VForm, source: String? = null): VBlock(vForm) {
-
-    init {
-      initializeBlock(source)
-    }
-
-    override fun setInfo(form: VForm) {
-      blockFields.forEach {
-        it.setInfo(super.source, form)
-      }
-    }
-  }
-
-  fun VBlock.initializeBlock(source: String?) {
-    handleTriggers(this@FormBlock.triggers)
-    this.source = source ?: sourceFile
-    this.title = this@FormBlock.title
-    this.help = this@FormBlock.help
-    this.bufferSize = buffer
-    this.displaySize = visible
-    this.pageNumber = this@FormBlock.pageNumber
-    this.border = this@FormBlock.border.value
-    this.maxRowPos = this@FormBlock.maxRowPos
-    this.maxColumnPos = this@FormBlock.maxColumnPos
-    this.displayedFields = this@FormBlock.displayedFields
-    this.commands = blockCommands.map { command ->
-      command.buildModel(this, form.actors)
-    }.toTypedArray()
-    this.name = ident
-    this.options = blockOptions
-    this.access = this@FormBlock.access
-    this.tables = blockTables.map {
-      it.table
-    }.toTypedArray()
-    fields = blockFields.map { formField ->
-      formField.vField
-    }.toTypedArray()
-    this.indices = this@FormBlock.indices.map {
-      it.message
-    }.toTypedArray()
-    this.indicesIdents = this@FormBlock.indices.map {
-      it.ident
-    }.toTypedArray()
-    alignment = align?.getBlockAlignModel()
-  }
-
-  /**
-   * Handling triggers
-   */
-  fun VBlock.handleTriggers(triggers: MutableList<Trigger>) {
-    // BLOCK TRIGGERS
-    val blockTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-
-    triggers.forEach { trigger ->
-      for (i in VConstants.TRG_TYPES.indices) {
-        if (trigger.events shr i and 1 > 0) {
-          blockTriggerArray[i] = trigger
-        }
-      }
-      this.VKT_Triggers[0] = blockTriggerArray
-    }
-
-    // FIELD TRIGGERS
-    blockFields.forEach { field ->
-      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-
-      field.triggers.forEach { trigger ->
-        for (i in VConstants.TRG_TYPES.indices) {
-          if (trigger.events shr i and 1 > 0) {
-            fieldTriggerArray[i] = trigger
-          }
-        }
-      }
-      this.VKT_Triggers.add(fieldTriggerArray)
-    }
-
-    // COMMANDS TRIGGERS
-    blockCommands.forEach {
-      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-      // TODO : Add commands triggers here
-      this.VKT_Triggers.add(fieldTriggerArray)
-    }
-
-    // FIELDS COMMANDS TRIGGERS
-    val fieldsCommands = getFieldsCommands()
-    fieldsCommands.forEach {
-      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-      // TODO : Add field commands triggers here
-      this.VKT_Triggers.add(fieldTriggerArray)
-    }
-  }
-
-  fun getFieldsCommands(): List<Command> {
-    return blockFields.map {
-      it.commands
-    }.flatten()
   }
 }

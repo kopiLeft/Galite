@@ -66,22 +66,16 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
-  protected constructor(ctxt: DBContextHandler) : super(ctxt) {
-    initIntern(true)
-  }
+  protected constructor(ctxt: DBContextHandler) : super(ctxt)
 
-  protected constructor(ctxt: DBContext) : super(ctxt) {
-    initIntern(true)
-  }
+  protected constructor(ctxt: DBContext) : super(ctxt)
 
-  protected constructor() {
-    initIntern(false)
-  }
+  protected constructor()
 
   /**
    * loads the form
    */
-  private fun initIntern(enterField: Boolean) {
+  protected fun initIntern(enterField: Boolean) {
     init()
     if (!ApplicationContext.isGeneratingHelp()) {
       initialise()
