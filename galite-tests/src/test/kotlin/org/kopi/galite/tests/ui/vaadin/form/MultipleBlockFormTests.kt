@@ -18,28 +18,27 @@ package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
 
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.enter
+import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findBlock
+import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
-import org.junit.Assert.assertFalse
-import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.tests.examples.FormExample
+import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
-import org.kopi.galite.tests.examples.FormExample
-import org.kopi.galite.testing.expect
-import org.junit.Ignore
-import org.kopi.galite.testing.editRecord
 
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.vaadin.flow.component.grid.Grid
@@ -242,20 +241,19 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     assertEquals(1, block.editor.item.record)
   }
 
-  @Ignore
   @Test
   fun `test activate record in multi block`() {
     formExample.open()
 
     val salesBlockModel = formExample.salesBlock.findBlock()
 
-    assertEquals(-1, salesBlockModel.activeRecord)
+    assertEquals(-1, salesBlockModel.model.activeRecord)
 
     formExample.salesBlock.enter()
-    assertEquals(0, salesBlockModel.activeRecord)
+    assertEquals(0, salesBlockModel.model.activeRecord)
 
     formExample.salesBlock.editRecord(5, 20)
-    assertEquals(5, salesBlockModel.activeRecord)
+    assertEquals(5, salesBlockModel.model.activeRecord)
 
   }
 

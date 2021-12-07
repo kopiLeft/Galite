@@ -239,6 +239,9 @@ class FieldsTests : GaliteVUITestBase() {
 }
 
 class FormToTestFormPopUp: Form() {
+  override val locale = Locale.UK
+  override val title = "apperation of form in popup"
+
   val edit = menu("Edit")
   val autoFill = actor(
     ident = "Autofill",
@@ -246,8 +249,7 @@ class FormToTestFormPopUp: Form() {
     label = "Autofill",
     help = "Autofill",
   )
-  override val locale = Locale.UK
-  override val title = "form to test list domains"
+
   val userListBlock = insertBlock(UsersListBlock()) {
     val field = visit(domain = STRING(25), position = at(3, 1)) {
       label = "test"
