@@ -46,7 +46,7 @@ import org.kopi.galite.visual.type.Image
  * @param initialAccess        the initial access mode
  * @param position             the position within the block
  */
-open class FormField<T>(val block: FormBlock,
+open class FormField<T>(val block: Block,
                         domain: Domain<T>,
                         private val fieldIndex: Int,
                         initialAccess: Int,
@@ -301,7 +301,7 @@ open class FormField<T>(val block: FormBlock,
    *
    * @param block        the actual form block
    */
-  open fun initialize(block: FormBlock) {
+  open fun initialize(block: Block) {
     // TRANSIENT MODE
     if (columns == null && isNeverAccessible) {
       options = options or VConstants.FDO_TRANSIENT

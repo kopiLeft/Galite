@@ -23,7 +23,7 @@ import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -62,7 +62,7 @@ class ProviderForm : ReportSelectionForm() {
   }
 }
 
-class BlockProvider : FormBlock(1, 1, "Providers") {
+class BlockProvider : Block(1, 1, "Providers") {
   val u = table(Provider)
 
   val idProvider = hidden(domain = INT(20)) {

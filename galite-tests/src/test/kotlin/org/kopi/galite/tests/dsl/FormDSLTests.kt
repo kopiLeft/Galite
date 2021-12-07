@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
 
@@ -271,7 +271,7 @@ class FormWithOneSimpleBlock : Form() {
   val page = page("title")
   val block = page.insertBlock(SimpleBlock())
 
-  inner class SimpleBlock : FormBlock(1, 1, "SimpleBlock") {
+  inner class SimpleBlock : Block(1, 1, "SimpleBlock") {
     override val help = "Information about the block"
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
@@ -308,7 +308,7 @@ class FormWithMultipleBlock : Form() {
   val clientBlock = firstPage.insertBlock(ClientBlock())
   val commandsBlock = secondPage.insertBlock(CommandsBlock())
 
-  inner class ClientBlock : FormBlock(1, 1, "ClientBlock") {
+  inner class ClientBlock : Block(1, 1, "ClientBlock") {
     val u = table(User)
     override val help = "Information about the client"
     val idClt = mustFill(domain = INT(30), position = at(1, 1)) {
@@ -338,7 +338,7 @@ class FormWithMultipleBlock : Form() {
       trigger(PREBLK, INIT) {}
     }
   }
-  inner class CommandsBlock : FormBlock(10, 5, "CommandsBlock") {
+  inner class CommandsBlock : Block(10, 5, "CommandsBlock") {
     override val help = "Information about the commands"
     val idCmd = hidden(domain = INT(30)) {
       label = "ID"

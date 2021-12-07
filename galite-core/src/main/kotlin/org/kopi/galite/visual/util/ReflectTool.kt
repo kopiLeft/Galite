@@ -25,7 +25,7 @@ import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.FormBlockIndex
 import org.kopi.galite.visual.dsl.form.FormField
 
@@ -40,25 +40,25 @@ object ReflectTool {
   /**
    * A function that returns a blockField element
    *
-   * @param        formBlock                the formBlock to access
+   * @param        block                the form block to access
    * @param        index                    the index of the element requested
    *
    * @return       the blockField element of position index
    */
-  fun blockFieldAt(formBlock: FormBlock, index: Int): String {
-    return elementOfFormBlock(formBlock, FormField::class, index)
+  fun blockFieldAt(block: Block, index: Int): String {
+    return elementOfFormBlock(block, FormField::class, index)
   }
 
   /**
    * A function that returns a blockIndex element
    *
-   * @param        formBlock                the formBlock to access
+   * @param        block                the form block to access
    * @param        index                    the index of the element requested
    *
    * @return       the blockIndex element of position index
    */
-  fun blockIndexAt(formBlock: FormBlock, index: Int): String {
-    return elementOfFormBlock(formBlock, FormBlockIndex::class, index)
+  fun blockIndexAt(block: Block, index: Int): String {
+    return elementOfFormBlock(block, FormBlockIndex::class, index)
   }
 
   /**
@@ -88,27 +88,27 @@ object ReflectTool {
   /**
    * A function that returns a blockTable element
    *
-   * @param        formBlock                the formBlock to access
+   * @param        block                the form block to access
    * @param        index                    the index of the element requested
    *
    * @return       the blockTable element of position index
    */
-  fun blockTableAt(formBlock: FormBlock, index: Int): String {
-    return elementOfFormBlock(formBlock, Table::class, index)
+  fun blockTableAt(block: Block, index: Int): String {
+    return elementOfFormBlock(block, Table::class, index)
   }
 
   /**
    * A function that returns the element of a particular subclass
    *
-   * @param        formBlock                the formBlock to access
+   * @param        block                the form block to access
    * @param        kClass                   the type of the element requested
    * @param        index                    the index of the element requested
    *
    * @return       the element of position index
    *
    */
-  private fun elementOfFormBlock(formBlock: FormBlock, kClass: KClass<*>, index: Int): String {
-    val formBlockClass = formBlock::class
+  private fun elementOfFormBlock(block: Block, kClass: KClass<*>, index: Int): String {
+    val formBlockClass = block::class
     val list = formBlockClass.memberProperties.filter {
       it.returnType.jvmErasure.isSubclassOf(kClass)
     }.map { it.name }

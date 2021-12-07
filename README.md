@@ -134,7 +134,7 @@ class ClientForm : Form() {
   val block = clientsPage.insertBlock(Clients()) 
 }
 
-class Clients : FormBlock(1, 1, "Clients") {
+class Clients : Block(1, 1, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = LONG(10), position = at(1, 1..2)) {

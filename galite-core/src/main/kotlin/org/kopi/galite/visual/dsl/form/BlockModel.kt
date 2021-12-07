@@ -30,7 +30,7 @@ import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VDefaultActor
 
-class BlockModel(vForm: VForm, val block: FormBlock, source: String? = null): VBlock(vForm) {
+class BlockModel(vForm: VForm, val block: Block, source: String? = null): VBlock(vForm) {
 
   init {
     initializeBlock(block, source)
@@ -95,7 +95,7 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendarBlock, source:
   }
 }
 
-fun VBlock.initializeBlock(block: FormBlock, source: String?) {
+fun VBlock.initializeBlock(block: Block, source: String?) {
   handleTriggers(block)
   this.source = source ?: block.sourceFile
   title = block.title
@@ -132,7 +132,7 @@ fun VBlock.initializeBlock(block: FormBlock, source: String?) {
 /**
  * Handling triggers
  */
-fun VBlock.handleTriggers(block: FormBlock) {
+fun VBlock.handleTriggers(block: Block) {
   // BLOCK TRIGGERS
   val blockTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
 
@@ -175,7 +175,7 @@ fun VBlock.handleTriggers(block: FormBlock) {
   }
 }
 
-fun getFieldsCommands(block: FormBlock): List<Command> {
+fun getFieldsCommands(block: Block): List<Command> {
   return block.fields.map {
     it.commands
   }.flatten()

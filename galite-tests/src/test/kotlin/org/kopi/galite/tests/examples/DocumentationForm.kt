@@ -28,7 +28,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class DocumentationForm : DictionaryForm() {
@@ -163,7 +163,7 @@ class DocumentationForm : DictionaryForm() {
   val simpleBlock = p2.insertBlock(SimpleBlock())
 
   // simple block
-  inner class SimpleBlock : FormBlock(1, 10, "SimpleForm") {
+  inner class SimpleBlock : Block(1, 10, "SimpleForm") {
     init {
       border = Border.LINE
     }
@@ -174,7 +174,7 @@ class DocumentationForm : DictionaryForm() {
   }
 
   // form triggers
-  inner class TriggerForm : FormBlock(1, 10, "Block to test: from triggers") {
+  inner class TriggerForm : Block(1, 10, "Block to test: from triggers") {
 
     val initTriggerForm = visit(domain = STRING(20), position = at(1, 1)) {
       label = "INIT Trigger Form"

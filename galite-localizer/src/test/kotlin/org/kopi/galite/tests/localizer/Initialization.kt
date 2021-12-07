@@ -34,7 +34,7 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
@@ -150,7 +150,7 @@ class FormSample : Form() {
     println("post form trigger works")
   }
 
-  inner class TestBlock : FormBlock(1, 5, "Test block") {
+  inner class TestBlock : Block(1, 5, "Test block") {
     val u = table(User)
     val i = index(message = "ID should be unique")
 

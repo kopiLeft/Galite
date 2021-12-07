@@ -38,7 +38,7 @@ import org.kopi.galite.visual.visual.WindowController
 abstract class Form : Window() {
 
   /** Form's blocks. */
-  val blocks = mutableListOf<FormBlock>()
+  val blocks = mutableListOf<Block>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
@@ -58,8 +58,8 @@ abstract class Form : Window() {
           name: String,
           title: String,
           formPage: FormPage? = null,
-          init: FormBlock.() -> Unit
-  ): FormBlock = insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
+          init: Block.() -> Unit
+  ): Block = insertBlock(Block(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
@@ -72,8 +72,8 @@ abstract class Form : Window() {
     buffer: Int,
     visible: Int,
     title: String,
-    init: FormBlock.() -> Unit
-  ): FormBlock = insertBlock(FormBlock(buffer, visible, title, title), this, init)
+    init: Block.() -> Unit
+  ): Block = insertBlock(Block(buffer, visible, title, title), this, init)
 
   /**
    * Adds a new block to this form.
@@ -81,7 +81,7 @@ abstract class Form : Window() {
    * @param        block                 the block to insert
    * @receiver                           the page containing the block
    */
-  fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
+  fun <T : Block> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
     this.form.insertBlock(block, this, init)
 
   /**
@@ -90,7 +90,7 @@ abstract class Form : Window() {
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
-  private fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+  private fun <T : Block> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
     }
@@ -107,7 +107,7 @@ abstract class Form : Window() {
    *
    * @param        block                 the block to insert
    */
-  fun <T : FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
+  fun <T : Block> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
 
   /**
    * Adds triggers to this form

@@ -30,7 +30,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -152,7 +152,7 @@ class ClientForm : ReportSelectionForm() {
   val salesBlock = clientsPage.insertBlock(Sales())
 
 
-  inner class Clients : FormBlock(1, 100, "Clients") {
+  inner class Clients : Block(1, 100, "Clients") {
     val c = table(Client)
 
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
@@ -242,7 +242,7 @@ class ClientForm : ReportSelectionForm() {
     }
   }
 
-  inner class Sales : FormBlock(10, 10, "Sales") {
+  inner class Sales : Block(10, 10, "Sales") {
     val C = table(Client)
     val S = table(Purchase)
     val P = table(Product)

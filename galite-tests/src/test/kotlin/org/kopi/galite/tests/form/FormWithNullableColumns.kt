@@ -26,7 +26,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 object Clients : Table() {
@@ -356,7 +356,7 @@ object FormWithNullableColumn : DictionaryForm() {
   }
 }
 
-class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test") {
+class FormWithTwoTablesInnerJoin :  Block(1, 1, "Inner Join Two Tables Test") {
   val c = table(Clients)
   val o = table(Order)
 
@@ -377,7 +377,7 @@ class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test"
   }
 }
 
-class FormWithTwoTablesLeftJoin :  FormBlock(1, 1, "Left Join Two Tables Test") {
+class FormWithTwoTablesLeftJoin :  Block(1, 1, "Left Join Two Tables Test") {
   val c = table(Clients)
   val o = table(Order)
 
@@ -398,7 +398,7 @@ class FormWithTwoTablesLeftJoin :  FormBlock(1, 1, "Left Join Two Tables Test") 
   }
 }
 
-class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test") {
+class FormWithThreeTablesLeftJoin : Block(1, 1, "Left Join three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val p = table(Products)
@@ -436,7 +436,7 @@ class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test
   }
 }
 
-class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Test") {
+class FormWithThreeTablesInnerJoin : Block(1, 1, "Inner Join three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val p = table(Products)
@@ -474,7 +474,7 @@ class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Te
   }
 }
 
-class FormWithThreeTablesInnerJoinInField : FormBlock(1, 1, "Inner Join three Tables in Field Test") {
+class FormWithThreeTablesInnerJoinInField : Block(1, 1, "Inner Join three Tables in Field Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -514,7 +514,7 @@ class FormWithThreeTablesInnerJoinInField : FormBlock(1, 1, "Inner Join three Ta
   }
 }
 
-class FormWithThreeTablesLeftJoinInField : FormBlock(1, 1, "Left Join three Tables in Field Test") {
+class FormWithThreeTablesLeftJoinInField : Block(1, 1, "Left Join three Tables in Field Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -554,7 +554,7 @@ class FormWithThreeTablesLeftJoinInField : FormBlock(1, 1, "Left Join three Tabl
   }
 }
 
-class FormThreeTablesMiddleLeftJoinInField : FormBlock(1, 1, "Left Join in middle of field three Tables Test") {
+class FormThreeTablesMiddleLeftJoinInField : Block(1, 1, "Left Join in middle of field three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -594,7 +594,7 @@ class FormThreeTablesMiddleLeftJoinInField : FormBlock(1, 1, "Left Join in middl
   }
 }
 
-class FormThreeTablesEndLeftJoinInField : FormBlock(1, 1, "Left Join in the end of the field three Tables Test") {
+class FormThreeTablesEndLeftJoinInField : Block(1, 1, "Left Join in the end of the field three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -634,7 +634,7 @@ class FormThreeTablesEndLeftJoinInField : FormBlock(1, 1, "Left Join in the end 
   }
 }
 
-class FormFourTablesLeftInnerLeftJoin : FormBlock(1, 1, "Left then inner then left join Test") {
+class FormFourTablesLeftInnerLeftJoin : Block(1, 1, "Left then inner then left join Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -662,7 +662,7 @@ class FormFourTablesLeftInnerLeftJoin : FormBlock(1, 1, "Left then inner then le
   }
 }
 
-class FormFourTablesInnerLeftInnerJoin : FormBlock(1, 1, "Inner then left then inner join Test") {
+class FormFourTablesInnerLeftInnerJoin : Block(1, 1, "Inner then left then inner join Test") {
   val a = table(Adress)
   val o = table(Order)
   val c = table(Clients)
@@ -690,7 +690,7 @@ class FormFourTablesInnerLeftInnerJoin : FormBlock(1, 1, "Inner then left then i
   }
 }
 
-class FormTwoTablesInnerJoinNoJoin : FormBlock(1, 1, "Inner join then no-join Test") {
+class FormTwoTablesInnerJoinNoJoin : Block(1, 1, "Inner join then no-join Test") {
   val a = table(Adress)
   val o = table(Order)
 
@@ -702,7 +702,7 @@ class FormTwoTablesInnerJoinNoJoin : FormBlock(1, 1, "Inner join then no-join Te
   }
 }
 
-class FormTwoTablesNoJoinInnerJoin : FormBlock(1, 1, "No join then inner join Test") {
+class FormTwoTablesNoJoinInnerJoin : Block(1, 1, "No join then inner join Test") {
   val a = table(Adress)
   val o = table(Order)
 
@@ -714,7 +714,7 @@ class FormTwoTablesNoJoinInnerJoin : FormBlock(1, 1, "No join then inner join Te
   }
 }
 
-class FormTwoTablesLeftJoinNoJoin : FormBlock(1, 1, "Left join then no-join Test") {
+class FormTwoTablesLeftJoinNoJoin : Block(1, 1, "Left join then no-join Test") {
   val a = table(Adress)
   val o = table(Order)
 
@@ -726,7 +726,7 @@ class FormTwoTablesLeftJoinNoJoin : FormBlock(1, 1, "Left join then no-join Test
   }
 }
 
-class FormTwoTablesNoJoinLeftJoin : FormBlock(1, 1, "No join then left join Test") {
+class FormTwoTablesNoJoinLeftJoin : Block(1, 1, "No join then left join Test") {
   val a = table(Adress)
   val o = table(Order)
 

@@ -21,7 +21,7 @@ import kotlin.test.assertIs
 
 import org.junit.Test
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VDateField
@@ -41,7 +41,7 @@ class DomainTests {
 
     @Test
     fun buildFormFieldTest() {
-        val block = FormBlock(1, 1, "TestBlock", "Test")
+        val block = Block(1, 1, "TestBlock", "Test")
         val intDomain = Domain<Int>(10, 10, 10)
         val intFormField = FormField(block, intDomain, 0, 0)
 

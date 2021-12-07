@@ -36,7 +36,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
@@ -126,7 +126,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   val triggersFieldsBlock = insertBlock(TriggersFieldBlock())
   val lastBlock = insertBlock(LastBlock())
 
-  inner class FieldsTypesBlock : FormBlock(1, 10, "Block to test fields types") {
+  inner class FieldsTypesBlock : Block(1, 10, "Block to test fields types") {
     init {
       border = Border.LINE
     }
@@ -239,7 +239,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   }
 
   /*** Block to test fields Access and multiField ***/
-  inner class FieldsAccessBlock : FormBlock(1, 10, "Block to test fields Access and multiField") {
+  inner class FieldsAccessBlock : Block(1, 10, "Block to test fields Access and multiField") {
     init {
       border = Border.LINE
     }
@@ -274,7 +274,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   }
 
   /*** Block to test fields Alignment ***/
-  inner class FieldsAlignmentBlock : FormBlock(1, 10, "Block to test fields Alignment") {
+  inner class FieldsAlignmentBlock : Block(1, 10, "Block to test fields Alignment") {
     init {
       border = Border.LINE
     }
@@ -300,7 +300,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   }
 
   /*** Block to test fields Options ***/
-  inner class FieldsOptionsBlock : FormBlock(1, 10, "Block to test fields Options") {
+  inner class FieldsOptionsBlock : Block(1, 10, "Block to test fields Options") {
     init {
       border = Border.LINE
     }
@@ -342,7 +342,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
   }
 
-  inner class SortableMultiBlock : FormBlock(10, 10, "Block to test : SORTABLE field options") {
+  inner class SortableMultiBlock : Block(10, 10, "Block to test : SORTABLE field options") {
     init {
       border = Border.LINE
     }
@@ -358,7 +358,7 @@ class DocumentationFieldsForm : DictionaryForm() {
    * QUERY UPPER
    * QUERY LOWER
    */
-  inner class QueryBlock : FormBlock(1, 10, "Block to test QUERY UPPER and QUERY LOWER field options") {
+  inner class QueryBlock : Block(1, 10, "Block to test QUERY UPPER and QUERY LOWER field options") {
     init {
       border = Border.LINE
     }
@@ -392,7 +392,7 @@ class DocumentationFieldsForm : DictionaryForm() {
    *
    * commandField to test Field Commands
    * ***/
-  inner class ColumnsBlock : FormBlock(1, 10, "Block to test: columns, priority, index and command Field") {
+  inner class ColumnsBlock : Block(1, 10, "Block to test: columns, priority, index and command Field") {
     val t = table(TestTable)
 
     val i = index(message = "this should be unique")
@@ -446,7 +446,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   /*** BLOCK to test Inner join
    * add twoColumns column and list to test inner join
    * ***/
-  inner class InnerJoinBlock : FormBlock(1, 10, "Block to test: Inner join") {
+  inner class InnerJoinBlock : Block(1, 10, "Block to test: Inner join") {
     init {
       border = Border.LINE
 
@@ -468,7 +468,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   }
 
   /*** Field Triggers ***/
-  inner class TriggersFieldBlock : FormBlock(1, 10, "Block to test: Field Triggers") {
+  inner class TriggersFieldBlock : Block(1, 10, "Block to test: Field Triggers") {
     val t = table(TestTriggers)
 
     val id = hidden(domain = INT(20)) {
@@ -620,7 +620,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     }
   }
 
-  inner class LastBlock : FormBlock(1, 10, "LastBlock") {
+  inner class LastBlock : Block(1, 10, "LastBlock") {
     val postInsTriggerField = visit(domain = STRING(20), position = at(1, 1)) {
       label = "POSTINS Trigger Field"
     }

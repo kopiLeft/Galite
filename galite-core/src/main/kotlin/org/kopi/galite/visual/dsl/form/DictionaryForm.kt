@@ -76,7 +76,7 @@ abstract class DictionaryForm : Form() {
   /**
    * create a report for this form
    */
-  protected fun FormBlock.createDynamicReport() {
+  protected fun Block.createDynamicReport() {
     val field = this.vBlock.activeField
     field?.validate()
     VDynamicReport.createDynamicReport(this.vBlock)

@@ -49,10 +49,10 @@ import org.kopi.galite.visual.visual.VException
  * @param        shortcut              the shortcut of this block
  * @param        title                 the title of the block
  */
-open class FormBlock(var buffer: Int,
-                     var visible: Int,
-                     val title: String,
-                     ident: String? = null)
+open class Block(var buffer: Int,
+                 var visible: Int,
+                 val title: String,
+                 ident: String? = null)
   : FormElement(ident), VConstants {
 
   internal var options: Int = 0 // the block options
@@ -366,7 +366,7 @@ open class FormBlock(var buffer: Int,
    *    the one in the left is the source block form field
    *    the other one is for the target block form field
    */
-  fun align(targetBlock: FormBlock, vararg positions: Pair<FormField<*>, FormField<*>>) {
+  fun align(targetBlock: Block, vararg positions: Pair<FormField<*>, FormField<*>>) {
     val targets = ArrayList<Int>()
 
     fields.forEach { field ->

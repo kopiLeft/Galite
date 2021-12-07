@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -49,10 +49,10 @@ class DocumentationReport : ReportSelectionForm() {
     icon = "report"
   }
 
-  val block = insertBlock(Block())
+  val block = insertBlock(SimpleBlock())
 
   // simple block
-  inner class Block : FormBlock(1, 10, "Block1") {
+  inner class SimpleBlock : Block(1, 10, "Block1") {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }
@@ -60,7 +60,7 @@ class DocumentationReport : ReportSelectionForm() {
     init {
       command(item = report) {
         action = {
-          createReport(this@Block)
+          createReport(this@SimpleBlock)
         }
       }
     }

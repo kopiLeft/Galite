@@ -160,12 +160,12 @@ private fun VForm.buildBlocks(form: Form) {
   blocks = formBlocks
 }
 
-private fun VForm.buildBlock(formBlock: FormBlock): VBlock {
-  val vBlock = formBlock.getBlockModel(this, source)
+private fun VForm.buildBlock(block: Block): VBlock {
+  val vBlock = block.getBlockModel(this, source)
 
-  vBlock.setInfo(formBlock.pageNumber, this)
+  vBlock.setInfo(block.pageNumber, this)
   vBlock.initIntern()
-  formBlock.fields.forEach { formField ->
+  block.fields.forEach { formField ->
     formField.initialValues.forEach {
       formField.vField.setObject(it.key, it.value)
     }
