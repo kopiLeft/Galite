@@ -43,7 +43,6 @@ class BlockModel(vForm: VForm, val block: FormBlock, source: String? = null): VB
   }
 }
 
-
 class FullCalendarBlockModel(vForm: VForm, val block: FullCalendarBlock, source: String? = null): VFullCalendarBlock(vForm) {
 
   init {
