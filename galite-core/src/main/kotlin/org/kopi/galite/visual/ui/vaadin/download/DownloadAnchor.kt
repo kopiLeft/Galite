@@ -23,19 +23,17 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 
-import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.server.InputStreamFactory
 import com.vaadin.flow.server.StreamResource
 
 /**
- * A download button that allows a user to download a file produced in the server.
+ * An anchor component that allows to download a file produced in the server.
  *
  * @param file the file to download.
  * @param name the file name
  */
 open class DownloadAnchor(file: File, name: String): Anchor() {
-  protected val downloadButton = Button()
 
   init {
     val href = StreamResource(name, InputStreamFactory {
@@ -45,7 +43,6 @@ open class DownloadAnchor(file: File, name: String): Anchor() {
     element.setAttribute("download", true)
 
     setHref(href)
-    add(downloadButton)
   }
 
   private fun createFileInputStream(path: String): InputStream? {

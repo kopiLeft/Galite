@@ -31,19 +31,15 @@ import com.vaadin.flow.component.HasComponents
 class Downloader(file: File, name: String, val parent: HasComponents): DownloadAnchor(file, name) {
 
   init {
-    downloadButton.style["visibility"] = "hidden"
+    style["visibility"] = "hidden"
   }
 
   /**
    * Downloads the file attached to this downloader.
    */
   fun download() {
-    addAttachListener {
-      downloadButton.element.callJsFunction("click").then {
-        parent.remove(this)
-      }
-    }
-
     parent.add(this)
+
+    element.callJsFunction("click")
   }
 }

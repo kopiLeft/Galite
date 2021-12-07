@@ -21,6 +21,7 @@ import java.io.File
 
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 
+import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 
@@ -31,10 +32,12 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param name the file name
  */
 class DownloadButton(file: File, name: String, locale: String): DownloadAnchor(file, name) {
+  private val downloadButton = Button()
 
   init {
     downloadButton.text = LocalizedProperties.getString(locale, "downloadLabel")
     downloadButton.icon = Icon(VaadinIcon.DOWNLOAD_ALT)
     downloadButton.isDisableOnClick = true
+    add(downloadButton)
   }
 }
