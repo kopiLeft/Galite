@@ -22,24 +22,20 @@ import java.io.File
 import com.vaadin.flow.component.HasComponents
 
 /**
- * A download component that allows a user to download a file produced in the server.
+ * A helper class containing a download anchor component that allows a user to download a file produced in the server.
  *
  * @param file the file to download.
  * @param name the file name.
  * @param parent component that will trigger this download.
  */
-class Downloader(file: File, name: String, val parent: HasComponents): DownloadAnchor(file, name) {
-
-  init {
-    style["visibility"] = "hidden"
-  }
+class Downloader(file: File, name: String, val parent: HasComponents) {
+  private val anchor = DownloadAnchor(file, name)
 
   /**
    * Downloads the file attached to this downloader.
    */
   fun download() {
-    parent.add(this)
-
-    element.callJsFunction("click")
+    parent.add(anchor)
+    anchor.element.callJsFunction("click")
   }
 }
