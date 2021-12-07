@@ -2558,7 +2558,7 @@ TrigerAction : {KOTLIN code}</code></pre>
 <h4 id="_creating_form_blocks">Creating Form Blocks</h4>
 <div class="paragraph">
 <p>As you already know, a form is composed of blocks. A block is a set of data which are stocked in the database and shown on a form. A block is created in order to either view the content of a database, to insert new data in the database or to update existing data in the database.
-To create a block you need first to create a class that extend from FormBlock class here we can specify the buffer size, the rows number and the name of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.</p>
+To create a block you need first to create a class that extend from Block class here we can specify the buffer size, the rows number and the name of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.</p>
 </div>
 <div class="paragraph">
 <p><strong>Syntax</strong></p>
@@ -2566,7 +2566,7 @@ To create a block you need first to create a class that extend from FormBlock cl
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockDefinition :
-class Block: FormBlock(buffer: Int, rows: Int, blockName : String) {
+class Block: Block(buffer: Int, rows: Int, blockName : String) {
     BlockBody
 }
 
@@ -2596,7 +2596,7 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : FormBlock(1, 5, "Commands") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block(1, 5, "Commands") {
   ...
 }
 
@@ -2625,7 +2625,7 @@ val BlockCommand = page.insertBlock(BlockCommand()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : FormBlock(10, 5, "Commands") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block(10, 5, "Commands") {
   ...
 }
 
@@ -2643,14 +2643,14 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 <div class="sect4">
 <h5 id="_block_names">Block Names</h5>
 <div class="paragraph">
-<p>The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock class.</p>
+<p>The example bellow show how to create a block, you need to specify the block title as parameter in the Block class.</p>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : FormBlock(10, 5, "Degree Block")</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : Block(10, 5, "Degree Block")</code></pre>
 </div>
 </div>
 </div>
@@ -2680,7 +2680,7 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(10, 5, "Degree Block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(10, 5, "Degree Block") {
     init {
         border = Border.LINE
     }
@@ -2729,7 +2729,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(10, 5, "Degree Block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(10, 5, "Degree Block") {
     init {
           border = Border.LINE
           help = "test"
@@ -2771,7 +2771,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(10, 5, "Degree Block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(10, 5, "Degree Block") {
     init {
           options(BlockOption.NODETAIL)
           ...
@@ -2798,7 +2798,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class School : FormBlock(1, 1, "School") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class School : Block(1, 1, "School") {
   val L = table(Lessons)
   val P = table(Lecturers)
   val R = table(Rooms)
@@ -2829,7 +2829,7 @@ when bringing in changes in the principal table.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : FormBlock(1, 1, "Degree") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(1, 1, "Degree") {
   val unique = index(message = "This data already exists")
   ...
 }</code></pre>
@@ -3072,7 +3072,7 @@ In the last example, all the fields in the block will be either VISIT, SKIPPED o
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Degree : FormBlock(10, 5, "Degree block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Degree : Block(10, 5, "Degree block") {
 
   trigger(PREBLK, INIT) {
    Kotlin-Code

@@ -611,13 +611,13 @@ val password = mustFill(domain = STRING(20), position = at(2, 1)) {
 ==== Creating Form Blocks
 
 As you already know, a form is composed of blocks. A block is a set of data which are stocked in the database and shown on a form. A block is created in order to either view the content of a database, to insert new data in the database or to update existing data in the database.
-To create a block you need first to create a class that extend from FormBlock class here we can specify the buffer size, the rows number and the name of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.
+To create a block you need first to create a class that extend from Block class here we can specify the buffer size, the rows number and the name of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.
 
 *Syntax*
 [source,kotlin]
 ----
 BlockDefinition :
-class Block: FormBlock(buffer: Int, rows: Int, blockName : String) {
+class Block: Block(buffer: Int, rows: Int, blockName : String) {
     BlockBody
 }
   
@@ -638,7 +638,7 @@ A single block is a block in which only one single row of a database table is di
 *Example*
 [source,kotlin]
 ----
-class BlockCommand : FormBlock(1, 5, "Commands") {
+class BlockCommand : Block(1, 5, "Commands") {
   ...
 }
 
@@ -657,7 +657,7 @@ A multiple block is a block in which more than one row are displayed on the form
 *Example*
 [source,kotlin]
 ----
-class BlockCommand : FormBlock(10, 5, "Commands") {
+class BlockCommand : Block(10, 5, "Commands") {
   ...
 }
 
@@ -671,12 +671,12 @@ The first integer indicates the number of rows to be automatically memorized whi
  
 ===== Block Names
 
-The example bellow show how to create a block, you need to specify the block title as parameter in the FormBlock class.
+The example bellow show how to create a block, you need to specify the block title as parameter in the Block class.
 
 *Example*
 [source,kotlin] 
 ----
-class Degree : FormBlock(10, 5, "Degree Block")
+class Degree : Block(10, 5, "Degree Block")
 ----
 
 ===== Block Border
@@ -691,7 +691,7 @@ You can insert the optional border statement that defines the Block's frame type
 *Example*
 [source,kotlin]
 ----
-inner class Degree : FormBlock(10, 5, "Degree Block") {
+inner class Degree : Block(10, 5, "Degree Block") {
     init {
         border = Border.LINE
     }
@@ -732,7 +732,7 @@ This optional command is used to define the help text for each field of the bloc
  	
 [source,kotlin]
 ----
-inner class Degree : FormBlock(10, 5, "Degree Block") {
+inner class Degree : Block(10, 5, "Degree Block") {
     init {
           border = Border.LINE
           help = "test"
@@ -754,7 +754,7 @@ You need to use options function in your block to specify block options. you can
 
 [source,kotlin]
 ----
-inner class Degree : FormBlock(10, 5, "Degree Block") {
+inner class Degree : Block(10, 5, "Degree Block") {
     init {
           options(BlockOption.NODETAIL)
           ...
@@ -777,7 +777,7 @@ BlockTables:   table(vararg ExposedTables)
  	
 [source,kotlin]
 ----
-inner class School : FormBlock(1, 1, "School") {
+inner class School : Block(1, 1, "School") {
   val L = table(Lessons)
   val P = table(Lecturers)
   val R = table(Rooms)
@@ -803,7 +803,7 @@ BlockIndices:   "index("  message : String  ")" [BlockIndices]*
  	
 [source,kotlin]
 ----
-inner class Degree : FormBlock(1, 1, "Degree") {
+inner class Degree : Block(1, 1, "Degree") {
   val unique = index(message = "This data already exists")
   ...
 }
@@ -938,7 +938,7 @@ Here is a list of all available block triggers or block events in Galite.
 *Examples*
 [source,kotlin]
 ----
-object Degree : FormBlock(10, 5, "Degree block") {
+object Degree : Block(10, 5, "Degree block") {
 
   trigger(PREBLK, INIT) {
    Kotlin-Code
