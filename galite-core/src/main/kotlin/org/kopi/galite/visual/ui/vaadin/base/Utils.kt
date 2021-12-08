@@ -22,6 +22,9 @@ import java.util.concurrent.CompletableFuture
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.VColor
 
 import com.flowingcode.vaadin.addons.ironicons.AvIcons
@@ -268,6 +271,20 @@ object Utils : Utils() {
 
     while (parent != null && mainWindow == null) {
       if(parent is MainWindow) {
+        mainWindow = parent
+      }
+      parent = parent.parent.orElse(null)
+    }
+
+    return mainWindow
+  }
+
+  fun Window.findDialog(): PopupWindow? {
+    var mainWindow: PopupWindow? = null
+    var parent: Component? = parent.orElse(null)
+
+    while (parent != null && mainWindow == null) {
+      if(parent is PopupWindow) {
         mainWindow = parent
       }
       parent = parent.parent.orElse(null)

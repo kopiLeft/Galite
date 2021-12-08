@@ -18,7 +18,6 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
-import org.kopi.galite.visual.ui.vaadin.base.runAfterGetValue
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -40,11 +39,16 @@ class KeyNavigator(field: InputTextField<*>,
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun performAction() {
-    field.runAfterGetValue {
+  override fun performAction(eagerValue: String?) {
+    val oldValue = field.value
+
+    // first sends the text value to model if changed
+    if(oldValue != eagerValue) {
+      // Synchronize with server side
+      field.value = eagerValue
       field.fieldConnector.valueChanged()
-      internalPerformAction()
     }
+    internalPerformAction()
   }
 
   /**
@@ -62,22 +66,6 @@ class KeyNavigator(field: InputTextField<*>,
   }*/
 
   /**
-   * Checks if the dirty values should be sent before performing
-   * the accelerator action.
-   */
-  protected fun maybeSendDirtyValues() {
-    /*
-     * When the navigation is delegated to the server side,
-     * all pending values must be sent to server side to be sure
-     * that the client state and the server state are synchronized
-     * before executing any server trigger.
-     */
-    if (field.delegateNavigationToServer()) {
-      field.sendDirtyValuesToServerSide()
-    }
-  }
-
-  /**
    * Internally performs the navigation action.
    */
   protected fun internalPerformAction() {
@@ -90,9 +78,6 @@ class KeyNavigator(field: InputTextField<*>,
     }*/
     // check if suggestions should be cancelled.
     // maybeCancelSuggestionsQuery() TODO: Suggestion
-    // check if dirty values should be communicated
-    // to server side.
-    // maybeSendDirtyValues() FIXME We don't need this. TODO: Remove useless code
     // perform the navigation action.
     doNavigatorAction()
   }

@@ -21,13 +21,9 @@ import java.util.Locale
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.FieldAlignment
-import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport

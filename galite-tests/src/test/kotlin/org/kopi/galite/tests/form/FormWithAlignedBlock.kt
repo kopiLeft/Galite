@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
 class FormWithAlignedBlock : Form() {
   override val locale = Locale.UK
@@ -43,7 +43,7 @@ class FormWithAlignedBlock : Form() {
   }
 }
 
-class TestAlign : FormBlock(10, 8, "Test block") {
+class TestAlign : Block(10, 8, "Test block") {
 
   init {
     options(BlockOption.NODETAIL)

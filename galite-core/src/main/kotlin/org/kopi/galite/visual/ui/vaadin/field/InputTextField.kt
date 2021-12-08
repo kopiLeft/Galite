@@ -17,16 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.text.DecimalFormatSymbols
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
+import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
+import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.block.Block
-import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
+import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
@@ -57,39 +57,24 @@ import com.vaadin.flow.shared.Registration
 open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
-      HasAutocomplete, HasPrefixAndSuffix
+      HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
    * Returns the parent window of this text field.
    * @return The parent window of this text field.
    */
-  val parentWindow: Window?
-    get() = fieldConnector.getWindow()
-
+  val parentWindow: Window? get() = fieldConnector.getWindow()
   // used while checking if FF has set input prompt as value
   private var validationStrategy: TextValidator? = null
   private var periodPressed = false
   private var currentText: String? = null
   //private var oracle: SuggestOracle? = null
   //private var display: SuggestionDisplay? = null
-
-  // not really used.
-  private var limit = 20
-  /**
-   * Whether or not the first suggestion will be automatically selected.
-   * This behavior is on by default.
-   */
-  var isAutoSelectEnabled = true
+  override val keyNavigators: MutableMap<String, ShortcutAction<*>> = mutableMapOf()
   private var hasAutocomplete = false
-  private var valueBeforeEdit: String? = ""
   private var align: String? = null
   private var isCheckingValue = false
-  /**
-   * `true` if the state of this field is not synchronized with server side.
-   */
-  var isAlreadySynchronized = false
-  private var recordNumber = -1 // The record number corresponding to this text input
 
   init {
     className = Styles.TEXT_INPUT
@@ -101,24 +86,11 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     addFocusListener(::onFocus)
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
-    autocomplete = if (hasAutoComplete()) {
-      Autocomplete.ON
-    } else {
-      Autocomplete.OFF
-    }
-
     // Autoselection on focus
     element.setProperty("autoselect", true)
   }
 
   var focusedTextField: InputTextField<*>? = null
-
-  /**
-   * Returns the last focused text field.
-   * @return the last focused text field.
-   */
-  var lastFocusedTextField: InputTextField<*>? = null
-    private set
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -137,7 +109,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   private fun format(s: Any?): String? =
-    if(s is LocalDate) {
+    if (s is LocalDate) {
       s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     } else {
       s?.toString()
@@ -205,11 +177,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
 
       if (!validationStrategy!!.validate(value)) {
         value = before
-      } else {
-        // even if it is not really correct, we mark the field as dirty after
-        // a paste event.
-        fieldConnector.isChanged = true
-        fieldConnector.markAsDirty(record)
       }
     }
   }
@@ -222,8 +189,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   override fun setValue(text: String?) {
     var text = text
 
-    // set record to synchronize view and model even field is not focused
-    setRecord()
     // set only valid inputs
     if (validationStrategy is NoeditValidator
       || validationStrategy!!.validate(text)
@@ -231,13 +196,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       if (text == null) {
         text = "" // avoid NullPointerException
       }
-      if (text != value) {
-        fieldConnector.isChanged = true
-      }
       setPresentationValue(text)
-    }
-    if (text != null) {
-      valueBeforeEdit = text
     }
   }
 
@@ -357,101 +316,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   fun updateFieldContent(text: String?) {
     value = text
-    fieldConnector.unsetDirty()
-  }
-
-  /**
-   * Sets the record number from the display line
-   */
-  protected fun setRecord() {
-    val position = fieldConnector.position
-
-    recordNumber = fieldConnector.columnView!!.getRecordFromDisplayLine(position)
-  }
-
-  /**
-   * Returns the record number of this input widget.
-   * @return The record number of this input widget.
-   */
-  protected val record: Int
-    get() {
-      if (recordNumber == -1) {
-        // get the record from the display line when it is not set
-        setRecord()
-      }
-      return recordNumber
-    }
-
-  /**
-   * Called when the field value might have changed and/or the field was
-   * blurred. These are combined so the blur event is sent in the same batch
-   * as a possible value change event (these are often connected).
-   *
-   * @param blurred true if the field was blurred
-   */
-  fun valueChange(blurred: Boolean) {
-    // if field is not changed give up
-    // this can happen when the dirty values
-    // are sent before blurring this field
-    if (!fieldConnector.isChanged) {
-      return
-    }
-    val rec = record
-    // mark the field as dirty only when really changed
-    if (!value.equals(fieldConnector.getCachedValueAt(rec))) {
-      fieldConnector.markAsDirty(rec, value)
-    }
-    // field is left and a showing suggestions are
-    // displayed ==> restore the old value of the field
-    if (blurred) {
-      maybeRestoreOldValue()
-      if (fieldConnector.isDirty) {
-        maybeSynchronizeWithServerSide()
-      }
-    } else {
-      handleEnumerationFields(rec)
-      maybeCheckValue(rec)
-    }
-  }
-
-  /**
-   * Restores the old value of the field when it is needed.
-   * This can happen when the field is blurred and the suggestions
-   * popup is showing.
-   */
-  protected fun maybeRestoreOldValue() {
-    /*if (isShowingSuggestions) { TODO
-      setText(fieldConnector.columnView!!.getValueAt(fieldConnector.position))
-    }*/
-  }
-
-  /**
-   * When the field is blurred and the navigation of this
-   * field is delegated to server side, the state of this component
-   * should be synchronized with the server side to have all necessary
-   * triggers executed
-   */
-  protected fun maybeSynchronizeWithServerSide() {
-    if (delegateNavigationToServer()
-      && connector.needsSynchronization()
-      && !isAlreadySynchronized
-    ) {
-      sendDirtyValuesToServerSide()
-    }
-  }
-
-  /**
-   * Checks the value of this input field when it is needed.
-   * @param rec The record number of the field.
-   */
-  protected fun maybeCheckValue(rec: Int) {
-    if (!isCheckingValue && !delegateNavigationToServer()) {
-      try {
-        checkValue(rec)
-      } catch (e: CheckTypeException) {
-        e.displayError()
-      }
-    }
   }
 
   /**
@@ -463,29 +327,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     //  fieldConnector.markAsDirty(rec, value)
     //}
   }
-
-  /**
-   * Sends all dirty values to the server side.
-   * This will send all pending dirty values to be sure
-   * that all necessary values are sent to the server model.
-   * TODO
-   */
-  internal fun sendDirtyValuesToServerSide() {
-    val window = parentWindow
-    val block = connector.parent.get() as? Block
-
-    if (block != null) {
-      window!!.cleanDirtyValues(block)
-    }
-    // now the field is synchronized with server side.
-    isAlreadySynchronized = true
-  }
-
-  /**
-   * Should the navigation be delegated to server side ?
-   * @return `true` if the navigation is delegated to serevr side.
-   */
-  internal fun delegateNavigationToServer(): Boolean = fieldConnector.delegateNavigationToServer()
 
   /**
    * Returns `true` if word wrap is used.
@@ -532,47 +373,19 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       maybeReplaceDecimalSeparator()
       periodPressed = false
     }
-    // check if the field has really changed.
-    if (isChanged) {
-      fieldConnector.isChanged = true
-    }
-    valueBeforeEdit = value
-  }// look to the lower and upper convert type to detect if the field value has really changed
-
-  /**
-   * Returns `true` when the field context is changed.
-   * @return `true` when the field context is changed.
-   */
-  protected val isChanged: Boolean
-    get() = if (validationStrategy is StringValidator) {
-      val strategy = validationStrategy as StringValidator
-
-      // look to the lower and upper convert type to detect if the field value has really changed
-      when (strategy.getConvertType()) {
-        ConvertType.UPPER -> value?.toUpperCase() != valueBeforeEdit!!.toUpperCase()
-        ConvertType.LOWER -> value?.toLowerCase() != valueBeforeEdit!!.toLowerCase()
-        else -> !value.equals(valueBeforeEdit)
-      }
-    } else {
-      !value.equals(valueBeforeEdit)
-    }
+  }
 
   /**
    * Checks if the decimal separator must be changed.
    */
   protected fun maybeReplaceDecimalSeparator() {
     if (validationStrategy is DecimalValidator && value!!.contains(".")) {
-      val dfs: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale(MainWindow.locale)) // TODO
-      if (dfs.decimalSeparator != '.') {
+      val dfs = DecimalFormatSymbols.get(MainWindow.locale)
+
+      if (dfs!!.decimalSeparator != '.') {
         value = value?.replace('.', dfs.decimalSeparator)
       }
     }
-  }
-
-  fun onValueChange(event: HasValue.ValueChangeEvent<String?>?) {
-    // FIXME : this causes the block of the UI after suggestion selection
-    // delegateEvent(this, event);
-    valueChange(false)
   }
 
   fun onKeyDown(event: KeyDownEvent) {
@@ -635,15 +448,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
   }
 
-  /**
-   * Fires a goto next field event.
-   */
-  fun gotoNextBlockTextInput() {
-    // first send dirty values to server side.
-    sendDirtyValuesToServerSide()
-    fieldConnector.columnView!!.gotoNextField()
-  }
-
   protected open fun onLoad() {
     //super.onLoad() TODO
     //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
@@ -661,9 +465,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
     removeStyleDependentName("focus")
     focusedTextField = null
-    valueChange(true)
     lazyHideSuggestions()
-    recordNumber = -1 // set this field is not related to any record
   }
 
   open fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<C>>) {
@@ -672,19 +474,10 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       return
     }
     focusedTextField = this
-    setRecord()
-    fieldConnector.columnView!!.disableAllBlocksActors()
     addStyleDependentName("focus")
-    setLastFocusedInput()
     // cancel the fetch of suggestions list on field focus
     // when the field is not empty
     maybeCancelSuggestions()
-    fieldConnector.columnView!!.setAsActiveField(-1)
-    fieldConnector.isChanged = false
-    isAlreadySynchronized = false
-    valueBeforeEdit = value
-    // activate all actors related to this field.
-    fieldConnector.setActorsEnabled(true)
   }
 
   override fun onDetach(detachEvent: DetachEvent?) {
@@ -711,16 +504,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   //---------------------------------------------------
   // PRIVATE MEMBERS
   //---------------------------------------------------
-
-  /**
-   * Sets the last focused input field.
-   */
-  private fun setLastFocusedInput() {
-    if (parent != null) {
-      lastFocusedTextField = this
-      //parent.setLastFocusedTextBox(lastFocusedTextField)
-    }
-  }
 
   /**
    * Cancel suggestions query if needed.
@@ -751,9 +534,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     isCheckingValue = true //!!! don't check twice on field blur
     if (validationStrategy != null) {
       validationStrategy!!.checkType(this, if (value == null) "" else value!!.trim())
-      if (!value.equals(fieldConnector.getCachedValueAt(rec))) {
-        connector.markAsDirty(rec, value)
-      }
     }
     isCheckingValue = false
   }
@@ -840,7 +620,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Returns the parent field connector.
    * @return The parent field connector.
    */
-  internal val fieldConnector: Field
+  internal val fieldConnector: DField
     get() = connector.fieldParent
 
   /**
@@ -954,16 +734,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   /**
-   * Sets the limit to the number of suggestions the oracle should provide. It
-   * is up to the oracle to enforce this limit.
-   *
-   * @param limit the limit to the number of suggestions provided
-   */
-  fun setLimit(limit: Int) {
-    this.limit = limit
-  }
-
-  /**
    * Sets whether this widget is enabled.
    *
    * @param enabled `true` to enable the widget, `false` to disable it
@@ -983,7 +753,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     currentText = null
     //oracle = null
     //display = null
-    valueBeforeEdit = null
     align = null
     //callback = null
     //suggestionCallback = null
@@ -1008,6 +777,12 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   fun setHasAutocomplete(hasAutocomplete: Boolean) {
     this.hasAutocomplete = hasAutocomplete
+
+    autocomplete = if (hasAutoComplete()) {
+      Autocomplete.ON
+    } else {
+      Autocomplete.OFF
+    }
   }
 
   /**

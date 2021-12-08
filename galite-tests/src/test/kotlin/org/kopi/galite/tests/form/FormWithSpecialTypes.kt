@@ -32,7 +32,7 @@ import org.kopi.galite.visual.domain.MONTH
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.minValue
 import org.kopi.galite.visual.form.VConstants
@@ -98,7 +98,7 @@ object FormWithSpecialTypes : Form() {
   }
 }
 
-class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
+class BlockWithSpecialTypes : Block(1, 1, "Test block") {
   val p = table(Product)
   val i = index(message = "ID should be unique")
 

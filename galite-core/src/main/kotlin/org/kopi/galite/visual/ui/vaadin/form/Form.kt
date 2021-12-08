@@ -42,11 +42,6 @@ import com.vaadin.flow.component.tabs.Tabs
 class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
 
   /**
-   * The form locale.
-   */
-  var locale: String? = null
-
-  /**
    * The current position
    */
   var currentPosition = 0
@@ -56,19 +51,14 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   var totalPositions = 0
 
-  /**
-   * The blocks components data.
-   */
-  var blocksData: MutableMap<Component, BlockComponentData> = mutableMapOf()
-
   private var currentPage = -1
   private var pages: Array<Page<*>?> = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
+  private val tabs: MutableList<Tab> = mutableListOf()
   private var tabPanel: Tabs? = null
   private var listeners: MutableList<FormListener> = mutableListOf()
   private var lastSelected: Tab? = null
-  private var fireSelectionEvent = true
-  private var blockInfo: PositionPanel = PositionPanel()
+  private var blockInfo = PositionPanel()
 
   init {
     className = Styles.FORM
@@ -88,6 +78,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
       tabPanel!!.className = Styles.FORM_TAB_PANEL
       for (i in pages.indices) {
         val tab = createTabLabel(titles[i])
+        tabs.add(tab)
         tabsToPages[tab] = pages[i]!!
         tabPanel!!.add(tab)
         tab.isEnabled = false
@@ -130,9 +121,9 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   private fun selectPage(page: Int) {
     if(tabPanel != null) {
+      tabs[page].isEnabled = true
       tabPanel!!.selectedIndex = page
       lastSelected = tabPanel!!.selectedTab
-      lastSelected!!.isEnabled = true
     }
   }
 
@@ -141,9 +132,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param title The page title.
    * @return The page tab
    */
-  private fun createTabLabel(title: String): Tab = Tab(
-          if (title.endsWith("<CENTER>")) title.substring(0, title.length - 8) else title
-  )
+  private fun createTabLabel(title: String): Tab =
+          Tab(if (title.endsWith("<CENTER>")) title.substring(0, title.length - 8) else title)
 
   /**
    * Adds a block to this form.
@@ -153,8 +143,6 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param isChart Is it a chart block ?
    */
   fun addBlock(block: Block, page: Int, isFollow: Boolean, isChart: Boolean) {
-    blocksData[block] = BlockComponentData(isFollow, isChart, page)
-
     val hAlign = if (isChart) {
       JustifyContentMode.CENTER
     } else {
@@ -184,7 +172,10 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   fun gotoPage(i: Int) {
     currentPage = i
-    lastSelected?.let { tabsToPages[it]!!.isVisible = false }
+    lastSelected?.let {
+      tabsToPages[it]!!.isVisible = false
+      it.isSelected = false
+    }
     lastSelected?.removeClassName("selected-tab")
     pages[i]!!.isVisible = true
     selectPage(i)
@@ -273,7 +264,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param page The page index.
    */
   fun setEnabled(enabled: Boolean, page: Int) {
-    tabsToPages.keys.elementAtOrNull(page)?.isEnabled = enabled
+    tabs.getOrNull(page)?.isEnabled = enabled
   }
 
   /**
@@ -417,23 +408,5 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   fun setCurrentPosition(current: Int, total: Int) {
     setPosition(current, total)
-  }
-
-  /**
-   * Cleans the dirty values of this form.
-   */
-  fun cleanDirtyValues(active: Block?, transferFocus: Boolean = true) {
-    active?.cleanDirtyValues(active, transferFocus)
-  }
-
-  /**
-   * Disables all block actors
-   */
-  fun disableAllBlocksActors() {
-    for (child in children) {
-      if (child is Block) {
-        child.setColumnViewsActorsEnabled(false)
-      }
-    }
   }
 }

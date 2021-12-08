@@ -23,7 +23,7 @@ import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.database.Stock
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -63,7 +63,7 @@ class StockForm : ReportSelectionForm() {
   }
 }
 
-class StockBlock : FormBlock(1, 1, "Stock") {
+class StockBlock : Block(1, 1, "Stock") {
   val u = table(Stock)
   val v = table(Product)
   val w = table(Provider)

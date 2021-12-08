@@ -25,7 +25,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class MultipleBlockForm : DictionaryForm() {
@@ -173,7 +173,7 @@ class MultipleBlockForm : DictionaryForm() {
     }
   }
 
-  class Centers : FormBlock(20, 20, "Centers") {
+  class Centers : Block(20, 20, "Centers") {
     val c = table(Center)
     val t = table(Training)
 
@@ -229,7 +229,7 @@ class MultipleBlockForm : DictionaryForm() {
     }
   }
 
-  class SimpleBlock : FormBlock(1, 1, "Simple block") {
+  class SimpleBlock : Block(1, 1, "Simple block") {
     val contact = visit(domain = STRING(20), position = at(1, 1)) {
       label = "contact"
       help = "The contact"

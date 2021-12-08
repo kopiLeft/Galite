@@ -34,7 +34,7 @@ import org.kopi.galite.testing.enter
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
 class TriggersTests : GaliteVUITestBase() {
 
@@ -152,14 +152,14 @@ class FormToTestTriggers : DictionaryForm() {
     }
   }
 
-  inner class Clients : FormBlock(1, 1, "Clients") {
+  inner class Clients : Block(1, 1, "Clients") {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class SalesSimpleBlock : FormBlock(1, 1, "Sales") {
+  inner class SalesSimpleBlock : Block(1, 1, "Sales") {
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"

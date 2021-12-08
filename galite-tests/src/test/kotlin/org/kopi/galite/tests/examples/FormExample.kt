@@ -29,7 +29,7 @@ import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.domain.WEEK
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
 class FormExample : DictionaryForm() {
   override val locale = Locale.UK
@@ -50,14 +50,14 @@ class FormExample : DictionaryForm() {
   val salesBlock = clientsPage.insertBlock(Sales())
   val salesSimpleBlock = clientsPage.insertBlock(SalesSimpleBlock())
 
-  inner class Clients : FormBlock(1, 1, "Clients") {
+  inner class Clients : Block(1, 1, "Clients") {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class Sales : FormBlock(10, 10, "Sales") {
+  inner class Sales : Block(10, 10, "Sales") {
 
     val idClient = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
@@ -105,7 +105,7 @@ class FormExample : DictionaryForm() {
     }
   }
 
-  inner class SalesSimpleBlock : FormBlock(1, 1, "Sales") {
+  inner class SalesSimpleBlock : Block(1, 1, "Sales") {
 
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"

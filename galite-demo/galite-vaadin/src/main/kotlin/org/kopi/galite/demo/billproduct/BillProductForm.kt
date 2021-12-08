@@ -25,7 +25,7 @@ import org.kopi.galite.demo.desktop.runForm
 
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -57,7 +57,7 @@ class BillProductForm : ReportSelectionForm() {
   }
 }
 
-class BlockBillProduct : FormBlock(1, 1, "bill product") {
+class BlockBillProduct : Block(1, 1, "bill product") {
   val u = table(BillProduct)
   val v = table(Product)
   val w = table(Bill)

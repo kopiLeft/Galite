@@ -19,6 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -39,7 +40,7 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
    */
   internal fun createNavigatorKeys(field: InputTextField<*>) {
     addKeyNavigator(field, Key.ENTER, KeyModifier.of("Control")) {
-      field.fieldConnector.columnView!!.gotoNextEmptyMustfill()
+      field.fieldConnector.gotoNextEmptyMustfill()
     }
     addKeyNavigator(field, Key.ENTER, KeyModifier.of("Shift")) {
       field.connector.fireGotoNextBlock()
@@ -56,47 +57,47 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
       }.start()
     }
     addKeyNavigator(field, Key.PAGE_DOWN) {
-      field.fieldConnector.columnView!!.gotoNextRecord()
+      field.fieldConnector.gotoNextRecord()
     }
     addKeyNavigator(field, Key.PAGE_DOWN, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoNextRecord()
+      field.fieldConnector.gotoNextRecord()
     }
     addKeyNavigator(field, Key.HOME, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoFirstRecord()
+      field.fieldConnector.gotoFirstRecord()
     }
     addKeyNavigator(field, Key.END, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoLastRecord()
+      field.fieldConnector.gotoLastRecord()
     }
     addKeyNavigator(field, Key.PAGE_UP) {
-      field.fieldConnector.columnView!!.gotoPrevRecord()
+      field.fieldConnector.gotoPrevRecord()
     }
     addKeyNavigator(field, Key.PAGE_UP, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoPrevRecord()
+      field.fieldConnector.gotoPrevRecord()
     }
     addKeyNavigator(field, Key.ARROW_LEFT, KeyModifier.of("Control")) {
-      field.fieldConnector.columnView!!.gotoPrevField()
+      field.fieldConnector.gotoPrevField()
     }
     addKeyNavigator(field, Key.TAB, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoPrevField()
+      field.fieldConnector.gotoPrevField()
     }
     addKeyNavigator(field, Key.ARROW_UP, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoPrevField()
+      field.fieldConnector.gotoPrevField()
     }
     addKeyNavigator(field, Key.ARROW_RIGHT, KeyModifier.of("Control")) {
-      field.fieldConnector.columnView!!.gotoNextField()
+      field.fieldConnector.gotoNextField()
     }
     addKeyNavigator(field, Key.TAB) {
-      field.fieldConnector.columnView!!.gotoNextField()
+      field.fieldConnector.gotoNextField()
     }
     addKeyNavigator(field, Key.ARROW_DOWN, KeyModifier.of("Shift")) {
-      field.fieldConnector.columnView!!.gotoNextField()
+      field.fieldConnector.gotoNextField()
     }
     addKeyNavigator(field, Key.PRINT_SCREEN, KeyModifier.of("Shift")) {
       field.connector.firePrintForm()
     }
     // the magnet card reader sends a CTRL-J as last character
     addKeyNavigator(field, Key.KEY_J, KeyModifier.of("Control")) {
-      field.fieldConnector.columnView!!.gotoNextField()
+      field.fieldConnector.gotoNextField()
     }
     addKeyNavigator(field, Key.ARROW_DOWN, KeyModifier.of("Control")) {
       field.connector.fireNextEntry()
@@ -107,13 +108,13 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
     if (!isMulti) {
       // In multiline fields these keys are used for other stuff
       addKeyNavigator(field, Key.ARROW_UP) {
-        field.fieldConnector.columnView!!.gotoPrevField()
+        field.fieldConnector.gotoPrevField()
       }
       addKeyNavigator(field, Key.ARROW_DOWN) {
-        field.fieldConnector.columnView!!.gotoNextField()
+        field.fieldConnector.gotoNextField()
       }
       addKeyNavigator(field, Key.ENTER) {
-        field.fieldConnector.columnView!!.gotoNextField()
+        field.fieldConnector.gotoNextField()
       }
     }
   }
@@ -131,8 +132,10 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
     vararg modifiers: KeyModifier,
     navigationAction: () -> Unit,
   ) {
-    KeyNavigator(field, key, modifiers, navigationAction)
-      .registerShortcut()
+    val keyNavigator = KeyNavigator(field, key, modifiers, navigationAction)
+    val navigatorKey = keyNavigator.getKey()
+
+    field.keyNavigators[navigatorKey] = keyNavigator
   }
 
   companion object {
@@ -150,7 +153,9 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
       isMulti: Boolean
     ): TextFieldNavigationHandler {
       val handler = TextFieldNavigationHandler(isMulti)
+
       handler.createNavigatorKeys(field)
+      field.addJSKeyDownListener(field.keyNavigators)
       return handler
     }
   }

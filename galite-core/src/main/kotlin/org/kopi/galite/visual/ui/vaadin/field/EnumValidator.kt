@@ -72,7 +72,6 @@ class EnumValidator(private val enumerations: Array<String>?,
         -1 -> throw CheckTypeException(field, "00001")
         -2 -> {
           // show the suggestions list
-          Field.doNotLeaveActiveField = true
           // TextField.internalHandleQuery(text, true, true) TODO
         }
         else -> field.value = enumerations!![found]

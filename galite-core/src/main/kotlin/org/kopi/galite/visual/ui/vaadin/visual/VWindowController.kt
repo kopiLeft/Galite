@@ -17,15 +17,17 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
+import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VHelpViewer
 import org.kopi.galite.visual.visual.VMenuTree
@@ -44,7 +46,7 @@ class VWindowController : WindowController() {
   override fun doModal(model: VWindow): Boolean {
     return try {
       val viewStarter = ModalViewRunner(model)
-      startAndWait(model as Object) {
+      startAndWaitAndPush(model as Object) {
         viewStarter.run()
       }
       if (viewStarter.getView() == null) false else viewStarter.getView()!!.returnCode == VWindow.CDE_VALIDATE
@@ -74,6 +76,7 @@ class VWindowController : WindowController() {
           if (model is VPreviewWindow
             || model is VHelpViewer
             || model is VMenuTree
+            || model is VFullCalendarForm
           ) {
             showNotModalPopupWindow(view, model.getTitle())
           } else {
@@ -83,6 +86,32 @@ class VWindowController : WindowController() {
       } catch (e: VException) {
         throw VRuntimeException(e.message, e)
       }
+    }
+  }
+
+  override fun doNotModal(window: UWindow) {
+    try {
+      val view: DWindow = window as DWindow
+      val model: VWindow? = window.getModel()
+
+      view.run()
+
+      if (!view.isAttached && model != null) {
+        val application = getApplication()
+        if (application != null) {
+          if (model is VPreviewWindow
+            || model is VHelpViewer
+            || model is VMenuTree
+            || model is VFullCalendarForm
+          ) {
+            showNotModalPopupWindow(view, model.getTitle())
+          } else {
+            application.addWindow(view, model.getTitle())
+          }
+        }
+      }
+    } catch (e: VException) {
+      throw VRuntimeException(e.message, e)
     }
   }
 
@@ -103,10 +132,10 @@ class VWindowController : WindowController() {
           title: String,
   ) {
     val popup = PopupWindow(getApplication()?.mainWindow)
-    popup.isModal = false
-    popup.setContent(view)
-    popup.setCaption(title) // put popup title
     accessAndPush {
+      popup.isModal = false
+      popup.setContent(view)
+      popup.setCaption(title) // put popup title
       popup.open()
 
       // Focus on a field inside a popup is not working.

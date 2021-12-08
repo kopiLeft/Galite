@@ -34,7 +34,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
@@ -49,13 +49,12 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.title, model.getTitle())
   }
 
-
   @Test
   fun `test a simple form block`() {
     val form = FormWithOneSimpleBlock()
     val model = form.model
 
-    assertCollectionsEquals(form.formBlocks, mutableListOf(form.block))
+    assertCollectionsEquals(form.blocks, mutableListOf(form.block))
     assertEquals(1, model.blocks.size)
 
     val blockModel = model.blocks.single()
@@ -104,7 +103,7 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
 
-    assertCollectionsEquals(form.formBlocks, mutableListOf(form.clientBlock, form.commandsBlock))
+    assertCollectionsEquals(form.blocks, mutableListOf(form.clientBlock, form.commandsBlock))
     assertEquals(2, formModel.blocks.size)
 
     val clientBlock = formModel.blocks[0]
@@ -135,7 +134,7 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(null, commandsBlock.alignment)
   }
 
-  /* @Test
+  /* @Test TODO
    fun `test access fields values`() {
      val form = FormWithMultipleBlock()
      val formModel = form.model
@@ -167,11 +166,10 @@ class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test block indexes`() {
     val form = MultipleBlockForm()
-    val model = form.model
     val index = form.block2.indices[0]
 
-    assertEquals(index, form.block2.blockFields[0].columns?.index)
-    assertEquals(index, form.block2.blockFields[1].columns?.index)
+    assertEquals(index, form.block2.fields[0].columns?.index)
+    assertEquals(index, form.block2.fields[1].columns?.index)
   }
 
   @Test
@@ -309,7 +307,7 @@ class FormWithOneSimpleBlock : Form() {
   val page = page("title")
   val block = page.insertBlock(SimpleBlock())
 
-  inner class SimpleBlock : FormBlock(1, 1, "SimpleBlock") {
+  inner class SimpleBlock : Block(1, 1, "SimpleBlock") {
     override val help = "Information about the block"
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
@@ -346,7 +344,7 @@ class FormWithMultipleBlock : Form() {
   val clientBlock = firstPage.insertBlock(ClientBlock())
   val commandsBlock = secondPage.insertBlock(CommandsBlock())
 
-  inner class ClientBlock : FormBlock(1, 1, "ClientBlock") {
+  inner class ClientBlock : Block(1, 1, "ClientBlock") {
     val u = table(User)
     override val help = "Information about the client"
     val idClt = mustFill(domain = INT(30), position = at(1, 1)) {
@@ -378,7 +376,7 @@ class FormWithMultipleBlock : Form() {
     }
   }
 
-  inner class CommandsBlock : FormBlock(10, 5, "CommandsBlock") {
+  inner class CommandsBlock : Block(10, 5, "CommandsBlock") {
     override val help = "Information about the commands"
     val idCmd = hidden(domain = INT(30)) {
       label = "ID"

@@ -56,9 +56,7 @@ import com.vaadin.flow.data.provider.Query
 /**
  * Grid based chart block implementation.
  */
-open class DGridBlock(parent: DForm, model: VBlock)
-  : DBlock(parent, model)
-/* ColumnResizeListener, SortListener TODO*/ {
+open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   // --------------------------------------------------
   // DATA MEMBERS
@@ -108,12 +106,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
   var lastSortOrder: List<GridSortOrder<DGridBlockContainer.GridBlockItem>>? = null
   lateinit var editor: Editor<DGridBlockContainer.GridBlockItem>
   val isEditorInitialized get() = ::editor.isInitialized
-
-  override fun setSortedRecords(sortedRecords: IntArray) {
-    if (!model.noDetail() && !inDetailMode()) {
-      super.setSortedRecords(sortedRecords)
-    }
-  }
 
   // --------------------------------------------------
   // IMPLEMENTATIONS
@@ -382,11 +374,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
     }
   }
 
-
-  override fun blockChanged() {
-    refresh(true)
-  }
-
   override fun blockCleared() {
     contentChanged()
     clear()
@@ -431,12 +418,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun fireRecordInfoChanged(rec: Int, info: Int) {
     // no client side cache
-  }
-
-  override fun fireActiveRecordChanged(record: Int) {
-    if (!model.noDetail()) {
-      super.fireActiveRecordChanged(record)
-    }
   }
 
   override fun orderChanged() {
@@ -637,22 +618,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun getField(propertyId: Any): VField {
     return model.fields[propertyId as Int]
-  }
-
-  /**
-   * Returns the container data source of this block.
-   * @return The container data source of this block.
-   */
-  protected val containerDatasource: DGridBlockContainer
-    protected get() = TODO()
-
-  /**
-   * Creates the data source container.
-   * @return The data source container.
-   */
-  protected fun createContainerDataSource(): DGridBlockContainer {
-    //return DGridBlockContainer(model)
-    TODO()
   }
 
   /**

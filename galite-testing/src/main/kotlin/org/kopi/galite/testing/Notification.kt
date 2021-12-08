@@ -22,6 +22,7 @@ import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.ui.vaadin.common.VSpan
+import org.kopi.galite.visual.ui.vaadin.notif.InformationNotification
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._get
@@ -63,4 +64,24 @@ fun expectErrorNotification(message: String, close: Boolean = true) {
     button._click()
     waitAndRunUIQueue(100)
   }
+}
+
+/**
+ * Interacts with a [InformationNotification] dialog.
+ *
+ * call function to close information notification
+ */
+fun expectInformationNotification(message: String, close: Boolean = true) {
+  val notificationFooter = _get<InformationNotification>().footer
+  val informationMessage = _get<InformationNotification>()
+    ._get<HorizontalLayout> { classes = "k-notification-content"}
+    ._get<VSpan> { classes = "k-notification-message"  }
+
+  assertEquals(message, informationMessage.getHtml())
+
+  if(close) {
+    notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }._click()
+  }
+
+  waitAndRunUIQueue(100)
 }

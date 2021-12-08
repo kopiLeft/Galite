@@ -31,7 +31,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIME
 import org.kopi.galite.visual.domain.WEEK
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
 class SimpleForm : DictionaryForm() {
   override val locale = Locale.UK
@@ -47,7 +47,7 @@ class SimpleForm : DictionaryForm() {
   val block = insertBlock(TraineeshipWithAllFieldTypes())
 }
 
-class TraineeshipWithAllFieldTypes : FormBlock(1, 1, "Training") {
+class TraineeshipWithAllFieldTypes : Block(1, 1, "Training") {
   val t = table(Training)
 
   val trainingID = visit(domain = INT(25), position = at(1, 1)) {

@@ -28,8 +28,8 @@ import org.kopi.galite.visual.chart.VIntegerCodeMeasure
 import org.kopi.galite.visual.chart.VStringCodeDimension
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.form.VStringCodeField
 import org.kopi.galite.visual.report.VStringCodeColumn
@@ -127,7 +127,7 @@ class TestForm : Form() {
   override val title: String = "Test Form"
   val block = insertBlock(TestBlock())
 
-  inner class TestBlock : FormBlock(1, 1, "Test Block") {
+  inner class TestBlock : Block(1, 1, "Test Block") {
     val field1 = visit(StringType(), at(1, 1)) {
       label = "Initial field"
     }

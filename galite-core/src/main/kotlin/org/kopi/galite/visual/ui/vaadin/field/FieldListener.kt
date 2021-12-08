@@ -23,7 +23,7 @@ import java.io.Serializable
  * The field listener that notifies registered objects with
  * actions performed on a field.
  */
-interface FieldListener : Serializable {
+interface FieldListener {
 
   /**
    * Fired when increment button is clicked.

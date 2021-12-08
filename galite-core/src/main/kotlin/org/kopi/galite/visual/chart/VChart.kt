@@ -71,7 +71,7 @@ import com.lowagie.text.Rectangle
  * @param context The database context handler.
  * @throws VException Visual errors.
  */
-abstract class VChart constructor(context: DBContextHandler? = null) : VWindow(), CConstants, Printable {
+abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants, Printable {
 
   companion object {
     const val TYP_PDF = 1
@@ -126,9 +126,6 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     if (context != null) {
       dBContext = context.dBContext
     }
-    init()
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
   }
 
   // ----------------------------------------------------------------------

@@ -121,7 +121,7 @@ abstract class Window {
   /**
    * Returns the qualified source file name where this object is defined.
    */
-  protected val sourceFile: String
+  internal val sourceFile: String
     get() {
       val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
