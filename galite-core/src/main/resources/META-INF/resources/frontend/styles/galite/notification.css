@@ -67,6 +67,7 @@
 	font-style: normal !important;
 	font-size: 1.2em !important;
 	min-width: 128px;
+	cursor: pointer;
 }
 
 :host([theme~="notification"]) [part="header"] {

@@ -19,13 +19,10 @@ package org.kopi.galite.visual.ui.vaadin.notif
 
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 
-import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
@@ -35,6 +32,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param message the confirm notification message.
  * @param locale  the notification locale
  */
+@JsModule("./src/confirm-notification.js")
 class ConfirmNotification(title: String?,
                           message: String,
                           locale: String,
@@ -48,8 +46,11 @@ class ConfirmNotification(title: String?,
   private lateinit var cancel: Button
 
   init {
-    Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)
-    Shortcuts.addShortcutListener(this, this::onArrowLeftEvent, Key.ARROW_LEFT)
+    element.executeJs(
+      "addFocusListener($0, $1);",
+      cancel,
+      ok
+    )
   }
 
   //-------------------------------------------------
