@@ -29,8 +29,14 @@
 }
 
 :host([theme~="galite-combobox"]) [part="input-field"] {
+    border-radius: 0;
     border-bottom: #dadada 1px solid;
     max-height: 30px;
+    box-shadow: none;
+}
+
+:host([theme~="galite-combobox"]) [part="input-field"]:focus-within {
+	border-bottom: #009bd4 1px solid;
 }
 
 [part~='input-field']::after {
