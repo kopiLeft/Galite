@@ -57,11 +57,14 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   private val model: MReport = report.model // report model
   private lateinit var table: DTable
   private var parameters: Parameters? = null
+  private var columnsSelector: ColumnsSelector = ColumnsSelector()
 
   init {
     model.addReportListener(this)
     getModel()!!.setDisplay(this)
     setSizeFull()
+
+    add(columnsSelector)
   }
 
   //---------------------------------------------------
@@ -89,6 +92,8 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     setContent(table)
     resetWidth()
     addTableListeners()
+
+    columnsSelector.build(table)
   }
 
   override fun redisplay() {

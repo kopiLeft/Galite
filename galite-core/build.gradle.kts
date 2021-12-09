@@ -78,6 +78,9 @@ dependencies {
   implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
+  // Popup dependencies
+  implementation("com.vaadin.componentfactory", "popup", Versions.POPUP)
+
 }
 
 dependencyManagement {
