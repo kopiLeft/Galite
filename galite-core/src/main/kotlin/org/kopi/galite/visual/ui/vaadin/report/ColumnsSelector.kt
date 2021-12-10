@@ -50,12 +50,14 @@ class ColumnsSelector : Div() {
   }
 
   fun build(table: DTable) {
-    table.columnToHeaderMap.forEach { (column: Grid.Column<*>, _) ->
-      val checkbox = Checkbox(table.model.model.columns[column.key.toInt()]?.label)
+    content.removeAll()
+    table.viewColumns?.forEach {
+      val checkbox = Checkbox(table.model.model.columns[it]?.label)
+      val column = table.getColumnByKey(it.toString())
 
       checkbox.value = column.isVisible
       checkbox.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<Checkbox?, Boolean?> ->
-        column.setVisible(e.value!!)
+        column.isVisible = e.value!!
       }
       content.add(checkbox)
     }

@@ -59,7 +59,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   /**
    * The indexes of the columns in the grid view
    */
-  var viewColumns: List<Int>? = null
+  var viewColumns: List<Int>? = model.accessibleColumns.mapIndexed { index, _ ->  index }
 
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 

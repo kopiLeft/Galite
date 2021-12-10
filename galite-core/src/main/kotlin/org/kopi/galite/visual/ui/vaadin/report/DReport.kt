@@ -170,6 +170,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
         val page = UI.getCurrent().page
         page.executeJs("$0.\$server.recalculateColumnWidths()", element)
       }
+      columnsSelector.build(table)
     }
   }
 
