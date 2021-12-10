@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ColumnsSelector {
+.columns-selector {
     display: inline-block;
     position: absolute;
     right: 0 !important;
@@ -24,7 +24,7 @@
     margin-top: 3.5em;
 }
 
-#columnsSelectorButton {
+.columns-selector-button {
     float: right;
     background: none;
     height: 1.2em;
@@ -39,36 +39,21 @@
     color: #009bd4;
 }
 
-#columnsSelectorButton:hover {
+.columns-selector-button:hover {
     color: #547988;
 }
 
-:host([theme~="columnsSelectorPopup"]) {
-    top: 0px !important;
+.column-item-selector {
+    padding: 0;
 }
 
-#popupContent {
-    color: #8f8f8f;
+.column-item-selector:before {
+    display: none;
+}
+
+.checkbox-selector {
     width: 100%;
-    font-family: Arial, sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 12px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-}
-
-#popupContent > * {
-    width: 100%;
-    margin: 0;
-    padding-top: var(--lumo-space-m);
-}
-
-#popupContent > *:hover {
-    background: #d9f0f8;
-}
-
-#popupContent > *:not(:last-child) {
-    border-bottom: 1px solid #dadada;
+    height: 100%;
+    padding-right: var(--lumo-space-m);
+    padding-left: var(--lumo-space-m);
 }

@@ -59,7 +59,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   /**
    * The indexes of the columns in the grid view
    */
-  var viewColumns: List<Int>? = model.accessibleColumns.mapIndexed { index, _ ->  index }
+  var viewColumns: List<Int> = model.accessibleColumns.indices.map { it }
 
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 
@@ -109,16 +109,12 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   /**
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
    */
-  override fun convertColumnIndexToModel(viewColumnIndex: Int): Int {
-    return viewColumns?.get(viewColumnIndex) ?: viewColumnIndex
-  }
+  override fun convertColumnIndexToModel(viewColumnIndex: Int): Int = viewColumns[viewColumnIndex]
 
   /**
    * Maps the index of the column in the table model at [modelColumnIndex] to the index of the column in the grid.
    */
-  override fun convertColumnIndexToView(modelColumnIndex: Int): Int {
-    return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
-  }
+  override fun convertColumnIndexToView(modelColumnIndex: Int): Int = viewColumns.indexOf(modelColumnIndex)
 
   /**
    * Adds a new text column to this table with a column value provider and a key for the column.

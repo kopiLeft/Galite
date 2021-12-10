@@ -17,49 +17,46 @@
  */
 package org.kopi.galite.visual.ui.vaadin.report
 
-import com.vaadin.componentfactory.Popup
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.checkbox.Checkbox
+import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
-@CssImport.Container(value = [
-  CssImport(value = "./styles/galite/columnselector.css"),
-  CssImport(value = "./styles/galite/columnselector.css", themeFor = "vcf-popup-overlay")
-])
+@CssImport(value = "./styles/galite/columnselector.css")
 class ColumnsSelector : Div() {
-  private val popup = Popup()
-  private val content = VerticalLayout()
+  private val contextMenu = ContextMenu()
   private val button = Button()
 
   init {
     button.icon = Icon(VaadinIcon.ANGLE_DOUBLE_RIGHT)
-    popup.setFor("columnsSelectorButton")
-    setId("ColumnsSelector")
-    button.setId("columnsSelectorButton")
-    popup.element.themeList.add("columnsSelectorPopup")
-    content.setId("popupContent")
+    contextMenu.target = button
+    contextMenu.isOpenOnClick = true
+    className = "columns-selector"
+    button.className = "columns-selector-button"
 
-    popup.add(content)
-    add(button, popup)
+    add(button, contextMenu)
   }
 
   fun build(table: DTable) {
-    content.removeAll()
-    table.viewColumns?.forEach {
+    contextMenu.removeAll()
+
+    table.viewColumns.forEach {
       val checkbox = Checkbox(table.model.model.columns[it]?.label)
       val column = table.getColumnByKey(it.toString())
 
+      checkbox.className = "checkbox-selector"
       checkbox.value = column.isVisible
       checkbox.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<Checkbox?, Boolean?> ->
         column.isVisible = e.value!!
       }
-      content.add(checkbox)
+      val item = contextMenu.addItem(checkbox)
+
+      item.element.setAttribute("onClick", "event.stopPropagation()")
+      item.element.classList.add("column-item-selector")
     }
   }
 }

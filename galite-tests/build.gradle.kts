@@ -67,9 +67,6 @@ dependencies {
 
   // EnhancedDialog dependency
   testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
-
-  // Popup dependency
- testImplementation("com.vaadin.componentfactory", "popup", Versions.POPUP)
 }
 
 tasks {
