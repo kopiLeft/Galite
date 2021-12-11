@@ -27,7 +27,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 
-class ReportDSLTests: VApplicationTestBase() {
+class ReportDSLTests : VApplicationTestBase() {
 
   @Test
   fun `test generated model from a basic report`() {
@@ -70,14 +70,34 @@ class ReportDSLTests: VApplicationTestBase() {
     assertEquals(listOf(20, 20, 30), report.getRowsForField(report.ageClt))
   }
 
- /* @Test
-  fun `test report triggers`() {
+  @Test
+  fun `test report rows`() {
     val report = ReportWithData()
-    val reportModel = report.model
 
-    assertEquals(true, reportModel.hasTrigger(VConstants.TRG_INIT))
-    assertEquals(true, reportModel.hasTrigger(VConstants.TRG_PREBLK))
-  }*/
+    report.add {
+      this[report.id] = 1
+      this[report.firstName] = "client Test"
+      this[report.addressClt] = "Test"
+      this[report.ageClt] = 10
+    }
+    report.model.initReport()
+    val reportModel = report.model.model
+
+    assertEquals(5, reportModel.getVisibleRowCount())
+    assertEquals(1, reportModel.getRow(2)?.getValueAt(0))
+    assertEquals("client Test", reportModel.getRow(2)?.getValueAt(1))
+    assertEquals("Test", reportModel.getRow(2)?.getValueAt(2))
+    assertEquals(10, reportModel.getRow(2)?.getValueAt(3))
+  }
+
+  /* @Test
+   fun `test report triggers`() {
+     val report = ReportWithData()
+     val reportModel = report.model
+
+     assertEquals(true, reportModel.hasTrigger(VConstants.TRG_INIT))
+     assertEquals(true, reportModel.hasTrigger(VConstants.TRG_PREBLK))
+   }*/
 }
 
 class BasicReport : Report() {
