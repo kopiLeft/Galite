@@ -229,6 +229,20 @@ class FormDSLTests : VApplicationTestBase() {
   }
 
   @Test
+  fun `test form command`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+
+    assertEquals(1, formModel._getCommands().size)
+
+    assertEquals(form.resetForm.label, formModel._getCommands()[0].item)
+    assertEquals(form.resetForm.ident, formModel._getCommands()[0].actor!!.actorIdent)
+    assertEquals(form.resetForm.menu.label, formModel._getCommands()[0].actor!!.menuIdent)
+    assertEquals(form.resetForm.icon, formModel._getCommands()[0].actor!!.iconName)
+    assertEquals(form.resetForm.help, formModel._getCommands()[0].actor!!.help)
+  }
+
+  @Test
   fun `test form actors`() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
@@ -337,6 +351,12 @@ class FormWithMultipleBlock : Form() {
   ) {
     key = Key.F7
     icon = "break"
+  }
+
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
   }
 
   val firstPage = page("Client")

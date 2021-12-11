@@ -339,9 +339,14 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
   }
 
+  // Issue: https://github.com/vaadin/flow-components/issues/1520
+  val contextMenuList = mutableListOf<ContextMenu>()
+
   private fun addHeaderListeners(gridColumn: Grid.Column<*>, header: VerticalLayout) {
     val currentModel: MReport = model
     val labelPopupMenu = ContextMenu()
+
+    contextMenuList.add(labelPopupMenu)
 
     labelPopupMenu.target = header
 
