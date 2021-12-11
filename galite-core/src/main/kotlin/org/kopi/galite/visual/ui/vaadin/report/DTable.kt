@@ -59,7 +59,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   /**
    * The indexes of the columns in the grid view
    */
-  var viewColumns: List<Int> = model.accessibleColumns.indices.map { it }
+  var viewColumns = mutableListOf<Int>()
 
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 
@@ -126,13 +126,25 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     val provider = ColumnValueProvider(key, column)
 
-    return super.addColumn(provider).also {
+    viewColumns.add(key)
+
+    return addColumn(provider).also {
       provider.column = it
       it.setKey(key.toString())
         .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
         .setSortable(false)
     }
+  }
+
+  override fun removeColumnByKey(columnKey: String) {
+    viewColumns.remove(columnKey.toInt())
+    super.removeColumnByKey(columnKey)
+  }
+
+  override fun removeColumn(column: Column<DReport.ReportModelItem>) {
+    viewColumns.remove(column.key.toInt())
+    super.removeColumn(column)
   }
 
   /**

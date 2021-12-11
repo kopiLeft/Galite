@@ -119,9 +119,11 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun removeColumn(position: Int) {
+    val indexInView = table.convertColumnIndexToView(position)
+
     model.removeColumn(position)
     table.removeColumnByKey(position.toString())
-    model.initializeAfterRemovingColumn(table.convertColumnIndexToView(position))
+    model.initializeAfterRemovingColumn(indexInView)
 
     // set new order.
     val pos = IntArray(model.getAccessibleColumnCount())
@@ -169,8 +171,8 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
         table.model.fireContentChanged()
         val page = UI.getCurrent().page
         page.executeJs("$0.\$server.recalculateColumnWidths()", element)
+        columnsSelector.build(table)
       }
-      columnsSelector.build(table)
     }
   }
 
@@ -301,7 +303,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
     // Listener for column reorder
     table.addColumnReorderListener { event ->
-      table.viewColumns = event.columns.map { it.key.toInt() }
+      table.viewColumns = event.columns.map { it.key.toInt() }.toMutableList()
       val newColumnOrder = IntArray(model.getColumnCount())
       val visibleColumns = table.viewColumns
       var hiddenColumnsCount = 0
