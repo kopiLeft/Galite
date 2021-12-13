@@ -46,7 +46,7 @@ import org.kopi.galite.visual.visual.VExecFailedException
 
 abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
-  var fullCalendarForm: VFullCalendarForm = buildFullCalendarForm()
+  lateinit var fullCalendarForm: VFullCalendarForm
   var dateField: VDateField? = null
   var fromTimeField: VTimeField? = null
   var toTimeField: VTimeField? = null
@@ -57,8 +57,6 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
    * Returns true if this block can display more than one record.
    */
   override fun isMulti(): Boolean = true
-
-  abstract fun buildFullCalendarForm() : VFullCalendarForm
 
   override fun initIntern() { }
 

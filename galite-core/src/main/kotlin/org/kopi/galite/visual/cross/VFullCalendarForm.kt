@@ -37,11 +37,6 @@ abstract class VFullCalendarForm : VForm() {
   private var actorsDef = mutableListOf<VActor>()
   private var commandsDef = mutableListOf<VCommand>()
 
-  init {
-    initDefaultActors()
-    initDefaultCommands()
-  }
-
   companion object {
     const val QUIT_ICON = "quit"
     const val SAVE_ICON = "save"
@@ -53,7 +48,7 @@ abstract class VFullCalendarForm : VForm() {
   // ----------------------------------------------------------------------
   // Default Actors
   // ----------------------------------------------------------------------
-  private fun initDefaultActors() {
+  protected fun initDefaultActors() {
     createActor("File", "Quit", QUIT_ICON, KeyEvent.VK_ESCAPE, 0, VConstants.CMD_QUIT)
     createActor("File", "Save", SAVE_ICON, 0, 0, VConstants.CMD_SAVE, mode(VConstants.MOD_INSERT, VConstants.MOD_UPDATE))
     createActor("File", "Delete", DELETE_ICON, 0, 0, VConstants.CMD_DELETE, mode(VConstants.MOD_UPDATE))
@@ -106,7 +101,7 @@ abstract class VFullCalendarForm : VForm() {
   // ----------------------------------------------------------------------
   // Default Commands
   // ----------------------------------------------------------------------
-  private fun initDefaultCommands() {
+  protected fun initDefaultCommands() {
     super.commands = arrayOf()
     block.commands = block.commands?.plus(commandsDef.toTypedArray()) ?: commandsDef.toTypedArray()
 

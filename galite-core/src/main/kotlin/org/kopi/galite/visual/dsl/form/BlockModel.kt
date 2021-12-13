@@ -46,6 +46,7 @@ class BlockModel(vForm: VForm, val block: Block, source: String? = null): VBlock
 class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: String? = null): VFullCalendarBlock(vForm) {
 
   init {
+    fullCalendarForm = buildFullCalendarForm()
     initializeBlock(block, source)
     dateField = block.dateField?.vField as? VDateField
     fromTimeField = block.fromTimeField?.vField as? VTimeField
@@ -60,8 +61,14 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: Stri
     }
   }
 
-  override fun buildFullCalendarForm(): VFullCalendarForm {
+  private fun buildFullCalendarForm(): VFullCalendarForm {
     return object : VFullCalendarForm() {
+
+      init {
+        initIntern(false)
+        initDefaultActors()
+        initDefaultCommands()
+      }
 
       override val locale: Locale?
         get() = form.locale
