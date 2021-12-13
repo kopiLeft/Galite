@@ -33,8 +33,6 @@ import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
-import com.vaadin.flow.component.ClientCallable
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
@@ -169,17 +167,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
       accessAndPush(currentUI) {
         table.setItems(buildRows())
         table.model.fireContentChanged()
-        val page = UI.getCurrent().page
-        page.executeJs("$0.\$server.recalculateColumnWidths()", element)
         columnsSelector.build(table)
       }
     }
-  }
-
-  // Workaround to issue: https://vaadin.com/forum/thread/18059426/grid-recalculatecolumnwidths-doesn-t-recalculate-on-first-attempt
-  @ClientCallable
-  fun recalculateColumnWidths() {
-    table.recalculateColumnWidths()
   }
 
   override fun columnMoved(pos: IntArray) {
