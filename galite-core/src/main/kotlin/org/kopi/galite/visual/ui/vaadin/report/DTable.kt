@@ -190,7 +190,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
       width = width * 9 + 2
     }
 
-    columns[pos].width = "${width}px"
+    columns[pos].width = "${width + 12}px"
   }
 
   /**
