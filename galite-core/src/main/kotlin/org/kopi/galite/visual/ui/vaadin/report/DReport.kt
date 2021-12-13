@@ -278,11 +278,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
           } else {
             currentModel.foldingColumn(col)
           }
-        } else {
-          // BackgroundThreadHandler.access(Runnable { table.refreshRowCache() }) TODO
-          synchronized(table) {
-            report.setMenu()
-          }
         }
       } else if (event.button == 2) {
         if (row >= 0) {
