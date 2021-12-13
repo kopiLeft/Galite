@@ -16,14 +16,15 @@
  */
 package org.kopi.galite.tests.dsl
 
-import java.util.Locale
-import java.awt.event.KeyEvent
-
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.assertEquals
 
+import java.util.Locale
+import java.awt.event.KeyEvent
+
 import org.junit.Test
+import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.form.FormWithAlignedBlock
 import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
@@ -34,10 +35,11 @@ import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
 
-class FormDSLTests: VApplicationTestBase() {
+class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test generated model from a basic form`() {
     val form = BasicForm()
@@ -132,18 +134,18 @@ class FormDSLTests: VApplicationTestBase() {
     assertEquals(null, commandsBlock.alignment)
   }
 
- /* @Test
-  fun `test access fields values`() {
-    val form = FormWithMultipleBlock()
-    val formModel = form.model
-    val clientBlock = formModel.blocks[0]
-    val commandsBlock = formModel.blocks[1]
+  /* @Test TODO
+   fun `test access fields values`() {
+     val form = FormWithMultipleBlock()
+     val formModel = form.model
+     val clientBlock = formModel.blocks[0]
+     val commandsBlock = formModel.blocks[1]
 
-    assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0].access) // Mustfill field
-    assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1].access) // Visit field
-    assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0].access) // Hidden field
-    assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1].access) // Skipped field
-  }*/
+     assertEquals(form.clientBlock.idClt.access, clientBlock.fields[0].access) // Mustfill field
+     assertEquals(form.clientBlock.clientName.access, clientBlock.fields[1].access) // Visit field
+     assertEquals(form.commandsBlock.idCmd.access, commandsBlock.fields[0].access) // Hidden field
+     assertEquals(form.commandsBlock.cmdName.access, commandsBlock.fields[1].access) // Skipped field
+   }*/
 
   @Test
   fun `test block triggers`() {
@@ -162,12 +164,46 @@ class FormDSLTests: VApplicationTestBase() {
   }
 
   @Test
+  fun `test block indexes`() {
+    val form = MultipleBlockForm()
+    val index = form.block2.indices[0]
+
+    assertEquals(index, form.block2.fields[0].columns?.index)
+    assertEquals(index, form.block2.fields[1].columns?.index)
+  }
+
+  @Test
+  fun `test Form Coordinate Position`() {
+    val firstCoordinatePosition = FormCoordinatePosition(1, 2, 3, 4)
+    val secondCoordinatePosition = FormCoordinatePosition(5)
+    val thirdCoordinatePosition = FormCoordinatePosition(1, 2)
+    val fourthCoordinatePosition = FormCoordinatePosition(1, 2, 3, 4, 5)
+
+    // first coordinate position
+    assertEquals(-1, firstCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(3, firstCoordinatePosition.getPositionModel().column)
+    assertEquals(1, firstCoordinatePosition.getPositionModel().line)
+    // second coordinate position
+    assertEquals(5, secondCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(-1, secondCoordinatePosition.getPositionModel().column)
+    assertEquals(-1, secondCoordinatePosition.getPositionModel().line)
+    // third coordinate position
+    assertEquals(-1, thirdCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(2, thirdCoordinatePosition.getPositionModel().column)
+    assertEquals(1, thirdCoordinatePosition.getPositionModel().line)
+    // second coordinate position
+    assertEquals(5, fourthCoordinatePosition.getPositionModel().chartPos)
+    assertEquals(3, fourthCoordinatePosition.getPositionModel().column)
+    assertEquals(1, fourthCoordinatePosition.getPositionModel().line)
+  }
+
+  @Test
   fun `test field triggers`() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val idClientModel =  clientBlock.fields[0]
-    val nameClientModel =  clientBlock.fields[1]
+    val idClientModel = clientBlock.fields[0]
+    val nameClientModel = clientBlock.fields[1]
 
     assertTrue(nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
 
@@ -184,12 +220,26 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel =  clientBlock.fields[1]
+    val nameClientModel = clientBlock.fields[1]
 
     assertEquals(User.name.name, nameClientModel.getColumn(0)!!.name)
     assertEquals(User, nameClientModel.getColumn(0)!!.getTable())
     assertEquals(form.clientBlock.clientName.columns!!.priority, nameClientModel.getPriority())
     assertEquals(1, nameClientModel.getColumnCount())
+  }
+
+  @Test
+  fun `test form command`() {
+    val form = FormWithMultipleBlock()
+    val formModel = form.model
+
+    assertEquals(1, formModel._getCommands().size)
+
+    assertEquals(form.resetForm.label, formModel._getCommands()[0].item)
+    assertEquals(form.resetForm.ident, formModel._getCommands()[0].actor!!.actorIdent)
+    assertEquals(form.resetForm.menu.label, formModel._getCommands()[0].actor!!.menuIdent)
+    assertEquals(form.resetForm.icon, formModel._getCommands()[0].actor!!.iconName)
+    assertEquals(form.resetForm.help, formModel._getCommands()[0].actor!!.help)
   }
 
   @Test
@@ -222,7 +272,7 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val fileModel =  clientBlock.fields[2]
+    val fileModel = clientBlock.fields[2]
 
     assertEquals(1, fileModel.command!!.size)
 
@@ -238,8 +288,8 @@ class FormDSLTests: VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel =  clientBlock.fields[1]
-    val fileModel =  clientBlock.fields[2]
+    val nameClientModel = clientBlock.fields[1]
+    val fileModel = clientBlock.fields[2]
 
     assertEquals(FieldOption.QUERY_LOWER.value, nameClientModel.options)
     assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)
@@ -303,6 +353,12 @@ class FormWithMultipleBlock : Form() {
     icon = "break"
   }
 
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
+  }
+
   val firstPage = page("Client")
   val secondPage = page("Commands")
   val clientBlock = firstPage.insertBlock(ClientBlock())
@@ -334,10 +390,12 @@ class FormWithMultipleBlock : Form() {
         action = {}
       }
     }
+
     init {
       trigger(PREBLK, INIT) {}
     }
   }
+
   inner class CommandsBlock : Block(10, 5, "CommandsBlock") {
     override val help = "Information about the commands"
     val idCmd = hidden(domain = INT(30)) {

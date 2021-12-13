@@ -12,6 +12,7 @@
     <module ident="2004" label="Form to test saving data of multiple block" />
     <module ident="2005" label="Form to test operations on fields" />
     <module ident="2006" label="Form to test triggers" />
+    <module ident="2014" label="Form to test form appear in PopUp" />
     <module ident="2007" label="DOCUMENTATION FORMS" />
     <module ident="2008" label="Form to test form fields" />
     <module ident="2009" label="Form to test form blocks" />

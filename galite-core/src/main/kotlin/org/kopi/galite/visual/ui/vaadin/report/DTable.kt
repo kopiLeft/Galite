@@ -59,7 +59,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   /**
    * The indexes of the columns in the grid view
    */
-  var viewColumns: List<Int>? = null
+  var viewColumns = mutableListOf<Int>()
 
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 
@@ -109,16 +109,12 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   /**
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
    */
-  override fun convertColumnIndexToModel(viewColumnIndex: Int): Int {
-    return viewColumns?.get(viewColumnIndex) ?: viewColumnIndex
-  }
+  override fun convertColumnIndexToModel(viewColumnIndex: Int): Int = viewColumns[viewColumnIndex]
 
   /**
    * Maps the index of the column in the table model at [modelColumnIndex] to the index of the column in the grid.
    */
-  override fun convertColumnIndexToView(modelColumnIndex: Int): Int {
-    return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
-  }
+  override fun convertColumnIndexToView(modelColumnIndex: Int): Int = viewColumns.indexOf(modelColumnIndex)
 
   /**
    * Adds a new text column to this table with a column value provider and a key for the column.
@@ -130,13 +126,25 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     val provider = ColumnValueProvider(key, column)
 
-    return super.addColumn(provider).also {
+    viewColumns.add(key)
+
+    return addColumn(provider).also {
       provider.column = it
       it.setKey(key.toString())
         .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
         .setSortable(false)
     }
+  }
+
+  override fun removeColumnByKey(columnKey: String) {
+    viewColumns.remove(columnKey.toInt())
+    super.removeColumnByKey(columnKey)
+  }
+
+  override fun removeColumn(column: Column<DReport.ReportModelItem>) {
+    viewColumns.remove(column.key.toInt())
+    super.removeColumn(column)
   }
 
   /**

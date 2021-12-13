@@ -57,11 +57,14 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   private val model: MReport = report.model // report model
   private lateinit var table: DTable
   private var parameters: Parameters? = null
+  private var columnsSelector: ColumnsSelector = ColumnsSelector()
 
   init {
     model.addReportListener(this)
     getModel()!!.setDisplay(this)
     setSizeFull()
+
+    add(columnsSelector)
   }
 
   //---------------------------------------------------
@@ -89,6 +92,8 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     setContent(table)
     resetWidth()
     addTableListeners()
+
+    columnsSelector.build(table)
   }
 
   override fun redisplay() {
@@ -114,9 +119,11 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun removeColumn(position: Int) {
+    val indexInView = table.convertColumnIndexToView(position)
+
     model.removeColumn(position)
     table.removeColumnByKey(position.toString())
-    model.initializeAfterRemovingColumn(table.convertColumnIndexToView(position))
+    model.initializeAfterRemovingColumn(indexInView)
 
     // set new order.
     val pos = IntArray(model.getAccessibleColumnCount())
@@ -164,6 +171,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
         table.model.fireContentChanged()
         val page = UI.getCurrent().page
         page.executeJs("$0.\$server.recalculateColumnWidths()", element)
+        columnsSelector.build(table)
       }
     }
   }
@@ -295,7 +303,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
     // Listener for column reorder
     table.addColumnReorderListener { event ->
-      table.viewColumns = event.columns.map { it.key.toInt() }
+      table.viewColumns = event.columns.map { it.key.toInt() }.toMutableList()
       val newColumnOrder = IntArray(model.getColumnCount())
       val visibleColumns = table.viewColumns
       var hiddenColumnsCount = 0
@@ -333,9 +341,14 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
   }
 
+  // Issue: https://github.com/vaadin/flow-components/issues/1520
+  val contextMenuList = mutableListOf<ContextMenu>()
+
   private fun addHeaderListeners(gridColumn: Grid.Column<*>, header: VerticalLayout) {
     val currentModel: MReport = model
     val labelPopupMenu = ContextMenu()
+
+    contextMenuList.add(labelPopupMenu)
 
     labelPopupMenu.target = header
 
