@@ -40,7 +40,7 @@
     --lumo-primary-color : #009bd4;
 }
 
-::part(checkbox) {
+.true::part(checkbox), .false::part(checkbox) {
     width: 1em;
     height: 1em;
     border-radius: 50%;
@@ -53,12 +53,12 @@
     margin-left: 0;
 }
 
-::part(checkbox)::after {
+.true::part(checkbox)::after, .false::part(checkbox)::after {
     border-width: 0.3em 0 0 0.3em;
     transform-origin: -1px -0.5px
 }
 
-:not(.true)::part(checkbox)::after {
+.false::part(checkbox)::after {
     opacity: none;
     transform: none;
     font-size: 13px;

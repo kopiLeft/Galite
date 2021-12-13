@@ -45,6 +45,7 @@
 
 .column-item-selector {
     padding: 0;
+    box-shadow: none;
 }
 
 .column-item-selector:before {

@@ -33,7 +33,7 @@ vaadin-grid > vaadin-grid-cell-content {
     padding: var(--lumo-size-xxs);
 }
 
-#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
+#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
     --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
@@ -52,4 +52,14 @@ vaadin-grid > vaadin-grid-cell-content {
 
 vaadin-grid.report > vaadin-grid-cell-content {
     cursor: pointer;
+}
+
+vaadin-grid.report > vaadin-grid-cell-content vaadin-vertical-layout {
+    align-items: center !important;
+}
+
+.report::part(cell) {
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #8f8f8f;
+    border-top: none;
 }
