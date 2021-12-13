@@ -39,7 +39,11 @@ import com.vaadin.flow.function.ValueProvider
  *
  * @param model The table model.
  */
-@CssImport("./styles/galite/report.css")
+
+@CssImport.Container(value = [
+  CssImport("./styles/galite/report.css"),
+  CssImport(value = "./styles/galite/report.css", themeFor = "vaadin-grid")
+])
 class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
 
   //---------------------------------------------------
@@ -69,6 +73,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
     setItems(model)
     buildColumns()
     addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_COLUMN_BORDERS)
+    themeNames.add("report")
     classNames.add("small")
     classNames.add("borderless")
     classNames.add("report")
