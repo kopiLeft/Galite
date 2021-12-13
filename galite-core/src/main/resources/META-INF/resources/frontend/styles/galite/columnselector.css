@@ -21,14 +21,12 @@
     position: absolute;
     right: 0 !important;
     z-index: 1;
-    margin-top: 3.5em;
+    margin-top: 3.8em;
 }
 
 .columns-selector-button {
     float: right;
     background: none;
-    height: 1.2em;
-    width: 18px;
     position: relative;
     cursor: pointer;
     font: normal normal normal 14px/1 FontAwesome !important;

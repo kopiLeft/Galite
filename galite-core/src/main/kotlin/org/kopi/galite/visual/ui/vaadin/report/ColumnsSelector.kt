@@ -29,16 +29,16 @@ import com.vaadin.flow.component.icon.VaadinIcon
 @CssImport(value = "./styles/galite/columnselector.css")
 class ColumnsSelector : Div() {
   private val contextMenu = ContextMenu()
-  private val button = Button()
+  private val icon: Icon = Icon(VaadinIcon.ANGLE_DOUBLE_RIGHT)
 
   init {
-    button.icon = Icon(VaadinIcon.ANGLE_DOUBLE_RIGHT)
-    contextMenu.target = button
+    contextMenu.target = icon
     contextMenu.isOpenOnClick = true
     className = "columns-selector"
-    button.className = "columns-selector-button"
+    icon.className = "columns-selector-button"
+    icon.setSize("1em")
 
-    add(button, contextMenu)
+    add(icon, contextMenu)
   }
 
   fun build(table: DTable) {
