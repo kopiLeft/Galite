@@ -115,7 +115,7 @@ abstract class VFullCalendarForm : VForm() {
    * close the form
    */
   override fun close(code: Int) {
-    if (block.isCurrentRecordFetched()) {
+    if (code == CDE_HIDE) {
       fullCalendarBlock.refreshEntries()
     }
 
