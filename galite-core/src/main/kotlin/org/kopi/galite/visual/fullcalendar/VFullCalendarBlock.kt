@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.fullcalendar
 
 import java.sql.SQLException
+import java.util.Calendar
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SortOrder
@@ -176,20 +177,24 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
     val query = if(dateField != null) {
       val dateColumn = dateField!!.getColumn(0)!!.column
-      val startDate = week.getDate(1).toSql()
-      val endDate = week.getDate(7).toSql()
+      val startDate = week.getFirstDay().toSql()
+      val lastDay =  week.getLastDay().toCalendar()
+      lastDay.add(Calendar.DAY_OF_MONTH, 1)
+      val endDate = Date(lastDay).toSql()
 
       tables!!.slice(columns)
-        .select { (dateColumn greaterEq startDate) and (dateColumn lessEq  endDate) }
+        .select { (dateColumn greaterEq startDate) and (dateColumn less endDate) }
         .orderBy(*orderBys.toTypedArray())
     } else {
       val fromColumn = fromField!!.getColumn(0)!!.column
       val toColumn = toField!!.getColumn(0)!!.column
-      val startDate = Timestamp(week.getDate(1).toCalendar()).toSql()
-      val endDate = Timestamp(week.getDate(7).toCalendar()).toSql()
+      val firstDayOfWeek = week.getFirstDay().toCalendar().toInstant()
+      val lastDay =  week.getLastDay().toCalendar()
+      lastDay.add(Calendar.DAY_OF_MONTH, 1)
+      val firstDayOfNextWeek = lastDay.toInstant()
 
       tables!!.slice(columns)
-        .select { (fromColumn greaterEq startDate) and (toColumn lessEq  endDate)  }
+        .select { (fromColumn greaterEq firstDayOfWeek) and (toColumn less firstDayOfNextWeek)  }
         .orderBy(*orderBys.toTypedArray())
     }
 
