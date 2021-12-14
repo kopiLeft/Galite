@@ -48,6 +48,7 @@ import org.kopi.galite.visual.db.databaseConfig
 import org.kopi.galite.visual.db.list_Of_Tables
 import org.kopi.galite.visual.db.sequencesList
 import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Week
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"
@@ -344,9 +345,11 @@ fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref:
 }
 
 fun addTasks() {
-  addTask(LocalDate.of(2021, 12, 1), LocalTime.of(10, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
-  addTask(LocalDate.of(2021, 12, 1), LocalTime.of(17, 0, 0), LocalTime.of(17, 30, 0), "Codage", "desc 2")
-  addTask(LocalDate.of(2021, 12, 4), LocalTime.of(16, 0, 0), LocalTime.of(17, 30, 0), "Validation", "desc 2")
+  val currentWeek = Week.now()
+
+  addTask(currentWeek.getDate(1).toSql().toLocalDate(), LocalTime.of(8, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
+  addTask(currentWeek.getDate(1).toSql().toLocalDate(), LocalTime.of(14, 0, 0), LocalTime.of(16, 0, 0), "Codage", "desc 2")
+  addTask(currentWeek.getDate(4).toSql().toLocalDate(), LocalTime.of(11, 0, 0), LocalTime.of(12, 30, 0), "Validation", "desc 2")
 }
 
 fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: String, description2: String) {
