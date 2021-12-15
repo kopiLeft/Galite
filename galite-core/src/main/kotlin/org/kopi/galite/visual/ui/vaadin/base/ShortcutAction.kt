@@ -25,8 +25,6 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.server.Command
 
 /**
  * A shortcut action represented by its key code and modifiers.
@@ -37,29 +35,58 @@ import com.vaadin.flow.server.Command
  */
 abstract class ShortcutAction<T: Component>(
   protected val field: T,
-  private val key: Key,
-  private val modifiers: Array<out KeyModifier>,
+  internal val key: Key,
+  internal val modifiers: Array<out KeyModifier>,
   protected val navigationAction: () -> Unit
-): Command {
-
-  override fun execute() {
-    performAction()
-  }
+) {
+  protected val modifierMask = createModifierMask(modifiers)
 
   /**
    * Performs the action handled by this shortcut.
    */
-  abstract fun performAction()
+  abstract fun performAction(eagerValue: String?)
 
-  fun registerShortcut() {
-    val registration = Shortcuts.addShortcutListener(
-      field,
-      this,
-      key,
-      *modifiers
-    ).listenOn(field)
+  /**
+   * Creates the action key.
+   * @return The action key.
+   */
+  fun getKey(): String {
+    // key is based on key & modifiers
+    return createKey(key.keys, modifierMask)
+  }
 
-    registration.isBrowserDefaultAllowed = false
+  companion object {
+
+    /**
+     * Creates a unique key for a key code and a modifier mask.
+     * @param keys The keys.
+     * @param modifierMask The modifier mask
+     * @return The unique key.
+     */
+    fun createKey(keys: List<String>, modifierMask: Int): String {
+      val stringKeys  = keys.joinToString(separator = "-")
+      return "$stringKeys-$modifierMask"
+    }
+
+    /**
+     * Creates the modifier mask of this shortcut action.
+     * @return The modifier mask to be used.
+     */
+    fun createModifierMask(modifiers: Array<out KeyModifier>): Int {
+      var modifiersMask = 0
+      for (i in modifiers.indices) {
+        when (modifiers[i]) {
+          KeyModifier.of("Shift") -> modifiersMask = modifiersMask or 1
+          KeyModifier.of("Control") -> modifiersMask = modifiersMask or 2
+          KeyModifier.of("Alt") -> modifiersMask = modifiersMask or 3
+          KeyModifier.of("AltGraph") -> modifiersMask = modifiersMask or 4
+          KeyModifier.of("Meta") -> modifiersMask = modifiersMask or 5
+          else -> {
+          }
+        }
+      }
+      return modifiersMask
+    }
   }
 }
 

@@ -19,12 +19,17 @@ package org.kopi.galite.demo.database
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.bill.BillForm
@@ -34,13 +39,16 @@ import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
+import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.UserRights
 import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.db.databaseConfig
 import org.kopi.galite.visual.db.list_Of_Tables
 import org.kopi.galite.visual.db.sequencesList
 import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Week
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"
@@ -53,9 +61,14 @@ const val testPassword = "admin"
 fun connectToDatabase(url: String = testURL,
                       driver: String = testDriver,
                       user: String = testUser,
-                      password: String = testPassword
+                      password: String = testPassword,
+                      schema: String? = null
 ) {
-  Database.connect(url, driver = driver, user = user, password = password)
+  if (schema != null) {
+    Database.connect(url, driver = driver, user = user, password = password, databaseConfig = databaseConfig(Schema(schema)))
+  } else {
+    Database.connect(url, driver = driver, user = user, password = password)
+  }
 }
 
 /**
@@ -77,6 +90,7 @@ fun initDatabase() {
     addCmds()
     addBillPrdts()
     addBills()
+    addTasks()
   }
   initModules()
 }
@@ -88,6 +102,9 @@ fun createApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.create(table)
   }
+  listOfSequences.forEach {
+    SchemaUtils.createSequence(it)
+  }
 }
 
 /**
@@ -97,10 +114,16 @@ fun dropApplicationTables() {
   list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.drop(table)
   }
+  listOfSequences.forEach {
+    SchemaUtils.dropSequence(it)
+  }
 }
 
 val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
-                                            Bill, TaxRule, Command, BillProduct, Purchase)
+                                            Bill, TaxRule, Command, BillProduct, Purchase,
+                                            Task)
+
+val listOfSequences = listOf(TASKId)
 
 fun initModules() {
   transaction {
@@ -119,6 +142,8 @@ fun initModules() {
     insertIntoModule("6001", "org/kopi/galite/demo/Menu", 601, "6000", TaxRuleForm::class)
     insertIntoModule("7000", "org/kopi/galite/demo/Menu", 700)
     insertIntoModule("7001", "org/kopi/galite/demo/Menu", 701, "7000", ProviderForm::class)
+    insertIntoModule("8000", "org/kopi/galite/demo/Menu", 800)
+    insertIntoModule("8001", "org/kopi/galite/demo/Menu", 801, "8000", TasksForm::class)
   }
 }
 
@@ -316,6 +341,25 @@ fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref:
     it[dateBill] = date
     it[amountWithTaxes] = amount
     it[refCmd] = ref
+  }
+}
+
+fun addTasks() {
+  val currentWeek = Week.now()
+
+  addTask(currentWeek.getDate(1).toSql().toLocalDate(), LocalTime.of(8, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
+  addTask(currentWeek.getDate(1).toSql().toLocalDate(), LocalTime.of(14, 0, 0), LocalTime.of(16, 0, 0), "Codage", "desc 2")
+  addTask(currentWeek.getDate(4).toSql().toLocalDate(), LocalTime.of(11, 0, 0), LocalTime.of(12, 30, 0), "Validation", "desc 2")
+}
+
+fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: String, description2: String) {
+  Task.insert {
+    it[id] = TASKId.nextIntVal()
+    it[Task.date] = date
+    it[Task.from] = LocalDateTime.of(date, from).atZone(ZoneId.systemDefault()).toInstant()
+    it[Task.to] = LocalDateTime.of(date, to).atZone(ZoneId.systemDefault()).toInstant()
+    it[Task.description1] = description1
+    it[Task.description2] = description2
   }
 }
 

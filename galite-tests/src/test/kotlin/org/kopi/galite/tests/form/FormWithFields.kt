@@ -23,7 +23,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
 class FormWithFields: Form() {
   override val locale = Locale.UK
@@ -34,7 +34,7 @@ class FormWithFields: Form() {
   val testBlocsk = testPagse.insertBlock(BlockWithFields())
 }
 
-class BlockWithFields : FormBlock(1, 1, "Test block") {
+class BlockWithFields : Block(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

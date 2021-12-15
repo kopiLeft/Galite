@@ -73,7 +73,7 @@ abstract class ApplicationContext {
     /**
      * Returns the default configuration of the Application
      */
-    fun getDefaults(): ApplicationConfiguration = applicationContext.getApplication().applicationConfiguration
+    fun getDefaults(): ApplicationConfiguration? = applicationContext.getApplication().applicationConfiguration
 
     /**
      * Returns the [Application] menu.
@@ -150,60 +150,63 @@ abstract class ApplicationContext {
             releaseDate = it.substring(19)
           }
         }
-        if (getDefaults() == null) {
+
+        val defaultConfiguration = getDefaults()
+
+        if (defaultConfiguration == null) {
           System.err.println("ERROR: No application configuration available")
           return
         }
         val applicationName: String = try {
-          getDefaults().applicationName
+          defaultConfiguration.applicationName
         } catch (e: PropertyException) {
           "application name not defined"
         }
         val version: String = try {
-          getDefaults().version
+          defaultConfiguration.version
         } catch (e: PropertyException) {
           "version not defined"
         }
         val smtpServer: String? = try {
-          getDefaults().getSMTPServer()
+          defaultConfiguration.getSMTPServer()
         } catch (e: PropertyException) {
           null
         }
         val logFile: String? = try {
-          getDefaults().logFile
+          defaultConfiguration.logFile
         } catch (e: PropertyException) {
           null
         }
         val sendMail: Boolean = try {
-          getDefaults().mailErrors()
+          defaultConfiguration.mailErrors()
         } catch (e: PropertyException) {
           false
         }
         val writeLog: Boolean = try {
-          getDefaults().logErrors()
+          defaultConfiguration.logErrors()
         } catch (e: PropertyException) {
           false
         }
         if (smtpServer != null && sendMail) {
           val recipient: String = try {
-            getDefaults().debugMailRecipient
+            defaultConfiguration.debugMailRecipient
           } catch (e: PropertyException) {
-            TODO()
+            throw Exception("Couldn't find the debugging mail recipient while sending an error report mail", e)
           }
-          val cc: String? = try {
-            getDefaults().getStringFor("debugging.mail.cc")
+          val cc = try {
+            defaultConfiguration.getStringFor("debugging.mail.cc")
           } catch (e: PropertyException) {
             null
           }
-          val bcc: String? = try {
-            getDefaults().getStringFor("debugging.mail.bcc")
+          val bcc = try {
+            defaultConfiguration.getStringFor("debugging.mail.bcc")
           } catch (e: PropertyException) {
             null
           }
-          val sender: String = try {
-            getDefaults().getStringFor("debugging.mail.sender")!!
+          val sender = try {
+            defaultConfiguration.getStringFor("debugging.mail.sender")
           } catch (e: PropertyException) {
-            TODO()
+            throw Exception("Couldn't find the debugging mail sender while sending an error report mail", e)
           }
           val buffer = StringWriter()
           val writer = PrintWriter(buffer)

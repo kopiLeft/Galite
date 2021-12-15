@@ -220,15 +220,7 @@
     background: #FF0000;
 }
 
-:host([theme="column-borders compact"]) [part~="cell"]:focus {
-    background: #bcdae6;
-}
-
-:host([theme="column-borders compact"]) {
-    --_lumo-grid-selected-row-color: none;
-}
-
-:host([theme="row-stripes"]) [part~="cell"] {
+:host([theme="grid-block"]) [part~="cell"] {
     height: 38px;
 }
 

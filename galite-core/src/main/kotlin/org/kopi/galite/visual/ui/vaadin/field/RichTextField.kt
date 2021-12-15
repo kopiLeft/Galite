@@ -19,8 +19,9 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.util.Locale
 
+import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
-import org.kopi.galite.visual.ui.vaadin.base.runAfterGetValue
+import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 import org.kopi.galite.visual.ui.vaadin.form.DRichTextEditor
 import org.vaadin.pekka.WysiwygE
 
@@ -38,7 +39,6 @@ import com.vaadin.flow.dom.Element
 /**
  * A rich text field implementation based on wysiwyg-e
  */
-
 @CssImport("./styles/galite/richtext.css")
 class RichTextField(
         var col: Int,
@@ -75,6 +75,7 @@ class RichTextField(
       editor.setWidth((8 * col).toFloat(), Unit.PIXELS)
     }
     createNavigatorKeys()
+    editor.addJSKeyDownListener(editor.keyNavigators)
   }
 
   /**
@@ -246,8 +247,10 @@ class RichTextField(
    * @param navigationAction lambda representing the action to perform
    */
   private fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> kotlin.Unit) {
-    NavigationAction(this, key, modifiers, navigationAction)
-      .registerShortcut()
+    val navigator = NavigationAction(this, key, modifiers, navigationAction)
+    val keyNavigator = navigator.getKey()
+
+    editor.keyNavigators[keyNavigator] = navigator
   }
 
   /**
@@ -263,19 +266,27 @@ class RichTextField(
     //---------------------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------------------
-    override fun performAction() {
-      editor.runAfterGetValue {
-        // first sends the text value to model if changed
+    override fun performAction(eagerValue: String?) {
+      val oldValue = field.value
+
+      // first sends the text value to model if changed
+      if(oldValue != eagerValue) {
+        // Synchronize with server side
+        field.value = eagerValue
         parent.valueChanged()
-        navigationAction()
       }
+      navigationAction()
     }
   }
 }
 
 @Tag("wysiwyg-e-rich-text")
 @JsModule("./src/wysiwyg-e-rich-text.js")
-class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE> {
+class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible),
+  Focusable<FocusableWysiwygE>, JSKeyDownHandler {
+
+  override val keyNavigators = mutableMapOf<String, ShortcutAction<*>>()
+
   init {
     // Ident and outdent tools not working and they define shortcuts which doesn't
     // allow to define a custom shortcut in server side.

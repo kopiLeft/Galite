@@ -271,6 +271,10 @@
   <property key="LoadConfiguration" value="شحن تشكيلة مسجلة"/>
   <property key="Options" value="تغيير اختيارات التعليق"/>
   <property key="Options-help" value="تغيير اختيارات  العليق"/>
+  <property key="Save" value="تسجيل" />
+  <property key="Save-help" value="تسجيل الضوابط في القاعدة" />
+  <property key="Delete" value="شطب" />
+  <property key="Delete-help" value="شطب هذا التسجيل من القاعدة." />
   <property key="choose_column" value="اختيار خانة من  القائمة "/>
   <property key="validate" value="توثيق"/>
   <property key="enter_new_label" value="ادخاال تسمية جديدة هذه الخانة"/>

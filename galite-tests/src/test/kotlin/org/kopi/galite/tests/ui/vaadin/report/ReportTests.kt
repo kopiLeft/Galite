@@ -31,7 +31,7 @@ import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
 import org.kopi.galite.visual.ui.vaadin.report.DReport
-import org.kopi.galite.visual.ui.vaadin.visual.DownloaderDialog
+import org.kopi.galite.visual.ui.vaadin.download.DownloaderDialog
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get

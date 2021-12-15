@@ -28,7 +28,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class FormWithList : DictionaryForm() {
@@ -119,7 +119,7 @@ class FormWithList : DictionaryForm() {
     }
   }
 
-  inner class UsersBlock : FormBlock(1, 1, "Test block") {
+  inner class UsersBlock : Block(1, 1, "Test block") {
     val u = table(Users)
     val unique = index(message = "ID should be unique")
 
@@ -194,7 +194,7 @@ class FormWithList : DictionaryForm() {
   }
 }
 
-object BlockSample : FormBlock(1, 1, "Test block") {
+object BlockSample : Block(1, 1, "Test block") {
   val u = table(Users)
   val m = table(Modules)
   val i = index(message = "ID should be unique")
@@ -217,7 +217,7 @@ object BlockSample : FormBlock(1, 1, "Test block") {
   }
 }
 
-class BlockWithManyTables : FormBlock(20, 20, "Test block") {
+class BlockWithManyTables : Block(20, 20, "Test block") {
   val u = table(Users)
   val m = table(Modules)
   val r = table(UserRights)

@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-  implementation("org.kopi", "galite-core", "1.0.0-beta")
+  implementation("org.kopi", "galite-core", "1.0.0-beta.1")
 }
 ````
 
@@ -134,7 +134,7 @@ class ClientForm : Form() {
   val block = clientsPage.insertBlock(Clients()) 
 }
 
-class Clients : FormBlock(1, 1, "Clients") {
+class Clients : Block(1, 1, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = LONG(10), position = at(1, 1..2)) {

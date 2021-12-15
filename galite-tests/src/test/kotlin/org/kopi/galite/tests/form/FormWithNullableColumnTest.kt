@@ -198,4 +198,124 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     }
   }
+
+  @Test
+  fun leftInnerLeftJoinFourTables() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockFourTablesLeftInnerLeftJoin
+
+    block.form
+    block.form.model
+    block.name.value = "client1"
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      assertEquals("SELECT CLIENTS.ID, ADRESS.ID, PRODUCTS.ID, CLIENTS.\"NAME\", CLIENTS.MAIL," +
+              " \"ORDER\".QUANTITY FROM \"ORDER\" LEFT JOIN CLIENTS " +
+              "ON \"ORDER\".CLIENT_ID = CLIENTS.ID INNER JOIN ADRESS " +
+              "ON \"ORDER\".ADDRESS_ID = ADRESS.ID LEFT JOIN PRODUCTS " +
+              "ON \"ORDER\".PRODUCT_ID = PRODUCTS.ID", query.prepareSQL(this) )
+    }
+  }
+
+  @Test
+  fun innerLeftInnerJoinFourTables() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockFourTablesInnerLeftInnerJoin
+
+    block.form
+    block.form.model
+    block.name.value = "client1"
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      assertEquals("SELECT ADRESS.ID, CLIENTS.ID, \"ORDER\".PRODUCT_ID, CLIENTS.\"NAME\", CLIENTS.MAIL," +
+              " \"ORDER\".QUANTITY FROM ADRESS INNER JOIN \"ORDER\" " +
+              "ON ADRESS.ID = \"ORDER\".ADDRESS_ID LEFT JOIN CLIENTS " +
+              "ON CLIENTS.ID = \"ORDER\".CLIENT_ID INNER JOIN PRODUCTS " +
+              "ON PRODUCTS.ID = \"ORDER\".PRODUCT_ID" , query.prepareSQL(this) )
+    }
+  }
+
+  @Test
+  fun innerJoinNoJoinTwoTables() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockTwoTablesInnerJoinNoJoin
+
+    block.form
+    block.form.model
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      assertEquals("SELECT ADRESS.ID, \"ORDER\".CLIENT_ID " +
+              "FROM ADRESS INNER JOIN \"ORDER\" " +
+              "ON ADRESS.ID = \"ORDER\".ADDRESS_ID", query.prepareSQL(this) )
+    }
+  }
+
+  @Test
+  fun noJoinInnerJoinTwoTables() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockTwoTablesNoJoinInnerJoin
+
+    block.form
+    block.form.model
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      assertEquals("SELECT \"ORDER\".CLIENT_ID, ADRESS.ID "  +
+              "FROM ADRESS INNER JOIN \"ORDER\" " +
+              "ON ADRESS.ID = \"ORDER\".ADDRESS_ID", query.prepareSQL(this) )
+    }
+  }
+
+  @Test
+  fun leftJoinNoJoinTwoTables() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockTwoTablesLeftJoinNoJoin
+
+    block.form
+    block.form.model
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      assertEquals("SELECT ADRESS.CLIENT_ID, \"ORDER\".QUANTITY "  +
+              "FROM ADRESS INNER JOIN \"ORDER\" " +
+              "ON ADRESS.CLIENT_ID = \"ORDER\".CLIENT_ID", query.prepareSQL(this) )
+    }
+  }
+
+  @Test
+  fun noJoinLeftJoinTwoTables() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockTwoTablesNoJoinLeftJoin
+
+    block.form
+    block.form.model
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      assertEquals("SELECT \"ORDER\".QUANTITY, ADRESS.CLIENT_ID "  +
+              "FROM ADRESS INNER JOIN \"ORDER\" " +
+              "ON ADRESS.CLIENT_ID = \"ORDER\".CLIENT_ID", query.prepareSQL(this) )
+    }
+  }
 }

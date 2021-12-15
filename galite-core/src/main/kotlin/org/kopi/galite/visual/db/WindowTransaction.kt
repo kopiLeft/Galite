@@ -96,7 +96,9 @@ internal fun <T> VWindow.transaction(message: String? = null,
             statement
           )
 
-          if (this is VForm) commitTrail()
+          if (this is VForm) {
+            commitTrail()
+          }
           value
         }
 
@@ -107,21 +109,12 @@ internal fun <T> VWindow.transaction(message: String? = null,
  * @param task    the task to execute.
  */
 fun <T> VWindow.doAndWait(message: String?, task: () -> T): T {
-  var finished = false
-
-  doAfter(10) {
-    if (!finished) {
-      setWaitInfo(message)
-    }
-  }
+  setWaitInfo(message)
 
   val returnValue = try {
     task()
   } finally {
-    synchronized(finished) {
-      finished = true
-      unsetWaitInfo()
-    }
+    unsetWaitInfo()
   }
 
   return returnValue

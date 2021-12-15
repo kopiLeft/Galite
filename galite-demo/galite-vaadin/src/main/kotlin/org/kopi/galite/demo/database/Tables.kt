@@ -16,8 +16,10 @@
  */
 package org.kopi.galite.demo.database
 
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.timestamp
 
 object Client : Table("CLIENTS") {
   val idClt = integer("ID").autoIncrement()
@@ -103,6 +105,19 @@ object Bill : Table("BILLS") {
   override val primaryKey = PrimaryKey(numBill)
 }
 
+object Task : Table("Task") {
+  val id = integer("ID").autoIncrement()
+  val date = date("DATE").nullable()
+  val from = timestamp("FROM")
+  val to = timestamp("TO")
+  val description1 = varchar("DESCRIPTION_1", 20)
+  val description2 = varchar("DESCRIPTION_2", 20)
+  val uc = integer("UC").autoIncrement()
+  val ts = integer("TS").autoIncrement()
+
+  override val primaryKey = PrimaryKey(id)
+}
+
 object TaxRule : Table("TAX_RULE") {
   val idTaxe = integer("ID").autoIncrement()
   val taxName = varchar("NAME", 20)
@@ -111,3 +126,5 @@ object TaxRule : Table("TAX_RULE") {
 
   override val primaryKey = PrimaryKey(idTaxe)
 }
+
+val TASKId = Sequence("TASKId")

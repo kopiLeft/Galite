@@ -20,10 +20,10 @@ package org.kopi.galite.demo.common
 import java.util.Locale
 
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
-class FormDefault(block: FormBlock) : Form() {
+class FormDefault(block: Block) : Form() {
 
   override val locale = Locale.UK
   override val title = "Default"

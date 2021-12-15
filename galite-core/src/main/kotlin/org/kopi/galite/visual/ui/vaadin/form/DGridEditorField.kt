@@ -22,10 +22,8 @@ import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.ui.vaadin.field.Field.NavigationDelegationMode
 import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.visual.Action
@@ -420,57 +418,6 @@ abstract class DGridEditorField<T>(
     val block = getModel().block
     return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(position)
   }
-
-  /**
-   * Returns the navigation delegation to server mode.
-   * For POSTFLD AND PREFLD triggers we always delegate the navigation to server.
-   * For POSTCHG, PREVAL, VALFLD and FORMAT triggers we delegate the navigation to server if
-   * the field value has changed.
-   * @return The navigation delegation to server mode.
-   */
-  protected val navigationDelegationMode: NavigationDelegationMode
-    protected get() = if (getModel().hasTrigger(VConstants.TRG_POSTFLD)) {
-      NavigationDelegationMode.ALWAYS
-    } else if (getModel().hasTrigger(VConstants.TRG_PREFLD)) {
-      NavigationDelegationMode.ALWAYS
-    } else if (getModel().block!!.hasTrigger(VConstants.TRG_PREREC)) {
-      NavigationDelegationMode.ALWAYS
-    } else if (getModel().block!!.hasTrigger(VConstants.TRG_POSTREC)) {
-      NavigationDelegationMode.ALWAYS
-    } else if (getModel().block!!.hasTrigger(VConstants.TRG_VALREC)) {
-      NavigationDelegationMode.ALWAYS
-    } else if (getModel().list != null) {
-      NavigationDelegationMode.ONVALUE
-    } else if (getModel().hasTrigger(VConstants.TRG_POSTCHG)) {
-      NavigationDelegationMode.ONCHANGE
-    } else if (getModel().hasTrigger(VConstants.TRG_PREVAL)) {
-      NavigationDelegationMode.ONCHANGE
-    } else if (getModel().hasTrigger(VConstants.TRG_VALFLD)) {
-      NavigationDelegationMode.ONCHANGE
-    } else if (getModel().hasTrigger(VConstants.TRG_FORMAT)) {
-      NavigationDelegationMode.ONCHANGE
-    } else {
-      NavigationDelegationMode.NONE
-    }// for field commands this is needed to have the actor model instance
-
-  /**
-   * Returns the actors associated with this field.
-   * @return The actors associated with this field.
-   */
-  protected val actors: Collection<Actor>
-    get() {
-      val actors = mutableSetOf<Actor>()
-      for (cmd in columnView.getAllCommands()) {
-        if (cmd != null) {
-          // for field commands this is needed to have the actor model instance
-          cmd.setEnabled(false)
-          if (cmd.actor != null) {
-            actors.add(cmd.actor!!.getDisplay() as Actor)
-          }
-        }
-      }
-      return actors
-    }
 
   /**
    * Returns the convert type for the string field.

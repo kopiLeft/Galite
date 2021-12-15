@@ -182,7 +182,7 @@ class VListDialog(list: Array<VListColumn?>,
 
   /**
    * Displays a dialog box returning position of selected element.
-   * @exception org.kopi.galite.visual.VException        an exception may be raised by string formatter
+   * @exception org.kopi.galite.visual.visual.VException        an exception may be raised by string formatter
    */
   fun selectFromDialog(showSingleEntry: Boolean): Int = selectFromDialog(null, showSingleEntry)
 
@@ -196,7 +196,7 @@ class VListDialog(list: Array<VListColumn?>,
 
   /**
    * Displays a dialog box returning position of selected element.
-   * @exception org.kopi.galite.visual.VException       an exception may be raised by string formatter
+   * @exception org.kopi.galite.visual.visual.VException       an exception may be raised by string formatter
    */
   fun selectFromDialog(window: VWindow?, showSingleEntry: Boolean): Int =
           display.selectFromDialog((window?.getDisplay())!!, showSingleEntry)

@@ -109,7 +109,9 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * @exception        VException        an exception may be raised by triggers
    */
   @Throws(VException::class)
-  override fun doNotModal() = WindowController.windowController.doNotModal(this)
+  override fun doNotModal() {
+    WindowController.windowController.doNotModal(this)
+  }
 
   // ----------------------------------------------------------------------
   // ACCESSORS
@@ -312,7 +314,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == ModelCloseListener::class.java) {
-        (listeners[i + 1] as ModelCloseListener).modelClosed(code)
+        if(code == CDE_HIDE) {
+          reset()
+          (listeners[i + 1] as ModelCloseListener).dispose()
+        } else {
+          (listeners[i + 1] as ModelCloseListener).modelClosed(code)
+        }
       }
     }
   }
@@ -535,7 +542,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
       )
       e.printStackTrace()
     }
-    if (ApplicationContext.getDefaults().isDebugModeEnabled) {
+    if (ApplicationContext.getDefaults()!!.isDebugModeEnabled) {
       error("FATAL ERROR: " + reason.message)
       reason.printStackTrace(System.err)
     } else {
@@ -633,6 +640,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
     const val CDE_QUIT = 0
     const val CDE_ESCAPED = 1
     const val CDE_VALIDATE = 2
+    const val CDE_HIDE = 3
     const val WINDOW_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/Window"
   }
 }

@@ -18,18 +18,22 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class DocumentationForm : DictionaryForm() {
 
-  //test Form Localization
+  // test Form Localization
   override val locale = Locale.UK
   // test Form Title
   override val title = "Test Form"
@@ -46,6 +50,38 @@ class DocumentationForm : DictionaryForm() {
   ) {
     key = Key.F2          // key is optional here
     icon = "list"  // icon is optional here
+  }
+
+  val quit = actor(
+    ident = "quit",
+    menu = file,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+
+  val resetForm = actor(
+    ident = "resetForm",
+    menu = file,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = "break"
+  }
+
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
+
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
   }
 
  // Types Definition Create CodeDomain & ListDomain Inside Form
@@ -72,57 +108,79 @@ class DocumentationForm : DictionaryForm() {
 
  // Commands Definition
  val cmd = command(item = cut) {
-   // test mode !! can we change mode of commands in form??!!
+   // test mode
    mode(Mode.UPDATE, Mode.QUERY)
     action = {
-      println("Form Commands")
+      this@DocumentationForm.model.notice("form command")
     }
   }
 
   /** Form Triggers Definition **/
-  // test INIT form
-  val initForm = trigger(INIT) {
-    println("INIT trigger !!")
+  // test INIT form trigger
+  val initFormTrigger = trigger(INIT) {
+    formTriggers.initTriggerForm.value = "INIT Trigger"
   }
 
-  // test PREFORM form
-  val preForm = trigger(PREFORM) {
-    println("PREFORM trigger !!")
+  // test PREFORM form trigger
+  val preFormTrigger = trigger(PREFORM) {
+    formTriggers.preFormTriggerForm.value = "PREFORM Trigger"
   }
 
-  // test POSTFORM form
-  val postForm = trigger(POSTFORM) {
-    println("POSTFORM trigger !!")
+  // test POSTFORM form trigger
+  val postFormTrigger = trigger(POSTFORM) {
+    transaction {
+      initDocumentationData()
+      TestTriggers.insert {
+        it[id] = 5
+        it[INS] = "POSTFORM Trigger"
+      }
+    }
   }
 
-  // test QUITFORM form
-  val quitForm = trigger(QUITFORM) {
+  // test QUITFORM form trigger
+  val quitFormTrigger = trigger(QUITFORM) {
     // actually not available
     true
   }
 
-  // test RESET form !!
-  val resetForm = trigger(RESET) {
+  // test RESET form : click on resetForm commands and check that form keep field values
+  val resetFormTrigger = trigger(RESET) {
     true
   }
 
-  // test CHANGED form !!
-  val changedForm = trigger(CHANGED) {
+  // test CHANGED form
+  val changedFormTrigger = trigger(CHANGED) {
     true
   }
+
   /** Form Pages **/
-  val p1 = page("Page1")
-  val p2 = page("Page2")
-  // insert blocks inside pages
-  val block1 = p1.insertBlock(Block1())
-  val block2 = p1.insertBlock(Block1())
-  val block3 = p2.insertBlock(Block1())
+  val p1 = page("first page")
+  val p2 = page("second page")
+  val p3 = page("third page")
 
-  //simple block
-  inner class Block1 : FormBlock(1, 10, "Block1") {
+  // insert blocks inside pages
+  val formTriggers = p1.insertBlock(TriggerForm())
+  val simpleBlock = p2.insertBlock(SimpleBlock())
+
+  // simple block
+  inner class SimpleBlock : Block(1, 10, "SimpleForm") {
+    init {
+      border = Border.LINE
+    }
 
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
+    }
+  }
+
+  // form triggers
+  inner class TriggerForm : Block(1, 10, "Block to test: from triggers") {
+
+    val initTriggerForm = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "INIT Trigger Form"
+    }
+    val preFormTriggerForm = visit(domain = STRING(20), position = at(1, 2)) {
+      label = "PREFORM Trigger Form"
     }
   }
 }

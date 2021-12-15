@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.visual.UWindow;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VRuntimeException;
 import org.kopi.galite.visual.visual.VWindow;
@@ -149,7 +150,12 @@ public class JWindowController extends WindowController {
     }
   }
 
-  //------------------------------------------------------------------------
+	@Override
+	public void doNotModal(UWindow window) throws Exception {
+  	throw new Exception("NOT SUPPORTED");
+	}
+
+	//------------------------------------------------------------------------
   // MODAL VIEW STARTER
   //------------------------------------------------------------------------
 

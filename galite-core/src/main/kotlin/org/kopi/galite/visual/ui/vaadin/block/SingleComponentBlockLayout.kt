@@ -17,14 +17,14 @@
  */
 package org.kopi.galite.visual.ui.vaadin.block
 
-import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
-
 import com.vaadin.flow.component.Component
 
 /**
  * A block layout that contains a single component inside.
+ *
+ * @param block the black inside this layout.
  */
-class SingleComponentBlockLayout(override val block: DGridBlock) : SimpleBlockLayout(1, 1, block) {
+class SingleComponentBlockLayout(override val block: Block) : SimpleBlockLayout(1, 1, block) {
 
   init {
     className = "multiple"

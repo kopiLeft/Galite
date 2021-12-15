@@ -37,7 +37,6 @@ import kotlin.collections.indices
 import kotlin.collections.isNotEmpty
 import kotlin.collections.map
 import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
 import kotlin.collections.single
 import kotlin.collections.toTypedArray
 import kotlin.math.abs
@@ -113,17 +112,17 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   /** The page number of this block */
   var pageNumber = 0 // page number
-  protected lateinit var source: String // qualified name of source file
+  internal lateinit var source: String // qualified name of source file
   lateinit var name: String // block name
   protected lateinit var shortcut: String // block short name
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
-  protected var help: String? = null // the help on this block
+  internal var help: String? = null // the help on this block
   internal var tables: Array<Table>? = null // names of database tables
-  protected var options = 0 // block options
-  protected lateinit var access: IntArray // access flags for each mode
-  protected var indices: Array<String>? = null // error messages for violated indices
-  protected var indicesIdents: Array<String>? = null // error messages for violated indices
+  internal var options = 0 // block options
+  internal lateinit var access: IntArray // access flags for each mode
+  internal var indices: Array<String>? = null // error messages for violated indices
+  internal var indicesIdents: Array<String>? = null // error messages for violated indices
   internal var commands: Array<VCommand>? = null // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
@@ -133,7 +132,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
+  internal var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
 
   // current mode
   private var mode = 0
@@ -148,7 +147,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var maxColumnPos = 0
   var displayedFields = 0
   private var isFilterVisible = false
-  protected var dropListMap = HashMap<String, String>()
+  internal var dropListMap = HashMap<String, String>()
 
   // dynamic data
   var activeRecord = 0 // current record
@@ -1042,7 +1041,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Goto first accessible field in current record
    * @exception VException      an exception may occur in field.leave()
    */
-  fun gotoFirstField() {
+  open fun gotoFirstField() {
     assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
@@ -1443,7 +1442,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // - inserted to get information about the usage of this code
           // - can be removed if the method checkBlock is removed
           if (ApplicationContext.getDefaults() != null
-                  && ApplicationContext.getDefaults().isDebugModeEnabled) {
+                  && ApplicationContext.getDefaults()!!.isDebugModeEnabled) {
             if ((form.getDisplay() as UForm).runtimeDebugInfo != null) {
               (form.getDisplay() as UForm).runtimeDebugInfo!!.printStackTrace()
             }
@@ -1843,6 +1842,34 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       pos += incr
     }
     throw VExecFailedException()
+  }
+
+  /**
+   * Sets the block into insert mode.
+   * @exception        VException        an exception may occur during DB access
+   */
+  open fun insertMode() {
+    assert(!isMulti()) { "The command InsertMode can be used only with a single block." }
+    assert(getMode() != VConstants.MOD_INSERT) {
+      "The block $name is already in INSERT mode."
+    }
+
+    if (getMode() == VConstants.MOD_UPDATE
+      && isChanged
+      && !form.ask(Message.getMessage("confirm_insert_mode"))
+    ) {
+      return
+    }
+
+    val changed: Boolean = isRecordChanged(0)
+
+    setMode(VConstants.MOD_INSERT)
+    setDefault()
+    setRecordFetched(0, false)
+    setRecordChanged(0, changed)
+    if (!isMulti() && form.getActiveBlock() == this) {
+      gotoFirstUnfilledField()
+    }
   }
 
   /**
@@ -2727,7 +2754,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     callTrigger(VConstants.TRG_INIT)
   }
 
-  fun initIntern() {
+  open fun initIntern() {
     for (i in fields.indices) {
       fields[i].block = this
     }
@@ -2754,7 +2781,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns true if this block can display more than one record.
    */
-  fun isMulti(): Boolean = bufferSize > 1
+  open fun isMulti(): Boolean = bufferSize > 1
 
   /**
    * nb field on this block

@@ -117,26 +117,29 @@ class TimeValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     }
   }
 
-  /**
-   * Checks if the given time is valid.
-   * @param h The hours.
-   * @param m The minutes.
-   * @return `true` if the given time is valid.
-   */
-  private fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m >= 0 && m < 60
+  companion object {
 
-  /**
-   * Returns the string representation of the given time.
-   * @param hours The time hours.
-   * @param minutes The time minutes.
-   * @return The string representation of the given time.
-   */
-  private fun toString(hours: Int, minutes: Int): String =
-          buildString {
-            append(hours / 10)
-            append(hours % 10)
-            append(':')
-            append(minutes / 10)
-            append(minutes % 10)
-          }
+    /**
+     * Returns the string representation of the given time.
+     * @param hours The time hours.
+     * @param minutes The time minutes.
+     * @return The string representation of the given time.
+     */
+    private fun toString(hours: Int, minutes: Int): String =
+            buildString {
+              append(hours / 10)
+              append(hours % 10)
+              append(':')
+              append(minutes / 10)
+              append(minutes % 10)
+            }
+
+    /**
+     * Checks if the given time is valid.
+     * @param h The hours.
+     * @param m The minutes.
+     * @return `true` if the given time is valid.
+     */
+    internal fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m >= 0 && m < 60
+  }
 }

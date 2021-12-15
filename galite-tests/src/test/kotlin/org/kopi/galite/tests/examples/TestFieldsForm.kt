@@ -26,7 +26,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
@@ -63,7 +63,7 @@ class TestFieldsForm : DictionaryForm() {
   }
 }
 
-class BlockWithAllFieldVisibilityTypes : FormBlock(1, 1, "Block With All Field Visibility Types") {
+class BlockWithAllFieldVisibilityTypes : Block(1, 1, "Block With All Field Visibility Types") {
   val hiddenField = hidden(domain = INT(25)) {
     label = "hidden field"
     help = "hidden field"
@@ -87,7 +87,7 @@ class BlockWithAllFieldVisibilityTypes : FormBlock(1, 1, "Block With All Field V
   }
 }
 
-class BlockWithDifferentTypes : FormBlock(1, 1, "Block With Different Types") {
+class BlockWithDifferentTypes : Block(1, 1, "Block With Different Types") {
   val upperStringField = visit(domain = STRING(50, Convert.UPPER), position = at(1, 1)) {
     label = "upper string field"
     help = "upper string field"
@@ -112,7 +112,7 @@ class BlockWithDifferentTypes : FormBlock(1, 1, "Block With Different Types") {
   }
 }
 
-class BlockWithSaveCommand : FormBlock(1, 1, "Block With Save Command") {
+class BlockWithSaveCommand : Block(1, 1, "Block With Save Command") {
   val t = table(Trainer)
   val trainerID = hidden(domain = INT(25)) {
     label = "trainer ID"

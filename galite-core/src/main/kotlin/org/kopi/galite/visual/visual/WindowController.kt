@@ -87,6 +87,13 @@ abstract class WindowController : Serializable {
   abstract fun doNotModal(model: VWindow)
 
   /**
+   * Shows the [UWindow] without blocking the executing thread. It shows the already created [window] it exists.
+   * @param window The [UWindow] window.
+   */
+  @Throws(Exception::class)
+  abstract fun doNotModal(window: UWindow)
+
+  /**
    * Shows the [UWindow] without blocking the executing thread.
    * @param model The [UWindow] model.
    */

@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
 
@@ -76,7 +76,7 @@ class TestFieldsVisibilityForm : DictionaryForm() {
   }
 }
 
-class BlockWithChangingFieldVisibilityTypes : FormBlock(1, 1, "Block With All Field Visibility Types") {
+class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field Visibility Types") {
   val hiddenField = hidden(domain = INT(25)) {
     label = "hidden field"
     help = "hidden field"

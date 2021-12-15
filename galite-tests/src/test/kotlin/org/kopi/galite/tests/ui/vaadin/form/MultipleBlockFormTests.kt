@@ -21,28 +21,32 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.findField
-import org.kopi.galite.testing.findForm
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.MultipleBlockForm
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.ui.vaadin.form.DForm
 import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.main.VWindowsMenuItem
+import org.kopi.galite.testing.findForm
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.visual.ui.vaadin.form.DForm
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._expect
@@ -62,18 +66,26 @@ import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.textfield.TextField
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.tests.examples.initData
 
 class MultipleBlockFormTests : GaliteVUITestBase() {
 
   val multipleBlockSaveForm = FormToTestSaveMultipleBlock().also { it.model }
   val multipleForm = MultipleBlockForm().also { it.model }
+  val formExample = FormExample().also { it.model }
 
   @Before
   fun `login to the App`() {
     login()
     multipleForm.open()
+  }
+
+  @Test
+  fun `test list command`() {
+    //TODO
+    /*
+      check that the list dialog is displayed & that contain a correct data,
+      then chose a row and check that first and second block contains data
+     */
   }
 
   /**
@@ -84,7 +96,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
   fun `test changeBlock command`() {
     var blockCaption = _get<H4> { classes = "block-title" }
 
-    assertEquals(multipleForm.formBlocks[1].title, blockCaption.text)
+    assertEquals(multipleForm.blocks[1].title, blockCaption.text)
     multipleForm.changeBlock.triggerCommand()
     // Check that the list dialog is displayed
     _expectOne<DListDialog>()
@@ -97,8 +109,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val grid = _get<DListDialog>()._get<ListTable>()
 
     grid.expect(arrayOf(
-      arrayOf(multipleForm.formBlocks[1].title),
-      arrayOf(multipleForm.formBlocks[2].title)
+      arrayOf(multipleForm.blocks[1].title),
+      arrayOf(multipleForm.blocks[2].title)
     ))
 
     // Choose second row
@@ -110,7 +122,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     // Dialog is closed and the block title is correct
     assertFalse(listDialog.isOpened)
-    assertEquals(multipleForm.formBlocks[2].title, blockCaption.text)
+    assertEquals(multipleForm.blocks[2].title, blockCaption.text)
   }
 
   /**
@@ -367,6 +379,22 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     visibleForm = _get<DForm> {  }
     assertEquals(form, visibleForm)
     assertFails { multipleForm.findForm() }
+  }
+
+  @Test
+  fun `test activate record in multi block`() {
+    formExample.open()
+
+    val salesBlockModel = formExample.salesBlock.findBlock()
+
+    assertEquals(-1, salesBlockModel.model.activeRecord)
+
+    formExample.salesBlock.enter()
+    assertEquals(0, salesBlockModel.model.activeRecord)
+
+    formExample.salesBlock.editRecord(5, 20)
+    assertEquals(5, salesBlockModel.model.activeRecord)
+
   }
 
   companion object {

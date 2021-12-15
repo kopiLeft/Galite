@@ -88,12 +88,6 @@ class DGridMultiBlock(parent: DForm,
       setContent(detail!!)
       // detail.addStyleName("grid-detail") TODO
     }
-    // block will not be marked in detail in client side
-    // we force the field to be on the chart view as a hack
-    // to allow free navigation
-    if (comp is DField) {
-      comp.noChart = false
-    }
 
     detail!!.addComponent(comp as Component,
                           constraint.x,
@@ -107,12 +101,6 @@ class DGridMultiBlock(parent: DForm,
   override fun inDetailMode(): Boolean = model.isDetailMode
 
   override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
-    // send active record to client side before view switch
-    if (!inDetailMode()) {
-      access(currentUI) {
-        fireActiveRecordChanged(model.activeRecord)
-      }
-    }
     try {
       // take care that value of current field
       // is visible in the other mode

@@ -19,6 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.block
 
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.AttachEvent
@@ -72,58 +73,62 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
     val ori = align!!.block.layout
     if (ori == null) {
       return
-    } else if (ori is SingleComponentBlockLayout) { // FIXME
-      // block contains a VAADIN grid inside
-      // -> we align according to grid column position
-      val gridBlock = ori.block.grid
-      val  grid = Grid<Array<Component?>>()
-      val rowsSize = aligns!!.maxOf { it.y } + 1
-      val columnsSize = gridBlock.columns.size
-      val alignedGridComponents = Array(rowsSize) {
-        arrayOfNulls<Component>(columnsSize)
-      }
+    } else if (ori is SingleComponentBlockLayout) {
+      if(ori.block is DGridBlock) {
 
-      val gridBlockWidth = gridBlock.columns.joinToString(" + ") { it.width }
+        // block contains a VAADIN grid inside
+        // -> we align according to grid column position
+        val gridBlock = ori.block.grid
+        val  grid = Grid<Array<Component?>>()
+        val rowsSize = aligns!!.maxOf { it.y } + 1
+        val columnsSize = gridBlock.columns.size
+        val alignedGridComponents = Array(rowsSize) {
+          arrayOfNulls<Component>(columnsSize)
+        }
 
-      grid.width = "calc($gridBlockWidth)"
-      grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
-      grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS)
-      grid.setSelectionMode(Grid.SelectionMode.NONE)
-      gridBlock.columns.forEachIndexed { index, column ->
-        grid.addComponentColumn { it[index] ?: Div() }
-          .setWidth(column.width)
-      }
-      (grid.dataProvider as ListDataProvider).addFilter { it != null }
+        val gridBlockWidth = gridBlock.columns.joinToString(" + ") { it.width }
 
-      for (i in aligns!!.indices) {
-        val align = aligns!![i]
+        grid.width = "calc($gridBlockWidth)"
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
+        grid.addThemeVariants(GridVariant.LUMO_NO_ROW_BORDERS)
+        grid.setSelectionMode(Grid.SelectionMode.NONE)
+        gridBlock.columns.forEachIndexed { index, column ->
+          grid.addComponentColumn { it[index] ?: Div() }
+            .setWidth(column.width)
+        }
+        (grid.dataProvider as ListDataProvider).addFilter { it != null }
 
-        if (align.x != -1) {
-          val overlap = getOverlappingComponent(i, align.x, align.y)
-          if (overlap != null) {
-            val component = components!![i]
-            if (component is Label) {
-              val field = getFieldOf(component)
-              field?.let {
-                addTooltipToField(component, it)
+        for (i in aligns!!.indices) {
+          val align = aligns!![i]
+
+          if (align.x != -1) {
+            val overlap = getOverlappingComponent(i, align.x, align.y)
+            if (overlap != null) {
+              val component = components!![i]
+              if (component is Label) {
+                val field = getFieldOf(component)
+                field?.let {
+                  addTooltipToField(component, it)
+                }
+              } else if (component is DField && component.label == overlap) {
+                component.label?.let {
+                  addTooltipToField(it, component)
+                }
+                alignedGridComponents[align.y][align.x] = component
+              } else {
+                Exception("Block $targetBlockName : Overlapping components at position ${align.x}, ${align.y}").printStackTrace()
               }
-            } else if (component is DField && component.label == overlap) {
-              component.label?.let {
-                addTooltipToField(it, component)
-              }
-              alignedGridComponents[align.y][align.x] = component
             } else {
-              Exception("Block $targetBlockName : Overlapping components at position ${align.x}, ${align.y}").printStackTrace()
+              alignedGridComponents[align.y][align.x] = components!![i]
             }
-          } else {
-            alignedGridComponents[align.y][align.x] = components!![i]
           }
         }
+
+        grid.setItems(alignedGridComponents.toList())
+        add(grid)
+      } else {
+        TODO("Not supported yet")
       }
-
-      grid.setItems(alignedGridComponents.toList())
-      add(grid)
-
     } else {
       val ori = ori as AbstractBlockLayout
 

@@ -26,7 +26,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 object Clients : Table() {
@@ -46,7 +46,7 @@ object Order : Table() {
   val quantity = integer("QUANTITY")
   val client_id = integer("CLIENT_ID").references(Clients.id)
   val product_id = integer("PRODUCT_ID").references(Products.id)
-
+  val address_id = integer("ADDRESS_ID").references(Adress.id)
   override val primaryKey = PrimaryKey(id)
 }
 
@@ -136,6 +136,15 @@ object FormWithNullableColumn : DictionaryForm() {
         it[description] = "produit de test"
       }
 
+      Adress.insert{
+        it[id] = 1
+        it[uc] = 0
+        it[ts] = 0
+        it[zip] = "1000"
+        it[country] = "Tunisie"
+        it[client_id] = 1
+      }
+
       Order.insert {
         it[id] = 1
         it[uc] = 0
@@ -143,6 +152,7 @@ object FormWithNullableColumn : DictionaryForm() {
         it[quantity] = 10
         it[client_id] = 1
         it[product_id] = 1
+        it[address_id] = 1
       }
     }
   }
@@ -152,7 +162,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockWithTwoTablesInnerJoin = p1.insertBlock(FormWithTwoTablesInnerJoin()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -167,7 +176,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockWithTwoTablesLeftJoin = p1.insertBlock(FormWithTwoTablesLeftJoin()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -182,7 +190,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockWithThreeTablesLeftJoin = p1.insertBlock(FormWithThreeTablesLeftJoin()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -197,7 +204,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockWithThreeTablesInnerJoin = p1.insertBlock(FormWithThreeTablesInnerJoin()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -212,7 +218,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockWithThreeTablesInnerJoinInOneField = p1.insertBlock(FormWithThreeTablesInnerJoinInField()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -227,7 +232,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockWithThreeTablesLeftJoinInOneField = p1.insertBlock(FormWithThreeTablesLeftJoinInField()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -242,7 +246,6 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockThreeTablesMiddleLeftJoinInOneField = p1.insertBlock(FormThreeTablesMiddleLeftJoinInField()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
@@ -257,7 +260,90 @@ object FormWithNullableColumn : DictionaryForm() {
   val blockThreeTablesEndLeftJoinInOneField = p1.insertBlock(FormThreeTablesEndLeftJoinInField()) {
     command(item = FormWithList.list) {
       action = {
-        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockFourTablesLeftInnerLeftJoin = p1.insertBlock(FormFourTablesLeftInnerLeftJoin()) {
+    command(item = FormWithList.list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockFourTablesInnerLeftInnerJoin = p1.insertBlock(FormFourTablesInnerLeftInnerJoin()) {
+    command(item = FormWithList.list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockTwoTablesInnerJoinNoJoin = p1.insertBlock(FormTwoTablesInnerJoinNoJoin()) {
+    command(item = FormWithList.list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockTwoTablesNoJoinInnerJoin = p1.insertBlock(FormTwoTablesNoJoinInnerJoin()) {
+    command(item = FormWithList.list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockTwoTablesLeftJoinNoJoin = p1.insertBlock(FormTwoTablesLeftJoinNoJoin()) {
+    command(item = FormWithList.list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockTwoTablesNoJoinLeftJoin = p1.insertBlock(FormTwoTablesNoJoinLeftJoin()) {
+    command(item = FormWithList.list) {
+      action = {
         recursiveQuery()
       }
     }
@@ -270,7 +356,7 @@ object FormWithNullableColumn : DictionaryForm() {
   }
 }
 
-class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test") {
+class FormWithTwoTablesInnerJoin :  Block(1, 1, "Inner Join Two Tables Test") {
   val c = table(Clients)
   val o = table(Order)
 
@@ -291,7 +377,7 @@ class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test"
   }
 }
 
-class FormWithTwoTablesLeftJoin :  FormBlock(1, 1, "Left Join Two Tables Test") {
+class FormWithTwoTablesLeftJoin :  Block(1, 1, "Left Join Two Tables Test") {
   val c = table(Clients)
   val o = table(Order)
 
@@ -312,7 +398,7 @@ class FormWithTwoTablesLeftJoin :  FormBlock(1, 1, "Left Join Two Tables Test") 
   }
 }
 
-class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test") {
+class FormWithThreeTablesLeftJoin : Block(1, 1, "Left Join three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val p = table(Products)
@@ -350,7 +436,7 @@ class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test
   }
 }
 
-class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Test") {
+class FormWithThreeTablesInnerJoin : Block(1, 1, "Inner Join three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val p = table(Products)
@@ -388,7 +474,7 @@ class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Te
   }
 }
 
-class FormWithThreeTablesInnerJoinInField : FormBlock(1, 1, "Inner Join three Tables in Field Test") {
+class FormWithThreeTablesInnerJoinInField : Block(1, 1, "Inner Join three Tables in Field Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -428,7 +514,7 @@ class FormWithThreeTablesInnerJoinInField : FormBlock(1, 1, "Inner Join three Ta
   }
 }
 
-class FormWithThreeTablesLeftJoinInField : FormBlock(1, 1, "Left Join three Tables in Field Test") {
+class FormWithThreeTablesLeftJoinInField : Block(1, 1, "Left Join three Tables in Field Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -468,7 +554,7 @@ class FormWithThreeTablesLeftJoinInField : FormBlock(1, 1, "Left Join three Tabl
   }
 }
 
-class FormThreeTablesMiddleLeftJoinInField : FormBlock(1, 1, "Left Join in middle of field three Tables Test") {
+class FormThreeTablesMiddleLeftJoinInField : Block(1, 1, "Left Join in middle of field three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -508,7 +594,7 @@ class FormThreeTablesMiddleLeftJoinInField : FormBlock(1, 1, "Left Join in middl
   }
 }
 
-class FormThreeTablesEndLeftJoinInField : FormBlock(1, 1, "Left Join in the end of the field three Tables Test") {
+class FormThreeTablesEndLeftJoinInField : Block(1, 1, "Left Join in the end of the field three Tables Test") {
   val o = table(Order)
   val c = table(Clients)
   val a = table(Adress)
@@ -547,6 +633,111 @@ class FormThreeTablesEndLeftJoinInField : FormBlock(1, 1, "Left Join in the end 
     columns(a.zip)
   }
 }
+
+class FormFourTablesLeftInnerLeftJoin : Block(1, 1, "Left then inner then left join Test") {
+  val o = table(Order)
+  val c = table(Clients)
+  val a = table(Adress)
+  val p = table(Products)
+
+  val id_user = skipped(domain = INT(20), position = at(1, 1)) {
+    columns(c.id, nullable(o.client_id))
+  }
+  val id_address = skipped(domain = INT(20), position = at(2, 1)) {
+    columns( a.id, o.address_id)
+  }
+  val id_product = skipped(domain = INT(20), position = at(3, 1)) {
+    columns( p.id , nullable(o.product_id))
+  }
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
+    columns(o.quantity)
+  }
+}
+
+class FormFourTablesInnerLeftInnerJoin : Block(1, 1, "Inner then left then inner join Test") {
+  val a = table(Adress)
+  val o = table(Order)
+  val c = table(Clients)
+  val p = table(Products)
+
+  val id_address = skipped(domain = INT(20), position = at(2, 1)) {
+    columns(a.id, o.address_id)
+  }
+  val id_user = skipped(domain = INT(20), position = at(1, 1)) {
+    columns(nullable(c.id), nullable(o.client_id))
+  }
+  val id_product = skipped(domain = INT(20), position = at(3, 1)) {
+    columns(o.product_id, p.id)
+  }
+  val name = visit(domain = STRING(20), position = at(4, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = STRING(20), position = at(4, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = INT(10), position = at(5, 1)) {
+    columns(o.quantity)
+  }
+}
+
+class FormTwoTablesInnerJoinNoJoin : Block(1, 1, "Inner join then no-join Test") {
+  val a = table(Adress)
+  val o = table(Order)
+
+  val id_address = skipped(domain = INT(20), position = at(2, 1)) {
+    columns(a.id, o.address_id)
+  }
+  val id_user = visit(domain = INT(20), position = at(1, 1)) {
+    columns(o.client_id)
+  }
+}
+
+class FormTwoTablesNoJoinInnerJoin : Block(1, 1, "No join then inner join Test") {
+  val a = table(Adress)
+  val o = table(Order)
+
+  val id_user = skipped(domain = INT(20), position = at(1, 1)) {
+    columns(o.client_id)
+  }
+  val id_address = visit(domain = INT(20), position = at(2, 1)) {
+    columns(a.id, o.address_id)
+  }
+}
+
+class FormTwoTablesLeftJoinNoJoin : Block(1, 1, "Left join then no-join Test") {
+  val a = table(Adress)
+  val o = table(Order)
+
+  val id_client = skipped(domain = INT(20), position = at(2, 1)) {
+    columns(a.client_id, o.client_id)
+  }
+  val quantity = visit(domain = INT(20), position = at(2, 1)) {
+    columns(o.quantity)
+  }
+}
+
+class FormTwoTablesNoJoinLeftJoin : Block(1, 1, "No join then left join Test") {
+  val a = table(Adress)
+  val o = table(Order)
+
+  val quantity = skipped(domain = INT(20), position = at(2, 1)) {
+    columns(o.quantity)
+  }
+  val id_client = visit(domain = INT(20), position = at(2, 1)) {
+    columns(a.client_id, o.client_id)
+  }
+}
+
 
 fun main() {
   runForm(formName = FormWithNullableColumn)

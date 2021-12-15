@@ -68,15 +68,15 @@ open class Date : Type<Date, LocalDate> {
   /**
    * Parses a date of format 'yyyy.MM.dd' or 'yyyy-MM-dd'
    */
-  internal constructor(image: String) {
+  internal constructor(date: String) {
     val pattern: Pattern = Pattern.compile("(\\d\\d\\d\\d)[-.]{1}(\\d\\d?)[-.]{1}(\\d\\d?)")
-    val matcher: Matcher = pattern.matcher(image)
+    val matcher: Matcher = pattern.matcher(date)
 
     if (matcher.matches()) {
-      val res = Pattern.compile("[-.]").split(image)
+      val res = Pattern.compile("[-.]").split(date)
       scalar = gregorianToJulian(res[0].toInt(), res[1].toInt(), res[2].toInt())
     } else {
-      throw IllegalArgumentException("invalid date string $image")
+      throw IllegalArgumentException("invalid date string $date")
     }
   }
 
