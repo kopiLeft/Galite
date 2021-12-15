@@ -66,7 +66,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
     themeList.add("grid-block")
-    grid.isHeightByRows = true
   }
 
   /*
@@ -229,12 +228,9 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   private fun setHeightByRows(buffer: Int, rows: Int) {
     if(buffer == rows) {
-      grid.isHeightByRows = true
+      grid.isAllRowsVisible = true
     } else {
-      grid.height = "calc(" +
-              "(1.04 * var(--lumo-size-m) + var(--_lumo-grid-border-width)) + " +
-              "(${rows * 24}px + ${rows -1} * var(--_lumo-grid-border-width))" +
-              ")"
+      grid.height = "calc(var(--_lumo-grid-border-width) + ${(rows + 1) * 24}px)"
     }
   }
 
