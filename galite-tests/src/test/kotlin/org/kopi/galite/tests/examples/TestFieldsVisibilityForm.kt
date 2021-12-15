@@ -82,19 +82,11 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "hidden field"
   }
 
-  val visitField = visit(domain = INT(3), position = at(1, 1)) {
-    label = "visit field"
-    help = "visit field"
-    minValue = 10
-    maxValue = 50
-  }
-
   val visitFieldToSkippedField = visit(domain = INT(25), position = at(1, 2)) {
     label = "visit field to skipped"
     help = "visit field"
     onInsertSkipped()
     onUpdateSkipped()
-    onQueryVisit()
   }
 
   val visitFieldToHiddenField = visit(domain = INT(25), position = at(1, 3)) {
@@ -102,7 +94,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "visit field"
     onInsertHidden()
     onUpdateHidden()
-    onQueryVisit()
   }
 
   val visitFieldToMustFillField = visit(domain = INT(25), position = at(1, 4)) {
@@ -110,12 +101,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "visit field"
     onInsertMustFill()
     onUpdateMustFill()
-    onQueryVisit()
-  }
-
-  val mustFillField = mustFill(domain = STRING(50), position = at(2, 1)) {
-    label = "mustFill field"
-    help = "mustFill field"
   }
 
   val mustFillToSkippedField = mustFill(domain = INT(25), position = at(2, 2)) {
@@ -123,7 +108,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "mustFill field"
     onInsertSkipped()
     onUpdateSkipped()
-    onQueryMustFill()
   }
 
   val mustFillToVisitField = mustFill(domain = INT(25), position = at(2, 3)) {
@@ -131,7 +115,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "mustFill field"
     onInsertVisit()
     onUpdateVisit()
-    onQueryMustFill()
   }
 
   val mustFillToHiddenField = mustFill(domain = INT(25), position = at(2, 4)) {
@@ -139,12 +122,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "mustFill field"
     onInsertHidden()
     onUpdateHidden()
-    onQueryMustFill()
-  }
-
-  val skippedField = skipped(domain = STRING(50), position = at(3, 1)) {
-    label = "skipped field"
-    help = "skipped field"
   }
 
   val skippedToHiddenField = skipped(domain = INT(25), position = at(3, 2)) {
@@ -152,7 +129,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "skipped field"
     onInsertHidden()
     onUpdateHidden()
-    onQuerySkipped()
   }
 
   val skippedToVisitField = skipped(domain = INT(25), position = at(3, 3)) {
@@ -160,7 +136,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "skipped field"
     onInsertVisit()
     onUpdateVisit()
-    onQuerySkipped()
   }
 
   val skippedToMustFillField = skipped(domain = INT(25), position = at(3, 4)) {
@@ -168,7 +143,6 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
     help = "skipped field"
     onInsertMustFill()
     onUpdateMustFill()
-    onQuerySkipped()
   }
 }
 

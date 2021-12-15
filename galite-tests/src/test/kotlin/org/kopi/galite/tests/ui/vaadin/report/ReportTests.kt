@@ -19,8 +19,10 @@ package org.kopi.galite.tests.ui.vaadin.report
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.visual.ui.vaadin.download.DownloadAnchor
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
@@ -31,17 +33,12 @@ import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
 import org.kopi.galite.visual.ui.vaadin.report.DReport
-import org.kopi.galite.visual.ui.vaadin.download.DownloaderDialog
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.html.Anchor
-import com.vaadin.flow.component.html.Div
-import org.junit.Before
-import org.kopi.galite.testing.waitAndRunUIQueue
 
 class ReportTests: GaliteVUITestBase() {
 
@@ -94,19 +91,11 @@ class ReportTests: GaliteVUITestBase() {
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.csv.triggerCommand()
-    waitAndRunUIQueue(100)
 
-    _expectOne<DownloaderDialog>()
-    val downloadDialog = _get<DownloaderDialog>()
-
-    assertTrue(downloadDialog.isOpened)
-    val anchor = downloadDialog._get<Anchor> {  }
-    val div = downloadDialog._get<Div> { classes = "download-file-title" }
+    val anchor = _get<DownloadAnchor>()
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".csv"))
-    assertTrue(div.text.contains(simpleReport.title))
-    assertTrue(div.text.endsWith(".csv"))
   }
 
   @Test
@@ -117,19 +106,11 @@ class ReportTests: GaliteVUITestBase() {
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.xls.triggerCommand()
-    waitAndRunUIQueue(100)
 
-    _expectOne<DownloaderDialog>()
-    val downloadDialog = _get<DownloaderDialog>()
-
-    assertTrue(downloadDialog.isOpened)
-    val anchor = downloadDialog._get<Anchor> {  }
-    val div = downloadDialog._get<Div> { classes = "download-file-title" }
+    val anchor = _get<DownloadAnchor>()
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".xls"))
-    assertTrue(div.text.contains(simpleReport.title))
-    assertTrue(div.text.endsWith(".xls"))
   }
 
   @Test
@@ -139,20 +120,12 @@ class ReportTests: GaliteVUITestBase() {
 
     // Check that the report is displayed
     _expectOne<DReport>()
-    simpleReport.xlsx.triggerCommand()
-    waitAndRunUIQueue(100)
+    simpleReport.xlsx.triggerCommand(800)
 
-    _expectOne<DownloaderDialog>()
-    val downloadDialog = _get<DownloaderDialog>()
-
-    assertTrue(downloadDialog.isOpened)
-    val anchor = downloadDialog._get<Anchor> {  }
-    val div = downloadDialog._get<Div> { classes = "download-file-title" }
+    val anchor = _get<DownloadAnchor>()
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".xlsx"))
-    assertTrue(div.text.contains(simpleReport.title))
-    assertTrue(div.text.endsWith(".xlsx"))
   }
 
   @Test
@@ -163,19 +136,11 @@ class ReportTests: GaliteVUITestBase() {
     // Check that the report is displayed
     _expectOne<DReport>()
     simpleReport.pdf.triggerCommand()
-    waitAndRunUIQueue(100)
 
-    _expectOne<DownloaderDialog>()
-    val downloadDialog = _get<DownloaderDialog>()
-
-    assertTrue(downloadDialog.isOpened)
-    val anchor = downloadDialog._get<Anchor> {  }
-    val div = downloadDialog._get<Div> { classes = "download-file-title" }
+    val anchor = _get<DownloadAnchor>()
 
     assertTrue(anchor.href.contains(simpleReport.title))
     assertTrue(anchor.href.endsWith(".pdf"))
-    assertTrue(div.text.contains(simpleReport.title))
-    assertTrue(div.text.endsWith(".pdf"))
   }
   companion object {
     @BeforeClass

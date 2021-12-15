@@ -27,6 +27,7 @@ import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.findBlock
+import org.kopi.galite.testing.findModel
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.FormExample
@@ -93,54 +94,92 @@ class SimpleBlockTests: GaliteVUITestBase() {
   }
 
   @Test
-  fun DynamicallyChangeBlocModeAndVerifyFieldsAccess(){
+  fun `dynamically change block mode and verify fields access`(){
     testFieldsVisibilityForm.open()
     val block = testFieldsVisibilityForm.blockWithAllFieldVisibilityTypes
+    val dBlock = block.findBlock()
+    val blockModel = dBlock.model
+    val visitFieldToSkippedField = block.visitFieldToSkippedField.findModel(blockModel)
+    val visitFieldToHiddenField = block.visitFieldToHiddenField.findModel(blockModel)
+    val visitFieldToMustFillField = block.visitFieldToMustFillField.findModel(blockModel)
+    val mustFillToSkippedField = block.mustFillToSkippedField.findModel(blockModel)
+    val mustFillToVisitField = block.mustFillToVisitField.findModel(blockModel)
+    val mustFillToHiddenField = block.mustFillToHiddenField.findModel(blockModel)
+    val skippedToHiddenField = block.skippedToHiddenField.findModel(blockModel)
+    val skippedToVisitField = block.skippedToVisitField.findModel(blockModel)
+    val skippedToMustFillField = block.skippedToMustFillField.findModel(blockModel)
 
     // enter the block to enable the commands
     block.enter()
+
+    // verify initial access
+    assertEquals(Mode.QUERY.value, blockModel.getMode())
+    // verify the visit fields access in query mode
+    assertEquals(VConstants.ACS_VISIT, visitFieldToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, visitFieldToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, visitFieldToMustFillField.getDefaultAccess())
+    // verify the mustfill fields access in query mode
+    assertEquals(VConstants.ACS_MUSTFILL, mustFillToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, mustFillToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, mustFillToHiddenField.getDefaultAccess())
+    // verify the skipped fields access in query mode
+    assertEquals(VConstants.ACS_SKIPPED, skippedToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_SKIPPED, skippedToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_SKIPPED, skippedToMustFillField.getDefaultAccess())
+
     // trigger a command
     testFieldsVisibilityForm.insert.triggerCommand()
 
-    val dBlock = block.findBlock()
-
     // verify that the mode have changed in the block
-    assertEquals(Mode.INSERT.value, dBlock.model.getMode())
+    assertEquals(Mode.INSERT.value, blockModel.getMode())
     // verify the visit fields access in insert mode
-    assertEquals(VConstants.ACS_SKIPPED, block.visitFieldToSkippedField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_HIDDEN, block.visitFieldToHiddenField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_MUSTFILL, block.visitFieldToMustFillField.access[Mode.INSERT.value])
+    assertEquals(VConstants.ACS_SKIPPED, visitFieldToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_HIDDEN, visitFieldToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, visitFieldToMustFillField.getDefaultAccess())
     // verify the mustfill fields access in insert mode
-    assertEquals(VConstants.ACS_SKIPPED, block.mustFillToSkippedField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_VISIT, block.mustFillToVisitField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_HIDDEN, block.mustFillToHiddenField.access[Mode.INSERT.value])
+    assertEquals(VConstants.ACS_SKIPPED, mustFillToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, mustFillToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_HIDDEN, mustFillToHiddenField.getDefaultAccess())
     // verify the skipped fields access in insert mode
-    assertEquals(VConstants.ACS_HIDDEN, block.skippedToHiddenField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_VISIT, block.skippedToVisitField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_MUSTFILL, block.skippedToMustFillField.access[Mode.INSERT.value])
+    assertEquals(VConstants.ACS_HIDDEN, skippedToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, skippedToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, skippedToMustFillField.getDefaultAccess())
 
     // click on query to change the block access
     testFieldsVisibilityForm.query.triggerCommand()
     // verify that the mode have changed in the block
-    assertEquals(Mode.QUERY.value, dBlock.model.getMode())
+    assertEquals(Mode.QUERY.value, blockModel.getMode())
+    // verify the visit fields access in query mode
+    assertEquals(VConstants.ACS_VISIT, visitFieldToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, visitFieldToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, visitFieldToMustFillField.getDefaultAccess())
+    // verify the mustfill fields access in query mode
+    assertEquals(VConstants.ACS_MUSTFILL, mustFillToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, mustFillToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, mustFillToHiddenField.getDefaultAccess())
+    // verify the skipped fields access in query mode
+    assertEquals(VConstants.ACS_SKIPPED, skippedToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_SKIPPED, skippedToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_SKIPPED, skippedToMustFillField.getDefaultAccess())
 
     // click on update to change again the access
     testFieldsVisibilityForm.update.triggerCommand()
     // verify that the mode have changed in the block
-    assertEquals(Mode.UPDATE.value, dBlock.model.getMode())
-    // verify the visit fields access in insert mode
-    assertEquals(VConstants.ACS_SKIPPED, block.visitFieldToSkippedField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_HIDDEN, block.visitFieldToHiddenField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_MUSTFILL, block.visitFieldToMustFillField.access[Mode.INSERT.value])
-    // verify the mustfill fields access in insert mode
-    assertEquals(VConstants.ACS_SKIPPED, block.mustFillToSkippedField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_VISIT, block.mustFillToVisitField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_HIDDEN, block.mustFillToHiddenField.access[Mode.INSERT.value])
-    // verify the skipped fields access in insert mode
-    assertEquals(VConstants.ACS_HIDDEN, block.skippedToHiddenField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_VISIT, block.skippedToVisitField.access[Mode.INSERT.value])
-    assertEquals(VConstants.ACS_MUSTFILL, block.skippedToMustFillField.access[Mode.INSERT.value])
+    assertEquals(Mode.UPDATE.value, blockModel.getMode())
+    // verify the visit fields access in update mode
+    assertEquals(VConstants.ACS_SKIPPED, visitFieldToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_HIDDEN, visitFieldToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, visitFieldToMustFillField.getDefaultAccess())
+    // verify the mustfill fields access in update mode
+    assertEquals(VConstants.ACS_SKIPPED, mustFillToSkippedField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, mustFillToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_HIDDEN, mustFillToHiddenField.getDefaultAccess())
+    // verify the skipped fields access in update mode
+    assertEquals(VConstants.ACS_HIDDEN, skippedToHiddenField.getDefaultAccess())
+    assertEquals(VConstants.ACS_VISIT, skippedToVisitField.getDefaultAccess())
+    assertEquals(VConstants.ACS_MUSTFILL, skippedToMustFillField.getDefaultAccess())
   }
+
   companion object {
     /**
      * Defined your test specific modules
