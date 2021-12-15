@@ -18,25 +18,18 @@
 package org.kopi.galite.visual.ui.vaadin.common
 
 import org.kopi.galite.visual.ui.vaadin.label.Label
+import org.vaadin.stefan.table.Table
+import org.vaadin.stefan.table.TableCell
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.Tag
-import com.vaadin.flow.dom.Element
 
-@Tag("table")
-open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasStyle {
-
-  val tbody: Element = Element("tbody")
+open class VTable(rowsNumber: Int, colsNumber: Int) : Table() {
 
   init {
-    element.appendChild(tbody)
     for (i in 0 until rowsNumber) {
-      val tr = Element("tr")
-      tbody.appendChild(tr)
+      val tr = addRow()
       for (j in 0 until colsNumber) {
-        tr.appendChild(Element("td"))
+        tr.addDataCell()
       }
     }
   }
@@ -79,7 +72,7 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
     val cell = getCellAt(row, column)
 
     components.forEach {
-      cell.appendChild(it.element)
+      cell.add(it)
 
       // FIXME: styling temporary workaround
       if(it is Label) {
@@ -97,6 +90,7 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
    */
   fun setAlignment(row: Int, column: Int, right: Boolean) {
     getCellAt(row, column)
+      .element
       .setProperty("align", if (right) "right" else "left")
   }
 
@@ -107,8 +101,8 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
    * @param row The cell's column.
    * @param colSpan the cell's column span.
    */
-  fun setColSpan(row: Int, column: Int, colSpan: String) {
-    getCellAt(row, column).setProperty("colSpan", colSpan)
+  fun setColSpan(row: Int, column: Int, colSpan: Int) {
+    getCellAt(row, column).colSpan = colSpan
   }
 
 
@@ -119,8 +113,8 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
    * @param column the cell's column.
    * @param rowSpan the cell's column span.
    */
-  fun setRowSpan(row: Int, column: Int, rowSpan: String) {
-    getCellAt(row, column).setProperty("rowSpan", rowSpan)
+  fun setRowSpan(row: Int, column: Int, rowSpan: Int) {
+    getCellAt(row, column).rowSpan = rowSpan
   }
 
   /**
@@ -129,26 +123,22 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
    * @param row the cell's row.
    * @param column the cell's column.
    */
-  fun getCellAt(row: Int, column: Int): Element {
-    if(row < 0 || row >= tbody.childCount) {
+  fun getCellAt(row: Int, column: Int): TableCell {
+    val tableRow = getRow(row).orElseGet {
       throw IndexOutOfBoundsException("Row index out of range: $row")
     }
 
-    val tableRow  = tbody.getChild(row)
-
-    if(column < 0 || column >= tableRow.childCount) {
+    val tableCell = tableRow.getCell(column).orElseGet {
       throw IndexOutOfBoundsException("Column index out of range: $column")
     }
 
-    return tableRow.getChild(column)
+    return tableCell
   }
 
   fun addInNewRow(component: Component) {
-    val tr = Element("tr")
-    val componentInTD = Element("td").appendChild(component.element)
+    val tr = addRow()
 
-    tbody.appendChild(tr)
-    tr.appendChild(componentInTD)
+    tr.addDataCell().add(component)
   }
 
   /**
@@ -157,19 +147,11 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
    * @param row the cell's row.
    * @param column the cell's column.
    */
-  fun getCellAtOrNull(row: Int, column: Int): Element? {
-    if(row < 0 || row >= tbody.childCount) {
-      return null
-    }
+  fun getCellAtOrNull(row: Int, column: Int): TableCell? {
+    val tableRow = getRow(row).orElseGet(null)
 
-    val tableRow  = tbody.getChild(row)
-
-    if(column < 0 || column >= tableRow.childCount) {
-      return null
-    }
-
-    return tableRow.getChild(column)
+    return tableRow?.getCell(column)?.orElseGet(null)
   }
 
-  val rowCount: Int get() = tbody.childCount
+  val rowCount: Int get() = streamRows().count().toInt()
 }

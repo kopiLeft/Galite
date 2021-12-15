@@ -78,12 +78,12 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
 
   init {
     className = Styles.TEXT_INPUT
-    addKeyPressListener(::onKeyPress)
-    addKeyUpListener(::onKeyUp)
+    //addKeyPressListener(::onKeyPress) TODO
+    //addKeyUpListener(::onKeyUp) TODO
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     // addKeyDownListener(::onKeyDown) TODO
-    addFocusListener(::onFocus)
+    //addFocusListener(::onFocus) TODO
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
     // Autoselection on focus

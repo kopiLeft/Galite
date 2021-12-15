@@ -93,10 +93,10 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
   open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
     add(row, column, formItem)
     if (colSpan > 1) {
-      setColSpan(row, column, colSpan.toString())
+      setColSpan(row, column, colSpan)
     }
     if (rowSpan > 1) {
-      setRowSpan(row, column, rowSpan.toString())
+      setRowSpan(row, column, rowSpan)
     }
   }
 

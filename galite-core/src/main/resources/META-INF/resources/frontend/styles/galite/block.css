@@ -69,7 +69,14 @@
 }
 
 /**
- * Styles for the grid wrapper cell
+ *  Grid inside a table is not displayed. this a workaround for this issue
+ */
+table.multiple, .multiple tr, .multiple tr td {
+    display: block;
+}
+
+/**
+ * Styles for the grid cell
  */
 .multiple ::part(cell) {
     height: 24px;

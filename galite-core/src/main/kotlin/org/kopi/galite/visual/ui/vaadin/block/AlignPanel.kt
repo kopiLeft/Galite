@@ -142,7 +142,7 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
             Thread {
               setComponentPosition(
                 components!![i],
-                Utils.getOffsetLeft(cell, ui),
+                Utils.getOffsetLeft(cell.element, ui),
                 align.y * 21) // text fields height is 15px
             }.start()
           }

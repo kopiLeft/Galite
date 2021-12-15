@@ -46,8 +46,10 @@ dependencies {
   implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
   // Iron Icons
   implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
-  //FullCalendar for Flow dependency
+  // FullCalendar for Flow dependency
   implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
+  // HTML Table
+  implementation("org.vaadin.stefan", "html-table", Versions.HTML_TABLE)
 
   // Itext dependency
   implementation("com.lowagie", "itext", Versions.ITEXT)

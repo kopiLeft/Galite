@@ -41,6 +41,7 @@ object Versions {
   const val JAVAX_MAIL = "1.4"
   const val JAVAX_ACTIVATION = "1.1.1"
   const val FULL_CALENDAR = "3.1.0"
+  const val HTML_TABLE = "1.0.1"
 
   const val JFREE_CHART = "1.0.19"
   const val WYSIWYG_EJAVA = "2.0.1"
