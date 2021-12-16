@@ -28,21 +28,14 @@ import org.kopi.galite.visual.dsl.form.Block
 class Traineeship : Block(1, 10, "Training") {
   val t = table(Training)
 
-  val trainingType = visit(domain = Type, position = at(1, 1)) {
-    label = "training Type"
-    help = "training Type"
-    columns(t.type) {
-      priority = 1
-    }
-  }
-  val trainingID = visit(domain = INT(25), position = at(2, 1)) {
+  val trainingID = visit(domain = INT(25), position = at(1, 1)) {
     label = "training ID"
     help = "training ID"
     columns(t.id) {
       priority = 1
     }
   }
-  val trainingName = visit(domain = STRING(50), position = at(3, 2)) {
+  val trainingName = visit(domain = STRING(50), position = at(2, 1)) {
     label = "training Name"
     help = "training Name"
     columns(t.trainingName) {
@@ -50,6 +43,13 @@ class Traineeship : Block(1, 10, "Training") {
     }
     trigger(DEFAULT) {
       "training value"
+    }
+  }
+  val trainingType = visit(domain = Type, position = follow(trainingName)) {
+    label = "training Type"
+    help = "training Type"
+    columns(t.type) {
+      priority = 1
     }
   }
   val trainingPrice = visit(domain = DECIMAL(10, 5), position = at(3, 1)) {
