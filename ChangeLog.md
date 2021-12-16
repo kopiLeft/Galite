@@ -35,3 +35,20 @@
 * Rename FullCalendarBlock class to FullCalendar
 
 **Full Changelog**: [1.0.0-beta...1.0.0-beta.1](https://github.com/kopiLeft/Galite/compare/1.0.0-beta...1.0.0-beta.1)
+
+# 1.0.0-beta.2
+## What's Changed
+* VaadinUI: More precise method to calculate multiblock height by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/bdb1ddf4ae97a1d8554bd93b8b6c8af4242788e1)
+* VaadinUI: Sort list dialog when reordering grid columns by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/2087563bc555dfbf2631317faf2a637b5db64408)
+* Add Unit Test for DSL components by @MedAliMarz in [#497](https://github.com/kopiLeft/Galite/pull/497)
+* Add the ability to display and hide the report's columns by @h-haddad in [#516](https://github.com/kopiLeft/Galite/pull/516)
+* UITests: Adding tests for block and report by @h-haddad in [#481](https://github.com/kopiLeft/Galite/pull/481)
+* VBump: Vaadin 21.0.9 by @hfazai in [#518](https://github.com/kopiLeft/Galite/pull/518)
+* VBump: Exposed 0.36.2 by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/4f27fee07478a63a5cbd3105fa618de31b73f88f)
+* Fix: Records of the last day of the week should be fetched in full calendar by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/85389ba69c1cc91d20561042a9ffad49860a39ea)
+* Improvement in Css style by @h-haddad in [#517](https://github.com/kopiLeft/Galite/pull/517)
+* FIX: Refresh data after deleting record from full calendar block by @hfazai in [#519](https://github.com/kopiLeft/Galite/pull/519)
+* Add UI Tests for Block, Form, Report and List by @MedAliMarz in [#503](https://github.com/kopiLeft/Galite/pull/503)
+* Add Unit tests for VForm, VField and VBlock by @MedAliMarz in [#500](https://github.com/kopiLeft/Galite/pull/500)
+
+**Full Changelog**: [1.0.0-beta.1 ... 1.0.0-beta.2](https://github.com/kopiLeft/Galite/compare/1.0.0-beta.1...1.0.0-beta.2)
