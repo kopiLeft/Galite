@@ -22,6 +22,10 @@
     border-radius: unset;
 }
 
+:host([focus-ring]) [part~='input-field'] {
+    box-shadow: none;
+}
+
 :host {
     vertical-align: top;
     max-height: 40px;

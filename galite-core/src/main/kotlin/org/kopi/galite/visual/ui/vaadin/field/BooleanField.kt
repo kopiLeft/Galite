@@ -66,10 +66,12 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
+
+    addFocusListener(::onFocus)
+    addBlurListener(::onBlur)
     content.element.addEventListener("mouseover") {
       isVisible = true
     }
-
     content.element.addEventListener("mouseout") {
       if (value == null) {
         isVisible = false
@@ -80,11 +82,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-
-  fun beforeClientResponse(initial: Boolean) {
-    // super.beforeClientResponse(initial) TODO
-    // state.value = value TODO
-  }
 
   /**
    * Sets the field focus.
@@ -110,15 +107,13 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
-    super.onBlur(event)
+  fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
     if (value == null) {
       isVisible = false
     }
   }
 
-  override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
-    super.onFocus(event)
+  fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
     isVisible = true
   }
 

@@ -155,7 +155,6 @@ class DGridTextEditorField(
       editor.setAutofill()
     }
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
-    editor.addActors(actors)
     //editor.setConvertType(getConvertType(columnView.model))
     return editor
   }

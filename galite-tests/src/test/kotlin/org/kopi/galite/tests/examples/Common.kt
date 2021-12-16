@@ -23,9 +23,9 @@ import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 
-class Traineeship : FormBlock(1, 10, "Training") {
+class Traineeship : Block(1, 10, "Training") {
   val t = table(Training)
 
   val trainingID = visit(domain = INT(25), position = at(1, 1)) {

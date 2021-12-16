@@ -44,7 +44,8 @@ class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChart
   }
 
   override fun isVisible(): Boolean {
-    TODO("Not yet implemented")
+    // TODO
+   return true
   }
 
   override fun setVisible(visible: Boolean) {

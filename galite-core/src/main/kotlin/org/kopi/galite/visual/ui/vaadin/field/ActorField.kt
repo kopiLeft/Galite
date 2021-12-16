@@ -19,11 +19,9 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 
-import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.shared.Registration
@@ -77,9 +75,6 @@ class ActorField : ObjectField<Any?>() {
     button.icon = icon
   }
 
-  override fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Any?>>) {}
-
-  override fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Any?>>) {}
   override val isNull: Boolean = true
 
   override fun setValue(o: Any?) {

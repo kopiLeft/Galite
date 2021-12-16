@@ -221,7 +221,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 
   /**
    * autofill
-   * @exception   org.kopi.galite.visual.VException    an exception may occur in gotoNextField
+   * @exception   org.kopi.galite.visual.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return handler?.let {

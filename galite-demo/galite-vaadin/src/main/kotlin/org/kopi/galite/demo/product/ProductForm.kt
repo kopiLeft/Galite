@@ -28,7 +28,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.dsl.form.FormBlock
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
@@ -61,7 +61,7 @@ class ProductForm : ReportSelectionForm() {
     return ProductReport()
   }
 
-  inner class BlockProduct : FormBlock(1, 1, "Products") {
+  inner class BlockProduct : Block(1, 1, "Products") {
     val u = table(Product)
 
     val idPdt = hidden(domain = INT(20)) {

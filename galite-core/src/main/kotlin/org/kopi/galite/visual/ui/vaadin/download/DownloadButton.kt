@@ -15,13 +15,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.form
+package org.kopi.galite.visual.ui.vaadin.download
+
+import java.io.File
+
+import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
+
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
- * Constraints for block position.
+ * A download button that allows a user to download a file produced in the server.
  *
- * @param isFollow is it a follow block ?
- * @param isChart is it a chart block ?
- * @param page the page index
+ * @param file the file to download.
+ * @param name the file name
  */
-data class BlockComponentData(var isFollow: Boolean, var isChart: Boolean, var page: Int)
+class DownloadButton(file: File, name: String, locale: String): DownloadAnchor(file, name) {
+  private val downloadButton = Button()
+
+  init {
+    downloadButton.text = LocalizedProperties.getString(locale, "downloadLabel")
+    downloadButton.icon = Icon(VaadinIcon.DOWNLOAD_ALT)
+    downloadButton.isDisableOnClick = true
+    add(downloadButton)
+  }
+}

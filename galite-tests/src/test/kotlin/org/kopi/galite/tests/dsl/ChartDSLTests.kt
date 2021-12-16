@@ -28,7 +28,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
 
-class ChartDSLTests: VApplicationTestBase() {
+class ChartDSLTests : VApplicationTestBase() {
 
   @Test
   fun `test generated model from a basic chart`() {
@@ -65,6 +65,17 @@ class ChartDSLTests: VApplicationTestBase() {
     assertEquals(chart.city.label, dimension.label)
     assertEquals(chart.city.help, dimension.help)
     assertEquals(chart.city.ident, dimension.ident)
+    assertEquals(2, chart.city.values.size)
+  }
+
+  @Test
+  fun `test chart dimension data`() {
+    val chart = BasicChart()
+
+    assertEquals(listOf("population"), chart.city.values[0].getMeasureLabels())
+    assertEquals(listOf("population"), chart.city.values[1].getMeasureLabels())
+    assertEquals(listOf(638845), chart.city.values[0].getMeasureValues())
+    assertEquals(listOf(271428), chart.city.values[1].getMeasureValues())
   }
 
   @Test
@@ -84,7 +95,7 @@ class ChartDSLTests: VApplicationTestBase() {
   }
 }
 
-class BasicChart: Chart() {
+class BasicChart : Chart() {
   override val locale = Locale.UK
   override val title = "Area/population per city"
   override val help = "This chart presents the area/population per city"
@@ -103,5 +114,14 @@ class BasicChart: Chart() {
 
   val type = trigger(CHARTTYPE) {
     VChartType.BAR
+  }
+
+  init{
+    city.add("Tunis") {
+      this[population] = 638845
+    }
+    city.add("Sousse") {
+      this[population] = 271428
+    }
   }
 }

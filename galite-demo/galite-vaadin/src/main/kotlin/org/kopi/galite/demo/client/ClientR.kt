@@ -175,7 +175,7 @@ class ClientR : Report() {
   }
 
   val countryClt = field(STRING(50)) {
-    label = "City"
+    label = "Country"
     help = "The client country"
     align = FieldAlignment.LEFT
   }

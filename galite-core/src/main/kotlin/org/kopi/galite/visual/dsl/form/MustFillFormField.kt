@@ -25,7 +25,7 @@ import org.kopi.galite.visual.type.Type0
  * This class represents a must-fill form field.
  *
  */
-class MustFillFormField<T>(block: FormBlock,
+class MustFillFormField<T>(block: Block,
                            domain: Domain<T>,
                            fieldIndex: Int,
                            initialAccess: Int,

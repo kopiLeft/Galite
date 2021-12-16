@@ -22,49 +22,51 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.report.FieldAlignment
+import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.type.Decimal
+import org.jetbrains.exposed.sql.insert
+import org.kopi.galite.visual.db.transaction
 
 /**
- * test format & align
  * test field triggers [compute]
  * report trigger
- *
  */
 class DocumentationReportTriggersR : Report() {
   override val locale = Locale.UK
 
-  override val title = "Clients_Report"
+  override val title = "Report to test triggers"
 
-  //test hiiden field
-  val hiddenField = field(STRING(10)) {
-    label = "hidden Field"
-    hidden
+  val action = menu("Action")
+
+  val quit = actor(
+    ident = "Quit",
+    menu = action,
+    label = "Quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
   }
 
-  // test to upper Case format + align left
+  val quitCmd = command(item = quit) {
+    action = {
+      model.close()
+    }
+  }
+
   val name = field(STRING(25)) {
     label = "Name"
     help = "The name"
-    align = FieldAlignment.LEFT
-    format { value ->
-      value.toUpperCase()
-    }
   }
 
-  // test to lower Case format + align right
-  val name2 = field(STRING(25)) {
-    label = "Name 2"
-    help = "The name 2"
-    align = FieldAlignment.RIGHT
-    format { value ->
-      value.toLowerCase()
-    }
+  val lastName = field(STRING(25)) {
+    label = "last Name"
+    help = "The last name"
   }
 
-  //test avgInteger
+  // test avgInteger
   val age = field(INT(25)) {
     label = "age with avg"
     help = "age"
@@ -74,7 +76,7 @@ class DocumentationReportTriggersR : Report() {
     }
   }
 
-  //test sumInteger
+  // test sumInteger
   val age2 = field(INT(25)) {
     label = "age2 with sum"
     help = "age2"
@@ -84,8 +86,8 @@ class DocumentationReportTriggersR : Report() {
     }
   }
 
-  //test sumDecimal
-  val salary = field(DECIMAL(20, 10)) {
+  // test sumDecimal
+  val salary = field(DECIMAL(5, 2)) {
     label = "salary with sum"
     help = "salary"
     compute {
@@ -94,8 +96,8 @@ class DocumentationReportTriggersR : Report() {
     }
   }
 
-  //test avgDecimal
-  val salary2 = field(DECIMAL(20, 10)) {
+  // test avgDecimal
+  val salary2 = field(DECIMAL(5, 2)) {
     label = "salary with avg"
     help = "salary"
     compute {
@@ -124,31 +126,43 @@ class DocumentationReportTriggersR : Report() {
 
   /** report trigger **/
   val preReport = trigger(PREREPORT) {
-    println("---------PREREPORT TRIGGER-------------")
+    transaction {
+      initDocumentationData()
+      TestTriggers.insert {
+        it[id] = 5
+        it[INS] = "PREREPORT Trigger"
+      }
+    }
   }
 
   val postReport = trigger(POSTREPORT) {
-    println("---------POSTREPORT TRIGGER-------------")
+    transaction {
+      initDocumentationData()
+      TestTriggers.insert {
+        it[id] = 5
+        it[INS] = "POSTREPORT Trigger"
+      }
+    }
   }
 
   /** Report data initialization **/
   init {
     add {
       this[name] = "Sami"
-      this[name2] = "Sami"
+      this[lastName] = "Malouli"
       this[age] = 20
       this[age2] = 40
-      this[salary] = Decimal("2000.50")
-      this[salary2] = Decimal("4000.50")
+      this[salary] = Decimal("20.50")
+      this[salary2] = Decimal("40.50")
       this[codeDomain] = Days.keyOf("Monday")
     }
     add {
       this[name] = "Ahmed"
-      this[name2] = "Ahmed"
+      this[lastName] = "Mouelhi"
       this[age] = 40
       this[age2] = 20
-      this[salary] = Decimal("4000.50")
-      this[salary2] = Decimal("2000.50")
+      this[salary] = Decimal("40.50")
+      this[salary2] = Decimal("20.50")
       this[codeDomain] = Days.keyOf("Sunday")
     }
   }

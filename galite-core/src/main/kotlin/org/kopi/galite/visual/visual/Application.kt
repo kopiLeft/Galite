@@ -129,5 +129,5 @@ interface Application : MessageListener {
   /**
    * The application configuration instance.
    */
-  var applicationConfiguration: ApplicationConfiguration
+  var applicationConfiguration: ApplicationConfiguration?
 }

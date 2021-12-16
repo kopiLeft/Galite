@@ -29,7 +29,6 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.WindowController
 
@@ -39,7 +38,7 @@ import org.kopi.galite.visual.visual.WindowController
 abstract class Form : Window() {
 
   /** Form's blocks. */
-  val formBlocks = mutableListOf<FormBlock>()
+  val blocks = mutableListOf<Block>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
@@ -59,8 +58,8 @@ abstract class Form : Window() {
           name: String,
           title: String,
           formPage: FormPage? = null,
-          init: FormBlock.() -> Unit
-  ): FormBlock = insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
+          init: Block.() -> Unit
+  ): Block = insertBlock(Block(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
@@ -73,8 +72,8 @@ abstract class Form : Window() {
     buffer: Int,
     visible: Int,
     title: String,
-    init: FormBlock.() -> Unit
-  ): FormBlock = insertBlock(FormBlock(buffer, visible, title, title), this, init)
+    init: Block.() -> Unit
+  ): Block = insertBlock(Block(buffer, visible, title, title), this, init)
 
   /**
    * Adds a new block to this form.
@@ -82,7 +81,7 @@ abstract class Form : Window() {
    * @param        block                 the block to insert
    * @receiver                           the page containing the block
    */
-  fun <T : FormBlock> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
+  fun <T : Block> FormPage.insertBlock(block: T, init: (T.() -> Unit)? = null): T =
     this.form.insertBlock(block, this, init)
 
   /**
@@ -91,7 +90,7 @@ abstract class Form : Window() {
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
-  private fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+  private fun <T : Block> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
     }
@@ -99,7 +98,7 @@ abstract class Form : Window() {
       block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
-    formBlocks.add(block)
+    blocks.add(block)
     return block
   }
 
@@ -108,7 +107,7 @@ abstract class Form : Window() {
    *
    * @param        block                 the block to insert
    */
-  fun <T : FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
+  fun <T : Block> insertBlock(block: T, init: (T.() -> Unit)? = null): T = insertBlock(block, null, init)
 
   /**
    * Adds triggers to this form
@@ -188,7 +187,7 @@ abstract class Form : Window() {
 
   /**
    * GOTO BLOCK
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
   fun gotoBlock(target: VBlock) {
     model.gotoBlock(target)
@@ -252,7 +251,7 @@ abstract class Form : Window() {
    * Get block
    */
   open fun getFormElement(ident: String?): FormElement? {
-    formBlocks.forEach { formBlock ->
+    blocks.forEach { formBlock ->
       if (formBlock.ident == ident || formBlock.shortcut == ident) {
         return formBlock
       }
@@ -284,73 +283,11 @@ abstract class Form : Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter)
-            .genForm(title, formBlocks.map { it.ownDomains }.flatten(), menus, actors, pages, formBlocks)
+            .genForm(title, blocks.map { it.ownDomains }.flatten(), menus, actors, pages, blocks)
   }
 
   // ----------------------------------------------------------------------
   // FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VForm by lazy { FormModel() }
-
-  inner class FormModel: VForm() {
-    override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale()
-
-    override fun init() {
-      initialize()
-    }
-  }
-
-  protected fun VForm.initialize() {
-    source = sourceFile
-    setTitle(title)
-    pages = this@Form.pages.map {
-      it.title
-    }.toTypedArray()
-    pagesIdents = this@Form.pages.map {
-      it.ident
-    }.toTypedArray()
-    this.addActors(this@Form.actors.map { actor ->
-      actor.buildModel(sourceFile)
-    }.toTypedArray())
-    this.commands = this@Form.commands.map { command ->
-      command.buildModel(this, actors)
-    }.toTypedArray()
-
-    this.handleTriggers(triggers)
-
-    blocks = formBlocks.map { formBlock ->
-      formBlock.getBlockModel(this, source).also { vBlock ->
-        vBlock.setInfo(formBlock.pageNumber, this)
-        vBlock.initIntern()
-        formBlock.blockFields.forEach { formField ->
-          formField.initialValues.forEach {
-            formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
-          }
-        }
-      }
-    }.toTypedArray()
-  }
-
-  /**
-   * Handling form triggers
-   */
-  private fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
-    // FORM TRIGGERS
-    val formTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-    triggers.forEach { trigger ->
-      for (i in VConstants.TRG_TYPES.indices) {
-        if (trigger.events shr i and 1 > 0) {
-          formTriggerArray[i] = trigger
-        }
-      }
-      VKT_Triggers[0] = formTriggerArray
-    }
-
-    // COMMANDS TRIGGERS
-    this@Form.commands.forEach {
-      val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-      // TODO : Add commands triggers here
-      VKT_Triggers.add(fieldTriggerArray)
-    }
-  }
+  override val model: VForm by lazy { FormModel(this) }
 }

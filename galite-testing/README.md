@@ -50,7 +50,7 @@ To simulate a click on an actor, which triggers a command action, you can use `A
 
 ### Blocks
 
-The function `FormBlock.findBlock()` returns the Vaadin component created for a form block.
+The function `Block.findBlock()` returns the Vaadin component created for a form block.
 
 #### Entering a block
 
@@ -58,7 +58,7 @@ To enter a block you can use `Block.enter()`. This function will focus on the fi
 
 #### Block records
 
-To edit a block record of a block you can use `FormBlock.editRecord(record: Int)`.
+To edit a block record of a block you can use `Block.editRecord(record: Int)`.
 
 ### Fields
 #### Edit a field

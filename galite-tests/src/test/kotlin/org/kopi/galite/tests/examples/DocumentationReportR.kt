@@ -30,15 +30,15 @@ import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.visual.WindowController
 
 /**
- *  Report
- *  test title
- *  test locale
- *  test menu
- *  test actors
- *  test commands
- *  test group
- *  test align field
- *  test format
+ *  Report Tests :
+ *    test title
+ *    test locale
+ *    test menu
+ *    test actors
+ *    test commands
+ *    test group
+ *    test align field
+ *    test format
  */
 class DocumentationReportR : Report() {
   //test locale
@@ -161,9 +161,9 @@ class DocumentationReportR : Report() {
   }
 
   // test to lower Case format + align right
-  val name2 = field(STRING(25)) {
-    label = "Name 2"
-    help = "The name 2"
+  val lastName = field(STRING(25)) {
+    label = "last Name "
+    help = "The last name"
     align = FieldAlignment.RIGHT
     format { value ->
       value.toLowerCase()
@@ -171,17 +171,23 @@ class DocumentationReportR : Report() {
     group = age
   }
 
-  // test normal format + align center !!
-  val name3 = field(STRING(25)) {
-    label = "Name 3"
-    help = "The name 3"
+  // test normal format + align center
+  val middleName = field(STRING(25)) {
+    label = "middleName"
+    help = "The middle Name"
     align = FieldAlignment.CENTER
     group = age
   }
 
   val age = field(INT(25)) {
-    label = "age with avg"
+    label = "age"
     help = "age"
+  }
+
+  //test hidden field
+  val hiddenField = field(STRING(10)) {
+    label = "hidden Field"
+    hidden = true
   }
 
   val testTable = TestTable.selectAll()
@@ -191,8 +197,8 @@ class DocumentationReportR : Report() {
       testTable.forEach { result ->
         add {
           this[name] = result[TestTable.name]
-          this[name2] = result[TestTable.name]
-          this[name3] = result[TestTable.name]
+          this[lastName] = result[TestTable.lastName] as String
+          this[middleName] = result[TestTable.lastName] as String
           this[age] = result[TestTable.age] as Int
         }
       }

@@ -27,7 +27,7 @@ import org.kopi.galite.visual.form.BlockAlignment
  * @param targetBlock            block alignment
  * @param targets                the target column list
  */
-class FormBlockAlign(private val targetBlock: FormBlock,
+class FormBlockAlign(private val targetBlock: Block,
                      private val targets: ArrayList<Int>) {
 
   fun getBlockAlignModel() = BlockAlignment(targetBlock.vBlock, targets.toIntArray())

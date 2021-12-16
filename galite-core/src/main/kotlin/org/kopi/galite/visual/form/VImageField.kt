@@ -73,7 +73,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {}
 
@@ -257,7 +257,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
 
   /**
    * autofill
-   * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
+   * @exception    org.kopi.galite.visual.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     if (handler != null) {

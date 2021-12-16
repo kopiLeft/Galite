@@ -19,7 +19,6 @@ package org.kopi.galite.visual.dsl.form
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.form.VDictionaryForm
-import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
 
 /**
@@ -77,7 +76,7 @@ abstract class DictionaryForm : Form() {
   /**
    * create a report for this form
    */
-  protected fun FormBlock.createDynamicReport() {
+  protected fun Block.createDynamicReport() {
     val field = this.vBlock.activeField
     field?.validate()
     VDynamicReport.createDynamicReport(this.vBlock)
@@ -86,12 +85,5 @@ abstract class DictionaryForm : Form() {
   // ----------------------------------------------------------------------
   // DICTIONARY FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VDictionaryForm by lazy { DictionaryFormModel() }
-
-  inner class DictionaryFormModel: VDictionaryForm() {
-    override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
-    override fun init() {
-      initialize()
-    }
-  }
+  override val model: VDictionaryForm by lazy { DictionaryFormModel(this) }
 }

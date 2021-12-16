@@ -18,6 +18,7 @@ package org.kopi.galite.testing
 
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
@@ -164,7 +165,18 @@ fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?
 }
 
 /**
+ * Finds the the field model.
+ */
+fun FormField<*>.findModel(): VField = findModel(block.findBlock().model)
+
+/**
+ * Finds the the field model.
+ */
+fun FormField<*>.findModel(block: VBlock): VField = block.fields.single { it eq vField }
+
+/**
  * Click on a field.
+ * When the field is in a multiBlock, this should be used after editing a record, see [editRecord].
  */
 fun <T> FormField<T>.click(): UField {
   val mainWindow = _get<MainWindow>()
