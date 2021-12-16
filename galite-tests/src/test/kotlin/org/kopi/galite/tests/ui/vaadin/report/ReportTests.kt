@@ -114,21 +114,6 @@ class ReportTests: GaliteVUITestBase() {
   }
 
   @Test
-  fun `test export XLSX`() {
-    // Trigger the report command
-    formWithReport.report.triggerCommand()
-
-    // Check that the report is displayed
-    _expectOne<DReport>()
-    simpleReport.xlsx.triggerCommand(800)
-
-    val anchor = _get<DownloadAnchor>()
-
-    assertTrue(anchor.href.contains(simpleReport.title))
-    assertTrue(anchor.href.endsWith(".xlsx"))
-  }
-
-  @Test
   fun `test export PDF`() {
     // Trigger the report command
     formWithReport.report.triggerCommand()
