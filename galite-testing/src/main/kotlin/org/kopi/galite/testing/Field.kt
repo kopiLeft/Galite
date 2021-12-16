@@ -167,18 +167,7 @@ fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?
 /**
  * Finds the the field model.
  */
-fun FormField<*>.findModel(): VField {
-  val mainWindow = _get<MainWindow>()
-
-  return if (block.vBlock.isMulti()) {
-    (mainWindow
-      ._find<Grid.Column<*>>()
-      .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq vField }
-      .editorComponent as GridEditorField<*>).dGridEditorField.getModel()
-  } else {
-    mainWindow._find<DField>().single { it.getModel() eq vField }.getModel()
-  }
-}
+fun FormField<*>.findModel(): VField = findModel(block.findBlock().model)
 
 /**
  * Finds the the field model.

@@ -45,6 +45,7 @@ import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.main.VWindowsMenuItem
 import org.kopi.galite.testing.findForm
+import org.kopi.galite.testing.findForms
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.visual.ui.vaadin.form.DForm
 
@@ -77,15 +78,6 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
   fun `login to the App`() {
     login()
     multipleForm.open()
-  }
-
-  @Test
-  fun `test list command`() {
-    //TODO
-    /*
-      check that the list dialog is displayed & that contain a correct data,
-      then chose a row and check that first and second block contains data
-     */
   }
 
   /**
@@ -265,58 +257,59 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val form = multipleForm.findForm()
     val tabsBeforeChangingPage = _find<Tab>{}
     val currentPage = 0
-
-    assertTrue(tabsBeforeChangingPage[currentPage].isSelected)
     val targetPage = 1
 
+    assertTrue(tabsBeforeChangingPage[currentPage].isSelected)
     assertFalse(tabsBeforeChangingPage[targetPage].isSelected)
+
     form.gotoPage(targetPage)
-
-    val tabsAfterChangingPage = _find<Tab>{}
-
-    assertTrue(tabsAfterChangingPage[targetPage].isSelected)
+    waitAndRunUIQueue(100)
+    assertTrue(tabsBeforeChangingPage[targetPage].isSelected)
   }
 
   @Test
   fun `test save data then enter block then enter next record`() {
-    multipleBlockSaveForm.open()
-    multipleBlockSaveForm.list.triggerCommand()
-    multipleBlockSaveForm.multipleBlock.enter()
-    multipleBlockSaveForm.multipleBlock.address.edit("new address")
-    multipleBlockSaveForm.saveBlock.triggerCommand()
-    val block = multipleBlockSaveForm.multipleBlock.findBlock() as DGridBlock
-    val data = arrayOf(
-      arrayOf("2", "Center 1", "new address", "example@mail"),
-      arrayOf("1", "Center 1", "10,Rue Lac", "example@mail"),
-      arrayOf("1", "Center 2", "14,Rue Mongi Slim", "example@mail"),
-      arrayOf("3", "Center 3", "10,Rue du Lac", "example@mail"),
-      arrayOf("4", "Center 4", "10,Rue du Lac", "example@mail")
-    )
+    try {
+      multipleBlockSaveForm.open()
+      multipleBlockSaveForm.list.triggerCommand()
+      multipleBlockSaveForm.multipleBlock.enter()
+      multipleBlockSaveForm.multipleBlock.address.edit("new address")
+      multipleBlockSaveForm.saveBlock.triggerCommand()
+      val block = multipleBlockSaveForm.multipleBlock.findBlock() as DGridBlock
+      val data = arrayOf(
+        arrayOf("2", "Center 1", "new address", "example@mail"),
+        arrayOf("1", "Center 1", "10,Rue Lac", "example@mail"),
+        arrayOf("1", "Center 2", "14,Rue Mongi Slim", "example@mail"),
+        arrayOf("3", "Center 3", "10,Rue du Lac", "example@mail"),
+        arrayOf("4", "Center 4", "10,Rue du Lac", "example@mail")
+      )
 
-    data.forEachIndexed { index, row ->
-      block.grid.expectRow(index, *row)
-    }
+      data.forEachIndexed { index, row ->
+        block.grid.expectRow(index, *row)
+      }
 
-    assertEquals(1, block.editor.item.record)
-//    reverting changes to avoid affecting other tests
-    multipleBlockSaveForm.block.enter()
-    multipleBlockSaveForm.multipleBlock.enter()
-    multipleBlockSaveForm.multipleBlock.vBlock.activeRecord = 0
-    multipleBlockSaveForm.multipleBlock.address.edit("10,Rue Lac")
-    multipleBlockSaveForm.saveBlock.triggerCommand()
-    val newdata = arrayOf(
-      arrayOf("2", "Center 1", "10,Rue Lac", "example@mail"),
-      arrayOf("1", "Center 1", "10,Rue Lac", "example@mail"),
-      arrayOf("1", "Center 2", "14,Rue Mongi Slim", "example@mail"),
-      arrayOf("3", "Center 3", "10,Rue du Lac", "example@mail"),
-      arrayOf("4", "Center 4", "10,Rue du Lac", "example@mail")
-    )
+      assertEquals(1, block.editor.item.record)
 
-    newdata.forEachIndexed { index, row ->
-      block.grid.expectRow(index, *row)
-    }
-    transaction {
-      initData()
+      multipleBlockSaveForm.block.enter()
+      multipleBlockSaveForm.multipleBlock.enter()
+      multipleBlockSaveForm.multipleBlock.vBlock.activeRecord = 0
+      multipleBlockSaveForm.multipleBlock.address.edit("10,Rue Lac")
+      multipleBlockSaveForm.saveBlock.triggerCommand()
+      val newdata = arrayOf(
+        arrayOf("2", "Center 1", "10,Rue Lac", "example@mail"),
+        arrayOf("1", "Center 1", "10,Rue Lac", "example@mail"),
+        arrayOf("1", "Center 2", "14,Rue Mongi Slim", "example@mail"),
+        arrayOf("3", "Center 3", "10,Rue du Lac", "example@mail"),
+        arrayOf("4", "Center 4", "10,Rue du Lac", "example@mail")
+      )
+
+      newdata.forEachIndexed { index, row ->
+        block.grid.expectRow(index, *row)
+      }
+    } finally {
+      transaction {
+        initData()
+      }
     }
   }
 
@@ -359,8 +352,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     windowsDiv._click()
     _expect<EnhancedDialog> {  }
 
-    var windowsContainer = _get<VerticalLayout> { classes = "window-items-container" }
-    var windowsItems = windowsContainer._find<VWindowsMenuItem> { classes = "item" }
+    val windowsContainer = _get<VerticalLayout> { classes = "window-items-container" }
+    val windowsItems = windowsContainer._find<VWindowsMenuItem> { classes = "item" }
 
     assertEquals(2, windowsItems.size)
     windowsItems[0].click()
@@ -378,7 +371,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     form = multipleBlockSaveForm.findForm()
     visibleForm = _get<DForm> {  }
     assertEquals(form, visibleForm)
-    assertFails { multipleForm.findForm() }
+    assert(multipleForm.findForms().isEmpty())
   }
 
   @Test

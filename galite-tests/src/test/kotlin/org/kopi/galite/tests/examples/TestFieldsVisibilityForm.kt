@@ -20,12 +20,9 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.maxValue
-import org.kopi.galite.visual.dsl.form.minValue
 
 class TestFieldsVisibilityForm : DictionaryForm() {
   override val locale = Locale.UK
@@ -147,5 +144,5 @@ class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field 
 }
 
 fun main() {
-  runForm(formName = TestFieldsForm())
+  runForm(formName = TestFieldsVisibilityForm())
 }
