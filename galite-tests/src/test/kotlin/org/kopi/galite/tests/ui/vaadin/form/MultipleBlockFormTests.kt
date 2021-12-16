@@ -385,9 +385,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     formExample.salesBlock.enter()
     assertEquals(0, salesBlockModel.model.activeRecord)
 
-    formExample.salesBlock.editRecord(5, 20)
+    formExample.salesBlock.editRecord(5)
     assertEquals(5, salesBlockModel.model.activeRecord)
-
   }
 
   companion object {
