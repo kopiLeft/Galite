@@ -42,6 +42,7 @@ import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSingleSelectionModel
 import com.vaadin.flow.data.provider.ListDataProvider
 
@@ -201,10 +202,10 @@ class DListDialog(
     }
   }
 
-  private val tableItems: Collection<List<Any?>>
-    get() = (table!!.dataProvider as ListDataProvider<List<Any?>>).items
+  private val tableItems: Collection<ListTable.ListDialogItem>
+    get() = (table!!.dataProvider as ListDataProvider<ListTable.ListDialogItem>).items
 
-  private val nextItem: List<Any?>
+  private val nextItem: ListTable.ListDialogItem?
     get() {
       var index = tableItems.indexOf(table!!.selectedItem) + 1
 
@@ -215,7 +216,7 @@ class DListDialog(
       return table!!.dataCommunicator.getItem(index)
     }
 
-  private val previousItem: List<Any?>
+  private val previousItem: ListTable.ListDialogItem
     get() {
       var index = tableItems.indexOf(table!!.selectedItem) - 1
 
@@ -231,7 +232,7 @@ class DListDialog(
    * @return The next item ID according to the currently selected one.
    */
 
-  protected val nextItemId: List<Any?>
+  protected val nextItemId: ListTable.ListDialogItem
    get() {
     return if (table!!.selectedItems.first() == tableItems.last()) {
       tableItems.last()
@@ -244,7 +245,7 @@ class DListDialog(
    * Returns the previous item ID according to the currently selected one.
    * @return The previous item ID according to the currently selected one.
    */
-  protected val prevItemId: List<Any?>
+  protected val prevItemId: ListTable.ListDialogItem
     get() {
       return if (table!!.selectedItems.first() == tableItems.first()) {
         tableItems.first()
@@ -257,7 +258,7 @@ class DListDialog(
    * Looks for the next page item ID starting from the selected row.
    * @return The next page item ID.
    */
-  protected val nextPageItemId: List<Any?>?
+  protected val nextPageItemId: ListTable.ListDialogItem?
     get() {
       var nextPageItemId = table!!.selectedItems.first()
       var i = 0
@@ -272,7 +273,7 @@ class DListDialog(
    * Looks for the previous page item ID starting from the selected row.
    * @return The previous page item ID.
    */
-  protected val prevPageItemId: List<Any?>?
+  protected val prevPageItemId: ListTable.ListDialogItem?
     get() {
       var prevPageItemId = table!!.selectedItems.first()
       var i = 0
@@ -348,6 +349,9 @@ class DListDialog(
                                   },
                                   Key.ARROW_UP
     )
+    table.addColumnReorderListener {
+      sort(it.columns)
+    }
    // TODO
   }
 
@@ -406,9 +410,24 @@ class DListDialog(
 
   /**
    * Bubble sort the columns from right to left
+   *
+   * @param columns the new order of the columns
    */
-  private fun sort() {
-    // TODO
+  private fun sort(columns: MutableList<Grid.Column<ListTable.ListDialogItem>>) {
+    var left = 0
+    var sel: ListTable.ListDialogItem? = null
+
+    if (table != null) {
+      sel = table!!.selectedItem
+      left = columns[0].key.toInt()
+    }
+
+    model.sort(left)
+
+    if (table != null) {
+      table!!.dataProvider.refreshAll()
+      table!!.select(sel)
+    }
   }
 
   var currentUI: UI? = null

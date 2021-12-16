@@ -27,12 +27,12 @@ import com.vaadin.flow.function.SerializablePredicate
 class ListFilter(private val filterFields: List<TextField>,
                  private val model: VListDialog,
                  private val ignoreCase: Boolean,
-                 private val onlyMatchPrefix: Boolean) : SerializablePredicate<List<Any?>> {
+                 private val onlyMatchPrefix: Boolean) : SerializablePredicate<ListTable.ListDialogItem> {
 
-  override fun test(t: List<Any?>): Boolean {
-    for (i in t.indices) {
+  override fun test(t: ListTable.ListDialogItem): Boolean {
+    for (i in model.columns.indices) {
       val filterString = if(ignoreCase) filterFields[i].value.lowercase(Locale.getDefault()) else filterFields[i].value
-      val value = if (ignoreCase) formatObject(t[i], i).lowercase(Locale.getDefault()) else formatObject(t[i], i)
+      val value = if (ignoreCase) t.getValueAt(i).lowercase(Locale.getDefault()) else t.getValueAt(i)
 
       if (onlyMatchPrefix) {
         if (!value.startsWith(filterString)) {

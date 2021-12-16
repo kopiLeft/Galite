@@ -31,7 +31,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 
 @CssImport("./styles/galite/list.css")
-class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
+class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
   internal var widthStyler = Div()
 
   init {
@@ -43,18 +43,15 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   }
 
   private fun buildRows() {
-    val items: Array<List<Any?>?> = arrayOfNulls(model.count)
+    val items = (0 until model.count).map { ListDialogItem(it) }
 
-    for (row in 0 until model.count) {
-      items[row] = model.data.map { it[model.translatedIdents[row]] }
-    }
-    setItems(*items)
+    setItems(items)
   }
 
   private fun buildColumns() {
     for(col in 0 until model.getColumnCount()) {
       addColumn {
-        formatObject(it[col], col)
+        it.getValueAt(col)
       }.setHeader(Span(model.getColumnName(col)))
               .setKey(col.toString())
     }
@@ -89,15 +86,6 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   }
 
   /**
-   * Formats an object according to the property nature.
-   * @param o The object to be formatted.
-   * @return The formatted property object.
-   */
-  private fun formatObject(o: Any?, col: Int): String {
-    return model.columns[col]!!.formatObject(o).toString()
-  }
-
-  /**
    * Calculates the table width based on its content.
    * @param model The data model.
    */
@@ -128,5 +116,31 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     return 8 * width
   }
 
-  val selectedItem: List<Any?> get() = asSingleSelect().value
+  val selectedItem: ListTable.ListDialogItem get() = asSingleSelect().value
+
+  /**
+   * List grid item model.
+   *
+   * @param row the row of the item in the grid.
+   */
+  inner class ListDialogItem(val row: Int) {
+
+    /**
+     * Returns the value of cell in position ([row], [col]).
+     *
+     * This method gets the value from the list model [VListDialog].
+     *
+     * It can be used in DataProvider to show the values of the grid initially of after refreshing data.
+     */
+    fun getValueAt(col: Int) = formatObject(model.data[col][model.translatedIdents[row]], col)
+
+    /**
+     * Formats an object according to the property nature.
+     * @param o The object to be formatted.
+     * @return The formatted property object.
+     */
+    private fun formatObject(o: Any?, col: Int): String {
+      return model.columns[col]!!.formatObject(o).toString()
+    }
+  }
 }

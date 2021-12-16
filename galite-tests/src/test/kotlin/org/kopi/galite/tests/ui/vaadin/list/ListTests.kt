@@ -120,10 +120,10 @@ class ListTests: GaliteVUITestBase() {
     grid.setColumnOrder(grid.columns.reversed())
     grid.expect(
       arrayOf(
-        arrayOf("informations training 1", "yes", "1.149,240", "Java", "training 1", "1"),
-        arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
-        arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
         arrayOf("informations training 4", "yes", "3.129,700", "Galite", "training 4", "4"),
+        arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
+        arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
+        arrayOf("informations training 1", "yes", "1.149,240", "Java", "training 1", "1"),
       )
     )
   }
