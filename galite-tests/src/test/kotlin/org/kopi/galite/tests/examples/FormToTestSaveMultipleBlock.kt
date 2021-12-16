@@ -95,19 +95,16 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       label = "center id"
       help = "The Center id"
       columns(c.id)
-      onInsertHidden()
     }
     val ts = hidden(domain = INT(20)) {
       label = "ts"
       value = 0
       columns(c.ts)
-      onInsertHidden()
     }
     val uc = hidden(domain = INT(20)) {
       label = "uc"
       value = 0
       columns(c.uc)
-      onInsertHidden()
     }
     val trainingId = visit(domain = INT(20), position = at(1, 1)) {
       label = "training id"

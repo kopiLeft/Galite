@@ -16,12 +16,12 @@
  */
 package org.kopi.galite.tests.form
 
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 import org.junit.Test
 import org.kopi.galite.tests.examples.Center
@@ -96,28 +96,29 @@ class FormWithMultipleBlockTests : JApplicationTestBase() {
     val formModel = formMultiple.model
 
     transaction {
-      initMultipleBlockFormTables()
-      formMultiple.multipleBlock.load()
-      assertTrue(formModel.blocks.any {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@any true
+      try {
+        initMultipleBlockFormTables()
+        formMultiple.multipleBlock.load()
+        assertTrue(formModel.blocks.any {
+          for (i in 0 until it.bufferSize) {
+            if (it.isRecordTrailed(i)) {
+              return@any true
+            }
           }
-        }
-        return@any false
-      })
-      formModel.commitTrail()
-      assertTrue(formModel.blocks.all {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@all false
+          return@any false
+        })
+        formModel.commitTrail()
+        assertTrue(formModel.blocks.all {
+          for (i in 0 until it.bufferSize) {
+            if (it.isRecordTrailed(i)) {
+              return@all false
+            }
           }
-        }
-        return@all true
-      })
-      destroyMultipleBlockFormTables()
+          return@all true
+        })
+      } finally {
+        destroyMultipleBlockFormTables()
+      }
     }
   }
 
@@ -126,28 +127,29 @@ class FormWithMultipleBlockTests : JApplicationTestBase() {
     val formModel = formMultiple.model
 
     transaction {
-      initMultipleBlockFormTables()
-      formMultiple.multipleBlock.load()
-      assertTrue(formModel.blocks.any {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@any true
+      try {
+        initMultipleBlockFormTables()
+        formMultiple.multipleBlock.load()
+        assertTrue(formModel.blocks.any {
+          for (i in 0 until it.bufferSize) {
+            if (it.isRecordTrailed(i)) {
+              return@any true
+            }
           }
-        }
-        return@any false
-      })
-      formModel.abortTrail()
-      assertTrue(formModel.blocks.all {
-        for (i in 0 until it.bufferSize) {
-          if (it.isRecordTrailed(i))
-          {
-            return@all false
+          return@any false
+        })
+        formModel.abortTrail()
+        assertTrue(formModel.blocks.all {
+          for (i in 0 until it.bufferSize) {
+            if (it.isRecordTrailed(i)) {
+              return@all false
+            }
           }
-        }
-        return@all true
-      })
-      destroyMultipleBlockFormTables()
+          return@all true
+        })
+      } finally {
+        destroyMultipleBlockFormTables()
+      }
     }
   }
 }

@@ -77,7 +77,7 @@ class VFieldTests : JApplicationTestBase() {
       }
     }
 
-    var listID : Int = -1
+    var listID: Int = -1
     transaction {
       User.insert {
         it[id] = 1
@@ -176,7 +176,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `getSearchCondition string field equal to value scenario test`() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.name.value = "name"
-    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
 
     transaction {
@@ -187,7 +187,7 @@ class VFieldTests : JApplicationTestBase() {
   @Test
   fun `getSearchCondition string field equal to null scenario test`() {
     FormSample.tb1.vBlock.clear()
-    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
 
     transaction {
@@ -199,7 +199,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `getSearchCondition string field like value scenario test`() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.name.value = "*name"
-    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
 
     transaction {
@@ -212,7 +212,7 @@ class VFieldTests : JApplicationTestBase() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.name.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.name.value = "*name"
-    val column : Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
 
     transaction {
@@ -225,7 +225,7 @@ class VFieldTests : JApplicationTestBase() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.job.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.job.value = "*job"
-    val column : Column<*>? = FormSample.tb1.job.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.job.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.job.vField.getSearchCondition(column!!)
 
     transaction {
@@ -237,7 +237,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `getSearchCondition lower string field not like value scenario test`() {
     FormSample.tb1.cv.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.cv.value = "*cv"
-    val column : Column<*>? = FormSample.tb1.cv.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.cv.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.cv.vField.getSearchCondition(column!!)
 
     transaction {
@@ -249,7 +249,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `getSearchCondition int field equal to value scenario test`() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.value = 1
-    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
 
     transaction {
@@ -262,7 +262,7 @@ class VFieldTests : JApplicationTestBase() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_LT)
     FormSample.tb1.id.value = 1
-    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
 
     transaction {
@@ -275,7 +275,7 @@ class VFieldTests : JApplicationTestBase() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_GT)
     FormSample.tb1.id.value = 1
-    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
 
     transaction {
@@ -288,7 +288,7 @@ class VFieldTests : JApplicationTestBase() {
     FormSample.tb1.vBlock.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_LE)
     FormSample.tb1.id.value = 1
-    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
 
     transaction {
@@ -300,7 +300,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `getSearchCondition int field greater than or equal to value scenario test`() {
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_GE)
     FormSample.tb1.id.value = 1
-    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
 
     transaction {
@@ -312,7 +312,7 @@ class VFieldTests : JApplicationTestBase() {
   fun `getSearchCondition int not equal to value scenario test`() {
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.id.value = 1
-    val column : Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
+    val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
 
     transaction {
@@ -368,7 +368,9 @@ class VFieldTests : JApplicationTestBase() {
   fun `selectFromList scenario with exception test`() {
     transaction {
       SchemaUtils.create(User)
-      val error = Assert.assertThrows(VFieldException::class.java) { FormSample.tb4ToTestListDomain.listNames.vField.selectFromList(false) }
+      val error = Assert.assertThrows(VFieldException::class.java) {
+        FormSample.tb4ToTestListDomain.listNames.vField.selectFromList(false)
+      }
 
       assertEquals("VIS-00001: Data entry error: No matching value.", error.message)
       SchemaUtils.drop(User)
@@ -383,23 +385,23 @@ class VFieldTests : JApplicationTestBase() {
   }
 
   @Test
-  fun `fetchColumn existing column scenario test` () {
-    val field = FormSample.tb1.blockFields[0].vField
+  fun `fetchColumn existing column scenario test`() {
+    val field = FormSample.tb1.id.vField
 
     assertEquals(0, field.fetchColumn(User))
   }
 
   @Test
-  fun `fetchColumn not existing column scenario test` () {
-    val field = FormSample.tb1.blockFields[4].vField
+  fun `fetchColumn not existing column scenario test`() {
+    val field = FormSample.tb1.password.vField
 
     assertEquals(-1, field.fetchColumn(User))
   }
 
   @Test
-  fun `enter test valid scenario` () {
+  fun `enter test valid scenario`() {
+    val field = FormSample.tb1.password.vField
 
-    val field = FormSample.tb1.blockFields[4].vField
     assertNotEquals(field, field.block?.activeField)
     field.block?.enter()
     field.block?.activeField?.leave(false)
@@ -410,26 +412,28 @@ class VFieldTests : JApplicationTestBase() {
   }
 
   @Test
-  fun `enter test invalid scenario` () {
-    val field = FormSample.tb1.blockFields[3].vField
+  fun `failing when entering a field without leaving the active field`() {
+    val field = FormSample.tb1.name.vField
 
     field.block?.enter()
     assertFails { field.enter() }
   }
 
   @Test
-  fun `leave test valid scenario` () {
-    val field = FormSample.tb1.blockFields[3].vField // 3rd field in the first visible field
+  fun `leave test valid scenario`() {
+    val field = FormSample.tb1.password.vField // 3rd field in the first visible field
 
     field.block?.enter()
+    field.block!!.activeField?.leave(false)
+    field.enter()
     field.leave(false)
     assertNotEquals(field, field.block?.activeField)
     assertNull(field.block?.activeField)
   }
 
   @Test
-  fun `leave test invalid scenario` () {
-    val field = FormSample.tb1.blockFields[4].vField
+  fun `fails when leaving a field without being entered`() {
+    val field = FormSample.tb1.password.vField
 
     field.block?.enter()
     assertFails { field.leave(false) }
