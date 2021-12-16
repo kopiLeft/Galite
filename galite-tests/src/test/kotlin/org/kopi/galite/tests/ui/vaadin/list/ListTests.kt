@@ -19,8 +19,10 @@ package org.kopi.galite.tests.ui.vaadin.list
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
+import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
@@ -41,18 +43,18 @@ class ListTests: GaliteVUITestBase() {
 
   private val formWithList = CommandsForm().also { it.model } // initialize the model
 
+  @Before
+  fun `login to the App`() {
+    login()
+    formWithList.open()
+  }
+
   /**
    * Checks that the list dialog is displayed and contains a correct data,
    * then select a row and check that form fields contain data
    */
   @Test
   fun `test list command`() {
-    // Login
-    login()
-
-    // Opens a form that contain a list command
-    formWithList.open()
-
     // Trigger the report command
     formWithList.list.triggerCommand()
 
@@ -89,6 +91,41 @@ class ListTests: GaliteVUITestBase() {
     assertEquals("training 2", formWithList.block.trainingName.findField().value)
     assertEquals(true, formWithList.block.active.findField().value)
     assertEquals("informations training 2", formWithList.block.informations.findField().value)
+  }
+
+  @Test
+  fun `test list command with reordered columns`() {
+    // Trigger the report command
+    formWithList.list.triggerCommand()
+
+    // Check that the list dialog is displayed
+    _expectOne<DListDialog>()
+
+    // Check that the list dialog contains a grid
+    val listDialog = _get<DListDialog>()
+
+    listDialog._expectOne<Grid<*>>()
+    val grid = _get<DListDialog>()._get<ListTable>()
+
+    grid.expect(
+      arrayOf(
+        arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
+        arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
+        arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
+        arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4")
+      )
+    )
+
+    // Change the columns order
+    grid.setColumnOrder(grid.columns.reversed())
+    grid.expect(
+      arrayOf(
+        arrayOf("informations training 1", "yes", "1.149,240", "Java", "training 1", "1"),
+        arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
+        arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
+        arrayOf("informations training 4", "yes", "3.129,700", "Galite", "training 4", "4"),
+      )
+    )
   }
 
   companion object {

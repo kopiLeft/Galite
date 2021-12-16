@@ -18,10 +18,12 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.Convert
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
@@ -66,16 +68,19 @@ class BlockWithAllFieldVisibilityTypes : Block(1, 1, "Block With All Field Visib
     label = "hidden field"
     help = "hidden field"
   }
+
   val visitField = visit(domain = INT(3), position = at(1, 1)) {
     label = "visit field"
     help = "visit field"
     minValue = 10
     maxValue = 50
   }
+
   val mustFillField = mustFill(domain = STRING(50), position = at(2, 1)) {
     label = "mustFill field"
     help = "mustFill field"
   }
+
   val skippedField = skipped(domain = STRING(50), position = at(3, 1)) {
     label = "skipped field"
     help = "skipped field"
@@ -130,4 +135,8 @@ class BlockWithSaveCommand : Block(1, 1, "Block With Save Command") {
   }
   val uc = hidden(domain = INT(20)) { columns(t.uc) }
   val ts = hidden(domain = INT(20)) { columns(t.ts) }
+}
+
+fun main() {
+  runForm(formName = TestFieldsForm())
 }

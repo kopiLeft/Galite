@@ -17,9 +17,12 @@
 package org.kopi.galite.tests.ui.vaadin.report
 
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
+import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.visual.ui.vaadin.download.DownloadAnchor
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
@@ -40,21 +43,21 @@ import com.vaadin.flow.component.grid.Grid
 class ReportTests: GaliteVUITestBase() {
 
   private val formWithReport = FormWithReport().also { it.model } // initialize the model
-  private val simpleReport = SimpleReport()
+  private val simpleReport = SimpleReport().also { it.model }
   private val mainWindow get() = _get<MainWindow>()
   private val windowCaption get() =
     mainWindow
       ._get<VWindowContainer>()
       ._get<VCaption>()
 
+  @Before
+  fun `login to the App`() {
+    login()
+    formWithReport.open()
+  }
+
   @Test
   fun `test simple report`() {
-    // Login
-    login()
-
-    // Opens a form that contain a report command
-    formWithReport.open()
-
     // Trigger the report command
     formWithReport.report.triggerCommand()
 
@@ -80,6 +83,50 @@ class ReportTests: GaliteVUITestBase() {
     }
   }
 
+  @Test
+  fun `test export CSV`() {
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.csv.triggerCommand()
+
+    val anchor = _get<DownloadAnchor>()
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".csv"))
+  }
+
+  @Test
+  fun `test export XLS`() {
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.xls.triggerCommand()
+
+    val anchor = _get<DownloadAnchor>()
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".xls"))
+  }
+
+  @Test
+  fun `test export PDF`() {
+    // Trigger the report command
+    formWithReport.report.triggerCommand()
+
+    // Check that the report is displayed
+    _expectOne<DReport>()
+    simpleReport.pdf.triggerCommand()
+
+    val anchor = _get<DownloadAnchor>()
+
+    assertTrue(anchor.href.contains(simpleReport.title))
+    assertTrue(anchor.href.endsWith(".pdf"))
+  }
   companion object {
     @BeforeClass
     @JvmStatic
