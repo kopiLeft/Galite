@@ -42,7 +42,6 @@ import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSingleSelectionModel
 import com.vaadin.flow.data.provider.ListDataProvider
 
@@ -349,9 +348,6 @@ class DListDialog(
                                   },
                                   Key.ARROW_UP
     )
-    table.addColumnReorderListener {
-      sort(it.columns)
-    }
    // TODO
   }
 
@@ -410,24 +406,9 @@ class DListDialog(
 
   /**
    * Bubble sort the columns from right to left
-   *
-   * @param columns the new order of the columns
    */
-  private fun sort(columns: MutableList<Grid.Column<List<Any?>>>) {
-    var left = 0
-    var sel: List<Any?>? = null
-
-    if (table != null) {
-      sel = table!!.selectedItem
-      left = columns[0].key.toInt()
-    }
-
-    model.sort(left)
-
-    if (table != null) {
-      table!!.dataProvider.refreshAll()
-      table!!.select(sel)
-    }
+  private fun sort() {
+    // TODO
   }
 
   var currentUI: UI? = null
