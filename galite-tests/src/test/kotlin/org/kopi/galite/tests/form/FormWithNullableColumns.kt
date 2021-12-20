@@ -161,197 +161,141 @@ object FormWithNullableColumn : DictionaryForm() {
 
   val blockWithTwoTablesInnerJoin = p1.insertBlock(FormWithTwoTablesInnerJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockWithTwoTablesLeftJoin = p1.insertBlock(FormWithTwoTablesLeftJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockWithThreeTablesLeftJoin = p1.insertBlock(FormWithThreeTablesLeftJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockWithThreeTablesInnerJoin = p1.insertBlock(FormWithThreeTablesInnerJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockWithThreeTablesInnerJoinInOneField = p1.insertBlock(FormWithThreeTablesInnerJoinInField()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockWithThreeTablesLeftJoinInOneField = p1.insertBlock(FormWithThreeTablesLeftJoinInField()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockThreeTablesMiddleLeftJoinInOneField = p1.insertBlock(FormThreeTablesMiddleLeftJoinInField()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockThreeTablesEndLeftJoinInOneField = p1.insertBlock(FormThreeTablesEndLeftJoinInField()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockFourTablesLeftInnerLeftJoin = p1.insertBlock(FormFourTablesLeftInnerLeftJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockFourTablesInnerLeftInnerJoin = p1.insertBlock(FormFourTablesInnerLeftInnerJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockTwoTablesInnerJoinNoJoin = p1.insertBlock(FormTwoTablesInnerJoinNoJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockTwoTablesNoJoinInnerJoin = p1.insertBlock(FormTwoTablesNoJoinInnerJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockTwoTablesLeftJoinNoJoin = p1.insertBlock(FormTwoTablesLeftJoinNoJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 
   val blockTwoTablesNoJoinLeftJoin = p1.insertBlock(FormTwoTablesNoJoinLeftJoin()) {
     command(item = FormWithList.list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
 
     command(item = FormWithList.resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 }

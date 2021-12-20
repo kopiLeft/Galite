@@ -81,17 +81,15 @@ object FormWithSpecialTypes : Form() {
 
   val blockWithSpecialTypes = insertBlock(BlockWithSpecialTypes()) {
     command(item = save) {
-      action = {
-        println("-----------Saving-----------------")
-        vBlock.setMode(VConstants.MOD_INSERT)
-        transaction {
+      println("-----------Saving-----------------")
+      vBlock.setMode(VConstants.MOD_INSERT)
+      transaction {
 
-          SchemaUtils.create(p)
-          saveBlock()
-          p.selectAll().forEach {
-            println("Image successfully inserted!")
-            println(it[p.image])
-          }
+        SchemaUtils.create(p)
+        saveBlock()
+        p.selectAll().forEach {
+          println("Image successfully inserted!")
+          println(it[p.image])
         }
       }
     }

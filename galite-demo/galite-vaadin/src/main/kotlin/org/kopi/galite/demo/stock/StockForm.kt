@@ -52,9 +52,7 @@ class StockForm : ReportSelectionForm() {
 
   val block = page.insertBlock(StockBlock()) {
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this)
     }
   }
 

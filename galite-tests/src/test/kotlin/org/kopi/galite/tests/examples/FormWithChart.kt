@@ -50,11 +50,8 @@ object FormWithChart: Form() {
   val p1 = page("test page")
   val b = p1.insertBlock(Traineeship())
 
-  val cmd = command(item = graph) {
-    mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-    action = {
-      showChart(ChartSample())
-    }
+  val cmd = command(item = graph, modes = arrayOf(Mode.UPDATE, Mode.INSERT, Mode.QUERY)) {
+    showChart(ChartSample())
   }
 }
 
@@ -76,9 +73,7 @@ class ChartSample: Chart() {
   }
 
   val cmd = command(item = greeting) {
-    action = {
-      println("----------- Hello Galite ----------------")
-    }
+    println("----------- Hello Galite ----------------")
   }
 
   val area = measure(DECIMAL(width = 10, scale = 5)) {

@@ -55,13 +55,9 @@ class FormDefault(block: Block) : Form() {
   }
   val autofillCommand = command(item = autoFill) {}
   val resetCommand = command(item = resetBlock) {
-    action = {
-      block.resetBlock()
-    }
+    block.resetBlock()
   }
   val quitCommand = command(item = quitForm) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
 }

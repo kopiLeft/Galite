@@ -80,9 +80,7 @@ class FormWithList : DictionaryForm() {
   }
 
   val resetFormCmd = command(item = resetForm) {
-    action = {
-      resetForm()
-    }
+    resetForm()
   }
 
   val save = actor(
@@ -97,25 +95,19 @@ class FormWithList : DictionaryForm() {
 
   val block3 = testPage1.insertBlock(UsersBlock()) {
     command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
+      println("-----------Generating list-----------------")
+      recursiveQuery()
     }
 
     command(item = save) {
-      action = {
-        println("-----------Saving-----------------")
-        saveBlock()
-      }
+      println("-----------Saving-----------------")
+      saveBlock()
     }
   }
 
   val block = testPage1.insertBlock(BlockWithManyTables()) {
     command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
   }
 

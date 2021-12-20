@@ -77,10 +77,8 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       }
 
       command(item = list) {
-        action = {
-          transaction {
-            recursiveQuery()
-          }
+        transaction {
+          recursiveQuery()
         }
       }
     }
@@ -141,24 +139,22 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       border = Border.LINE
 
       command(item = saveBlock) {
-        action = {
-          val b = vBlock
-          val rec: Int = b.activeRecord
+        val b = vBlock
+        val rec: Int = b.activeRecord
 
-          b.validate()
+        b.validate()
 
-          if (!b.isFilled()) {
-            b.currentRecord = 0
-            throw VExecFailedException()
-          }
-
-          transaction {
-            b.save()
-          }
-
-          b.form.gotoBlock(b)
-          b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
+        if (!b.isFilled()) {
+          b.currentRecord = 0
+          throw VExecFailedException()
         }
+
+        transaction {
+          b.save()
+        }
+
+        b.form.gotoBlock(b)
+        b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
   }

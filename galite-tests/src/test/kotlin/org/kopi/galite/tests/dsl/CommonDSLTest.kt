@@ -44,13 +44,13 @@ class CommonDSLTests : VApplicationTestBase() {
 
     assertEquals(MOD_ANY, command.mode) // default mode is MOD_ANY
 
-    command.mode(Mode.INSERT)
+    command.setMode(Mode.INSERT)
     assertEquals(2, command.mode) // mode = 0 | 1 << 1
 
-    command.mode(Mode.INSERT, Mode.UPDATE)
+    command.setMode(Mode.INSERT, Mode.UPDATE)
     assertEquals(6, command.mode) // mode = 0 | 1 << 1 | 1 << 2
 
-    command.mode(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
+    command.setMode(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
     assertEquals(7, command.mode) // mode = 0 | 1 << 1 | 1 << 2 || 1 << 0
   }
 

@@ -28,14 +28,18 @@ import org.kopi.galite.visual.visual.VCommand
  *
  * @param item                 the item
  */
-class Command(val item: Actor, var mode: Int = VConstants.MOD_ANY) {
-  var action: (() -> Unit)? = null
-  lateinit var body: CommandBody
+class Command(val item: Actor) {
+
+  var action: () -> Unit = {}
+    internal set
+
+  var mode: Int = VConstants.MOD_ANY
+    private set
 
   /**
    * Changes the access mode of the command
    **/
-  fun mode(vararg access: Mode) {
+  fun setMode(vararg access: Mode) {
     mode = 0
     for (item in access) {
       mode = mode or (1 shl item.value)

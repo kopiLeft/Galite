@@ -106,12 +106,14 @@ abstract class Window {
    * Adds a new command to this window.
    *
    * @param item    the actor linked to the command.
-   * @param init    initialization method.
+   * @param modes   the modes in which the command should be executed.
+   * @param action  the action function.
    */
-  fun command(item: Actor, init: Command.() -> Unit): Command {
+  fun command(item: Actor, vararg modes: Mode = arrayOf(Mode.ANY), action: () -> Unit): Command {
     val command = Command(item)
 
-    command.init()
+    command.setMode(*modes)
+    command.action = action
     commands.add(command)
     return command
   }

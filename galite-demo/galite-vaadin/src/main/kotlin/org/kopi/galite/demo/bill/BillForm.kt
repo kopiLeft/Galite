@@ -54,9 +54,7 @@ class BillForm : ReportSelectionForm() {
 
   val tb1 = page.insertBlock(BlockBill()) {
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this)
     }
   }
 

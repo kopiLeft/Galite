@@ -106,20 +106,15 @@ class FormSample : Form() {
   }
 
   val cmd = command(item = formActor) {
-    action = {
-      println("----------- FORM COMMAND ----------------")
-    }
+    println("----------- FORM COMMAND ----------------")
   }
 
   val p1 = page("test page")
   val p2 = page("test page2")
 
   val tb1 = p1.insertBlock(TestBlock()) {
-    command(item = graph) {
-      mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-      action = {
-        println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
-      }
+    command(item = graph, modes = arrayOf(Mode.UPDATE, Mode.INSERT, Mode.QUERY)) {
+      println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
     }
   }
 
@@ -132,12 +127,8 @@ class FormSample : Form() {
   }
 
   val tb2 = p2.insertBlock(TestBlock()) {
-    command(item = graph) {
-      mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-      action = {
+    command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
-      }
-
     }
   }
 

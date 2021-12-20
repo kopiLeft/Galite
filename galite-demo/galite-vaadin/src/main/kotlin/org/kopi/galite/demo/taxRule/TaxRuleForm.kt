@@ -94,35 +94,25 @@ class TaxRuleForm : ReportSelectionForm() {
 
   val block = page.insertBlock(TaxRuleBlock()) {
     command(item = saveBlock) {
-      action = {
-        println("-----------save-----------------" + informations.value)
-        saveBlock()
-      }
+      println("-----------save-----------------" + informations.value)
+      saveBlock()
     }
 
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this@insertBlock)
     }
 
     command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
+      println("-----------Generating list-----------------")
+      recursiveQuery()
     }
 
     command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
 
     command(item = deleteBlock) {
-      action = {
-        deleteBlock()
-      }
+      deleteBlock()
     }
   }
 

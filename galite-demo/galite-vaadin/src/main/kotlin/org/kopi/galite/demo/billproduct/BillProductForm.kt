@@ -46,9 +46,7 @@ class BillProductForm : ReportSelectionForm() {
   }
   val tb1 = page.insertBlock(BlockBillProduct()) {
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this)
     }
   }
 

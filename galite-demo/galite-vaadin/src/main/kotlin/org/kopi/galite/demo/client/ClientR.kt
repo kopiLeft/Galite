@@ -102,41 +102,29 @@ class ClientR : Report() {
   }
 
   val cmdCSV = command(item = csv) {
-    action = {
-      model.export(VReport.TYP_CSV)
-    }
+    model.export(VReport.TYP_CSV)
   }
 
   val cmdPDF = command(item = pdf) {
-    action = {
-      model.export(VReport.TYP_PDF)
-    }
+    model.export(VReport.TYP_PDF)
   }
 
   val cmdXLS = command(item = xls) {
-    action = {
-      model.export(VReport.TYP_XLS)
-    }
+    model.export(VReport.TYP_XLS)
   }
 
   val cmdXLSX = command(item = xlsx) {
-    action = {
-      model.export(VReport.TYP_XLSX)
-    }
+    model.export(VReport.TYP_XLSX)
   }
 
   val helpCmd = command(item = helpForm) {
-    action = {
-      model.showHelp()
-    }
+    model.showHelp()
   }
 
   val editColumn = command(item = editColumnData) {
-    action = {
-      if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
-        val formula  = org.kopi.galite.demo.product.ProductForm()
-        WindowController.windowController.doModal(formula)
-      }
+    if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
+      val formula  = org.kopi.galite.demo.product.ProductForm()
+      WindowController.windowController.doModal(formula)
     }
   }
 

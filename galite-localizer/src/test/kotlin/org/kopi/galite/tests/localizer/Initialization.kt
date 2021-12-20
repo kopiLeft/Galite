@@ -123,9 +123,7 @@ class FormSample : Form() {
     icon =  "save"  // icon is optional here
   }
 
-  val cmd = command(item = formActor) {
-    action = {}
-  }
+  val cmd = command(item = formActor) {}
 
   val p1 = page("test page")
   val p2 = page("test page2")
@@ -212,11 +210,7 @@ class FormSample : Form() {
     }
 
     init {
-      command(item = graph) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-        action = { }
-      }
-
+      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) { }
     }
   }
 }

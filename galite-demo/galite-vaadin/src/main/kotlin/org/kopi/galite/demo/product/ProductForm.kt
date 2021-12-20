@@ -98,9 +98,7 @@ class ProductForm : ReportSelectionForm() {
       blockVisibility(Access.VISIT, Mode.QUERY)
 
       command(item = report) {
-        action = {
-          createReport(this@BlockProduct)
-        }
+        createReport(this)
       }
     }
   }

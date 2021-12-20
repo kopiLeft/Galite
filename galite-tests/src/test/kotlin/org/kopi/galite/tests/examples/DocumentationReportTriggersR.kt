@@ -51,9 +51,7 @@ class DocumentationReportTriggersR : Report() {
   }
 
   val quitCmd = command(item = quit) {
-    action = {
-      model.close()
-    }
+    model.close()
   }
 
   val name = field(STRING(25)) {

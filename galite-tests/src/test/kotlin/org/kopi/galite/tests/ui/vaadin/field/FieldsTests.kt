@@ -294,9 +294,7 @@ class FormInPopUp : DictionaryForm() {
     icon = "quit"
   }
   val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
 
   val block = insertBlock(UsersBlock()) {}

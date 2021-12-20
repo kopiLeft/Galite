@@ -115,9 +115,7 @@ class DocumentationFieldsForm : DictionaryForm() {
   val fieldsOptionsBlock = insertBlock(FieldsOptionsBlock())
   val queryBlock = insertBlock(QueryBlock()) {
     command(item = serialQuery) {
-      action = {
-        serialQuery()
-      }
+      serialQuery()
     }
   }
   val sortableMultiBlock = insertBlock(SortableMultiBlock())
@@ -420,25 +418,18 @@ class DocumentationFieldsForm : DictionaryForm() {
     val commandField = visit(domain = STRING(20), position = at(2, 1)) {
       label = "commandField"
 
-      command(item = autoFill) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-        action = {}
-      }
+      command(item = autoFill, Mode.UPDATE, Mode.INSERT, Mode.QUERY) { }
     }
 
     init  {
       border = Border.LINE
 
       command(item = list) {
-        action = {
-          recursiveQuery()
-        }
+        recursiveQuery()
       }
       command(item = saveBlock) {
-        action = {
-          insertMode()
-          saveBlock()
-        }
+        insertMode()
+        saveBlock()
       }
     }
   }
@@ -451,9 +442,7 @@ class DocumentationFieldsForm : DictionaryForm() {
       border = Border.LINE
 
       command(item = list) {
-        action = {
-          recursiveQuery()
-        }
+        recursiveQuery()
       }
     }
 
@@ -582,9 +571,9 @@ class DocumentationFieldsForm : DictionaryForm() {
       }
     }
 
-   // test PREDEL : click on list command then delete
+    // test PREDEL : click on list command then delete
     val preDelTriggerField = visit(domain = STRING(20), position = at(4, 3)) {
-     label = "PREDEL Trigger Field"
+      label = "PREDEL Trigger Field"
       trigger(PREDEL) {
         vBlock.form.notice("PREDEL Trigger")
       }
@@ -597,25 +586,17 @@ class DocumentationFieldsForm : DictionaryForm() {
       border = Border.LINE
 
       command(item = list) {
-        action = {
-          recursiveQuery()
-        }
+        recursiveQuery()
       }
       command(item = insertMode) {
-        action = {
-          insertMode()
-        }
+        insertMode()
       }
       command(item = saveBlock) {
-        action = {
-          saveBlock()
-        }
+        saveBlock()
       }
 
       command(item = deleteBlock) {
-        action = {
-          deleteBlock()
-        }
+        deleteBlock()
       }
     }
   }

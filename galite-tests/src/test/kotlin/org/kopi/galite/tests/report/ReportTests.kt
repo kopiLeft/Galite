@@ -185,35 +185,25 @@ class SimpleReport : Report() {
   }
 
   val cmdCSV = command(item = csv) {
-    action = {
-      model.export(VReport.TYP_CSV)
-    }
+    model.export(VReport.TYP_CSV)
   }
 
   val cmdPDF = command(item = pdf) {
-    action = {
-      model.export(VReport.TYP_PDF)
-    }
+    model.export(VReport.TYP_PDF)
   }
 
   val cmdXLS = command(item = xls) {
-    action = {
-      model.export(VReport.TYP_XLS)
-    }
+    model.export(VReport.TYP_XLS)
   }
 
   val cmdXLSX = command(item = xlsx) {
-    action = {
-      model.export(VReport.TYP_XLSX)
-    }
+    model.export(VReport.TYP_XLSX)
   }
 
   val cmd = command(item = greeting) {
-    action = {
-      println("----------- Hello Galite ----------------")
-      println("----------- I will show you help ----------------")
-      model.showHelp()
-    }
+    println("----------- Hello Galite ----------------")
+    println("----------- I will show you help ----------------")
+    model.showHelp()
   }
 
   val name = field(STRING(20)) {

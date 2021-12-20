@@ -354,9 +354,7 @@ class FormWithMultipleBlock : Form() {
   }
 
   val resetFormCmd = command(item = resetForm) {
-    action = {
-      resetForm()
-    }
+    resetForm()
   }
 
   val firstPage = page("Client")
@@ -386,9 +384,7 @@ class FormWithMultipleBlock : Form() {
       label = "test"
       help = "The test"
       options(FieldOption.QUERY_UPPER)
-      command(item = autoFill) {
-        action = {}
-      }
+      command(item = autoFill) {}
     }
 
     init {

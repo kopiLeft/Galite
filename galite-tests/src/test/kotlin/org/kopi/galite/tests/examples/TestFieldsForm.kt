@@ -56,9 +56,7 @@ class TestFieldsForm : DictionaryForm() {
   val blockWithAllFieldVisibilityTypes = insertBlock(BlockWithAllFieldVisibilityTypes())
   val blockWithSaveCommand = insertBlock(BlockWithSaveCommand()) {
     command(item = serialQuery) {
-      action = {
-        serialQuery()
-      }
+      serialQuery()
     }
   }
 }
