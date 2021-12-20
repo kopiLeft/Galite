@@ -59,6 +59,18 @@ abstract class Report : Window() {
   }
 
   /**
+   * creates and returns a field that accept nulls. It uses [init] method to initialize the field.
+   *
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
+                                                       noinline init: ReportField<T>.() -> Unit): ReportField<T?> {
+    return field(domain, init) as ReportField<T?>
+  }
+
+  /**
    * Adds a row to the report.
    *
    * @param init initializes the row with values.

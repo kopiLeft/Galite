@@ -73,7 +73,7 @@ abstract class VReportColumn(
     return if (isFolded || o == null) {
       ""
     } else if (format != null) {
-      format!!.format(o)!!
+      format!!.format(o)
     } else if (height == 1) {
       val str = o.toString()
       val strLength = str.length

@@ -149,7 +149,7 @@ class DocumentationReportR : Report() {
   }
 
   // test to lower Case format + align right
-  val lastName = field(STRING(25)) {
+  val lastName = nullableField(STRING(25)) {
     label = "last Name "
     help = "The last name"
     align = FieldAlignment.RIGHT
@@ -160,14 +160,14 @@ class DocumentationReportR : Report() {
   }
 
   // test normal format + align center
-  val middleName = field(STRING(25)) {
+  val middleName = nullableField(STRING(25)) {
     label = "middleName"
     help = "The middle Name"
     align = FieldAlignment.CENTER
     group = age
   }
 
-  val age = field(INT(25)) {
+  val age = nullableField(INT(25)) {
     label = "age"
     help = "age"
   }
@@ -185,9 +185,9 @@ class DocumentationReportR : Report() {
       testTable.forEach { result ->
         add {
           this[name] = result[TestTable.name]
-          this[lastName] = result[TestTable.lastName] as String
-          this[middleName] = result[TestTable.lastName] as String
-          this[age] = result[TestTable.age] as Int
+          this[lastName] = result[TestTable.lastName]
+          this[middleName] = result[TestTable.lastName]
+          this[age] = result[TestTable.age]
         }
       }
     }

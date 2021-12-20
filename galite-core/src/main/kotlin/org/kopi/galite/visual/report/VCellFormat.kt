@@ -23,7 +23,7 @@ open class VCellFormat {
    *   Return a formatted string of the Object
    * @return the value formatted
    */
-  open fun format(value: Any?): String? {
+  open fun format(value: Any?): String {
     return value?.toString() ?: ""
   }
 }
