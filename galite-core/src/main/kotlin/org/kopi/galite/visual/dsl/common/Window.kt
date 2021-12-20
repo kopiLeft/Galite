@@ -109,10 +109,12 @@ abstract class Window {
    * @param modes   the modes in which the command should be executed.
    * @param action  the action function.
    */
-  fun command(item: Actor, vararg modes: Mode = arrayOf(Mode.ANY), action: () -> Unit): Command {
+  fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
     val command = Command(item)
 
-    command.setMode(*modes)
+    if (modes.isNotEmpty()) {
+      command.setMode(*modes)
+    }
     command.action = action
     commands.add(command)
     return command

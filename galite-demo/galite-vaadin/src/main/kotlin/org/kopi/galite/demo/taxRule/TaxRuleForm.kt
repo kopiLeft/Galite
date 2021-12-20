@@ -99,7 +99,7 @@ class TaxRuleForm : ReportSelectionForm() {
     }
 
     command(item = report) {
-      createReport(this@insertBlock)
+      createReport(this)
     }
 
     command(item = list) {

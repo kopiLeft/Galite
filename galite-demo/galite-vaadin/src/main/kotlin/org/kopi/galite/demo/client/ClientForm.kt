@@ -210,7 +210,7 @@ class ClientForm : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        createReport(this@Clients)
+        createReport(this)
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -275,7 +275,7 @@ class ClientForm : ReportSelectionForm() {
       }
 
       command(item = report) {
-        createReport(this@Sales)
+        createReport(this)
       }
       command(item = dynamicReport) {
         createDynamicReport()

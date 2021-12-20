@@ -154,7 +154,7 @@ class CommandsForm : ReportSelectionForm() {
       serialQuery()
     }
     command(item = report) {
-      createReport(this@insertBlock)
+      createReport(this)
     }
     command(item = dynamicReport) {
       createDynamicReport()
