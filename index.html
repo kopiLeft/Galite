@@ -3,6 +3,8 @@
   <head>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" />
     <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/material.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
     <title>Galite Framework</title>
   </head>
 
@@ -51,6 +53,63 @@
         </div>
       </div>
     </section>
+
+    <section id="dsl-section">
+      <div class="dsl-details">
+        <h2 class="dsl-title">
+          DSL BASED FRAMEWORK
+        </h2>
+        <p class="dsl-paragraph">
+          Galite provides a DSL layer for developer to use. It make generating application from model very easy. Using
+          few lines of code, Galite generate a nice user interface with backend fully managed. </p>
+      </div>
+      <pre class="dsl-code">
+        <code class="language-kotlin">
+class Clients : Form() {
+  override val title = "Clients form"
+
+  val block = insertBlock(ClientBlock())
+
+  inner class ClientBlock : Block(1, 1, "Clients") {
+
+    val id = hidden(domain = INT(20)) {
+      label = "ID"
+      help = "The user id"
+      columns(Clients.id) {
+        index = unique
+      }
+    }
+
+    val name = visit(domain = STRING(20), position = at(1, 1)) {
+      label = "name"
+      help = "name"
+      columns(Clients.name)
+    }
+
+    val createdOn = visit(domain = TIMESTAMP, position = at(2, 1)) {
+      label = "createdOn"
+      help = "createdOn"
+      columns(Clients.createdOn)
+    }
+  }
+}
+        </code>
+      </pre>
+    </section>
+    <section id="ui-section">
+      <div class="ui-screenshots">
+        <img src="images/screenshots.png" alt="Screenshots for the Galite UI">
+      </div>
+      <div class="ui-details">
+        <h2 class="ui-title">
+          GREAT UX / UI
+        </h2>
+        <p class="ui-paragraph">
+          Galite apps provides good UX (User Experience) for business.
+          Galite UI (User interface) allows to easily show and manipulate data and navigate between the application components.
+        </p>
+      </div>
+    </section>
     <footer id="footer">
       <div>
         <a class="link" href="https://github.com/kopiLeft">
@@ -66,4 +125,5 @@
       <p>Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN</p>
     </footer>
   </body>
+  <script>hljs.highlightAll();</script>
 </html>
