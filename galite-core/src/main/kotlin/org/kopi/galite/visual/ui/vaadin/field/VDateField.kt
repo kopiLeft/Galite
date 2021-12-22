@@ -35,6 +35,13 @@ class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
     internalField.isAutoOpen = false
 
     // Workaround for autoselection on focus
+    element.executeJs(
+      """
+              this.addEventListener("focus", event => {
+                    this.$.input.inputElement.select()
+              })
+              """
+    )
     addFocusListener {
       element.executeJs("this.$.input.inputElement.select()")
     }

@@ -30,10 +30,16 @@ import com.vaadin.flow.component.timepicker.TimePicker
 class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
 
   init {
+    internalField.isAutoOpen = false
+
     // Workaround for autoselection on focus
-    addFocusListener {
-      element.executeJs("this.focusElement.inputElement.select()")
-    }
+    element.executeJs(
+      """
+              this.addEventListener("focus", event => {
+                    this.focusElement.inputElement.select()
+              })
+      """
+    )
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
