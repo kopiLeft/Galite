@@ -617,7 +617,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // DATA MEMBERS
     //-----------------------------------------------------------
     private val waitIndicator = WaitWindow()
-    private var finished = false
     var delay: Long = 10
 
     //-----------------------------------------------------------
@@ -629,40 +628,22 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
      * @param message message to show
      */
     override fun setWaitInfo(message: String?) {
-      schedule {
+      access(currentUI) {
         synchronized(waitIndicator) {
           waitIndicator.setText(message)
           if (!waitIndicator.isOpened) {
             waitIndicator.show()
           }
-          currentUI?.push()
-        }
-      }
-    }
-
-    /**
-     * Executes the [task] only if it takes more than a specified [delay] in milliseconds.
-     *
-     * @param task the task to be executed.
-     */
-    private fun schedule(task: () -> Unit) {
-      val ui = currentUI ?: locateUI()
-
-      finished = false
-      doAfter(delay) {
-        access(ui) {
-          if (!finished) {
-            task()
+          doAfter(delay) {
+            access(currentUI) {
+              currentUI?.push()
+            }
           }
         }
       }
     }
 
     override fun unsetWaitInfo() {
-      synchronized(finished) {
-        finished = true
-      }
-
       access(currentUI) {
         synchronized(waitIndicator) {
           if (waitIndicator.isOpened) {
