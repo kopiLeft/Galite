@@ -139,8 +139,7 @@ class VWindowController : WindowController() {
       popup.open()
 
       // Focus on a field inside a popup is not working.
-      // This is a workaround to call focus asynchronously after some time from
-      // popup attachment.
+      // This is a workaround in https://github.com/vaadin/vaadin-dialog-flow/issues/55.
       view.focusOnLastField()
     }
   }
@@ -185,8 +184,7 @@ class VWindowController : WindowController() {
             popup.open()
 
             // Focus on a field inside a popup is not working.
-            // This is a workaround to call focus asynchronously after some time from
-            // popup attachment.
+            // This is a workaround in https://github.com/vaadin/vaadin-dialog-flow/issues/55.
             view!!.focusOnLastField()
           }
         } catch (e: VException) {
@@ -208,17 +206,16 @@ class VWindowController : WindowController() {
    * Focus on last focused field of this window.
    */
   fun DWindow.focusOnLastField() {
-    element.executeJs("").then {
-      val lasFocusedField = lasFocusedField
+    val lasFocusedField = lasFocusedField
 
-      if (lasFocusedField != null) {
-        val internalField = when (lasFocusedField) {
-          is TextField -> lasFocusedField.inputField
-          is GridEditorTextField -> lasFocusedField.wrappedField
-          else -> lasFocusedField
-        }
-        internalField.element.executeJs("setTimeout(function(){$0.focus()},60)", internalField.element)
+    if (lasFocusedField != null) {
+      val internalField = when (lasFocusedField) {
+        is TextField -> lasFocusedField.inputField
+        is GridEditorTextField -> lasFocusedField.wrappedField
+        else -> lasFocusedField
       }
+
+      internalField.tabIndex = 1
     }
   }
 }
