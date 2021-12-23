@@ -116,7 +116,7 @@ class FormWithList : DictionaryForm() {
     init {
       trigger(POSTQRY) {
         blockWithManyTables.uid[0] = id.value
-        block.load()
+        blockWithManyTables.load()
       }
     }
     val id = hidden(domain = INT(20)) {
