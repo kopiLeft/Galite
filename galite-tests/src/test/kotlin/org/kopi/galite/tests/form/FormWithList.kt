@@ -95,12 +95,10 @@ class FormWithList : DictionaryForm() {
 
   val block3 = testPage1.insertBlock(UsersBlock()) {
     command(item = list) {
-      println("-----------Generating list-----------------")
       recursiveQuery()
     }
 
     command(item = save) {
-      println("-----------Saving-----------------")
       saveBlock()
     }
   }

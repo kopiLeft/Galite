@@ -103,7 +103,6 @@ class TaxRuleForm : ReportSelectionForm() {
     }
 
     command(item = list) {
-      println("-----------Generating list-----------------")
       recursiveQuery()
     }
 

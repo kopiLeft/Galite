@@ -530,6 +530,10 @@ open class Block(var buffer: Int,
       Commands.queryMove(vBlock)
   }
 
+  fun setMode(mode: Mode) {
+    vBlock.setMode(mode.value)
+  }
+
   /**
    * Adds a field drop list. A check is performed to test if the dropped extension
    * id associated to another field. In this case, the conflicted drop extension is

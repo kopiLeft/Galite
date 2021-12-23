@@ -132,7 +132,7 @@ class DocumentationBlockForm : DictionaryForm() {
   // test command access
   val commandAccessBlock = insertBlock(CommandAccessBlock()) {
     trigger(INIT) {
-      vBlock.setMode(VConstants.MOD_INSERT)
+      setMode(Mode.INSERT)
     }
 
     command(item = list, modes = arrayOf(Mode.UPDATE, Mode.QUERY)) {

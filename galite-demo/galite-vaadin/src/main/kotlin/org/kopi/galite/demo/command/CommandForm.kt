@@ -98,7 +98,6 @@ class CommandForm : ReportSelectionForm() {
     }
 
     command(item = list) {
-      println("-----------Generating list-----------------")
       recursiveQuery()
     }
     command(item = resetBlock) {

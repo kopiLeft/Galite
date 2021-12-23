@@ -124,7 +124,6 @@ class MultipleBlockForm : DictionaryForm() {
     }
 
     command(item = list) {
-      println("-----------Generating list-----------------")
       recursiveQuery()
     }
     command(item = query) {

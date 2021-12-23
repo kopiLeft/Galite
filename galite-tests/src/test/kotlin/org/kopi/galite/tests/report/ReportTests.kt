@@ -201,8 +201,6 @@ class SimpleReport : Report() {
   }
 
   val cmd = command(item = greeting) {
-    println("----------- Hello Galite ----------------")
-    println("----------- I will show you help ----------------")
     model.showHelp()
   }
 

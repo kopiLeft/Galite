@@ -176,7 +176,6 @@ class SomeDictionnaryForm : DictionaryForm() {
 
   val block = insertBlock(UsersBlock()) {
     command(item = list) {
-      println("-----------Generating list-----------------")
       recursiveQuery()
     }
   }
