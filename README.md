@@ -123,10 +123,8 @@ class ClientForm : Form() {
     icon = "help"  // icon is optional here
   }
  
-  val helpCmd = command(item = helpForm) {
-    action = {
-      showHelp()
-    }
+  val helpCmd = command(item = helpForm) { 
+    showHelp()
   }
 
   val clientsPage= page("Clients")
@@ -197,16 +195,12 @@ class ProductReport : Report() {
     icon = "exportPdf"  // icon is optional here
   }
 
-  val cmdCSV = command(item = csv) {
-    action = {
-      model.export(VReport.TYP_CSV)
-    }
+  val cmdCSV = command(item = csv) { 
+    model.export(VReport.TYP_CSV)
   }
 
-  val cmdPDF = command(item = pdf) {
-    action = {
-      model.export(VReport.TYP_PDF)
-    }
+  val cmdPDF = command(item = pdf) { 
+    model.export(VReport.TYP_PDF)
   }
 
   val category = field(domain = Category) {

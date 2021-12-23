@@ -73,15 +73,11 @@ class DocumentationForm : DictionaryForm() {
   }
 
   val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
 
   val resetFormCmd = command(item = resetForm) {
-    action = {
-      resetForm()
-    }
+    resetForm()
   }
 
  // Types Definition Create CodeDomain & ListDomain Inside Form
@@ -106,13 +102,10 @@ class DocumentationForm : DictionaryForm() {
     }
   }
 
- // Commands Definition
- val cmd = command(item = cut) {
-   // test mode
-   mode(Mode.UPDATE, Mode.QUERY)
-    action = {
-      this@DocumentationForm.model.notice("form command")
-    }
+  // Commands Definition
+  // test mode
+  val cmd = command(item = cut, Mode.UPDATE, Mode.QUERY) {
+    model.notice("form command")
   }
 
   /** Form Triggers Definition **/

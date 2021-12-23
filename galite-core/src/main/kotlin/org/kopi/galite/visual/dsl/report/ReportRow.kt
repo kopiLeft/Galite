@@ -43,7 +43,7 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
    * @param field the field.
    * @param value the field's value.
    */
-  operator fun <T : Comparable<T>?> set(field: ReportField<T>, value: T) {
+  operator fun <T> set(field: ReportField<T>, value: T) {
     if (field in reportFields) {
       data.putIfAbsent(field, value)
     }
@@ -56,6 +56,7 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
    * @param field the field.
    * @param value the field's value.
    */
+  @JvmName("setType0")
   operator fun <T : Type0<K>, K> set(field: ReportField<T>, value: K) {
     if (field in reportFields) {
       data.putIfAbsent(field, value)

@@ -114,9 +114,7 @@ class MultipleBlockForm : DictionaryForm() {
     icon = "break"
   }
   val resetFormCmd = command(item = resetForm) {
-    action = {
-      resetForm()
-    }
+    resetForm()
   }
 
   val block = page1.insertBlock(Traineeship()) {
@@ -126,45 +124,30 @@ class MultipleBlockForm : DictionaryForm() {
     }
 
     command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
     command(item = query) {
-      action = {
-        queryMove()
-      }
+      queryMove()
     }
     command(item = load) {
-      action = {
-        transaction {
-          load()
-        }
+      transaction {
+        load()
       }
     }
     command(item = changeBlock) {
-      action = {
-        changeBlock()
-      }
+      changeBlock()
     }
   }
 
   val block2 = page1.insertBlock(Centers()) {
     command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
     command(item = showHideFilter) {
-      action = {
-        showHideFilter()
-      }
+      showHideFilter()
     }
     command(item = add) {
-      action = {
-        insertLine()
-      }
+      insertLine()
     }
   }
   val block3 = page2.insertBlock(SimpleBlock()) {

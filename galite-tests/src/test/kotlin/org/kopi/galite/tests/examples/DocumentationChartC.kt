@@ -75,16 +75,12 @@ class DocumentationChartC :  Chart() {
   }
 
   val quitCmd = command(item = quit) {
-    action = {
-      model.close()
-    }
+    model.close()
   }
 
   // chart command
   val chartCmd = command(item = chartActor) {
-    action = {
-      this@DocumentationChartC.model.notice("chart command")
-    }
+    model.notice("chart command")
   }
 
   val area = measure(DECIMAL(width = 10, scale = 5)) {

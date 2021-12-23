@@ -111,41 +111,29 @@ class DocumentationReportR : Report() {
   }
 
   val cmdCSV = command(item = csv) {
-    action = {
-      model.export(VReport.TYP_CSV)
-    }
+    model.export(VReport.TYP_CSV)
   }
 
   val cmdPDF = command(item = pdf) {
-    action = {
-      model.export(VReport.TYP_PDF)
-    }
+    model.export(VReport.TYP_PDF)
   }
 
   val cmdXLS = command(item = xls) {
-    action = {
-      model.export(VReport.TYP_XLS)
-    }
+    model.export(VReport.TYP_XLS)
   }
 
   val cmdXLSX = command(item = xlsx) {
-    action = {
-      model.export(VReport.TYP_XLSX)
-    }
+    model.export(VReport.TYP_XLSX)
   }
 
   val helpCmd = command(item = helpForm) {
-    action = {
-      model.showHelp()
-    }
+    model.showHelp()
   }
 
   val editColumn = command(item = editColumnData) {
-    action = {
-      if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
-        val formula  = FormExample()
-        WindowController.windowController.doModal(formula)
-      }
+    if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
+      val formula  = FormExample()
+      WindowController.windowController.doModal(formula)
     }
   }
 
@@ -161,7 +149,7 @@ class DocumentationReportR : Report() {
   }
 
   // test to lower Case format + align right
-  val lastName = field(STRING(25)) {
+  val lastName = nullableField(STRING(25)) {
     label = "last Name "
     help = "The last name"
     align = FieldAlignment.RIGHT
@@ -172,14 +160,14 @@ class DocumentationReportR : Report() {
   }
 
   // test normal format + align center
-  val middleName = field(STRING(25)) {
+  val middleName = nullableField(STRING(25)) {
     label = "middleName"
     help = "The middle Name"
     align = FieldAlignment.CENTER
     group = age
   }
 
-  val age = field(INT(25)) {
+  val age = nullableField(INT(25)) {
     label = "age"
     help = "age"
   }
@@ -197,9 +185,9 @@ class DocumentationReportR : Report() {
       testTable.forEach { result ->
         add {
           this[name] = result[TestTable.name]
-          this[lastName] = result[TestTable.lastName] as String
-          this[middleName] = result[TestTable.lastName] as String
-          this[age] = result[TestTable.age] as Int
+          this[lastName] = result[TestTable.lastName]
+          this[middleName] = result[TestTable.lastName]
+          this[age] = result[TestTable.age]
         }
       }
     }

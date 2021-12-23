@@ -24,6 +24,7 @@ import kotlin.test.assertTrue
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 
@@ -65,7 +66,7 @@ class FormSampleTests: JApplicationTestBase() {
     val form = FormSample()
     val formModel = form.model
 
-    form.tb1.vBlock.setMode(VConstants.MOD_INSERT)
+    form.tb1.setMode(Mode.INSERT)
     form.tb1.vBlock.enter()
     formModel.reset()
     assertTrue(formModel.blocks.all { it.getMode() == VConstants.MOD_QUERY })

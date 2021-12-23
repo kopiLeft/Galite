@@ -137,61 +137,39 @@ class CommandsForm : ReportSelectionForm() {
     icon = "help"
   }
   val helpCmd = command(item = helpForm) {
-    action = {
-      showHelp()
-    }
+    showHelp()
   }
   val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
 
   val block = insertBlock(Traineeship()) {
     command(item = list) {
-      action = {
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
     command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
     command(item = serialQuery) {
-      action = {
-        serialQuery()
-      }
+      serialQuery()
     }
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this)
     }
     command(item = dynamicReport) {
-      action = {
-        createDynamicReport()
-      }
+      createDynamicReport()
     }
     command(item = saveBlock) {
-      action = {
-        saveBlock()
-      }
+      saveBlock()
     }
     command(item = deleteBlock) {
-      action = {
-        deleteBlock()
-      }
+      deleteBlock()
     }
     command(item = Operator) {
-      action = {
-        searchOperator()
-      }
+      searchOperator()
     }
     command(item = InsertMode) {
-      action = {
-        insertMode()
-      }
+      insertMode()
     }
   }
 }

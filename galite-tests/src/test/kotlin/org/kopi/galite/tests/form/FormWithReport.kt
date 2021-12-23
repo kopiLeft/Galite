@@ -43,10 +43,7 @@ class FormWithReport : ReportSelectionForm() {
 
   val block = testPage.insertBlock(BlockSample) {
     command(item = report) {
-      action = {
-        println("-----------Generating report-----------------")
-        createReport(BlockSample)
-      }
+      createReport(BlockSample)
     }
   }
 

@@ -31,11 +31,11 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.minValue
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Timestamp
@@ -81,17 +81,13 @@ object FormWithSpecialTypes : Form() {
 
   val blockWithSpecialTypes = insertBlock(BlockWithSpecialTypes()) {
     command(item = save) {
-      action = {
-        println("-----------Saving-----------------")
-        vBlock.setMode(VConstants.MOD_INSERT)
-        transaction {
-
-          SchemaUtils.create(p)
-          saveBlock()
-          p.selectAll().forEach {
-            println("Image successfully inserted!")
-            println(it[p.image])
-          }
+      setMode(Mode.INSERT)
+      transaction {
+        SchemaUtils.create(p)
+        saveBlock()
+        p.selectAll().forEach {
+          println("Image successfully inserted!")
+          println(it[p.image])
         }
       }
     }

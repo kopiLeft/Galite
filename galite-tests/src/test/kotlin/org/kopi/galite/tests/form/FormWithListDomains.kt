@@ -65,12 +65,9 @@ class FormWithListDomains: Form() {
       label = "test"
       help = "The test"
       command(item = autoFill) {
-        action = {
-
-          val file = FileHandler.fileHandler!!.openFile(model.getDisplay()!!, FileFilter());
-          if (file != null) {
-            value = file.absolutePath
-          }
+        val file = FileHandler.fileHandler!!.openFile(model.getDisplay()!!, FileFilter());
+        if (file != null) {
+          value = file.absolutePath
         }
       }
     }
@@ -165,15 +162,13 @@ class SomeDictionnaryForm : DictionaryForm() {
     icon = "quit"
   }
   val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
   val list = actor(
-          ident = "list",
-          menu = action,
-          label = "list",
-          help = "Display List",
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
@@ -181,10 +176,7 @@ class SomeDictionnaryForm : DictionaryForm() {
 
   val block = insertBlock(UsersBlock()) {
     command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
   }
 

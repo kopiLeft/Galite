@@ -300,11 +300,16 @@ open class Block(var buffer: Int,
    * PS: Block commands are commands accessible only from the block where they are called.
    *
    * @param item    the actor linked to the command.
-   * @param init    initialization method.
+   * @param modes   the modes in which the command should be executed.
+   * @param action  the action function.
    */
-  fun command(item: Actor, init: Command.() -> Unit): Command {
+  fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
     val command = Command(item)
-    command.init()
+
+    if (modes.isNotEmpty()) {
+      command.setMode(*modes)
+    }
+    command.action = action
     commands.add(command)
     return command
   }
@@ -319,9 +324,7 @@ open class Block(var buffer: Int,
    */
   fun command(window: Window, command: Command)  {
     window.actors.add(command.item)
-    command(item = command.item) {
-      action = command.action
-    }
+    command(item = command.item, action = command.action)
   }
 
   /**
@@ -525,6 +528,10 @@ open class Block(var buffer: Int,
    */
   fun queryMove() {
       Commands.queryMove(vBlock)
+  }
+
+  fun setMode(mode: Mode) {
+    vBlock.setMode(mode.value)
   }
 
   /**

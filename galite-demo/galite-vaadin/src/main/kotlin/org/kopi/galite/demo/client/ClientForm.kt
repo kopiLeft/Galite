@@ -134,14 +134,10 @@ class ClientForm : ReportSelectionForm() {
   }
 
   val helpCmd = command(item = helpForm) {
-    action = {
-      showHelp()
-    }
+    showHelp()
   }
   val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
 
   val clientsPage= page("Clients")
@@ -214,30 +210,19 @@ class ClientForm : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        action = {
-          createReport(this@Clients)
-        }
+        createReport(this)
       }
       command(item = dynamicReport) {
-        action = {
-          createDynamicReport()
-        }
+        createDynamicReport()
       }
-      command(item = graph) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-        action = {
-          showChart(ChartSample())
-        }
+      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+        showChart(ChartSample())
       }
       command(item = list) {
-        action = {
-          recursiveQuery()
-        }
+        recursiveQuery()
       }
       command(item = saveBlock) {
-        action = {
-          saveBlock()
-        }
+        saveBlock()
       }
     }
   }
@@ -286,56 +271,41 @@ class ClientForm : ReportSelectionForm() {
       border = Border.LINE
 
       command(item = showHideFilter) {
-        action = {
-          showHideFilter()
-        }
+        showHideFilter()
       }
 
       command(item = report) {
-        action = {
-          createReport(this@Sales)
-        }
+        createReport(this)
       }
       command(item = dynamicReport) {
-        action = {
-          createDynamicReport()
-        }
+        createDynamicReport()
       }
-      command(item = graph) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-        action = {
-          showChart(ChartSample())
-        }
+      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+        showChart(ChartSample())
       }
       command(item = list) {
-        action = {
-          recursiveQuery()
-        }
+        recursiveQuery()
       }
       command(item = saveBlock) {
-        action = {
-          saveBlock()
-        }
+        saveBlock()
       }
       command(item = interSave) {
-        action = {
-          val b = salesBlock.vBlock
-          val rec: Int = b.activeRecord
+        val b = salesBlock.vBlock
+        val rec: Int = b.activeRecord
 
-          b.validate()
+        b.validate()
 
-          if (!b.isFilled()) {
-            b.currentRecord = 0
-            throw VExecFailedException()
-          }
-
-          transaction {
-            b.save()
-          }
-
-          gotoBlock(b)
-          b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
+        if (!b.isFilled()) {
+          b.currentRecord = 0
+          throw VExecFailedException()
         }
+
+        transaction {
+          b.save()
+        }
+
+        gotoBlock(b)
+        b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
   }

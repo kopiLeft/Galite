@@ -39,6 +39,7 @@ import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
@@ -476,7 +477,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.age.value = 26
       FormSample.tb1.job.value = "job"
 
-      FormSample.tb1.vBlock.setMode(VConstants.MOD_INSERT)
+      FormSample.tb1.setMode(Mode.INSERT)
       FormSample.tb1.vBlock.save()
 
       val query = User.selectAll().single()
@@ -505,7 +506,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.age.value = 27
       FormSample.tb1.job.value = "work"
 
-      FormSample.tb1.vBlock.setMode(VConstants.MOD_UPDATE)
+      FormSample.tb1.setMode(Mode.UPDATE)
       FormSample.tb1.vBlock.save()
 
       val query = User.select { User.id eq 1 }.single()
@@ -549,7 +550,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.mail[1] = "center2@gmail.com"
 
 
-      formMultiple.multipleBlock.vBlock.setMode(VConstants.MOD_INSERT)
+      formMultiple.multipleBlock.setMode(Mode.INSERT)
       formMultiple.multipleBlock.vBlock.save()
 
       val listInfoCenter = mutableListOf<Any?>()
@@ -608,7 +609,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.address[2] = "adresse 333"
       formMultiple.multipleBlock.mail[2] = "center333@gmail.com"
 
-      formMultiple.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
+      formMultiple.multipleBlock.setMode(Mode.UPDATE)
       formMultiple.multipleBlock.vBlock.setRecordFetched(0, true)
       formMultiple.multipleBlock.vBlock.setRecordFetched(1, true)
       formMultiple.multipleBlock.vBlock.setRecordFetched(2, true)
@@ -696,7 +697,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.address[1] = "adresse 222"
       formMultiple.multipleBlock.mail[1] = "center222@gmail.com"
 
-      formMultiple.multipleBlock.vBlock.setMode(VConstants.MOD_UPDATE)
+      formMultiple.multipleBlock.setMode(Mode.UPDATE)
       formMultiple.multipleBlock.vBlock.setRecordFetched(0, true)
       formMultiple.multipleBlock.vBlock.setRecordFetched(1, true)
       formMultiple.multipleBlock.vBlock.delete()

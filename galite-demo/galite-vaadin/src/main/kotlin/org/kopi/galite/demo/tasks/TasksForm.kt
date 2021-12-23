@@ -58,14 +58,10 @@ class TasksForm : Form() {
   }
 
   val helpCmd = command(item = helpForm) {
-    action = {
-      showHelp()
-    }
+    showHelp()
   }
   val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+    quitForm()
   }
 
   val tasksBlock = insertBlock(Tasks())

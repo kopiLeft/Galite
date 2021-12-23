@@ -59,9 +59,7 @@ class DocumentationReport : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        action = {
-          createReport(this@SimpleBlock)
-        }
+        createReport(this)
       }
     }
   }

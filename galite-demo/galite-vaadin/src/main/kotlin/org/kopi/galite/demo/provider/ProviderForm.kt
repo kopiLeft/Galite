@@ -51,9 +51,7 @@ class ProviderForm : ReportSelectionForm() {
 
   val block = page.insertBlock(BlockProvider()) {
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this)
     }
   }
 

@@ -29,6 +29,7 @@ import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.form.VCodeField
@@ -130,11 +131,16 @@ open class FormField<T>(val block: Block,
    * Adds a new command to this field.
    **
    * @param item    the actor linked to the command.
-   * @param init    initialization method.
+   * @param modes   the modes in which the command should be executed.
+   * @param action  the action function.
    */
-  fun command(item: Actor, init: Command.() -> Unit): Command {
+  fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
     val command = Command(item)
-    command.init()
+
+    if (modes.isNotEmpty()) {
+      command.setMode(*modes)
+    }
+    command.action = action
     commands.add(command)
     return command
   }

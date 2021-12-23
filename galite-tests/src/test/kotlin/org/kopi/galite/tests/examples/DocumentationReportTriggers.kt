@@ -56,9 +56,7 @@ class DocumentationReportTriggers : Form() {
 
     init {
       command(item = report) {
-        action = {
-          WindowController.windowController.doNotModal(DocumentationReportTriggersR())
-        }
+        WindowController.windowController.doNotModal(DocumentationReportTriggersR())
       }
     }
   }

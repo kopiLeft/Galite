@@ -53,11 +53,11 @@ class DocumentationChart : Form() {
     }
 
     init {
-      command(item = graph) {
-        mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-        action = {
-          showChart(DocumentationChartC())
-        }
+      command(
+        item = graph,
+        modes = arrayOf(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
+      ) {
+        showChart(DocumentationChartC())
       }
     }
   }

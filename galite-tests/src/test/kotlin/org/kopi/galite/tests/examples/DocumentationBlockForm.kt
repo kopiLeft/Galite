@@ -97,9 +97,7 @@ class DocumentationBlockForm : DictionaryForm() {
   }
 
   val resetFormCmd = command(item = resetForm) {
-    action = {
-      resetForm()
-    }
+    resetForm()
   }
 
   /*** Block Types ***/
@@ -134,20 +132,15 @@ class DocumentationBlockForm : DictionaryForm() {
   // test command access
   val commandAccessBlock = insertBlock(CommandAccessBlock()) {
     trigger(INIT) {
-      vBlock.setMode(VConstants.MOD_INSERT)
+      setMode(Mode.INSERT)
     }
 
-    command(item = list) {
-      mode(Mode.UPDATE, Mode.QUERY)
-      action = {
-        recursiveQuery()
-      }
+    command(item = list, modes = arrayOf(Mode.UPDATE, Mode.QUERY)) {
+      recursiveQuery()
     }
 
     command(item = deleteBlock) {
-      action = {
-        deleteBlock()
-      }
+      deleteBlock()
     }
   }
 
@@ -295,9 +288,7 @@ class DocumentationBlockForm : DictionaryForm() {
       options(BlockOption.NODELETE)
 
       command(item = deleteBlock) {
-        action = {
-          deleteBlock()
-        }
+        deleteBlock()
       }
     }
     val field = visit(domain = INT(20), position = at(1, 1)) {
@@ -478,27 +469,19 @@ class DocumentationBlockForm : DictionaryForm() {
       }
 
       command(item = list) {
-        action = {
-          recursiveQuery()
-        }
+        recursiveQuery()
       }
 
       command(item = insertMode) {
-        action = {
-          insertMode()
-        }
+        insertMode()
       }
 
       command(item = saveBlock) {
-        action = {
-          saveBlock()
-        }
+        saveBlock()
       }
 
       command(item = deleteBlock) {
-        action = {
-          deleteBlock()
-        }
+        deleteBlock()
       }
     }
   }

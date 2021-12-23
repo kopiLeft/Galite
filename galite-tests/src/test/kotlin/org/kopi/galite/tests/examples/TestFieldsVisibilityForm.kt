@@ -56,19 +56,13 @@ class TestFieldsVisibilityForm : DictionaryForm() {
 
   val blockWithAllFieldVisibilityTypes = insertBlock(BlockWithChangingFieldVisibilityTypes()) {
     command(item = query) {
-      action = {
-        this@insertBlock.vBlock.setMode(Mode.QUERY.value)
-      }
+      setMode(Mode.QUERY)
     }
     command(item = update) {
-      action = {
-        this@insertBlock.vBlock.setMode(Mode.UPDATE.value)
-      }
+      setMode(Mode.UPDATE)
     }
     command(item = insert) {
-      action = {
-        this@insertBlock.vBlock.setMode(Mode.INSERT.value)
-      }
+      setMode(Mode.INSERT)
     }
   }
 }

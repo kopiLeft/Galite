@@ -94,32 +94,21 @@ class CommandForm : ReportSelectionForm() {
 
   val tb1 = page.insertBlock(BlockCommand()) {
     command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+      createReport(this)
     }
 
     command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
+      recursiveQuery()
     }
     command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
+      resetBlock()
     }
     command(item = serialQuery) {
-      action = {
-        serialQuery()
-      }
+      serialQuery()
     }
 
     command(item = dynamicReport) {
-      action = {
-        createDynamicReport()
-      }
+      createDynamicReport()
     }
   }
 
