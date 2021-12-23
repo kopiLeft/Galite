@@ -44,12 +44,21 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
     val children = internalField.children.toArray()
     val datePicker = (children.single { it is DatePicker } as DatePicker)
     val timePicker = (children.single { it is TimePicker } as TimePicker)
-    datePicker.addFocusListener {
-      datePicker.element.executeJs("this.focusElement.inputElement.select()")
-    }
-    timePicker.addFocusListener {
-      timePicker.element.executeJs("this.focusElement.inputElement.select()")
-    }
+
+    datePicker.element.executeJs(
+      """
+              this.addEventListener("focus", event => {
+                    this.focusElement.inputElement.select()
+              })
+      """
+    )
+    timePicker.element.executeJs(
+      """
+              this.addEventListener("focus", event => {
+                    this.focusElement.inputElement.select()
+              })
+      """
+    )
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

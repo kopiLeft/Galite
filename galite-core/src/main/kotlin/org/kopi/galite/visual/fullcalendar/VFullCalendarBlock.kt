@@ -314,9 +314,8 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
   }
 
   override fun insertMode() {
-    fullCalendarForm.block.insertMode()
     fullCalendarForm.doNotModal()
-    fullCalendarForm.block.gotoFirstUnfilledField()
+    fullCalendarForm.block.insertMode()
   }
 
   /**

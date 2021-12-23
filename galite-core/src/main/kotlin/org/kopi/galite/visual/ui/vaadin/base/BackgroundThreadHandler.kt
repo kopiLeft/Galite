@@ -37,6 +37,12 @@ object BackgroundThreadHandler {
    * @param command the command which accesses the UI.
    */
   fun access(currentUI: UI? = null, command: () -> Unit) {
+    if (UI.getCurrent() != null) {
+      command()
+
+      return
+    }
+
     val currentUI = currentUI ?: locateUI()
 
     if(currentUI == null) {
@@ -51,6 +57,12 @@ object BackgroundThreadHandler {
    * @param command the command which accesses the UI.
    */
   fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
+    if (UI.getCurrent() != null) {
+      command()
+
+      return
+    }
+
     val currentUI = currentUI ?: locateUI()
 
     if(currentUI == null) {
@@ -78,6 +90,12 @@ object BackgroundThreadHandler {
    * @param command the command which accesses the UI.
    */
   fun accessAndAwait(currentUI: UI? = null, command: () -> Unit) {
+    if (UI.getCurrent() != null) {
+      command()
+
+      return
+    }
+
     val currentUI = currentUI ?: locateUI()
 
     if(currentUI == null) {

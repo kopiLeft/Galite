@@ -19,13 +19,15 @@ package org.kopi.galite.visual.ui.vaadin.visual
 
 import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VException
@@ -34,6 +36,8 @@ import org.kopi.galite.visual.visual.VMenuTree
 import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.WindowController
+
+import com.vaadin.flow.component.Component
 
 /**
  * The `VWindowController` is the vaadin implementation
@@ -139,9 +143,8 @@ class VWindowController : WindowController() {
       popup.open()
 
       // Focus on a field inside a popup is not working.
-      // This is a workaround to call focus asynchronously after some time from
-      // popup attachment.
-      view.focusOnLastField()
+      // Call focus asynchronously after some time from popup attachment.
+      view.focusOnActiveField()
     }
   }
 
@@ -185,9 +188,8 @@ class VWindowController : WindowController() {
             popup.open()
 
             // Focus on a field inside a popup is not working.
-            // This is a workaround to call focus asynchronously after some time from
-            // popup attachment.
-            view!!.focusOnLastField()
+            // Call focus asynchronously after some time from popup attachment.
+            view!!.focusOnActiveField()
           }
         } catch (e: VException) {
           throw VRuntimeException(e.message, e)
@@ -205,17 +207,19 @@ class VWindowController : WindowController() {
   }
 
   /**
-   * Focus on last focused field of this window.
+   * Ensure that active field of this window is focused.
+   *
+   * This is a workaround for issue https://github.com/vaadin/vaadin-dialog-flow/issues/55.
    */
-  fun DWindow.focusOnLastField() {
+  fun DWindow.focusOnActiveField() {
     element.executeJs("").then {
-      val lasFocusedField = lasFocusedField
+      val lasFocusedField = (getModel() as VForm).getActiveBlock()?.activeField?.getDisplay()
 
       if (lasFocusedField != null) {
-        val internalField = when (lasFocusedField) {
-          is TextField -> lasFocusedField.inputField
-          is GridEditorTextField -> lasFocusedField.wrappedField
-          else -> lasFocusedField
+        val internalField: Component = when (lasFocusedField) {
+          is DField -> (lasFocusedField.wrappedField as TextField).inputField
+          is DGridEditorField<*> -> lasFocusedField.editor
+          else -> return@then
         }
         internalField.element.executeJs("setTimeout(function(){$0.focus()},60)", internalField.element)
       }
