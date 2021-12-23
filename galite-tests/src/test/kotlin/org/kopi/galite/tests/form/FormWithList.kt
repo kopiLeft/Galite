@@ -103,7 +103,7 @@ class FormWithList : DictionaryForm() {
     }
   }
 
-  val block = testPage1.insertBlock(BlockWithManyTables()) {
+  val blockWithManyTables = testPage1.insertBlock(BlockWithManyTables()) {
     command(item = resetBlock) {
       resetBlock()
     }
@@ -115,7 +115,7 @@ class FormWithList : DictionaryForm() {
 
     init {
       trigger(POSTQRY) {
-        block.uid[0] = id.value
+        blockWithManyTables.uid[0] = id.value
         block.load()
       }
     }

@@ -34,8 +34,11 @@ import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.visual.visual.Color
+import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VException
 
 /**
@@ -444,18 +447,282 @@ open class Block(var buffer: Int,
     return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
   }
 
+  // ----------------------------------------------------------------------
+  // BLOCK APIs
+  // ----------------------------------------------------------------------
+
+  var activeRecord
+    get() = block.activeRecord
+    set(rec) {
+      block.activeRecord = rec
+    }
+
+  var activeField: FormField<*>?
+    get() = resolve(block.activeField)
+    set(value) {
+      block.activeField = value?.vField
+    }
+
+  var isDetailMode
+    get() = block.isDetailMode
+    set(mode: Boolean) {
+      block.isDetailMode = mode
+    }
+
+  // number of active records
+  val recordCount
+    get(): Int = block.recordCount
+
+  var currentRecord
+    get(): Int = block.currentRecord
+    set(rec) {
+      block.currentRecord = rec
+    }
+
+  fun getActiveCommands(): List<Command?> {
+    val activeCommands = block.getActiveCommands()
+
+    return commands.filter { it.model in activeCommands }
+  }
+
+  fun getMode(): Int = block.getMode()
+
+  fun setMode(mode: Int) {
+    block.setMode(mode)
+  }
+
+  /**
+   * @param page the page number of this block
+   */
+  fun setInfo(page: FormPage, form: Form) {
+    block.setInfo(page.pageNumber, form.model)
+  }
+
+  /**
+   * Returns true if this block can display more than one record.
+   */
+  val isMulti: Boolean get() = block.isMulti()
+
+  /**
+   * @return true if this block follows an other block
+   */
+  val isFollow: Boolean get() = block.isFollow
+
+  val isDroppable: Boolean get() = block.isDroppable
+
+  fun isAccepted(flavor: String): Boolean = block.isAccepted(flavor)
+
+  val acceptedFlavors: MutableSet<String> get() = block.acceptedFlavors
+
+  fun getDropTarget(flavor: String): FormField<*>? = resolve(block.getDropTarget(flavor))
+
+  fun resolve(field: VField?): FormField<*>? = fields.singleOrNull { it.vField == field }
+
+  /**
+   * Sets the access of the block
+   * (if isAccessible does not evaluate the
+   * access of the block, this method can be made
+   * public)
+   */
+  protected fun setAccess(access: Boolean) {
+    block.setAccess(access)
+  }
+
+  /**
+   * Returns true if the block is accessible
+   */
+  val isAccessible: Boolean get() = block.isAccessible
+
+  /**
+   * Sets the color properties of the given record.
+   * @param r The record number.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(r: Int, foreground: Color?, background: Color?) {
+    val foreground = if(foreground == null) {
+      null
+    } else {
+      VColor(foreground.red, foreground.green, foreground.blue)
+    }
+    val background = if(background == null) {
+      null
+    } else {
+      VColor(background.red, background.green, background.blue)
+    }
+
+    block.setColor(r, foreground, background)
+  }
+
+  /**
+   * nb record read (and not deleted)
+   */
+  val numberOfValidRecord: Int
+    get() = block.numberOfValidRecord
+
+  /**
+   * nb record read (and not deleted)
+   */
+  fun getNumberOfValidRecordBefore(recno: Int): Int = block.getNumberOfValidRecordBefore(recno)
+
+  val numberOfFilledRecords: Int
+    get() = block.numberOfFilledRecords
+
+  /**
+   * enter record
+   */
+  protected fun enterRecord(recno: Int) {
+    block.enterRecord(recno)
+  }
+
+  /**
+   * leave record
+   * @exception VException      an exception may occur in field.leave()
+   */
+  fun leaveRecord(check: Boolean) {
+    block.leaveRecord(check)
+  }
+
+  /**
+   * GOTO FIRST RECORD
+   * @exception VException      an exception may occur in record.leave()
+   */
+  fun gotoFirstRecord() {
+    block.gotoFirstRecord()
+  }
+
+  /**
+   * GOTO LAST RECORD
+   * @exception VException      an exception may occur in record.leave()
+   */
+  fun gotoLastRecord() {
+    block.gotoLastRecord()
+  }
+
+  fun isRecordInsertAllowed(rec: Int): Boolean = block.isRecordInsertAllowed(rec)
+
+  fun isRecordAccessible(rec: Int): Boolean = block.isRecordAccessible(rec)
+
+  fun changeActiveRecord(record: Int) {
+    block.changeActiveRecord(record)
+  }
+
+  /**
+   * GOTO NEXT RECORD OF CURRENT BLOCK
+   * @exception VException      an exception may be raised bu record.leave
+   */
+  fun gotoNextRecord() {
+    block.gotoNextRecord()
+  }
+
+  /**
+   * GOTO PREVIOUS RECORD
+   * @exception VException      an exception may occur in record.leave()
+   */
+  fun gotoPrevRecord() {
+    block.gotoPrevRecord()
+  }
+
+  /**
+   * GOTO SPECIFIED RECORD
+   * @param recno               the record number
+   * @exception VException      an exception may occur in record.leave()
+   */
+  fun gotoRecord(recno: Int) {
+    block.gotoRecord(recno)
+  }
+
+  /**
+   * Goto field in current block and in current record.
+   * @exception VException      an exception may occur in record.leave()
+   */
+  fun gotoField(fld: VField) {
+    block.gotoField(fld)
+  }
+
+  /**
+   * Goto next field in current record
+   * @exception VException      an exception may occur in record.leave()
+   */
+  fun gotoNextField() {
+    block.gotoNextField()
+  }
+
+  /**
+   * Goto previous field in current record
+   * @exception VException      an exception may occur in field.leave()
+   */
+  fun gotoPrevField() {
+    block.gotoPrevField()
+  }
+
+  /**
+   * Goto first accessible field in current record
+   * @exception VException      an exception may occur in field.leave()
+   */
+  open fun gotoFirstField() {
+    block.gotoFirstField()
+  }
+
+  /**
+   * Goto first accessible field in current record that is not fill
+   * @exception VException      an exception may occur in field.leave()
+   */
+  fun gotoFirstUnfilledField() {
+    block.gotoFirstUnfilledField()
+  }
+
+  /**
+   * Goto next accessible field in current record that is not fill
+   * @exception VException      an exception may occur in field.leave()
+   */
+  fun gotoNextEmptyMustfill() {
+    block.gotoNextEmptyMustfill()
+  }
+
+  /**
+   * Goto last accessible field in current record.
+   * @exception VException      an exception may occur in field.leave()
+   */
+  fun gotoLastField() {
+    block.gotoLastField()
+  }
+
+  /**
+   * Returns true if the block has changed wrt the database.
+   */
+  val isChanged: Boolean
+    get() = block.isChanged
+
+  val record: Int
+    get() = block.record
+
+  /**
+   * check that user has proper UI with focus on a field on the good page
+   */
+  fun checkBlock() {
+    block.checkBlock()
+  }
+
+  /**
+   * Checks that all mustfill fields are filled.
+   */
+  protected fun checkMustfillFields() {
+    block.checkMustfillFields()
+  }
+
   /**
    * Saves current block (insert or update)
    */
   fun saveBlock() {
-    Commands.saveBlock(vBlock)
+    Commands.saveBlock(block)
   }
 
   /**
    * Resets current block
    */
   fun resetBlock() {
-    Commands.resetBlock(vBlock)
+    Commands.resetBlock(block)
   }
 
   /**
@@ -463,7 +730,7 @@ open class Block(var buffer: Int,
    * @exception        VException        an exception may occur during DB access
    */
   fun serialQuery() {
-    Commands.serialQuery(vBlock)
+    Commands.serialQuery(block)
   }
 
   /**
@@ -471,7 +738,7 @@ open class Block(var buffer: Int,
    * @exception        VException        an exception may occur during DB access
    */
   open fun insertMode() {
-    Commands.insertMode(vBlock)
+    Commands.insertMode(block)
   }
 
   /**
@@ -479,7 +746,7 @@ open class Block(var buffer: Int,
    * @exception        VException        an exception may occur during DB access
    */
   fun insertLine() {
-    Commands.insertLine(vBlock)
+    Commands.insertLine(block)
   }
 
   /**
@@ -487,7 +754,7 @@ open class Block(var buffer: Int,
    * @exception        VException        an exception may occur during DB access
    */
   fun changeBlock() {
-    Commands.changeBlock(vBlock)
+    Commands.changeBlock(block)
   }
 
   /**
@@ -495,43 +762,43 @@ open class Block(var buffer: Int,
    * @exception        VException        an exception may occur during DB access
    */
   fun searchOperator() {
-    Commands.setSearchOperator(vBlock)
+    Commands.setSearchOperator(block)
   }
 
   fun showHideFilter() {
-    Commands.showHideFilter(vBlock)
+    Commands.showHideFilter(block)
   }
 
   /**
    * * Loads block from database
    */
   fun load() {
-    vBlock.load()
+    block.load()
   }
 
   /**
    * * Loads block from database
    */
   fun deleteBlock() {
-    Commands.deleteBlock(vBlock)
+    Commands.deleteBlock(block)
   }
 
   /**
    * Menu query block, fetches selected record.
    */
   fun DictionaryForm.recursiveQuery() {
-    Commands.recursiveQuery(vBlock)
+    Commands.recursiveQuery(block)
   }
 
   /**
    * Menu query block, fetches selected record, then moves to next block
    */
   fun queryMove() {
-      Commands.queryMove(vBlock)
+    Commands.queryMove(block)
   }
 
   fun setMode(mode: Mode) {
-    vBlock.setMode(mode.value)
+    block.setMode(mode.value)
   }
 
   /**
@@ -694,13 +961,13 @@ open class Block(var buffer: Int,
   // ----------------------------------------------------------------------
 
   /** The block model */
-  lateinit var vBlock: VBlock
+  lateinit var block: VBlock
 
   /** Returns block model */
   open fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
     val blockModel = BlockModel(vForm, this, source)
 
-    vBlock = blockModel
+    block = blockModel
 
     return blockModel
   }

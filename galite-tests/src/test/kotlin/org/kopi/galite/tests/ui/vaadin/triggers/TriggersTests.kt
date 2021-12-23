@@ -141,7 +141,7 @@ class FormToTestTriggers : DictionaryForm() {
   }
   val salesSimpleBlock = insertBlock(SalesSimpleBlock()) {
     trigger(PREBLK) {
-      vBlock.setDefault()
+      block.setDefault()
     }
     trigger(DEFAULT) {
       defaultValueFromBlock.value = "Setting by block"

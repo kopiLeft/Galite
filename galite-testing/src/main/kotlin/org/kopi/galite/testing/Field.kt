@@ -53,7 +53,7 @@ fun <T> FormField<T>.edit(value: T): UField {
   val mainWindow = _get<MainWindow>()
   lateinit var field: UField
 
-  return if (this.block.vBlock.isMulti()) {
+  return if (this.parentBlock.isMulti) {
     editInMultipleBlock(value, mainWindow)
   } else {
     editInSimpleBlock(value, mainWindow)
@@ -154,7 +154,7 @@ fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
 fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?> {
   val mainWindow = _get<MainWindow>()
 
-  return if (block.vBlock.isMulti()) {
+  return if (parentBlock.isMulti) {
     mainWindow
       ._find<Grid.Column<*>>()
       .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq vField }
@@ -167,7 +167,7 @@ fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?
 /**
  * Finds the the field model.
  */
-fun FormField<*>.findModel(): VField = findModel(block.findBlock().model)
+fun FormField<*>.findModel(): VField = findModel(parentBlock.findBlock().model)
 
 /**
  * Finds the the field model.
@@ -182,7 +182,7 @@ fun <T> FormField<T>.click(): UField {
   val mainWindow = _get<MainWindow>()
   lateinit var field: UField
 
-  val editorField = if (this.block.vBlock.isMulti()) {
+  val editorField = if (this.parentBlock.isMulti) {
     val column = mainWindow
       ._find<Grid.Column<*>>()
       .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }

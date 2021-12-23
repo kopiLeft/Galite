@@ -123,10 +123,10 @@ class VBlockTests : VApplicationTestBase() {
 
     transaction {
       initSampleFormTables()
-      FormSample.tb1.vBlock.load()
+      FormSample.tb1.block.load()
       val query = User.slice(User.name, User.age).selectAll()
 
-      FormSample.tb1.vBlock.deleteRecord(0)
+      FormSample.tb1.block.deleteRecord(0)
       val deleteRecordList = query.map {
         listOf(it[User.name], it[User.age])
       }
@@ -142,12 +142,12 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun checkUniqueIndexTest() {
     FormWithList.model
-    FormWithList.block.uid[0] = 1
-    FormWithList.block.name[0] = "administrator"
+    FormWithList.blockWithManyTables.uid[0] = 1
+    FormWithList.blockWithManyTables.name[0] = "administrator"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block.vBlock.checkUniqueIndices(0)
+        FormWithList.blockWithManyTables.block.checkUniqueIndices(0)
       }
     }
     assertEquals("VIS-00014: ID should be unique", vExecFailedException.message)
@@ -190,7 +190,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.mail[0] = "6"
       val vExecFailedException = assertFailsWith<VExecFailedException> {
         transaction {
-          formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+          formMultiple.multipleBlock.block.checkUniqueIndices(0)
         }
       }
       assertEquals("VIS-00014: Index 0", vExecFailedException.message)
@@ -203,7 +203,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.mail[0] = "3"
       val vExecFailedException2 = assertFailsWith<VExecFailedException> {
         transaction {
-          formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+          formMultiple.multipleBlock.block.checkUniqueIndices(0)
         }
       }
       assertEquals("VIS-00014: Index 1", vExecFailedException2.message)
@@ -214,7 +214,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.address[0] = "12"
       formMultiple.multipleBlock.mail[0] = "13"
       transaction {
-        formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+        formMultiple.multipleBlock.block.checkUniqueIndices(0)
       }
 
       // Should works without throwing exception
@@ -223,7 +223,7 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.address[0] = "17"
       formMultiple.multipleBlock.mail[0] = "9"
       transaction {
-        formMultiple.multipleBlock.vBlock.checkUniqueIndices(0)
+        formMultiple.multipleBlock.block.checkUniqueIndices(0)
       }
     } finally {
       transaction {
@@ -236,25 +236,25 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `test refreshLookup with no matching value in the table`() {
     FormWithList.model
-    FormWithList.block.shortName[0] = "test"
+    FormWithList.blockWithManyTables.shortName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block.vBlock.refreshLookup(0)
+        FormWithList.blockWithManyTables.block.refreshLookup(0)
       }
     }
 
-    assertEquals(MessageCode.getMessage("VIS-00016", FormWithList.block.m.tableName), vExecFailedException.message)
+    assertEquals(MessageCode.getMessage("VIS-00016", FormWithList.blockWithManyTables.m.tableName), vExecFailedException.message)
   }
 
   @Test
   fun refreshLookupTest() {
     FormWithList.model
-    FormWithList.block.shortName[0] = "1000"
+    FormWithList.blockWithManyTables.shortName[0] = "1000"
 
     transaction {
       initModules()
-      FormWithList.block.vBlock.refreshLookup(0)
+      FormWithList.blockWithManyTables.block.refreshLookup(0)
     }
   }
 
@@ -269,7 +269,7 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.age.value = 6
     FormSample.tb1.job.value = "jobValue"
 
-    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
+    val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
@@ -281,7 +281,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun getSearchConditionsTest2() {
     val FormSample = FormSample().also { it.model }
-    with(FormSample.tb1.vBlock) {
+    with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_LT)
       fields[6].setSearchOperator(VConstants.SOP_NE)
     }
@@ -291,7 +291,7 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.name.value = "myName*"
     FormSample.tb1.age.value = 8
     FormSample.tb1.job.value = "jobValue*"
-    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
+    val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
 
     transaction {
       assertEquals(
@@ -305,7 +305,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun getSearchConditionsTest3() {
     val FormSample = FormSample().also { it.model }
-    with(FormSample.tb1.vBlock) {
+    with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_GT)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
     }
@@ -317,7 +317,7 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.age.value = 9
     FormSample.tb1.job.value = "jobValue"
 
-    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
+    val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
@@ -329,7 +329,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun getSearchConditionsTest4() {
     val FormSample = FormSample().also { it.model }
-    with(FormSample.tb1.vBlock) {
+    with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_LE)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
     }
@@ -340,7 +340,7 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.age.value = 10
     FormSample.tb1.job.value = "*jobValue"
 
-    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
+    val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'my%Name') AND " +
@@ -353,7 +353,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun getSearchConditionsTest5() {
     val FormSample = FormSample().also { it.model }
-    with(FormSample.tb1.vBlock) {
+    with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_GE)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
     }
@@ -363,7 +363,7 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.age.value = 11
     FormSample.tb1.job.value = "job*Value"
 
-    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions()
+    val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%') AND " +
@@ -376,7 +376,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun getSearchOrderTest() {
     FormWithList.model
-    val orderBys = FormWithList.block3.vBlock.getSearchOrder()
+    val orderBys = FormWithList.block3.block.getSearchOrder()
 
     assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
   }
@@ -387,8 +387,8 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       initSampleFormTables()
       //fetch record search with id 1 and there is no exception
-      FormSample.tb1.vBlock.fetchRecord(1)
-      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      FormSample.tb1.block.fetchRecord(1)
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.block.getMode())
       SchemaUtils.drop(User)
     }
   }
@@ -400,7 +400,7 @@ class VBlockTests : VApplicationTestBase() {
       SchemaUtils.create(User)
 
       assertThrows(VSkipRecordException::class.java) {
-        FormSample.tb1.vBlock.fetchRecord(1)
+        FormSample.tb1.block.fetchRecord(1)
       }
       SchemaUtils.drop(User)
     }
@@ -417,7 +417,7 @@ class VBlockTests : VApplicationTestBase() {
         it[ts] = 0
         it[uc] = 0
       }
-      val error = assertThrows(AssertionError::class.java) { FormSample.tb1.vBlock.fetchRecord(1) }
+      val error = assertThrows(AssertionError::class.java) { FormSample.tb1.block.fetchRecord(1) }
 
       assertEquals("too many rows", error.message)
       SchemaUtils.drop(User)
@@ -431,8 +431,8 @@ class VBlockTests : VApplicationTestBase() {
       initSampleFormTables()
       FormSample.tb1.name.value = "AUDREY"
       FormSample.tb1.age.value = 26
-      FormSample.tb1.vBlock.load()
-      FormSample.tb1.vBlock.fetchNextRecord(0)
+      FormSample.tb1.block.load()
+      FormSample.tb1.block.fetchNextRecord(0)
 
       val query = User.select { User.name.eq("AUDREY") and User.age.eq(26) }.single()
       val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
@@ -441,7 +441,7 @@ class VBlockTests : VApplicationTestBase() {
         listOf(1, FormSample.tb1.name.value, FormSample.tb1.age.value, FormSample.tb1.job.value),
         listInfoUser
       )
-      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.block.getMode())
       SchemaUtils.drop(User)
     }
   }
@@ -450,17 +450,17 @@ class VBlockTests : VApplicationTestBase() {
   fun `fetchNextRecord multi block scenario test`() {
     FormWithMultipleBlock.model
     val error = assertThrows(AssertionError::class.java) {
-      FormWithMultipleBlock.multipleBlock.vBlock.fetchNextRecord(0)
+      FormWithMultipleBlock.multipleBlock.block.fetchNextRecord(0)
     }
 
-    assertEquals(FormWithMultipleBlock.multipleBlock.vBlock.name + " is a multi block", error.message)
+    assertEquals(FormWithMultipleBlock.multipleBlock.block.name + " is a multi block", error.message)
   }
 
   @Test
   fun `fetchNextRecord exec failed scenario test`() {
     val FormSample = FormSample().also { it.model }
     assertThrows(VExecFailedException::class.java) {
-      FormSample.tb1.vBlock.fetchNextRecord(3)
+      FormSample.tb1.block.fetchNextRecord(3)
     }
   }
 
@@ -478,7 +478,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.job.value = "job"
 
       FormSample.tb1.setMode(Mode.INSERT)
-      FormSample.tb1.vBlock.save()
+      FormSample.tb1.block.save()
 
       val query = User.selectAll().single()
       val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
@@ -507,7 +507,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.job.value = "work"
 
       FormSample.tb1.setMode(Mode.UPDATE)
-      FormSample.tb1.vBlock.save()
+      FormSample.tb1.block.save()
 
       val query = User.select { User.id eq 1 }.single()
       val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
@@ -551,7 +551,7 @@ class VBlockTests : VApplicationTestBase() {
 
 
       formMultiple.multipleBlock.setMode(Mode.INSERT)
-      formMultiple.multipleBlock.vBlock.save()
+      formMultiple.multipleBlock.block.save()
 
       val listInfoCenter = mutableListOf<Any?>()
 
@@ -610,10 +610,10 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.mail[2] = "center333@gmail.com"
 
       formMultiple.multipleBlock.setMode(Mode.UPDATE)
-      formMultiple.multipleBlock.vBlock.setRecordFetched(0, true)
-      formMultiple.multipleBlock.vBlock.setRecordFetched(1, true)
-      formMultiple.multipleBlock.vBlock.setRecordFetched(2, true)
-      formMultiple.multipleBlock.vBlock.save()
+      formMultiple.multipleBlock.block.setRecordFetched(0, true)
+      formMultiple.multipleBlock.block.setRecordFetched(1, true)
+      formMultiple.multipleBlock.block.setRecordFetched(2, true)
+      formMultiple.multipleBlock.block.save()
 
       val listInfoCenter = mutableListOf<Any?>()
 
@@ -663,8 +663,8 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.age.value = 23
       FormSample.tb1.job.value = "job"
 
-      FormSample.tb1.vBlock.setRecordFetched(0, true)
-      FormSample.tb1.vBlock.delete()
+      FormSample.tb1.block.setRecordFetched(0, true)
+      FormSample.tb1.block.delete()
 
       count = User.select { User.id eq 1 }.count()
       assertEquals(0, count)
@@ -698,9 +698,9 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.mail[1] = "center222@gmail.com"
 
       formMultiple.multipleBlock.setMode(Mode.UPDATE)
-      formMultiple.multipleBlock.vBlock.setRecordFetched(0, true)
-      formMultiple.multipleBlock.vBlock.setRecordFetched(1, true)
-      formMultiple.multipleBlock.vBlock.delete()
+      formMultiple.multipleBlock.block.setRecordFetched(0, true)
+      formMultiple.multipleBlock.block.setRecordFetched(1, true)
+      formMultiple.multipleBlock.block.delete()
 
       count = Center.selectAll().count()
       assertEquals(1, count)
@@ -719,7 +719,7 @@ class VBlockTests : VApplicationTestBase() {
                         FormSample.tb1.age.columns?.getColumnsModels()?.get(0)?.column,
                         FormSample.tb1.job.columns?.getColumnsModels()?.get(0)?.column,
                         FormSample.tb1.cv.columns?.getColumnsModels()?.get(0)?.column),
-                 FormSample.tb1.vBlock.getSearchColumns()
+                 FormSample.tb1.block.getSearchColumns()
     )
   }
 
@@ -736,8 +736,8 @@ class VBlockTests : VApplicationTestBase() {
         it[age] = 26
         it[job] = "job"
       }
-      FormSample.tb1.vBlock.clear()
-      FormSample.tb1.vBlock.load()
+      FormSample.tb1.block.clear()
+      FormSample.tb1.block.load()
 
       val query = User.selectAll().single()
       val listInfoUser = listOf(query[User.id], query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
@@ -749,7 +749,7 @@ class VBlockTests : VApplicationTestBase() {
                           FormSample.tb1.age.value,
                           FormSample.tb1.job.value),
                    listInfoUser)
-      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.block.getMode())
       SchemaUtils.drop(User)
     }
   }
@@ -760,10 +760,10 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       initSampleFormTables()
 
-      FormSample.tb1.vBlock.clear()
+      FormSample.tb1.block.clear()
       FormSample.tb1.id.value = 3
       FormSample.tb1.age.value = 25
-      FormSample.tb1.vBlock.load()
+      FormSample.tb1.block.load()
 
       val query = User.select { User.id eq 3 }.single()
       val listInfoUser = listOf(query[User.id], query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
@@ -775,7 +775,7 @@ class VBlockTests : VApplicationTestBase() {
                           FormSample.tb1.age.value,
                           FormSample.tb1.job.value),
                    listInfoUser)
-      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.vBlock.getMode())
+      assertEquals(VConstants.MOD_UPDATE, FormSample.tb1.block.getMode())
       SchemaUtils.drop(User)
     }
   }
@@ -788,7 +788,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.id.value = 2
       FormSample.tb1.age.value = 27
 
-      val error = assertThrows(VQueryNoRowException::class.java) { FormSample.tb1.vBlock.load() }
+      val error = assertThrows(VQueryNoRowException::class.java) { FormSample.tb1.block.load() }
 
       assertEquals("VIS-00022: No matching value found.", error.message)
       SchemaUtils.drop(User)
@@ -800,11 +800,11 @@ class VBlockTests : VApplicationTestBase() {
     formMultiple.model
     transaction {
       initMultipleBlockFormTables()
-      formMultiple.multipleBlock.vBlock.clear()
+      formMultiple.multipleBlock.block.clear()
       formMultiple.multipleBlock.trainingId[0] = 1
       formMultiple.multipleBlock.trainingId[1] = 1
       formMultiple.multipleBlock.trainingId[2] = 1
-      formMultiple.multipleBlock.vBlock.load()
+      formMultiple.multipleBlock.block.load()
 
       val listInfoCenter = mutableListOf<Any?>()
 
@@ -844,9 +844,9 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       initSampleFormTables()
 
-      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 1
-      FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+      FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
 
       val query = User.select { User.name.eq("AUDREY") and User.age.eq(26) }.single()
       val listInfoUser = listOf(query[User.id], query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
@@ -868,11 +868,11 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       initSampleFormTables()
 
-      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 2
 
       val vExecFailedException = assertThrows(VExecFailedException::class.java) {
-        FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+        FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
       }
       assertEquals("VIS-00016: No matching value in User.", vExecFailedException.message)
       SchemaUtils.drop(User)
@@ -883,11 +883,11 @@ class VBlockTests : VApplicationTestBase() {
   fun `fetchLookup no table found exception scenario test`() {
     val FormSample = FormSample().also { it.model }
     transaction {
-      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 1
 
       val vExecFailedException = assertThrows(VExecFailedException::class.java) {
-        FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+        FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
       }
 
       assertTrue(
@@ -912,11 +912,11 @@ class VBlockTests : VApplicationTestBase() {
         it[age] = 6
         it[job] = "job"
       }
-      FormSample.model.setActiveBlock(FormSample.tb1.vBlock)
+      FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 1
 
       val vExecFailedException = assertThrows(VExecFailedException::class.java) {
-        FormSample.tb1.vBlock.fetchLookup(FormSample.tb1.id.vField)
+        FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
       }
       assertEquals("VIS-00020: The value in User is not unique.", vExecFailedException.message)
       SchemaUtils.drop(User)
@@ -928,9 +928,9 @@ class VBlockTests : VApplicationTestBase() {
     val FormSample = FormSample().also { it.model }
     transaction {
       initSampleFormTables()
-      FormSample.tb1.vBlock.clear()
+      FormSample.tb1.block.clear()
 
-      val query = FormSample.tb1.vBlock.buildQueryDialog()!!
+      val query = FormSample.tb1.block.buildQueryDialog()!!
       val listInfoUser = mutableListOf<Any?>()
 
       User.selectAll().forEach {
@@ -957,7 +957,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `getActiveCommands test`() {
     formMultiple.model
-    val model = formMultiple.multipleBlock.vBlock
+    val model = formMultiple.multipleBlock.block
 
     model.setCommandsEnabled(true)
     assertEquals(1, model.getActiveCommands().size)
@@ -967,7 +967,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `setMode test`() {
     formMultiple.model
-    val model = formMultiple.multipleBlock.vBlock
+    val model = formMultiple.multipleBlock.block
 
     model.setMode(VConstants.MOD_INSERT)
     assertEquals(VConstants.MOD_INSERT, model.getMode())
@@ -984,7 +984,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `set and reset Color test`() {
     formMultiple.model
-    val model = formMultiple.multipleBlock.vBlock
+    val model = formMultiple.multipleBlock.block
     val recordId = 0
 
     model.setColor(recordId, VColor.BLACK, VColor.WHITE)
@@ -1001,7 +1001,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `leave block test`() {
     val formSample = FormSample().also { it.model }
-    val blockModel = formSample.tb1.vBlock
+    val blockModel = formSample.tb1.block
 
     formSample.model.getActiveBlock()?.leave(false)
     assertNotEquals(blockModel, formSample.model.getActiveBlock())
@@ -1011,7 +1011,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `sort test`() {
     formMultiple.model
-    val blockModel = formMultiple.multipleBlock.vBlock
+    val blockModel = formMultiple.multipleBlock.block
 
     transaction {
       try {
@@ -1033,7 +1033,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `getNumberOfValidRecord test`() {
     formMultiple.model
-    val blockModel = formMultiple.multipleBlock.vBlock
+    val blockModel = formMultiple.multipleBlock.block
 
     transaction {
       try {
@@ -1051,7 +1051,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `enter test`() {
     val formSample = FormSample().also { it.model }
-    val blockModel = formSample.tb1.vBlock
+    val blockModel = formSample.tb1.block
 
     blockModel.enter()
     assertEquals(blockModel, formSample.model.getActiveBlock())
@@ -1070,14 +1070,14 @@ class VBlockTests : VApplicationTestBase() {
         formSample.tb1.cv.columns?.getColumnsModels()?.get(0)?.column,
         formSample.tb1.id.columns?.getColumnsModels()?.get(0)?.column
       ),
-      formSample.tb1.vBlock.getReportSearchColumns()
+      formSample.tb1.block.getReportSearchColumns()
     )
   }
 
   @Test
   fun `trailRecord test`() {
     FormWithList.model
-    val singleBlockModel = FormWithList.block3.vBlock
+    val singleBlockModel = FormWithList.block3.block
 
     transaction {
       FormWithList.block3.load()
@@ -1090,7 +1090,7 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `abortTrail test`() {
     FormWithList.model
-    val singleBlockModel = FormWithList.block3.vBlock
+    val singleBlockModel = FormWithList.block3.block
 
     transaction {
       FormWithList.block3.load()

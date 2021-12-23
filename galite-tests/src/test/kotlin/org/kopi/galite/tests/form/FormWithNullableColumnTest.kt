@@ -35,8 +35,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -55,8 +55,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -75,8 +75,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -97,8 +97,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -119,8 +119,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -141,8 +141,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -162,8 +162,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -185,8 +185,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -208,8 +208,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -230,8 +230,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form.model
     block.name.value = "client1"
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -251,8 +251,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form
     block.form.model
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -270,8 +270,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form
     block.form.model
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -289,8 +289,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form
     block.form.model
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {
@@ -308,8 +308,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     block.form
     block.form.model
 
-    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
-    val columns = block.vBlock.getSearchColumns()
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
+    val columns = block.block.getSearchColumns()
     val query = table!!.slice(columns).selectAll()
 
     transaction {

@@ -47,7 +47,7 @@ import org.kopi.galite.visual.type.Image
  * @param initialAccess        the initial access mode
  * @param position             the position within the block
  */
-open class FormField<T>(val block: Block,
+open class FormField<T>(internal val block: Block,
                         domain: Domain<T>,
                         private val fieldIndex: Int,
                         initialAccess: Int,
@@ -286,19 +286,19 @@ open class FormField<T>(val block: Block,
     }
 
     vField.setInfo(
-            getIdent(),
-            fieldIndex,
-            posInArray,
-            options,
-            access,
-            list, // TODO
-            columns?.getColumnsModels()?.toTypedArray(), // TODO
-            columns?.index?.indexNumber ?: 0,
-            columns?.priority ?: 0,
-            commands.map { it.buildModel(block.vBlock, form.actors) }.toTypedArray(),
-            position?.getPositionModel(),
-            align.value,
-            null // TODO
+      getIdent(),
+      fieldIndex,
+      posInArray,
+      options,
+      access,
+      list, // TODO
+      columns?.getColumnsModels()?.toTypedArray(), // TODO
+      columns?.index?.indexNumber ?: 0,
+      columns?.priority ?: 0,
+      commands.map { it.buildModel(block.block, form.actors) }.toTypedArray(),
+      position?.getPositionModel(),
+      align.value,
+      null // TODO
     )
   }
 
@@ -346,6 +346,8 @@ open class FormField<T>(val block: Block,
       options = options or fieldOption.value
     }
   }
+
+  val parentBlock: Block get() = block
 
   // ----------------------------------------------------------------------
   // ACCESSORS

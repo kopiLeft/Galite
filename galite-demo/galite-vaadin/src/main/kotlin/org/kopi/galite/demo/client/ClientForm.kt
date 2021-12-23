@@ -290,7 +290,7 @@ class ClientForm : ReportSelectionForm() {
         saveBlock()
       }
       command(item = interSave) {
-        val b = salesBlock.vBlock
+        val b = salesBlock.block
         val rec: Int = b.activeRecord
 
         b.validate()

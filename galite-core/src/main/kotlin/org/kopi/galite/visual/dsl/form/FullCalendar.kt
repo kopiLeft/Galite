@@ -173,7 +173,7 @@ open class FullCalendar(title: String,
    * @exception        VException        an exception may occur during DB access
    */
   override fun insertMode() {
-    vBlock.insertMode()
+    block.insertMode()
   }
 
   fun goToDate(date: Date) {
@@ -193,13 +193,13 @@ open class FullCalendar(title: String,
   // BLOCK MODEL
   // ----------------------------------------------------------------------
 
-  val model: VFullCalendarBlock get() = (vBlock as VFullCalendarBlock)
+  val model: VFullCalendarBlock get() = (block as VFullCalendarBlock)
 
   /** Returns block model */
   override fun getBlockModel(vForm: VForm, source: String?): VBlock {
     val fullCalendarModel = FullCalendarBlockModel(vForm, this, source)
 
-    vBlock = fullCalendarModel
+    block = fullCalendarModel
 
     return fullCalendarModel
   }

@@ -127,7 +127,7 @@ class VFieldTests : JApplicationTestBase() {
     assertFailsWith<VFieldException>(MessageCode.getMessage("VIS-00001")) {
       transaction {
         SchemaUtils.create(User)
-        FormSample.tb1.vBlock.fields[3].validate()
+        FormSample.tb1.block.fields[3].validate()
       }
     }
   }
@@ -167,14 +167,14 @@ class VFieldTests : JApplicationTestBase() {
     assertFailsWith<VFieldException>(MessageCode.getMessage("VIS-00001")) {
       transaction {
         SchemaUtils.create(User)
-        FormSample.tb1.vBlock.fields[5].validate()
+        FormSample.tb1.block.fields[5].validate()
       }
     }
   }
 
   @Test
   fun `getSearchCondition string field equal to value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.name.value = "name"
     val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
@@ -186,7 +186,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field equal to null scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
 
@@ -197,7 +197,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field like value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.name.value = "*name"
     val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.name.vField.getSearchCondition(column!!)
@@ -209,7 +209,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition string field not like value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.name.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.name.value = "*name"
     val column: Column<*>? = FormSample.tb1.name.vField.lookupColumn(User)
@@ -222,7 +222,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition upper string field not like value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.job.vField.setSearchOperator(VConstants.SOP_NE)
     FormSample.tb1.job.value = "*job"
     val column: Column<*>? = FormSample.tb1.job.vField.lookupColumn(User)
@@ -247,7 +247,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field equal to value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.id.value = 1
     val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
     val fieldSearchCondition = FormSample.tb1.id.vField.getSearchCondition(column!!)
@@ -259,7 +259,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field less than value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_LT)
     FormSample.tb1.id.value = 1
     val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
@@ -272,7 +272,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field greater than value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_GT)
     FormSample.tb1.id.value = 1
     val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)
@@ -285,7 +285,7 @@ class VFieldTests : JApplicationTestBase() {
 
   @Test
   fun `getSearchCondition int field less than or equal to value scenario test`() {
-    FormSample.tb1.vBlock.clear()
+    FormSample.tb1.block.clear()
     FormSample.tb1.id.vField.setSearchOperator(VConstants.SOP_LE)
     FormSample.tb1.id.value = 1
     val column: Column<*>? = FormSample.tb1.id.vField.lookupColumn(User)

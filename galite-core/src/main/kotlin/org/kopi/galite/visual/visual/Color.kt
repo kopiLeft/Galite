@@ -20,7 +20,7 @@ package org.kopi.galite.visual.visual
 /**
  * Represents the set of default colors to use with measures in charts.
  */
-enum class Color(val red: Int, green: Int, blue: Int) {
+enum class Color(val red: Int, val green: Int, val blue: Int) {
   /**
    * The white color in the RGB space.
    */

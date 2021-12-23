@@ -41,7 +41,7 @@ class FormSampleTests: JApplicationTestBase() {
   fun changeBlockAccessTest() {
     val formSample = FormSample().also { it.model }
 
-    assertEquals(1, formSample.tb4ToTestChangeBlockAccess.vBlock.getAccess())
+    assertEquals(1, formSample.tb4ToTestChangeBlockAccess.block.getAccess())
 
     assertArrayEquals(intArrayOf(0, 0, 0), formSample.tb4ToTestChangeBlockAccess.id.access)
     assertArrayEquals(intArrayOf(1, 1, 2), formSample.tb4ToTestChangeBlockAccess.name.access)
@@ -57,7 +57,7 @@ class FormSampleTests: JApplicationTestBase() {
     assertNull(formModel.getActiveBlock())
     assertNull(formModel.getActiveBlock()?.getActiveCommands())
     formModel.prepareForm()
-    assertEquals(form.tb1.vBlock, formModel.getActiveBlock())
+    assertEquals(form.tb1.block, formModel.getActiveBlock())
     assertNotNull(formModel.getActiveBlock()?.getActiveCommands())
   }
 
@@ -67,10 +67,10 @@ class FormSampleTests: JApplicationTestBase() {
     val formModel = form.model
 
     form.tb1.setMode(Mode.INSERT)
-    form.tb1.vBlock.enter()
+    form.tb1.block.enter()
     formModel.reset()
     assertTrue(formModel.blocks.all { it.getMode() == VConstants.MOD_QUERY })
-    assertEquals(form.tb1.vBlock, formModel.getActiveBlock())
+    assertEquals(form.tb1.block, formModel.getActiveBlock())
   }
 
   @Test
@@ -98,7 +98,7 @@ class FormSampleTests: JApplicationTestBase() {
     val targetPage = 1
 
     formModel.gotoPage(targetPage)
-    assertEquals(form.tb2.vBlock, formModel.getActiveBlock())
+    assertEquals(form.tb2.block, formModel.getActiveBlock())
   }
 
   @Test
@@ -108,7 +108,7 @@ class FormSampleTests: JApplicationTestBase() {
     val targetBlock = 2
 
     formModel.gotoBlock(formModel.getBlock(targetBlock))
-    assertEquals(form.blocks[targetBlock].vBlock, formModel.getActiveBlock())
+    assertEquals(form.blocks[targetBlock].block, formModel.getActiveBlock())
   }
 
   @Test
@@ -119,7 +119,7 @@ class FormSampleTests: JApplicationTestBase() {
 
     formModel.gotoBlock(formModel.getBlock(targetBlock))
     formModel.gotoNextBlock()
-    assertEquals(form.blocks[targetBlock + 1].vBlock, formModel.getActiveBlock())
+    assertEquals(form.blocks[targetBlock + 1].block, formModel.getActiveBlock())
   }
 
   @Test
@@ -128,7 +128,7 @@ class FormSampleTests: JApplicationTestBase() {
     val formModel = form.model
 
     formModel.enterBlock()
-    assertEquals(form.blocks[0].vBlock, formModel.getActiveBlock())
+    assertEquals(form.blocks[0].block, formModel.getActiveBlock())
   }
 
   @Test

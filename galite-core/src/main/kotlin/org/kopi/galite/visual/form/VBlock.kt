@@ -420,7 +420,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * access of the block, this method can be made
    * public)
    */
-  protected fun setAccess(access: Boolean) {
+  internal fun setAccess(access: Boolean) {
     if (blockAccess != access) {
       blockAccess = access
       // inform BlockListener
@@ -667,7 +667,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * enter record
    */
-  protected fun enterRecord(recno: Int) {
+  internal fun enterRecord(recno: Int) {
     assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(isMulti()) { "Is not multiblock" }
     assert(activeRecord == -1) { "Is multi and activeRecord = $activeRecord" }
@@ -1461,7 +1461,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Checks that all mustfill fields are filled.
    */
-  protected fun checkMustfillFields() {
+  internal fun checkMustfillFields() {
     fields.forEach { field ->
       if (field.getAccess(activeRecord) == VConstants.ACS_MUSTFILL && field.isNull(activeRecord)) {
         // !!! lackner 04.10.2003 I don't know if it is really necessary here

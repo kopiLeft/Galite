@@ -30,5 +30,5 @@ import org.kopi.galite.visual.form.BlockAlignment
 class FormBlockAlign(private val targetBlock: Block,
                      private val targets: ArrayList<Int>) {
 
-  fun getBlockAlignModel() = BlockAlignment(targetBlock.vBlock, targets.toIntArray())
+  fun getBlockAlignModel() = BlockAlignment(targetBlock.block, targets.toIntArray())
 }

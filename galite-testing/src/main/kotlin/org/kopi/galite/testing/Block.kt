@@ -79,7 +79,7 @@ fun Block.findBlock(): DBlock {
     ._find<DBlock>()
 
   val block = blocks.singleOrNull {
-    it.model eq this.vBlock
+    it.model eq this.block
   }
 
   if (block != null) {

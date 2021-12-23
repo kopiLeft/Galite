@@ -46,15 +46,22 @@ class Command(val item: Actor) {
     }
   }
 
+  lateinit var model: VCommand
+
   /**
    * Builds the command model [VCommand] from information provided by this command.
    */
-  internal fun buildModel(handler: ActionHandler, formActors: Array<VActor?>) : VCommand =
-          VCommand(mode,
-                   handler,
-                   formActors.find { it?.actorIdent ==  item.ident },
-                   -1,
-                   item.ident,
-                   action
-          )
+  internal fun buildModel(handler: ActionHandler, formActors: Array<VActor?>) : VCommand {
+    model = VCommand(
+      mode,
+      handler,
+      formActors.find { it?.actorIdent ==  item.ident },
+      -1,
+      item.ident,
+      action
+    )
+
+    return model
+  }
+
 }

@@ -33,7 +33,7 @@ abstract class ReportSelectionForm : DictionaryForm() {
    * create a report for this form
    */
   protected fun createReport(formBlock: Block) {
-    model.createReport(formBlock.vBlock)
+    model.createReport(formBlock.block)
   }
 
   // ----------------------------------------------------------------------

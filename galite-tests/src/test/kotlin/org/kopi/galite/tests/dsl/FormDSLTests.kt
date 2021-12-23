@@ -91,8 +91,8 @@ class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test form with aligned block`() {
     val form = FormWithAlignedBlock()
-    val targetBlockModel = form.model.blocks.single { it == form.targetBlock.vBlock }
-    val totalBlockModel = form.model.blocks.single { it == form.totalBlock.vBlock }
+    val targetBlockModel = form.model.blocks.single { it == form.targetBlock.block }
+    val totalBlockModel = form.model.blocks.single { it == form.totalBlock.block }
 
     assertEquals(targetBlockModel, totalBlockModel.alignment!!.block)
     assertArraysEquals(arrayOf(2, 3), totalBlockModel.alignment!!.targets.toTypedArray())

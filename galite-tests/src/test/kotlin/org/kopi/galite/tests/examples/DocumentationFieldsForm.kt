@@ -567,7 +567,7 @@ class DocumentationFieldsForm : DictionaryForm() {
         this.value = "PREUPD Trigger"
       }
       trigger(POSTUPD) {
-        vBlock.form.notice("POSTUPD Trigger")
+        block.form.notice("POSTUPD Trigger")
       }
     }
 
@@ -575,7 +575,7 @@ class DocumentationFieldsForm : DictionaryForm() {
     val preDelTriggerField = visit(domain = STRING(20), position = at(4, 3)) {
       label = "PREDEL Trigger Field"
       trigger(PREDEL) {
-        vBlock.form.notice("PREDEL Trigger")
+        block.form.notice("PREDEL Trigger")
       }
     }
 

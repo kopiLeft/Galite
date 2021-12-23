@@ -139,7 +139,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       border = Border.LINE
 
       command(item = saveBlock) {
-        val b = vBlock
+        val b = block
         val rec: Int = b.activeRecord
 
         b.validate()
