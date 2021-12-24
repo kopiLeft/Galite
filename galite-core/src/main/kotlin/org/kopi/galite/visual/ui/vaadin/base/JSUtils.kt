@@ -42,8 +42,8 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
       val keyConditions = key.keys.joinToString(" && ", prefix = "event.key ==='", postfix = "'")
       val modifiersConditions = when {
         modifiers.isEmpty() -> ""
-        key.keys.isEmpty() -> modifiers.joinToString(separator = " && ") { it.modifiersCondition() }
-        else -> modifiers.joinToString(prefix = " && ") { it.modifiersCondition() }
+        key.keys.isEmpty() -> modifiers.modifiersCondition()
+        else -> " && " + modifiers.modifiersCondition()
       }
 
       val conditions = "$keyConditions $modifiersConditions"
@@ -68,13 +68,34 @@ fun Component.inputValueExpression(): String {
   }
 }
 
-fun KeyModifier.modifiersCondition() : String {
-  return when (this) {
-    KeyModifier.of("Shift") -> "event.shiftKey"
-    KeyModifier.of("Control") -> "event.ctrlKey"
-    KeyModifier.of("Alt") -> "event.altKey"
-    KeyModifier.of("AltGraph") -> "event.altKey"
-    KeyModifier.of("Meta") -> "event.metaKey"
-    else -> ""
+fun Array<out KeyModifier>.modifiersCondition() : String {
+  val modifiers = this
+
+  return buildString {
+    if(KeyModifier.of("Shift") in modifiers) {
+      append("event.shiftKey && ")
+    } else {
+      append("!event.shiftKey && ")
+    }
+    if(KeyModifier.of("Control") in modifiers) {
+      append("event.ctrlKey && ")
+    } else {
+      append("!event.ctrlKey && ")
+    }
+    if(KeyModifier.of("Alt") in modifiers) {
+      append("event.altKey && ")
+    } else {
+      append("!event.altKey && ")
+    }
+    if(KeyModifier.of("AltGraph") in modifiers) {
+      append("event.altKey && ")
+    } else {
+      append("!event.altKey && ")
+    }
+    if(KeyModifier.of("Meta") in modifiers) {
+      append("event.metaKey")
+    } else {
+      append("!event.metaKey")
+    }
   }
 }
