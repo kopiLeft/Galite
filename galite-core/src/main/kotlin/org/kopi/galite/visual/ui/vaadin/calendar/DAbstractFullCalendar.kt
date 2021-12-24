@@ -76,7 +76,6 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
    * Refresh full calendar data.
    */
   fun refreshEntries() {
-    removeAllEntries()
     updateEntries()
   }
 
@@ -105,10 +104,12 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     })
   }
 
-  private fun updateEntries(queryList: List<VFullCalendarEntry>) {
-    val entries = queryList.map { fcEntry ->
+  private fun updateEntries(entries: List<VFullCalendarEntry>) {
+    val currentEntries = calendar.entries.map { (it as FullCalendarEntry).updatedModel }
+
+    val newEntries = (entries - currentEntries.toSet()).map { fcEntry ->
       val record = fcEntry.values[model.idField] as Int
-      val entry = FullCalendarEntry(record)
+      val entry = FullCalendarEntry(record, fcEntry)
       val start = fcEntry.start.sqlTimestamp.toLocalDateTime()
       val end = fcEntry.end.sqlTimestamp.toLocalDateTime()
 
@@ -120,8 +121,11 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
       entry
     }
 
+    val dirtyEntries = calendar.entries.filterNot { (it as FullCalendarEntry).updatedModel in entries }
+
     access(currentUI) {
-      calendar.addEntries(entries)
+      calendar.addEntries(newEntries)
+      calendar.removeEntries(dirtyEntries)
     }
   }
 
@@ -206,7 +210,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     val end = endDateTime.toCalendar()
 
     if(model.dateField != null && start.get(Calendar.DAY_OF_WEEK) != end.get(Calendar.DAY_OF_WEEK)) {
-      updateEntries()
+      updateEntries(calendar.entries.map { (it as FullCalendarEntry).model })
       throw VExecFailedException(MessageCode.getMessage("VIS-00070"))
     }
   }
@@ -221,5 +225,10 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     currentUI = attachEvent.ui
   }
 
-  class FullCalendarEntry(val record: Int) : Entry()
+  class FullCalendarEntry(val record: Int, val model: VFullCalendarEntry) : Entry() {
+    val updatedModel: VFullCalendarEntry
+      get() {
+        return model.copy(Timestamp.from(start), Timestamp.from(end))
+      }
+  }
 }
