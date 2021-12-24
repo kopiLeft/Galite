@@ -23,6 +23,7 @@ import java.util.Calendar
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.db.DBDeadLockException
@@ -67,7 +68,7 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
    *
    * @param date the date
    */
-  fun fetchEntries(date: Date): List<VFullCalendarEntry>? {
+  fun fetchEntries(date: Date): List<VFullCalendarEntry> {
     var entries: List<VFullCalendarEntry>?
 
     try {
@@ -112,11 +113,11 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
       if (e.message != null) {
         form.error(e.message!!)
       }
-      return null
+      return listOf()
     }
     return if (entries == null) {
       form.error(MessageCode.getMessage("VIS-00022"))
-      null
+      listOf()
     } else {
       entries
     }
@@ -194,7 +195,10 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
       val firstDayOfNextWeek = lastDay.toInstant()
 
       tables!!.slice(columns)
-        .select { (fromColumn greaterEq firstDayOfWeek) and (toColumn less firstDayOfNextWeek)  }
+        .select {
+          ((fromColumn greaterEq firstDayOfWeek) and (fromColumn less firstDayOfNextWeek)) or
+                  ((toColumn greaterEq firstDayOfWeek) and (toColumn less firstDayOfNextWeek))
+        }
         .orderBy(*orderBys.toTypedArray())
     }
 
@@ -284,9 +288,11 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
   fun set(startDateTime: Timestamp, endDateTime: Timestamp) {
     if (dateField != null) {
-      dateField!!.setDate(Date(startDateTime.toCalendar()))
-      fromTimeField!!.setTime(Time(startDateTime.toCalendar()))
-      toTimeField!!.setTime(Time(endDateTime.toCalendar()))
+      val start = startDateTime.toCalendar()
+      val end = endDateTime.toCalendar()
+      dateField!!.setDate(Date(start))
+      fromTimeField!!.setTime(Time(start))
+      toTimeField!!.setTime(Time(end))
     } else {
       fromField!!.setTimestamp(startDateTime)
       toField!!.setTimestamp(endDateTime)
