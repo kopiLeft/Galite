@@ -87,4 +87,5 @@
   <message ident="00067" text="Please wait ..." />
   <message ident="00068" text="الحد الأقصى {0} أحرف" />
   <message ident="00069" text="أقصى عمق للشجرة: {0} مستويات" />
+  <message ident="00070" text="لا يمكن تحديد فترات زمنية في أيام مختلفة" />
 </messages>

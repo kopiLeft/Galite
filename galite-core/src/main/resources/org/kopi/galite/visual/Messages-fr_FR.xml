@@ -87,4 +87,5 @@
   <message ident="00067" text="Attendez s'il vous plaît ..." />
   <message ident="00068" text="Maximum {0} caractères" />
   <message ident="00069" text="Profondeur maximale de l'arbre : {0} niveaux" />
+  <message ident="00070" text="Impossible de sélectionner un créneau horaire sur plusieurs jours car le formulaire contient un champ pour la date" />
 </messages>

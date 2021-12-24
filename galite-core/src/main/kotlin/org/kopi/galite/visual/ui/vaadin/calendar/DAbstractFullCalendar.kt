@@ -18,13 +18,17 @@
 package org.kopi.galite.visual.ui.vaadin.calendar
 
 import java.time.LocalDate
+import java.util.Calendar
 
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
 import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.visual.VExecFailedException
 import org.vaadin.stefan.fullcalendar.CalendarViewImpl
 import org.vaadin.stefan.fullcalendar.Entry
 import org.vaadin.stefan.fullcalendar.FullCalendar
@@ -57,7 +61,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     calendar.setSizeFull()
     calendar.changeView(type)
     // adding data to full calendar
-    addAllEntries()
+    updateEntries()
     // adding header to full calendar
     setHeader()
     // adding full calendar to layout
@@ -73,7 +77,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
    */
   fun refreshEntries() {
     removeAllEntries()
-    addAllEntries()
+    updateEntries()
   }
 
   fun getSelectedDate() : Date {
@@ -92,32 +96,33 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     }
   }
 
-  private fun addAllEntries() {
+  private fun updateEntries() {
     model.form.performAsyncAction(object : Action("Fetch entries") {
       override fun execute() {
         val queryList = model.fetchEntries(Date(datePicker.value))
-
-        val entries = queryList?.map { e ->
-          val record = e.values[model.idField] as Int
-          val entry = FullCalendarEntry(record)
-          val start = e.start.sqlTimestamp.toLocalDateTime()
-          val end = e.end.sqlTimestamp.toLocalDateTime()
-
-          entry.title = e.description
-          entry.setStart(start, calendar.timezone)
-          entry.setEnd(end, calendar.timezone)
-          entry.color = Utils.toString(e.getColor(record))
-
-          entry
-        }
-
-        if (entries != null) {
-          access(currentUI) {
-            calendar.addEntries(entries)
-          }
-        }
+        updateEntries(queryList)
       }
     })
+  }
+
+  private fun updateEntries(queryList: List<VFullCalendarEntry>) {
+    val entries = queryList.map { fcEntry ->
+      val record = fcEntry.values[model.idField] as Int
+      val entry = FullCalendarEntry(record)
+      val start = fcEntry.start.sqlTimestamp.toLocalDateTime()
+      val end = fcEntry.end.sqlTimestamp.toLocalDateTime()
+
+      entry.title = fcEntry.description
+      entry.setStart(start, calendar.timezone)
+      entry.setEnd(end, calendar.timezone)
+      entry.color = Utils.toString(fcEntry.getColor(record))
+
+      entry
+    }
+
+    access(currentUI) {
+      calendar.addEntries(entries)
+    }
   }
 
   /**
@@ -163,6 +168,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val newStart = Timestamp.from(newEntry.start)
           val newEnd = Timestamp.from(newEntry.end)
 
+          check(newStart, newEnd)
           model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
         }
       })
@@ -174,6 +180,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val newStart = Timestamp.from(newEntry.start)
           val newEnd = Timestamp.from(newEntry.end)
 
+          check(newStart, newEnd)
           model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
         }
       })
@@ -183,9 +190,24 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     calendar.addTimeslotsSelectedListener {
       model.form.performAsyncAction(object : Action("new entry") {
         override fun execute() {
-          model.openForEdit(Timestamp.from(it.startDateTime), Timestamp.from(it.endDateTime))
+          val start = Timestamp.from(it.startDateTime)
+          val end = Timestamp.from(it.endDateTime)
+
+          check(start, end)
+          model.openForEdit(start, end)
         }
       })
+    }
+  }
+
+  @Deprecated("to be removed when dateField is not supported")
+  private fun check(startDateTime: Timestamp, endDateTime: Timestamp) {
+    val start = startDateTime.toCalendar()
+    val end = endDateTime.toCalendar()
+
+    if(model.dateField != null && start.get(Calendar.DAY_OF_WEEK) != end.get(Calendar.DAY_OF_WEEK)) {
+      updateEntries()
+      throw VExecFailedException(MessageCode.getMessage("VIS-00070"))
     }
   }
 
