@@ -47,6 +47,7 @@ open class FullCalendar(title: String,
    * @param init    initialization method to initialize the field.
    * @return a date mustfill field.
    */
+  @Deprecated("use from() and to() fields instead")
   fun date(position: FormPosition, init: MustFillFormField<Date>.() -> Unit): MustFillFormField<Date> =
     date(Domain(), position, init)
 
@@ -57,6 +58,7 @@ open class FullCalendar(title: String,
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
+  @Deprecated("use from() and to() fields instead")
   inline fun <reified T: Date> date(domain: Domain<T>,
                                     position: FormPosition,
                                     init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
@@ -72,6 +74,7 @@ open class FullCalendar(title: String,
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
+  @Deprecated("use from() and to() fields instead")
   fun fromTime(position: FormPosition, init: MustFillFormField<Time>.() -> Unit): MustFillFormField<Time> =
     fromTime(Domain(), position, init)
 
@@ -82,6 +85,7 @@ open class FullCalendar(title: String,
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
+  @Deprecated("use from() and to() fields instead")
   inline fun <reified T: Time> fromTime(domain: Domain<T>,
                                         position: FormPosition,
                                         init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
@@ -97,6 +101,7 @@ open class FullCalendar(title: String,
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
+  @Deprecated("use from() and to() fields instead")
   fun toTime(position: FormPosition, init: MustFillFormField<Time>.() -> Unit): MustFillFormField<Time> =
     toTime(Domain(), position, init)
 
@@ -107,6 +112,7 @@ open class FullCalendar(title: String,
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
+  @Deprecated("use from() and to() fields instead")
   inline fun <reified T: Time> toTime(domain: Domain<T>,
                                       position: FormPosition,
                                       init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {

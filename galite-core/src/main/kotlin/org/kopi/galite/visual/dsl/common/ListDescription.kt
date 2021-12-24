@@ -20,12 +20,16 @@ package org.kopi.galite.visual.dsl.common
 import java.lang.RuntimeException
 
 import org.jetbrains.exposed.sql.AutoIncColumnType
+import org.jetbrains.exposed.sql.BinaryColumnType
 import org.jetbrains.exposed.sql.BooleanColumnType
+import org.jetbrains.exposed.sql.CharColumnType
+import org.jetbrains.exposed.sql.CharacterColumnType
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.IDateColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.LongColumnType
 import org.jetbrains.exposed.sql.StringColumnType
+import org.jetbrains.exposed.sql.VarCharColumnType
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.list.VBooleanColumn
 import org.kopi.galite.visual.list.VDateColumn
@@ -44,16 +48,24 @@ class ListDescription(val title: String,
                       val column: Column<*>,
                       val domain: ListDomain<*>) {
 
-  fun buildModel(): VListColumn {
-    val type = if(column.columnType is AutoIncColumnType) {
-      (column.columnType as AutoIncColumnType).delegate
-    } else {
-      column.columnType
-    }
+  val type = if(column.columnType is AutoIncColumnType) {
+    (column.columnType as AutoIncColumnType).delegate
+  } else {
+    column.columnType
+  }
 
+  var width = when (type) {
+    is VarCharColumnType -> type.colLength
+    is CharColumnType -> type.colLength
+    is CharacterColumnType -> 1
+    is BinaryColumnType -> type.length
+    else -> domain.width!!
+  }
+
+  fun buildModel(): VListColumn {
     return when(type) {
-      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.table, domain.defaultAlignment, domain.width!!, true)
-      is StringColumnType -> VStringColumn(title, column, domain.table, domain.defaultAlignment, domain.width!!, true)
+      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.table, domain.defaultAlignment, width, true)
+      is StringColumnType -> VStringColumn(title, column, domain.table, domain.defaultAlignment, width, true)
       is BooleanColumnType -> VBooleanColumn(title, column, domain.table, true)
       is IDateColumnType, ->
         VDateColumn(title, column, domain.table, true)

@@ -86,8 +86,19 @@ abstract class ListDomain<T>(width: Int? = null,
    * @receiver the text
    * @param value the value
    */
-  infix fun String.keyOf(value: Column<*>) {
-    columns.add(ListDescription(this, value, this@ListDomain))
+  infix fun String.keyOf(value: Column<*>): ListDescription {
+    val listDescription = ListDescription(this, value, this@ListDomain)
+
+    columns.add(listDescription)
+
+    return listDescription
+  }
+
+  /**
+   * Sets the width for this list description.
+   */
+  infix fun ListDescription.hasWidth(width: Int) {
+    this.width = width
   }
 
   /**
