@@ -23,6 +23,13 @@ import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.visual.VColor
 
+/**
+ * Represents a full calendar record.
+ *
+ * @param start     the timestamp as start of the entry
+ * @param end       the timestamp as end of the entry
+ * @param values    the values of the form fields except the [start] and [end].
+ */
 data class VFullCalendarEntry(val start: Timestamp,
                               val end: Timestamp,
                               val values: MutableMap<VField, Any?>) {
@@ -56,6 +63,30 @@ data class VFullCalendarEntry(val start: Timestamp,
     }
 
   fun getColor(record: Int) : VColor = colors[record % colors.size]
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is VFullCalendarEntry) return false
+
+    if (start != other.start || end != other.end) return false
+    if (values.size != other.values.size) return false
+    for (key in values.keys) {
+      if(values[key] != other.values[key]) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = start.hashCode()
+    result = 31 * result + end.hashCode()
+    result = 31 * result + values.hashCode()
+    return result
+  }
+
+  fun copy(start: Timestamp, end: Timestamp): VFullCalendarEntry = VFullCalendarEntry(start, end, values)
 
   companion object {
     val colors = listOf(
