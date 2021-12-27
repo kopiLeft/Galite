@@ -18,6 +18,7 @@ package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.VException
 
@@ -69,8 +70,48 @@ abstract class DictionaryForm : Form() {
       model.dBContext = value
     }
 
-  fun doNotModal() {
-    model.doNotModal()
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   */
+  fun editWithID(parent: Window, id: Int): Int = model.editWithID(parent.model, id)
+
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   */
+  fun openForQuery(parent: Window): Int = model.openForQuery(parent.model)
+
+  /**
+   * create a new record and returns id
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   */
+  fun newRecord(parent: Window): Int = model.newRecord(parent.model)
+
+  /**
+   * close the form
+   */
+  fun close(code: Int) {
+    model.close(code)
+  }
+
+  fun saveFilledField() {
+    model.saveFilledField()
+  }
+
+  /**
+   *
+   */
+  fun interruptRecursiveQuery() {
+    model.interruptRecursiveQuery()
+  }
+
+  fun isNewRecord(): Boolean = model.isNewRecord()
+
+  fun setCloseOnSave() {
+    model.setCloseOnSave()
   }
 
   /**

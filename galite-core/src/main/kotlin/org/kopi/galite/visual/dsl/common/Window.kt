@@ -120,6 +120,14 @@ abstract class Window {
     return command
   }
 
+
+  /**
+   * Resets window to initial state
+   */
+  fun reset() {
+    model.reset()
+  }
+
   abstract fun genLocalization(destination: String? = null, locale: Locale? = this.locale)
 
   /**
