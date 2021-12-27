@@ -29,7 +29,6 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -99,7 +98,7 @@ class TaxRuleForm : ReportSelectionForm() {
     }
 
     command(item = report) {
-      createReport(this)
+      createReport(TaxRuleR())
     }
 
     command(item = list) {
@@ -113,10 +112,6 @@ class TaxRuleForm : ReportSelectionForm() {
     command(item = deleteBlock) {
       deleteBlock()
     }
-  }
-
-  override fun createReport(): Report {
-    return TaxRuleR()
   }
 }
 

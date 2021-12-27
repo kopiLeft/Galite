@@ -21,14 +21,9 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class CommandsForm : ReportSelectionForm() {
   override val locale = Locale.UK
-  override fun createReport(): Report {
-    return TrainingR()
-  }
-
   override val title = "Commands Form"
   val action = menu("Action")
   val autoFill = actor(
@@ -154,7 +149,7 @@ class CommandsForm : ReportSelectionForm() {
       serialQuery()
     }
     command(item = report) {
-      createReport(this)
+      createReport(TrainingR())
     }
     command(item = dynamicReport) {
       createDynamicReport()

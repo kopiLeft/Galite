@@ -24,7 +24,6 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.visual.ApplicationContext
 
 class FormModel: VForm {
@@ -99,10 +98,6 @@ class ReportSelectionFormModel: VReportSelectionForm {
 
   override fun init() {
     initialize(form)
-  }
-
-  override fun createReport(): VReport {
-    return form.createReport().model
   }
 }
 

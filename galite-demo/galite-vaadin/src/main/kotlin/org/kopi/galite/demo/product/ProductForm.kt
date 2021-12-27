@@ -31,7 +31,6 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class ProductForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -56,10 +55,6 @@ class ProductForm : ReportSelectionForm() {
   }
 
   val block = page.insertBlock(BlockProduct())
-
-  override fun createReport(): Report {
-    return ProductReport()
-  }
 
   inner class BlockProduct : Block(1, 1, "Products") {
     val u = table(Product)
@@ -98,7 +93,7 @@ class ProductForm : ReportSelectionForm() {
       blockVisibility(Access.VISIT, Mode.QUERY)
 
       command(item = report) {
-        createReport(this)
+        createReport(ProductReport())
       }
     }
   }

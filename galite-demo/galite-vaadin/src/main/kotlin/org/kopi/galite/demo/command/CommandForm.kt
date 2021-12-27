@@ -28,7 +28,6 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class CommandForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -94,7 +93,7 @@ class CommandForm : ReportSelectionForm() {
 
   val tb1 = page.insertBlock(BlockCommand()) {
     command(item = report) {
-      createReport(this)
+      createReport(CommandR())
     }
 
     command(item = list) {
@@ -110,10 +109,6 @@ class CommandForm : ReportSelectionForm() {
     command(item = dynamicReport) {
       createDynamicReport()
     }
-  }
-
-  override fun createReport(): Report {
-    return CommandR()
   }
 }
 
