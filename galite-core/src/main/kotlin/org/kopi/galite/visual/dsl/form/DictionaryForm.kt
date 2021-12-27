@@ -34,10 +34,11 @@ abstract class DictionaryForm : Form() {
    * database query. The returned integer represents the identifier
    * of the selected record after the search operation.
    *
+   * @param parent The parent window.
    * @return The selected ID of the searched record.
    * @throws VException Any visual errors that occurs during search operation.
    */
-  fun search(): Int = model.search(model)
+  fun search(parent: Window): Int = model.search(parent.model)
 
   /**
    * Edits an existing record.
@@ -46,11 +47,12 @@ abstract class DictionaryForm : Form() {
    * database query. The returned integer represents the identifier
    * of the edited record after the edit operation.
    *
+   * @param parent The parent window.
    * @param id The record ID to be edited.
    * @return The edited record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun edit(id: Int): Int = model.edit(model, id)
+  fun edit(parent: Window, id: Int): Int = model.edit(parent.model, id)
 
   /**
    * Adds a new record.
@@ -59,10 +61,11 @@ abstract class DictionaryForm : Form() {
    * database query. The returned integer represents the identifier
    * of the created record.
    *
+   * @param parent The parent window.
    * @return The created record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun add(): Int = model.add(model)
+  fun add(parent: Window): Int = model.add(parent.model)
 
   var dBContext: DBContext?
     get() = model.dBContext
