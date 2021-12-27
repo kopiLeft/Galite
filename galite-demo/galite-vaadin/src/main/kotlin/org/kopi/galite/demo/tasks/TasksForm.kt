@@ -25,6 +25,7 @@ import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FullCalendar
 import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.TimeFields
 
 class TasksForm : Form() {
   override val locale = Locale.UK
@@ -67,6 +68,8 @@ class TasksForm : Form() {
   val tasksBlock = insertBlock(Tasks())
 
   inner class Tasks : FullCalendar("Tasks") {
+    override val timeFields get() = TimeFields(from, to)
+
     val t = table(Task)
 
     val id = hidden(INT(20)) { columns(t.id) }

@@ -60,8 +60,12 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     height = "70vh"
     calendar.setSizeFull()
     calendar.changeView(type)
-    // adding data to full calendar
-    updateEntries()
+
+    if (model.isAutoLoaded) {
+      // adding data to full calendar
+      updateEntries()
+    }
+
     // adding header to full calendar
     setHeader()
     // adding full calendar to layout

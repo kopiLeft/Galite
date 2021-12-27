@@ -31,15 +31,13 @@ import org.kopi.galite.visual.type.Timestamp
  *
  * @param        title                 the title of the block
  */
-open class FullCalendar(title: String,
-                        ident: String? = null)
+abstract class FullCalendar(title: String,
+                            ident: String? = null)
   : Block(1, 1, title, ident) {
 
-  var dateField: MustFillFormField<*>? = null
-  var fromTimeField: MustFillFormField<*>? = null
-  var toTimeField: MustFillFormField<*>? = null
-  var fromField: MustFillFormField<*>? = null
-  var toField: MustFillFormField<*>? = null
+  open val fullCalendarForm: Form? = null
+  abstract val timeFields: TimeFields
+  var isAutoLoaded = true
 
   /**
    * Creates and returns a date mustfill field.
@@ -63,9 +61,7 @@ open class FullCalendar(title: String,
                                     position: FormPosition,
                                     init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
 
-    return mustFill(domain, position, init).also { field ->
-      dateField = field
-    }
+    return mustFill(domain, position, init)
   }
 
   /**
@@ -90,9 +86,7 @@ open class FullCalendar(title: String,
                                         position: FormPosition,
                                         init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
 
-    return mustFill(domain, position, init).also { field ->
-      fromTimeField = field
-    }
+    return mustFill(domain, position, init)
   }
 
   /**
@@ -117,9 +111,7 @@ open class FullCalendar(title: String,
                                       position: FormPosition,
                                       init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
 
-    return mustFill(domain, position, init).also { field ->
-      toTimeField = field
-    }
+    return mustFill(domain, position, init)
   }
 
   /**
@@ -143,9 +135,7 @@ open class FullCalendar(title: String,
   inline fun <reified T: Timestamp> from(domain: Domain<T>,
                                          position: FormPosition,
                                          init: MustFillFormField<T>.() -> Unit): FormField<T> {
-    return mustFill(domain, position, init).also { field ->
-      fromField = field
-    }
+    return mustFill(domain, position, init)
   }
 
   /**
@@ -169,9 +159,7 @@ open class FullCalendar(title: String,
   inline fun <reified T: Timestamp> to(domain: Domain<T>,
                                        position: FormPosition,
                                        init: MustFillFormField<T>.() -> Unit): FormField<T> {
-    return mustFill(domain, position, init).also { field ->
-      toField = field
-    }
+    return mustFill(domain, position, init)
   }
 
   /**
@@ -209,4 +197,42 @@ open class FullCalendar(title: String,
 
     return fullCalendarModel
   }
+}
+
+/**
+ * Represents fields providing values to the starting and ending times of the full calendar entries.
+ */
+class TimeFields {
+
+  /**
+   * Use this constructor if you have two timestamp fields in your form.
+   */
+  constructor(from: FormField<Timestamp>, to: FormField<Timestamp>) {
+    fromField = from
+    toField = to
+    dateField = null
+    fromTimeField = null
+    toTimeField = null
+    isDate = false
+  }
+
+  /**
+   * Use this constructor if you have a date field and two time fields in your form.
+   * If you need multi-days entries use [TimeFields(from, to)].
+   */
+  constructor(date: FormField<Date>, from: FormField<Time>, to: FormField<Time>) {
+    dateField = date
+    fromTimeField = from
+    toTimeField = to
+    fromField = null
+    toField = null
+    isDate = true
+  }
+
+  val isDate: Boolean
+  val fromField: FormField<Timestamp>?
+  val toField: FormField<Timestamp>?
+  val dateField: FormField<Date>?
+  val fromTimeField: FormField<Time>?
+  val toTimeField: FormField<Time>?
 }

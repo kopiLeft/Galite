@@ -48,12 +48,13 @@ import org.kopi.galite.visual.visual.VExecFailedException
 
 abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
-  lateinit var fullCalendarForm: VFullCalendarForm
+  lateinit var fullCalendarForm: VForm
   var dateField: VDateField? = null
   var fromTimeField: VTimeField? = null
   var toTimeField: VTimeField? = null
   var fromField: VTimestampField? = null
   var toField: VTimestampField? = null
+  var isAutoLoaded = true
 
   /**
    * Returns true if this block can display more than one record.
@@ -282,7 +283,7 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
   private fun fetchRecordInBlock(record: Int) {
     form.transaction(Message.getMessage("loading_record")) {
-      fullCalendarForm.block.fetchRecord(record)
+      fullCalendarForm.getActiveBlock()?.fetchRecord(record)
     }
   }
 
@@ -321,7 +322,7 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
   override fun insertMode() {
     fullCalendarForm.doNotModal()
-    fullCalendarForm.block.insertMode()
+    fullCalendarForm.getActiveBlock()?.insertMode()
   }
 
   /**

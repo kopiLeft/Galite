@@ -46,13 +46,19 @@ class BlockModel(vForm: VForm, val block: Block, source: String? = null): VBlock
 class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: String? = null): VFullCalendarBlock(vForm) {
 
   init {
-    fullCalendarForm = buildFullCalendarForm()
+    fullCalendarForm = block.fullCalendarForm?.model ?: buildFullCalendarForm()
     initializeBlock(block, source)
-    dateField = block.dateField?.vField as? VDateField
-    fromTimeField = block.fromTimeField?.vField as? VTimeField
-    toTimeField = block.toTimeField?.vField as? VTimeField
-    fromField = block.fromField?.vField as? VTimestampField
-    toField = block.toField?.vField as? VTimestampField
+
+    if (block.timeFields.isDate) {
+      dateField = block.timeFields.dateField?.vField as? VDateField
+      fromTimeField = block.timeFields.fromTimeField?.vField as? VTimeField
+      toTimeField = block.timeFields.toTimeField?.vField as? VTimeField
+    } else {
+      fromField = block.timeFields.fromField?.vField as? VTimestampField
+      toField = block.timeFields.toField?.vField as? VTimestampField
+    }
+
+    isAutoLoaded = block.isAutoLoaded
   }
 
   override fun setInfo(form: VForm) {
