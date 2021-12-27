@@ -27,11 +27,13 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing._clickCell
 import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.findForms
+import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
@@ -58,6 +60,7 @@ import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
+import com.github.mvysny.kaributesting.v10.expectRow
 
 class CommandsFormTests : GaliteVUITestBase() {
 
@@ -650,15 +653,18 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     val simpleField = multipleForm.block.trainingID.findField()
     val multipleField = multipleForm.block2.centerName.findField()
+    val multipleBlock = multipleForm.block2.findMultipleBlock()
 
     multipleForm.block.trainingID.edit(10)
     multipleForm.block2.centerName.edit("center name")
     assertEquals("10", simpleField.value)
     assertEquals("center name", multipleField.value)
+    multipleForm.block2.editRecord(1)
+    multipleBlock.grid.expectRow(0, "center name", "", "", "", "", "")
     multipleForm.resetForm.triggerCommand()
     expectConfirmNotification(true)
     assertEquals("", simpleField.value)
-    assertEquals("", multipleField.value)
+    multipleBlock.grid.expectRow(0, "", "", "", "", "", "")
   }
 
   companion object {
