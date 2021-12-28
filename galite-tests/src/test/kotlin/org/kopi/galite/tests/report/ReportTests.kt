@@ -27,6 +27,7 @@ import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
@@ -140,8 +141,8 @@ class SimpleReport : Report() {
           label = "Greeting",
           help = "Click me to show greeting",
   ) {
-    key  =  Key.F1          // key is optional here
-    icon =  "ask"  // icon is optional here
+    key  =  Key.F1
+    icon =  Icon.ASK
   }
 
   val csv = actor(
@@ -150,8 +151,8 @@ class SimpleReport : Report() {
           label = "CSV",
           help = "Obtenir le format CSV",
   ) {
-    key  =  Key.F8          // key is optional here
-    icon =  "exportCsv"  // icon is optional here
+    key  =  Key.F8
+    icon =  Icon.EXPORT_CSV
   }
 
   val xls = actor(
@@ -160,8 +161,8 @@ class SimpleReport : Report() {
           label = "XLS",
           help = "Obtenir le format Excel (XLS)",
   ) {
-    key  =  Key.SHIFT_F8          // key is optional here
-    icon =  "exportXlsx"  // icon is optional here
+    key  =  Key.SHIFT_F8
+    icon =  Icon.EXPORT_XLSX
   }
 
   val xlsx = actor(
@@ -170,8 +171,8 @@ class SimpleReport : Report() {
           label = "XLSX",
           help = "Obtenir le format Excel (XLSX)",
   ) {
-    key  =  Key.SHIFT_F8          // key is optional here
-    icon =  "export"  // icon is optional here
+    key  =  Key.SHIFT_F8
+    icon =  Icon.EXPORT
   }
 
   val pdf = actor(
@@ -180,8 +181,8 @@ class SimpleReport : Report() {
           label = "PDF",
           help = "Obtenir le format PDF",
   ) {
-    key  =  Key.F9          // key is optional here
-    icon =  "exportPdf"  // icon is optional here
+    key  =  Key.F9
+    icon =  Icon.EXPORT_PDF
   }
 
   val cmdCSV = command(item = csv) {

@@ -25,6 +25,7 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
@@ -48,8 +49,8 @@ class DocumentationForm : DictionaryForm() {
     label = "cut",
     help = "cut element",
   ) {
-    key = Key.F2          // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F2
+    icon = Icon.LIST
   }
 
   val quit = actor(
@@ -59,7 +60,7 @@ class DocumentationForm : DictionaryForm() {
     help = "Quit",
   ) {
     key = Key.ESCAPE
-    icon = "quit"
+    icon = Icon.QUIT
   }
 
   val resetForm = actor(
@@ -69,7 +70,7 @@ class DocumentationForm : DictionaryForm() {
     help = "Reset Form",
   ) {
     key = Key.F7
-    icon = "break"
+    icon = Icon.BREAK
   }
 
   val quitCmd = command(item = quit) {

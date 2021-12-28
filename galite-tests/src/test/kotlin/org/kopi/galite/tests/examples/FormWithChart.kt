@@ -25,6 +25,7 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
@@ -43,8 +44,8 @@ object FormWithChart: Form() {
           label =  "Graph for test",
           help =   "show graph values" ,
   ) {
-    key  =  Key.F9          // key is optional here
-    icon =  "column_chart"  // icon is optional here
+    key  =  Key.F9
+    icon =  Icon.COLUMN_CHART
   }
 
   val p1 = page("test page")
@@ -68,8 +69,8 @@ class ChartSample: Chart() {
           label = "Greeting",
           help = "Click me to show greeting",
   ) {
-    key  =  Key.F1          // key is optional here
-    icon =  "ask"  // icon is optional here
+    key  =  Key.F1
+    icon =  Icon.ASK
   }
 
   val cmd = command(item = greeting) {

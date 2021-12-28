@@ -19,6 +19,7 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
@@ -39,7 +40,7 @@ class CommandsForm : ReportSelectionForm() {
     help = "Display List",
   ) {
     key = Key.F2
-    icon = "list"
+    icon = Icon.LIST
   }
   val resetBlock = actor(
     ident = "reset",
@@ -48,7 +49,7 @@ class CommandsForm : ReportSelectionForm() {
     help = "Reset Block",
   ) {
     key = Key.F11
-    icon = "break"
+    icon = Icon.BREAK
   }
   val serialQuery = actor(
     ident = "serialQuery",
@@ -57,7 +58,7 @@ class CommandsForm : ReportSelectionForm() {
     help = "serial query",
   ) {
     key = Key.F6
-    icon = "serialquery"
+    icon = Icon.SERIAL_QUERY
   }
   val report = actor(
     ident = "report",
@@ -66,7 +67,7 @@ class CommandsForm : ReportSelectionForm() {
     help = "Create report",
   ) {
     key = Key.F8
-    icon = "report"
+    icon = Icon.REPORT
   }
   val dynamicReport = actor(
     ident = "dynamicReport",
@@ -75,7 +76,7 @@ class CommandsForm : ReportSelectionForm() {
     help = " Create Dynamic Report",
   ) {
     key = Key.F9
-    icon = "report"
+    icon = Icon.REPORT
   }
   val saveBlock = actor(
     ident = "saveBlock",
@@ -84,7 +85,7 @@ class CommandsForm : ReportSelectionForm() {
     help = " Save Block",
   ) {
     key = Key.F3
-    icon = "save"
+    icon = Icon.SAVE
   }
   val deleteBlock = actor(
     ident = "deleteBlock",
@@ -93,7 +94,7 @@ class CommandsForm : ReportSelectionForm() {
     help = " deletes block",
   ) {
     key = Key.F4
-    icon = "delete"
+    icon = Icon.DELETE
   }
   val Operator = actor(
     ident = "search",
@@ -102,7 +103,7 @@ class CommandsForm : ReportSelectionForm() {
     help = " search",
   ) {
     key = Key.F7
-    icon = "detail_view"
+    icon = Icon.DETAIL_VIEW
   }
   val InsertMode = actor(
     ident = "Insert",
@@ -111,7 +112,7 @@ class CommandsForm : ReportSelectionForm() {
     help = " Insert",
   ) {
     key = Key.F7
-    icon = "insert"
+    icon = Icon.INSERT
   }
   val quit = actor(
     ident = "quit",
@@ -120,7 +121,7 @@ class CommandsForm : ReportSelectionForm() {
     help = "Quit",
   ) {
     key = Key.ESCAPE
-    icon = "quit"
+    icon = Icon.QUIT
   }
   val helpForm = actor(
     ident = "helpForm",
@@ -129,7 +130,7 @@ class CommandsForm : ReportSelectionForm() {
     help = " Help"
   ) {
     key = Key.F1
-    icon = "help"
+    icon = Icon.HELP
   }
   val helpCmd = command(item = helpForm) {
     showHelp()

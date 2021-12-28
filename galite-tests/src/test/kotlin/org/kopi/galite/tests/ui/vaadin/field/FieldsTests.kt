@@ -49,6 +49,7 @@ import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.visual.dsl.common.Icon
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -291,7 +292,7 @@ class FormInPopUp : DictionaryForm() {
     help = "Quit",
   ) {
     key = Key.ESCAPE
-    icon = "quit"
+    icon = Icon.QUIT
   }
   val quitCmd = command(item = quit) {
     quitForm()

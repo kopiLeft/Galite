@@ -23,6 +23,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
@@ -48,7 +49,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = "Display List",
   ) {
     key = Key.F2
-    icon = "list"
+    icon = Icon.LIST
   }
   val query = actor(
     ident = "query",
@@ -57,7 +58,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = "query",
   ) {
     key = Key.F3
-    icon = "list"
+    icon = Icon.LIST
   }
   val load = actor(
     ident = "load",
@@ -66,7 +67,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = "load",
   ) {
     key = Key.F8
-    icon = "list"
+    icon = Icon.LIST
   }
   val changeBlock = actor(
     ident = "change Block",
@@ -75,7 +76,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = "change Block",
   ) {
     key = Key.F4
-    icon = "refresh"
+    icon = Icon.REFRESH
   }
   val resetBlock = actor(
     ident = "reset",
@@ -84,7 +85,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = "Reset Block",
   ) {
     key = Key.F5
-    icon = "break"
+    icon = Icon.BREAK
   }
   val showHideFilter = actor(
     ident = "ShowHideFilter",
@@ -93,7 +94,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = " Show Hide Filter",
   ) {
     key = Key.F6
-    icon = "searchop"
+    icon = Icon.SEARCH_OP
   }
   val add = actor(
     ident = "add",
@@ -102,7 +103,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = " add",
   ) {
     key = Key.F10
-    icon = "add"
+    icon = Icon.ADD
   }
   val resetForm = actor(
     ident = "resetForm",
@@ -111,7 +112,7 @@ class MultipleBlockForm : DictionaryForm() {
     help = "Reset Form",
   ) {
     key = Key.F7
-    icon = "break"
+    icon = Icon.BREAK
   }
   val resetFormCmd = command(item = resetForm) {
     resetForm()

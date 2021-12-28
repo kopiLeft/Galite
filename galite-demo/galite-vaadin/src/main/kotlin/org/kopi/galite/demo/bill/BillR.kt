@@ -25,6 +25,7 @@ import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
@@ -48,7 +49,7 @@ class BillR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "exportCsv"  // icon is optional here
+    icon = Icon.EXPORT_CSV  // icon is optional here
   }
 
   val xls = actor(
@@ -58,7 +59,7 @@ class BillR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "exportXlsx"  // icon is optional here
+    icon = Icon.EXPORT_XLSX  // icon is optional here
   }
 
   val xlsx = actor(
@@ -68,7 +69,7 @@ class BillR : Report() {
           help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = Icon.EXPORT  // icon is optional here
   }
 
   val pdf = actor(
@@ -78,7 +79,7 @@ class BillR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "exportPdf"  // icon is optional here
+    icon = Icon.EXPORT_PDF  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {

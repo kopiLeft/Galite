@@ -21,6 +21,7 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
@@ -52,7 +53,7 @@ class DocumentationBlockForm : DictionaryForm() {
     help = "Display List",
   ) {
     key = Key.F2
-    icon = "list"
+    icon = Icon.LIST
   }
 
   val saveBlock = actor(
@@ -62,7 +63,7 @@ class DocumentationBlockForm : DictionaryForm() {
     help = " Save Block",
   ) {
     key = Key.F3
-    icon = "save"
+    icon = Icon.SAVE
   }
 
   val insertMode = actor(
@@ -72,7 +73,7 @@ class DocumentationBlockForm : DictionaryForm() {
     help = " Insert",
   ) {
     key = Key.F7
-    icon = "insert"
+    icon = Icon.INSERT
   }
 
   val deleteBlock = actor(
@@ -82,7 +83,7 @@ class DocumentationBlockForm : DictionaryForm() {
     help = " deletes block",
   ) {
     key = Key.F4
-    icon = "delete"
+    icon = Icon.DELETE
   }
 
   val resetForm = actor(
@@ -92,7 +93,7 @@ class DocumentationBlockForm : DictionaryForm() {
     help = "Reset Block",
   ) {
     key = Key.F11
-    icon = "break"
+    icon = Icon.BREAK
   }
 
   val resetFormCmd = command(item = resetForm) {

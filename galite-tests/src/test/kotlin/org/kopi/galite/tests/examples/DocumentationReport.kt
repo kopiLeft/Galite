@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
@@ -40,7 +41,7 @@ class DocumentationReport : ReportSelectionForm() {
     help = "Create report",
   ) {
     key = Key.F8
-    icon = "report"
+    icon = Icon.REPORT
   }
 
   val block = insertBlock(SimpleBlock())
