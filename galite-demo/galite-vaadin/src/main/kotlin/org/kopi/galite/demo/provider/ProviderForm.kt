@@ -26,7 +26,6 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class ProviderForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -51,12 +50,8 @@ class ProviderForm : ReportSelectionForm() {
 
   val block = page.insertBlock(BlockProvider()) {
     command(item = report) {
-      createReport(this)
+      createReport(ProviderR())
     }
-  }
-
-  override fun createReport(): Report {
-    return ProviderR()
   }
 }
 

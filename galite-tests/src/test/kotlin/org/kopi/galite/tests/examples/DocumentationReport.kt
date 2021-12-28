@@ -23,16 +23,10 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class DocumentationReport : ReportSelectionForm() {
 
   override val locale = Locale.UK
-  /** Calling reports **/
-  // call report
-  override fun createReport(): Report {
-    return DocumentationReportR()
-  }
 
   override val title = "Test Report Form"
 
@@ -59,7 +53,7 @@ class DocumentationReport : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        createReport(this)
+        createReport(DocumentationReportR())
       }
     }
   }

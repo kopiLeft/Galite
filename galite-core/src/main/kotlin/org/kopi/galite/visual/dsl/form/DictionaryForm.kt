@@ -18,6 +18,7 @@ package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.VException
 
@@ -33,10 +34,11 @@ abstract class DictionaryForm : Form() {
    * database query. The returned integer represents the identifier
    * of the selected record after the search operation.
    *
+   * @param parent The parent window.
    * @return The selected ID of the searched record.
    * @throws VException Any visual errors that occurs during search operation.
    */
-  fun search(): Int = model.search(model)
+  fun search(parent: Window): Int = model.search(parent.model)
 
   /**
    * Edits an existing record.
@@ -45,11 +47,12 @@ abstract class DictionaryForm : Form() {
    * database query. The returned integer represents the identifier
    * of the edited record after the edit operation.
    *
+   * @param parent The parent window.
    * @param id The record ID to be edited.
    * @return The edited record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun edit(id: Int): Int = model.edit(model, id)
+  fun edit(parent: Window, id: Int): Int = model.edit(parent.model, id)
 
   /**
    * Adds a new record.
@@ -58,10 +61,11 @@ abstract class DictionaryForm : Form() {
    * database query. The returned integer represents the identifier
    * of the created record.
    *
+   * @param parent The parent window.
    * @return The created record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun add(): Int = model.add(model)
+  fun add(parent: Window): Int = model.add(parent.model)
 
   var dBContext: DBContext?
     get() = model.dBContext
@@ -69,8 +73,48 @@ abstract class DictionaryForm : Form() {
       model.dBContext = value
     }
 
-  fun doNotModal() {
-    model.doNotModal()
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   */
+  fun editWithID(parent: Window, id: Int): Int = model.editWithID(parent.model, id)
+
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   */
+  fun openForQuery(parent: Window): Int = model.openForQuery(parent.model)
+
+  /**
+   * create a new record and returns id
+   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   */
+  fun newRecord(parent: Window): Int = model.newRecord(parent.model)
+
+  /**
+   * close the form
+   */
+  fun close(code: Int) {
+    model.close(code)
+  }
+
+  fun saveFilledField() {
+    model.saveFilledField()
+  }
+
+  /**
+   *
+   */
+  fun interruptRecursiveQuery() {
+    model.interruptRecursiveQuery()
+  }
+
+  fun isNewRecord(): Boolean = model.isNewRecord()
+
+  fun setCloseOnSave() {
+    model.setCloseOnSave()
   }
 
   /**

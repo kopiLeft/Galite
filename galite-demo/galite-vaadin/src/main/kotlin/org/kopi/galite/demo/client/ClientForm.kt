@@ -33,7 +33,6 @@ import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class ClientForm : ReportSelectionForm() {
@@ -210,7 +209,7 @@ class ClientForm : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        createReport(this)
+        createReport(ClientR())
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -275,7 +274,7 @@ class ClientForm : ReportSelectionForm() {
       }
 
       command(item = report) {
-        createReport(this)
+        createReport(ClientR())
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -308,10 +307,6 @@ class ClientForm : ReportSelectionForm() {
         b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
-  }
-
-  override fun createReport(): Report {
-    return ClientR()
   }
 }
 
