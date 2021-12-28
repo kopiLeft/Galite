@@ -49,7 +49,7 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: Stri
     fullCalendarForm = block.fullCalendarForm?.model ?: buildFullCalendarForm()
     initializeBlock(block, source)
 
-    if (block.timeFields.isDate) {
+    if (block.timeFields.hasDateField) {
       dateField = block.timeFields.dateField?.vField as? VDateField
       fromTimeField = block.timeFields.fromTimeField?.vField as? VTimeField
       toTimeField = block.timeFields.toTimeField?.vField as? VTimeField

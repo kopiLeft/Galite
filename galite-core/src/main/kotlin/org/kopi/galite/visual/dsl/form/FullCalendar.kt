@@ -213,7 +213,7 @@ class TimeFields {
     dateField = null
     fromTimeField = null
     toTimeField = null
-    isDate = false
+    hasDateField = false
   }
 
   /**
@@ -226,10 +226,10 @@ class TimeFields {
     toTimeField = to
     fromField = null
     toField = null
-    isDate = true
+    hasDateField = true
   }
 
-  val isDate: Boolean
+  val hasDateField: Boolean
   val fromField: FormField<Timestamp>?
   val toField: FormField<Timestamp>?
   val dateField: FormField<Date>?
