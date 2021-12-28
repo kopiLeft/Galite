@@ -27,6 +27,7 @@ import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
@@ -48,8 +49,8 @@ class FormWithList : DictionaryForm() {
     label = "list",
     help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F1
+    icon = Icon.LIST
   }
 
   val autoFill = actor(
@@ -66,7 +67,7 @@ class FormWithList : DictionaryForm() {
     help = "Reset Block",
   ) {
     key = Key.F3
-    icon = "break"
+    icon = Icon.BREAK
   }
 
   val resetForm = actor(
@@ -76,7 +77,7 @@ class FormWithList : DictionaryForm() {
     help = "Reset Form",
   ) {
     key = Key.F7
-    icon = "break"
+    icon = Icon.BREAK
   }
 
   val resetFormCmd = command(item = resetForm) {
@@ -89,8 +90,8 @@ class FormWithList : DictionaryForm() {
     label = "save",
     help = "save",
   ) {
-    key = Key.F2   // key is optional here
-    icon = "save"  // icon is optional here
+    key = Key.F2
+    icon = Icon.SAVE
   }
 
   val block3 = testPage1.insertBlock(UsersBlock()) {

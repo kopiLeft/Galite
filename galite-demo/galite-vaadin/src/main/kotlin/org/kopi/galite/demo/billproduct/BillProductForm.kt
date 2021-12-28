@@ -25,6 +25,7 @@ import org.kopi.galite.demo.desktop.runForm
 
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
@@ -42,7 +43,7 @@ class BillProductForm : ReportSelectionForm() {
           help = "Create report",
   ) {
     key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    icon = Icon.REPORT  // icon is optional here
   }
   val tb1 = page.insertBlock(BlockBillProduct()) {
     command(item = report) {

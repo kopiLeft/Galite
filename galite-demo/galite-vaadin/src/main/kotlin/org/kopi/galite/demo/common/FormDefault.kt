@@ -18,6 +18,7 @@
 package org.kopi.galite.demo.common
 
 import java.util.Locale
+import org.kopi.galite.visual.dsl.common.Icon
 
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
@@ -41,8 +42,8 @@ class FormDefault(block: Block) : Form() {
           label = "break",
           help = "Reset Block",
   ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
+    key = Key.F3
+    icon = Icon.BREAK
   }
   val quitForm = actor(
           ident = "quit",
@@ -51,7 +52,7 @@ class FormDefault(block: Block) : Form() {
           help = "quit From",
   ) {
     key = Key.F4  // key is optional here
-    icon = "quit"  // icon is optional here
+    icon = Icon.QUIT
   }
   val autofillCommand = command(item = autoFill) {}
   val resetCommand = command(item = resetBlock) {
