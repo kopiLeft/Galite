@@ -31,12 +31,8 @@ val name = field(STRING(20)) {
   help = "The user name"
   align = FieldAlignment.LEFT
   group = age
-  format {
-    object : VCellFormat() {
-      override fun format(value: Any?): String {
-        return (value as String).toUpperCase()
-      }
-    }
+  format { value ->
+    value.toUpperCase()
   }
 }
 
@@ -190,7 +186,7 @@ In report Fields, you can call commands with this syntaxe :
 
 [source,kotlin]
 ----
-"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }
+"command (" SimpleItemName  ")" {KOTLIN Code}
 ----
 
 ===== Report Field Triggers
@@ -230,12 +226,8 @@ val name = field(STRING(20)) {
   help = "The user name"
   align = FieldAlignment.LEFT
   group = age
-  format {
-    object : VCellFormat() {
-      override fun format(value: Any?): String {
-        return (value as String).toUpperCase()
-      }
-    }
+  format { value ->
+    value.toUpperCase()
   }
 }
 ----
@@ -353,7 +345,7 @@ actor("ident =" SimpleName,
       "help" = helpText : String
      ) {
       [key = key  : String]
-      [icon = icon : String]
+      [icon = icon : Icon]
 }
 ----
 
@@ -376,7 +368,7 @@ class ListLecturersR : Report() {
           help = "Print the report",
   ) {
     key = Key.F9         // key is optional here
-    icon = "printerIcon"  // icon is optional here
+    icon = ICON.PRINT    // icon is optional here
   }
   ...
 }
@@ -517,14 +509,13 @@ class UserList : Report() {
 A report is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :
 
  * Change DictionaryForm to ReportSelectionForm
- * Add the CreateReport command to the caller form
- * Implement the createReport abstract method :
+ * Add a command that implements `CreateReport` method and pass the report as a parameter to this method :
 
 *Example*
 [source,kotlin]
 ----
-override fun createReport(): Report() {
-   return UserList()
+command(item = report) {
+  createReport(ClientR())
 }
 ----
 

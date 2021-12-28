@@ -424,7 +424,7 @@ We shall notice that negative values are also permitted in this option. However,
  	
 [source,kotlin]
 ----
-val i = index(message = "this should be unique")"
+val i = index(message = "this should be unique")
 
 val surname = mustFill(domain = STRING(20), position = at(1, 1)) {
     label = "Surname"
@@ -451,16 +451,15 @@ Once you have defined the columns , you may define the field commands.
 [source,kotlin]
 ----
 ModeAndCommands :
-command(item : Actor) {
-    [AccessMode]
-    CommandBody
+command(item : Actor, [AccessMode]) {
+  CommandBody
 }
 
 CommandBody     :   CommandAction
 
-CommandAction   : action = { KotlinCode  }
+CommandAction   :   KotlinCode
 
-AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE
+AccessMode      : "arrayOf(" vararg ListOfModes.. ")" |  vararg ListOfModes.. |  mode = MODE
 ----
 
 ===== Standard Field Command
@@ -470,11 +469,8 @@ The command can be a Galite predefined command or you can make new Actors and co
 Example:
 [source,kotlin]
 ----
-command(item = clear) {
-    mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-    action = {
-       ...
-    }
+command(item = clear, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+  ...
 }
 
 val clear = actor()
@@ -492,8 +488,8 @@ All the previous command definition ways can be preceded by one mode or more. Th
  	
 [source,kotlin]
 ----
-command(item = insertMode) {
-    mode(Mode.UPDATE, Mode.QUERY)
+command(item = insertMode, Mode.UPDATE, Mode.QUERY) {
+  ...
 }
 ----
 
@@ -818,13 +814,14 @@ Structure of command:
 
 [source,kotlin]
 ----
-"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }
+"command (" SimpleItemName  ")" {KOTLIN Code}
+----
 
-Example
+*Example*
+[source,kotlin]
+----
 command(item = Validate) {
-  action = {
-    validate ()
-  }
+  validate ()
 }
 ----
 
@@ -842,20 +839,17 @@ Use the mode function inside you command body declaration to set the modes :
 *Syntax*
 [source,kotlin]
 ----
-"command (" SimpleItemName  ")" { BlockMode }
+"command (" SimpleItemName, [Modes]")" {}
 
-BlockMode: "mode(" ModeName* ")"
+Modes: ModeName*
 ----
 This means that the command called is only accessible when the block is in the specified Mode.
 
 *Example*
 [source,kotlin]
 ----
-command(item = Validate) {
-    mode(Mode.UPDATE, Mode.QUERY)
-    action = {
-      validate ()
-    }
+command(item = Validate, Mode.UPDATE, Mode.QUERY) {
+  validate ()
 }
 ----
 
@@ -1072,7 +1066,7 @@ ActorDefinition:  "actor"(
                     "help" = helpText : String,
                   ) {
                     [key = key  : String]
-                    [icon = icon : String]
+                    [icon = icon : Icon]
                   }
 ----
 
@@ -1092,7 +1086,7 @@ class ListLecturersForm : ReportSelectionForm() {
     help = "cut element",
   ) {
     key = Key.F2          // key is optional here
-    icon = "CutIcon"  // icon is optional here
+    icon = Icon.CUT       // icon is optional here
   }
   ....
 }
@@ -1155,12 +1149,9 @@ Writing the action's body :
 [source,kotlin]
 ----
 command(item = PrintBlock) {
-    action = {
-        blockName.validate();
-        blockName.getForm().close(VForm.CDE-Validate);
-    }
+  blockName.validate()
+  blockName.getForm().close(VForm.CDE-Validate)
 }
-
 ----
 
 After the different definitions we have made (types, menus, actors,commands), we need to begin the declaration of our form.Here, we will set up the structure and the behaviour of the form throw 4 sections :
@@ -1184,20 +1175,17 @@ The Syntax to use command with modes is the following :
 *Syntax*
 [source,kotlin]
 ----
-"command (" SimpleItemName  ")" { BlockMode }
+"command (" SimpleItemName, Modes  ")" {}
 
-BlockMode: "mode(" ModeName* ")"
+Modes: ModeName*
 ----
 This means that the command called is only accessible when the block is in the specified Mode.
 
 *Example*
 [source,kotlin]
 ----
-command(item = Validate) {
-    mode(Mode.UPDATE, Mode.QUERY)
-    action = {
-      validate ()
-    }
+command(item = Validate, Mode.UPDATE, Mode.QUERY) {
+  validate ()
 }
 ----
 
