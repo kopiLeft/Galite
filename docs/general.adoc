@@ -340,8 +340,9 @@ class "ListName" : ListDomain<String>(20) {
 
 ListColumns : ListColumn  [ListColumns]
 
-ListColumn  : SimpleName "keyOf" TableName.columnName
+ListColumn  : SimpleName "keyOf" TableName.columnName [hasWidth width: Int]
 ----
+When the type of the data in our database is different of `VarChar` or `Binary` we need to use the keyword `hasWidth` to specify the width of the data displayed :
 
 *Example*
 
@@ -357,6 +358,7 @@ class CurrentDegree(year: Int) : ListDomain<String>(20) {
     init {
         "Symbol" keyOf Degree.Symbol
         "Description" keyOf Degree.Description
+        "year" keyOf Degree.year hasWidth 5
     }
 }
 ----
@@ -364,5 +366,5 @@ class CurrentDegree(year: Int) : ListDomain<String>(20) {
 In this example, we have used Exposed syntax to declare the select query from the Degree table, then we have created a list that contains two columns Symbol and Description those columns receive data from the result of the query.
 
 The function `keyOf` is used in order to enter the columns in which Galite has to make its research.
-
+The fucntion `hasWidth` is used in order to specify the width of the data displayed.
 As a result of your selection, you will then have a table with two columns which will contain the different sorts of degrees achievable in the year you have entered.

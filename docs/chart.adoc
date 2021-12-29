@@ -283,7 +283,7 @@ ActorDefinition:  "actor("
                          "help" = helpText : String,
                        ) {
                          [key = key  : String]
-                         [icon = icon : String]
+                         [icon = icon : Icon]
                        }
 ----
 
@@ -304,7 +304,7 @@ class OrderedChart: Chart() {
             help = "Print the chart",
     ) {
       key = Key.F9         // key is optional here
-      icon = "printerIcon"  // icon is optional here
+      icon = Icon.Print    // icon is optional here
     }
     ...
 }
@@ -371,9 +371,7 @@ Calling a local action :
 [source,kotlin]
 ----
 val print = command(item = printActor) {
-  action = {
-    // KOTLIN code
-  }
+  // KOTLIN code
 }
 ----
 
