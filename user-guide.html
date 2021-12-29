@@ -1658,8 +1658,11 @@ class "ListName" : ListDomain&lt;String&gt;(20) {
 
 ListColumns : ListColumn  [ListColumns]
 
-ListColumn  : SimpleName "keyOf" TableName.columnName</code></pre>
+ListColumn  : SimpleName "keyOf" TableName.columnName [hasWidth width: Int]</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>When the type of the data in our database is different of <code>VarChar</code> or <code>Binary</code> we need to use the keyword <code>hasWidth</code> to specify the width of the data displayed :</p>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong></p>
@@ -1676,6 +1679,7 @@ ListColumn  : SimpleName "keyOf" TableName.columnName</code></pre>
     init {
         "Symbol" keyOf Degree.Symbol
         "Description" keyOf Degree.Description
+        "year" keyOf Degree.year hasWidth 5
     }
 }</code></pre>
 </div>
@@ -1685,10 +1689,9 @@ ListColumn  : SimpleName "keyOf" TableName.columnName</code></pre>
 In this example, we have used Exposed syntax to declare the select query from the Degree table, then we have created a list that contains two columns Symbol and Description those columns receive data from the result of the query.</p>
 </div>
 <div class="paragraph">
-<p>The function <code>keyOf</code> is used in order to enter the columns in which Galite has to make its research.</p>
-</div>
-<div class="paragraph">
-<p>As a result of your selection, you will then have a table with two columns which will contain the different sorts of degrees achievable in the year you have entered.</p>
+<p>The function <code>keyOf</code> is used in order to enter the columns in which Galite has to make its research.
+The fucntion <code>hasWidth</code> is used in order to specify the width of the data displayed.
+As a result of your selection, you will then have a table with two columns which will contain the different sorts of degrees achievable in the year you have entered.</p>
 </div>
 </div>
 </div>
@@ -2284,7 +2287,7 @@ mustFill(domain = STRING(20)) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val i = index(message = "this should be unique")"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val i = index(message = "this should be unique")
 
 val surname = mustFill(domain = STRING(20), position = at(1, 1)) {
     label = "Surname"
@@ -2316,16 +2319,15 @@ difference that the names will be sorted out from Z to A.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ModeAndCommands :
-command(item : Actor) {
-    [AccessMode]
-    CommandBody
+command(item : Actor, [AccessMode]) {
+  CommandBody
 }
 
 CommandBody     :   CommandAction
 
-CommandAction   : action = { KotlinCode  }
+CommandAction   :   KotlinCode
 
-AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE</code></pre>
+AccessMode      : "arrayOf(" vararg ListOfModes.. ")" |  vararg ListOfModes..</code></pre>
 </div>
 </div>
 </div>
@@ -2339,11 +2341,8 @@ AccessMode      : "mode(" vararg ListOfModes.. ")" |  mode = MODE</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = clear) {
-    mode(Mode.UPDATE, Mode.INSERT, Mode.QUERY)
-    action = {
-       ...
-    }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = clear, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+  ...
 }
 
 val clear = actor()</code></pre>
@@ -2373,8 +2372,8 @@ val clear = actor()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = insertMode) {
-    mode(Mode.UPDATE, Mode.QUERY)
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = insertMode, Mode.UPDATE, Mode.QUERY) {
+  ...
 }</code></pre>
 </div>
 </div>
@@ -2853,13 +2852,16 @@ when bringing in changes in the principal table.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }
-
-Example
-command(item = Validate) {
-  action = {
-    validate ()
-  }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" {KOTLIN Code}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate) {
+  validate ()
 }</code></pre>
 </div>
 </div>
@@ -2895,9 +2897,9 @@ Use the mode function inside you command body declaration to set the modes :</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" { BlockMode }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName, [Modes]")" {}
 
-BlockMode: "mode(" ModeName* ")"</code></pre>
+Modes: Mode*</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2908,11 +2910,8 @@ BlockMode: "mode(" ModeName* ")"</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate) {
-    mode(Mode.UPDATE, Mode.QUERY)
-    action = {
-      validate ()
-    }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate, Mode.UPDATE, Mode.QUERY) {
+  validate ()
 }</code></pre>
 </div>
 </div>
@@ -3243,7 +3242,7 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
                     "help" = helpText : String,
                   ) {
                     [key = key  : String]
-                    [icon = icon : String]
+                    [icon = icon : Icon]
                   }</code></pre>
 </div>
 </div>
@@ -3263,7 +3262,7 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
     help = "cut element",
   ) {
     key = Key.F2          // key is optional here
-    icon = "CutIcon"  // icon is optional here
+    icon = Icon.CUT       // icon is optional here
   }
   ....
 }</code></pre>
@@ -3340,10 +3339,8 @@ Writing the action&#8217;s body :</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = PrintBlock) {
-    action = {
-        blockName.validate();
-        blockName.getForm().close(VForm.CDE-Validate);
-    }
+  blockName.validate()
+  blockName.getForm().close(VForm.CDE-Validate)
 }</code></pre>
 </div>
 </div>
@@ -3394,9 +3391,9 @@ A form have 3 possible Modes :</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" { BlockMode }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName, Modes  ")" {}
 
-BlockMode: "mode(" ModeName* ")"</code></pre>
+Modes: Mode*</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3407,11 +3404,8 @@ BlockMode: "mode(" ModeName* ")"</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate) {
-    mode(Mode.UPDATE, Mode.QUERY)
-    action = {
-      validate ()
-    }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate, Mode.UPDATE, Mode.QUERY) {
+  validate ()
 }</code></pre>
 </div>
 </div>
@@ -3532,12 +3526,8 @@ GroupCommands : "group =" field</code></pre>
   help = "The user name"
   align = FieldAlignment.LEFT
   group = age
-  format {
-    object : VCellFormat() {
-      override fun format(value: Any?): String {
-        return (value as String).toUpperCase()
-      }
-    }
+  format { value -&gt;
+    value.toUpperCase()
   }
 }
 
@@ -3731,7 +3721,7 @@ val InvoiceNum = field(STRING(10)) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" {KOTLIN Code}</code></pre>
 </div>
 </div>
 </div>
@@ -3785,12 +3775,8 @@ val name = field(STRING(20)) {
   help = "The user name"
   align = FieldAlignment.LEFT
   group = age
-  format {
-    object : VCellFormat() {
-      override fun format(value: Any?): String {
-        return (value as String).toUpperCase()
-      }
-    }
+  format { value -&gt;
+    value.toUpperCase()
   }
 }</code></pre>
 </div>
@@ -3931,7 +3917,7 @@ actor("ident =" SimpleName,
       "help" = helpText : String
      ) {
       [key = key  : String]
-      [icon = icon : String]
+      [icon = icon : Icon]
 }</code></pre>
 </div>
 </div>
@@ -3954,7 +3940,7 @@ actor("ident =" SimpleName,
           help = "Print the report",
   ) {
     key = Key.F9         // key is optional here
-    icon = "printerIcon"  // icon is optional here
+    icon = ICON.PRINT    // icon is optional here
   }
   ...
 }</code></pre>
@@ -4141,10 +4127,7 @@ You can use Exposed Syntax to create query that select data from you database ta
 <p>Change DictionaryForm to ReportSelectionForm</p>
 </li>
 <li>
-<p>Add the CreateReport command to the caller form</p>
-</li>
-<li>
-<p>Implement the createReport abstract method :</p>
+<p>Add a command that calls the <code>createReport</code> method and pass the report as a parameter to this method :</p>
 </li>
 </ul>
 </div>
@@ -4153,8 +4136,8 @@ You can use Exposed Syntax to create query that select data from you database ta
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override fun createReport(): Report() {
-   return UserList()
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = report) {
+  createReport(ClientR())
 }</code></pre>
 </div>
 </div>
@@ -4524,7 +4507,7 @@ ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign t
                          "help" = helpText : String,
                        ) {
                          [key = key  : String]
-                         [icon = icon : String]
+                         [icon = icon : Icon]
                        }</code></pre>
 </div>
 </div>
@@ -4546,7 +4529,7 @@ ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign t
             help = "Print the chart",
     ) {
       key = Key.F9         // key is optional here
-      icon = "printerIcon"  // icon is optional here
+      icon = Icon.Print    // icon is optional here
     }
     ...
 }</code></pre>
@@ -4630,9 +4613,7 @@ cmdBody: { KOTLIN statements }</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val print = command(item = printActor) {
-  action = {
-    // KOTLIN code
-  }
+  // KOTLIN code
 }</code></pre>
 </div>
 </div>

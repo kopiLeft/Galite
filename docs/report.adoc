@@ -509,7 +509,7 @@ class UserList : Report() {
 A report is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :
 
  * Change DictionaryForm to ReportSelectionForm
- * Add a command that implements `CreateReport` method and pass the report as a parameter to this method :
+ * Add a command that calls the `createReport` method and pass the report as a parameter to this method :
 
 *Example*
 [source,kotlin]

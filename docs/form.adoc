@@ -459,7 +459,7 @@ CommandBody     :   CommandAction
 
 CommandAction   :   KotlinCode
 
-AccessMode      : "arrayOf(" vararg ListOfModes.. ")" |  vararg ListOfModes.. |  mode = MODE
+AccessMode      : "arrayOf(" vararg ListOfModes.. ")" |  vararg ListOfModes..
 ----
 
 ===== Standard Field Command
@@ -841,7 +841,7 @@ Use the mode function inside you command body declaration to set the modes :
 ----
 "command (" SimpleItemName, [Modes]")" {}
 
-Modes: ModeName*
+Modes: Mode*
 ----
 This means that the command called is only accessible when the block is in the specified Mode.
 
@@ -1177,7 +1177,7 @@ The Syntax to use command with modes is the following :
 ----
 "command (" SimpleItemName, Modes  ")" {}
 
-Modes: ModeName*
+Modes: Mode*
 ----
 This means that the command called is only accessible when the block is in the specified Mode.
 
