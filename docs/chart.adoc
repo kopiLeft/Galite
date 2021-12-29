@@ -471,17 +471,15 @@ You should note that calling setType will create the data series and refresh the
 
 ==== Calling charts
 
-A chart is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :
+A chart is always called from a form. You have to do the following steps :
 
- * Change DictionaryForm to ChartSelectionForm
- * Add the CreateChart command to the caller form
- * Use showChart method :
+ * Add a command that calls the `createReport` method and pass the report as a parameter to this method.
 
 *Example*
 [source,kotlin]
 ----
-override fun createChart() {
-   return ChartSample()
+command(item = graph) {
+  showChart(ChartSample())
 }
 ----
 
