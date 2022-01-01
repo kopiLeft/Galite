@@ -6,31 +6,78 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/material.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
     <title>Galite Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 
   <body>
-    <main id="main">
-      <img src="images/logo_galite.png" class="main-logo" />
-      <h3 class="main-paragraph">
-        Opensource framework that allows users to build business applications
-        made of forms, reports and charts using a simple and creative
-        syntax based on a domain specific language.
-      </h3>
-      <div class="main-actions">
-        <a class="btn" href="https://kopileft.github.io/Galite/user-guide.html">
-          Get started
-        </a>
-        <a class="btn" href="https://github.com/kopiLeft/Galite">
-          <i class="fab fa-github"></i>&nbsp; Github
-        </a>
-        <a class="btn" href="https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core">
-          <i class="fas fa-download"></i>&nbsp; Maven
-        </a>
-      </div>
-    </main>
+    <div>
+      <main id="main">
+        <div id="header-container"></div>
+        <img src="images/text-logo.png" class="top-logo" />
+        <div id="container">
+          <img src="images/g-logo.png" class="main-logo" />
+          <table>
+            <tr>
+              <td>
+                <h3 class="main-paragraph">
+                  Galite make your website
+                  <p id="text">simple</p>
+                </h3>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <ul class="main-actions">
+                  <li class="btn" href="https://kopileft.github.io/Galite/user-guide.html">
+                    Get started
+                  </li>
+                  <li class="btn" href="https://github.com/kopiLeft/Galite">
+                    <i class="fab fa-github"></i>&nbsp; Github
+                  </li>
+                  <li class="btn" href="https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core">
+                    <i class="fas fa-download"></i>&nbsp; Maven
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div id="bubble-one"></div>
+        <div id="bubble-two"></div>
+        <div id="devices-container">
+          <img src="images/devices.png" id="devices"/>
+          <div>
+            <h3>WHAT IS GALITE</h3>
+            <p>
+              Opensource framework that allows users to build business applications</br>
+              made of forms, reports and charts using a simple and creative syntax</br>
+              based on a domain specific language.
+            </p>
+          </div>
+        </div>
+        <div id="links">
+          <a class="link" onClick="change()">
+            <i id= "switch" class="fas fa-moon"></i>
+            <!-- <i class="far fa-lightbulb"></i> -->
+          </a>
+          <a class="link" href="https://github.com/kopiLeft">
+            <i class="fab fa-github"></i>
+          </a>
+          <a class="link" href="https://www.linkedin.com/company/kopileft-services/">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a class="link" href="http://www.kopileft.com/">
+            <i class="fas fa-globe"></i>
+          </a>
+        </div>
+      </main>
+    </div>
+
     <section id="features-section" class="section">
+      <h2>STRENGHTS & ADVANTAGES</h2>
       <div class="features-box">
         <div class="feature">
+          <img src="images/generic.png" class="feature-img"/>
           <h2 class="feature-title">Generic</h2>
           <p class="feature-paragraph">
             Make it easy to build a full fledged application based on business
@@ -38,6 +85,7 @@
           </p>
         </div>
         <div class="feature">
+          <img src="images/extendible.png" class="feature-img"/>
           <h2 class="feature-title">Extendible</h2>
           <p class="feature-paragraph">
             It provide a collections of component that can be combined in order
@@ -45,10 +93,19 @@
           </p>
         </div>
         <div class="feature">
+          <img src="images/devFriendly.png" class="feature-img"/>
           <h2 class="feature-title">Developer friendly</h2>
           <p class="feature-paragraph">
             Galite provide a domain specific language that is easy to use in
             combination with the Koltin programming language.
+          </p>
+        </div>
+        <div class="feature">
+          <img src="images/speed.png" class="feature-img"/>
+          <h2 class="feature-title">Development time</h2>
+          <p class="feature-paragraph">
+            Galite take into consideration the time to market,
+            you can create your application and run it in a few minutes.
           </p>
         </div>
       </div>
@@ -64,38 +121,39 @@
           few lines of code, Galite generate a nice user interface with backend fully managed. </p>
       </div>
       <pre class="dsl-code">
-        <code class="language-kotlin">
+            <code id="language-kotlin">
 class Clients : Form() {
-  override val title = "Clients form"
+   override val title = "Clients form"
 
-  val block = insertBlock(ClientBlock())
+   val block = insertBlock(ClientBlock())
 
-  inner class ClientBlock : Block(1, 1, "Clients") {
+   inner class ClientBlock : Block(1, 1, "Clients") {
 
-    val id = hidden(domain = INT(20)) {
-      label = "ID"
-      help = "The user id"
-      columns(Clients.id) {
-        index = unique
-      }
-    }
+     val id = hidden(domain = INT(20)) {
+       label = "ID"
+       help = "The user id"
+       columns(Clients.id) {
+         index = unique
+       }
+     }
 
-    val name = visit(domain = STRING(20), position = at(1, 1)) {
-      label = "name"
-      help = "name"
-      columns(Clients.name)
-    }
+     val name = visit(domain = STRING(20), position = at(1, 1)) {
+       label = "name"
+       help = "name"
+       columns(Clients.name)
+     }
 
-    val createdOn = visit(domain = TIMESTAMP, position = at(2, 1)) {
-      label = "createdOn"
-      help = "createdOn"
-      columns(Clients.createdOn)
-    }
-  }
+     val createdOn = visit(domain = TIMESTAMP, position = at(2, 1)) {
+       label = "createdOn"
+       help = "createdOn"
+       columns(Clients.createdOn)
+     }
+   }
 }
-        </code>
-      </pre>
+            </code>
+          </pre>
     </section>
+
     <section id="ui-section">
       <div class="ui-screenshots">
         <img src="images/screenshots.png" alt="Screenshots for the Galite UI">
@@ -111,19 +169,74 @@ class Clients : Form() {
       </div>
     </section>
     <footer id="footer">
-      <div>
-        <a class="link" href="https://github.com/kopiLeft">
-          <i class="fab fa-github"></i>
-        </a>
-        <a class="link" href="https://www.linkedin.com/company/kopileft-services/">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        <a class="link" href="http://www.kopileft.com/">
-          <i class="fas fa-globe"></i>
-        </a>
-      </div>
       <p>Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN</p>
     </footer>
-  </body>
+
+      <script type="text/javascript">
+        var text = ["modern", "ergonomic", "simple", "reactive", "awesome"];
+        var counter = 0;
+        var elem = document.getElementById("text");
+        var inst = setInterval(change, 3000);
+        function change() {
+          elem.innerHTML = text[counter];
+          counter++;
+          if (counter >= text.length) {
+            counter = 0;
+          }
+        }
+      </script>
+      <script>
+        var check = false;
+        function change() {
+          var headerContainer = document.getElementById("header-container");
+          headerContainer.classList.toggle("dark-mode-header");
+
+          var main = document.getElementById("main");
+          main.classList.toggle("dark-mode");
+
+          var swap = document.getElementById("switch");
+          swap.classList.toggle("fa-moon");
+          swap.classList.toggle("fa-lightbulb");
+
+          var links = document.getElementsByClassName("link");
+          links[0].classList.toggle("dark-mode-first-link");
+          for (const li of links) {
+            li.classList.toggle("dark-mode-white-color");
+          }
+
+          for (const li of document.getElementsByClassName("btn")) {
+            li.classList.toggle("dark-mode-black-color");
+          }
+
+          var bubbleOne = document.getElementById("bubble-one");
+          bubbleOne.classList.toggle("dark-mode-black-background");
+          var bubbleTwo = document.getElementById("bubble-two");
+          bubbleTwo.classList.toggle("dark-mode-white-background");
+
+          var featuresSection = document.getElementById("features-section");
+          featuresSection.classList.toggle("dark-mode");
+          featuresSection.classList.toggle("dark-mode-white-color");
+
+          var dslSection = document.getElementById("dsl-section");
+          dslSection.classList.toggle("dark-mode");
+
+          var  uiSection = document.getElementById("ui-section");
+          uiSection.classList.toggle("dark-mode");
+
+          check ^= true;
+        }
+      </script>
+      <script>
+        for (const container of document.getElementsByClassName("feature")) {
+          container.addEventListener('mouseenter', function(){
+          if(check)
+            this.classList.add('feature-dark-mode');
+          })
+          container.addEventListener('mouseleave', function(){
+            this.classList.remove('feature-dark-mode');
+          })
+        }
+      </script>
+    </body>
   <script>hljs.highlightAll();</script>
 </html>
