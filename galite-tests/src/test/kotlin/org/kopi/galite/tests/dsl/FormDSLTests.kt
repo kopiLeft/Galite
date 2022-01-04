@@ -30,6 +30,7 @@ import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
@@ -238,7 +239,7 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.resetForm.label, formModel._getCommands()[0].item)
     assertEquals(form.resetForm.ident, formModel._getCommands()[0].actor!!.actorIdent)
     assertEquals(form.resetForm.menu.label, formModel._getCommands()[0].actor!!.menuIdent)
-    assertEquals(form.resetForm.icon, formModel._getCommands()[0].actor!!.iconName)
+    assertEquals(form.resetForm.icon?.iconName, formModel._getCommands()[0].actor!!.iconName)
     assertEquals(form.resetForm.help, formModel._getCommands()[0].actor!!.help)
   }
 
@@ -257,12 +258,12 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(form.edit.label, formModel.actors[1]!!.menuName)
     assertEquals(form.autoFill.ident, formModel.actors[1]!!.actorIdent)
-    assertEquals(form.autoFill.icon, formModel.actors[1]!!.iconName)
+    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1]!!.iconName)
     assertEquals(form.autoFill.help, formModel.actors[1]!!.help)
 
     assertEquals(form.reset.label, formModel.actors[2]!!.menuName)
     assertEquals(form.resetForm.ident, formModel.actors[2]!!.actorIdent)
-    assertEquals(form.resetForm.icon, formModel.actors[2]!!.iconName)
+    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2]!!.iconName)
     assertEquals(form.resetForm.help, formModel.actors[2]!!.help)
     assertEquals(form.resetForm.key!!.value, formModel.actors[2]!!.acceleratorKey)
   }
@@ -279,7 +280,7 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.autoFill.label, fileModel.command!![0].item)
     assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.actorIdent)
     assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
-    assertEquals(form.autoFill.icon, fileModel.command!![0].actor!!.iconName)
+    assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!.iconName)
     assertEquals(form.autoFill.help, fileModel.command!![0].actor!!.help)
   }
 
@@ -350,7 +351,7 @@ class FormWithMultipleBlock : Form() {
     help = "Reset Form",
   ) {
     key = Key.F7
-    icon = "break"
+    icon = Icon.BREAK
   }
 
   val resetFormCmd = command(item = resetForm) {

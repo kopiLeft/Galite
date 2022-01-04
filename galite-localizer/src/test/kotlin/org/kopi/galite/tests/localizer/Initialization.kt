@@ -30,6 +30,7 @@ import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.list_Of_Tables
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.FieldOption
@@ -109,8 +110,8 @@ class FormSample : Form() {
     label = "Graph for test",
     help = "show graph values",
   ) {
-    key = Key.F9          // key is optional here
-    icon = "column_chart"  // icon is optional here
+    key = Key.F9
+    icon = Icon.COLUMN_CHART
   }
 
   val formActor = actor(
@@ -119,8 +120,8 @@ class FormSample : Form() {
     label =  "form Command",
     help =   "actor to test form command",
   ) {
-    key  =  Key.F2          // key is optional here
-    icon =  "save"  // icon is optional here
+    key  =  Key.F2
+    icon =  Icon.SAVE
   }
 
   val cmd = command(item = formActor) {}

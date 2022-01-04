@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.Convert
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
@@ -49,7 +49,7 @@ class TestFieldsForm : DictionaryForm() {
     help = "serial query",
   ) {
     key = Key.F6
-    icon = "serialquery"
+    icon = Icon.SERIAL_QUERY
   }
 
   val blockWithDifferentTypes = insertBlock(BlockWithDifferentTypes())

@@ -24,12 +24,12 @@ import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -42,8 +42,8 @@ class TaxRuleForm : ReportSelectionForm() {
           label = "CreateReport",
           help = "Create report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F8
+    icon = Icon.REPORT
   }
   val autoFill = actor(
     ident = "Autofill",
@@ -58,8 +58,8 @@ class TaxRuleForm : ReportSelectionForm() {
           label = "list",
           help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F1
+    icon = Icon.LIST
   }
 
   val resetBlock = actor(
@@ -68,8 +68,8 @@ class TaxRuleForm : ReportSelectionForm() {
           label = "break",
           help = "Reset Block",
   ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
+    key = Key.F3
+    icon = Icon.BREAK
   }
 
   val deleteBlock = actor(
@@ -79,7 +79,7 @@ class TaxRuleForm : ReportSelectionForm() {
           help = " deletes block",
   ) {
     key = Key.F5
-    icon = "delete"
+    icon = Icon.DELETE
   }
 
   val saveBlock = actor(
@@ -89,7 +89,7 @@ class TaxRuleForm : ReportSelectionForm() {
           help = " Save Block",
   ) {
     key = Key.F9
-    icon = "save"
+    icon = Icon.SAVE
   }
 
   val block = page.insertBlock(TaxRuleBlock()) {
@@ -99,7 +99,7 @@ class TaxRuleForm : ReportSelectionForm() {
     }
 
     command(item = report) {
-      createReport(this)
+      createReport(TaxRuleR())
     }
 
     command(item = list) {
@@ -113,10 +113,6 @@ class TaxRuleForm : ReportSelectionForm() {
     command(item = deleteBlock) {
       deleteBlock()
     }
-  }
-
-  override fun createReport(): Report {
-    return TaxRuleR()
   }
 }
 

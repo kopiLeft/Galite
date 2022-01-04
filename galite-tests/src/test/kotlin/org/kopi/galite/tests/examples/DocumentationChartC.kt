@@ -31,6 +31,7 @@ import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.visual.VColor
 import org.jetbrains.exposed.sql.insert
+import org.kopi.galite.visual.dsl.common.Icon
 
 /**
  * test locale, title, help for chart
@@ -61,7 +62,7 @@ class DocumentationChartC :  Chart() {
     help = "chart cmd",
   ) {
     key = Key.F8
-    icon = "list"
+    icon = Icon.LIST
   }
 
   val quit = actor(
@@ -71,7 +72,7 @@ class DocumentationChartC :  Chart() {
     help = "Quit",
   ) {
     key = Key.ESCAPE
-    icon = "quit"
+    icon = Icon.QUIT
   }
 
   val quitCmd = command(item = quit) {

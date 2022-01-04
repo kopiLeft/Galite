@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
@@ -34,7 +35,7 @@ class TestFieldsVisibilityForm : DictionaryForm() {
           label = "Query Mode",
           help = "Change the mode to query"
   ) {
-    icon = "all"
+    icon = Icon.ALL
   }
   val insert = actor(
           ident = "Insert",
@@ -42,7 +43,7 @@ class TestFieldsVisibilityForm : DictionaryForm() {
           label = "Insert Mode",
           help = "Change the mode to insert"
   ) {
-    icon = "insert"
+    icon = Icon.INSERT
   }
 
   val update = actor(
@@ -51,7 +52,7 @@ class TestFieldsVisibilityForm : DictionaryForm() {
           label = "Update Mode",
           help = "Change the mode to update"
   ) {
-    icon = "edit"
+    icon = Icon.EDIT
   }
 
   val blockWithAllFieldVisibilityTypes = insertBlock(BlockWithChangingFieldVisibilityTypes()) {

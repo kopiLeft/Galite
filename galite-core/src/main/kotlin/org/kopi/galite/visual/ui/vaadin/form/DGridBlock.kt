@@ -128,11 +128,18 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
             }
           }
 
-          // Workaround for https://github.com/vaadin/flow-components/issues/1997
           override fun editItem(item: DGridBlockContainer.GridBlockItem) {
+            if (!inDetailMode()) {
+              updateEditors()
+              doEditItem(item)
+            }
+          }
+
+          // Workaround for https://github.com/vaadin/flow-components/issues/1997
+          fun doEditItem(item: DGridBlockContainer.GridBlockItem) {
             itemToEdit = item
 
-            if(editItemRequest == null) {
+            if (editItemRequest == null) {
               editItemRequest = SerializableConsumer {
                 super.editItem(itemToEdit)
                 editItemRequest = null
@@ -147,11 +154,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       }
     }
     editor = grid.editor
-    editor.addOpenListener {
-      if (!inDetailMode()) {
-        updateEditors()
-      }
-    }
     grid.addSortListener(::sort)
     grid.setSelectionMode(Grid.SelectionMode.NONE)
     grid.isEnabled = model.isAccessible
@@ -240,7 +242,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * @param recno The record number
    */
   override fun enterRecord(recno: Int) {
-    super.enterRecord(recno)
     model.form.performAsyncAction(object : Action() {
       override fun execute() {
         try {
@@ -517,11 +518,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
       itemToBeEdited = it.item.record
 
-      if (!inDetailMode()) {
-        enterRecord(it.item.record)
-      }
-
-      gridEditorFieldToBeEdited.focus()
       gridEditorFieldToBeEdited.dGridEditorField.onClick()
     }
 
@@ -583,7 +579,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       if (columnView != null) {
         val rowController = columnView as DGridBlockFieldUI
         if (rowController.hasDisplays()) {
-          rowController.editorField.reset()
           if (rowController.editorField.modelHasFocus()) {
             rowController.editorField.updateFocus()
           }

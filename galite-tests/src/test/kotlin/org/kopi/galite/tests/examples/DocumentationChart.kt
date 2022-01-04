@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
@@ -40,8 +41,8 @@ class DocumentationChart : Form() {
     label =  "Graph",
     help =   "show graph values",
   ) {
-    key  =  Key.F9          // key is optional here
-    icon =  "column_chart"  // icon is optional here
+    key  =  Key.F9
+    icon =  Icon.COLUMN_CHART
   }
 
   val simpleBlock = insertBlock(SimpleBlock())

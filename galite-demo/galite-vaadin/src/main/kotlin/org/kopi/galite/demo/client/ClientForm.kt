@@ -27,13 +27,13 @@ import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.visual.VExecFailedException
 
 class ClientForm : ReportSelectionForm() {
@@ -47,7 +47,7 @@ class ClientForm : ReportSelectionForm() {
     help = "Quit",
   ) {
     key = Key.ESCAPE          // key is optional here
-    icon = "quit"  // icon is optional here
+    icon = Icon.QUIT          // icon is optional here
   }
   val showHideFilter = actor(
           ident = "ShowHideFilter",
@@ -56,7 +56,7 @@ class ClientForm : ReportSelectionForm() {
           help = " Show Hide Filter",
   ) {
     key = Key.F4
-    icon = "searchop"
+    icon = Icon.SEARCH_OP
   }
   val report = actor(
           ident = "report",
@@ -64,8 +64,8 @@ class ClientForm : ReportSelectionForm() {
           label = "CreateReport",
           help = "Create report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F8
+    icon = Icon.REPORT
   }
 
   val list = actor(
@@ -75,7 +75,7 @@ class ClientForm : ReportSelectionForm() {
           help = "Display List",
   ) {
     key = Key.F10
-    icon = "list"  // icon is optional here
+    icon = Icon.LIST
   }
 
   val saveBlock = actor(
@@ -85,7 +85,7 @@ class ClientForm : ReportSelectionForm() {
           help = " Save Block",
   ) {
     key = Key.F9
-    icon = "save"
+    icon = Icon.SAVE
   }
 
   val interSave = actor(
@@ -95,7 +95,7 @@ class ClientForm : ReportSelectionForm() {
           help = " Save and load",
   ) {
     key = Key.F11
-    icon = "save"
+    icon = Icon.SAVE
   }
 
   val autoFill = actor(
@@ -111,8 +111,8 @@ class ClientForm : ReportSelectionForm() {
           label = "DynamicReport",
           help = " Create Dynamic Report",
   ) {
-    key = Key.F6      // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F6
+    icon = Icon.REPORT
   }
   val helpForm = actor(
           ident = "helpForm",
@@ -121,7 +121,7 @@ class ClientForm : ReportSelectionForm() {
           help = " Help"
   ) {
     key = Key.F1
-    icon = "help"
+    icon = Icon.HELP
   }
   val graph = actor (
           ident =  "graph",
@@ -129,8 +129,8 @@ class ClientForm : ReportSelectionForm() {
           label =  "Graph",
           help =   "show graph values",
   ) {
-    key  =  Key.F9          // key is optional here
-    icon =  "column_chart"  // icon is optional here
+    key  =  Key.F9
+    icon =  Icon.COLUMN_CHART
   }
 
   val helpCmd = command(item = helpForm) {
@@ -210,7 +210,7 @@ class ClientForm : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        createReport(this)
+        createReport(ClientR())
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -275,7 +275,7 @@ class ClientForm : ReportSelectionForm() {
       }
 
       command(item = report) {
-        createReport(this)
+        createReport(ClientR())
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -308,10 +308,6 @@ class ClientForm : ReportSelectionForm() {
         b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
-  }
-
-  override fun createReport(): Report {
-    return ClientR()
   }
 }
 

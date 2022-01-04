@@ -22,6 +22,7 @@ import org.kopi.galite.demo.database.Task
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FullCalendar
 import org.kopi.galite.visual.dsl.form.Key
@@ -37,8 +38,8 @@ class TasksForm : Form() {
     label = "quit",
     help = "Quit",
   ) {
-    key = Key.ESCAPE          // key is optional here
-    icon = "quit"  // icon is optional here
+    key = Key.ESCAPE
+    icon = Icon.QUIT
   }
 
   val autoFill = actor(
@@ -55,7 +56,7 @@ class TasksForm : Form() {
           help = " Help"
   ) {
     key = Key.F1
-    icon = "help"
+    icon = Icon.HELP
   }
 
   val helpCmd = command(item = helpForm) {

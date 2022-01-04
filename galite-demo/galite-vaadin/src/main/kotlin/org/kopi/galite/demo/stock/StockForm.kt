@@ -23,10 +23,10 @@ import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.database.Stock
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class StockForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -46,18 +46,14 @@ class StockForm : ReportSelectionForm() {
           label = "CreateReport",
           help = "Create report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F8
+    icon = Icon.REPORT
   }
 
   val block = page.insertBlock(StockBlock()) {
     command(item = report) {
-      createReport(this)
+      createReport(StockR())
     }
-  }
-
-  override fun createReport(): Report {
-    return StockR()
   }
 }
 

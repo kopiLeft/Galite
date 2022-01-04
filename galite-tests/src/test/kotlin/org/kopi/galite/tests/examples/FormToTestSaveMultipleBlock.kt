@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
@@ -46,7 +47,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     help = " Save Block",
   ) {
     key = Key.F9
-    icon = "save"
+    icon = Icon.SAVE
   }
   val list = actor(
     ident = "list",
@@ -55,7 +56,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     help = "List data",
   ) {
     key = Key.F5
-    icon = "list"
+    icon = Icon.LIST
   }
   val block = insertBlock(Trainee())
   val multipleBlock = insertBlock(Centers())

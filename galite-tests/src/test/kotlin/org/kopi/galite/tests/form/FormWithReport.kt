@@ -20,9 +20,9 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.tests.report.SimpleReport
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class FormWithReport : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -37,18 +37,14 @@ class FormWithReport : ReportSelectionForm() {
           label = "CreateReport",
           help = "Create report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F8
+    icon = Icon.REPORT
   }
 
   val block = testPage.insertBlock(BlockSample) {
     command(item = report) {
-      createReport(BlockSample)
+      createReport(SimpleReport())
     }
-  }
-
-  override fun createReport(): Report {
-    return SimpleReport()
   }
 }
 

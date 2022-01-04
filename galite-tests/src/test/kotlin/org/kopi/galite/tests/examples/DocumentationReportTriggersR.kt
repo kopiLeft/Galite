@@ -28,6 +28,7 @@ import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.type.Decimal
 import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.visual.db.transaction
+import org.kopi.galite.visual.dsl.common.Icon
 
 /**
  * test field triggers [compute]
@@ -47,7 +48,7 @@ class DocumentationReportTriggersR : Report() {
     help = "Quit",
   ) {
     key = Key.ESCAPE
-    icon = "quit"
+    icon = Icon.QUIT
   }
 
   val quitCmd = command(item = quit) {

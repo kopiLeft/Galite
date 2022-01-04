@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-  implementation("org.kopi", "galite-core", "1.0.0-beta.2")
+  implementation("org.kopi", "galite-core", "1.0.0-beta.3")
 }
 ````
 
@@ -119,8 +119,8 @@ class ClientForm : Form() {
     label = "Help",
     help = " Help"
   ) {
-    key = Key.F1   // key is optional here
-    icon = "help"  // icon is optional here
+    key = Key.F1      // key is optional here
+    icon = Icon.HELP  // icon is optional here
   }
  
   val helpCmd = command(item = helpForm) { 
@@ -182,7 +182,7 @@ class ProductReport : Report() {
     help = "CSV Format",
   ) {
     key = Key.F8
-    icon = "exportCsv"
+    icon = Icon.EXPORT_CSV
   }
 
   val pdf = actor(
@@ -191,8 +191,8 @@ class ProductReport : Report() {
     label = "PDF",
     help = "PDF Format",
   ) {
-    key = Key.F9          // key is optional here
-    icon = "exportPdf"  // icon is optional here
+    key = Key.F9            // key is optional here
+    icon = Icon.EXPORT_PDF  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) { 

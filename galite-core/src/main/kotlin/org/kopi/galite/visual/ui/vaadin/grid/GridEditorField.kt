@@ -119,7 +119,6 @@ abstract class GridEditorField<T> protected constructor() : AbstractCompositeFie
   }
 
   override fun focus() {
-    super.focus()
     parentWindow?.lasFocusedField = this
     doFocus()
   }

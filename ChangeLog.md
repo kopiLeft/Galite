@@ -52,3 +52,17 @@
 * Add Unit tests for VForm, VField and VBlock by @MedAliMarz in [#500](https://github.com/kopiLeft/Galite/pull/500)
 
 **Full Changelog**: [1.0.0-beta.1 ... 1.0.0-beta.2](https://github.com/kopiLeft/Galite/compare/1.0.0-beta.1...1.0.0-beta.2)
+
+# 1.0.0-beta.3
+## What's Changed
+* VaadinUI: focus on a field when a form is opened in a dialog by @hfazai in [#522](https://github.com/kopiLeft/Galite/pull/522)
+* DSL: simplify DSL API for commands by @hfazai in [#521](https://github.com/kopiLeft/Galite/pull/521)
+* DSL: more APIs to manipulate a form block by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/a628c3b34ba84c64367e7d2f660d545d988e3e3e)
+* Fix: field's shortcuts should be fired only when all modifiers are combined by @hfazai in [#523](https://github.com/kopiLeft/Galite/pull/523)
+* Full Calendar performance: refresh only changed entries by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/3e0f07d0196164a693307fef399c9da6cf8dfdf2)
+* DSL: API for setting the width of a list description in ListDomain by @hfazai in [commit](https://github.com/kopiLeft/Galite/commit/9a6c91aceb778274f82a6119af0bf600e54b3236)
+* DSL: Create report without having to override a method from ReportSelectionForm by @hfazai in [#524](https://github.com/kopiLeft/Galite/pull/524)
+* Code clean for grid block: Do not update model many times by @hfazai in [#526](https://github.com/kopiLeft/Galite/pull/526)
+* DSL: Add enum class for actor icons by @hfazai in [#527](https://github.com/kopiLeft/Galite/pull/527)
+
+**Full Changelog**: [1.0.0-beta.2 ... 1.0.0-beta.3](https://github.com/kopiLeft/Galite/compare/1.0.0-beta.2...1.0.0-beta.3)

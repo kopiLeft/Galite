@@ -36,11 +36,10 @@ abstract class VReportSelectionForm : VDictionaryForm {
   /**
    * Implements interface for COMMAND CreateReport
    */
-  fun createReport(b: VBlock) {
+  fun createReport(b: VBlock, report: VReport) {
     b.validate()
     try {
       setWaitInfo(Message.getMessage("report_generation"))
-      val report: VReport = createReport()
       report.dBContext = dBContext
       report.doNotModal()
       unsetWaitInfo()
@@ -50,11 +49,6 @@ abstract class VReportSelectionForm : VDictionaryForm {
     }
     b.setRecordChanged(0, false)
   }
-
-  /**
-   * create a report for this form
-   */
-  protected abstract fun createReport(): VReport
 
   companion object {
     /**

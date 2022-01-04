@@ -31,6 +31,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
@@ -159,7 +160,7 @@ class SomeDictionnaryForm : DictionaryForm() {
     help = "Quit",
   ) {
     key = Key.ESCAPE
-    icon = "quit"
+    icon = Icon.QUIT
   }
   val quitCmd = command(item = quit) {
     quitForm()
@@ -170,8 +171,8 @@ class SomeDictionnaryForm : DictionaryForm() {
     label = "list",
     help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F1
+    icon = Icon.LIST
   }
 
   val block = insertBlock(UsersBlock()) {

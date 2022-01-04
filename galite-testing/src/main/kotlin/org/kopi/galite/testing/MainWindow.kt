@@ -36,7 +36,7 @@ import com.vaadin.flow.component.menubar.MenuBar
  * @param form the form caption.
  * @param duration how much time it takes to open the form.
  */
-fun Form.openForm(form: String, duration: Long?) {
+fun Form.openForm(form: String, duration: Long? = null) {
   val modulesMenu = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
   val existingForms = findForms()
 

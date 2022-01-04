@@ -26,10 +26,10 @@ import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class BillForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -43,7 +43,7 @@ class BillForm : ReportSelectionForm() {
           help = "Create report",
   ) {
     key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    icon = Icon.REPORT  // icon is optional here
   }
   val autoFill = actor(
     ident = "Autofill",
@@ -54,12 +54,8 @@ class BillForm : ReportSelectionForm() {
 
   val tb1 = page.insertBlock(BlockBill()) {
     command(item = report) {
-      createReport(this)
+      createReport(BillR())
     }
-  }
-
-  override fun createReport(): Report {
-    return BillR()
   }
 }
 

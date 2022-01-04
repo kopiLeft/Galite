@@ -24,6 +24,7 @@ import org.kopi.galite.demo.database.Client
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
@@ -47,8 +48,8 @@ class ClientR : Report() {
           label = "CSV",
           help = "CSV Format",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "exportCsv"  // icon is optional here
+    key = Key.F8           // key is optional here
+    icon = Icon.EXPORT_CSV // icon is optional here
   }
 
   val xls = actor(
@@ -57,8 +58,8 @@ class ClientR : Report() {
           label = "XLS",
           help = "Excel (XLS) Format",
   ) {
-    key = Key.SHIFT_F8          // key is optional here
-    icon = "exportXlsx"  // icon is optional here
+    key = Key.SHIFT_F8
+    icon = Icon.EXPORT_XLSX
   }
 
   val xlsx = actor(
@@ -67,8 +68,8 @@ class ClientR : Report() {
           label = "XLSX",
           help = "Excel (XLSX) Format",
   ) {
-    key = Key.SHIFT_F8          // key is optional here
-    icon = "exportXlsx"  // icon is optional here
+    key = Key.SHIFT_F8
+    icon = Icon.EXPORT_XLSX
   }
 
   val pdf = actor(
@@ -77,8 +78,8 @@ class ClientR : Report() {
           label = "PDF",
           help = "PDF Format",
   ) {
-    key = Key.F9          // key is optional here
-    icon = "exportPdf"  // icon is optional here
+    key = Key.F9
+    icon = Icon.EXPORT_PDF
   }
 
   val editColumnData = actor(
@@ -87,8 +88,8 @@ class ClientR : Report() {
     label = "Edit Column Data",
     help = "Edit Column Data",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "formula"  // icon is optional here
+    key = Key.F8
+    icon = Icon.FORMULA
   }
 
   val helpForm = actor(
@@ -98,7 +99,7 @@ class ClientR : Report() {
           help = " Help"
   ) {
     key = Key.F1
-    icon = "help"
+    icon = Icon.HELP
   }
 
   val cmdCSV = command(item = csv) {

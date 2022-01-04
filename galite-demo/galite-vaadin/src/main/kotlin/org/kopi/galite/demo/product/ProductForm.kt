@@ -26,12 +26,12 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-import org.kopi.galite.visual.dsl.report.Report
 
 class ProductForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -51,15 +51,11 @@ class ProductForm : ReportSelectionForm() {
           label = "CreateReport",
           help = "Create report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F8
+    icon = Icon.REPORT
   }
 
   val block = page.insertBlock(BlockProduct())
-
-  override fun createReport(): Report {
-    return ProductReport()
-  }
 
   inner class BlockProduct : Block(1, 1, "Products") {
     val u = table(Product)
@@ -98,7 +94,7 @@ class ProductForm : ReportSelectionForm() {
       blockVisibility(Access.VISIT, Mode.QUERY)
 
       command(item = report) {
-        createReport(this)
+        createReport(ProductReport())
       }
     }
   }
