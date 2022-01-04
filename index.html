@@ -13,14 +13,14 @@
     <div>
       <main id="main">
         <div id="header-container"></div>
-        <img src="images/text-logo.png" class="top-logo" />
+        <img src="images/logo_galite.png" class="top-logo" />
         <div id="container">
           <img src="images/g-logo.png" class="main-logo" />
           <table>
             <tr>
               <td>
                 <h3 class="main-paragraph">
-                  Galite make your website
+                  Galite Applications are
                   <p id="text">simple</p>
                 </h3>
               </td>
@@ -28,13 +28,13 @@
             <tr>
               <td>
                 <ul class="main-actions">
-                  <li class="btn" href="https://kopileft.github.io/Galite/user-guide.html">
+                  <li class="btn" onclick="location.href = 'https://kopileft.github.io/Galite/user-guide.html';">
                     Get started
                   </li>
-                  <li class="btn" href="https://github.com/kopiLeft/Galite">
+                  <li class="btn" onclick="location.href = 'https://github.com/kopiLeft/Galite';">
                     <i class="fab fa-github"></i>&nbsp; Github
                   </li>
-                  <li class="btn" href="https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core">
+                  <li class="btn" onclick="location.href = 'https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core';">
                     <i class="fas fa-download"></i>&nbsp; Maven
                   </li>
                 </ul>
@@ -102,7 +102,7 @@
         </div>
         <div class="feature">
           <img src="images/speed.png" class="feature-img"/>
-          <h2 class="feature-title">Development time</h2>
+          <h2 class="feature-title">Productive</h2>
           <p class="feature-paragraph">
             Galite take into consideration the time to market,
             you can create your application and run it in a few minutes.
@@ -120,123 +120,680 @@
           Galite provides a DSL layer for developer to use. It make generating application from model very easy. Using
           few lines of code, Galite generate a nice user interface with backend fully managed. </p>
       </div>
-      <pre class="dsl-code">
-            <code id="language-kotlin">
-class Clients : Form() {
-   override val title = "Clients form"
 
-   val block = insertBlock(ClientBlock())
+      <table>
+        <tr>
+          <td>
+            <div class="warpper">
+              <input class="radio" id="one" name="group" type="radio" checked>
+              <input class="radio" id="two" name="group" type="radio">
+              <input class="radio" id="three" name="group" type="radio">
+              <div class="tabs">
+                <label class="tab" id="one-tab" for="one">Form</label>
+                <label class="tab" id="two-tab" for="two">Report</label>
+                <label class="tab" id="three-tab" for="three">Chart</label>
+              </div>
+              <div id="panels">
+                <div class="panel" id="one-panel">
+                    <div class="panel-content">
+                      <span>
+                        <img src="images/form.png" alt="Screenshots for the Galite UI">
+                      </span>
 
-   inner class ClientBlock : Block(1, 1, "Clients") {
+                      <span>
+                        <pre class="dsl-code">
+                          <code class="language-kotlin">
+class ClientForm : ReportSelectionForm() {
+  override val locale = Locale.UK
+  override val title = "Clients"
+  val action = menu("Action")
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE          // key is optional here
+    icon = Icon.QUIT          // icon is optional here
+  }
+  val showHideFilter = actor(
+          ident = "ShowHideFilter",
+          menu = action,
+          label = "ShowHideFilter",
+          help = " Show Hide Filter",
+  ) {
+    key = Key.F4
+    icon = Icon.SEARCH_OP
+  }
+  val report = actor(
+          ident = "report",
+          menu = action,
+          label = "CreateReport",
+          help = "Create report",
+  ) {
+    key = Key.F8
+    icon = Icon.REPORT
+  }
 
-     val id = hidden(domain = INT(20)) {
-       label = "ID"
-       help = "The user id"
-       columns(Clients.id) {
-         index = unique
-       }
-     }
+  val list = actor(
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
+  ) {
+    key = Key.F10
+    icon = Icon.LIST
+  }
 
-     val name = visit(domain = STRING(20), position = at(1, 1)) {
-       label = "name"
-       help = "name"
-       columns(Clients.name)
-     }
+  val saveBlock = actor(
+          ident = "saveBlock",
+          menu = action,
+          label = "Save Block",
+          help = " Save Block",
+  ) {
+    key = Key.F9
+    icon = Icon.SAVE
+  }
 
-     val createdOn = visit(domain = TIMESTAMP, position = at(2, 1)) {
-       label = "createdOn"
-       help = "createdOn"
-       columns(Clients.createdOn)
-     }
-   }
+  val interSave = actor(
+          ident = "interSave",
+          menu = action,
+          label = "Save and load",
+          help = " Save and load",
+  ) {
+    key = Key.F11
+    icon = Icon.SAVE
+  }
+
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val dynamicReport = actor(
+          ident = "dynamicReport",
+          menu = action,
+          label = "DynamicReport",
+          help = " Create Dynamic Report",
+  ) {
+    key = Key.F6
+    icon = Icon.REPORT
+  }
+  val helpForm = actor(
+          ident = "helpForm",
+          menu = action,
+          label = "Help",
+          help = " Help"
+  ) {
+    key = Key.F1
+    icon = Icon.HELP
+  }
+  val graph = actor (
+          ident =  "graph",
+          menu =   action,
+          label =  "Graph",
+          help =   "show graph values",
+  ) {
+    key  =  Key.F9
+    icon =  Icon.COLUMN_CHART
+  }
+
+  val helpCmd = command(item = helpForm) {
+    showHelp()
+  }
+  val quitCmd = command(item = quit) {
+    quitForm()
+  }
+
+  val clientsPage= page("Clients")
+  val contactsPage= page("Contacts")
+  val detailsPage= page("Details")
+  val clientsBlock = clientsPage.insertBlock(Clients())
+  val k = contactsPage.insertBlock(Clients())
+  val salesBlock = clientsPage.insertBlock(Sales())
+
+
+  inner class Clients : Block(1, 100, "Clients") {
+    val c = table(Client)
+
+    val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The client id"
+      columns(c.idClt)
+      value = 1
+    }
+    val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
+      label = "First Name"
+      help = "The client first name"
+      columns(c.firstNameClt)
+    }
+    val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
+      label = "Last name"
+      help = "The client last name"
+      columns(c.lastNameClt)
+    }
+    val ageClt = visit(domain = INT(3), position = at(2, 3)) {
+      label = "Age"
+      help = "The client age"
+      columns(c.ageClt)
+    }
+    val email = visit(domain = STRING(25), position = at(3, 1)) {
+      label = "Email"
+      help = "The mail adress"
+      columns(c.mail)
+    }
+    val addressClt = visit(domain = STRING(20), position = at(3, 2)) {
+      label = "Address"
+      help = "The client address"
+      columns(c.addressClt)
+    }
+    val countryClt = visit(domain = STRING(12), position = at(4, 1)) {
+      label = "Country"
+      help = "The client country"
+      columns(c.countryClt)
+    }
+    val cityClt = visit(domain = STRING(12), position = at(4, 2)) {
+      label = "City"
+      help = "The client city"
+      columns(c.cityClt)
+    }
+    val zipCodeClt = visit(domain = INT(12), position = follow(cityClt)) {
+      label = "Zip code"
+      help = "The client zip code"
+      columns(c.zipCodeClt)
+    }
+    val active = visit(domain = BOOL, position = at(5, 1)) {
+      label = "Active ?"
+      help = "Is the user active?"
+      columns(c.activeClt)
+    }
+
+    val PostqryTrigger = trigger(POSTQRY) {
+      salesBlock.idClt[0] = idClt.value
+      salesBlock.load()
+    }
+
+    init {
+      command(item = report) {
+        createReport(ClientR())
+      }
+      command(item = dynamicReport) {
+        createDynamicReport()
+      }
+      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+        showChart(ChartSample())
+      }
+      command(item = list) {
+        recursiveQuery()
+      }
+      command(item = saveBlock) {
+        saveBlock()
+      }
+    }
+  }
+
+  inner class Sales : Block(10, 10, "Sales") {
+    val C = table(Client)
+    val S = table(Purchase)
+    val P = table(Product)
+
+    val idClt = hidden(domain = INT(5)) {
+      label = "ID"
+      help = "The client id"
+      columns(C.idClt, S.idClt)
+    }
+
+    val idPdt = hidden(domain = INT(5)) {
+      label = "ID"
+      help = "The product id"
+      columns(P.idPdt, S.idPdt)
+    }
+
+    val id = visit(domain = INT(5), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The item id"
+      columns(S.id)
+      options(FieldOption.SORTABLE)
+    }
+    val description = visit(domain = STRING(25), position = at(2, 1)) {
+      label = "Description"
+      help = "The item description"
+      columns(P.description)
+      options(FieldOption.SORTABLE)
+    }
+    val quantity = visit(domain = INT(7), position = at(2, 2)) {
+      label = "Quantity"
+      help = "The number of items"
+      columns(S.quantity)
+    }
+    val price = visit(domain = DECIMAL(10, 5), position = at(2, 2)) {
+      label = "Price"
+      help = "The item price"
+      columns(P.price)
+    }
+
+    init {
+      border = Border.LINE
+
+      command(item = showHideFilter) {
+        showHideFilter()
+      }
+
+      command(item = report) {
+        createReport(ClientR())
+      }
+      command(item = dynamicReport) {
+        createDynamicReport()
+      }
+      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+        showChart(ChartSample())
+      }
+      command(item = list) {
+        recursiveQuery()
+      }
+      command(item = saveBlock) {
+        saveBlock()
+      }
+      command(item = interSave) {
+        val b = salesBlock.block
+        val rec: Int = b.activeRecord
+
+        b.validate()
+
+        if (!b.isFilled()) {
+          b.currentRecord = 0
+          throw VExecFailedException()
+        }
+
+        transaction {
+          b.save()
+        }
+
+        gotoBlock(b)
+        b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
+      }
+    }
+  }
 }
-            </code>
-          </pre>
+                          </code>
+                        </pre>
+                      </span>
+                    </div>
+                </div>
+
+                <div class="panel" id="two-panel">
+                  <div class="panel-content">
+                      <span>
+                        <img src="images/report.png" alt="Screenshots for the Galite UI">
+                      </span>
+
+                    <span>
+                        <pre class="dsl-code">
+                          <code class="language-kotlin">
+class ClientR : Report() {
+  override val locale = Locale.UK
+
+  override val title = "Clients_Report"
+
+  val action = menu("Action")
+
+  val csv = actor(
+          ident = "CSV",
+          menu = action,
+          label = "CSV",
+          help = "CSV Format",
+  ) {
+    key = Key.F8           // key is optional here
+    icon = Icon.EXPORT_CSV // icon is optional here
+  }
+
+  val xls = actor(
+          ident = "XLS",
+          menu = action,
+          label = "XLS",
+          help = "Excel (XLS) Format",
+  ) {
+    key = Key.SHIFT_F8
+    icon = Icon.EXPORT_XLSX
+  }
+
+  val xlsx = actor(
+          ident = "XLSX",
+          menu = action,
+          label = "XLSX",
+          help = "Excel (XLSX) Format",
+  ) {
+    key = Key.SHIFT_F8
+    icon = Icon.EXPORT_XLSX
+  }
+
+  val pdf = actor(
+          ident = "PDF",
+          menu = action,
+          label = "PDF",
+          help = "PDF Format",
+  ) {
+    key = Key.F9
+    icon = Icon.EXPORT_PDF
+  }
+
+  val editColumnData = actor(
+    ident = "EditColumnData",
+    menu = action,
+    label = "Edit Column Data",
+    help = "Edit Column Data",
+  ) {
+    key = Key.F8
+    icon = Icon.FORMULA
+  }
+
+  val helpForm = actor(
+          ident = "helpForm",
+          menu = action,
+          label = "Help",
+          help = " Help"
+  ) {
+    key = Key.F1
+    icon = Icon.HELP
+  }
+
+  val cmdCSV = command(item = csv) {
+    model.export(VReport.TYP_CSV)
+  }
+
+  val cmdPDF = command(item = pdf) {
+    model.export(VReport.TYP_PDF)
+  }
+
+  val cmdXLS = command(item = xls) {
+    model.export(VReport.TYP_XLS)
+  }
+
+  val cmdXLSX = command(item = xlsx) {
+    model.export(VReport.TYP_XLSX)
+  }
+
+  val helpCmd = command(item = helpForm) {
+    model.showHelp()
+  }
+
+  val editColumn = command(item = editColumnData) {
+    if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
+      val formula  = org.kopi.galite.demo.product.ProductForm()
+      WindowController.windowController.doModal(formula)
+    }
+  }
+
+  val firstName = field(STRING(25)) {
+    label = "First Name"
+    help = "The client first name"
+    align = FieldAlignment.LEFT
+    group = ageClt
+    format { value ->
+      value.toUpperCase()
+    }
+  }
+
+  val lastName = field(STRING(25)) {
+    label = "Last Name"
+    help = "The client last name"
+    align = FieldAlignment.LEFT
+    format { value ->
+      value.toUpperCase()
+    }
+  }
+
+  val addressClt = field(STRING(50)) {
+    label = "Address"
+    help = "The client address"
+    align = FieldAlignment.LEFT
+    format { value ->
+      value.toLowerCase()
+    }
+  }
+
+  val ageClt = field(INT(2)) {
+    label = "Age"
+    help = "The client age"
+    align = FieldAlignment.LEFT
+  }
+
+  val countryClt = field(STRING(50)) {
+    label = "Country"
+    help = "The client country"
+    align = FieldAlignment.LEFT
+  }
+
+  val cityClt = field(STRING(50)) {
+    label = "City"
+    help = "The client city"
+    align = FieldAlignment.LEFT
+  }
+
+  val zipCodeClt = field(INT(2)) {
+    label = "Zip code"
+    help = "The client zip code"
+    align = FieldAlignment.LEFT
+  }
+
+  val activeClt = field(BOOL) {
+    label = "Status"
+    help = "Is the client active?"
+  }
+
+  val clients = Client.selectAll()
+
+  init {
+    transaction {
+      clients.forEach { result ->
+        add {
+          this[firstName] = result[Client.firstNameClt]
+          this[lastName] = result[Client.lastNameClt]
+          this[addressClt] = result[Client.addressClt]
+          this[ageClt] = result[Client.ageClt]
+          this[countryClt] = result[Client.countryClt]
+          this[cityClt] = result[Client.cityClt]
+          this[zipCodeClt] = result[Client.zipCodeClt]
+          this[activeClt] = result[Client.activeClt]
+        }
+      }
+    }
+  }
+}
+                          </code>
+                        </pre>
+                      </span>
+                  </div>
+                </div>
+
+                <div class="panel" id="three-panel">
+                  <div class="panel-content">
+                      <span>
+                        <img src="images/chart.png" alt="Screenshots for the Galite UI">
+                      </span>
+
+                    <span>
+                        <pre class="dsl-code">
+                          <code class="language-kotlin">
+class ChartSample: Chart() {
+  override val locale = Locale.UK
+  override val title = "Area/population per city"
+  override val help = "This chart presents the area/population per city"
+
+  val action = menu("Action")
+
+  val area = measure(DECIMAL(width = 10, scale = 5)) {
+    label = "area (ha)"
+
+    color {
+      VColor.GREEN
+    }
+  }
+
+  val population = measure(INT(10)) {
+    label = "population"
+  }
+
+  val city = dimension(STRING(10)) {
+    label = "dimension"
+
+    format {
+      object : VColumnFormat() {
+        override fun format(value: Any?): String {
+          return (value as String).toUpperCase()
+        }
+      }
+    }
+  }
+
+  // You can either change the chart type in INIT or CHARTTYPE trigger
+  val init = trigger(INITCHART) {
+    chartType = VChartType.BAR
+  }
+
+  /* This is the type that will be taken
+  because CHARTTYPE is executed after INIT */
+  val type = trigger(CHARTTYPE) {
+    VChartType.BAR
+  }
+
+  init {
+    city.add("Tunis") {
+      this[area] = Decimal("34600")
+      this[population] = 1056247
+    }
+
+    city.add("Kasserine") {
+      this[area] = Decimal("806600")
+      this[population] = 439243
+    }
+
+    city.add("Bizerte") {
+      this[area] = Decimal("568219")
+      this[population] = 368500
+    }
+  }
+}
+                          </code>
+                        </pre>
+                      </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
     </section>
 
     <section id="ui-section">
       <div class="ui-screenshots">
-        <img src="images/screenshots.png" alt="Screenshots for the Galite UI">
-      </div>
-      <div class="ui-details">
-        <h2 class="ui-title">
-          GREAT UX / UI
-        </h2>
-        <p class="ui-paragraph">
-          Galite apps provides good UX (User Experience) for business.
-          Galite UI (User interface) allows to easily show and manipulate data and navigate between the application components.
-        </p>
-      </div>
+        <img class ="ui-img phone" src="images/form-iphone.png" alt="Screenshots for the Galite UI">
+        <img class ="ui-img" src="images/form-ipad-2.png" alt="Screenshots for the Galite UI">
+        <img class ="ui-img" src="images/form-laptop.png" alt="Screenshots for the Galite UI">
+        <img class ="ui-img" src="images/pc.png" alt="Screenshots for the Galite UI">
+        <img class ="ui-img" src="images/form-nestHub.png" alt="Screenshots for the Galite UI">
+       </div>
+       <div class="ui-details">
+         <h2 class="ui-title">
+           GREAT UX / UI
+         </h2>
+         <p class="ui-paragraph">
+           Galite apps provides good UX (User Experience) for business.
+           Galite UI (User interface) allows to easily show and manipulate data and navigate between the application components.
+         </p>
+       </div>
     </section>
     <footer id="footer">
-      <p>Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN</p>
+      <p>Copyright &#9400; 2013-2022 kopiLeft Services SARL, Tunis TN.</p>
+      <p>Code licensed under an <a href = "https://github.com/kopiLeft/Galite/blob/master/COPYING">LGPLv2.1</a> License. </p>
     </footer>
 
-      <script type="text/javascript">
-        var text = ["modern", "ergonomic", "simple", "reactive", "awesome"];
-        var counter = 0;
-        var elem = document.getElementById("text");
-        var inst = setInterval(change, 3000);
-        function change() {
-          elem.innerHTML = text[counter];
-          counter++;
-          if (counter >= text.length) {
-            counter = 0;
-          }
+    <script>
+      var text = ["modern", "ergonomic", "simple", "reactive", "awesome"];
+      var counter = 0;
+      var elemnt = document.getElementById("text");
+      var inst = setInterval(change, 3000);
+      function change() {
+        elemnt.innerHTML = text[counter];
+        counter++;
+        if (counter >= text.length) {
+          counter = 0;
         }
-      </script>
-      <script>
-        var check = false;
-        function change() {
-          var headerContainer = document.getElementById("header-container");
-          headerContainer.classList.toggle("dark-mode-header");
+      }
+    </script>
+    <script>
+      var check = false;
+      function change() {
+        var headerContainer = document.getElementById("header-container");
+        headerContainer.classList.toggle("dark-mode-header");
 
-          var main = document.getElementById("main");
-          main.classList.toggle("dark-mode");
+        var main = document.getElementById("main");
+        main.classList.toggle("dark-mode");
 
-          var swap = document.getElementById("switch");
-          swap.classList.toggle("fa-moon");
-          swap.classList.toggle("fa-lightbulb");
+        var swap = document.getElementById("switch");
+        swap.classList.toggle("fa-moon");
+        swap.classList.toggle("fa-lightbulb");
 
-          var links = document.getElementsByClassName("link");
-          links[0].classList.toggle("dark-mode-first-link");
-          for (const li of links) {
-            li.classList.toggle("dark-mode-white-color");
-          }
-
-          for (const li of document.getElementsByClassName("btn")) {
-            li.classList.toggle("dark-mode-black-color");
-          }
-
-          var bubbleOne = document.getElementById("bubble-one");
-          bubbleOne.classList.toggle("dark-mode-black-background");
-          var bubbleTwo = document.getElementById("bubble-two");
-          bubbleTwo.classList.toggle("dark-mode-white-background");
-
-          var featuresSection = document.getElementById("features-section");
-          featuresSection.classList.toggle("dark-mode");
-          featuresSection.classList.toggle("dark-mode-white-color");
-
-          var dslSection = document.getElementById("dsl-section");
-          dslSection.classList.toggle("dark-mode");
-
-          var  uiSection = document.getElementById("ui-section");
-          uiSection.classList.toggle("dark-mode");
-
-          check ^= true;
+        var links = document.getElementsByClassName("link");
+        links[0].classList.toggle("dark-mode-first-link");
+        for (const li of links) {
+          li.classList.toggle("dark-mode-white-color");
         }
-      </script>
-      <script>
-        for (const container of document.getElementsByClassName("feature")) {
-          container.addEventListener('mouseenter', function(){
-          if(check)
-            this.classList.add('feature-dark-mode');
-          })
-          container.addEventListener('mouseleave', function(){
-            this.classList.remove('feature-dark-mode');
-          })
+
+        for (const li of document.getElementsByClassName("btn")) {
+          li.classList.toggle("dark-mode-black-color");
         }
-      </script>
-    </body>
+
+        var bubbleOne = document.getElementById("bubble-one");
+        bubbleOne.classList.toggle("dark-mode-black-background");
+        var bubbleTwo = document.getElementById("bubble-two");
+        bubbleTwo.classList.toggle("dark-mode-white-background");
+
+        var featuresSection = document.getElementById("features-section");
+        featuresSection.classList.toggle("dark-mode");
+        featuresSection.classList.toggle("dark-mode-white-color");
+
+        var dslSection = document.getElementById("dsl-section");
+        dslSection.classList.toggle("dark-mode");
+
+        var  uiSection = document.getElementById("ui-section");
+        uiSection.classList.toggle("dark-mode");
+
+        var  panels = document.getElementById("panels");
+        panels.classList.toggle("dark-mode-panel");
+
+        check ^= true;
+      }
+    </script>
+    <script>
+      for (const container of document.getElementsByClassName("feature")) {
+        container.addEventListener('mouseenter', function() {
+        if(check)
+          this.classList.add('feature-dark-mode');
+        })
+        container.addEventListener('mouseleave', function() {
+          this.classList.remove('feature-dark-mode');
+        })
+      }
+    </script>
+    <script>
+      var i = 0;
+      var max = document.getElementsByClassName("ui-img").length - 1;
+      setTimeout(nextPhoto, 2000);
+
+      function nextPhoto() {
+       document.getElementsByClassName("ui-img")[i].style.display = "none";
+       if ( i < max )
+         i++;
+       else
+         i = 0;
+       document.getElementsByClassName("ui-img")[i].style.display = "block";
+       setTimeout(nextPhoto, 2000);
+      }
+    </script>
+  </body>
   <script>hljs.highlightAll();</script>
-</html>
+ </html>
