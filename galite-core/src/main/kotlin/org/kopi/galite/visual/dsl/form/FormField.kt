@@ -153,15 +153,31 @@ open class FormField<T>(internal val block: Block,
   /** list of nullable columns */
   var nullableColumns = mutableListOf<Column<*>>()
 
+  /** list of key columns */
+  var keyColumns = mutableListOf<Column<*>>()
+
   /** used for LEFT OUTER JOIN */
   fun <T: Column<*>> nullable(column: T): T {
     nullableColumns.add(column)
     return column
   }
 
+  /**
+   * Call this if this column is a key in the database.
+   */
+  fun <T: Column<*>> key(column: T): T {
+    keyColumns.add(column)
+    return column
+  }
+
   fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
-      FormFieldColumn(column, column.table.tableName, column.name, this, false, nullableColumns.contains(column))
+      FormFieldColumn(column,
+                      column.table.tableName,
+                      column.name,
+                      this,
+                      keyColumns.contains(column),
+                      nullableColumns.contains(column))
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
