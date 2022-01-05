@@ -17,13 +17,14 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
-import kotlin.collections.Collection
-
 import org.kopi.galite.visual.ui.vaadin.actor.Actor
-import org.kopi.galite.visual.ui.vaadin.field.Field
+import org.kopi.galite.visual.ui.vaadin.base.StyleManager
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ui.vaadin.window.Window
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.VColor
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AttachEvent
@@ -63,15 +64,9 @@ abstract class GridEditorField<T> protected constructor() : AbstractCompositeFie
    */
   var actors: MutableList<Actor> = mutableListOf()
 
-  /**
-   * The foreground color of the field.
-   */
-  var foreground: String? = null
-
-  /**
-   * The background color of the field.
-   */
-  var background: String? = null
+  protected val styleManager: StyleManager by lazy {
+    (ApplicationContext.applicationContext.getApplication() as VApplication).styleManager
+  }
 
   /**
    * The navigation delegation to server mode.
@@ -113,10 +108,7 @@ abstract class GridEditorField<T> protected constructor() : AbstractCompositeFie
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  fun setColor(foreground: String, background: String) {
-    this.foreground = foreground
-    this.background = background
-  }
+  abstract fun setColor(align: Int, foreground: VColor?, background: VColor?)
 
   override fun focus() {
     parentWindow?.lasFocusedField = this

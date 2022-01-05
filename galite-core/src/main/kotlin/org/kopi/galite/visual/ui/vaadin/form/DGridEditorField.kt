@@ -23,7 +23,6 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.visual.Action
@@ -114,9 +113,7 @@ abstract class DGridEditorField<T>(
   }
 
   override fun updateColor() {
-    access(currentUI) {
-      editor.setColor(Utils.toString(foreground), Utils.toString(background))
-    }
+    editor.setColor(getModel().align, foreground, background)
   }
 
   var currentUI: UI? = null

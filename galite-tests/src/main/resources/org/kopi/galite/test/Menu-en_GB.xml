@@ -21,4 +21,5 @@
     <module ident="2013" label="Form to test chart" />
     <module ident="2014" label="Form to test form appear in PopUp" />
     <module ident="2015" label="Form to test fields visibility changes" />
+    <module ident="2016" label="Form to test fields coloring" />
 </modules>

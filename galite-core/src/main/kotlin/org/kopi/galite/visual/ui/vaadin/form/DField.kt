@@ -27,11 +27,14 @@ import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.StyleManager
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.field.AbstractField
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.field.FieldListener
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VColor
 
 import com.vaadin.flow.component.AttachEvent
@@ -65,6 +68,10 @@ abstract class DField(internal var model: VFieldUI,
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
   protected var mouseInside = false // private events
+  protected val styleManager: StyleManager by lazy {
+    (ApplicationContext.applicationContext.getApplication() as VApplication).styleManager
+  }
+
   /**
    * The visible field height needed to create layout.
    */

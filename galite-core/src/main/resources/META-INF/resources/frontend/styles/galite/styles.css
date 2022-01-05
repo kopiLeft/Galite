@@ -72,14 +72,6 @@ summary, time, mark, audio, video {
 	border-bottom: #009bd4 1px solid;
 }
 
-/**
- * remove background of TextField
- */
-::part(input-field) {
-    box-shadow: none;
-    background-color: white;
-}
-
 .galite *, .k-popup-window > *, .k-window-container > *, .k-form * {
 	font-family: Arial, sans-serif !important;
 	font-weight: 400 !important;
