@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
+import org.kopi.galite.visual.visual.VColor
+
 /**
  * The grid editor actor field server side implementation
  */
@@ -54,6 +56,10 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   }
 
   override fun setBlink(blink: Boolean) {}
+
+  override fun setColor(align: Int, foreground: VColor?, background: VColor?) {
+    styleManager.createAndApplyStyle(this, align, foreground, background)
+  }
 
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED

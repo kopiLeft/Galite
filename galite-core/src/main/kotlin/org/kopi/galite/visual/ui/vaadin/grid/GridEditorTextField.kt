@@ -22,6 +22,7 @@ import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
+import org.kopi.galite.visual.visual.VColor
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
@@ -120,6 +121,10 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
         element.classList.remove("$className-blink")
       }
     }
+  }
+
+  override fun setColor(align: Int, foreground: VColor?, background: VColor?) {
+    styleManager.createAndApplyStyle(this, null, foreground, background)
   }
 
   //---------------------------------------------------

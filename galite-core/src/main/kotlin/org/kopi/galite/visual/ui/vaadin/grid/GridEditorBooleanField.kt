@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.grid
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.visual.VColor
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
@@ -111,6 +112,10 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     } else {
       element.classList.remove(Styles.BOOLEAN_FIELD + "-blink")
     }
+  }
+
+  override fun setColor(align: Int, foreground: VColor?, background: VColor?) {
+    // NOT SUPPORTED
   }
 
   fun onBlur() {

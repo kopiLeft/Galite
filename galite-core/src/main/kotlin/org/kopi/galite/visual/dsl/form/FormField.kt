@@ -37,6 +37,8 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.type.Image
+import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.visual.VException
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -218,6 +220,77 @@ open class FormField<T>(internal val block: Block,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
+  // ----------------------------------------------------------------------
+  // UTILS
+  // ----------------------------------------------------------------------
+
+  /**
+   * Copies the fields value of a record to another
+   */
+  fun copyRecord(f: Int, t: Int) = vField.copyRecord(f, t)
+
+  // ----------------------------------------------------------------------
+  // FOREGROUND AND BACKGROUND COLOR MANAGEMENT
+  // ----------------------------------------------------------------------
+
+  /**
+   * Sets the foreground and the background colors for the current record.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(foreground: VColor?, background: VColor?) {
+    vField.setColor(foreground, background)
+  }
+
+  /**
+   * Sets the foreground and the background colors.
+   * @param r The record number.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(r: Int, foreground: VColor?, background: VColor?) {
+    vField.setColor(r, foreground, background)
+  }
+
+  /**
+   * Resets the foreground and the background colors the current record.
+   */
+  fun resetColor(r: Int) {
+    vField.resetColor(r)
+  }
+
+  /**
+   * Update the foreground and the background colors.
+   * @param r The record number.
+   */
+  fun updateColor(r: Int) {
+    vField.updateColor(r)
+  }
+
+  fun getForeground(r: Int): VColor? = vField.getForeground(r)
+
+  fun getBackground(r: Int): VColor? = vField.getBackground(r)
+
+  // ----------------------------------------------------------------------
+  // DRAG AND DROP HANDLIN
+  // ----------------------------------------------------------------------
+
+  /**
+   * Call before a drop starts on this field.
+   * @throws VException Visual errors occurring.
+   */
+  fun onBeforeDrop() {
+    vField.onBeforeDrop()
+  }
+
+  /**
+   * Called after a drop ends on this field.
+   * @throws VException Visual errors occurring.
+   */
+  fun onAfterDrop() {
+    vField.onAfterDrop()
+  }
+
   /**
    * Adds triggers to this field
    *
@@ -225,7 +298,7 @@ open class FormField<T>(internal val block: Block,
    * @param method                the method to execute when trigger is called
    */
   fun <T> trigger(vararg fieldTriggerEvents: FieldTriggerEvent<T>, method: () -> T): Trigger =
-          initTrigger(fieldTriggerEvents, method)
+    initTrigger(fieldTriggerEvents, method)
 
   /**
    * Adds protected triggers to this block.
@@ -234,7 +307,7 @@ open class FormField<T>(internal val block: Block,
    * @param method              the method to execute when trigger is called
    */
   fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger =
-          initTrigger(fieldTriggerEvents, method)
+    initTrigger(fieldTriggerEvents, method)
 
   /**
    * Adds protected triggers to this block.
@@ -243,7 +316,7 @@ open class FormField<T>(internal val block: Block,
    * @param method              the method to execute when trigger is called
    */
   fun trigger(vararg fieldTriggerEvents: FieldTypeTriggerEvent, method: () -> T): Trigger =
-          initTrigger(fieldTriggerEvents, method)
+    initTrigger(fieldTriggerEvents, method)
 
   fun <T> initTrigger(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>, method: () -> T) : Trigger {
     val event = fieldEventList(fieldTriggerEvents)
@@ -314,7 +387,7 @@ open class FormField<T>(internal val block: Block,
     }
 
     // POSITION
-    if (!isInternal && !block.isSingle()) {
+    if (!_isInternal && !block.isSingle()) {
       // with NO DETAIL the position must be null
       if (hasOption(VConstants.FDO_NODETAIL) || block.hasOption(VConstants.BKO_NODETAIL)) {
 
@@ -371,7 +444,11 @@ open class FormField<T>(internal val block: Block,
    * Returns true if the field is never displayed
    */
   val isInternal: Boolean
-    get() = access[0] == VConstants.ACS_HIDDEN && access[1] == VConstants.ACS_HIDDEN && access[2] == VConstants.ACS_HIDDEN
+    get() = vField.isInternal()
+
+  private val _isInternal = access[0] == VConstants.ACS_HIDDEN
+          && access[1] == VConstants.ACS_HIDDEN
+          && access[2] == VConstants.ACS_HIDDEN
 
   /**
    * Returns the ident of this field
@@ -527,7 +604,7 @@ open class FormField<T>(internal val block: Block,
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    if (!isInternal) {
+    if (!_isInternal) {
       (writer as FormLocalizationWriter).genField(label, label, help)
     }
   }

@@ -32,7 +32,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.FontMetrics
-import org.kopi.galite.visual.ui.vaadin.base.StylesInjector
+import org.kopi.galite.visual.ui.vaadin.base.StyleManager
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.MainWindowListener
 import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
@@ -100,7 +100,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var welcomeView: WelcomeView? = null
   internal var windowError: Throwable? = null // Sets the window error.
   private var askAnswer = 0
-  var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
+  lateinit var styleManager: StyleManager // the styles injector attached with this application instance.
   var currentUI: UI? = null
     get() = field ?: UI.getCurrent()
   private val configProperties: ResourceBundle? =
@@ -127,6 +127,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
+    styleManager = StyleManager(currentUI!!)
   }
 
   // ---------------------------------------------------------------------

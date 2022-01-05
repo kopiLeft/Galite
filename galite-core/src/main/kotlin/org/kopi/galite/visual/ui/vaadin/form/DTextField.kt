@@ -155,11 +155,7 @@ open class DTextField(
   }
 
   override fun updateColor() {
-    access(currentUI) {
-      val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
-
-      field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
-    }
+    styleManager.createAndApplyStyle(field.inputField, getModel().align, foreground, background)
   }
 
   override fun updateFocus() {
