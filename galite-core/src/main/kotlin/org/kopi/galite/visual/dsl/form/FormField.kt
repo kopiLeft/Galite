@@ -381,17 +381,13 @@ open class FormField<T>(internal val block: Block,
    * @param block        the actual form block
    */
   open fun initialize(block: Block) {
-    val isInternal = access[0] == VConstants.ACS_HIDDEN
-            && access[1] == VConstants.ACS_HIDDEN
-            && access[2] == VConstants.ACS_HIDDEN
-
     // TRANSIENT MODE
     if (columns == null && isNeverAccessible) {
       options = options or VConstants.FDO_TRANSIENT
     }
 
     // POSITION
-    if (!isInternal && !block.isSingle()) {
+    if (!_isInternal && !block.isSingle()) {
       // with NO DETAIL the position must be null
       if (hasOption(VConstants.FDO_NODETAIL) || block.hasOption(VConstants.BKO_NODETAIL)) {
 
@@ -449,6 +445,10 @@ open class FormField<T>(internal val block: Block,
    */
   val isInternal: Boolean
     get() = vField.isInternal()
+
+  private val _isInternal = access[0] == VConstants.ACS_HIDDEN
+          && access[1] == VConstants.ACS_HIDDEN
+          && access[2] == VConstants.ACS_HIDDEN
 
   /**
    * Returns the ident of this field
@@ -604,7 +604,7 @@ open class FormField<T>(internal val block: Block,
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    if (!isInternal) {
+    if (!_isInternal) {
       (writer as FormLocalizationWriter).genField(label, label, help)
     }
   }
