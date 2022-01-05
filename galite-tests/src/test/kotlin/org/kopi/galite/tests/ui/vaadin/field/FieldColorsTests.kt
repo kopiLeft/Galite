@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.field
 
 import kotlin.test.assertEquals
+
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
@@ -93,8 +94,8 @@ class FormWithColoredFields: Form() {
   val colorFields = actor(
     ident = "ColorFields",
     menu = action,
-    label = "ColorFields",
-    help = "ColorFields",
+    label = "Color fields",
+    help = "Color fields",
   ) {
     icon = Icon.PRINT
   }
