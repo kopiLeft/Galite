@@ -137,9 +137,11 @@
     padding: 0;
     height: 100%;
     --lumo-text-field-size: var(--lumo-size-xxs);
+    background: white;
 }
 
 .editor-field::part(input-field) {
     height: 100%;
     padding: 0;
+    background: transparent;
 }
