@@ -334,14 +334,14 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     val dataProvider = grid.dataProvider as ListDataProvider
 
     if (filterRow != null) {
-      access {
+      access(currentUI) {
         grid.element.themeList.remove("hidden-filter")
         grid.element.themeList.add("shown-filter")
       }
       return
     }
 
-    access {
+    access(currentUI) {
       filterRow = grid.appendHeaderRow()
       filterRow.also { element.classList.add("block-filter") }
       val filterFields = grid.columns.mapIndexed { index, column ->

@@ -649,6 +649,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   /**
    * Changes access dynamically, overriding mode access
+   *
+   * @param at the record number.
+   * @param value the access value.
    */
   fun setAccess(at: Int, value: Int) {
     var value = value
@@ -699,6 +702,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     updateAccess(block!!.activeRecord)
   }
 
+  /**
+   * Updates the field's access in a given record.
+   *
+   * @param current the record number.
+   */
   fun updateAccess(current: Int = block!!.currentRecord) {
     if (isInternal()) {
       // internal fields are always hidden
@@ -741,6 +749,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
+  /**
+   * Updates the field's access in every record.
+   */
   fun updateModeAccess() {
     // TOO SIMPLE (ACCESS TRIGGER IGNORED)
     for (i in 0 until block!!.bufferSize) {
@@ -2527,7 +2538,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return value
   }
 
-  fun loadItem(item: Int) {
+  fun loadItem(mode: Int) {
     if (hasListener) {
       var loaded = false
       val listeners = fieldListener!!.listenerList
@@ -2535,7 +2546,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       while (i >= 0 && !loaded) {
         if (listeners[i] === FieldListener::class.java) {
-          loaded = (listeners[i + 1] as FieldListener).loadItem(item)
+          loaded = (listeners[i + 1] as FieldListener).loadItem(mode)
         }
         i -= 2
       }

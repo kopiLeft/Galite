@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -960,8 +961,8 @@ class VBlockTests : VApplicationTestBase() {
     val model = formMultiple.multipleBlock.block
 
     model.setCommandsEnabled(true)
-    assertEquals(1, model.getActiveCommands().size)
-    assertEquals(formMultiple.saveBlock.model, model.getActiveCommands()[0]?.actor)
+    assertEquals(1, model.activeCommands.size)
+    assertEquals(formMultiple.saveBlock.model, model.activeCommands[0].actor)
   }
 
   @Test
@@ -979,6 +980,22 @@ class VBlockTests : VApplicationTestBase() {
       }
       return@all true
     })
+  }
+
+  @Test
+  fun `test active field after setting mode`() {
+    formMultiple.model
+    val model = formMultiple.block.block
+
+    model.enter()
+    model.setMode(VConstants.MOD_INSERT)
+    assertNotNull(model.activeField)
+
+    model.activeField!!.leave(false)
+    formMultiple.block.name.vField.enter()
+
+    model.setMode(VConstants.MOD_INSERT)
+    assertNull(model.activeField)
   }
 
   @Test

@@ -55,10 +55,10 @@ class FormSampleTests: JApplicationTestBase() {
     val formModel = form.model
 
     assertNull(formModel.getActiveBlock())
-    assertNull(formModel.getActiveBlock()?.getActiveCommands())
+    assertNull(formModel.getActiveBlock()?.activeCommands)
     formModel.prepareForm()
     assertEquals(form.tb1.block, formModel.getActiveBlock())
-    assertNotNull(formModel.getActiveBlock()?.getActiveCommands())
+    assertNotNull(formModel.getActiveBlock()?.activeCommands)
   }
 
   @Test
@@ -82,12 +82,12 @@ class FormSampleTests: JApplicationTestBase() {
 
     formModel.setCommandsEnabled(false)
     assertTrue(formModel.blocks.all {
-      it.getActiveCommands().isEmpty()
+      it.activeCommands.isEmpty()
     })
 
     formModel.setCommandsEnabled(true)
     assertTrue(formModel.blocks.any {
-      it.getActiveCommands().isNotEmpty()
+      it.activeCommands.isNotEmpty()
     })
   }
 

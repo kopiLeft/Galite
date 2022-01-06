@@ -160,13 +160,16 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   var activeField: VField? = null
-  var isDetailMode = false
-    set(mode: Boolean) {
-      if (mode != field) {
+
+  private var detailMode = false
+  var isDetailMode
+    get() = detailMode
+    set(mode) {
+      if (mode != detailMode) {
         // remember field to enter it in the next view
         val vField = activeField
         fireViewModeLeaved(this, vField)
-        field = mode
+        detailMode = mode
         fireViewModeEntered(this, vField)
       }
     }
@@ -191,7 +194,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return count
     }
 
-  protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
+  val activeCommands = mutableListOf<VCommand>() // commands currently active
+
   private var _currentRecord = 0
   var currentRecord
     get(): Int {
@@ -225,7 +229,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Build everything after construction
    */
   protected fun buildCstr() {
-    activeCommands = ArrayList()
     if (bufferSize == 1) {
       fetchSize = displaySize
       displaySize = 1
@@ -239,7 +242,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     activeField = null
     activeRecord = if (isMulti()) -1 else 0
     currentRecord = -1
-    isDetailMode = (!isMulti() || noChart()) && displaySize == 1
+    detailMode = (!isMulti() || noChart()) && displaySize == 1
     sortedRecords = if (isMulti()) {
       IntArray(bufferSize)
     } else {
@@ -267,15 +270,18 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return view
     }
 
-  fun getActiveCommands(): Array<VCommand?> {
-    val temp: Array<VCommand?> = arrayOfNulls(activeCommands.size)
-
-    activeCommands.toArray(temp)
-    return temp
-  }
-
+  /**
+   * Returns the current mode of the block.
+   */
   fun getMode(): Int = mode
 
+  /**
+   * Sets the current mode of the block.
+   *
+   * This will update all the access for each field in this block.
+   *
+   * @param mode the mode to set to the block.
+   */
   fun setMode(mode: Int) {
     if (this !== form.getActiveBlock()) {
       this.mode = mode
@@ -416,7 +422,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   /**
    * Sets the access of the block
-   * (if isAccessible does not evaluate the
+   * (if [isAccessible] does not evaluate the
    * access of the block, this method can be made
    * public)
    */
@@ -434,7 +440,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun updateBlockAccess() {
     // !! fix that isAccessible do not
     // calculate the access
-    // !! merge with updateAcess
+    /** !! merge with [updateAccess] */
     isAccessible
   }
 
@@ -864,13 +870,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun gotoNextRecord() {
     if (isMulti()) {
       var currentRec = activeRecord
-      var i: Int
       assert(currentRec != -1) { " current record $activeRecord" }
 
       // get position in sorted order
       currentRec = getSortedPosition(currentRec)
 
-      /* search target record*/i = currentRec + 1
+      /* search target record*/
+      var i = currentRec + 1
       while (i < bufferSize) {
         if (!isSortedRecordDeleted(i)) {
           break
@@ -897,14 +903,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun gotoPrevRecord() {
     if (isMulti()) {
       var currentRec = activeRecord
-      var i: Int
       assert(currentRec != -1) { " current record $activeRecord" }
 
       // get position in sorted order
       currentRec = getSortedPosition(currentRec)
 
       /* search target record*/
-      i = currentRec - 1
+      var i = currentRec - 1
       while (i >= 0) {
         if (!isSortedRecordDeleted(i)) {
           break
@@ -928,8 +933,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun gotoRecord(recno: Int) {
     assert(this == form.getActiveBlock()) {
-      (name + " != "
-              + (if (form.getActiveBlock() == null) "null" else form.getActiveBlock()!!.name))
+      (name + " != " + (if (form.getActiveBlock() == null) "null" else form.getActiveBlock()!!.name))
     }
     if (!isMulti()) {
       changeActiveRecord(recno - fetchPosition)
@@ -1058,7 +1062,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       i += 1
     }
 
-    target?.enter() ?: fireBlockChanged()
+    if (target != null) {
+      target.enter()
+    } else {
+      fireBlockChanged()
+    }
   }
 
   /**
@@ -1083,7 +1091,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       i += 1
     }
-    target?.enter() ?: gotoFirstField()
+
+    if (target != null) {
+      target.enter()
+    } else {
+      gotoFirstField()
+    }
   }
 
   /**
@@ -1095,17 +1108,17 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
     }
-    val current: VField? = activeField
 
-    if (activeField != null)
-      activeField?.leave(true) ?: run {
-        gotoFirstUnfilledField()
-        return
-      }
+    val current = activeField
 
+    if (activeField != null) {
+      activeField!!.leave(true)
+    } else {
+      gotoFirstUnfilledField()
+      return
+    }
 
     var target: VField? = null
-
     // found field
     var i = 0
     while (i < fields.size && fields[i] !== current) {
@@ -1116,9 +1129,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // walk next to next
     while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() &&
-              fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL &&
-              fields[i].isNull(activeRecord)) {
+      if (!fields[i].hasAction()
+              && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
+              && fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
@@ -1127,14 +1140,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // redo from start
     i = 0
     while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() &&
-              fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL &&
-              fields[i].isNull(activeRecord)) {
+      if (!fields[i].hasAction()
+              && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
+              && fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
     }
-    target?.enter() ?: gotoFirstField()
+
+    if (target == null) {
+      gotoFirstUnfilledField()
+    } else {
+      target.enter()
+    }
   }
 
   /**
@@ -1421,7 +1439,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * check that user has proper UI with focus on a field on the good page
+   * Check that user has proper UI with focus on a field on the good page
    */
   fun checkBlock() {
     if (form.getActiveBlock() == this) {
@@ -2601,14 +2619,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   fun setRecordFetched(rec: Int, value: Boolean) {
     val oldValue = recordInfo[rec]
-    val newValue: Int
-
     // calculate new value
-    newValue = if (value) {
+    val newValue = if (value) {
       oldValue or RCI_FETCHED
     } else {
       oldValue and RCI_FETCHED.inv()
     }
+
     if (newValue != oldValue) {
       // backup record before we changed it
       trailRecord(rec)
@@ -2638,14 +2655,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   fun setRecordChanged(rec: Int, value: Boolean) {
     val oldValue = recordInfo[rec]
-    val newValue: Int
-
     // calculate new value
-    newValue = if (value) {
+    val newValue = if (value) {
       oldValue or RCI_CHANGED
     } else {
       oldValue and RCI_CHANGED.inv()
     }
+
     if (newValue != oldValue) {
       // backup record before we change it
       trailRecord(rec)
@@ -2681,14 +2697,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun setRecordDeleted(rec: Int, value: Boolean) {
     val oldValue = recordInfo[rec]
-    val newValue: Int
-
     // calculate new value
-    newValue = if (value) {
+    val newValue = if (value) {
       oldValue or RCI_DELETED
     } else {
       oldValue and RCI_DELETED.inv()
     }
+
     if (newValue != oldValue) {
       // backup record before we change it
       trailRecord(rec)
@@ -2997,9 +3012,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     copyRecord(rec, bufferSize + rec, false)
     setRecordTrailed(rec, true)
   }
-  /**
-   * Calls trigger for given event, returns last trigger called 's value.
-   */
+
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
@@ -3008,9 +3021,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     executeProtectedVoidTrigger(VKT_Triggers[index][event])
     return null
   }
-  /**
-   * Calls trigger for given event, returns last trigger called 's value.
-   */
+
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
@@ -3044,6 +3055,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns true if there is trigger associated with given event.
    */
   fun hasTrigger(event: Int): Boolean = hasTrigger(event, 0)
+
 
   /**
    * Returns true if there is trigger associated with given event.
@@ -3528,7 +3540,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun close() {
     setCommandsEnabled(false)
     if (activeField != null) {
-      // !!! TO DO
+      // !!! TODO
       //      activeField.getUI().close();
     }
   }

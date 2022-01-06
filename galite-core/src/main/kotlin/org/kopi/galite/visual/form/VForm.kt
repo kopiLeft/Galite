@@ -49,6 +49,41 @@ import org.kopi.galite.visual.visual.WindowBuilder
 import org.kopi.galite.visual.visual.WindowController
 
 abstract class VForm : VWindow, VConstants {
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  // static (from DSL) data
+  override var source: String? = null // qualified name of source file
+  lateinit var blocks: Array<VBlock>
+  internal lateinit var pages: Array<String>
+  internal lateinit var pagesIdents: Array<String>
+  internal var help: String? = null //the name of this field
+  internal val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
+
+  // dynamic data
+  private val blockMoveAllowed = true
+  private var activeBlock: VBlock? = null
+  internal lateinit var commands: Array<VCommand> // commands
+
+  private val formListener = EventListenerList()
+
+  // ----------------------------------------------------------------------
+  // SHARED DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var autofillActor: VActor? = null
+  private var editItemActor: VActor? = null
+  private var editItemActor_S: VActor? = null
+  private var newItemActor: VActor? = null
+
+  // ---------------------------------------------------------------------
+  // PREDEFINED COMMANDS
+  // ---------------------------------------------------------------------
+  val cmdAutofill:    VCommand = VFieldCommand(this, CMD_AUTOFILL)
+  val cmdEditItem_S:  VCommand = VFieldCommand(this, CMD_EDITITEM_S)
+  val cmdEditItem:    VCommand = VFieldCommand(this, CMD_EDITITEM)
+  val cmdNewItem:     VCommand = VFieldCommand(this, CMD_NEWITEM)
+
   companion object {
     const val CMD_NEWITEM = -2
     const val CMD_EDITITEM = -3
@@ -805,42 +840,6 @@ abstract class VForm : VWindow, VConstants {
     return (getDisplay() as UForm).printForm()
   }
 
-  val eventList: MutableList<Int> = mutableListOf()
-
   @TestOnly
   fun _getCommands() = commands
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  // static (from DSL) data
-  override var source: String? = null // qualified name of source file
-  lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String>
-  internal lateinit var pagesIdents: Array<String>
-  internal var help: String? = null //the name of this field
-  internal val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
-
-  // dynamic data
-  private val blockMoveAllowed = true
-  private var activeBlock: VBlock? = null
-  internal lateinit var commands: Array<VCommand> // commands
-
-  private val formListener = EventListenerList()
-
-  // ----------------------------------------------------------------------
-  // SHARED DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private var autofillActor: VActor? = null
-  private var editItemActor: VActor? = null
-  private var editItemActor_S: VActor? = null
-  private var newItemActor: VActor? = null
-
-  // ---------------------------------------------------------------------
-  // PREDEFINED COMMANDS
-  // ---------------------------------------------------------------------
-  val cmdAutofill:    VCommand = VFieldCommand(this, CMD_AUTOFILL)
-  val cmdEditItem_S:  VCommand = VFieldCommand(this, CMD_EDITITEM_S)
-  val cmdEditItem:    VCommand = VFieldCommand(this, CMD_EDITITEM)
-  val cmdNewItem:     VCommand = VFieldCommand(this, CMD_NEWITEM)
 }

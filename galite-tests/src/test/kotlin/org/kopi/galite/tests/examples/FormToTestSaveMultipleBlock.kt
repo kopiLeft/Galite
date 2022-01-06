@@ -72,6 +72,10 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       }
     }
 
+    val name = skipped(domain = STRING(25), position = at(2, 1)) {
+      label = "Name"
+    }
+
     init {
       trigger(POSTQRY) {
         multipleBlock.load()

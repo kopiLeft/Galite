@@ -480,7 +480,7 @@ open class Block(var buffer: Int,
     }
 
   fun getActiveCommands(): List<Command?> {
-    val activeCommands = block.getActiveCommands()
+    val activeCommands = block.activeCommands
 
     return commands.filter { it.model in activeCommands }
   }
@@ -520,7 +520,7 @@ open class Block(var buffer: Int,
 
   /**
    * Sets the access of the block
-   * (if isAccessible does not evaluate the
+   * (if [isAccessible] does not evaluate the
    * access of the block, this method can be made
    * public)
    */
