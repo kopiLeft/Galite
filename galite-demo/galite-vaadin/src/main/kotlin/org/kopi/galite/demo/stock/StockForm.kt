@@ -18,36 +18,24 @@ package org.kopi.galite.demo.stock
 
 import java.util.Locale
 
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.database.Stock
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class StockForm : ReportSelectionForm() {
+class StockForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "Stocks"
   val page = page("Stock")
-  val action = menu("Action")
-  val edit = menu("Edit")
-  val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
-  )
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
+
+  init {
+    insertMenus()
+    insertCommands()
   }
 
   val block = page.insertBlock(StockBlock()) {

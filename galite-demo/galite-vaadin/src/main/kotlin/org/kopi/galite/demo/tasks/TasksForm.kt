@@ -18,51 +18,22 @@ package org.kopi.galite.demo.tasks
 
 import java.util.Locale
 
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.Task
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.FullCalendar
-import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class TasksForm : Form() {
+class TasksForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "Tasks"
-  val action = menu("Action")
-  val quit = actor(
-    ident = "quit",
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
-    key = Key.ESCAPE
-    icon = Icon.QUIT
-  }
 
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
-
-  val helpForm = actor(
-          ident = "helpForm",
-          menu = action,
-          label = "Help",
-          help = " Help"
-  ) {
-    key = Key.F1
-    icon = Icon.HELP
-  }
-
-  val helpCmd = command(item = helpForm) {
-    showHelp()
-  }
-  val quitCmd = command(item = quit) {
-    quitForm()
+  init {
+    insertMenus()
+    insertCommands()
   }
 
   val tasksBlock = insertBlock(Tasks())

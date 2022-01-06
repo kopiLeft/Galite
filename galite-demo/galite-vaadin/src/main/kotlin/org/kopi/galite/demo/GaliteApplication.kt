@@ -31,7 +31,7 @@ import com.vaadin.flow.router.Route
 class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
-  override val logoHref get() = "http://"
+  override val logoHref get() = "https://kopileft.github.io/Galite/"
   override val alternateLocale get() = Locale.UK
   override val title get() = "Galite demo"
   override val supportedLocales
@@ -68,7 +68,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
 object ConfigurationManager : ApplicationConfiguration() {
   override val isDebugModeEnabled: Boolean = true
   override val version get(): String = "1.0"
-  override val applicationName get(): String = "MyApp"
+  override val applicationName get(): String = "Inventory app"
   override val informationText get(): String = "info"
   override val logFile get(): String = ""
   override val debugMailRecipient get(): String = ""

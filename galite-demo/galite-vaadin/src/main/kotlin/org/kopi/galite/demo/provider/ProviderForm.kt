@@ -18,36 +18,25 @@ package org.kopi.galite.demo.provider
 
 import java.util.Locale
 
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class ProviderForm : ReportSelectionForm() {
+class ProviderForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "Providers"
   val page = page("Provider")
-  val action = menu("Action")
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
+
+  init {
+    insertMenus()
+    insertCommands()
   }
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
 
   val block = page.insertBlock(BlockProvider()) {
     command(item = report) {

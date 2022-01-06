@@ -19,6 +19,8 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
@@ -28,7 +30,6 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
@@ -36,36 +37,13 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.visual.VExecFailedException
 
-class ClientForm : ReportSelectionForm() {
+class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "Clients"
-  val action = menu("Action")
-  val quit = actor(
-    ident = "quit",
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
-    key = Key.ESCAPE          // key is optional here
-    icon = Icon.QUIT          // icon is optional here
-  }
-  val showHideFilter = actor(
-          ident = "ShowHideFilter",
-          menu = action,
-          label = "ShowHideFilter",
-          help = " Show Hide Filter",
-  ) {
-    key = Key.F4
-    icon = Icon.SEARCH_OP
-  }
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
+
+  init {
+    insertMenus()
+    insertCommands()
   }
 
   val list = actor(
@@ -78,16 +56,6 @@ class ClientForm : ReportSelectionForm() {
     icon = Icon.LIST
   }
 
-  val saveBlock = actor(
-          ident = "saveBlock",
-          menu = action,
-          label = "Save Block",
-          help = " Save Block",
-  ) {
-    key = Key.F9
-    icon = Icon.SAVE
-  }
-
   val interSave = actor(
           ident = "interSave",
           menu = action,
@@ -98,13 +66,6 @@ class ClientForm : ReportSelectionForm() {
     icon = Icon.SAVE
   }
 
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
-
   val dynamicReport = actor(
           ident = "dynamicReport",
           menu = action,
@@ -114,37 +75,10 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6
     icon = Icon.REPORT
   }
-  val helpForm = actor(
-          ident = "helpForm",
-          menu = action,
-          label = "Help",
-          help = " Help"
-  ) {
-    key = Key.F1
-    icon = Icon.HELP
-  }
-  val graph = actor (
-          ident =  "graph",
-          menu =   action,
-          label =  "Graph",
-          help =   "show graph values",
-  ) {
-    key  =  Key.F9
-    icon =  Icon.COLUMN_CHART
-  }
-
-  val helpCmd = command(item = helpForm) {
-    showHelp()
-  }
-  val quitCmd = command(item = quit) {
-    quitForm()
-  }
 
   val clientsPage= page("Clients")
-  val contactsPage= page("Contacts")
   val detailsPage= page("Details")
   val clientsBlock = clientsPage.insertBlock(Clients())
-  val k = contactsPage.insertBlock(Clients())
   val salesBlock = clientsPage.insertBlock(Sales())
 
 
@@ -160,22 +94,30 @@ class ClientForm : ReportSelectionForm() {
     val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
       label = "First Name"
       help = "The client first name"
-      columns(c.firstNameClt)
+      columns(c.firstNameClt) {
+        priority = 1
+      }
     }
     val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
       label = "Last name"
       help = "The client last name"
-      columns(c.lastNameClt)
+      columns(c.lastNameClt) {
+        priority = 2
+      }
     }
     val ageClt = visit(domain = INT(3), position = at(2, 3)) {
       label = "Age"
       help = "The client age"
-      columns(c.ageClt)
+      columns(c.ageClt) {
+        priority = 3
+      }
     }
     val email = visit(domain = STRING(25), position = at(3, 1)) {
       label = "Email"
       help = "The mail adress"
-      columns(c.mail)
+      columns(c.mail) {
+        priority = 4
+      }
     }
     val addressClt = visit(domain = STRING(20), position = at(3, 2)) {
       label = "Address"
@@ -215,14 +157,8 @@ class ClientForm : ReportSelectionForm() {
       command(item = dynamicReport) {
         createDynamicReport()
       }
-      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
-        showChart(ChartSample())
-      }
       command(item = list) {
         recursiveQuery()
-      }
-      command(item = saveBlock) {
-        saveBlock()
       }
     }
   }
@@ -270,9 +206,7 @@ class ClientForm : ReportSelectionForm() {
     init {
       border = Border.LINE
 
-      command(item = showHideFilter) {
-        showHideFilter()
-      }
+      showHideFilterCmd
 
       command(item = report) {
         createReport(ClientR())
@@ -280,14 +214,8 @@ class ClientForm : ReportSelectionForm() {
       command(item = dynamicReport) {
         createDynamicReport()
       }
-      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
-        showChart(ChartSample())
-      }
       command(item = list) {
         recursiveQuery()
-      }
-      command(item = saveBlock) {
-        saveBlock()
       }
       command(item = interSave) {
         val b = salesBlock.block

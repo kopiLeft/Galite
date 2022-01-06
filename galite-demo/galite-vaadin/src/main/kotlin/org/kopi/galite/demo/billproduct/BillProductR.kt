@@ -20,6 +20,8 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.common.IReportDefault
+import org.kopi.galite.demo.common.ReportDefaultImpl
 import org.kopi.galite.demo.database.BillProduct
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -27,19 +29,16 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.type.Decimal
 
 /**
  * Products Bill Report
  */
-class BillProductR : Report() {
+class BillProductR : Report(), IReportDefault by ReportDefaultImpl() {
 
   override val locale = Locale.UK
 
   override val title = "Bill Product Report"
-
-  val action = menu("Action")
 
   val greeting = actor(
           ident = "greeting",
@@ -49,62 +48,6 @@ class BillProductR : Report() {
   ) {
     key = Key.F1     // key is optional here
     icon = Icon.ASK  // icon is optional here
-  }
-
-  val csv = actor(
-          ident = "CSV",
-          menu = action,
-          label = "CSV",
-          help = "CSV Format",
-  ) {
-    key = Key.F8
-    icon = Icon.EXPORT_CSV
-  }
-
-  val xls = actor(
-          ident = "XLS",
-          menu = action,
-          label = "XLS",
-          help = "Excel (XLS) Format",
-  ) {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT_XLSX
-  }
-
-  val xlsx = actor(
-          ident = "XLSX",
-          menu = action,
-          label = "XLSX",
-          help = "Excel (XLSX) Format",
-  ) {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT
-  }
-
-  val pdf = actor(
-          ident = "PDF",
-          menu = action,
-          label = "PDF",
-          help = "PDF Format",
-  ) {
-    key = Key.F9
-    icon = Icon.EXPORT_PDF
-  }
-
-  val cmdCSV = command(item = csv) {
-    model.export(VReport.TYP_CSV)
-  }
-
-  val cmdPDF = command(item = pdf) {
-    model.export(VReport.TYP_PDF)
-  }
-
-  val cmdXLS = command(item = xls) {
-    model.export(VReport.TYP_XLS)
-  }
-
-  val cmdXLSX = command(item = xlsx) {
-    model.export(VReport.TYP_XLSX)
   }
 
   val quantity = field(INT(25)) {

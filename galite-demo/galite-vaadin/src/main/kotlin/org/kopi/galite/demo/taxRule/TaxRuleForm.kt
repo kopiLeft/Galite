@@ -18,6 +18,8 @@ package org.kopi.galite.demo.taxRule
 
 import java.util.Locale
 
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.TaxRule
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.BOOL
@@ -31,26 +33,15 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class TaxRuleForm : ReportSelectionForm() {
+class TaxRuleForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "TaxRules"
   val page = page("TaxRule")
-  val action = menu("Action")
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
+
+  init {
+    insertMenus()
+    insertCommands()
   }
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
 
   val list = actor(
           ident = "list",
@@ -62,57 +53,14 @@ class TaxRuleForm : ReportSelectionForm() {
     icon = Icon.LIST
   }
 
-  val resetBlock = actor(
-          ident = "reset",
-          menu = action,
-          label = "break",
-          help = "Reset Block",
-  ) {
-    key = Key.F3
-    icon = Icon.BREAK
-  }
-
-  val deleteBlock = actor(
-          ident = "deleteBlock",
-          menu = action,
-          label = "deleteBlock",
-          help = " deletes block",
-  ) {
-    key = Key.F5
-    icon = Icon.DELETE
-  }
-
-  val saveBlock = actor(
-          ident = "saveBlock",
-          menu = action,
-          label = "Save Block",
-          help = " Save Block",
-  ) {
-    key = Key.F9
-    icon = Icon.SAVE
-  }
-
   val block = page.insertBlock(TaxRuleBlock()) {
-    command(item = saveBlock) {
-      println("-----------save-----------------" + informations.value)
-      saveBlock()
-    }
-
     command(item = report) {
       createReport(TaxRuleR())
     }
-
-    command(item = list) {
-      recursiveQuery()
-    }
-
-    command(item = resetBlock) {
-      resetBlock()
-    }
-
-    command(item = deleteBlock) {
-      deleteBlock()
-    }
+    saveCmd
+    recursiveQueryCmd
+    breakCmd
+    deleteCmd
   }
 }
 

@@ -18,39 +18,27 @@ package org.kopi.galite.demo.bill
 
 import java.util.Locale
 
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.Bill
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
-
 import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class BillForm : ReportSelectionForm() {
+class BillForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "Bills"
   val page = page("Bill")
-  val action = menu("Action")
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8          // key is optional here
-    icon = Icon.REPORT  // icon is optional here
+
+  init {
+    insertMenus()
+    insertCommands()
   }
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
 
   val tb1 = page.insertBlock(BlockBill()) {
     command(item = report) {

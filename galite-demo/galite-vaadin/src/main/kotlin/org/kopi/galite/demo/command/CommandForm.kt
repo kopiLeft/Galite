@@ -18,6 +18,8 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
+import org.kopi.galite.demo.common.FormDefaultImpl
+import org.kopi.galite.demo.common.IFormDefault
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
@@ -30,27 +32,15 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class CommandForm : ReportSelectionForm() {
+class CommandForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   override val locale = Locale.UK
   override val title = "Commands"
   val page = page("Command")
-  val action = menu("Action")
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8          // key is optional here
-    icon = Icon.REPORT    // icon is optional here
-  }
 
-  val autoFill = actor(
-          ident = "Autofill",
-          menu = action,
-          label = "Autofill",
-          help = "Autofill",
-  )
+  init {
+    insertMenus()
+    insertCommands()
+  }
 
   val list = actor(
           ident = "list",
@@ -62,31 +52,11 @@ class CommandForm : ReportSelectionForm() {
     icon = Icon.LIST
   }
 
-  val resetBlock = actor(
-          ident = "reset",
-          menu = action,
-          label = "break",
-          help = "Reset Block",
-  ) {
-    key = Key.F3
-    icon = Icon.BREAK
-  }
-
-  val serialQuery = actor(
-          ident = "serialQuery",
-          menu = action,
-          label = "serialQuery",
-          help = "serial query",
-  ) {
-    key = Key.F6
-    icon = Icon.SERIAL_QUERY
-  }
-
   val dynamicReport = actor(
-          ident = "dynamicReport",
-          menu = action,
-          label = "DynamicReport",
-          help = " Create Dynamic Report",
+    ident = "dynamicReport",
+    menu = action,
+    label = "DynamicReport",
+    help = " Create Dynamic Report",
   ) {
     key = Key.F8
     icon = Icon.REPORT
@@ -100,9 +70,9 @@ class CommandForm : ReportSelectionForm() {
     command(item = list) {
       recursiveQuery()
     }
-    command(item = resetBlock) {
-      resetBlock()
-    }
+
+    breakCmd
+
     command(item = serialQuery) {
       serialQuery()
     }
