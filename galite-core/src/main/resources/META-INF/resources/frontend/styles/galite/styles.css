@@ -56,8 +56,8 @@ summary, time, mark, audio, video {
 	padding: 0;
 }
 
-.simple .k-textinput:hover, .textarea::part(input-field):hover {
-	background: #d9f0f8;
+::part(input-field):hover {
+	background: #d9f0f8 !important;
 }
 
 /**

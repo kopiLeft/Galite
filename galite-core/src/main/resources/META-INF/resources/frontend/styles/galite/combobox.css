@@ -39,16 +39,12 @@
 	border-bottom: #009bd4 1px solid;
 }
 
-[part~='input-field']::after {
+:host([theme~="galite-combobox"])  [part~='input-field']::after {
     background: none;
 }
 
-[part~='value']:focus {
+:host([theme~="galite-combobox"])  [part~='value']:focus {
 	background: none;
-}
-
-:host([theme~="galite-combobox"])  [part~='input-field']:hover {
-	background: #d9f0f8;
 }
 
 :host {
