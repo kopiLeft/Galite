@@ -52,7 +52,7 @@ object Product : Table() {
   val month = month("EXP_MONTH").nullable()
 }
 
-object FormWithSpecialTypes : Form() {
+class FormWithSpecialTypes : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
 
@@ -157,5 +157,5 @@ class BlockWithSpecialTypes : Block(1, 1, "Test block") {
 }
 
 fun main() {
-  runForm(formName = FormWithSpecialTypes)
+  runForm(formName = FormWithSpecialTypes())
 }

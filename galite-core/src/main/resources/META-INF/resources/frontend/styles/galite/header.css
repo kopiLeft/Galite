@@ -61,7 +61,7 @@
 
 .logo-image {
     vertical-align: middle;
-    width: 172px;
+    max-width: 172px;
 }
 
 /*

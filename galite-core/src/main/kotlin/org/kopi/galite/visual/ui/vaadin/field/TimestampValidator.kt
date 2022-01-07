@@ -172,7 +172,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       return Date(year, month, day)
     }
 
-    private fun parseTime(time: String): Time? {
+    fun parseTime(time: String): Time? {
       var hours = -1
       var minutes = 0
       var seconds = 0
