@@ -34,6 +34,7 @@
     border-bottom: #dadada 1px solid;
     max-height: 25px;
     box-shadow: none;
+    padding: 0;
 }
 
 :host([theme~="galite-combobox"]) [part="input-field"]:focus-within {
@@ -42,10 +43,6 @@
 
 :host([theme~="galite-combobox"])  [part~='input-field']::after {
     background: none;
-}
-
-:host([theme~="galite-combobox"])  [part~='value']:focus {
-	background: none;
 }
 
 [part~='input-field']:hover {
@@ -58,5 +55,4 @@
 	font-style: normal !important;
 	font-size: 12px;
 	max-height: 25px;
-	color: var(--color)
 }

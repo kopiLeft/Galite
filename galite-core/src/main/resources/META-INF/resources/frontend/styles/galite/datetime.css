@@ -71,8 +71,12 @@ vaadin-date-time-picker {
     background: white;
 }
 
-:host([theme~="galite-date"]) .input,
-  :host([theme~="galite-time"]) .input,
+vaadin-date-time-picker-time-text-field, vaadin-date-time-picker-date-text-field {
+    color: inherit;
+}
+
+:host([theme~="galite-date"]),
+  :host([theme~="galite-time"]),
   :host([theme~="galite-timestamp"]) #customField {
-    color:inherit
+    color: inherit;
 }

@@ -202,8 +202,9 @@ fun <T> FormField<T>.click(): UField {
   return field
 }
 
-infix fun VField.eq(block: VField): Boolean {
-  return this.name == block.name
-          && this.label == block.label
-          && this.block!! eq block.block!!
+infix fun VField.eq(other: VField): Boolean {
+  return this::class == other::class
+          && this.name == other.name
+          && this.label == other.label
+          && this.block!! eq other.block!!
 }
