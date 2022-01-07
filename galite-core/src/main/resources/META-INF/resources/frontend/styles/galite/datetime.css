@@ -36,7 +36,6 @@
     font-size: 12px !important;
     line-height: normal;
     padding: 0;
-    color: var(--color)
 }
 
 :host:hover {
@@ -70,4 +69,10 @@ vaadin-date-time-picker {
 
 :host([disabled]) [part="input-field"] {
     background: white;
+}
+
+:host([theme~="galite-date"]) .input,
+  :host([theme~="galite-time"]) .input,
+  :host([theme~="galite-timestamp"]) #customField {
+    color:inherit
 }

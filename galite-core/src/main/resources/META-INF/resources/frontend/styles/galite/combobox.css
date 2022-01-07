@@ -26,6 +26,7 @@
     font-style: normal !important;
     font-size: 12px !important;
     padding: 0;
+    color: inherit;
 }
 
 :host([theme~="galite-combobox"]) [part="input-field"] {

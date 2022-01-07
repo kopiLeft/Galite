@@ -118,19 +118,19 @@ class FormWithColoredFields: Form() {
       simpleBlock.stringField.setColor(0, VColor.BLUE, VColor.RED)
       simpleBlock.intField.setColor(0, VColor.BLUE, VColor.RED)
       simpleBlock.dateField.setColor(0, VColor.BLUE, VColor.RED)
-      simpleBlock.timeField.setColor(0, VColor.BLUE, VColor.RED)
-      simpleBlock.timestampField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.timeField.setColor(0, VColor.YELLOW, VColor.RED)
+      simpleBlock.timestampField.setColor(0, VColor.WHITE, VColor.RED)
       simpleBlock.booleanField.setColor(0, VColor.BLUE, VColor.RED)
-      simpleBlock.checkboxField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.checkboxField.setColor(0, VColor.GREEN, VColor.RED)
 
 
       multiBlock.stringField.setColor(0, VColor.BLUE, VColor.RED)
       multiBlock.intField.setColor(0, VColor.BLUE, VColor.RED)
       multiBlock.dateField.setColor(0, VColor.BLUE, VColor.RED)
-      multiBlock.timeField.setColor(0, VColor.BLUE, VColor.RED)
-      multiBlock.timestampField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.timeField.setColor(0, VColor.YELLOW, VColor.RED)
+      multiBlock.timestampField.setColor(0, VColor.WHITE, VColor.RED)
       multiBlock.booleanField.setColor(0, VColor.BLUE, VColor.RED)
-      multiBlock.checkboxField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.checkboxField.setColor(0, VColor.GREEN, VColor.RED)
     }
   }
 
