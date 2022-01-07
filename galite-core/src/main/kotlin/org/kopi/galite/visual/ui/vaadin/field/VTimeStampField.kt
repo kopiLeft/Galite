@@ -33,7 +33,8 @@ import com.vaadin.flow.component.timepicker.TimePicker
   CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-text-field"),
   CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-text-field"),
   CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-picker"),
-  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-picker")
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-picker"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker")
 ])
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
@@ -44,6 +45,8 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
     val children = internalField.children.toArray()
     val datePicker = (children.single { it is DatePicker } as DatePicker)
     val timePicker = (children.single { it is TimePicker } as TimePicker)
+
+    element.themeList.add("galite-timestamp")
 
     datePicker.element.executeJs(
       """

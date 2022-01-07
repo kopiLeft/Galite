@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-[part~='input-field'] {
-    background-color: white;
+:host([theme~="galite-combobox"]) [part~='input-field'] {
+    background-color: transparent;
 }
 
 :host([theme~="galite-combobox"]) [part="text-field"] {
@@ -26,34 +26,33 @@
     font-style: normal !important;
     font-size: 12px !important;
     padding: 0;
+    color: inherit;
 }
 
 :host([theme~="galite-combobox"]) [part="input-field"] {
     border-radius: 0;
     border-bottom: #dadada 1px solid;
-    max-height: 30px;
+    max-height: 25px;
     box-shadow: none;
+    padding: 0;
 }
 
 :host([theme~="galite-combobox"]) [part="input-field"]:focus-within {
 	border-bottom: #009bd4 1px solid;
 }
 
-[part~='input-field']::after {
+:host([theme~="galite-combobox"])  [part~='input-field']::after {
     background: none;
 }
 
-[part~='value']:focus {
-	background: none;
-}
-
 [part~='input-field']:hover {
-	background: #d9f0f8;
+	background: #d9f0f8 !important;
 }
 
 :host {
-    font-family: Arial, sans-serif !important;
+  font-family: Arial, sans-serif !important;
 	font-weight: 400 !important;
 	font-style: normal !important;
 	font-size: 12px;
+	max-height: 25px;
 }

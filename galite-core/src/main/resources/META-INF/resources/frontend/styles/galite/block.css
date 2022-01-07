@@ -126,6 +126,8 @@
 
 .block-filter-text::part(input-field) {
     height: 100%;
+    background: white;
+    border-radius: 0;
 }
 
 .block-filter-text > iron-icon {
@@ -137,9 +139,12 @@
     padding: 0;
     height: 100%;
     --lumo-text-field-size: var(--lumo-size-xxs);
+    background: white;
 }
 
 .editor-field::part(input-field) {
     height: 100%;
     padding: 0;
+    border-radius: 0;
+    background: none;
 }

@@ -19,8 +19,8 @@
 /**
  * Main style for input text field.
  */
-.k-textinput::part(input-field), .k-textareainput {
-    color: #000000;
+.k-textinput::part(input-field), .textarea::part(input-field) {
+    background: none;
     font-weight: 500 !important;
     font-style: normal !important;
     line-height: 1.2em;

@@ -97,12 +97,12 @@ class StyleManager(val currentUI: UI) {
       if (background != null) {
         component.style["background-color"] = Utils.toString(background) + " !important"
       } else {
-        component.style["background-color"] = "inherit"
+        component.style["background-color"] = null
       }
       if (foreground != null) {
         component.style["color"] = Utils.toString(foreground) + " !important"
       } else {
-        component.style["color"] = "inherit"
+        component.style["color"] = null
       }
     }
 
