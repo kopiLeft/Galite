@@ -20,7 +20,7 @@
  * Main style for input text field.
  */
 .k-textinput::part(input-field), .textarea::part(input-field) {
-    background: transparent;
+    background: none;
     font-weight: 500 !important;
     font-style: normal !important;
     line-height: 1.2em;

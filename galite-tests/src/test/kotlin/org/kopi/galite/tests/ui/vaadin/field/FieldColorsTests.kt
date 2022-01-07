@@ -27,8 +27,14 @@ import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.tests.form.Days
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DATE
+import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.TIME
+import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
@@ -91,6 +97,13 @@ class FormWithColoredFields: Form() {
   override val title: String = ""
   val action = menu("Action")
 
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
   val colorFields = actor(
     ident = "ColorFields",
     menu = action,
@@ -103,7 +116,21 @@ class FormWithColoredFields: Form() {
   init {
     command(item = colorFields) {
       simpleBlock.stringField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.intField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.dateField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.timeField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.timestampField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.booleanField.setColor(0, VColor.BLUE, VColor.RED)
+      simpleBlock.checkboxField.setColor(0, VColor.BLUE, VColor.RED)
+
+
       multiBlock.stringField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.intField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.dateField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.timeField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.timestampField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.booleanField.setColor(0, VColor.BLUE, VColor.RED)
+      multiBlock.checkboxField.setColor(0, VColor.BLUE, VColor.RED)
     }
   }
 
@@ -112,11 +139,24 @@ class FormWithColoredFields: Form() {
 
   inner class SimpleBlock: Block(1, 1, "") {
     val stringField = visit(STRING(10), position = at(1, 1)) {}
+    val intField = visit(INT(10), position = at(1, 2)) {}
+    val dateField = visit(DATE, position = at(2, 1)) {}
+    val timeField = visit(TIME, position = at(2, 2)) {}
+    val timestampField = visit(TIMESTAMP, position = at(2, 3)) {}
+    val checkboxField = visit(domain = Days, position = at(3, 1)) {}
+    val booleanField = visit(BOOL, position = at(4, 1)) {}
     // TODO: test actor field
   }
 
   inner class MultiBlock: Block(10, 10, "") {
     val stringField = visit(STRING(10), position = at(1, 1)) {}
+    val intField = visit(INT(10), position = at(1, 2)) {}
+    val dateField = visit(DATE, position = at(2, 1)) {}
+    val timeField = visit(TIME, position = at(2, 2)) {}
+    val timestampField = visit(TIMESTAMP, position = at(2, 3)) {}
+    val checkboxField = visit(domain = Days, position = at(3, 1)) {}
+    val booleanField = visit(BOOL, position = at(4, 1)) {}
+
     // TODO: test actor field
   }
 }

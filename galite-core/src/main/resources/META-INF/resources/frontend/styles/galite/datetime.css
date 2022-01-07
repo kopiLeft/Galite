@@ -17,7 +17,7 @@
  */
 
 [part~='input-field'] {
-    background-color: white;
+    background-color: transparent !important;
     border-bottom: #dadada 1px solid;
     border-radius: unset;
 }
@@ -36,6 +36,7 @@
     font-size: 12px !important;
     line-height: normal;
     padding: 0;
+    color: var(--color)
 }
 
 :host:hover {

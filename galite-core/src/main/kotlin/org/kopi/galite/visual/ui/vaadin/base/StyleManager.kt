@@ -101,6 +101,7 @@ class StyleManager(val currentUI: UI) {
       }
       if (foreground != null) {
         component.style["color"] = Utils.toString(foreground) + " !important"
+        component.style["--color"] = Utils.toString(foreground) + " !important"
       } else {
         component.style["color"] = null
       }

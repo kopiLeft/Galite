@@ -67,6 +67,11 @@ vaadin-grid-cell-content, .k-listdialog {
     border-right: 1px solid #ddd;
 }
 
+.filter-text::part(input-field) {
+    background: white;
+    border-radius: 0;
+}
+
 .filter-text {
     padding: 0 !important;
     border-right: 1px solid #ddd;
