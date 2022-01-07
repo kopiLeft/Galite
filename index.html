@@ -13,9 +13,10 @@
     <div>
       <main id="main">
         <div id="header-container"></div>
-        <img src="images/logo_galite.png" class="top-logo" />
-        <div id="container">
-          <img src="images/g-logo.png" class="main-logo" />
+        <div id="top-container">
+          <img src="images/logo_galite_top.png" class="top-logo" />
+          <div id="container">
+          <img src="images/logo_galite.png" class="main-logo" />
           <table>
             <tr>
               <td>
@@ -42,12 +43,13 @@
             </tr>
           </table>
         </div>
+        </div>
         <div id="bubble-one"></div>
         <div id="bubble-two"></div>
         <div id="devices-container">
           <img src="images/devices.png" id="devices"/>
           <div>
-            <h3>WHAT IS GALITE</h3>
+            <h2>WHAT IS GALITE</h2>
             <p>
               Opensource framework that allows users to build business applications</br>
               made of forms, reports and charts using a simple and creative syntax</br>
@@ -690,11 +692,7 @@ class ChartSample: Chart() {
 
     <section id="ui-section">
       <div class="ui-screenshots">
-        <img class ="ui-img phone" src="images/form-iphone.png" alt="Screenshots for the Galite UI">
-        <img class ="ui-img" src="images/form-ipad-2.png" alt="Screenshots for the Galite UI">
-        <img class ="ui-img" src="images/form-laptop.png" alt="Screenshots for the Galite UI">
-        <img class ="ui-img" src="images/pc.png" alt="Screenshots for the Galite UI">
-        <img class ="ui-img" src="images/form-nestHub.png" alt="Screenshots for the Galite UI">
+        <img src="images/form-ui.png" alt="Screenshots for the Galite UI">
        </div>
        <div class="ui-details">
          <h2 class="ui-title">
@@ -725,10 +723,21 @@ class ChartSample: Chart() {
       }
     </script>
     <script>
+   /* window.addEventListener('resize', function(event) {
+     if (window.innerWidth > 767) {
+      topContainer.classList.remove("dark-mode-top-header");
+     }
+    }, true);*/
+
       var check = false;
       function change() {
         var headerContainer = document.getElementById("header-container");
         headerContainer.classList.toggle("dark-mode-header");
+
+        if (window.innerWidth <= 767) {
+          var topContainer = document.getElementById("top-container");
+          topContainer.classList.toggle("dark-mode-top-header");
+        }
 
         var main = document.getElementById("main");
         main.classList.toggle("dark-mode");
@@ -762,9 +771,6 @@ class ChartSample: Chart() {
         var  uiSection = document.getElementById("ui-section");
         uiSection.classList.toggle("dark-mode");
 
-        var  panels = document.getElementById("panels");
-        panels.classList.toggle("dark-mode-panel");
-
         check ^= true;
       }
     </script>
@@ -777,21 +783,6 @@ class ChartSample: Chart() {
         container.addEventListener('mouseleave', function() {
           this.classList.remove('feature-dark-mode');
         })
-      }
-    </script>
-    <script>
-      var i = 0;
-      var max = document.getElementsByClassName("ui-img").length - 1;
-      setTimeout(nextPhoto, 2000);
-
-      function nextPhoto() {
-       document.getElementsByClassName("ui-img")[i].style.display = "none";
-       if ( i < max )
-         i++;
-       else
-         i = 0;
-       document.getElementsByClassName("ui-img")[i].style.display = "block";
-       setTimeout(nextPhoto, 2000);
       }
     </script>
   </body>
