@@ -150,7 +150,9 @@ class CommandsForm : ReportSelectionForm() {
       serialQuery()
     }
     command(item = report) {
-      createReport(TrainingR())
+      createReport {
+        TrainingR()
+      }
     }
     command(item = dynamicReport) {
       createDynamicReport()

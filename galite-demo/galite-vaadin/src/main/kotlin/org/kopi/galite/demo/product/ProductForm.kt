@@ -81,7 +81,9 @@ class ProductForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
       blockVisibility(Access.VISIT, Mode.QUERY)
 
       command(item = report) {
-        createReport(ProductReport())
+        createReport {
+          ProductReport()
+        }
       }
     }
   }

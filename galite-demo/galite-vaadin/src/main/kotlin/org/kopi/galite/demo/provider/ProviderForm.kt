@@ -40,7 +40,9 @@ class ProviderForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
 
   val block = page.insertBlock(BlockProvider()) {
     command(item = report) {
-      createReport(ProviderR())
+      createReport {
+        ProviderR()
+      }
     }
   }
 }

@@ -55,7 +55,9 @@ class TaxRuleForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
 
   val block = page.insertBlock(TaxRuleBlock()) {
     command(item = report) {
-      createReport(TaxRuleR())
+      createReport {
+        TaxRuleR()
+      }
     }
     saveCmd
     recursiveQueryCmd

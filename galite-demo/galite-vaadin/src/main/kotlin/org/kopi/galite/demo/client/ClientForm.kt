@@ -152,7 +152,9 @@ class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
 
     init {
       command(item = report) {
-        createReport(ClientR())
+        createReport {
+          ClientR()
+        }
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -209,7 +211,9 @@ class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
       showHideFilterCmd
 
       command(item = report) {
-        createReport(ClientR())
+        createReport {
+          ClientR()
+        }
       }
       command(item = dynamicReport) {
         createDynamicReport()

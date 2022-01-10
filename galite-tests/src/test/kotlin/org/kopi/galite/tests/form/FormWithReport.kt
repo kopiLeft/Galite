@@ -43,7 +43,9 @@ class FormWithReport : ReportSelectionForm() {
 
   val block = testPage.insertBlock(BlockSample) {
     command(item = report) {
-      createReport(SimpleReport())
+      createReport {
+        SimpleReport()
+      }
     }
   }
 }

@@ -41,7 +41,9 @@ class BillProductForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl()
 
   val tb1 = page.insertBlock(BlockBillProduct()) {
     command(item = report) {
-      createReport(BillProductR())
+      createReport {
+        BillProductR()
+      }
     }
   }
 }

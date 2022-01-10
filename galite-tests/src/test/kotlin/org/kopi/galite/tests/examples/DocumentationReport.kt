@@ -54,7 +54,9 @@ class DocumentationReport : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        createReport(DocumentationReportR())
+        createReport {
+          DocumentationReportR()
+        }
       }
     }
   }

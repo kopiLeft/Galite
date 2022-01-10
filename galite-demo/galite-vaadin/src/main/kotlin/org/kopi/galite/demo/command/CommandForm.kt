@@ -64,7 +64,9 @@ class CommandForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
 
   val tb1 = page.insertBlock(BlockCommand()) {
     command(item = report) {
-      createReport(CommandR())
+      createReport {
+        CommandR()
+      }
     }
 
     command(item = list) {

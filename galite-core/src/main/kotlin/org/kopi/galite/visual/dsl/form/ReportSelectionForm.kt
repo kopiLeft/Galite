@@ -27,8 +27,10 @@ abstract class ReportSelectionForm : DictionaryForm() {
   /**
    * create a report for this form
    */
-  protected fun Block.createReport(report: Report) {
-    model.createReport(block, report.model)
+  protected fun Block.createReport(reportbuilder: () -> Report) {
+    model.createReport(block) {
+      reportbuilder().model
+    }
   }
 
   // ----------------------------------------------------------------------

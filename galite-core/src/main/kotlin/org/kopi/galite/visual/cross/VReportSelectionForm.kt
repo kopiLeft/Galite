@@ -36,10 +36,11 @@ abstract class VReportSelectionForm : VDictionaryForm {
   /**
    * Implements interface for COMMAND CreateReport
    */
-  fun createReport(b: VBlock, report: VReport) {
+  fun createReport(b: VBlock, reportBuilder: () -> VReport) {
     b.validate()
     try {
       setWaitInfo(Message.getMessage("report_generation"))
+      val report = reportBuilder()
       report.dBContext = dBContext
       report.doNotModal()
       unsetWaitInfo()

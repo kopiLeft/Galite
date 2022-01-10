@@ -40,7 +40,9 @@ class StockForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
 
   val block = page.insertBlock(StockBlock()) {
     command(item = report) {
-      createReport(StockR())
+      createReport {
+        StockR()
+      }
     }
   }
 }
