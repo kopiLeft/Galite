@@ -134,15 +134,15 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal>, Type0<BigD
   }
 
   infix fun shr(count: Int): Decimal {
-    return setScale(count, java.math.BigDecimal.ROUND_FLOOR);
+    return setScale(count, BigDecimal.ROUND_FLOOR)
   }
 
   infix fun ushr(count: Int): Decimal {
-    return setScale(count, java.math.BigDecimal.ROUND_HALF_UP)
+    return setScale(count, BigDecimal.ROUND_HALF_UP)
   }
 
   infix fun shl(count: Int): Decimal {
-    return setScale(count, java.math.BigDecimal.ROUND_UP);
+    return setScale(count, BigDecimal.ROUND_UP)
   }
 
   // ----------------------------------------------------------------------
