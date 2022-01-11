@@ -18,7 +18,6 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -43,9 +42,6 @@ class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
               })
               """
     )
-    addFocusListener {
-      element.executeJs("this.$.input.inputElement.select()")
-    }
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
