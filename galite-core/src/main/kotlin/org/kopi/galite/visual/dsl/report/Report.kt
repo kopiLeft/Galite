@@ -17,6 +17,7 @@
 
 package org.kopi.galite.visual.dsl.report
 
+import java.io.File
 import java.io.IOException
 import java.util.Locale
 
@@ -28,6 +29,7 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.util.PrintJob
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -143,6 +145,87 @@ abstract class Report : Window() {
    * Executed after the report is closed.
    */
   val POSTREPORT = ReportTriggerEvent<Unit>(Constants.TRG_POSTREPORT)
+
+  /**
+   * Creates a printable object
+   * @return        job to print
+   */
+  fun createPrintJob(): PrintJob = model.createPrintJob()
+
+  /**
+   * Prints the report
+   */
+  fun export(type: Int = VReport.TYP_CSV) {
+    model.export(type)
+  }
+
+  /**
+   * Prints the report
+   */
+  fun export(file: File, type: Int = VReport.TYP_CSV) {
+    model.export(file, type)
+  }
+
+  /**
+   * Sets the title
+   */
+  fun setPageTitle(title: String) {
+    model.setPageTitle(title)
+  }
+
+  fun setPageTitleParams(param: Any) {
+    model.setPageTitleParams(param)
+  }
+
+  fun setPageTitleParams(param1: Any, param2: Any) {
+    model.setPageTitleParams(param1, param2)
+  }
+
+  fun setPageTitleParams(params: Array<Any>) {
+    model.setPageTitleParams(params)
+  }
+
+  fun setFirstPageHeader(firstPageHeader: String) {
+    model.setFirstPageHeader(firstPageHeader)
+  }
+
+  fun foldSelection() {
+    model.foldSelection()
+  }
+
+  fun unfoldSelection() {
+    model.unfoldSelection()
+  }
+
+  fun foldSelectedColumn() {
+    model.foldSelectedColumn()
+  }
+
+  fun unfoldSelectedColumn() {
+    model.unfoldSelectedColumn()
+  }
+
+  /**
+   * Sort the displayed tree wrt to a column
+   */
+  fun sortSelectedColumn() {
+    model.sortSelectedColumn()
+  }
+
+  /**
+   * Sort the displayed tree wrt to a column
+   */
+  fun editLine() {
+    model.editLine()
+  }
+
+  fun setColumnData() {
+    model.setColumnData()
+  }
+
+  fun setColumnInfo() {
+    model.setColumnInfo()
+  }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
