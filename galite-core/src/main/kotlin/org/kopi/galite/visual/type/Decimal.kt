@@ -132,6 +132,19 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal>, Type0<BigD
   operator fun remAssign(f: Decimal) {
     value = value.remainder(f.value, MATH_CONTEXT)
   }
+
+  infix fun shr(count: Int): Decimal {
+    return setScale(count, BigDecimal.ROUND_FLOOR)
+  }
+
+  infix fun ushr(count: Int): Decimal {
+    return setScale(count, BigDecimal.ROUND_HALF_UP)
+  }
+
+  infix fun shl(count: Int): Decimal {
+    return setScale(count, BigDecimal.ROUND_UP)
+  }
+
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
   // ----------------------------------------------------------------------
