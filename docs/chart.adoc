@@ -180,9 +180,7 @@ Visual Galite charts have a unique structure, you need to create new class that 
 [source,kotlin]
 ----
 ChartDefinition   :
-classChartClass : Chart() {
-    [CharttLocalization]
-    ChartTitle
+classChartClass : Chart(ChartTitle, [CharttLocalization]) {
     [ContextHeader] [CharttHelp] [ChartDefinitions]
     [ChartCommands] [ChartTriggers] (ChartFields)
     [ContextFooter]
@@ -202,7 +200,7 @@ This is an optional step in which you may define the language of your forms menu
 *Example:*
 [source,kotlin]
 ----
-override val locale = Locale.UK
+class ChartSample: Chart(title = "", locale = Locale.UK)
 ----
 
 ===== Chart Title
@@ -213,9 +211,7 @@ To set you chart title you need to override the title variable of Chart class.
  	
 [source,kotlin]
 ----  
-class ChartSample: Chart() {
-  override val locale = Locale.UK
-  override val title = "Area/population per city"
+class ChartSample: Chart(title = "Area/population per city", locale = Locale.UK) {
   ...
 }
 ----
@@ -227,17 +223,14 @@ You can enter a help text for the chart using the following syntax:
 *Syntax*
 [source,kotlin]
 ----
-override val help = helpText :String
+class ChartSample: Chart(title = titleText :String, help = helpText :String, locale = Locale.UK)
 ----
 Actually every chart has a help menu that tries to describe the structure of the chart by giving information about its commands and fields in a document, the help text will be on the top of this help menu document.
 
 *Example*
 [source,kotlin]
 ----
-class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
-  override val help = "TThis chart lists the ordered quantities per month"
+class OrderedChart: Chart(title = "Ordered quantities per month", help = "TThis chart lists the ordered quantities per month", locale = Locale.UK) {
   ...
 }
 ----
@@ -257,10 +250,7 @@ MenuDefinition: val SimpleName = "menu (" label : String ")"
  	
 [source,kotlin]
 ----
-class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
-
+class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
   val newMenu = menu("newMenu")
   ...
 }
@@ -277,7 +267,6 @@ ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign t
 [source,kotlin]
 ----  
 ActorDefinition:  "actor("
-                         "ident =" SimpleName,
                          "menu =" SimpleName,
                          "label =" label : String,
                          "help" = helpText : String,
@@ -298,7 +287,6 @@ class OrderedChart: Chart() {
   val newMenu = menu("newMenu")
 
    val printChart = actor(
-            ident = "Print",
             menu = newMenu,
             label = "Print",
             help = "Print the chart",
@@ -324,7 +312,7 @@ TypeDefinition:  "object" SimplName":" CodeDomain<FieldType>() {[TypeList] } | "
  	
 [source,kotlin]
 ----
-class OrderedChart : Chart() {
+class OrderedChart : Chart("") {
 
   object Days: CodeDomain<Int>() {
     init {
@@ -395,10 +383,7 @@ Galite actually defines 4 chart Triggers or chart Events :
 *Example*
 [source, java]
 ----
-class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
-
+class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
   val init = trigger(INITCHART) {
     chartType = VChartType.BAR
   }
