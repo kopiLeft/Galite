@@ -62,6 +62,7 @@
 .k-window ::part(menu-bar-button) {
     padding: 0;
     height: 42px;
+    background: #009bd4;
 }
 
 /**
@@ -100,7 +101,12 @@
  * Change color of root menu button
  */
 ::part(rootNavigation) {
-    color: #ffffff;;
+    color: #ffffff;
+    background: #009bd4;
+}
+
+::part(rootNavigation):hover {
+    cursor: pointer;
 }
 
 .actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover * {
