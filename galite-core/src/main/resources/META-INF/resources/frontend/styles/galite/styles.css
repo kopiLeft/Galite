@@ -176,3 +176,7 @@ pre {
   font-style: normal !important;
   font-size: 18px !important;
 }
+
+.k-imagefield img {
+  margin-top: 10px;
+}

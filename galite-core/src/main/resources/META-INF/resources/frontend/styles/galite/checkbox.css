@@ -19,23 +19,6 @@
  /*
  * Boolean field style
  */
-
-.multiple ::part(checkbox) {
-    width: 1.2em;
-    height: 1.2em;
-    border: 1.2px solid #ddd;
-}
-
-.multiple ::part(checkbox)::after {
-    border-width: 0.3em 0 0 0.3em;
-    transform-origin: -0.1px -0px;
-}
-
-.multiple :not(.true)::part(checkbox)::after {
-    left: 0.17em;
-    font-size: 14px;
-}
-
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
     --lumo-primary-color : #009bd4;
 }
@@ -45,7 +28,6 @@
     height: 1em;
     border-radius: 50%;
     vertical-align: middle;
-    border: 1px solid #ddd;
     font-size: 14px !important;
 }
 
@@ -83,6 +65,8 @@
 .multiple .k-boolean-field-content {
     display: flex;
     background-color: #ffffff;
+    align-items: center;
+    justify-content: center;
 }
 
 .editor-booleanfield {
