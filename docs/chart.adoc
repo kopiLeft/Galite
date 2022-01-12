@@ -230,7 +230,11 @@ Actually every chart has a help menu that tries to describe the structure of the
 *Example*
 [source,kotlin]
 ----
-class OrderedChart: Chart(title = "Ordered quantities per month", help = "TThis chart lists the ordered quantities per month", locale = Locale.UK) {
+class OrderedChart: Chart(
+  title = "Ordered quantities per month",
+  help = "TThis chart lists the ordered quantities per month",
+  locale = Locale.UK
+) {
   ...
 }
 ----
@@ -280,9 +284,7 @@ ActorDefinition:  "actor("
  	
 [source,kotlin]
 ----
-class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
+class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
 
   val newMenu = menu("newMenu")
 

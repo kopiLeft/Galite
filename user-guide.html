@@ -2557,7 +2557,7 @@ TrigerAction : {KOTLIN code}</code></pre>
 <h4 id="_creating_form_blocks">Creating Form Blocks</h4>
 <div class="paragraph">
 <p>As you already know, a form is composed of blocks. A block is a set of data which are stocked in the database and shown on a form. A block is created in order to either view the content of a database, to insert new data in the database or to update existing data in the database.
-To create a block you need first to create a class that extend from Block class here we can specify the buffer size, the rows number and the name of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.</p>
+To create a block you need first to create a class that extend from Block class here we can specify the name, the buffer size and the rows number of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.</p>
 </div>
 <div class="paragraph">
 <p><strong>Syntax</strong></p>
@@ -2565,7 +2565,7 @@ To create a block you need first to create a class that extend from Block class 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockDefinition :
-class Block: Block(buffer: Int, rows: Int, blockName : String) {
+class Block: Block(blockName : String, buffer: Int, rows: Int) {
     BlockBody
 }
 
@@ -2595,7 +2595,7 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block(1, 5, "Commands") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block("Commands", 1, 5) {
   ...
 }
 
@@ -2624,14 +2624,8 @@ val BlockCommand = page.insertBlock(BlockCommand()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block(10, 5, "Commands") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block("Commands", 10, 5) {
   ...
-}
-
-or
-
-val BlockCommand = block(10, 5, "Commands", "Commands") {
-...
 }</code></pre>
 </div>
 </div>
@@ -2649,7 +2643,7 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : Block(10, 5, "Degree Block")</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : Block("Degree Block", 10, 5)</code></pre>
 </div>
 </div>
 </div>
@@ -2679,7 +2673,7 @@ val BlockCommand = block(10, 5, "Commands", "Commands") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(10, 5, "Degree Block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree Block", 10, 5) {
     init {
         border = Border.LINE
     }
@@ -2705,7 +2699,7 @@ with column 3 filled with Quantities and Column 4 with Prices, we also have a si
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val targetBlock = insertBlock(Prices())
 
-val TotalPrices = block(1, 1, "Total", "Total block") {
+val TotalPrices = block("Total", 1, 1) {
 
   val totalQuantity = visit(INT(3), position = at(1, 1)) {
     label = "Total"
@@ -2728,7 +2722,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(10, 5, "Degree Block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree Block", 10, 5) {
     init {
           border = Border.LINE
           help = "test"
@@ -2770,7 +2764,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(10, 5, "Degree Block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree Block", 10, 5) {
     init {
           options(BlockOption.NODETAIL)
           ...
@@ -2797,7 +2791,7 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class School : Block(1, 1, "School") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class School : Block("School", 1, 1) {
   val L = table(Lessons)
   val P = table(Lecturers)
   val R = table(Rooms)
@@ -2828,7 +2822,7 @@ when bringing in changes in the principal table.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block(1, 1, "Degree") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree", 1, 1) {
   val unique = index(message = "This data already exists")
   ...
 }</code></pre>
@@ -3071,7 +3065,7 @@ In the last example, all the fields in the block will be either VISIT, SKIPPED o
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Degree : Block(10, 5, "Degree block") {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Degree : Block("Degree block", 10, 5) {
 
   trigger(PREBLK, INIT) {
    Kotlin-Code
@@ -3138,9 +3132,8 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FormDef :
           FormName ":" QualifiedName [,QualifiedName]*
+          ("title ="  formTitle : String, ["locale ="  formLocalization : String])
           {
-              "title ="  formTitle : String
-              ["locale ="  formLocalization : String]
               [MenuDefinition]
               [ActorDefinition] [TypeDefinition]
               [CommandDefinition] [InsertDefinition]
@@ -3159,7 +3152,7 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"locale =" formLocalization : String</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"Form(title =" formTitle : String, "locale =" formLocalization : String")"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3167,9 +3160,7 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LecturersForm : Form() {
-    override val locale = Locale.UK
-}</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LecturersForm : Form(title = "Form", locale = Locale.UK) {}</code></pre>
 </div>
 </div>
 </div>
@@ -3183,7 +3174,7 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"title =" formTitle : String</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"Form(title =" formTitle : String")"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3191,9 +3182,7 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LecturersForm : Form() {
-    override val title = "Lecturers List"
-}</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LecturersForm : Form(title = "Lecturers List", locale = Locale.UK) {}</code></pre>
 </div>
 </div>
 </div>
@@ -3215,9 +3204,7 @@ A form begins always with FORM and ends with END FORM, while a BLOC INSERT form 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm() {
-  override val locale = Locale.UK
-  override val title = "List of the Lecturers"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm(title = "List of the Lecturers", locale = Locale.UK) {
   val file = menu("file")
   ...
 }</code></pre>
@@ -3236,7 +3223,6 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ActorDefinition:  "actor"(
-                    "ident" = SimpleName,
                     "menu" = SimpleName,
                     "label" = label : String,
                     "help" = helpText : String,
@@ -3251,12 +3237,9 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm() {
-  override val locale = Locale.UK
-  override val title = "List of the Lecturers"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm(title = "List of the Lecturers", locale = Locale.UK) {
   val file = menu("file")
   val cut = actor(
-    ident = "cut",
     menu = file,
     label = "cut",
     help = "cut element",
@@ -3280,7 +3263,7 @@ to customize these new types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm("") {
 
     object Days: CodeDomain&lt;Int&gt;() {
       init {
@@ -3794,10 +3777,8 @@ val name = field(STRING(20)) {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ReportDefinition  :
-class ReportClass : Report {
-    [ReportLocalization]
-    ReportTitle
-    [ContextHeader] [ReportHelp] [ReportDefinitions]
+class ReportClass : Report(ReportTitle, [ReportHelp], [ReportLocalization]) {
+    [ContextHeader] [ReportDefinitions]
     [ReportCommands] [ReportTriggers] (ReportFields)
     [ContextFooter]
 }
@@ -3819,7 +3800,7 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override val locale = Locale.UK</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Report(title : String, help: String, locale : Locale)</code></pre>
 </div>
 </div>
 </div>
@@ -3833,10 +3814,7 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ClientR : Report() {
-    override val locale = Locale.UK
-
-    override val title = "Clients_Report"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     ...
 }</code></pre>
 </div>
@@ -3852,7 +3830,7 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override val help = helpText :String</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Report(title : String, help : String, locale : Locale)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3863,12 +3841,7 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrdersReport : Report() {
-  override val locale = Locale.UK
-  override val title = "Orders Report"
-
-  override val help = "This report lists purchase orders"
-}</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrdersReport : Report(title = "Orders Report", help = "This report lists purchase orders", locale = Locale.UK) {}</code></pre>
 </div>
 </div>
 </div>
@@ -3890,10 +3863,7 @@ ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersR : Report() {
-  override val locale = Locale.UK
-  override val title = "List of the Lecturers"
-
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersR : Report(title = "List of the Lecturers", locale = Locale.UK) {
   val newMenu = menu("newMenu")
 }</code></pre>
 </div>
@@ -3911,8 +3881,7 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ActorDefinition:
-actor("ident =" SimpleName,
-      "menu =" SimpleName,
+actor("menu =" SimpleName,
       "label =" label : String,
       "help" = helpText : String
      ) {
@@ -3926,15 +3895,10 @@ actor("ident =" SimpleName,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersR : Report() {
- override val locale = Locale.UK
- override val title = "List of the Lecturers"
- override val help = "Clients_Report"
-
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersR : Report(title = "List of the Lecturers", help = "Clients_Report", locale = Locale.UK) {
  val newMenu = menu("newMenu")
 
   val printReport = actor(
-          ident = "Print",
           menu = newMenu,
           label = "Print",
           help = "Print the report",
@@ -3966,7 +3930,7 @@ to customize these new types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LisLecturersR : Report() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LisLecturersR : Report("") {
 
     object Days: CodeDomain&lt;Int&gt;() {
       init {
@@ -4061,11 +4025,7 @@ ReportEventList:  ReportEvent [,FormEvent]*</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class SimpleReport : Report() {
-  override val locale = Locale.UK
-
-  override val title = "SimpleReport"
-
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
   val preReport = trigger(PREREPORT) {
     println("---------PREREPORT TRIGGER-------------")
   }
@@ -4099,7 +4059,7 @@ You can use Exposed Syntax to create query that select data from you database ta
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class UserList : Report() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class UserList : Report("") {
   init {
     transaction {
       User.selectAll().forEach { result -&gt;
@@ -4384,9 +4344,7 @@ TrigerAction : color | format { KOTLIN code }</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDefinition   :
-classChartClass : Chart() {
-    [CharttLocalization]
-    ChartTitle
+classChartClass : Chart(ChartTitle, [CharttLocalization]) {
     [ContextHeader] [CharttHelp] [ChartDefinitions]
     [ChartCommands] [ChartTriggers] (ChartFields)
     [ContextFooter]
@@ -4409,7 +4367,7 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override val locale = Locale.UK</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart(title = "", locale = Locale.UK)</code></pre>
 </div>
 </div>
 </div>
@@ -4423,9 +4381,7 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart() {
-  override val locale = Locale.UK
-  override val title = "Area/population per city"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart(title = "Area/population per city", locale = Locale.UK) {
   ...
 }</code></pre>
 </div>
@@ -4441,7 +4397,7 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">override val help = helpText :String</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart(title = titleText :String, help = helpText :String, locale = Locale.UK)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4452,10 +4408,11 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
-  override val help = "TThis chart lists the ordered quantities per month"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart(
+  title = "Ordered quantities per month",
+  help = "TThis chart lists the ordered quantities per month",
+  locale = Locale.UK
+) {
   ...
 }</code></pre>
 </div>
@@ -4479,10 +4436,7 @@ ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
-
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
   val newMenu = menu("newMenu")
   ...
 }</code></pre>
@@ -4501,7 +4455,6 @@ ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign t
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ActorDefinition:  "actor("
-                         "ident =" SimpleName,
                          "menu =" SimpleName,
                          "label =" label : String,
                          "help" = helpText : String,
@@ -4516,14 +4469,11 @@ ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
 
   val newMenu = menu("newMenu")
 
    val printChart = actor(
-            ident = "Print",
             menu = newMenu,
             label = "Print",
             help = "Print the chart",
@@ -4555,7 +4505,7 @@ to customize these new types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart : Chart() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart : Chart("") {
 
   object Days: CodeDomain&lt;Int&gt;() {
     init {
@@ -4656,10 +4606,7 @@ ChartEventList:    ChartEvent*</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class OrderedChart: Chart() {
-  override val locale = Locale.UK
-  override val title = "Ordered quantities per month"
-
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
   val init = trigger(INITCHART) {
     chartType = VChartType.BAR
   }

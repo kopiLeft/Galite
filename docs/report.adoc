@@ -240,8 +240,8 @@ Visual Galite Dynamic reports have a unique structure, you need to create new cl
 [source,kotlin]
 ----
 ReportDefinition  :
-class ReportClass : Report(ReportTitle, [ReportLocalization]) {
-    [ContextHeader] [ReportHelp] [ReportDefinitions]
+class ReportClass : Report(ReportTitle, [ReportHelp], [ReportLocalization]) {
+    [ContextHeader] [ReportDefinitions]
     [ReportCommands] [ReportTriggers] (ReportFields)
     [ContextFooter]
 }
@@ -260,7 +260,7 @@ This is an optional step in which you may define the language of your forms menu
 *Example:*
 [source,kotlin]
 ----
-Report(title : String, locale : Locale)
+Report(title : String, help: String, locale : Locale)
 ----
 
 ===== Report Title
