@@ -204,6 +204,9 @@ class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
       help = "The item price"
       columns(P.price)
     }
+    val available = visit(domain = BOOL, position = at(2, 2)) {
+      label = "available"
+    }
 
     init {
       border = Border.LINE
