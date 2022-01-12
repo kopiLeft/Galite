@@ -34,10 +34,7 @@ import org.kopi.galite.visual.dsl.common.Icon
  * test field triggers [compute]
  * report trigger
  */
-class DocumentationReportTriggersR : Report() {
-  override val locale = Locale.UK
-
-  override val title = "Report to test triggers"
+class DocumentationReportTriggersR : Report(title = "Report to test triggers", locale = Locale.UK) {
 
   val action = menu("Action")
 

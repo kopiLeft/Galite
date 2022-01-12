@@ -34,11 +34,7 @@ import org.kopi.galite.visual.type.Decimal
 /**
  * Products Bill Report
  */
-class BillProductR : Report(), IReportDefault by ReportDefaultImpl() {
-
-  override val locale = Locale.UK
-
-  override val title = "Bill Product Report"
+class BillProductR : Report("Bill Product Report", Locale.UK), IReportDefault by ReportDefaultImpl() {
 
   val greeting = actor(
           ident = "greeting",

@@ -101,9 +101,7 @@ class ReportTriggersTests: VApplicationTestBase() {
   }
 }
 
-class ReportWithTriggers : Report() {
-  override val locale = Locale.UK
-  override val title = "Report"
+class ReportWithTriggers : Report(title = "Report", locale = Locale.UK) {
 
   val age = field(INT(3)) {
     label = "Age"

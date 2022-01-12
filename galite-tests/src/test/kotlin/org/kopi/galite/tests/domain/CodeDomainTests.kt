@@ -122,9 +122,7 @@ class IntegerType : CodeDomain<Int>() {
   }
 }
 
-class TestForm : Form() {
-  override val locale: Locale = Locale.UK
-  override val title: String = "Test Form"
+class TestForm : Form(title = "Test Form", locale = Locale.UK) {
   val block = insertBlock(TestBlock())
 
   inner class TestBlock : Block(1, 1, "Test Block") {
@@ -134,18 +132,14 @@ class TestForm : Form() {
   }
 }
 
-class TestReport : Report() {
-  override val locale = Locale.UK
-  override val title = "Test Report"
+class TestReport : Report(title = "Test Report", locale = Locale.UK) {
 
   val testField = field(StringType()) {
     label = "Test field"
   }
 }
 
-class TestChart : Chart() {
-  override val locale = Locale.UK
-  override val title = "Test Chart"
+class TestChart : Chart(title = "Test Chart", locale = Locale.UK) {
 
   val measureTest = measure(IntegerType()) {
     label = "Test Measure"

@@ -123,9 +123,7 @@ class TriggersTests : GaliteVUITestBase() {
   }
 }
 
-class FormToTestTriggers : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Form to test triggers"
+class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",

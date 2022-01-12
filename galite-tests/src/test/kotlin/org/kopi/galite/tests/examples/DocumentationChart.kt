@@ -26,11 +26,7 @@ import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
-class DocumentationChart : Form() {
-
-  override val locale = Locale.UK
-
-  override val title = "Test Report Form"
+class DocumentationChart : Form(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
   val file = menu("file")

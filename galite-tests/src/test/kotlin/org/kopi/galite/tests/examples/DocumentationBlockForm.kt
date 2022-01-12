@@ -33,9 +33,7 @@ import org.kopi.galite.visual.dsl.form.Key
 /*** Block Tables & Block Indexes  ***/
 // See [DocumentationFieldsForm]
 
-class DocumentationBlockForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Form to test Blocks"
+class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", locale = Locale.UK) {
 
   val action = menu("Action")
 

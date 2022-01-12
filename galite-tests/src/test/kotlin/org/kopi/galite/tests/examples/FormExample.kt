@@ -31,9 +31,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class FormExample : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",

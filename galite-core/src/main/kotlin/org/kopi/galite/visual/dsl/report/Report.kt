@@ -33,17 +33,20 @@ import org.kopi.galite.visual.util.PrintJob
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
+
+ * @param title The title of this form.
+ * @param help The help text.
+ * @param locale the window locale.
  */
-abstract class Report : Window() {
+abstract class Report(title: String, val help: String?, locale: Locale? = null) : Window(title, locale) {
+
+  constructor(title: String, locale: Locale? = null) : this(title, null, locale)
 
   /** Report's fields. */
   val fields = mutableListOf<ReportField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
-
-  /** the help text */
-  open val help: String? = null
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -166,12 +169,7 @@ abstract class Report : Window() {
     model.export(file, type)
   }
 
-  /**
-   * Sets the title
-   */
-  fun setPageTitle(title: String) {
-    model.setPageTitle(title)
-  }
+  var pageTitle: String? = null
 
   fun setPageTitleParams(param: Any) {
     model.setPageTitleParams(param)
@@ -257,7 +255,9 @@ abstract class Report : Window() {
   // ----------------------------------------------------------------------
   override val model: VReport by lazy {
     initFields()
-    ReportModel(this)
+    ReportModel(this).also { r ->
+      pageTitle?.let { r.setPageTitle(it) }
+    }
   }
 
   fun initFields() {

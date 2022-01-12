@@ -80,10 +80,11 @@ object DecimalCode : CodeDomain<Decimal>() {
   }
 }
 
-class TestChart : Chart() {
-  override val locale = Locale.UK
-  override val title = "Test Chart for measures"
-  override val help = "This chart presents a test chart"
+class TestChart : Chart(
+  locale = Locale.UK,
+  title = "Test Chart for measures",
+  help = "This chart presents a test chart"
+) {
 
   val decimalMeasure = measure(DECIMAL(width = 10, scale = 5)) {
     label = "Decimal measure"

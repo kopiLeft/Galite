@@ -31,9 +31,8 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.maxValue
 import org.kopi.galite.visual.dsl.form.minValue
 
-class TestFieldsForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Fields Form"
+class TestFieldsForm : DictionaryForm(title = "Fields Form", locale = Locale.UK) {
+
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",

@@ -25,13 +25,11 @@ import org.kopi.galite.visual.visual.VWindow
 
 /**
  * This class represents the definition of a window
- */
-abstract class Window {
-  /** The title of this form */
-  abstract val title: String
 
-  /** The window locale */
-  open val locale: Locale? = null
+ * @param title The title of this form.
+ * @param locale the window locale
+ */
+abstract class Window(val title: String, val locale: Locale?) {
 
   /** The window options */
   internal var options: Int? = null

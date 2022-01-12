@@ -239,10 +239,7 @@ class FieldsTests : GaliteVUITestBase() {
   }
 }
 
-class FormToTestFormPopUp: Form() {
-  override val locale = Locale.UK
-  override val title = "apperation of form in popup"
-
+class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
     ident = "Autofill",
@@ -273,9 +270,7 @@ class FormToTestFormPopUp: Form() {
   }
 }
 
-class FormInPopUp : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) {
   val action = menu("Action")
 
   val autoFill = actor(

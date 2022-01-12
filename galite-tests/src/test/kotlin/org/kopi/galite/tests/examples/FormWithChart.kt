@@ -32,9 +32,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 
-object FormWithChart: Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
 
@@ -56,10 +54,11 @@ object FormWithChart: Form() {
   }
 }
 
-class ChartSample: Chart() {
-  override val locale = Locale.UK
-  override val title = "Area/population per city"
-  override val help = "This chart presents the area/population per city"
+class ChartSample: Chart(
+  title = "Area/population per city",
+  help = "This chart presents the area/population per city",
+  locale = Locale.UK
+) {
 
   val action = menu("Action")
 

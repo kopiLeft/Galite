@@ -35,10 +35,7 @@ import org.kopi.galite.visual.visual.WindowController
 /**
  * Training Report
  */
-class TrainingR : Report() {
-  override val locale = Locale.UK
-
-  override val title = "Clients_Report"
+class TrainingR : Report(title = "Clients_Report", locale = Locale.UK) {
 
   val action = menu("Action")
 

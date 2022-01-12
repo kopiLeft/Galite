@@ -33,9 +33,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class TaxRuleForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "TaxRules"
+class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
   val page = page("TaxRule")
 
   init {

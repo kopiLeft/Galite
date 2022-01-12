@@ -50,9 +50,7 @@ object User : Table() {
 
 val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
 
-class FormSample : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormSample : Form(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
 

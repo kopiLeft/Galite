@@ -47,9 +47,7 @@ import org.kopi.galite.visual.visual.FileHandler
 /*** Field Access modifiers using Modes ***/
 // See [FormToCheckFieldVisibility]
 
-class DocumentationFieldsForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Form to test fields"
+class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", locale = Locale.UK) {
 
   val action = menu("Action")
 

@@ -32,10 +32,7 @@ import org.kopi.galite.visual.report.VReport
 /**
  * Tax Rules Report
  */
-class TaxRuleR : Report() {
-  override val locale = Locale.UK
-
-  override val title = "TaxRules_Report"
+class TaxRuleR : Report(title = "TaxRules_Report", locale = Locale.UK) {
 
   val action = menu("Action")
 

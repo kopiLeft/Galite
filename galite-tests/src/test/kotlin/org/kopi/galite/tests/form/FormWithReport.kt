@@ -24,10 +24,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class FormWithReport : ReportSelectionForm() {
-  override val locale = Locale.UK
-
-  override val title = "form for test"
+class FormWithReport : ReportSelectionForm(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
   val testPage = page("test page")

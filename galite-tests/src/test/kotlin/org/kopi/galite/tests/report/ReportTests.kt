@@ -120,10 +120,7 @@ class ReportTests: VApplicationTestBase() {
 /**
  * Simple Report with two fields.
  */
-class SimpleReport : Report() {
-  override val locale = Locale.UK
-
-  override val title = "SimpleReport"
+class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
 
   val preReport = trigger(PREREPORT) {
     println("---------PREREPORT TRIGGER-------------")

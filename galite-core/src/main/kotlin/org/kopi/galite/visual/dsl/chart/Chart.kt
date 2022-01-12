@@ -38,16 +38,20 @@ import org.kopi.galite.visual.dsl.common.Window
  *
  * With this Charts, you will also be able to print or export the created chart to different file formats.
  *
+ *
+ * @param title The title of this form.
+ * @param help The help text.
+ * @param locale The window locale.
  */
-abstract class Chart : Window() {
+abstract class Chart(title: String, val help: String?, locale: Locale? = null) : Window(title, locale) {
+
+  constructor(title: String, locale: Locale? = null) : this(title, null, locale)
+
   /** The chart's dimension */
   lateinit var dimension: ChartDimension<*>
 
   /** The chart's measures */
   val measures = mutableListOf<ChartMeasure<*>>()
-
-  /** the help text */
-  open val help: String? = null
 
   /**
    * Creates a chart dimension, with the specified [domain], used to store values of type [T] and measures values.

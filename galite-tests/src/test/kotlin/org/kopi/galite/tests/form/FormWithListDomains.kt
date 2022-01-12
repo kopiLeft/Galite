@@ -37,7 +37,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.visual.FileHandler
 
-class FormWithListDomains: Form() {
+class FormWithListDomains: Form(title = "form to test list domains", locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
           ident = "Autofill",
@@ -57,8 +57,7 @@ class FormWithListDomains: Form() {
           label = "EditItem",
           help = "EditItem",
   )
-  override val locale = Locale.UK
-  override val title = "form to test list domains"
+
   val userListBlock = insertBlock(UsersListBlock()) {
 
     val file = visit(domain = STRING(25), position = at(3, 1)) {
@@ -138,9 +137,7 @@ class Module: ListDomain<String>(20) {
     "SYMBOL" keyOf Modules.symbol
   }
 }
-class SomeDictionnaryForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class SomeDictionnaryForm : DictionaryForm(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
 

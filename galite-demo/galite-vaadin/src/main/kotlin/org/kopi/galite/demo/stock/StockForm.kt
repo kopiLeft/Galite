@@ -28,9 +28,8 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class StockForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Stocks"
+class StockForm : ReportSelectionForm(title = "Stocks", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+
   val page = page("Stock")
 
   init {

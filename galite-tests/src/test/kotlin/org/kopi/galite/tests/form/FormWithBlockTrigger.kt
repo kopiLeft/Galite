@@ -24,10 +24,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-object FormWithBlockTrigger: Form() {
-
-  override val locale = Locale.UK
-  override val title = "form for test"
+object FormWithBlockTrigger: Form(title = "form for test", locale = Locale.UK) {
   val testPage = page("test page")
   val menu = menu("Action")
   val firstBlock = testPage.insertBlock(BlockWithTrigger1)

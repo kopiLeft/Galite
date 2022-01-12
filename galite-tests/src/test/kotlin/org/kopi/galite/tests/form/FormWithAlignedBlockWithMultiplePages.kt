@@ -25,9 +25,7 @@ import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-class FormWithAlignedBlockWithMultiplePages : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormWithAlignedBlockWithMultiplePages : Form(title = "form for test", locale = Locale.UK) {
 
   val p1 = page("page 1")
   val p2 = page("page 2")

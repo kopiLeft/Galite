@@ -32,12 +32,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
-class DocumentationForm : DictionaryForm() {
-
-  // test Form Localization
-  override val locale = Locale.UK
-  // test Form Title
-  override val title = "Test Form"
+class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK) {
 
   //Menus Definition
   val file = menu("file")

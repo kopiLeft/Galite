@@ -25,9 +25,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class ManyPagesForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class ManyPagesForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val clientsPage= page("Clients")
   val contactsPage= page("Contacts")
   val detailsPage= page("Details")

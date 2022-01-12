@@ -43,13 +43,11 @@ import org.kopi.galite.visual.dsl.common.Icon
  * test chart triggers : init, preChar, postChart, type
  * test data initialization
  */
-class DocumentationChartC :  Chart() {
-  //test locale
-  override val locale = Locale.UK
-  //test title
-  override val title = "Chart title"
-  //char help
-  override val help = "chart help"
+class DocumentationChartC :  Chart(
+  locale = Locale.UK,
+  title = "Chart title",
+  help = "chart help"
+) {
 
   //chart menu
   val action = menu("Action")

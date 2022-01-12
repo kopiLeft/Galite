@@ -33,9 +33,7 @@ import org.kopi.galite.visual.domain.WEEK
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class SimpleForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Training"
+class SimpleForm : DictionaryForm(title = "Training", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",

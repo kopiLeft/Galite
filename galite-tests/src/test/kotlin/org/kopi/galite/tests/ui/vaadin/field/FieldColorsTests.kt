@@ -93,8 +93,7 @@ class FieldColorsTests: GaliteVUITestBase() {
   }
 }
 
-class FormWithColoredFields: Form() {
-  override val title: String = ""
+class FormWithColoredFields: Form(title = "") {
   val action = menu("Action")
 
   val autoFill = actor(

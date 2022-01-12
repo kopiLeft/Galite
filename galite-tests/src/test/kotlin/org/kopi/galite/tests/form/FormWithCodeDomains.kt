@@ -24,7 +24,7 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-class FormWithCodeDomains: Form() {
+class FormWithCodeDomains: Form(title = "form to test domains",  locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
           ident = "Autofill",
@@ -32,8 +32,6 @@ class FormWithCodeDomains: Form() {
           label = "Autofill",
           help = "Autofill",
   )
-  override val locale = Locale.UK
-  override val title = "form to test domains"
   val testBlock = insertBlock(DaysBlock)
 }
 

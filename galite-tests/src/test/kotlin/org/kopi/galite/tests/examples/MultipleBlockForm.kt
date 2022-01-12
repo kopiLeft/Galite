@@ -29,10 +29,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
-class MultipleBlockForm : DictionaryForm() {
-  override val locale = Locale.UK
-
-  override val title = "Training Form"
+class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val page1 = page("page1")
   val page2 = page("page2")
   val action = menu("Action")

@@ -52,9 +52,7 @@ object Product : Table() {
   val month = month("EXP_MONTH").nullable()
 }
 
-class FormWithSpecialTypes : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormWithSpecialTypes : Form(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
   val edit = menu("Edit")

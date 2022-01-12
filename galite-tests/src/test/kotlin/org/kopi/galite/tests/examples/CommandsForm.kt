@@ -23,9 +23,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class CommandsForm : ReportSelectionForm() {
-  override val locale = Locale.UK
-  override val title = "Commands Form"
+class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",

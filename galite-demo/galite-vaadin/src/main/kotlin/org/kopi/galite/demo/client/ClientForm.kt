@@ -37,9 +37,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.visual.VExecFailedException
 
-class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
 
   init {
     insertMenus()

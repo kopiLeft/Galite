@@ -311,14 +311,9 @@ class FormDSLTests : VApplicationTestBase() {
   }*/
 }
 
-class BasicForm : Form() {
-  override val locale = Locale.UK
-  override val title = "Clients"
-}
+class BasicForm : Form(title = "Clients", locale = Locale.UK)
 
-class FormWithOneSimpleBlock : Form() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class FormWithOneSimpleBlock : Form(title = "Clients", locale = Locale.UK) {
   val page = page("title")
   val block = page.insertBlock(SimpleBlock())
 
@@ -331,9 +326,7 @@ class FormWithOneSimpleBlock : Form() {
   }
 }
 
-class FormWithMultipleBlock : Form() {
-  override val locale = Locale.UK
-  override val title = "Information"
+class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val reset = menu("reset")
   val edit = menu("edit")
 
