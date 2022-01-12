@@ -67,7 +67,7 @@ AccessModifier:   mustFill()
 As the user moves from a field to another when filling the form, the current field is always colored in red.
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val password = mustFill(domain = STRING(20), position = at(2, 1)) {
@@ -107,14 +107,14 @@ FieldPosition : at(row: Int  [,column: Int])
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val name = visit(domain = STRING(20), position = at(1, 1..4)) {
   ...
 }
 ----
-The first integer indicates the row number while the second defines the column. 
+The first integer indicates the row number while the second defines the column.
 In fact, Galite automatically divides up the window in rows and columns when setting up a form. +
  When defining the width of a column, thus,
 it always adopts the width of the longest field. Since the form wide is not unlimited,
@@ -125,7 +125,7 @@ you can put a long field in two or more columns in order to spare place as it is
 You can also make use of the following structure : `follow(otherField)`
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val age = visit(domain = INT(3), position = follow(name)) {
@@ -160,13 +160,13 @@ val secondName = visit(domain = STRING(20), position = at(1, 1)) {
 this property is used to insert an explanation text for the application user in order to help him filling in the form. This Help text will then be displayed when the user places the mouse on the field.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 HelpText:   help = "HELP TEXT"
 ----
 *Example*
- 	
+
 [source,kotlin]
 ----
 val lesson = visit(domain = STRING(20), position = at(1, 1)) {
@@ -256,16 +256,16 @@ val cv = visit(domain = STRING(20), position = at(4, 1)) {
 In this example, you can drag pdf files and drop them in the field named "cv".
 
 ===== Field Options
- 
+
 In this part of the field definition, you can use one or more option from the 9 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().
 
  * NOECHO               : If this option is used, characters typed in the field will not be displayed and a star(*) will be displayed instead, this option is useful for password fields.
  * NOEDIT               : This option makes it impossible to change the data of the field or to overwrite it.
- * SORTABLE             : This option adds two opposed arrows icons(up and down) just before the field, clicking on the icon changes the way data are sorted in the field, you can click the icon three times to have ascending sort, descending sort and default sort, 
+ * SORTABLE             : This option adds two opposed arrows icons(up and down) just before the field, clicking on the icon changes the way data are sorted in the field, you can click the icon three times to have ascending sort, descending sort and default sort,
  * TRANSIENT            : This option make the field transient, meaning that the system can no trail it, if a transaction  calls this field and then this transaction is aborted, the field will not be able to backup or roll-back to its original value, besides this option makes changes ignored for this field.
  * NO DELETE ON UPDATE  : If the field is a lookup is a column of a lookup table, using this option prevent the system to clear the field when inserting new rows or updating rows.
  * NO DETAIL            : If the block is in detailed, using this option on a field make it invisible in the detail.
- * NO CHART             : If the block is multiple, using this option on a field exclude it from the chart. 
+ * NO CHART             : If the block is multiple, using this option on a field exclude it from the chart.
  * QUERY UPPER          : Whatever the string you input, this option will make Galite transform it to capital letters.
  * QUERY LOWER          : the opposite of the previous option it transform strings to lower case.
 
@@ -288,7 +288,7 @@ The same field can refer to more than one column.
 Two more option are available with the `columns` function, the index and the priority options.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 FieldColumns :
@@ -302,7 +302,7 @@ ColumnList   : Column  [, Column ]
 Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]
 ----
 *Example*
- 	
+
 [source,kotlin]
 ----
  val id = hidden(domain = INT(20)) {
@@ -315,7 +315,7 @@ Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]
 NOTE: that a field can be connected to more than one table and column. In this case, the statement you will type will be:
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val id = hidden(domain = INT(20)) {
@@ -333,7 +333,7 @@ This option is used to define a value in the database which is to remain unique 
 Let’s sum up with the following syntax:
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ColumnIndex : "val i = index(message : String)"
@@ -341,10 +341,10 @@ ColumnIndex : "val i = index(message : String)"
 
 If two or more fields are given the same index value, it means that two similar combinations of these field values will not be accepted.
 
-For example, two different lessons cannot be given in the same room. In this case, the three fields, namely the fields "professor", "time" and "lesson" are to be attributed the same index. Thus, at least one of the three values needs to be changed so that the combination can be accepted by the machine. 
+For example, two different lessons cannot be given in the same room. In this case, the three fields, namely the fields "professor", "time" and "lesson" are to be attributed the same index. Thus, at least one of the three values needs to be changed so that the combination can be accepted by the machine.
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val i = index(message = "this should be unique")
@@ -376,7 +376,7 @@ val time = mustFill(domain = STRING(20), position = at(3, 1)) {
 However, this example would implicate a professor can give two different lessons at the same time. In order to avoid such errors, you can attribute one field two or more indexes. So you can associate the two fields "professor" and "time" together. Thus, you will have:
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val lessonIndex = index("Lesson should be unique")
@@ -411,7 +411,7 @@ The index value is ascendant. When attributing an index value to a field combina
  * *Priority*
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ColumnPriority:   "priority = Integer"
@@ -421,7 +421,7 @@ This option is used in order to define the column order within a list when this 
 We shall notice that negative values are also permitted in this option. However, the minus sign ("-") standing before the number does not have any influence over its value but simply indicates the way all the information will be sorted out within a column. Actually, the different fields are always sorted in the ascending way, i.e from A to Z in case of an alphabetical text and from 1 to x+1 for numbers. Now, if the integer is preceded by a minus, the column content will be sorted in the other way round.
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 val i = index(message = "this should be unique")
@@ -434,7 +434,7 @@ val surname = mustFill(domain = STRING(20), position = at(1, 1)) {
 }
 ----
 
-If columns "Surname", "Name" and "Date of Birth" are 
+If columns "Surname", "Name" and "Date of Birth" are
 respectively given the priorities 3,4 and 1, "Name" will come
 first and will be followed by "Surname" and "Date of Birth".
 The same order applies with the values 3, -4 and 1, with the only
@@ -447,7 +447,7 @@ Moreover, two columns with the same priority will be displayed according to the 
 Once you have defined the columns , you may define the field commands.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ModeAndCommands :
@@ -485,7 +485,7 @@ All the previous command definition ways can be preceded by one mode or more. Th
  * UPDATE to enter new information within a row
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 command(item = insertMode, Mode.UPDATE, Mode.QUERY) {
@@ -529,7 +529,7 @@ if the block is in the `QUERY` or the `INSERT` mode.
 
 ===== Field Triggers
 
-Triggers are events that you can use to execute actions when they occur, there are field triggers, block triggers and form triggers that you can use following this syntax : 
+Triggers are events that you can use to execute actions when they occur, there are field triggers, block triggers and form triggers that you can use following this syntax :
 
 *Syntax*
 [source,kotlin]
@@ -546,8 +546,8 @@ Field Triggers are events that concern the fields behavior, here is a list of al
   * PREFLD     : is executed upon entry of field
 
   * POSTFLD    : is executed upon exit of field
-  
-  * POSTCHG    : is executed on field content change 
+
+  * POSTCHG    : is executed on field content change
 
   * PREVAL     : is executed before validating any new entry
 
@@ -563,7 +563,7 @@ Field Triggers are events that concern the fields behavior, here is a list of al
 
   * VALUE      : equates the value of two fields
 
-  * AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field 
+  * AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field
 
   * PREINS     : is executed before inserting a row of the database
 
@@ -607,20 +607,20 @@ val password = mustFill(domain = STRING(20), position = at(2, 1)) {
 ==== Creating Form Blocks
 
 As you already know, a form is composed of blocks. A block is a set of data which are stocked in the database and shown on a form. A block is created in order to either view the content of a database, to insert new data in the database or to update existing data in the database.
-To create a block you need first to create a class that extend from Block class here we can specify the buffer size, the rows number and the name of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.
+To create a block you need first to create a class that extend from Block class here we can specify the name, the buffer size and the rows number of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.
 
 *Syntax*
 [source,kotlin]
 ----
 BlockDefinition :
-class Block: Block(buffer: Int, rows: Int, blockName : String) {
+class Block: Block(blockName : String, buffer: Int, rows: Int) {
     BlockBody
 }
-  
+
 BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
-                  [blockOptions] [blockTables]  
+                  [blockOptions] [blockTables]
                   [blocIndices] [blockCommands] [blockTriggers] blockFields
-                  [blockContextFooter]                     
+                  [blockContextFooter]
 ----
 
 ===== Block Types
@@ -628,13 +628,13 @@ BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
 There are actually two types of blocks in Galite, the only difference between them in the definition syntax is the buffer Integer.
 
  * single blocks
-  
+
 A single block is a block in which only one single row of a database table is displayed on the form. Each time, the computer will memorize only one entire row and a certain quantity of ID numbers through which it will retrieve another rows from the database if you want to view them.
 
 *Example*
 [source,kotlin]
 ----
-class BlockCommand : Block(1, 5, "Commands") {
+class BlockCommand : Block("Commands", 1, 5) {
   ...
 }
 
@@ -653,26 +653,20 @@ A multiple block is a block in which more than one row are displayed on the form
 *Example*
 [source,kotlin]
 ----
-class BlockCommand : Block(10, 5, "Commands") {
+class BlockCommand : Block("Commands", 10, 5) {
   ...
-}
-
-or
-
-val BlockCommand = block(10, 5, "Commands", "Commands") {
-...
 }
 ----
 The first integer indicates the number of rows to be automatically memorized while the second defines the number of displayed rows. Notice the first integer value must always be greater than 1.
- 
+
 ===== Block Names
 
 The example bellow show how to create a block, you need to specify the block title as parameter in the Block class.
 
 *Example*
-[source,kotlin] 
+[source,kotlin]
 ----
-class Degree : Block(10, 5, "Degree Block")
+class Degree : Block("Degree Block", 10, 5)
 ----
 
 ===== Block Border
@@ -687,7 +681,7 @@ You can insert the optional border statement that defines the Block's frame type
 *Example*
 [source,kotlin]
 ----
-inner class Degree : Block(10, 5, "Degree Block") {
+inner class Degree : Block("Degree Block", 10, 5) {
     init {
         border = Border.LINE
     }
@@ -708,7 +702,7 @@ with column 3 filled with Quantities and Column 4 with Prices, we also have a si
 ----
 val targetBlock = insertBlock(Prices())
 
-val TotalPrices = block(1, 1, "Total", "Total block") {
+val TotalPrices = block("Total", 1, 1) {
 
   val totalQuantity = visit(INT(3), position = at(1, 1)) {
     label = "Total"
@@ -725,10 +719,10 @@ val TotalPrices = block(1, 1, "Total", "Total block") {
 This optional command is used to define the help text for each field of the block. You need to set the value of help property.
 
 *Example*
- 	
+
 [source,kotlin]
 ----
-inner class Degree : Block(10, 5, "Degree Block") {
+inner class Degree : Block("Degree Block", 10, 5) {
     init {
           border = Border.LINE
           help = "test"
@@ -750,7 +744,7 @@ You need to use options function in your block to specify block options. you can
 
 [source,kotlin]
 ----
-inner class Degree : Block(10, 5, "Degree Block") {
+inner class Degree : Block("Degree Block", 10, 5) {
     init {
           options(BlockOption.NODETAIL)
           ...
@@ -759,21 +753,21 @@ inner class Degree : Block(10, 5, "Degree Block") {
 ----
 
 ===== Block Tables
- 
+
 When making use of this section, you have to type the function table and enter the table name, assign this function to an variable. This variable will further be used as a shorthand in place of the complete table name in order to access to the table. These names refer to certain tables in the database whereby the first table is the one on which the user will work. The remaining tables are the so-called "look-up tables", i.e tables that are associated with the first one.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 BlockTables:   table(vararg ExposedTables)
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
-inner class School : Block(1, 1, "School") {
+inner class School : Block("School", 1, 1) {
   val L = table(Lessons)
   val P = table(Lecturers)
   val R = table(Rooms)
@@ -789,17 +783,17 @@ when bringing in changes in the principal table.
 If you plan to enter one index or more when defining your fields, you also have to define one index text or more which will appear if you make a mistake by entering an indexed data or a data combination twice. This command can be followed by an error message contained in a string.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 BlockIndices:   "index("  message : String  ")" [BlockIndices]*
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
-inner class Degree : Block(1, 1, "Degree") {
+inner class Degree : Block("Degree", 1, 1) {
   val unique = index(message = "This data already exists")
   ...
 }
@@ -827,7 +821,7 @@ command(item = Validate) {
 
  *  *Calling The Block Commands With Modes*
 
-Blocks have 3 possible Modes: 
+Blocks have 3 possible Modes:
 
  * QUERY  : When querying the database
  * INSERT : When inserting a new row in the database
@@ -856,12 +850,12 @@ command(item = Validate, Mode.UPDATE, Mode.QUERY) {
  * *Calling The Block Commands With Modes And An Access Modifier*
 
 in Galite, a field can have different access types or modifiers, here is the definition of the four available access modifiers listed by ascending level.
- 
+
  * HIDDEN : HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
  * SKIPPED : SKIPPED fields are read only fields, you can read the value but you can't modify it.
  * VISIT : fields with this access type are accessible, can be modified but not necessary.
  * MUSTFILL : MUSTFILL fields are accessible fields that the user must fill with a value.
-  
+
 In the block command section, you can set the highest access level for the block fields according to the mode in wich the block would be ording to the mode in which the block would be.
 
 *Example*
@@ -903,7 +897,7 @@ Here is a list of all available block triggers or block events in Galite.
  ** PREUPD  : executed before a row is updated
  ** POSTUPD : executed after a row is updated
  ** PRESAVE : executed before saving a row
- ** PREREC  : executed upon record entry		
+ ** PREREC  : executed upon record entry
  ** POSTREC : executed upon record exit
  ** PREBLK  : executed upon block entry
  ** POSTBLK : executed upon block exit
@@ -912,7 +906,7 @@ Here is a list of all available block triggers or block events in Galite.
  ** DEFAULT : is executed when the block is in the InsertMode. This trigger becomes active when the user presses the key F4. It will then enable the system to load standard values which will be proposed to the user if he wishes to enter new data.
  ** INIT    : executed upon block initialization
  ** RESET   : executed upon Reset command (ResetForm)
- ** CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way : 
+ ** CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way :
 ----
  trigger(CHANGED) {
    return false;
@@ -920,7 +914,7 @@ Here is a list of all available block triggers or block events in Galite.
 ----
 
  ** ACCESS  : defines whether a block can or not be accessed, it must always return a boolean value
- 
+
 ----
   trigger(ACCESS) {
     return Block.getMode() == MOD_QUERY
@@ -928,11 +922,11 @@ Here is a list of all available block triggers or block events in Galite.
     this block is only accessible on query mode
   }
 ----
- 
+
 *Examples*
 [source,kotlin]
 ----
-object Degree : Block(10, 5, "Degree block") {
+object Degree : Block("Degree block", 10, 5) {
 
   trigger(PREBLK, INIT) {
    Kotlin-Code
@@ -945,7 +939,7 @@ object Degree : Block(10, 5, "Degree block") {
   ...
 }
 ----
- 
+
 ===== Block Fields Declaration
 
 In this section, all you have to do is to write at least on block field definition that begins with an access modifier and ends with brace "}", you can enter as much fields as you may need
@@ -960,7 +954,7 @@ val name = visit(domain = STRING(25), position = at(1, 2)) {
       columns(c.name)
 }
 ----
- 
+
 ==== Creating Forms 
 
 There are actually two types of forms in Galite, normal forms and BLOC INSERT forms which are special forms containing blocks that you may insert in other forms. +
@@ -975,13 +969,12 @@ In Galite to create a form you need to extend from this list off classes :
 When creating a form, you will have to include the block and the field definitions. Moreover, you will have to define the menus as well as the different commands. Finally, you can also define some form triggers. Concretely, the structure is the following:
 
 *Syntax:*
-[source,kotlin] 
+[source,kotlin]
 ----
 FormDef :
           FormName ":" QualifiedName [,QualifiedName]*
+          ("title ="  formTitle : String, ["locale ="  formLocalization : String])
           {
-              "title ="  formTitle : String
-              ["locale ="  formLocalization : String]
               [MenuDefinition]
               [ActorDefinition] [TypeDefinition]
               [CommandDefinition] [InsertDefinition]
@@ -997,14 +990,12 @@ This is an optional step in which you may define the language of your forms menu
 *Syntax*
 [source,kotlin]
 ----
-"locale =" formLocalization : String
+"Form(title =" formTitle : String, "locale =" formLocalization : String")"
 ----
 *Example:*
 [source,kotlin]
 ----
-class LecturersForm : Form() {
-    override val locale = Locale.UK
-}
+class LecturersForm : Form(title = "Form", locale = Locale.UK) {}
 ----
 
 ===== Form Title
@@ -1014,16 +1005,14 @@ Every form have can have a title (optional).
 *Syntax*
 [source,kotlin]
 ----
-"title =" formTitle : String
+"Form(title =" formTitle : String")"
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
-class LecturersForm : Form() {
-    override val title = "Lecturers List"
-}
+class LecturersForm : Form(title = "Lecturers List", locale = Locale.UK) {}
 ----
 
 ===== Menus Definition
@@ -1031,19 +1020,17 @@ class LecturersForm : Form() {
 Defining a menu means adding an entry to the menu bar in the top of the form, you can add actors to this menu later by specifying the menu name in the actor definition.
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----  
 MenuDefinition: "menu (" label : String ")"
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
-class ListLecturersForm : ReportSelectionForm() {
-  override val locale = Locale.UK
-  override val title = "List of the Lecturers"
+class ListLecturersForm : ReportSelectionForm(title = "List of the Lecturers", locale = Locale.UK) {
   val file = menu("file")
   ...
 }
@@ -1056,11 +1043,10 @@ ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the 
 
 
 *Syntax:*
- 	
+
 [source,kotlin]
 ----
 ActorDefinition:  "actor"(
-                    "ident" = SimpleName,
                     "menu" = SimpleName,
                     "label" = label : String,
                     "help" = helpText : String,
@@ -1071,16 +1057,13 @@ ActorDefinition:  "actor"(
 ----
 
 *Example*
- 	
+
 [source,kotlin]
 ----
 
-class ListLecturersForm : ReportSelectionForm() {
-  override val locale = Locale.UK
-  override val title = "List of the Lecturers"
+class ListLecturersForm : ReportSelectionForm(title = "List of the Lecturers", locale = Locale.UK) {
   val file = menu("file")
   val cut = actor(
-    ident = "cut",
     menu = file,
     label = "cut",
     help = "cut element",
@@ -1095,13 +1078,13 @@ class ListLecturersForm : ReportSelectionForm() {
 ===== Types Definition
 
 After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use SELECT commands
-to customize these new types. 
+to customize these new types.
 
 *Example*
- 	
+
 [source,kotlin]
 ----
-class ListLecturersForm : ReportSelectionForm() {
+class ListLecturersForm : ReportSelectionForm("") {
 
     object Days: CodeDomain<Int>() {
       init {
@@ -1131,10 +1114,10 @@ class ListLecturersForm : ReportSelectionForm() {
 In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
 every command have a effective ray of action (VField, VBlock, VForm)
 
- * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm. 
+ * Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm.
 
 Command Defined in this section can be form level commands, block level commands or field level commands, this will depend on the action called by the command and where the command is actualy called.
- 
+
 *Syntax*
 [source,kotlin]
 ----
@@ -1199,13 +1182,13 @@ FormEventList:  FormEvent [,FormEvent]*
 ----
 
 Galite actually defines 6 Form Triggers or Form Events :
- 
+
  * INIT      : executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
  * PREFORM   : executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
  * POSTFORM  : executed when closing the form
  * QUITFORM  : actually not available
  * RESET     : executed upon ResetForm command
- * CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way : 
+ * CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way :
 ----
 val postform = trigger(POSTFORM) {
   println("post form trigger works")
