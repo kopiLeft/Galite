@@ -27,9 +27,7 @@ import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.form.FullCalendar
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class TasksForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Tasks"
+class TasksForm : ReportSelectionForm(title = "Tasks", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
 
   init {
     insertMenus()

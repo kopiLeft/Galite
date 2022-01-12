@@ -25,11 +25,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class DocumentationReport : ReportSelectionForm() {
-
-  override val locale = Locale.UK
-
-  override val title = "Test Report Form"
+class DocumentationReport : ReportSelectionForm(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
   val file = menu("file")
@@ -47,7 +43,7 @@ class DocumentationReport : ReportSelectionForm() {
   val block = insertBlock(SimpleBlock())
 
   // simple block
-  inner class SimpleBlock : Block(1, 10, "Block1") {
+  inner class SimpleBlock : Block("Block1", 1, 10) {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }

@@ -31,10 +31,7 @@ import org.kopi.galite.visual.report.VReport
 /**
  * Product Report
  */
-class ProductReport : Report() {
-  override val locale = Locale.UK
-
-  override val title = "Products"
+class ProductReport : Report(title = "Products", locale = Locale.UK) {
 
   val action = menu("Action")
 

@@ -17,7 +17,19 @@
 
 package org.kopi.galite.visual.dsl.report
 
+import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.Month
+import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Type0
+import org.kopi.galite.visual.type.Week
 
 /**
  * Represents a data row of a [Report].
@@ -59,7 +71,28 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
   @JvmName("setType0")
   operator fun <T : Type0<K>, K> set(field: ReportField<T>, value: K) {
     if (field in reportFields) {
-      data.putIfAbsent(field, value)
+      data.putIfAbsent(field, field.toType0(value))
     }
+  }
+}
+
+/**
+ * Represents the value in sql
+ */
+fun <T> ReportField<*>.toType0(value: T): Any? {
+  return when(value) {
+    is LocalDate -> Date(value)
+    is BigDecimal -> Decimal(value)
+    is ExposedBlob -> value
+    is Int -> {
+      when (domain.kClass) {
+        Month::class -> Month(value)
+        Week::class -> Week(value)
+        else -> null
+      }
+    }
+    is LocalTime -> Time(value)
+    is Instant -> Timestamp(value)
+    else -> null
   }
 }

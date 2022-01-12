@@ -311,18 +311,13 @@ class FormDSLTests : VApplicationTestBase() {
   }*/
 }
 
-class BasicForm : Form() {
-  override val locale = Locale.UK
-  override val title = "Clients"
-}
+class BasicForm : Form(title = "Clients", locale = Locale.UK)
 
-class FormWithOneSimpleBlock : Form() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class FormWithOneSimpleBlock : Form(title = "Clients", locale = Locale.UK) {
   val page = page("title")
   val block = page.insertBlock(SimpleBlock())
 
-  inner class SimpleBlock : Block(1, 1, "SimpleBlock") {
+  inner class SimpleBlock : Block("SimpleBlock", 1, 1) {
     override val help = "Information about the block"
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
@@ -331,9 +326,7 @@ class FormWithOneSimpleBlock : Form() {
   }
 }
 
-class FormWithMultipleBlock : Form() {
-  override val locale = Locale.UK
-  override val title = "Information"
+class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val reset = menu("reset")
   val edit = menu("edit")
 
@@ -363,7 +356,7 @@ class FormWithMultipleBlock : Form() {
   val clientBlock = firstPage.insertBlock(ClientBlock())
   val commandsBlock = secondPage.insertBlock(CommandsBlock())
 
-  inner class ClientBlock : Block(1, 1, "ClientBlock") {
+  inner class ClientBlock : Block("ClientBlock", 1, 1) {
     val u = table(User)
     override val help = "Information about the client"
     val idClt = mustFill(domain = INT(30), position = at(1, 1)) {
@@ -393,7 +386,7 @@ class FormWithMultipleBlock : Form() {
     }
   }
 
-  inner class CommandsBlock : Block(10, 5, "CommandsBlock") {
+  inner class CommandsBlock : Block("CommandsBlock", 10, 5) {
     override val help = "Information about the commands"
     val idCmd = hidden(domain = INT(30)) {
       label = "ID"

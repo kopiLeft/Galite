@@ -100,15 +100,13 @@ class ReportDSLTests : VApplicationTestBase() {
    }*/
 }
 
-class BasicReport : Report() {
-  override val locale = Locale.UK
-  override val title = "Clients Report"
-  override val help = "This is a Report that contains information about clients"
-}
+class BasicReport : Report(
+  title = "Clients Report",
+  help = "This is a Report that contains information about clients",
+  locale = Locale.UK
+)
 
-class ReportWithData : Report() {
-  override val locale = Locale.UK
-  override val title = "Clients Report"
+class ReportWithData : Report(title = "Clients Report", locale = Locale.UK) {
 
   val preReport = trigger(PREREPORT) {}
   val postReport = trigger(POSTREPORT) {}

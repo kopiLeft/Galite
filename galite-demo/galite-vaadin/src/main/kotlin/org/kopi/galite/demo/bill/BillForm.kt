@@ -30,9 +30,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class BillForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Bills"
+class BillForm : ReportSelectionForm(title = "Bills", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
   val page = page("Bill")
 
   init {
@@ -49,7 +47,7 @@ class BillForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   }
 }
 
-class BlockBill : Block(1, 1, "Bills") {
+class BlockBill : Block("Bills", 1, 1) {
   val u = table(Bill)
   val v = table(Command)
 

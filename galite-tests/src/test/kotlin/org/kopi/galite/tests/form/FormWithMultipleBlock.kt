@@ -24,14 +24,12 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-object FormWithMultipleBlock : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+object FormWithMultipleBlock : Form(title = "form for test", locale = Locale.UK) {
   val blockSample = insertBlock(BlockSample)
   val multipleBlock = insertBlock(MultipleBlock)
 }
 
-object MultipleBlock : Block(100, 100, "Test block") {
+object MultipleBlock : Block("Test block", 100, 100) {
   val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"

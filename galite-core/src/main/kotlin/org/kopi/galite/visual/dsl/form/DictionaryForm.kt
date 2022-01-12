@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.visual.dsl.form
 
+import java.util.Locale
+
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.dsl.common.Window
@@ -24,8 +26,11 @@ import org.kopi.galite.visual.visual.VException
 
 /**
  * Represents a dictionary form.
+ *
+ * @param title The title of this form.
+ * @param locale the window locale.
  */
-abstract class DictionaryForm : Form() {
+abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(title, locale) {
 
   /**
    * Searches for an existing record.

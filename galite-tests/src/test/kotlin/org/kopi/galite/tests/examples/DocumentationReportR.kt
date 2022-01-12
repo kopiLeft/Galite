@@ -41,11 +41,7 @@ import org.kopi.galite.visual.visual.WindowController
  *    test align field
  *    test format
  */
-class DocumentationReportR : Report() {
-  //test locale
-  override val locale = Locale.UK
-  //test title
-  override val title = "Test Report"
+class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
 
   //test Menu
   val action = menu("Action")

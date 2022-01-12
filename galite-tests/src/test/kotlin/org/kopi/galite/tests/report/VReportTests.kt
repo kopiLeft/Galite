@@ -232,10 +232,7 @@ class VReportTests: JApplicationTestBase() {
   /**
    * Simple Report with two fields.
    */
-  class SimpleReport : Report() {
-    override val locale = Locale.UK
-
-    override val title = "SimpleReport"
+  class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
 
     val id = field(INT(20)) {
       label = "id"

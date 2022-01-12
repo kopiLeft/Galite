@@ -28,12 +28,9 @@ import java.util.Locale
 /**
  * This class represents month types
  */
-open class Month(year: Int, month: Int) : Type<Month, Int>() {
+open class Month(private var scalar: Int) : Type<Month, Int>() {
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var scalar: Int = year * 12 + month - 1
+  constructor(year: Int, month: Int): this(year * 12 + month - 1)
 
   /**
    * Constructs a Month from a Date

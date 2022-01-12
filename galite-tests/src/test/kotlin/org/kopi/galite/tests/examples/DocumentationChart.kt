@@ -26,11 +26,7 @@ import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
-class DocumentationChart : Form() {
-
-  override val locale = Locale.UK
-
-  override val title = "Test Report Form"
+class DocumentationChart : Form(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
   val file = menu("file")
@@ -48,7 +44,7 @@ class DocumentationChart : Form() {
   val simpleBlock = insertBlock(SimpleBlock())
 
   //simple block
-  inner class SimpleBlock : Block(1, 10, "Simple Block") {
+  inner class SimpleBlock : Block("Simple Block", 1, 10) {
     val field = visit(domain = INT(20), position = at(1, 1)) {
       label = "field"
     }

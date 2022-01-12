@@ -48,8 +48,8 @@ open class VActor(var menuIdent: String,
   var isEnabled: Boolean
     get() = display != null && display!!.isEnabled() // Checks whether the actor is enabled
     set(enabled) {
-      display?.setEnabled(enabled)
-    }    // Enables/disables the actor.
+      display?.setEnabled(enabled) // Enables/disables the actor.
+    }
   var menuName: String? = null
   var menuItem: String? = null
   private var display: UActor? = null

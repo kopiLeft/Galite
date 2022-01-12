@@ -33,9 +33,7 @@ import org.kopi.galite.visual.domain.WEEK
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class SimpleForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Training"
+class SimpleForm : DictionaryForm(title = "Training", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",
@@ -47,7 +45,7 @@ class SimpleForm : DictionaryForm() {
   val block = insertBlock(TraineeshipWithAllFieldTypes())
 }
 
-class TraineeshipWithAllFieldTypes : Block(1, 1, "Training") {
+class TraineeshipWithAllFieldTypes : Block("Training", 1, 1) {
   val t = table(Training)
 
   val trainingID = visit(domain = INT(25), position = at(1, 1)) {

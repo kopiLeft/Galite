@@ -25,9 +25,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class ManyPagesForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class ManyPagesForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val clientsPage= page("Clients")
   val contactsPage= page("Contacts")
   val detailsPage= page("Details")
@@ -35,21 +33,21 @@ class ManyPagesForm : DictionaryForm() {
   val contactsBlock = contactsPage.insertBlock(Contacts())
   val detailsBlock = detailsPage.insertBlock(Details())
 
-  inner class Clients : Block(1, 100, "Clients") {
+  inner class Clients : Block("Clients", 1, 100) {
     val idClt = visit(domain = INT(30), position = at(1, 1)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class Contacts : Block(1, 100, "Contacts") {
+  inner class Contacts : Block("Contacts", 1, 100) {
     val contact = visit(domain = STRING(30 ), position = at(1, 1)) {
       label = "contact"
       help = "The contact"
     }
   }
 
-  inner class Details : Block(1, 100, "Details") {
+  inner class Details : Block("Details", 1, 100) {
     val detail = visit(domain = STRING(30, 30, 30, Fixed.ON), position = at(1, 1)) {
       label = "detail"
       help = "The detail"

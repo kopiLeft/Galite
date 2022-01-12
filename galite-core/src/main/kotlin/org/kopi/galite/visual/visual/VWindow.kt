@@ -268,7 +268,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   }
 
   /**
-   * addCommand in menu
+   * add actors in menu
    */
   open fun addActors(actorDefs: Array<VActor>?) {
     actors += actorDefs.orEmpty()

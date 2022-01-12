@@ -115,9 +115,7 @@ interface IFormDefault {
   val Block.showHideFilterCmd: Command
 }
 
-open class FormDefaultImpl: Form(), IFormDefault {
-
-  override val title: String = ""
+open class FormDefaultImpl: Form(""), IFormDefault {
 
   // --------------------MENUS-----------------
   override val Form.file by LazyWithReceiver<Form, Menu> { menu("File") }

@@ -123,9 +123,7 @@ class TriggersTests : GaliteVUITestBase() {
   }
 }
 
-class FormToTestTriggers : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Form to test triggers"
+class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",
@@ -152,14 +150,14 @@ class FormToTestTriggers : DictionaryForm() {
     }
   }
 
-  inner class Clients : Block(1, 1, "Clients") {
+  inner class Clients : Block("Clients", 1, 1) {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class SalesSimpleBlock : Block(1, 1, "Sales") {
+  inner class SalesSimpleBlock : Block("Sales", 1, 1) {
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"

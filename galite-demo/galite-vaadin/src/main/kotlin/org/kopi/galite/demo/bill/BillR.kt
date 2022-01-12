@@ -35,10 +35,7 @@ import org.kopi.galite.visual.type.Decimal
 /**
  * Bill Report
  */
-class BillR : Report() {
-  override val locale = Locale.UK
-
-  override val title = "Bills_Report"
+class BillR : Report("Bills_Report", locale = Locale.UK) {
 
   val action = menu("Action")
 

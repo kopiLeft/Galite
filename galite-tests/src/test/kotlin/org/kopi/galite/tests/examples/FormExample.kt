@@ -31,9 +31,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class FormExample : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
     ident = "Autofill",
@@ -50,14 +48,14 @@ class FormExample : DictionaryForm() {
   val salesBlock = clientsPage.insertBlock(Sales())
   val salesSimpleBlock = clientsPage.insertBlock(SalesSimpleBlock())
 
-  inner class Clients : Block(1, 1, "Clients") {
+  inner class Clients : Block("Clients", 1, 1) {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class Sales : Block(10, 10, "Sales") {
+  inner class Sales : Block("Sales", 10, 10) {
 
     val idClient = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
@@ -105,7 +103,7 @@ class FormExample : DictionaryForm() {
     }
   }
 
-  inner class SalesSimpleBlock : Block(1, 1, "Sales") {
+  inner class SalesSimpleBlock : Block("Sales", 1, 1) {
 
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"

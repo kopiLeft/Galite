@@ -239,10 +239,7 @@ class FieldsTests : GaliteVUITestBase() {
   }
 }
 
-class FormToTestFormPopUp: Form() {
-  override val locale = Locale.UK
-  override val title = "apperation of form in popup"
-
+class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
     ident = "Autofill",
@@ -258,7 +255,7 @@ class FormToTestFormPopUp: Form() {
     }
   }
 
-  inner class UsersListBlock : Block(1, 1, "UsersListBlock") {
+  inner class UsersListBlock : Block("UsersListBlock", 1, 1) {
     val user = mustFill(domain = UsersList(), position = at(1, 1)) {
       label = "user"
       help = "The user"
@@ -273,9 +270,7 @@ class FormToTestFormPopUp: Form() {
   }
 }
 
-class FormInPopUp : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) {
   val action = menu("Action")
 
   val autoFill = actor(
@@ -300,7 +295,7 @@ class FormInPopUp : DictionaryForm() {
 
   val block = insertBlock(UsersBlock()) {}
 
-  inner class UsersBlock : Block(1, 1, "Test block") {
+  inner class UsersBlock : Block("Test block", 1, 1) {
     val shortName = visit(domain = STRING(20), position = at(1, 1)) {
       label = "Kurzname"
       help = "Kurzname"

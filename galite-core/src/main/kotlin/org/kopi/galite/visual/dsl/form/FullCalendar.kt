@@ -33,7 +33,7 @@ import org.kopi.galite.visual.type.Timestamp
  */
 open class FullCalendar(title: String,
                         ident: String? = null)
-  : Block(1, 1, title, ident) {
+  : Block(title, 1, 1, ident) {
 
   var dateField: MustFillFormField<*>? = null
   var fromTimeField: MustFillFormField<*>? = null

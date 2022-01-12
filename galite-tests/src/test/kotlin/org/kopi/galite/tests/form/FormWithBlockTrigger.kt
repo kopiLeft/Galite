@@ -24,17 +24,14 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-object FormWithBlockTrigger: Form() {
-
-  override val locale = Locale.UK
-  override val title = "form for test"
+object FormWithBlockTrigger: Form(title = "form for test", locale = Locale.UK) {
   val testPage = page("test page")
   val menu = menu("Action")
   val firstBlock = testPage.insertBlock(BlockWithTrigger1)
   val secondVlock = testPage.insertBlock(BlockWithTrigger2)
 }
 
-object BlockWithTrigger1 : Block(1, 1, "Test block") {
+object BlockWithTrigger1 : Block("Test block", 1, 1) {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -51,7 +48,7 @@ object BlockWithTrigger1 : Block(1, 1, "Test block") {
   }
 }
 
-object BlockWithTrigger2 : Block(1, 1, "Test", "Test block") {
+object BlockWithTrigger2 : Block("Test", 1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

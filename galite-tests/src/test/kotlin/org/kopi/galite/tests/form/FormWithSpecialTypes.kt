@@ -52,9 +52,7 @@ object Product : Table() {
   val month = month("EXP_MONTH").nullable()
 }
 
-class FormWithSpecialTypes : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormWithSpecialTypes : Form(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
   val edit = menu("Edit")
@@ -95,7 +93,7 @@ class FormWithSpecialTypes : Form() {
   }
 }
 
-class BlockWithSpecialTypes : Block(1, 1, "Test block") {
+class BlockWithSpecialTypes : Block("Test block", 1, 1) {
   val p = table(Product)
   val i = index(message = "ID should be unique")
 

@@ -27,10 +27,11 @@ import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 
-class ChartSample: Chart() {
-  override val locale = Locale.UK
-  override val title = "Area/population per city"
-  override val help = "This chart presents the area/population per city"
+class ChartSample : Chart(
+  locale = Locale.UK,
+  title = "Area/population per city",
+  help = "This chart presents the area/population per city"
+) {
 
   val action = menu("Action")
 

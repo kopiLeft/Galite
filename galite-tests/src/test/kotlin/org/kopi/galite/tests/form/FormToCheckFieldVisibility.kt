@@ -25,14 +25,12 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-object FormToCheckFieldVisibility: Form() {
-  override val locale = Locale.UK
-  override val title = "form for test fields visibility"
+object FormToCheckFieldVisibility: Form(title = "form for test fields visibility", locale = Locale.UK) {
   val testPage = page("test page")
   val testBlock = testPage.insertBlock(blockToCheckFieldVisibility)
 }
 
-object blockToCheckFieldVisibility : Block(1, 1, "Test block") {
+object blockToCheckFieldVisibility : Block("Test block", 1, 1) {
   val u = table(User)
 
   val id = hidden(domain = INT(20)) {

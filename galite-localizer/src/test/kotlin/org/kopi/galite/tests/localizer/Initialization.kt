@@ -89,9 +89,7 @@ object User : Table() {
   val cv = varchar("CURRICULUM VITAE", 70).nullable()
 }
 
-class FormSample : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormSample : Form(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")
 
@@ -149,7 +147,7 @@ class FormSample : Form() {
     println("post form trigger works")
   }
 
-  inner class TestBlock : Block(1, 5, "Test block") {
+  inner class TestBlock : Block("Test block", 1, 5) {
     val u = table(User)
     val i = index(message = "ID should be unique")
 

@@ -32,9 +32,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class CommandForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Commands"
+class CommandForm : ReportSelectionForm(title = "Commands", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
   val page = page("Command")
 
   init {
@@ -85,7 +83,7 @@ class CommandForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   }
 }
 
-class BlockCommand : Block(1, 10, "Commands") {
+class BlockCommand : Block("Commands", 1, 10) {
   val u = table(Command)
   val v = table(Client)
 

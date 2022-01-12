@@ -25,9 +25,7 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
-class TestFieldsVisibilityForm : DictionaryForm() {
-  override val locale = Locale.UK
-  override val title = "Fields Visibility Form"
+class TestFieldsVisibilityForm : DictionaryForm(title = "Fields Visibility Form", locale = Locale.UK) {
   val action = menu("Action")
   val query = actor(
           ident = "Query",
@@ -68,7 +66,7 @@ class TestFieldsVisibilityForm : DictionaryForm() {
   }
 }
 
-class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field Visibility Types") {
+class BlockWithChangingFieldVisibilityTypes : Block("Block With All Field Visibility Types", 1, 1) {
   val hiddenField = hidden(domain = INT(25)) {
     label = "hidden field"
     help = "hidden field"

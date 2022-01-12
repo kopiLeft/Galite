@@ -34,8 +34,11 @@ import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Represents a form.
+ *
+ * @param title The title of this form.
+ * @param locale the window locale.
  */
-abstract class Form : Window() {
+abstract class Form(title: String, locale: Locale? = null) : Window(title, locale) {
 
   /** Form's blocks. */
   val blocks = mutableListOf<Block>()
@@ -59,7 +62,7 @@ abstract class Form : Window() {
           title: String,
           formPage: FormPage? = null,
           init: Block.() -> Unit
-  ): Block = insertBlock(Block(buffer, visible, name, title), formPage, init)
+  ): Block = insertBlock(Block(title, buffer, visible, name), formPage, init)
 
   /**
    * Adds a new block to this form.
@@ -73,7 +76,7 @@ abstract class Form : Window() {
     visible: Int,
     title: String,
     init: Block.() -> Unit
-  ): Block = insertBlock(Block(buffer, visible, title, title), this, init)
+  ): Block = insertBlock(Block(title, buffer, visible, title), this, init)
 
   /**
    * Adds a new block to this form.

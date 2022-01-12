@@ -28,9 +28,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class ProviderForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Providers"
+class ProviderForm : ReportSelectionForm(title = "Providers", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
   val page = page("Provider")
 
   init {
@@ -47,7 +45,7 @@ class ProviderForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   }
 }
 
-class BlockProvider : Block(1, 1, "Providers") {
+class BlockProvider : Block("Providers", 1, 1) {
   val u = table(Provider)
 
   val idProvider = hidden(domain = INT(20)) {

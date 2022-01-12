@@ -37,9 +37,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.visual.VExecFailedException
 
-class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Clients"
+class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
 
   init {
     insertMenus()
@@ -82,7 +80,7 @@ class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
   val salesBlock = clientsPage.insertBlock(Sales())
 
 
-  inner class Clients : Block(1, 100, "Clients") {
+  inner class Clients : Block("Clients", 1, 100) {
     val c = table(Client)
 
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
@@ -165,7 +163,7 @@ class ClientForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
     }
   }
 
-  inner class Sales : Block(10, 10, "Sales") {
+  inner class Sales : Block("Sales", 10, 10) {
     val C = table(Client)
     val S = table(Purchase)
     val P = table(Product)

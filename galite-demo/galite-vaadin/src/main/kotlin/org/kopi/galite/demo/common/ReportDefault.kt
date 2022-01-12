@@ -46,8 +46,7 @@ interface IReportDefault {
   val cmdXLSX: Command
 }
 
-open class ReportDefaultImpl : IReportDefault, Report() {
-  override val title: String = ""
+open class ReportDefaultImpl : IReportDefault, Report("") {
 
   // --------------------MENUS-----------------
   final override val file = menu("File")

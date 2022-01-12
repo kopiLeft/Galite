@@ -32,9 +32,7 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class ProductForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
-  override val locale = Locale.UK
-  override val title = "Products"
+class ProductForm : ReportSelectionForm(title = "Products", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
   val page = page("Product")
 
   init {
@@ -44,7 +42,7 @@ class ProductForm : ReportSelectionForm(), IFormDefault by FormDefaultImpl() {
 
   val block = page.insertBlock(BlockProduct())
 
-  inner class BlockProduct : Block(1, 1, "Products") {
+  inner class BlockProduct : Block("Products", 1, 1) {
     val u = table(Product)
 
     val idPdt = hidden(domain = INT(20)) {

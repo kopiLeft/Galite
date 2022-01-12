@@ -25,9 +25,7 @@ import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-class FormWithAlignedBlockWithMultiplePages : Form() {
-  override val locale = Locale.UK
-  override val title = "form for test"
+class FormWithAlignedBlockWithMultiplePages : Form(title = "form for test", locale = Locale.UK) {
 
   val p1 = page("page 1")
   val p2 = page("page 2")
@@ -91,7 +89,7 @@ class FormWithAlignedBlockWithMultiplePages : Form() {
   }
 }
 
-class ProductBlock1 : Block(10, 5, "ProductBlock") {
+class ProductBlock1 : Block("ProductBlock", 10, 5) {
   val idProduct = visit(domain = INT(10), position = at(1, 1)) {
     label = "ID Prod"
   }
@@ -103,7 +101,7 @@ class ProductBlock1 : Block(10, 5, "ProductBlock") {
   }
 }
 
-class ProductBlock2 : Block(10, 5, "ProductBlock") {
+class ProductBlock2 : Block("ProductBlock", 10, 5) {
   init {
     options(BlockOption.NODETAIL)
   }
@@ -119,7 +117,7 @@ class ProductBlock2 : Block(10, 5, "ProductBlock") {
   }
 }
 
-class ProductBlock3 : Block(10, 5, "ProductBlock") {
+class ProductBlock3 : Block("ProductBlock", 10, 5) {
   val idProduct = visit(domain = INT(10), position = at(1, 1)) {
     label = "ID Prod"
   }
@@ -137,7 +135,7 @@ class ProductBlock3 : Block(10, 5, "ProductBlock") {
   }
 }
 
-class ProductBlock4 : Block(10, 5, "ProductBlock") {
+class ProductBlock4 : Block("ProductBlock", 10, 5) {
   val idProduct = visit(domain = INT(10), position = at(1, 1)) {
     label = "ID Prod"
   }
@@ -158,7 +156,7 @@ class ProductBlock4 : Block(10, 5, "ProductBlock") {
   }
 }
 
-class Sample : Block(1, 1, "Sample") {
+class Sample : Block("Sample", 1, 1) {
   val id = visit(domain = INT(10), position = at(1, 1)) {
     label = "ID"
   }

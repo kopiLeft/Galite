@@ -29,10 +29,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
-class MultipleBlockForm : DictionaryForm() {
-  override val locale = Locale.UK
-
-  override val title = "Training Form"
+class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val page1 = page("page1")
   val page2 = page("page2")
   val action = menu("Action")
@@ -157,7 +154,7 @@ class MultipleBlockForm : DictionaryForm() {
     }
   }
 
-  class Centers : Block(20, 20, "Centers") {
+  class Centers : Block("Centers", 20, 20) {
     val c = table(Center)
     val t = table(Training)
 
@@ -213,7 +210,7 @@ class MultipleBlockForm : DictionaryForm() {
     }
   }
 
-  class SimpleBlock : Block(1, 1, "Simple block") {
+  class SimpleBlock : Block("Simple block", 1, 1) {
     val contact = visit(domain = STRING(20), position = at(1, 1)) {
       label = "contact"
       help = "The contact"

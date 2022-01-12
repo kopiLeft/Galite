@@ -16,13 +16,18 @@
  */
 package org.kopi.galite.visual.dsl.form
 
+import java.util.Locale
+
 import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
 
 /**
  * Represents a report selection form.
+ *
+ * @param title The title of this form.
+ * @param locale the window locale.
  */
-abstract class ReportSelectionForm : DictionaryForm() {
+abstract class ReportSelectionForm(title: String, locale: Locale? = null) : DictionaryForm(title, locale) {
 
   /**
    * create a report for this form

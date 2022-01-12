@@ -25,16 +25,15 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
-class FormWithFields: Form() {
-  override val locale = Locale.UK
-  override val title = "form with fields"
+class FormWithFields: Form(title = "form with fields", locale = Locale.UK) {
+
   val testPage = page("test page")
   val testPagse = page("test page")
   val testBlock = testPage.insertBlock(BlockWithFields())
   val testBlocsk = testPagse.insertBlock(BlockWithFields())
 }
 
-class BlockWithFields : Block(1, 1, "Test block") {
+class BlockWithFields : Block("Test block", 1, 1) {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

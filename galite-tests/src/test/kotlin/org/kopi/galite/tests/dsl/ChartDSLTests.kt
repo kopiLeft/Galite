@@ -95,10 +95,11 @@ class ChartDSLTests : VApplicationTestBase() {
   }
 }
 
-class BasicChart : Chart() {
-  override val locale = Locale.UK
-  override val title = "Area/population per city"
-  override val help = "This chart presents the area/population per city"
+class BasicChart : Chart(
+  title = "Area/population per city",
+  help = "This chart presents the area/population per city",
+  locale = Locale.UK
+) {
 
   val area = measure(DECIMAL(width = 10, scale = 5)) {
     label = "area (ha)"
