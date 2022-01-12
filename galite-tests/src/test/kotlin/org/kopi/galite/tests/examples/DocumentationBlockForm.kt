@@ -244,7 +244,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val targetBlock = insertBlock(TestAlign())
-  val totalPrices = block(1, 1, "Total", "Total block") {
+  val totalPrices = block("Total block", 1, 1) {
 
     val totalQuantity = visit(INT(20), position = at(1, 1)) {
       label = "Total"

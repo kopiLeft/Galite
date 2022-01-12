@@ -54,9 +54,8 @@ import org.kopi.galite.visual.visual.VException
  */
 open class Block(val title: String,
                  var buffer: Int,
-                 var visible: Int,
-                 ident: String? = null)
-  : FormElement(ident), VConstants {
+                 var visible: Int)
+  : FormElement(), VConstants {
 
   internal var options: Int = 0 // the block options
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode

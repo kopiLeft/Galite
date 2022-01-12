@@ -48,7 +48,7 @@ object BlockWithTrigger1 : Block("Test block", 1, 1) {
   }
 }
 
-object BlockWithTrigger2 : Block("Test", 1, 1, "Test block") {
+object BlockWithTrigger2 : Block("Test", 1, 1) {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

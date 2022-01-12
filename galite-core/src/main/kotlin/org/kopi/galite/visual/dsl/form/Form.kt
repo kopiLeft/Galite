@@ -49,34 +49,31 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   /**
    * Adds a new block to this form.
    *
+   * @param        title                  the title of the block
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
-   * @param        name                   the simple identifier of this block
-   * @param        title                  the title of the block
    * @param        formPage              the page containing the block
    */
   fun block(
+          title: String,
           buffer: Int,
           visible: Int,
-          name: String,
-          title: String,
-          formPage: FormPage? = null,
           init: Block.() -> Unit
-  ): Block = insertBlock(Block(title, buffer, visible, name), formPage, init)
+  ): Block = insertBlock(Block(title, buffer, visible), init)
 
   /**
-   * Adds a new block to this form.
+   * Adds a new block to this page which belongs to this form.
    *
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
    * @param        title                  the title of the block
    */
   fun FormPage.block(
+    title: String,
     buffer: Int,
     visible: Int,
-    title: String,
     init: Block.() -> Unit
-  ): Block = insertBlock(Block(title, buffer, visible, title), this, init)
+  ): Block = insertBlock(Block(title, buffer, visible), this, init)
 
   /**
    * Adds a new block to this form.

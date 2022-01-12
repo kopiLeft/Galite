@@ -35,7 +35,7 @@ class FormWithCodeDomains: Form(title = "form to test domains",  locale = Locale
   val testBlock = insertBlock(DaysBlock)
 }
 
-object DaysBlock : Block("DaysBlock", 1, 1, "Days block") {
+object DaysBlock : Block("DaysBlock", 1, 1) {
   val day = mustFill(domain = Days, position = at(1, 1)) {
     label = "day"
     help = "The day"

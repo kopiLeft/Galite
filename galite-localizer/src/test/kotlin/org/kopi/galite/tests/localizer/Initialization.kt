@@ -129,7 +129,7 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
 
   val tb1 = p1.insertBlock(TestBlock())
 
-  val testBlock2 = block(1, 1, "Test2", "Test block2") {
+  val testBlock2 = block("Test block2", 1, 1) {
 
     val totalAge = visit(INT(3), position = at(1, 1)) {
       label = "Total"

@@ -37,7 +37,7 @@ class FormWithAlignedBlockWithMultiplePages : Form(title = "form for test", loca
 
   val blockSimple1 = p1.insertBlock(Sample())
   val blockMultiple1 = p1.insertBlock(ProductBlock1())
-  val blockTotal1 = block(1, 1, "Total", "Total block", p1) {
+  val blockTotal1 = p1.block("Total block", 1, 1) {
 
     val totalWithTaxes = skipped(INT(10), position = at(1, 1)) {
       label = "Total"
@@ -50,7 +50,7 @@ class FormWithAlignedBlockWithMultiplePages : Form(title = "form for test", loca
 
   val blockSimple2 = p2.insertBlock(Sample())
   val blockMultiple2 = p2.insertBlock(ProductBlock2())
-  val blockTotal2 = block(1, 1, "Total", "Total block", p2) {
+  val blockTotal2 = p2.block("Total block", 1, 1) {
 
     val totalWithTaxes = skipped(INT(10), position = at(1, 1)) {
       label = "Total"
@@ -64,7 +64,7 @@ class FormWithAlignedBlockWithMultiplePages : Form(title = "form for test", loca
 
   val blockSimple3 = p3.insertBlock(Sample())
   val blockMultiple3 = p3.insertBlock(ProductBlock3())
-  val blockTotal3 = block(1, 1, "Total", "Total block", p3) {
+  val blockTotal3 = p3.block("Total block", 1, 1) {
 
     val totalWithTaxes = skipped(INT(10), position = at(1, 1)) {
       label = "Total"
@@ -76,7 +76,7 @@ class FormWithAlignedBlockWithMultiplePages : Form(title = "form for test", loca
 
   val blockSimple4 = p4.insertBlock(Sample())
   val blockMultiple4 = p4.insertBlock(ProductBlock4())
-  val blockTotal4 = block(1, 1, "Total", "Total block", p4) {
+  val blockTotal4 = p4.block("Total block", 1, 1) {
 
     val totalRemise = skipped(INT(15), position = at(1, 1)) {
       label = "Total"

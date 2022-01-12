@@ -29,7 +29,7 @@ class FormWithAlignedBlock : Form(title = "form for test", locale = Locale.UK) {
 
   val targetBlock = insertBlock(TestAlign())
 
-  val totalBlock = block(1, 1, "Total", "Total block") {
+  val totalBlock = block("Total block", 1, 1) {
 
     val totalQuantity = visit(INT(3), position = at(1, 1)) {
       label = "Total"

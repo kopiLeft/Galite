@@ -26,14 +26,13 @@ import org.kopi.galite.visual.dsl.common.Window
  * A block on a form
  * A block contains fields and reference to database
  *
- * @param     ident           the identifier of this block
  * @param     shortcut        the shortcut of this block
  */
-abstract class FormElement(ident: String?) {
+abstract class FormElement {
 
   open lateinit var shortcut: String
 
-  val ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
+  val ident: String = javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringBeforeLast('$')
           .substringAfterLast('$')
 
