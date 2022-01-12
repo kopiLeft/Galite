@@ -55,7 +55,6 @@ open class ReportDefaultImpl : IReportDefault, Report("") {
 
   // --------------------Actors-----------------
   override val csv = actor(
-    ident = "CSV",
     menu = action,
     label = "CSV",
     help = "CSV Format",
@@ -65,7 +64,6 @@ open class ReportDefaultImpl : IReportDefault, Report("") {
   }
 
   override val xls = actor(
-    ident = "XLS",
     menu = action,
     label = "XLS",
     help = "Excel (XLS) Format",
@@ -75,7 +73,6 @@ open class ReportDefaultImpl : IReportDefault, Report("") {
   }
 
   override val xlsx = actor(
-    ident = "XLSX",
     menu = action,
     label = "XLSX",
     help = "Excel (XLSX) Format",
@@ -85,7 +82,6 @@ open class ReportDefaultImpl : IReportDefault, Report("") {
   }
 
   override val pdf = actor(
-    ident = "PDF",
     menu = action,
     label = "PDF",
     help = "PDF Format",

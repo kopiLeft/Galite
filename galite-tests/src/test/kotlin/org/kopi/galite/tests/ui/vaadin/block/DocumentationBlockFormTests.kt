@@ -41,10 +41,10 @@ import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.testing.expectInformationNotification
+import org.kopi.galite.testing.findActor
 import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.tests.examples.DocumentationBlockForm
 import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.visual.DActor
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
 
 import com.github.mvysny.kaributesting.v10._expectNone
@@ -352,12 +352,10 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
   fun `test command access in block`() {
     form.commandAccessBlock.enter()
 
-    val actors = _find<DActor>()
-
     // the block is in mode insert, the actor list is disable in this mode
-    assertFalse(actors.single { it.getModel().actorIdent == "list" }.isEnabled)
+    assertFalse(form.list.findActor().isEnabled)
     // the block is in mode insert, the actor list is enabled in this mode
-    assertTrue(actors.single { it.getModel().actorIdent == "delete Block" }.isEnabled)
+    assertTrue(form.deleteBlock.findActor().isEnabled)
   }
 
   @Test

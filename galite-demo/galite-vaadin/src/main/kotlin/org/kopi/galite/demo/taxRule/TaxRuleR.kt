@@ -37,7 +37,6 @@ class TaxRuleR : Report(title = "TaxRules_Report", locale = Locale.UK) {
   val action = menu("Action")
 
   val csv = actor(
-          ident = "CSV",
           menu = action,
           label = "CSV",
           help = "CSV Format",
@@ -47,7 +46,6 @@ class TaxRuleR : Report(title = "TaxRules_Report", locale = Locale.UK) {
   }
 
   val xls = actor(
-          ident = "XLS",
           menu = action,
           label = "XLS",
           help = "Excel (XLS) Format",
@@ -57,7 +55,6 @@ class TaxRuleR : Report(title = "TaxRules_Report", locale = Locale.UK) {
   }
 
   val xlsx = actor(
-          ident = "XLSX",
           menu = action,
           label = "XLSX",
           help = "Excel (XLSX) Format",
@@ -67,7 +64,6 @@ class TaxRuleR : Report(title = "TaxRules_Report", locale = Locale.UK) {
   }
 
   val pdf = actor(
-          ident = "PDF",
           menu = action,
           label = "PDF",
           help = "PDF Format",

@@ -23,6 +23,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Border
@@ -38,14 +39,13 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   val action = menu("Action")
 
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "Display List",
@@ -55,7 +55,6 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val saveBlock = actor(
-    ident = "saveBlock",
     menu = action,
     label = "Save Block",
     help = " Save Block",
@@ -65,7 +64,6 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val insertMode = actor(
-    ident = "Insert",
     menu = action,
     label = "Insert",
     help = " Insert",
@@ -75,7 +73,6 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val deleteBlock = actor(
-    ident = "delete Block",
     menu = action,
     label = "delete Block",
     help = " deletes block",
@@ -85,7 +82,6 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val resetForm = actor(
-    ident = "reset",
     menu = action,
     label = "break",
     help = "Reset Block",

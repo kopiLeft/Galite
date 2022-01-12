@@ -24,6 +24,7 @@ import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
@@ -34,13 +35,12 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
   val page2 = page("page2")
   val action = menu("Action")
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "Display List",
@@ -49,7 +49,6 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     icon = Icon.LIST
   }
   val query = actor(
-    ident = "query",
     menu = action,
     label = "query",
     help = "query",
@@ -58,7 +57,6 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     icon = Icon.LIST
   }
   val load = actor(
-    ident = "load",
     menu = action,
     label = "load",
     help = "load",
@@ -67,7 +65,6 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     icon = Icon.LIST
   }
   val changeBlock = actor(
-    ident = "change Block",
     menu = action,
     label = "change Block",
     help = "change Block",
@@ -76,7 +73,6 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     icon = Icon.REFRESH
   }
   val resetBlock = actor(
-    ident = "reset",
     menu = action,
     label = "break",
     help = "Reset Block",
@@ -85,16 +81,14 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     icon = Icon.BREAK
   }
   val showHideFilter = actor(
-    ident = "ShowHideFilter",
     menu = action,
-    label = "ShowHideFilter",
+    label = "Show/Hide Filter",
     help = " Show Hide Filter",
   ) {
     key = Key.F6
     icon = Icon.SEARCH_OP
   }
   val add = actor(
-    ident = "add",
     menu = action,
     label = "add",
     help = " add",
@@ -103,7 +97,6 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     icon = Icon.ADD
   }
   val resetForm = actor(
-    ident = "resetForm",
     menu = action,
     label = "resetForm",
     help = "Reset Form",

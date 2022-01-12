@@ -41,7 +41,6 @@ class CommandForm : ReportSelectionForm(title = "Commands", locale = Locale.UK),
   }
 
   val list = actor(
-          ident = "list",
           menu = action,
           label = "list",
           help = "Display List",
@@ -51,7 +50,6 @@ class CommandForm : ReportSelectionForm(title = "Commands", locale = Locale.UK),
   }
 
   val dynamicReport = actor(
-    ident = "dynamicReport",
     menu = action,
     label = "DynamicReport",
     help = " Create Dynamic Report",

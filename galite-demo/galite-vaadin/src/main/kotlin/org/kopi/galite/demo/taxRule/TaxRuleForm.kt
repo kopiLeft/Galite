@@ -42,7 +42,6 @@ class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK),
   }
 
   val list = actor(
-          ident = "list",
           menu = action,
           label = "list",
           help = "Display List",

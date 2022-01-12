@@ -39,7 +39,6 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
 
   // Actors Definition
   val cut = actor(
-    ident = "cut",
     menu = file,
     label = "cut",
     help = "cut element",
@@ -49,7 +48,6 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
   }
 
   val quit = actor(
-    ident = "quit",
     menu = file,
     label = "quit",
     help = "Quit",
@@ -59,7 +57,6 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
   }
 
   val resetForm = actor(
-    ident = "resetForm",
     menu = file,
     label = "resetForm",
     help = "Reset Form",

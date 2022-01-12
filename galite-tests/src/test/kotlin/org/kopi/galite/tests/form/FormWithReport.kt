@@ -29,7 +29,6 @@ class FormWithReport : ReportSelectionForm(title = "form for test", locale = Loc
   val action = menu("Action")
   val testPage = page("test page")
   val report = actor(
-          ident = "report",
           menu = action,
           label = "CreateReport",
           help = "Create report",

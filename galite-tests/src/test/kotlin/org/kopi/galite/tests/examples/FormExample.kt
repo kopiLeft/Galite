@@ -27,6 +27,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIME
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.domain.WEEK
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
@@ -34,10 +35,10 @@ import org.kopi.galite.visual.dsl.form.Block
 class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
   val clientsPage= page("Clients")
   val block = clientsPage.insertBlock(Clients()) {

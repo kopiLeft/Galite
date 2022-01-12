@@ -32,7 +32,6 @@ class DocumentationChart : Form(title = "Test Report Form", locale = Locale.UK) 
   val file = menu("file")
 
   val graph = actor (
-    ident =  "graph",
     menu =   file,
     label =  "Graph",
     help =   "show graph values",

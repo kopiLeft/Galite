@@ -37,7 +37,6 @@ object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
   val action = menu("Action")
 
   val graph = actor (
-          ident =  "graph",
           menu =   action,
           label =  "Graph for test",
           help =   "show graph values" ,
@@ -63,7 +62,6 @@ class ChartSample: Chart(
   val action = menu("Action")
 
   val greeting = actor(
-          ident = "greeting",
           menu = action,
           label = "Greeting",
           help = "Click me to show greeting",

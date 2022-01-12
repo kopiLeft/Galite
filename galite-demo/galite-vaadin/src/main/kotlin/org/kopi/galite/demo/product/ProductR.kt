@@ -36,7 +36,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   val action = menu("Action")
 
   val quit = actor(
-          ident = "quit",
           menu = action,
           label = "Quit",
           help = "Quit",
@@ -46,7 +45,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   }
 
   val csv = actor(
-          ident = "CSV",
           menu = action,
           label = "CSV",
           help = "CSV Format",
@@ -56,7 +54,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   }
 
   val xls = actor(
-          ident = "XLS",
           menu = action,
           label = "XLS",
           help = "Excel (XLS) Format",
@@ -66,7 +63,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   }
 
   val xlsx = actor(
-          ident = "XLSX",
           menu = action,
           label = "XLSX",
           help = "Excel (XLSX) Format",
@@ -76,7 +72,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   }
 
   val pdf = actor(
-          ident = "PDF",
           menu = action,
           label = "PDF",
           help = "PDF Format",

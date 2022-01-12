@@ -106,7 +106,7 @@ class ReportTests: VApplicationTestBase() {
     assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
     assertEquals("Action", actionMenu.getAttributeValue("ident"))
     assertEquals("Action", actionMenu.getAttributeValue("label"))
-    assertEquals("greeting", greetingActor.getAttributeValue("ident"))
+    assertEquals("actor0", greetingActor.getAttributeValue("ident"))
     assertEquals("Greeting", greetingActor.getAttributeValue("label"))
     assertEquals("ANM_0", nameField.getAttributeValue("ident"))
     assertEquals("name", nameField.getAttributeValue("label"))
@@ -133,7 +133,6 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
   val action = menu("Action")
 
   val greeting = actor(
-          ident = "greeting",
           menu = action,
           label = "Greeting",
           help = "Click me to show greeting",
@@ -143,7 +142,6 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
   }
 
   val csv = actor(
-          ident = "CSV",
           menu = action,
           label = "CSV",
           help = "Obtenir le format CSV",
@@ -153,7 +151,6 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
   }
 
   val xls = actor(
-          ident = "XLS",
           menu = action,
           label = "XLS",
           help = "Obtenir le format Excel (XLS)",
@@ -163,7 +160,6 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
   }
 
   val xlsx = actor(
-          ident = "XLSX",
           menu = action,
           label = "XLSX",
           help = "Obtenir le format Excel (XLSX)",
@@ -173,7 +169,6 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
   }
 
   val pdf = actor(
-          ident = "PDF",
           menu = action,
           label = "PDF",
           help = "Obtenir le format PDF",

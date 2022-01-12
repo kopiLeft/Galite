@@ -54,7 +54,6 @@ class DocumentationChartC :  Chart(
 
   //chart actor
   val chartActor = actor(
-    ident = "chart",
     menu = action,
     label = "chart cmd",
     help = "chart cmd",
@@ -64,7 +63,6 @@ class DocumentationChartC :  Chart(
   }
 
   val quit = actor(
-    ident = "Quit",
     menu = action,
     label = "Quit",
     help = "Quit",

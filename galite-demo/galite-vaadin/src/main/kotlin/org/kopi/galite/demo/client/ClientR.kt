@@ -39,7 +39,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   val action = menu("Action")
 
   val csv = actor(
-          ident = "CSV",
           menu = action,
           label = "CSV",
           help = "CSV Format",
@@ -49,7 +48,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   }
 
   val xls = actor(
-          ident = "XLS",
           menu = action,
           label = "XLS",
           help = "Excel (XLS) Format",
@@ -59,7 +57,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   }
 
   val xlsx = actor(
-          ident = "XLSX",
           menu = action,
           label = "XLSX",
           help = "Excel (XLSX) Format",
@@ -69,7 +66,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   }
 
   val pdf = actor(
-          ident = "PDF",
           menu = action,
           label = "PDF",
           help = "PDF Format",
@@ -79,7 +75,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   }
 
   val editColumnData = actor(
-    ident = "EditColumnData",
     menu = action,
     label = "Edit Column Data",
     help = "Edit Column Data",
@@ -89,7 +84,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   }
 
   val helpForm = actor(
-          ident = "helpForm",
           menu = action,
           label = "Help",
           help = " Help"

@@ -36,6 +36,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIME
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.ui.vaadin.field.TextField
@@ -97,14 +98,13 @@ class FormWithColoredFields: Form(title = "") {
   val action = menu("Action")
 
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val colorFields = actor(
-    ident = "ColorFields",
     menu = action,
     label = "Color fields",
     help = "Color fields",

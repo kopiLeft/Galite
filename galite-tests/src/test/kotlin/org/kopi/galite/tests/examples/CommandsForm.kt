@@ -20,19 +20,19 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "Display List",
@@ -41,7 +41,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.LIST
   }
   val resetBlock = actor(
-    ident = "reset",
     menu = action,
     label = "break",
     help = "Reset Block",
@@ -50,7 +49,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.BREAK
   }
   val serialQuery = actor(
-    ident = "serialQuery",
     menu = action,
     label = "serialQuery",
     help = "serial query",
@@ -59,7 +57,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.SERIAL_QUERY
   }
   val report = actor(
-    ident = "report",
     menu = action,
     label = "CreateReport",
     help = "Create report",
@@ -68,7 +65,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.REPORT
   }
   val dynamicReport = actor(
-    ident = "dynamicReport",
     menu = action,
     label = "DynamicReport",
     help = " Create Dynamic Report",
@@ -77,7 +73,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.REPORT
   }
   val saveBlock = actor(
-    ident = "saveBlock",
     menu = action,
     label = "Save Block",
     help = " Save Block",
@@ -86,7 +81,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.SAVE
   }
   val deleteBlock = actor(
-    ident = "deleteBlock",
     menu = action,
     label = "deleteBlock",
     help = " deletes block",
@@ -95,7 +89,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.DELETE
   }
   val Operator = actor(
-    ident = "search",
     menu = action,
     label = "search",
     help = " search",
@@ -104,7 +97,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.DETAIL_VIEW
   }
   val InsertMode = actor(
-    ident = "Insert",
     menu = action,
     label = "Insert",
     help = " Insert",
@@ -113,7 +105,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.INSERT
   }
   val quit = actor(
-    ident = "quit",
     menu = action,
     label = "quit",
     help = "Quit",
@@ -122,7 +113,6 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     icon = Icon.QUIT
   }
   val helpForm = actor(
-    ident = "helpForm",
     menu = action,
     label = "Help",
     help = " Help"

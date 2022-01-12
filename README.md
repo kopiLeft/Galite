@@ -110,7 +110,6 @@ class ClientForm : Form(title = "form-title", locale = Locale.UK) {
   val action = menu("Action")
 
   val helpForm = actor(
-    ident = "helpForm",
     menu = action,
     label = "Help",
     help = " Help"
@@ -169,7 +168,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   val action = menu("Action")
 
   val csv = actor(
-    ident = "CSV",
     menu = action,
     label = "CSV",
     help = "CSV Format",
@@ -179,7 +177,6 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   }
 
   val pdf = actor(
-    ident = "PDF",
     menu = action,
     label = "PDF",
     help = "PDF Format",

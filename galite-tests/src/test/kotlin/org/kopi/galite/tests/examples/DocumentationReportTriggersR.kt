@@ -39,7 +39,6 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
   val action = menu("Action")
 
   val quit = actor(
-    ident = "Quit",
     menu = action,
     label = "Quit",
     help = "Quit",

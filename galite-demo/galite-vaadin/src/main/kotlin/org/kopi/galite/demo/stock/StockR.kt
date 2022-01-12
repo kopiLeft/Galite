@@ -40,7 +40,6 @@ class StockR : Report(title = "Stocks", locale = Locale.UK) {
   val action = menu("Action")
 
   val csv = actor(
-          ident = "CSV",
           menu = action,
           label = "CSV",
           help = "CSV Format",
@@ -50,7 +49,6 @@ class StockR : Report(title = "Stocks", locale = Locale.UK) {
   }
 
   val xls = actor(
-          ident = "XLS",
           menu = action,
           label = "XLS",
           help = "Excel (XLS) Format",
@@ -60,7 +58,6 @@ class StockR : Report(title = "Stocks", locale = Locale.UK) {
   }
 
   val xlsx = actor(
-          ident = "XLSX",
           menu = action,
           label = "XLSX",
           help = "Excel (XLSX) Format",
@@ -70,7 +67,6 @@ class StockR : Report(title = "Stocks", locale = Locale.UK) {
   }
 
   val pdf = actor(
-          ident = "PDF",
           menu = action,
           label = "PDF",
           help = "PDF Format",

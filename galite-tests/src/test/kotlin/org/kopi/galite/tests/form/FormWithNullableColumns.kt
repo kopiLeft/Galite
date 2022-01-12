@@ -26,6 +26,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
@@ -77,7 +78,6 @@ object FormWithNullableColumn : DictionaryForm(title = "form for test nullable "
   val edit = menu("Edit")
 
   val list = actor(
-          ident = "list",
           menu = action,
           label = "list",
           help = "Display List",
@@ -87,14 +87,13 @@ object FormWithNullableColumn : DictionaryForm(title = "form for test nullable "
   }
 
   val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val resetBlock = actor(
-          ident = "reset",
           menu = edit,
           label = "break",
           help = "Reset Block",

@@ -32,20 +32,20 @@ import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.DocumentationReport
 import org.kopi.galite.tests.examples.DocumentationReportTriggers
+import org.kopi.galite.tests.examples.DocumentationReportTriggersR
 import org.kopi.galite.tests.examples.TestTriggers
 import org.kopi.galite.tests.examples.initReportDocumentationData
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
-import org.kopi.galite.visual.ui.vaadin.visual.DActor
 
 import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 
 class DocumentationReportTests : GaliteVUITestBase() {
-  val simpleReport = DocumentationReport().also { it.model }
-  val triggersReport = DocumentationReportTriggers().also { it.model }
+  val simpleReportForm = DocumentationReport().also { it.model }
+  val triggersReportForm = DocumentationReportTriggers().also { it.model }
+  val triggersReport = DocumentationReportTriggersR().also { it.model }
 
   @Before
   fun `login to the App`() {
@@ -58,9 +58,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test simple report`() {
     // Open the forms
-    simpleReport.open()
+    simpleReportForm.open()
     // Trigger the report command
-    simpleReport.report.triggerCommand()
+    simpleReportForm.report.triggerCommand()
 
     // Check that the report is displayed
     _expectOne<DReport>()
@@ -69,9 +69,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test format upper`() {
     // Open the forms
-    simpleReport.open()
+    simpleReportForm.open()
     // Trigger the report command
-    simpleReport.report.triggerCommand()
+    simpleReportForm.report.triggerCommand()
 
     val reportTable = _get<DReport>().getTable() as DTable
 
@@ -83,9 +83,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test format lower`() {
     // Open the forms
-    simpleReport.open()
+    simpleReportForm.open()
     // Trigger the report command
-    simpleReport.report.triggerCommand()
+    simpleReportForm.report.triggerCommand()
 
     val reportTable = _get<DReport>().getTable() as DTable
 
@@ -98,9 +98,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test report group`() {
     // Open the forms
-    simpleReport.open()
+    simpleReportForm.open()
     // Trigger the report command
-    simpleReport.report.triggerCommand()
+    simpleReportForm.report.triggerCommand()
 
     val reportTable = _get<DReport>().getTable() as DTable
 
@@ -170,9 +170,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test report changing separator position`() {
     // Open the forms
-    simpleReport.open()
+    simpleReportForm.open()
     // Trigger the report command
-    simpleReport.report.triggerCommand()
+    simpleReportForm.report.triggerCommand()
 
     val reportTable = _get<DReport>().getTable() as DTable
 
@@ -201,9 +201,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test filed triggers`() {
     // Open the forms
-    triggersReport.open()
+    triggersReportForm.open()
     // Trigger the report command
-    triggersReport.report.triggerCommand()
+    triggersReportForm.report.triggerCommand()
 
     val reportTable = _get<DReport>().getTable() as DTable
 
@@ -218,9 +218,9 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test PREREPORT trigger`() {
     // Open the forms
-    triggersReport.open()
+    triggersReportForm.open()
     // Trigger the report command
-    triggersReport.report.triggerCommand()
+    triggersReportForm.report.triggerCommand()
 
     // check that PREREPORT form trigger insert value in tha database
     transaction {
@@ -233,15 +233,12 @@ class DocumentationReportTests : GaliteVUITestBase() {
   @Test
   fun `test POSTREPORT trigger`() {
     // Open the forms
-    triggersReport.open()
+    triggersReportForm.open()
     // Trigger the report command
-    triggersReport.report.triggerCommand()
+    triggersReportForm.report.triggerCommand()
 
     //click on quit command to quit report and call POSTREPORT trigger
-    val actors = _find<DActor>()
-
-    // quit command
-    actors.single { it.getModel().actorIdent == "Quit" }._clickAndWait()
+    triggersReport.quit.triggerCommand()
 
     // check that POSTREPORT form trigger insert value in tha database
     transaction {

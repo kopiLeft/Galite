@@ -31,6 +31,7 @@ import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
@@ -40,22 +41,22 @@ import org.kopi.galite.visual.visual.FileHandler
 class FormWithListDomains: Form(title = "form to test list domains", locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
   val newItem = actor(
-          ident = "NewItem",
-          menu = edit,
-          label = "NewItem",
-          help = "NewItem",
+    menu = edit,
+    label = "NewItem",
+    help = "NewItem",
+    command = PredefinedCommand.NEW_ITEM
   )
   val editItem = actor(
-          ident = "EditItem",
-          menu = edit,
-          label = "EditItem",
-          help = "EditItem",
+    menu = edit,
+    label = "EditItem",
+    help = "EditItem",
+    command = PredefinedCommand.EDIT_ITEM
   )
 
   val userListBlock = insertBlock(UsersListBlock()) {
@@ -143,14 +144,13 @@ class SomeDictionnaryForm : DictionaryForm(title = "form for test", locale = Loc
 
   val edit = menu("Edit")
   val autoFill = actor(
-    ident = "Autofill",
     menu = edit,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val quit = actor(
-    ident = "quit",
     menu = action,
     label = "quit",
     help = "Quit",
@@ -162,7 +162,6 @@ class SomeDictionnaryForm : DictionaryForm(title = "form for test", locale = Loc
     quitForm()
   }
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "Display List",

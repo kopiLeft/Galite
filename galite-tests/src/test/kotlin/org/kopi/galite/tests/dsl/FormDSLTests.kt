@@ -31,6 +31,7 @@ import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
@@ -236,7 +237,7 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(1, formModel._getCommands().size)
 
-    assertEquals(form.resetForm.label, formModel._getCommands()[0].item)
+    assertEquals(form.resetForm.ident, formModel._getCommands()[0].item)
     assertEquals(form.resetForm.ident, formModel._getCommands()[0].actor!!.actorIdent)
     assertEquals(form.resetForm.menu.label, formModel._getCommands()[0].actor!!.menuIdent)
     assertEquals(form.resetForm.icon?.iconName, formModel._getCommands()[0].actor!!.iconName)
@@ -277,7 +278,7 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(1, fileModel.command!!.size)
 
-    assertEquals(form.autoFill.label, fileModel.command!![0].item)
+    assertEquals(form.autoFill.ident, fileModel.command!![0].item)
     assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.actorIdent)
     assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
     assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!.iconName)
@@ -331,14 +332,13 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val edit = menu("edit")
 
   val autoFill = actor(
-    ident = "Autofill",
     menu = edit,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val resetForm = actor(
-    ident = "resetForm",
     menu = reset,
     label = "resetForm",
     help = "Reset Form",

@@ -32,7 +32,6 @@ class DocumentationReportTriggers : Form(title = "Test Report Form", locale = Lo
   val file = menu("file")
 
   val report = actor(
-    ident = "report",
     menu = file,
     label = "CreateReport",
     help = "Create report",

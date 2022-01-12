@@ -50,6 +50,7 @@ import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -242,10 +243,10 @@ class FieldsTests : GaliteVUITestBase() {
 class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
-    ident = "Autofill",
     menu = edit,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val userListBlock = insertBlock(UsersListBlock()) {
@@ -274,14 +275,13 @@ class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) 
   val action = menu("Action")
 
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val quit = actor(
-    ident = "quit",
     menu = action,
     label = "quit",
     help = "Quit",

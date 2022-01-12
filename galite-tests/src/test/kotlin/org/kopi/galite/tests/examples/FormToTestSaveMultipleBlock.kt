@@ -23,6 +23,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
@@ -32,13 +33,12 @@ import org.kopi.galite.visual.visual.VExecFailedException
 class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
   val saveBlock = actor(
-    ident = "saveBlock",
     menu = action,
     label = "Save Block",
     help = " Save Block",
@@ -47,7 +47,6 @@ class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", loca
     icon = Icon.SAVE
   }
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "List data",

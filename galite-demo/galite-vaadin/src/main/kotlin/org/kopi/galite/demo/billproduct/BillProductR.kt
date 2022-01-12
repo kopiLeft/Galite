@@ -37,7 +37,6 @@ import org.kopi.galite.visual.type.Decimal
 class BillProductR : Report("Bill Product Report", Locale.UK), IReportDefault by ReportDefaultImpl() {
 
   val greeting = actor(
-          ident = "greeting",
           menu = action,
           label = "Greeting",
           help = "Click me to show greeting",

@@ -28,6 +28,7 @@ import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.FieldOption
@@ -57,35 +58,34 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
   val edit = menu("Edit")
 
   val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val editItemShortcut = actor(
-          ident = "EditItem_S",
-          menu = edit,
-          label = "Edit Item Shortcut",
-          help = "Edit Item Shortcut",
+    menu = edit,
+    label = "Edit Item Shortcut",
+    help = "Edit Item Shortcut",
+    command = PredefinedCommand.EDIT_ITEM_SHORTCUT
   )
 
   val editItem = actor(
-          ident = "EditItem",
-          menu = edit,
-          label = "Edit Item",
-          help = "Edit Item",
+    menu = edit,
+    label = "Edit Item",
+    help = "Edit Item",
+    command = PredefinedCommand.EDIT_ITEM
   )
 
   val newItem = actor(
-          ident = "NewItem",
-          menu = edit,
-          label = "New Item",
-          help = "New Item",
+    menu = edit,
+    label = "New Item",
+    help = "New Item",
+    command = PredefinedCommand.NEW_ITEM
   )
 
   val graph = actor(
-          ident = "graph",
           menu = action,
           label = "Graph for test",
           help = "show graph values",
@@ -95,7 +95,6 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
   }
 
   val formActor = actor(
-          ident =  "save",
           menu =   action,
           label =  "form Command",
           help =   "actor to test form command",

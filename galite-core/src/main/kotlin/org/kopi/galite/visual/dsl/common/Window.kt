@@ -72,30 +72,19 @@ abstract class Window(val title: String, val locale: Locale?) {
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
-    val number = when (ident) {
-      VKConstants.CMD_AUTOFILL -> {
-        VForm.CMD_AUTOFILL
-      }
-      VKConstants.CMD_NEWITEM -> {
-        VForm.CMD_NEWITEM
-      }
-      VKConstants.CMD_EDITITEM -> {
-        VForm.CMD_EDITITEM
-      }
-      VKConstants.CMD_SHORTCUT -> {
-        VForm.CMD_EDITITEM_S
-      }
-      else -> {
-        0
-      }
-    }
+  fun actor(menu: Menu,
+            label: String,
+            help: String,
+            command: PredefinedCommand? = null,
+            init: (Actor.() -> Unit)? = null): Actor {
+    val number = command?.number ?: 0
+    val ident = command?.ident ?: "actor${actors.size}"
 
     val actor = Actor(ident, menu, label, help, number)
-
     if (init != null) {
       actor.init()
     }
+
     actors.add(actor)
     return actor
   }

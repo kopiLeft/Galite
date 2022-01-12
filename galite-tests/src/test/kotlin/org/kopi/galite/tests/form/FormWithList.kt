@@ -28,6 +28,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TIMESTAMP
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
@@ -42,7 +43,6 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   val testPage2 = page("test page2")
 
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "Display List",
@@ -52,14 +52,13 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   }
 
   val autoFill = actor(
-    ident = "Autofill",
     menu = edit,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val resetBlock = actor(
-    ident = "reset",
     menu = reset,
     label = "break",
     help = "Reset Block",
@@ -69,7 +68,6 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   }
 
   val resetForm = actor(
-    ident = "resetForm",
     menu = reset,
     label = "resetForm",
     help = "Reset Form",
@@ -83,7 +81,6 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   }
 
   val save = actor(
-    ident = "save",
     menu = action,
     label = "save",
     help = "save",

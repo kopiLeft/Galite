@@ -45,7 +45,6 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
   }
 
   val list = actor(
-          ident = "list",
           menu = action,
           label = "list",
           help = "Display List",
@@ -55,7 +54,6 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
   }
 
   val interSave = actor(
-          ident = "interSave",
           menu = action,
           label = "Save and load",
           help = " Save and load",
@@ -65,7 +63,6 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
   }
 
   val dynamicReport = actor(
-          ident = "dynamicReport",
           menu = action,
           label = "DynamicReport",
           help = " Create Dynamic Report",

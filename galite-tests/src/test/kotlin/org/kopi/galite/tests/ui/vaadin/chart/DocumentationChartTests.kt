@@ -28,30 +28,30 @@ import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.tests.examples.TestTriggers
-import org.kopi.galite.visual.ui.vaadin.visual.DActor
 import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.tests.examples.DocumentationChart
+import org.kopi.galite.tests.examples.DocumentationChartC
 import org.kopi.galite.tests.examples.initDocumentationData
 import org.kopi.galite.visual.ui.vaadin.chart.DAbstractChartType
 
 import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._find
 
 class DocumentationChartTests : GaliteVUITestBase() {
-  val simpleChart = DocumentationChart().also { it.model }
+  val simpleChartForm = DocumentationChart().also { it.model }
+  val chart = DocumentationChartC().also { it.model }
 
   @Before
   fun `login to the App`() {
     login()
 
     // Open the form
-    simpleChart.open()
+    simpleChartForm.open()
   }
 
   @Test
   fun `test simple chart`() {
     // Trigger the graph command
-    simpleChart.graph.triggerCommand()
+    simpleChartForm.graph.triggerCommand()
     // Check that the report is displayed
     _expectOne<DAbstractChartType>()
   }
@@ -59,12 +59,10 @@ class DocumentationChartTests : GaliteVUITestBase() {
   @Test
   fun `test chart command`() {
     // Trigger the graph command
-    simpleChart.graph.triggerCommand()
-    //click on chart command to see information notification
-    val actors = _find<DActor>()
+    simpleChartForm.graph.triggerCommand()
 
-    // chart command
-    actors.single { it.getModel().actorIdent == "chart" }._clickAndWait()
+    //click on chart command to see information notification
+    chart.chartActor.triggerCommand()
 
     expectInformationNotification("chart command")
   }
@@ -72,7 +70,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
   @Test
   fun `test INITCHART trigger`() {
     // Trigger the graph command
-    simpleChart.graph.triggerCommand()
+    simpleChartForm.graph.triggerCommand()
 
     // check that INIT trigger insert value in tha database
     transaction {
@@ -85,7 +83,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
   @Test
   fun `test PRECHART trigger`() {
     // Trigger the graph command
-    simpleChart.graph.triggerCommand()
+    simpleChartForm.graph.triggerCommand()
 
     // check that PRECHART trigger insert value in tha database
     transaction {
@@ -98,13 +96,10 @@ class DocumentationChartTests : GaliteVUITestBase() {
   @Test
   fun `test POSTCHART trigger`() {
     // Trigger the graph command
-    simpleChart.graph.triggerCommand()
+    simpleChartForm.graph.triggerCommand()
 
     //click on quit command to quit report and call POSTCHART trigger
-    val actors = _find<DActor>()
-
-    // quit command
-    actors.single { it.getModel().actorIdent == "Quit" }._clickAndWait()
+    chart.quit.triggerCommand()
 
     // check that POSTCHART trigger insert value in tha database
     transaction {

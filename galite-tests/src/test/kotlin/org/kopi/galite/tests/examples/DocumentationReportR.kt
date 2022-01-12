@@ -48,7 +48,6 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
 
   //test Actors
   val csv = actor(
-    ident = "CSV",
     menu = action,
     label = "CSV",
     help = "CSV Format",
@@ -58,7 +57,6 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
   }
 
   val xls = actor(
-    ident = "XLS",
     menu = action,
     label = "XLS",
     help = "Excel (XLS) Format",
@@ -68,7 +66,6 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
   }
 
   val xlsx = actor(
-    ident = "XLSX",
     menu = action,
     label = "XLSX",
     help = "Excel (XLSX) Format",
@@ -78,7 +75,6 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
   }
 
   val pdf = actor(
-    ident = "PDF",
     menu = action,
     label = "PDF",
     help = "PDF Format",
@@ -88,7 +84,6 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
   }
 
   val editColumnData = actor(
-    ident = "EditColumnData",
     menu = action,
     label = "Edit Column Data",
     help = "Edit Column Data",
@@ -98,7 +93,6 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
   }
 
   val helpForm = actor(
-    ident = "helpForm",
     menu = action,
     label = "Help",
     help = " Help"

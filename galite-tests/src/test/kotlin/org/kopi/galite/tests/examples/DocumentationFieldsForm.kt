@@ -32,6 +32,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
@@ -52,14 +53,13 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   val action = menu("Action")
 
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val list = actor(
-    ident = "list",
     menu = action,
     label = "list",
     help = "Display List",
@@ -69,7 +69,6 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   }
 
   val saveBlock = actor(
-    ident = "saveBlock",
     menu = action,
     label = "Save Block",
     help = " Save Block",
@@ -79,7 +78,6 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   }
 
   val insertMode = actor(
-    ident = "Insert",
     menu = action,
     label = "Insert",
     help = " Insert",
@@ -89,7 +87,6 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   }
 
   val deleteBlock = actor(
-    ident = "deleteBlock",
     menu = action,
     label = "deleteBlock",
     help = " deletes block",
@@ -99,7 +96,6 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   }
 
   val serialQuery = actor(
-    ident = "serialQuery",
     menu = action,
     label = "serialQuery",
     help = "serial query",

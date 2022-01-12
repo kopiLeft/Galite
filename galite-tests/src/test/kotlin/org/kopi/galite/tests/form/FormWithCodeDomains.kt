@@ -21,16 +21,17 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
 class FormWithCodeDomains: Form(title = "form to test domains",  locale = Locale.UK) {
   val edit = menu("Edit")
   val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
   val testBlock = insertBlock(DaysBlock)
 }

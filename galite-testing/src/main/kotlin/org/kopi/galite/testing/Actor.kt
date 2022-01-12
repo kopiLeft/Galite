@@ -31,18 +31,27 @@ import com.github.mvysny.kaributesting.v10._get
  * @receiver the actor of the command to trigger.
  */
 fun Actor.triggerCommand(duration: Long = 300) {
-  val mainWindow = _get<MainWindow>()
-  val actors = mainWindow
-    ._get<VActorPanel> {  }
-    ._find<DActor> {  }
-
-  val actor = actors.single {
-    it.getModel() == this.model
-  }
+  val actor = findActor()
 
   actor._clickAndWait(200)
 
   // Wait after completing the view creation.
   // VWindowController.doNotModal() is crating the view synchronously.
   Thread.sleep(duration)
+}
+
+/**
+ * Finds the actor's component command.
+ *
+ * @receiver the actor to find.
+ */
+fun Actor.findActor(): DActor {
+  val mainWindow = _get<MainWindow>()
+  val actors = mainWindow
+    ._get<VActorPanel> {  }
+    ._find<DActor> {  }
+
+  return actors.single {
+    it.getModel() == this.model
+  }
 }

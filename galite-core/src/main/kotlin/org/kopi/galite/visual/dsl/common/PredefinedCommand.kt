@@ -17,12 +17,14 @@
  */
 package org.kopi.galite.visual.dsl.common
 
-object VKConstants {
-  // ----------------------------------------------------------------------
-  // PREDEFINED COMMANDS
-  // ----------------------------------------------------------------------
-  const val CMD_AUTOFILL: String = "Autofill"
-  const val CMD_SHORTCUT: String = "EditItem_S"
-  const val CMD_NEWITEM: String = "NewItem"
-  const val CMD_EDITITEM: String = "EditItem"
+import org.kopi.galite.visual.form.VForm
+
+/**
+ * Predefined commands.
+ */
+enum class PredefinedCommand(val ident: String, val number: Int) {
+  AUTOFILL("Autofill", VForm.CMD_AUTOFILL),
+  EDIT_ITEM_SHORTCUT("EditItem_S", VForm.CMD_EDITITEM_S),
+  NEW_ITEM("NewItem", VForm.CMD_NEWITEM) ,
+  EDIT_ITEM("EditItem", VForm.CMD_EDITITEM)
 }

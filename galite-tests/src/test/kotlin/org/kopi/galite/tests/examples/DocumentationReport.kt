@@ -31,7 +31,6 @@ class DocumentationReport : ReportSelectionForm(title = "Test Report Form", loca
   val file = menu("file")
 
   val report = actor(
-    ident = "report",
     menu = file,
     label = "CreateReport",
     help = "Create report",

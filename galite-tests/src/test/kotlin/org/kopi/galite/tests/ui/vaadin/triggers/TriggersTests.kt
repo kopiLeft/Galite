@@ -33,6 +33,7 @@ import org.kopi.galite.testing.click
 import org.kopi.galite.testing.enter
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
@@ -126,10 +127,10 @@ class TriggersTests : GaliteVUITestBase() {
 class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", locale = Locale.UK) {
   val action = menu("Action")
   val autoFill = actor(
-    ident = "Autofill",
     menu = action,
     label = "Autofill",
     help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
   )
 
   val block = insertBlock(Clients()) {

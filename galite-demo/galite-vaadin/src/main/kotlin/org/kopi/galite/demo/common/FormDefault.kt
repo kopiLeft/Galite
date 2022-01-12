@@ -25,6 +25,7 @@ import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Menu
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
@@ -127,7 +128,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
   // --------------------ACTORS----------------
   override val Form.quit by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "Quit",
       menu = file,
       label = "Quit",
       help = "Quit",
@@ -139,7 +139,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form._break by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "Break",
       menu = file,
       label = "Break",
       help = "Break",
@@ -151,10 +150,10 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.autofill by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "Autofill",
       menu = edit,
       label = "Autofill",
       help = "Autofill",
+      command = PredefinedCommand.AUTOFILL
     ) {
       key = Key.F2
     }
@@ -162,10 +161,10 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.editItem by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "EditItem",
       menu = edit,
       label = "EditItem",
       help = "EditItem",
+      command = PredefinedCommand.EDIT_ITEM
     ) {
       key = Key.SHIFT_F2
     }
@@ -173,10 +172,10 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.editItemS by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "EditItem_S",
       menu = edit,
       label = "EditItem_S",
       help = "EditItem_S",
+      command = PredefinedCommand.EDIT_ITEM_SHORTCUT
     ) {
       key = Key.F2
     }
@@ -184,7 +183,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.searchOperator by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "SearchOperator",
       menu = edit,
       label = "SearchOperator",
       help = "SearchOperator",
@@ -196,7 +194,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.insertLine by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "InsertLine",
       menu = edit,
       label = "InsertLine",
       help = "InsertLine",
@@ -208,7 +205,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.deleteLine by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "DeleteLine",
       menu = edit,
       label = "DeleteLine",
       help = "DeleteLine",
@@ -220,7 +216,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.menuQuery by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "MenuQuery",
       menu = action,
       label = "MenuQuery",
       help = "MenuQuery",
@@ -232,7 +227,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.serialQuery by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "SerialQuery",
       menu = action,
       label = "SerialQuery",
       help = "SerialQuery",
@@ -244,7 +238,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.insertMode by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "InsertMode",
       menu = action,
       label = "InsertMode",
       help = "InsertMode",
@@ -256,7 +249,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.save by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "Save",
       menu = action,
       label = "Save",
       help = "Save",
@@ -268,7 +260,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.delete by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "Delete",
       menu = action,
       label = "Delete",
       help = "Delete",
@@ -280,7 +271,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.createReport by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "CreateReport",
       menu = action,
       label = "CreateReport",
       help = "CreateReport",
@@ -292,7 +282,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.createDynamicReport by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "CreateDynamicReport",
       menu = action,
       label = "CreateDynamicReport",
       help = "CreateDynamicReport",
@@ -304,7 +293,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.help by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "Help",
       menu = action,
       label = "Help",
       help = "Help",
@@ -316,7 +304,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.showHideFilter by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "ShowHideFilter",
       menu = action,
       label = "ShowHideFilter",
       help = "ShowHideFilter",
@@ -328,7 +315,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
 
   override val Form.report by LazyWithReceiver<Form, Actor> {
     actor(
-      ident = "report",
       menu = action,
       label = "CreateReport",
       help = "Create report",
