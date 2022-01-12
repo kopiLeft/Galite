@@ -58,7 +58,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", loca
   val block = insertBlock(Trainee())
   val multipleBlock = insertBlock(Centers())
 
-  inner class Trainee: Block(1, 1, "Training") {
+  inner class Trainee: Block("Training", 1, 1) {
     val t = table(Training)
 
     val trainingID = visit(domain = INT(25), position = at(1, 1)) {
@@ -86,7 +86,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", loca
     }
   }
 
-  inner class Centers : Block(20, 20, "Centers") {
+  inner class Centers : Block("Centers", 20, 20) {
     val c = table(Center)
     val index0 = index(message = "Index 0")
     val index1 = index(message = "Index 1")

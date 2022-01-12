@@ -64,7 +64,7 @@ class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK),
   }
 }
 
-class TaxRuleBlock : Block(1, 10, "TaxRule") {
+class TaxRuleBlock : Block("TaxRule", 1, 10) {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = INT(20)) {

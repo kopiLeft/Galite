@@ -154,7 +154,7 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     }
   }
 
-  class Centers : Block(20, 20, "Centers") {
+  class Centers : Block("Centers", 20, 20) {
     val c = table(Center)
     val t = table(Training)
 
@@ -210,7 +210,7 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     }
   }
 
-  class SimpleBlock : Block(1, 1, "Simple block") {
+  class SimpleBlock : Block("Simple block", 1, 1) {
     val contact = visit(domain = STRING(20), position = at(1, 1)) {
       label = "contact"
       help = "The contact"

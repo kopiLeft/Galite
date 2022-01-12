@@ -42,7 +42,7 @@ class ProductForm : ReportSelectionForm(title = "Products", locale = Locale.UK),
 
   val block = page.insertBlock(BlockProduct())
 
-  inner class BlockProduct : Block(1, 1, "Products") {
+  inner class BlockProduct : Block("Products", 1, 1) {
     val u = table(Product)
 
     val idPdt = hidden(domain = INT(20)) {

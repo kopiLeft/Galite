@@ -46,7 +46,7 @@ class BillProductForm : ReportSelectionForm("Bill products", Locale.UK), IFormDe
   }
 }
 
-class BlockBillProduct : Block(1, 1, "bill product") {
+class BlockBillProduct : Block("bill product", 1, 1) {
   val u = table(BillProduct)
   val v = table(Product)
   val w = table(Bill)

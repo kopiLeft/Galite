@@ -62,7 +62,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
           title: String,
           formPage: FormPage? = null,
           init: Block.() -> Unit
-  ): Block = insertBlock(Block(buffer, visible, name, title), formPage, init)
+  ): Block = insertBlock(Block(title, buffer, visible, name), formPage, init)
 
   /**
    * Adds a new block to this form.
@@ -76,7 +76,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     visible: Int,
     title: String,
     init: Block.() -> Unit
-  ): Block = insertBlock(Block(buffer, visible, title, title), this, init)
+  ): Block = insertBlock(Block(title, buffer, visible, title), this, init)
 
   /**
    * Adds a new block to this form.

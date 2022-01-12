@@ -84,7 +84,7 @@ class FileFilter : FileHandler.FileFilter {
     get() = "XLS/XLSX"
 }
 
-class UsersListBlock : Block(1, 1, "UsersListBlock") {
+class UsersListBlock : Block("UsersListBlock", 1, 1) {
   val user = mustFill(domain = UsersList(), position = at(1, 1)) {
     label = "user"
     help = "The user"
@@ -177,7 +177,7 @@ class SomeDictionnaryForm : DictionaryForm(title = "form for test", locale = Loc
     }
   }
 
-  inner class UsersBlock : Block(1, 1, "Test block") {
+  inner class UsersBlock : Block("Test block", 1, 1) {
     val u = table(Users)
     val unique = index(message = "ID should be unique")
 

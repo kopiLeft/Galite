@@ -105,11 +105,7 @@ You should be able to build custom forms fast and efficiently.
 
 Here is a code snippet:
 ````KOTLIN
-class ClientForm : Form() {
-  
-  override val locale = Locale.UK
-  
-  override val title = "form-title"
+class ClientForm : Form(title = "form-title", locale = Locale.UK) {
 
   val action = menu("Action")
 
@@ -132,7 +128,7 @@ class ClientForm : Form() {
   val block = clientsPage.insertBlock(Clients()) 
 }
 
-class Clients : Block(1, 1, "Clients") {
+class Clients : Block("Clients", 1, 1) {
   val u = table(Client)
 
   val idClt = visit(domain = LONG(10), position = at(1, 1..2)) {
@@ -168,10 +164,7 @@ The report consists of an instance that gets dynamically injected with the data 
 Reports can be grouped together according to certain attributes (collapse, computations)
 The user can generate a file from a report. The file can be in one of the following formats: csv, pdf or excel.
 ````KOTLIN
-class ProductReport : Report() {
-  override val locale = Locale.UK
-
-  override val title = "Products"
+class ProductReport : Report(title = "Products", locale = Locale.UK) {
 
   val action = menu("Action")
 
@@ -277,10 +270,11 @@ Charts are essential to the decision-making process and for speculation.
 The user will be able to select the required data along with the chart’s dimensions and measures.
 
 ````KOTLIN
-class ChartSample: Chart() {
-  override val locale = Locale.UK
-  override val title = "area/population per city"
-  override val help = "This chart presents the area/population per city"
+class ChartSample: Chart(
+  title = "area/population per city",
+  help = "This chart presents the area/population per city",
+  locale = Locale.UK
+) {
 
   val action = menu("Action")
 

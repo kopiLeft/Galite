@@ -83,7 +83,7 @@ class CommandForm : ReportSelectionForm(title = "Commands", locale = Locale.UK),
   }
 }
 
-class BlockCommand : Block(1, 10, "Commands") {
+class BlockCommand : Block("Commands", 1, 10) {
   val u = table(Command)
   val v = table(Client)
 

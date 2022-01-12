@@ -152,7 +152,7 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
   val simpleBlock = p2.insertBlock(SimpleBlock())
 
   // simple block
-  inner class SimpleBlock : Block(1, 10, "SimpleForm") {
+  inner class SimpleBlock : Block("SimpleForm", 1, 10) {
     init {
       border = Border.LINE
     }
@@ -163,7 +163,7 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
   }
 
   // form triggers
-  inner class TriggerForm : Block(1, 10, "Block to test: from triggers") {
+  inner class TriggerForm : Block("Block to test: from triggers", 1, 10) {
 
     val initTriggerForm = visit(domain = STRING(20), position = at(1, 1)) {
       label = "INIT Trigger Form"

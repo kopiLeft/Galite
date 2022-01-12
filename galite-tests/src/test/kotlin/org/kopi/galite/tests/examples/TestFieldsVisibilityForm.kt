@@ -66,7 +66,7 @@ class TestFieldsVisibilityForm : DictionaryForm(title = "Fields Visibility Form"
   }
 }
 
-class BlockWithChangingFieldVisibilityTypes : Block(1, 1, "Block With All Field Visibility Types") {
+class BlockWithChangingFieldVisibilityTypes : Block("Block With All Field Visibility Types", 1, 1) {
   val hiddenField = hidden(domain = INT(25)) {
     label = "hidden field"
     help = "hidden field"

@@ -80,7 +80,7 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
   val salesBlock = clientsPage.insertBlock(Sales())
 
 
-  inner class Clients : Block(1, 100, "Clients") {
+  inner class Clients : Block("Clients", 1, 100) {
     val c = table(Client)
 
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
@@ -163,7 +163,7 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
     }
   }
 
-  inner class Sales : Block(10, 10, "Sales") {
+  inner class Sales : Block("Sales", 10, 10) {
     val C = table(Client)
     val S = table(Purchase)
     val P = table(Product)

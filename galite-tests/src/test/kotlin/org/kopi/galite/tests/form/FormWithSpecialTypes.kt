@@ -93,7 +93,7 @@ class FormWithSpecialTypes : Form(title = "form for test", locale = Locale.UK) {
   }
 }
 
-class BlockWithSpecialTypes : Block(1, 1, "Test block") {
+class BlockWithSpecialTypes : Block("Test block", 1, 1) {
   val p = table(Product)
   val i = index(message = "ID should be unique")
 

@@ -136,7 +136,7 @@ class FormWithColoredFields: Form(title = "") {
   val simpleBlock = insertBlock(SimpleBlock())
   val multiBlock = insertBlock(MultiBlock())
 
-  inner class SimpleBlock: Block(1, 1, "") {
+  inner class SimpleBlock: Block("", 1, 1) {
     val stringField = visit(STRING(10), position = at(1, 1)) {}
     val intField = visit(INT(10), position = at(1, 2)) {}
     val dateField = visit(DATE, position = at(2, 1)) {}
@@ -147,7 +147,7 @@ class FormWithColoredFields: Form(title = "") {
     // TODO: test actor field
   }
 
-  inner class MultiBlock: Block(10, 10, "") {
+  inner class MultiBlock: Block("", 10, 10) {
     val stringField = visit(STRING(10), position = at(1, 1)) {}
     val intField = visit(INT(10), position = at(1, 2)) {}
     val dateField = visit(DATE, position = at(2, 1)) {}

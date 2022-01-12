@@ -48,14 +48,14 @@ class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val salesBlock = clientsPage.insertBlock(Sales())
   val salesSimpleBlock = clientsPage.insertBlock(SalesSimpleBlock())
 
-  inner class Clients : Block(1, 1, "Clients") {
+  inner class Clients : Block("Clients", 1, 1) {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class Sales : Block(10, 10, "Sales") {
+  inner class Sales : Block("Sales", 10, 10) {
 
     val idClient = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
@@ -103,7 +103,7 @@ class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
     }
   }
 
-  inner class SalesSimpleBlock : Block(1, 1, "Sales") {
+  inner class SalesSimpleBlock : Block("Sales", 1, 1) {
 
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"

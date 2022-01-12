@@ -45,7 +45,7 @@ class SimpleForm : DictionaryForm(title = "Training", locale = Locale.UK) {
   val block = insertBlock(TraineeshipWithAllFieldTypes())
 }
 
-class TraineeshipWithAllFieldTypes : Block(1, 1, "Training") {
+class TraineeshipWithAllFieldTypes : Block("Training", 1, 1) {
   val t = table(Training)
 
   val trainingID = visit(domain = INT(25), position = at(1, 1)) {

@@ -47,7 +47,7 @@ class BillForm : ReportSelectionForm(title = "Bills", locale = Locale.UK), IForm
   }
 }
 
-class BlockBill : Block(1, 1, "Bills") {
+class BlockBill : Block("Bills", 1, 1) {
   val u = table(Bill)
   val v = table(Command)
 

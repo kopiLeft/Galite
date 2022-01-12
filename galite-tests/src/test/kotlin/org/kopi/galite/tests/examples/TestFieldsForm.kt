@@ -60,7 +60,7 @@ class TestFieldsForm : DictionaryForm(title = "Fields Form", locale = Locale.UK)
   }
 }
 
-class BlockWithAllFieldVisibilityTypes : Block(1, 1, "Block With All Field Visibility Types") {
+class BlockWithAllFieldVisibilityTypes : Block("Block With All Field Visibility Types", 1, 1) {
   val hiddenField = hidden(domain = INT(25)) {
     label = "hidden field"
     help = "hidden field"
@@ -84,7 +84,7 @@ class BlockWithAllFieldVisibilityTypes : Block(1, 1, "Block With All Field Visib
   }
 }
 
-class BlockWithDifferentTypes : Block(1, 1, "Block With Different Types") {
+class BlockWithDifferentTypes : Block("Block With Different Types", 1, 1) {
   val upperStringField = visit(domain = STRING(50, Convert.UPPER), position = at(1, 1)) {
     label = "upper string field"
     help = "upper string field"
@@ -109,7 +109,7 @@ class BlockWithDifferentTypes : Block(1, 1, "Block With Different Types") {
   }
 }
 
-class BlockWithSaveCommand : Block(1, 1, "Block With Save Command") {
+class BlockWithSaveCommand : Block("Block With Save Command", 1, 1) {
   val t = table(Trainer)
   val trainerID = hidden(domain = INT(25)) {
     label = "trainer ID"

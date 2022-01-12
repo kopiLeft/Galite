@@ -29,7 +29,7 @@ object FormWithMultipleBlock : Form(title = "form for test", locale = Locale.UK)
   val multipleBlock = insertBlock(MultipleBlock)
 }
 
-object MultipleBlock : Block(100, 100, "Test block") {
+object MultipleBlock : Block("Test block", 100, 100) {
   val id = hidden(domain = INT(20)) {
     label = "id"
     help = "The user id"

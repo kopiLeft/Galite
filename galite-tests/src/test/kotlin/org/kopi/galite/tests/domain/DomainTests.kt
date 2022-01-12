@@ -41,7 +41,7 @@ class DomainTests {
 
     @Test
     fun buildFormFieldTest() {
-        val block = Block(1, 1, "TestBlock", "Test")
+        val block = Block("TestBlock", 1, 1, "Test")
         val intDomain = Domain<Int>(10, 10, 10)
         val intFormField = FormField(block, intDomain, 0, 0)
 

@@ -46,15 +46,15 @@ import org.kopi.galite.visual.visual.VException
  * A block is created in order to either view the content of a database, to insert
  * new data in the database or to update existing data in the database.
  *
+ * @param        title                 the title of the block
  * @param        buffer                the buffer size of this block
  * @param        visible               the number of visible elements
  * @param        ident                 the simple identifier of this block
  * @param        shortcut              the shortcut of this block
- * @param        title                 the title of the block
  */
-open class Block(var buffer: Int,
+open class Block(val title: String,
+                 var buffer: Int,
                  var visible: Int,
-                 val title: String,
                  ident: String? = null)
   : FormElement(ident), VConstants {
 

@@ -46,7 +46,7 @@ class StockForm : ReportSelectionForm(title = "Stocks", locale = Locale.UK), IFo
   }
 }
 
-class StockBlock : Block(1, 1, "Stock") {
+class StockBlock : Block("Stock", 1, 1) {
   val u = table(Stock)
   val v = table(Product)
   val w = table(Provider)

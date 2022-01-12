@@ -150,14 +150,14 @@ class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", local
     }
   }
 
-  inner class Clients : Block(1, 1, "Clients") {
+  inner class Clients : Block("Clients", 1, 1) {
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
     }
   }
 
-  inner class SalesSimpleBlock : Block(1, 1, "Sales") {
+  inner class SalesSimpleBlock : Block("Sales", 1, 1) {
     val idClt = visit(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The item id"

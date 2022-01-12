@@ -30,7 +30,7 @@ object FormToCheckFieldVisibility: Form(title = "form for test fields visibility
   val testBlock = testPage.insertBlock(blockToCheckFieldVisibility)
 }
 
-object blockToCheckFieldVisibility : Block(1, 1, "Test block") {
+object blockToCheckFieldVisibility : Block("Test block", 1, 1) {
   val u = table(User)
 
   val id = hidden(domain = INT(20)) {

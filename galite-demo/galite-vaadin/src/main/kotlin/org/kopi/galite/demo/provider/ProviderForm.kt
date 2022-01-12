@@ -45,7 +45,7 @@ class ProviderForm : ReportSelectionForm(title = "Providers", locale = Locale.UK
   }
 }
 
-class BlockProvider : Block(1, 1, "Providers") {
+class BlockProvider : Block("Providers", 1, 1) {
   val u = table(Provider)
 
   val idProvider = hidden(domain = INT(20)) {

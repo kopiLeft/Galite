@@ -155,7 +155,7 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
   }
 }
 
-class TestBlock : Block(1, 5, "Test block") {
+class TestBlock : Block("Test block", 1, 5) {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -237,7 +237,7 @@ class TestBlock : Block(1, 5, "Test block") {
   }
 }
 
-class ListDomainTest : Block(1, 1, "Test block") {
+class ListDomainTest : Block("Test block", 1, 1) {
   val u = table(User)
   val listNames = visit(domain = ListNames, position = at(1, 1)) {
     label = "list names"

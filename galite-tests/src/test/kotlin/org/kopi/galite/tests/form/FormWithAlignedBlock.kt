@@ -41,7 +41,7 @@ class FormWithAlignedBlock : Form(title = "form for test", locale = Locale.UK) {
   }
 }
 
-class TestAlign : Block(10, 8, "Test block") {
+class TestAlign : Block("Test block", 10, 8) {
 
   init {
     options(BlockOption.NODETAIL)

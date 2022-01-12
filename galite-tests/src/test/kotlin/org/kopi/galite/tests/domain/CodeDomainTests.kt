@@ -125,7 +125,7 @@ class IntegerType : CodeDomain<Int>() {
 class TestForm : Form(title = "Test Form", locale = Locale.UK) {
   val block = insertBlock(TestBlock())
 
-  inner class TestBlock : Block(1, 1, "Test Block") {
+  inner class TestBlock : Block("Test Block", 1, 1) {
     val field1 = visit(StringType(), at(1, 1)) {
       label = "Initial field"
     }

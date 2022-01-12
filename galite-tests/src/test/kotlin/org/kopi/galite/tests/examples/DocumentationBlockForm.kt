@@ -154,7 +154,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
 
   /*** Block Types ***/
   // Simple block
-  inner class SimpleBlock : Block(1, 10, "Simple Block") {
+  inner class SimpleBlock : Block("Simple Block", 1, 10) {
     init {
       border = Border.LINE
     }
@@ -164,7 +164,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
     }
   }
   // Multi block
-  inner class MultiBlock : Block(2, 2, "Multi Block") {
+  inner class MultiBlock : Block("Multi Block", 2, 2) {
     init {
       border = Border.LINE
     }
@@ -176,7 +176,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
 
   /*** Block Border ***/
   // test border = Border.LINE
-  inner class LineBorderBlock : Block(2, 2, "Line Border Block") {
+  inner class LineBorderBlock : Block("Line Border Block", 2, 2) {
     init {
       border = Border.LINE
     }
@@ -186,7 +186,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test border = Border.RAISED
-  inner class RaisedBorderBlock : Block(2, 2, "Raised Border Block") {
+  inner class RaisedBorderBlock : Block("Raised Border Block", 2, 2) {
     init {
       border = Border.RAISED
     }
@@ -196,7 +196,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test border = Border.LOWERED
-  inner class LoweredBorderBlock : Block(2, 2, "Lowered Border Block") {
+  inner class LoweredBorderBlock : Block("Lowered Border Block", 2, 2) {
     init {
       border = Border.LOWERED
     }
@@ -206,7 +206,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test border = Border.ETCHED
-  inner class EtchedBorderBlock : Block(2, 2, "Etched Border Block") {
+  inner class EtchedBorderBlock : Block("Etched Border Block", 2, 2) {
     init {
       border = Border.ETCHED
     }
@@ -216,7 +216,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   /*** Block Alignment ***/
-  class TestAlign : Block(10, 8, "Align block") {
+  class TestAlign : Block("Align block", 10, 8) {
     init {
       border = Border.LINE
       options(BlockOption.NODETAIL)
@@ -258,7 +258,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
 
   /*** Block Options ***/
   // test NOCHART option
-  inner class NoChartBlock : Block(2, 2, "NOCHART Block") {
+  inner class NoChartBlock : Block("NOCHART Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.NOCHART)
@@ -269,7 +269,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test NODETAIL option
-  inner class NoDetailBlock : Block(2, 2, "NODETAIL Block") {
+  inner class NoDetailBlock : Block("NODETAIL Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.NODETAIL)
@@ -280,7 +280,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test NODELETE option
-  inner class NoDeleteBlock : Block(2, 2, "NODELETE Block") {
+  inner class NoDeleteBlock : Block("NODELETE Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.NODELETE)
@@ -295,7 +295,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test NOINSERT option
-  inner class NoInsertBlock : Block(2, 2, "NOINSERT Block") {
+  inner class NoInsertBlock : Block("NOINSERT Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.NOINSERT)
@@ -306,7 +306,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test NOMOVE option
-  inner class NoMoveBlock : Block(2, 2, "NOMOVE Block") {
+  inner class NoMoveBlock : Block("NOMOVE Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.NOMOVE)
@@ -317,7 +317,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test ACCESS_ON_SKIPPED option
-  inner class AccessOnSkippedBlock : Block(2, 2, "ACCESS_ON_SKIPPED Block") {
+  inner class AccessOnSkippedBlock : Block("ACCESS_ON_SKIPPED Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.ACCESS_ON_SKIPPED)
@@ -328,7 +328,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test UPDATE_INDEX option
-  inner class UpdateIndexBlock : Block(2, 2, "UPDATE_INDEX Block") {
+  inner class UpdateIndexBlock : Block("UPDATE_INDEX Block", 2, 2) {
     init {
       border = Border.LINE
       options(BlockOption.UPDATE_INDEX)
@@ -339,7 +339,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   /*** Simple Block Triggers ***/
-  inner class TriggersBlock : Block(1, 10, "Simple block Triggers") {
+  inner class TriggersBlock : Block("Simple block Triggers", 1, 10) {
     val t = table(TestTriggers)
 
     val id = hidden(domain = INT(20)) { columns(t.id) }
@@ -485,7 +485,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   /*** Multi Block Triggers ***/
-  inner class TriggersMultiBlock : Block(10, 10, "Multi block Triggers") {
+  inner class TriggersMultiBlock : Block("Multi block Triggers", 10, 10) {
     val preRecTrigger = visit(domain = STRING(20), position = at(1, 1)) {
       label = "PREREC Trigger"
     }
@@ -518,7 +518,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
     }
   }
 
-  inner class CommandAccessBlock : Block(1, 10, "Block to test command access") {
+  inner class CommandAccessBlock : Block("Block to test command access", 1, 10) {
     init {
       border = Border.LINE
     }
@@ -528,7 +528,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
     }
   }
 
-  inner class ChangeVisibilityBlock : Block(1, 10, "Block to test visibility") {
+  inner class ChangeVisibilityBlock : Block("Block to test visibility", 1, 10) {
     init {
       border = Border.LINE
     }
@@ -538,7 +538,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
     }
   }
 
-  inner class LastBlock : Block(1, 10, "Last block") {
+  inner class LastBlock : Block("Last block", 1, 10) {
     val postDelTrigger = visit(domain = STRING(20), position = at(1, 1)) {
       label = "post Del Trigger"
     }

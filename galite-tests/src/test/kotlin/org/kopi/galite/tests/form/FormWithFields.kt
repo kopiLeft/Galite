@@ -33,7 +33,7 @@ class FormWithFields: Form(title = "form with fields", locale = Locale.UK) {
   val testBlocsk = testPagse.insertBlock(BlockWithFields())
 }
 
-class BlockWithFields : Block(1, 1, "Test block") {
+class BlockWithFields : Block("Test block", 1, 1) {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

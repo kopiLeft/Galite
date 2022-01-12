@@ -255,7 +255,7 @@ class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = 
     }
   }
 
-  inner class UsersListBlock : Block(1, 1, "UsersListBlock") {
+  inner class UsersListBlock : Block("UsersListBlock", 1, 1) {
     val user = mustFill(domain = UsersList(), position = at(1, 1)) {
       label = "user"
       help = "The user"
@@ -295,7 +295,7 @@ class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) 
 
   val block = insertBlock(UsersBlock()) {}
 
-  inner class UsersBlock : Block(1, 1, "Test block") {
+  inner class UsersBlock : Block("Test block", 1, 1) {
     val shortName = visit(domain = STRING(20), position = at(1, 1)) {
       label = "Kurzname"
       help = "Kurzname"
