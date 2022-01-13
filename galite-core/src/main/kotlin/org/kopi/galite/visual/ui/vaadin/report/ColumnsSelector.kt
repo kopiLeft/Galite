@@ -52,6 +52,7 @@ class ColumnsSelector : Div() {
       checkbox.value = column.isVisible
       checkbox.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<Checkbox?, Boolean?> ->
         column.isVisible = e.value!!
+        table.model.model.columns[it]?.isVisible = e.value!!
       }
       val item = contextMenu.addItem(checkbox)
 
