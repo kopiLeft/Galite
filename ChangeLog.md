@@ -1,3 +1,19 @@
+# 1.0.0-beta.4
+## What's Changed
+* Full calendar block should be in insert mode when inserting new entry
+* VaadinUI: Feature of changing the foreground and background of a field by @hfazai in [#531](https://github.com/kopiLeft/Galite/pull/531)
+* DSL: Supporting key columns in form fields
+* Do not loose field's color on blur by @h-haddad in [#532](https://github.com/kopiLeft/Galite/pull/532)
+* VaadinUI: Parse time field value to accept many formats like 1000 => 10:00
+* DSL: Adding more APIs to report DSL
+* Adding shift left and shift right to Decimal by @hfazai in [#533](https://github.com/kopiLeft/Galite/pull/533)
+* Enhancement in style of VActorsRootNavigationItem in actors panel by @h-haddad in [#528](https://github.com/kopiLeft/Galite/pull/528)
+* Improvement in style of checkbox by @h-haddad in [#535](https://github.com/kopiLeft/Galite/pull/535)
+* DSL: Remove ident parameter from Actor declaration and add predefined commands
+* DSL: title, help and locale parameters will be passed to Window's constructor and reorder Block constructor parameters by @hfazai in [#534](https://github.com/kopiLeft/Galite/pull/534)
+
+**Full Changelog**: [1.0.0-beta.3 ... 1.0.0-beta.4](https://github.com/kopiLeft/Galite/compare/1.0.0-beta.3...1.0.0-beta.4)
+
 # 1.0.0-beta.3
 ## What's Changed
 * VaadinUI: focus on a field when a form is opened in a dialog by @hfazai in [#522](https://github.com/kopiLeft/Galite/pull/522)
