@@ -199,9 +199,6 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
       help = "The item price"
       columns(P.price)
     }
-    val available = visit(domain = BOOL, position = at(2, 2)) {
-      label = "available"
-    }
 
     init {
       border = Border.LINE
