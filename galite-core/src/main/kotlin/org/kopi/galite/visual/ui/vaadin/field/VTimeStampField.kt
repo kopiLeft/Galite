@@ -62,6 +62,27 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
               })
       """
     )
+
+    // Issue: https://github.com/vaadin/flow-components/issues/1158
+    // TODO: Remove this workaround when the ticket is resolved.
+    datePicker.element.executeJs(
+      """
+              this.addEventListener("blur", event => {
+                if (this.value == '' && this.$.input.inputElement.value != '') {
+                  this.$.input.inputElement.value = ''
+                }
+              })
+      """
+    )
+    timePicker.element.executeJs(
+      """
+              this.addEventListener("blur", event => {
+                if (this.value == '' && this.__inputElement.value != '') {
+                  this.__inputElement.value = ''
+                }
+              })
+      """
+    )
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

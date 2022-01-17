@@ -42,6 +42,18 @@ class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
               })
               """
     )
+
+    // Issue: https://github.com/vaadin/flow-components/issues/1158
+    // TODO: Remove this workaround when the ticket is resolved.
+    element.executeJs(
+      """
+              this.addEventListener("blur", event => {
+                if (this.value == '' && this.$.input.inputElement.value != '') {
+                  this.$.input.inputElement.value = ''
+                }
+              })
+              """
+    )
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
