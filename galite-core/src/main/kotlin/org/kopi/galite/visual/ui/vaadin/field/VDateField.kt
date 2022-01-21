@@ -19,6 +19,8 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.util.Optional
 
+import org.kopi.galite.visual.type.Date
+
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.ComponentEventListener
@@ -49,6 +51,14 @@ class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifi
       listener(it.isFromClient)
     }
     internalField.addPickerListener {
+      if(it.value.isNotEmpty()) {
+        val date = Date.parse(it.value, "yyyy-MM-dd").toString()
+
+        if(content.value != date) {
+          // Synchronize value with textfield
+          content.value = date
+        }
+      }
       listener(it.isFromClient)
     }
   }
