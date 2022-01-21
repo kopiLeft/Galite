@@ -22,6 +22,7 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
+import org.kopi.galite.visual.ui.vaadin.field.DatePickerLight
 import org.kopi.galite.visual.ui.vaadin.field.InputTextField
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
@@ -51,7 +52,6 @@ import com.vaadin.flow.component.grid.Grid
  */
 fun <T> FormField<T>.edit(value: T): UField {
   val mainWindow = _get<MainWindow>()
-  lateinit var field: UField
 
   return if (this.parentBlock.isMulti) {
     editInMultipleBlock(value, mainWindow)
@@ -132,9 +132,15 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
     }
   }
 
-  if (inputField != null) {
-    inputField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
-    inputField._fireEvent(ComponentValueChangeEvent<Component, Any?>(inputField, inputField, oldValue, true))
+  val _inputField = if(inputField is DatePickerLight) {
+    inputField.textField
+  } else {
+    inputField
+  }
+
+  if (_inputField != null) {
+    _inputField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
+    _inputField._fireEvent(ComponentValueChangeEvent<Component, Any?>(_inputField, _inputField, oldValue, true))
     waitAndRunUIQueue(50)
   }
 

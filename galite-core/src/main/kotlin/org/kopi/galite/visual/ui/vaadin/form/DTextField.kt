@@ -79,7 +79,6 @@ open class DTextField(
         }
       }
     } else {
-
       field.inputField.addTextValueChangeListener {
         if(it.isFromClient) {
           valueChanged()
