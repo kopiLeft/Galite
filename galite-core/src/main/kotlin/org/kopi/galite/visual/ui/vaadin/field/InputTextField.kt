@@ -54,10 +54,11 @@ import com.vaadin.flow.shared.Registration
  *
  * Protected constructor to use to create other types of fields.
  */
-open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val internalField: C)
+open class InputTextField<C> internal constructor(protected val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
       HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
+        where C: AbstractField<*, out Any>, C: Focusable<*>
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
@@ -190,14 +191,14 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     var text = text
 
     // set only valid inputs
-    if (validationStrategy is NoeditValidator
-      || validationStrategy!!.validate(text)
-    ) {
-      if (text == null) {
-        text = "" // avoid NullPointerException
-      }
-      setPresentationValue(text)
+    //if (validationStrategy is NoeditValidator TODO
+    //  || validationStrategy!!.validate(text)
+    //) {
+    if (text == null) {
+      text = "" // avoid NullPointerException
     }
+    setPresentationValue(text)
+    //}
   }
 
   /**
@@ -279,7 +280,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Sets the text size.
    */
   open var size: Int
-    get() = internalField.element.getProperty("size").toInt()
+    get() = internalField.getElement().getProperty("size").toInt()
     set(value) { this.element.setProperty("size", value.toString()) }
 
   /**
@@ -441,11 +442,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   override fun focus() {
-    if(internalField is Focusable<*>) {
-      internalField.focus()
-    } else {
-      super.focus()
-    }
+    internalField.focus()
   }
 
   protected open fun onLoad() {

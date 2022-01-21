@@ -31,6 +31,8 @@ class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
 
   init {
     internalField.isAutoOpen = false
+    internalField.element.setProperty("pattern", "[0-9:]*")
+    internalField.element.setProperty("preventInvalidInput", true)
     element.themeList.add("galite-time")
 
     // Workaround for autoselection on focus

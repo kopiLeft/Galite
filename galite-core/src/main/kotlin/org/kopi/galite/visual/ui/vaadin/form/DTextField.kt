@@ -23,9 +23,8 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.ui.vaadin.field.VDateField
 import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.contextmenu.ContextMenu
@@ -71,9 +70,19 @@ open class DTextField(
     }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    field.inputField.addTextValueChangeListener {
-      if(it.isFromClient) {
-        valueChanged()
+    // Issue: https://github.com/vaadin/flow-components/issues/1158
+    // TODO: Remove this workaround when the ticket is resolved.
+    if(field.inputField is VDateField) {
+      field.inputField.addDateValueChangeListener { fromClient ->
+        if(fromClient) {
+          valueChanged()
+        }
+      }
+    } else {
+      field.inputField.addTextValueChangeListener {
+        if(it.isFromClient) {
+          valueChanged()
+        }
       }
     }
 
@@ -233,9 +242,9 @@ open class DTextField(
     if (!transformer!!.checkFormat(text)) {
       return
     }
-    if (getModel().checkText(text!!)) {
-      getModel().onTextChange(text)
+    getModel().onTextChange(text!!)
 
+    if (getModel().checkText(text)) {
       // affect value directly to the model.
       getModel().getForm().performAsyncAction(object : Action("check_type") {
         override fun execute() {
