@@ -350,7 +350,7 @@ class TextField(val model: VField,
 
     text.size = size
     text.setMaxLength(maxLength)
-    text.width = "" + size + "ch" // TODO: temporary styling
+    text.content.width = "" + size + "ch" // TODO: temporary styling
     text.element.style["box-sizing"] = "unset"
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.

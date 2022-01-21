@@ -31,6 +31,8 @@ class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
 
   init {
     internalField.isAutoOpen = false
+    internalField.element.setProperty("pattern", "[0-9:]*")
+    internalField.element.setProperty("preventInvalidInput", true)
     element.themeList.add("galite-time")
 
     // Workaround for autoselection on focus
@@ -38,18 +40,6 @@ class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
       """
               this.addEventListener("focus", event => {
                     this.focusElement.inputElement.select()
-              })
-      """
-    )
-
-    // Issue: https://github.com/vaadin/flow-components/issues/1158
-    // TODO: Remove this workaround when the ticket is resolved.
-    element.executeJs(
-      """
-              this.addEventListener("blur", event => {
-                if (this.value == '' && this.__inputElement.value != '') {
-                  this.__inputElement.value = ''
-                }
               })
       """
     )

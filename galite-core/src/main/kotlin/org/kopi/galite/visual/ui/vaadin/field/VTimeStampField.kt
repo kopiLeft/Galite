@@ -17,9 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.datetimepicker.DateTimePicker
@@ -59,27 +56,6 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
       """
               this.addEventListener("focus", event => {
                     this.focusElement.inputElement.select()
-              })
-      """
-    )
-
-    // Issue: https://github.com/vaadin/flow-components/issues/1158
-    // TODO: Remove this workaround when the ticket is resolved.
-    datePicker.element.executeJs(
-      """
-              this.addEventListener("blur", event => {
-                if (this.value == '' && this.$.input.inputElement.value != '') {
-                  this.$.input.inputElement.value = ''
-                }
-              })
-      """
-    )
-    timePicker.element.executeJs(
-      """
-              this.addEventListener("blur", event => {
-                if (this.value == '' && this.__inputElement.value != '') {
-                  this.__inputElement.value = ''
-                }
               })
       """
     )
