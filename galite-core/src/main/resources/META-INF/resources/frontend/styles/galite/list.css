@@ -68,7 +68,6 @@ vaadin-grid-cell-content, .k-listdialog {
 }
 
 .filter-text::part(input-field) {
-    background: white;
     border-radius: 0;
 }
 
@@ -79,6 +78,7 @@ vaadin-grid-cell-content, .k-listdialog {
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
+    background: white;
     --lumo-text-field-size: none;
 }
 
