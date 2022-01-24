@@ -29,8 +29,6 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.maxValue
-import org.kopi.galite.visual.dsl.form.minValue
 
 class TestFieldsForm : DictionaryForm(title = "Fields Form", locale = Locale.UK) {
 

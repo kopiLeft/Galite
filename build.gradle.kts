@@ -18,7 +18,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.5.30" apply false
+  id("org.jetbrains.kotlin.jvm") version "1.6.10" apply false
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 

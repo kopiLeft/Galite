@@ -35,8 +35,6 @@ import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.maxValue
-import org.kopi.galite.visual.dsl.form.minValue
 import org.kopi.galite.visual.visual.FileHandler
 
 object User : Table() {

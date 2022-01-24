@@ -962,6 +962,8 @@ open class Block(val title: String,
   /** The block model */
   lateinit var block: VBlock
 
+  val isModelInitialized: Boolean get() = ::block.isInitialized
+
   /** Returns block model */
   open fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
     val blockModel = BlockModel(vForm, this, source)
