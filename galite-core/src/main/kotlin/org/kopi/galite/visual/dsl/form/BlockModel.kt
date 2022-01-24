@@ -98,6 +98,8 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: Stri
         pages = arrayOf()
         pagesIdents = arrayOf()
       }
+
+      override fun formClassName(): String = block.javaClass.name
     }
   }
 }
