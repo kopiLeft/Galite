@@ -286,12 +286,8 @@ class ChartSample: Chart(
   val city = dimension(STRING(10)) {
     label = "dimension"
 
-    format {
-      object : VColumnFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      value?.toUpperCase()
     }
   }
 

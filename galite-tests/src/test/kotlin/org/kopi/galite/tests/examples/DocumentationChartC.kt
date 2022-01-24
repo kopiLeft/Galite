@@ -19,7 +19,6 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.visual.chart.VChartType
-import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -107,13 +106,8 @@ class DocumentationChartC :  Chart(
 
     // test format trigger try to upperCase then to lowerCase
     // to test it remove month dimension and see the result
-    format {
-      object : VColumnFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-          //return (value as String).toLowerCase()
-        }
-      }
+    format { value ->
+      value?.toUpperCase()
     }
   }
 

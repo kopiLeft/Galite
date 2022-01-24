@@ -20,7 +20,6 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.chart.VChartType
-import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -89,12 +88,8 @@ class ChartSample: Chart(
   val city = dimension(STRING(10)) {
     label = "dimension"
 
-    format {
-      object : VColumnFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      value?.toUpperCase()
     }
   }
 

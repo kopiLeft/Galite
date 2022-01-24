@@ -45,8 +45,13 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>, val source: Str
    *
    * @param method    The method to execute when compute trigger is executed.
    */
-  fun format(method: () -> VColumnFormat): ChartTrigger {
-    val fieldAction = Action(null, method)
+  fun format(method: (value: T?) -> String?): ChartTrigger {
+    val formatMethod = {
+      object : VColumnFormat() {
+        override fun format(value: Any?): String = method(value as? T).orEmpty()
+      }
+    }
+    val fieldAction = Action(null, formatMethod)
     return ChartTrigger(0L or (1L shl CConstants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it
     }
