@@ -112,7 +112,6 @@ open class FormField<T>(internal val block: Block,
       max = value
     }
 
-
   /**
    * Returns the field value of the current record number [record]
    *
@@ -135,7 +134,7 @@ open class FormField<T>(internal val block: Block,
   operator fun set(record: Int = 0, value: T) {
     initialValues[record] = value
 
-    if (vField.block != null) {
+    if (block.isModelInitialized) {
       vField.setObject(record, value)
     }
   }

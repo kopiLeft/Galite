@@ -208,12 +208,8 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
   val description = field(domain = STRING(50)) {
     label = "Description"
     help = "The product description"
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      value.toUpperCase()
     }
   }
 
