@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -239,8 +239,8 @@ open class Utils : org.kopi.galite.visual.util.base.Utils() {
     const val RESOURCE_DIR = "org/kopi/galite/visual"
     private val DEFAULT_VERSION = arrayOf(
             "No version information available.",
-            "Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN. All rights reserved.",
-            "Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT. All rights reserved."
+            "Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN. All rights reserved.",
+            "Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT. All rights reserved."
     )
     private var allowExplicitGcCall: Boolean? = null
   }

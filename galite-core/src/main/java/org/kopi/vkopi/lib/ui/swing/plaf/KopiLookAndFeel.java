@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,7 +57,7 @@ public KopiLookAndFeel() {
 
   public String getDescription() {
     return "Look and Feel giving a flat effect."
-      + " Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH."
+      + " Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH."
       + " Published under the GNU Lesser General Public Licence Version 2.1.";
   }
 
