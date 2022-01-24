@@ -18,7 +18,7 @@ package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.form.VConstants
 
-enum class FieldOption(val value: Int) {
+enum class Option(val value: Int) {
   /**
    * If this option is used, characters typed in the field will not be displayed and a star(*) will be
    * displayed instead, this option is useful for password fields.

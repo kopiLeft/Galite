@@ -37,7 +37,7 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldAlignment
-import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Option
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.type.Decimal
@@ -299,37 +299,37 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
     // test NOECHO
     val noEcho = visit(domain = STRING(20), position = at(1, 1)) {
       label = "no Echo"
-      options(FieldOption.NOECHO)
+      options(Option.NOECHO)
     }
 
     // test NOEDIT
     val noEdit = visit(domain = STRING(20), position = at(1, 2)) {
       label = "no Edit"
-      options(FieldOption.NOEDIT)
+      options(Option.NOEDIT)
     }
 
     // test TRANSIENT
     val transient = visit(domain = STRING(20), position = at(1, 3)) {
       label = "Transient"
-      options(FieldOption.TRANSIENT)
+      options(Option.TRANSIENT)
     }
 
     // test NO DELETE ON UPDATE
     val noDeleteOnUpdate = visit(domain = STRING(20), position = at(1,4)) {
       label = "No Delete On Update"
-      options(FieldOption.NO_DELETE_ON_UPDATE)
+      options(Option.NO_DELETE_ON_UPDATE)
     }
 
     // test NO DETAIL
     val noDetail = visit(domain = STRING(20), position = at(1, 5)) {
       label = "no Detail"
-      options(FieldOption.NO_DETAIL)
+      options(Option.NO_DETAIL)
     }
 
     // test NO CHART
     val noChart = visit(domain = STRING(20), position = at(1, 6)) {
       label = "no Chart"
-      options(FieldOption.NO_CHART)
+      options(Option.NO_CHART)
     }
   }
 
@@ -341,7 +341,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
     // test SORTABLE
     val sortable = visit(domain = STRING(20), position = at(1, 1)) {
       label = "Sortable"
-      options(FieldOption.SORTABLE)
+      options(Option.SORTABLE)
     }
   }
 
@@ -364,14 +364,14 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
     val queryUpper = visit(domain = STRING(20), position = at(1, 1)) {
       label = "query Upper"
       columns(t.name)
-      options(FieldOption.QUERY_UPPER)
+      options(Option.QUERY_UPPER)
     }
 
     // test QUERY LOWER
     val queryLower = visit(domain = STRING(20), position = at(2, 1)) {
       label = "query Lower"
       columns(t.lastName)
-      options(FieldOption.QUERY_LOWER)
+      options(Option.QUERY_LOWER)
     }
   }
 
@@ -519,7 +519,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
     // test ACCESS : the visibility of the filed is changed to skipped
     val accessTriggerField  = visit(domain = STRING(20), position = at(3, 1)) {
       label = "ACCESS Trigger Field"
-      trigger(ACCESS) { Access.SKIPPED }
+      access { Access.SKIPPED }
     }
 
     // test VALUE : the field contains a default value

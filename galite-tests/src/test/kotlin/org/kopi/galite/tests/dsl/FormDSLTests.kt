@@ -34,7 +34,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
-import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Option
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
@@ -293,8 +293,8 @@ class FormDSLTests : VApplicationTestBase() {
     val nameClientModel = clientBlock.fields[1]
     val fileModel = clientBlock.fields[2]
 
-    assertEquals(FieldOption.QUERY_LOWER.value, nameClientModel.options)
-    assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)
+    assertEquals(Option.QUERY_LOWER.value, nameClientModel.options)
+    assertEquals(Option.QUERY_UPPER.value, fileModel.options)
   }
 
   /*@Test
@@ -366,7 +366,7 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
     val clientName = visit(domain = STRING(30), position = at(2, 1)) {
       label = "Name"
       help = "The client Name"
-      options(FieldOption.QUERY_LOWER)
+      options(Option.QUERY_LOWER)
       columns(u.name) {
         priority = 9
       }
@@ -377,7 +377,7 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
     val file = visit(domain = STRING(25), position = at(3, 1)) {
       label = "test"
       help = "The test"
-      options(FieldOption.QUERY_UPPER)
+      options(Option.QUERY_UPPER)
       command(item = autoFill) {}
     }
 

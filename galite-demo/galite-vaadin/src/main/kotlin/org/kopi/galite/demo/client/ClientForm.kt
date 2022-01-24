@@ -31,7 +31,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Border
-import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Option
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
@@ -181,13 +181,13 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
       label = "ID"
       help = "The item id"
       columns(S.id)
-      options(FieldOption.SORTABLE)
+      options(Option.SORTABLE)
     }
     val description = visit(domain = STRING(25), position = at(2, 1)) {
       label = "Description"
       help = "The item description"
       columns(P.description)
-      options(FieldOption.SORTABLE)
+      options(Option.SORTABLE)
     }
     val quantity = visit(domain = INT(7), position = at(2, 2)) {
       label = "Quantity"

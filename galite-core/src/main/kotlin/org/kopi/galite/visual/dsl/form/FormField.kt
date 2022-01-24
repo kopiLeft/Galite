@@ -84,6 +84,23 @@ open class FormField<T>(internal val block: Block,
     }
   }
 
+  /**
+   * Adds the field options. you can use one or more option from the options available for fields.
+   *
+   * Use [Option] to see the list of these field options.
+   *
+   * @param fieldOptions the field options
+   */
+  fun options(vararg fieldOptions: Option) {
+    fieldOptions.forEach { fieldOption ->
+      if (fieldOption == Option.QUERY_LOWER || fieldOption == Option.QUERY_UPPER) {
+        options = options and fieldOption.value.inv()
+      }
+
+      options = options or fieldOption.value
+    }
+  }
+
   /** the minimum value that cannot exceed  */
   internal var min : T? = null
 
@@ -329,6 +346,19 @@ open class FormField<T>(internal val block: Block,
     vField.onAfterDrop()
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+  // FORM FIELD TRIGGERS
+  ///////////////////////////////////////////////////////////////////////////
+
+  /**
+   * `access` is a special trigger that defines how a field can be accessed.
+   * This trigger must return one of these values:
+   * [Access.SKIPPED], [Access.HIDDEN], [Access.VISIT] or [Access.MUSTFILL].
+   */
+  fun access(action: () -> Access): Trigger {
+    return initTrigger(arrayOf(FieldTriggerEvent<Access>(VConstants.TRG_FLDACCESS)), action)
+  }
+
   /**
    * Adds triggers to this field
    *
@@ -356,7 +386,7 @@ open class FormField<T>(internal val block: Block,
   fun trigger(vararg fieldTriggerEvents: FieldTypeTriggerEvent, method: () -> T): Trigger =
     initTrigger(fieldTriggerEvents, method)
 
-  fun <T> initTrigger(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>, method: () -> T) : Trigger {
+  private fun <T> initTrigger(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>, method: () -> T) : Trigger {
     val event = fieldEventList(fieldTriggerEvents)
     val fieldAction = Action(null, method)
     val trigger = FormTrigger(event, fieldAction)
@@ -374,6 +404,10 @@ open class FormField<T>(internal val block: Block,
 
     return self
   }
+
+  ///////////////////////////////////////////////////////////////////////////
+  // FIELD MODEL
+  ///////////////////////////////////////////////////////////////////////////
 
   /**
    * The field model based on the field type.
@@ -441,23 +475,6 @@ open class FormField<T>(internal val block: Block,
     }
   }
 
-  /**
-   * Adds the field options. you can use one or more option from the options available for fields.
-   *
-   * Use [FieldOption] to see the list of these field options.
-   *
-   * @param fieldOptions the field options
-   */
-  fun options(vararg fieldOptions: FieldOption) {
-    fieldOptions.forEach { fieldOption ->
-      if (fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
-        options = options and fieldOption.value.inv()
-      }
-
-      options = options or fieldOption.value
-    }
-  }
-
   val parentBlock: Block get() = block
 
   // ----------------------------------------------------------------------
@@ -518,12 +535,6 @@ open class FormField<T>(internal val block: Block,
   ///////////////////////////////////////////////////////////////////////////
   // FORM FIELD TRIGGERS EVENTS
   ///////////////////////////////////////////////////////////////////////////
-  /**
-   * ACCESS is a special trigger that defines how a field can be accessed.
-   * This trigger must return one of these values:
-   * [Access.SKIPPED], [Access.HIDDEN], [Access.VISIT] or [Access.MUSTFILL].
-   */
-  val ACCESS = FieldTriggerEvent<Access>(VConstants.TRG_FLDACCESS)
 
   /**
    * Not defined actually

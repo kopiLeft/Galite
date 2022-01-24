@@ -31,7 +31,7 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
-import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Option
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
@@ -184,8 +184,8 @@ class TestBlock : Block("Test block", 1, 5) {
     label = "password"
     help = "The user password"
 
-    options(FieldOption.NOECHO)
-    trigger(ACCESS) {
+    options(Option.NOECHO)
+    access {
       if (name.value == "hidden") {
         Access.HIDDEN
       } else {
@@ -209,7 +209,7 @@ class TestBlock : Block("Test block", 1, 5) {
   val job = visit(domain = STRING(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
-    options(FieldOption.QUERY_UPPER)
+    options(Option.QUERY_UPPER)
     columns(u.job) {
       priority = 1
     }
@@ -217,7 +217,7 @@ class TestBlock : Block("Test block", 1, 5) {
   val cv = visit(domain = STRING(20), position = at(4, 1)) {
     label = "Cv"
     help = "The user curriculum vitae"
-    options(FieldOption.QUERY_LOWER)
+    options(Option.QUERY_LOWER)
     columns(u.cv)
     droppable("pdf")
     trigger(ACTION) {

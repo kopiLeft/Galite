@@ -34,7 +34,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Option
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
@@ -176,8 +176,8 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
       label = "password"
       help = "The user password"
 
-      options(FieldOption.NOECHO)
-      trigger(ACCESS) { Access.SKIPPED }
+      options(Option.NOECHO)
+      access { Access.SKIPPED }
     }
     val age = visit(domain = INT(3), position = follow(name)) {
       label = "age"
@@ -192,7 +192,7 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
     val job = visit(domain = STRING(20), position = at(3, 1)) {
       label = "Job"
       help = "The user job"
-      options(FieldOption.QUERY_UPPER)
+      options(Option.QUERY_UPPER)
       columns(u.job) {
         priority = 1
       }
@@ -200,7 +200,7 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
     val cv = visit(domain = STRING(20), position = at(4, 1)) {
       label = "Cv"
       help = "The user curriculum vitae"
-      options(FieldOption.QUERY_LOWER)
+      options(Option.QUERY_LOWER)
       droppable("pdf")
       trigger(ACTION) {}
     }
