@@ -557,6 +557,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
             && getBlock().isMulti()
             && recno != getBlock().activeRecord && getBlock().isRecordAccessible(recno)) {
       getBlock().gotoRecord(recno)
+    } else {
+      getBlock().gotoRecord(getBlock().activeRecord)
     }
 
     // go to the correct field if already necessary
