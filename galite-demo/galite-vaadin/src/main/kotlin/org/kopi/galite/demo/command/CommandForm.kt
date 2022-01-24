@@ -69,7 +69,9 @@ class CommandForm : ReportSelectionForm(title = "Commands", locale = Locale.UK),
       recursiveQuery()
     }
 
-    breakCmd
+    command(item = _break) {
+      resetBlock()
+    }
 
     command(item = serialQuery) {
       serialQuery()

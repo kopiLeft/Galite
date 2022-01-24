@@ -26,10 +26,8 @@ import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
-import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.form.Commands
 
 interface IFormDefault {
   fun Form.insertMenus() {
@@ -100,20 +98,6 @@ interface IFormDefault {
   val Form.resetForm: Command
   val Form.quitForm: Command
   val Form.helpForm: Command
-
-  // -------------------------------------------------------------------
-  // BLOCK-LEVEL COMMANDS
-  // -------------------------------------------------------------------
-  val Block.breakCmd: Command
-  val Block.recursiveQueryCmd: Command
-  val Block.menuQueryCmd: Command
-  val Block.queryMoveCmd: Command
-  val Block.serialQueryCmd: Command
-  val Block.insertModeCmd: Command
-  val Block.saveCmd: Command
-  val Block.deleteCmd: Command
-  val Block.insertLineCmd: Command
-  val Block.showHideFilterCmd: Command
 }
 
 open class FormDefaultImpl: Form(""), IFormDefault {
@@ -344,58 +328,6 @@ open class FormDefaultImpl: Form(""), IFormDefault {
       showHelp()
     }
   }
-
-    // -------------------------------------------------------------------
-    // BLOCK-LEVEL COMMANDS
-    // -------------------------------------------------------------------
-    override val Block.breakCmd: Command
-      get() = command(item = _break) {
-        resetBlock()
-      }
-
-  override val Block.recursiveQueryCmd: Command
-    get() = command(item = menuQuery) {
-      Commands.recursiveQuery(block)
-    }
-
-  override val Block.menuQueryCmd: Command
-    get() = command(item = menuQuery) {
-      Commands.menuQuery(block)
-    }
-
-  override val Block.queryMoveCmd: Command
-    get() = command(item = menuQuery) {
-      Commands.queryMove(block)
-    }
-
-  override val Block.serialQueryCmd: Command
-    get() = command(item = serialQuery) {
-      Commands.serialQuery(block)
-    }
-
-  override val Block.insertModeCmd: Command
-    get() = command(item = insertMode) {
-      insertMode()
-    }
-
-  override val Block.saveCmd: Command
-    get() = command(item = save) {
-      saveBlock()
-    }
-  override val Block.deleteCmd: Command
-    get() = command(item = delete) {
-      deleteBlock()
-    }
-
-  override val Block.insertLineCmd: Command
-    get() = command(item = insertLine) {
-      insertLine()
-    }
-
-  override val Block.showHideFilterCmd: Command
-    get() = command(item = showHideFilter) {
-      showHideFilter()
-    }
 }
 
 class LazyWithReceiver<This, Return>(val initializer: This.() -> Return) {

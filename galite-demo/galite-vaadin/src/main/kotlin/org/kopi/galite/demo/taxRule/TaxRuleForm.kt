@@ -32,6 +32,7 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import org.kopi.galite.visual.form.Commands
 
 class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
   val page = page("TaxRule")
@@ -50,59 +51,71 @@ class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK),
     icon = Icon.LIST
   }
 
-  val block = page.insertBlock(TaxRuleBlock()) {
-    command(item = report) {
-      createReport {
-        TaxRuleR()
+  val block = page.insertBlock(TaxRuleBlock())
+
+  inner class TaxRuleBlock : Block("TaxRule", 1, 10) {
+    val u = table(TaxRule)
+
+    val idTaxe = hidden(domain = INT(20)) {
+      label = "ID"
+      help = "The tax ID"
+      columns(u.idTaxe)
+    }
+
+    val taxName = mustFill(domain = STRING(20), position = at(1, 1)) {
+      label = "Name"
+      help = "The tax name"
+      columns(u.taxName) {
+        priority = 1
       }
     }
-    saveCmd
-    recursiveQueryCmd
-    breakCmd
-    deleteCmd
-  }
-}
 
-class TaxRuleBlock : Block("TaxRule", 1, 10) {
-  val u = table(TaxRule)
-
-  val idTaxe = hidden(domain = INT(20)) {
-    label = "ID"
-    help = "The tax ID"
-    columns(u.idTaxe)
-  }
-
-  val taxName = mustFill(domain = STRING(20), position = at(1, 1)) {
-    label = "Name"
-    help = "The tax name"
-    columns(u.taxName) {
-      priority = 1
+    val rate = mustFill(domain = INT(25), position = at(2, 1)) {
+      label = "Rate"
+      help = "The tax rate in %"
+      columns(u.rate) {
+        priority = 1
+      }
     }
-  }
 
-  val rate = mustFill(domain = INT(25), position = at(2, 1)) {
-    label = "Rate"
-    help = "The tax rate in %"
-    columns(u.rate) {
-      priority = 1
+    val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
+      label = "tax informations"
+      help = "The tax informations"
+      columns(u.informations) {
+        priority = 1
+      }
     }
-  }
 
-  val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
-    label = "tax informations"
-    help = "The tax informations"
-    columns(u.informations) {
-      priority = 1
+    val percent = visit(domain = BOOL, position = at(2, 2)) {
+      label = "%"
+      help = "The tax rate in %"
     }
-  }
 
-  init {
-    blockVisibility(Access.VISIT, Mode.QUERY)
-  }
+    init {
+      blockVisibility(Access.VISIT, Mode.QUERY)
 
-  val percent = visit(domain = BOOL, position = at(2, 2)) {
-    label = "%"
-    help = "The tax rate in %"
+      command(item = report) {
+        createReport {
+          TaxRuleR()
+        }
+      }
+
+      command(item = save) {
+        saveBlock()
+      }
+
+      command(item = menuQuery) {
+        Commands.recursiveQuery(block)
+      }
+
+      command(item = _break) {
+        resetBlock()
+      }
+
+      command(item = delete) {
+        deleteBlock()
+      }
+    }
   }
 }
 

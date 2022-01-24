@@ -203,7 +203,9 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
     init {
       border = Border.LINE
 
-      showHideFilterCmd
+      command(item = showHideFilter) {
+        showHideFilter()
+      }
 
       command(item = report) {
         createReport {
