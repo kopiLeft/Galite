@@ -87,13 +87,13 @@ open class FormField<T>(internal val block: Block,
   /**
    * Adds the field options. you can use one or more option from the options available for fields.
    *
-   * Use [Option] to see the list of these field options.
+   * Use [FieldOption] to see the list of these field options.
    *
    * @param fieldOptions the field options
    */
-  fun options(vararg fieldOptions: Option) {
+  fun options(vararg fieldOptions: FieldOption) {
     fieldOptions.forEach { fieldOption ->
-      if (fieldOption == Option.QUERY_LOWER || fieldOption == Option.QUERY_UPPER) {
+      if (fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
         options = options and fieldOption.value.inv()
       }
 

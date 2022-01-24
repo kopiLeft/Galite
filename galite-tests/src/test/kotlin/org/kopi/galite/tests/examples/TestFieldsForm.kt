@@ -26,7 +26,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Option
+import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
@@ -120,13 +120,13 @@ class BlockWithSaveCommand : Block("Block With Save Command", 1, 1) {
     label = "trainer First Name"
     help = "trainer First Name"
     columns(t.trainerFirstName)
-    options(Option.QUERY_LOWER)
+    options(FieldOption.QUERY_LOWER)
   }
   val trainerLastName = visit(domain = STRING(25), position = at(1, 2)) {
     label = "trainer Last Name"
     help = "trainer Last Name"
     columns(t.trainerLastName)
-    options(Option.QUERY_UPPER)
+    options(FieldOption.QUERY_UPPER)
   }
   val uc = hidden(domain = INT(20)) { columns(t.uc) }
   val ts = hidden(domain = INT(20)) { columns(t.ts) }
