@@ -61,7 +61,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+  lateinit var grid: Grid<GridBlockItem>
 
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
@@ -104,8 +104,8 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   private var filterRow: HeaderRow? = null
   private lateinit var sortableHeaders: MutableMap<Grid.Column<*>, DGridEditorLabel>
-  var lastSortOrder: List<GridSortOrder<DGridBlockContainer.GridBlockItem>>? = null
-  lateinit var editor: Editor<DGridBlockContainer.GridBlockItem>
+  var lastSortOrder: List<GridSortOrder<GridBlockItem>>? = null
+  lateinit var editor: Editor<GridBlockItem>
   val isEditorInitialized get() = ::editor.isInitialized
 
   // --------------------------------------------------
@@ -116,10 +116,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    */
   override fun createFields() {
     super.createFields()
-    grid = object : Grid<DGridBlockContainer.GridBlockItem>() {
-      override fun createEditor(): Editor<DGridBlockContainer.GridBlockItem> {
-        return object : EditorImpl<DGridBlockContainer.GridBlockItem>(this, propertySet) {
-          private var itemToEdit: DGridBlockContainer.GridBlockItem? = null
+    grid = object : Grid<GridBlockItem>() {
+      override fun createEditor(): Editor<GridBlockItem> {
+        return object : EditorImpl<GridBlockItem>(this, propertySet) {
+          private var itemToEdit: GridBlockItem? = null
           private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
 
           override fun closeEditor() {
@@ -128,7 +128,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
             }
           }
 
-          override fun editItem(item: DGridBlockContainer.GridBlockItem) {
+          override fun editItem(item: GridBlockItem) {
             if (!inDetailMode()) {
               updateEditors()
               doEditItem(item)
@@ -136,7 +136,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
           }
 
           // Workaround for https://github.com/vaadin/flow-components/issues/1997
-          fun doEditItem(item: DGridBlockContainer.GridBlockItem) {
+          fun doEditItem(item: GridBlockItem) {
             itemToEdit = item
 
             if (editItemRequest == null) {
@@ -432,7 +432,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   }
 
   fun sort(
-          event: SortEvent<Grid<DGridBlockContainer.GridBlockItem>, GridSortOrder<DGridBlockContainer.GridBlockItem>>?,
+          event: SortEvent<Grid<GridBlockItem>, GridSortOrder<GridBlockItem>>?,
   ) {
     if (event!!.isFromClient) {
       // Sort records
@@ -446,7 +446,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     }
   }
 
-  fun sort(sortOrder: List<GridSortOrder<DGridBlockContainer.GridBlockItem>>) {
+  fun sort(sortOrder: List<GridSortOrder<GridBlockItem>>) {
     sortOrder.forEach {
       sortableHeaders[it.sorted]?.let { label ->
         label.model?.sortColumn(label.fieldIndex!!)
@@ -454,7 +454,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     }
   }
 
-  private fun getActualItems(): List<DGridBlockContainer.GridBlockItem> {
+  private fun getActualItems(): List<GridBlockItem> {
     val dataProvider = grid.dataProvider as ListDataProvider
     val totalSize = dataProvider.items.size
     val dataCommunicator = grid.dataCommunicator
@@ -464,7 +464,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     return stream.toList()
   }
 
-  fun columnResize(event: ColumnResizeEvent<DGridBlockContainer.GridBlockItem>?) {
+  fun columnResize(event: ColumnResizeEvent<GridBlockItem>?) {
     // on column resize, we cancel editor to be resized
     // cause size is CSS imposed and not refreshed until
     // editor is cancelled
@@ -508,7 +508,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * Configures the columns of this block
    */
   protected fun configure() {
-    val binder: Binder<DGridBlockContainer.GridBlockItem> = Binder()
+    val binder: Binder<GridBlockItem> = Binder()
 
     sortableHeaders = mutableMapOf()
     editor.binder = binder
@@ -563,10 +563,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }
     }
-    val items = mutableListOf<DGridBlockContainer.GridBlockItem>()
+    val items = mutableListOf<GridBlockItem>()
 
     repeat(model.bufferSize) {
-      items.add(DGridBlockContainer.GridBlockItem(it))
+      items.add(GridBlockItem(it))
     }
     grid.setItems(items)
   }

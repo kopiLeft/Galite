@@ -38,7 +38,7 @@ class DGridMultiBlock(parent: DForm,
   : DGridBlock(parent, model), UMultiBlock /*, DetailsGenerator TODO */ {
 
   private var detail: SimpleBlockLayout? = null
-  private var itemHasDetailVisible: DGridBlockContainer.GridBlockItem? = null
+  private var itemHasDetailVisible: GridBlockItem? = null
 
   // --------------------------------------------------
   // IMPLEMENTATION
