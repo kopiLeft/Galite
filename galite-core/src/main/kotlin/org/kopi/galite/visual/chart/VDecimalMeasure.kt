@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Decimal
+import java.math.BigDecimal
 import org.kopi.galite.visual.visual.VColor
 
 /**
@@ -35,8 +35,8 @@ class VDecimalMeasure(ident: String, color: VColor?, private val maxScale: Int) 
       return null
     }
     return when (value) {
-      is Decimal -> value
-      is Number -> Decimal(value.toLong(), maxScale)
+      is BigDecimal -> value
+      is Number -> BigDecimal.valueOf(value.toLong(), maxScale)
       else -> null
     }
   }

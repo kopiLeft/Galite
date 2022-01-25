@@ -18,7 +18,8 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Decimal
+import java.math.BigDecimal
+import org.kopi.galite.visual.type.format
 
 /**
  * Represents a decimal chart column.
@@ -40,9 +41,9 @@ class VDecimalDimension(ident: String,
     return if (value == null) {
       CConstants.EMPTY_TEXT
     } else (value as? Int)?.toString()
-            ?: if (value is Decimal) {
-              if (value.scale > maxScale || exactScale) value.setScale(maxScale).toString()
-              else value.toString()
+            ?: if (value is BigDecimal) {
+              if (value.scale() > maxScale || exactScale) value.setScale(maxScale).format()
+              else value.format()
             } else {
               value.toString()
             }

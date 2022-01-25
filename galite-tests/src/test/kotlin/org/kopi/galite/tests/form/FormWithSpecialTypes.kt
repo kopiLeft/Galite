@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.form
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -37,7 +38,6 @@ import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Timestamp
 
@@ -114,7 +114,7 @@ class BlockWithSpecialTypes : Block("Test block", 1, 1) {
   val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
     label = "price"
     help = "The price"
-    minValue = Decimal.valueOf("1.9")
+    minValue = BigDecimal("1.9")
     columns(p.price)
   }
 
@@ -143,7 +143,7 @@ class BlockWithSpecialTypes : Block("Test block", 1, 1) {
   }
 
   init {
-    price.value = Decimal.valueOf("2")
+    price.value = BigDecimal("2")
     id.value = 1
     uc.value = 0
     ts.value = 0

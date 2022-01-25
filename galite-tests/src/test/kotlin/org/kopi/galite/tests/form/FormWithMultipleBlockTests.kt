@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.form
 
+import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -29,7 +31,6 @@ import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
-import org.kopi.galite.visual.type.Decimal
 
 class FormWithMultipleBlockTests : JApplicationTestBase() {
 
@@ -43,7 +44,7 @@ class FormWithMultipleBlockTests : JApplicationTestBase() {
       it[id] = 1
       it[trainingName] = "trainingName"
       it[type] = 1
-      it[price] = Decimal("1149.24").value
+      it[price] = BigDecimal("1149.24")
       it[active] = true
     }
     Center.insert {

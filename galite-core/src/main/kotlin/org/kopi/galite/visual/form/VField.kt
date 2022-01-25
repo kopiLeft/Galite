@@ -20,6 +20,7 @@ package org.kopi.galite.visual.form
 
 import java.awt.Color
 import java.io.InputStream
+import java.math.BigDecimal
 import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
@@ -60,7 +61,6 @@ import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -991,7 +991,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setDecimal(v: Decimal?) {
+  fun setDecimal(v: BigDecimal?) {
     setDecimal(block!!.currentRecord, v)
   }
 
@@ -1104,7 +1104,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setDecimal(r: Int, v: Decimal?) {
+  open fun setDecimal(r: Int, v: BigDecimal?) {
     throw InconsistencyException()
   }
 
@@ -1248,7 +1248,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getDecimal(): Decimal = getDecimal(block!!.currentRecord)
+  fun getDecimal(): BigDecimal? = getDecimal(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a boolean value.
@@ -1377,7 +1377,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getDecimal(r: Int): Decimal {
+  open fun getDecimal(r: Int): BigDecimal? {
     throw InconsistencyException()
   }
 

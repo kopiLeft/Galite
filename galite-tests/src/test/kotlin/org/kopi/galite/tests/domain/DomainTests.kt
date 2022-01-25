@@ -17,6 +17,8 @@
 
 package org.kopi.galite.tests.domain
 
+import java.math.BigDecimal
+
 import kotlin.test.assertIs
 
 import org.junit.Test
@@ -32,7 +34,6 @@ import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VWeekField
 import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Week
@@ -54,7 +55,7 @@ class DomainTests {
         block.initDomain(stringDomain)
         assertIs<VStringField>(stringDomain.buildFormFieldModel(stringFormField))
 
-        val decimalDomain = Domain<Decimal>(10, 10, 10)
+        val decimalDomain = Domain<BigDecimal>(10, 10, 10)
         val decimalFormField = FormField(block, decimalDomain, 0, 0)
 
         block.initDomain(decimalDomain)

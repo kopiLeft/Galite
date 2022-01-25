@@ -17,11 +17,13 @@
  */
 package org.kopi.galite.visual.list
 
+import java.math.BigDecimal
+
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.format
 
 /**
  * Represents a list column.
@@ -42,5 +44,10 @@ class VDecimalColumn(title: String,
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Decimal::class
+  override fun getDataType(): KClass<*> = BigDecimal::class
+
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any = (value as BigDecimal).format()
 }

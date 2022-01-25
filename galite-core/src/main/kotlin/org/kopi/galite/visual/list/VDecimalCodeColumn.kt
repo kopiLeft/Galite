@@ -18,11 +18,12 @@
 
 package org.kopi.galite.visual.list
 
+import java.math.BigDecimal
+
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
@@ -32,7 +33,7 @@ class VDecimalCodeColumn(title: String,
                          column: Column<*>?,
                          table: ColumnSet?,
                          names: Array<String>,
-                         private val codes: Array<Decimal?>,
+                         private val codes: Array<BigDecimal?>,
                          sortAscending: Boolean)
           : VCodeColumn(title,
                         column,
@@ -51,8 +52,8 @@ class VDecimalCodeColumn(title: String,
         return index
       }
     }
-    throw InconsistencyException("bad code value " + value as Decimal)
+    throw InconsistencyException("bad code value " + value as BigDecimal)
   }
 
-  override fun getDataType(): KClass<*> = Decimal::class
+  override fun getDataType(): KClass<*> = BigDecimal::class
 }

@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import kotlin.test.assertEquals
@@ -43,7 +44,6 @@ import org.kopi.galite.tests.examples.TestFieldsForm
 import org.kopi.galite.tests.examples.Trainer
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
@@ -148,7 +148,7 @@ class FieldsTests : GaliteVUITestBase() {
 
   @Test
   fun `test decimal field`() {
-    form.blockWithDifferentTypes.decimalField.edit(Decimal("999999"))
+    form.blockWithDifferentTypes.decimalField.edit(BigDecimal("999999"))
     form.blockWithDifferentTypes.intField.click()
 
     // Check that the error notification is displayed

@@ -17,6 +17,8 @@
 
 package org.kopi.galite.visual.domain
 
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.chart.VBooleanCodeDimension
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.chart.VDimension
@@ -44,7 +46,6 @@ import org.kopi.galite.visual.report.VDecimalCodeColumn
 import org.kopi.galite.visual.report.VIntegerCodeColumn
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.report.VStringCodeColumn
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 
 /**
@@ -68,11 +69,11 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                             block.sourceFile,
                                             codes.map { it.ident }.toTypedArray(),
                                             codes.map { it.value as? Boolean }.toTypedArray())
-        Decimal::class -> VDecimalCodeField(block.buffer,
-                                            ident,
-                                            block.sourceFile,
-                                            codes.map { it.ident }.toTypedArray(),
-                                            codes.map { it.value as? Decimal }.toTypedArray())
+        BigDecimal::class -> VDecimalCodeField(block.buffer,
+                                               ident,
+                                               block.sourceFile,
+                                               codes.map { it.ident }.toTypedArray(),
+                                               codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeField(block.buffer,
                                                      ident,
                                                      block.sourceFile,
@@ -104,13 +105,13 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                                 source,
                                                 codes.map { it.ident }.toTypedArray(),
                                                 codes.map { it.value as? Boolean }.toTypedArray())
-        Decimal::class -> VDecimalCodeDimension(ident,
-                                                true, // FIXME: do we need this?
-                                                format,
-                                                this@CodeDomain.ident,
-                                                source,
-                                                codes.map { it.ident }.toTypedArray(),
-                                                codes.map { it.value as? Decimal }.toTypedArray())
+        BigDecimal::class -> VDecimalCodeDimension(ident,
+                                                   true, // FIXME: do we need this?
+                                                   format,
+                                                   this@CodeDomain.ident,
+                                                   source,
+                                                   codes.map { it.ident }.toTypedArray(),
+                                                   codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeDimension(ident,
                                                          format,
                                                          this@CodeDomain.ident,
@@ -136,12 +137,12 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
   override fun buildMeasureModel(measure: ChartMeasure<*>, color: VColor?): VMeasure {
     return with(measure) {
       when (kClass) {
-        Decimal::class -> VDecimalCodeMeasure(ident,
-                                              color,
-                                              this@CodeDomain.ident,
-                                              measure.source,
-                                              codes.map { it.ident }.toTypedArray(),
-                                              codes.map { it.value as? Decimal }.toTypedArray())
+        BigDecimal::class -> VDecimalCodeMeasure(ident,
+                                                 color,
+                                                 this@CodeDomain.ident,
+                                                 measure.source,
+                                                 codes.map { it.ident }.toTypedArray(),
+                                                 codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeMeasure(ident,
                                                        color,
                                                        this@CodeDomain.ident,
@@ -178,7 +179,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           codes.map { it.ident }.toTypedArray(),
           codes.map { it.value as Boolean }.toBooleanArray()
         )
-        Decimal::class -> VDecimalCodeColumn(
+        BigDecimal::class -> VDecimalCodeColumn(
           ident,
           this@CodeDomain.ident,
           field.source,
@@ -189,7 +190,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           width ?: 0,
           format,
           codes.map { it.ident }.toTypedArray(),
-          codes.map { it.value as? Decimal }.toTypedArray()
+          codes.map { it.value as? BigDecimal }.toTypedArray()
         )
         Int::class, Long::class -> VIntegerCodeColumn(
           ident,

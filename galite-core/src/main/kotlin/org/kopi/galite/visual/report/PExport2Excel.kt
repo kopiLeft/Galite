@@ -20,6 +20,7 @@ package org.kopi.galite.visual.report
 
 import java.awt.Color
 import java.io.OutputStream
+import java.math.BigDecimal
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -35,7 +36,6 @@ import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.kopi.galite.visual.report.UReport.UTable
 import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -174,7 +174,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       if (datatype[cellPos] == CellType.STRING.code) {
         cell.setCellValue(data.replace('\n', ' '))
       } else {
-        if (orig is Decimal) {
+        if (orig is BigDecimal) {
           cell.setCellValue(orig.toDouble())
         } else if (orig is Int) {
           if (datatype[cellPos] == CellType.BOOLEAN.code) {

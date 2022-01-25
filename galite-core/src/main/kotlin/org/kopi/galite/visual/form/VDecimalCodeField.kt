@@ -26,7 +26,6 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VDecimalCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
@@ -39,7 +38,7 @@ open class VDecimalCodeField(bufferSize: Int,
                              ident: String,
                              source: String,
                              names: Array<String>,
-                             private val codes: Array<Decimal?>) : VCodeField(bufferSize, ident, source, names) {
+                             private val codes: Array<BigDecimal?>) : VCodeField(bufferSize, ident, source, names) {
 
   /**
    * return a list column for list
@@ -63,17 +62,17 @@ open class VDecimalCodeField(bufferSize: Int,
    * @param     exclude         exclude the current record
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(exclude: Boolean): Decimal? {
-    var sum: Decimal? = null
+  fun computeSum(exclude: Boolean): BigDecimal? {
+    var sum: BigDecimal? = null
 
     for (i in 0 until block!!.bufferSize) {
       if (block!!.isRecordFilled(i)
               && !isNull(i)
               && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
-          sum = Decimal(0.0)
+          sum = BigDecimal(0.0)
         }
-        sum = sum + getDecimal(i)
+        sum += getDecimal(i)!!
       }
     }
     return sum
@@ -84,21 +83,21 @@ open class VDecimalCodeField(bufferSize: Int,
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(): Decimal? = computeSum(false)
+  fun computeSum(): BigDecimal? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block.
    */
-  open fun getSum(): Decimal {
+  open fun getSum(): BigDecimal {
     val sum = computeSum()
 
-    return sum ?: Decimal(0.0)
+    return sum ?: BigDecimal(0.0)
   }
 
   /**
    * Sets the field value of given record to a decimal value.
    */
-  override fun setDecimal(r: Int, v: Decimal?) {
+  override fun setDecimal(r: Int, v: BigDecimal?) {
     if (v == null) {
       setCode(r, -1)
     } else {
@@ -122,7 +121,7 @@ open class VDecimalCodeField(bufferSize: Int,
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setDecimal(r, v as? Decimal)
+    setDecimal(r, v as? BigDecimal)
   }
 
   /**
@@ -130,20 +129,12 @@ open class VDecimalCodeField(bufferSize: Int,
    * @param    result       the result row
    * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val bigDecimal = result[column] as? BigDecimal
-
-    return if (bigDecimal == null) {
-      null
-    } else {
-      Decimal(bigDecimal)
-    }
-  }
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? = result[column] as? BigDecimal
 
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getDecimal(r: Int): Decimal = getObject(r) as Decimal
+  override fun getDecimal(r: Int): BigDecimal? = getObject(r) as? BigDecimal
 
   /**
    * Returns the field value of the current record as an object
@@ -153,12 +144,12 @@ open class VDecimalCodeField(bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): BigDecimal? = if (value[r] == -1) null else codes[value[r]]!!.toSql()
+  override fun getSqlImpl(r: Int): BigDecimal? = if (value[r] == -1) null else codes[value[r]]
 
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Decimal::class
+  override fun getDataType(): KClass<*> = BigDecimal::class
 
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
@@ -166,7 +157,7 @@ open class VDecimalCodeField(bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  override fun formatDecimal(value: Decimal): String {
+  override fun formatDecimal(value: BigDecimal): String {
     var code = -1 // cannot be null
     var i = 0
 

@@ -18,7 +18,8 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Decimal
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 class VDecimalCodeColumn(ident: String?,
@@ -32,7 +33,7 @@ class VDecimalCodeColumn(ident: String?,
                          format: VCellFormat?,
                          names: Array<String>,
                         // array of internal representations
-                         private val codes: Array<Decimal?>)
+                         private val codes: Array<BigDecimal?>)
           : VCodeColumn(ident,
                         type,
                         source,
@@ -73,6 +74,6 @@ class VDecimalCodeColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Decimal)
-          .compareTo(object2 as Decimal)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as BigDecimal)
+          .compareTo(object2 as BigDecimal)
 }
