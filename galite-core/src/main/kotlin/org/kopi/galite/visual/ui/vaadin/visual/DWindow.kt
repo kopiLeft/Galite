@@ -56,7 +56,6 @@ import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.WaitInfoListener
 
 import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.Shortcuts
@@ -86,7 +85,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     private set
   private var currentAction: Action? = null
   private val askUser = false
-  private var runtimeDebugInfo: Throwable? = null
+  protected var runtimeDebugInfoThrowable: Throwable? = null
 
   /**
    * Returns the exist code of this window.
@@ -236,7 +235,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     inAction = true
     currentAction = action
     getModel()!!.setCommandsEnabled(false)
-    runtimeDebugInfo = RuntimeException(currentAction.toString())
+    runtimeDebugInfoThrowable = RuntimeException(currentAction.toString())
     if (!asynch || !getModel()!!.allowAsynchronousOperation()) {
       // synchronus call
       actionRunner.run()
@@ -305,7 +304,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     model = null
     inAction = false
     currentAction = null
-    runtimeDebugInfo = null
+    runtimeDebugInfoThrowable = null
     returnCode = -1
     isUserAsked = false
     actionsQueue.clear()

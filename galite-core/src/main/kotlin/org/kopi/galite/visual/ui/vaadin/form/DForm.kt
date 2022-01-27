@@ -293,7 +293,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // TODO
   }
 
-  override var runtimeDebugInfo: Throwable? = null
+  override var runtimeDebugInfo: Throwable? = runtimeDebugInfoThrowable
     private set
 
   override fun launchDocumentPreview(file: String) {
