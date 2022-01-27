@@ -154,8 +154,7 @@ open class DTextField(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access(currentUI) {
-      // field.value = transformer!!.toGui(newModelTxt)!!.trim() FIXME
-      field.value = transformer!!.toGui(newModelTxt)
+      field.value = transformer!!.toGui(newModelTxt)?.trim() // FIXME
     }
     super.updateText()
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {

@@ -100,8 +100,7 @@ class DGridTextEditorField(
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
     access(currentUI) {
-      //editor.value = transformer.toGui(newModelTxt)!!.trim() FIXME
-      editor.value = transformer.toGui(newModelTxt)
+      editor.value = transformer.toGui(newModelTxt)?.trim() // FIXME
     }
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
       selectionAfterUpdateDisabled = false
