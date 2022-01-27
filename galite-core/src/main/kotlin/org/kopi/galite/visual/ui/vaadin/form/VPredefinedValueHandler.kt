@@ -50,11 +50,7 @@ class VPredefinedValueHandler(model: VFieldUI,
   }
 
   override fun selectDate(date: Date): Date {
-    return if (field.getDisplay() is DGridEditorField<*>) {
-      DateChooser.selectDate(date, (field.getDisplay() as DGridEditorField<*>).editor)
-    } else {
-      DateChooser.selectDate(date, field.getDisplay() as Component)
-    }!! // TODO: nullable?
+    return date
   }
 
   /**
