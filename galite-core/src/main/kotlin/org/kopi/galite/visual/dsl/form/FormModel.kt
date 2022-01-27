@@ -49,6 +49,8 @@ class FormModel: VForm {
   override fun init() {
     initialize(form)
   }
+
+  override fun formClassName(): String = form.javaClass.name
 }
 
 class DictionaryFormModel: VDictionaryForm {
@@ -74,6 +76,8 @@ class DictionaryFormModel: VDictionaryForm {
   override fun init() {
     initialize(form)
   }
+
+  override fun formClassName(): String = form.javaClass.name
 }
 
 class ReportSelectionFormModel: VReportSelectionForm {
@@ -99,6 +103,8 @@ class ReportSelectionFormModel: VReportSelectionForm {
   override fun init() {
     initialize(form)
   }
+
+  override fun formClassName(): String = form.javaClass.name
 }
 
 fun VForm.initialize(form: Form) {

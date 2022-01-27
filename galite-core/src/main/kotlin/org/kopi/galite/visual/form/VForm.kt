@@ -687,6 +687,9 @@ abstract class VForm : VWindow, VConstants {
     }
     throw InconsistencyException()
   }
+
+  protected abstract fun formClassName(): String
+
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
@@ -694,7 +697,7 @@ abstract class VForm : VWindow, VConstants {
    *
    */
   fun getName(): String {
-    val name: String = javaClass.name
+    val name: String = formClassName()
     val index = name.lastIndexOf(".")
     return if (index == -1) name else name.substring(index + 1)
   }
@@ -720,7 +723,7 @@ abstract class VForm : VWindow, VConstants {
     var localHelp: String? = null
     val surl = StringBuffer()
     val module = try {
-      ApplicationContext.getMenu()!!.getModule(this)
+      ApplicationContext.getMenu()!!.getModule(formClassName())
     } catch (npe: NullPointerException) {
       null
     }

@@ -665,9 +665,9 @@ class VMenuTree constructor(ctxt: DBContext?,
 
   fun getModules(): MutableList<Module> = items
 
-  fun getModule(executable: Executable): Module? {
+  fun getModule(objectName: String): Module? {
     items.forEach { item ->
-      if (item.objectName != null && item.objectName == executable.javaClass.name) {
+      if (item.objectName != null && item.objectName == objectName) {
         return item
       }
     }
