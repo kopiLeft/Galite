@@ -428,6 +428,9 @@ class VDecimalField(val bufferSize: Int,
 
     // append spaces until the max scale is reached to make commas aligned.
     // append an extra space to replace the missing comma if the current scale is zero.
+    // FIXME!! The added spaces are actually being deleted in Vaadin implementation
+    // FIXME!! because the decimal field doesn't defines a pattern that doesn't accept spaces.
+    // FIXME!! Do we really need to do this?
     if (block!!.isMulti()) {
       for (i in (if (currentScale[r] == 0) -1 else currentScale[r]) until maxScale) {
         res += " "
