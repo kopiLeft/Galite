@@ -32,7 +32,7 @@ class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
 
   fun setRows(rows: Int, visibleRows: Int) {
-    height = visibleRows.toString() + "em"
+    internalField.element.executeJs("this.shadowRoot.querySelector('textarea').rows = $0;", rows)
   }
 
   /**

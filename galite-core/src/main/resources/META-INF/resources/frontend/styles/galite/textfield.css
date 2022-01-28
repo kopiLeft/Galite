@@ -248,3 +248,8 @@
 .transform-none::part(value) {
     text-transform: none;
 }
+
+.textarea::part(value) {
+  height: unset !important;
+  overflow: auto !important;
+}
