@@ -118,11 +118,11 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
    * @return The column name container.
    */
   fun getColumnNameComponent(column: VReportColumn, gridColumn: Column<DReport.ReportModelItem>): Component =
-    VerticalLayout(Span(column.label))
-      .also {
-        it.element.setProperty("title", column.help)
-        columnToHeaderMap[gridColumn] = it
-      }
+          VerticalLayout(Span(column.label))
+            .also {
+              it.element.setProperty("title", column.help)
+              columnToHeaderMap[gridColumn] = it
+            }
 
   /**
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
