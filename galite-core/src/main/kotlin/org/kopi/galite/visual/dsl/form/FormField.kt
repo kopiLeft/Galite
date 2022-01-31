@@ -505,6 +505,8 @@ open class FormField<T>(internal val block: Block,
           && access[1] == VConstants.ACS_HIDDEN
           && access[2] == VConstants.ACS_HIDDEN
 
+  override var ident: String = if (_isInternal) "ANONYMOUS!@#$%^&*()" else super.ident
+
   /**
    * Returns true if it is certain that the field will never be entered
    */

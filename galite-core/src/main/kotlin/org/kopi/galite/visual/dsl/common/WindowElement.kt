@@ -24,7 +24,7 @@ import java.io.File
  */
 abstract class WindowElement(ident: String? = null, open val source: String? = null) {
 
-  var ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
+  open var ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringAfterLast('$')
 
   /**
