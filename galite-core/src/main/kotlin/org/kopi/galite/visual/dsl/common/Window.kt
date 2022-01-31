@@ -73,7 +73,9 @@ abstract class Window(val title: String, val locale: Locale?) {
   fun actor(actor: Actor): Actor {
     actor.ident = actor.command?.ident ?: "actor${actors.size}"
 
-    menus.add(actor.menu)
+    if (!menus.contains(actor.menu)) {
+      menus.add(actor.menu)
+    }
     actors.add(actor)
     return actor
   }
@@ -117,6 +119,10 @@ abstract class Window(val title: String, val locale: Locale?) {
       command.setMode(*modes)
     }
     command.action = action
+
+    if(!actors.contains(item)) {
+      actors.add(item)
+    }
     commands.add(command)
     return command
   }
