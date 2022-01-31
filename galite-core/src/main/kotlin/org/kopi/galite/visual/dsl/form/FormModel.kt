@@ -18,7 +18,6 @@ package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.db.DBContext
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -31,7 +30,6 @@ class FormModel(val form: Form, ctxt: DBContext? = null): VForm(ctxt) {
   init {
     initialize(form)
     initIntern()
-
   }
 
   override val locale get() = form.locale ?: ApplicationContext.getDefaultLocale()
