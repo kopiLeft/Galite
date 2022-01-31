@@ -40,7 +40,7 @@ import org.kopi.galite.visual.visual.VDefaultActor
 open class Actor(val menu: Menu,
                  val label: String,
                  val help: String,
-                 command: PredefinedCommand? = null,
+                 val command: PredefinedCommand? = null,
                  source: String? = null)
   : WindowElement(source = source) {
 
