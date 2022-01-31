@@ -33,7 +33,7 @@ class FormLocalizationWriter : LocalizationWriter() {
               menus: List<Menu>,
               actors: List<Actor>,
               pages: List<FormPage>,
-              blocks: List<FormElement>) {
+              blocks: List<Block>) {
     val self = Element("form")
     self.setAttribute("title", title)
     pushNode(self)

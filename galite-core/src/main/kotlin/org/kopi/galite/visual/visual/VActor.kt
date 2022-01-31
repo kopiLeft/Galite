@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.visual
 
+import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.l10n.LocalizationManager
 
@@ -162,4 +163,7 @@ open class VActor(var menuIdent: String,
     buffer.append("]")
     return buffer.toString()
   }
+
+  val _actorSource: String? @TestOnly get() = actorSource
+  val _menuSource: String? @TestOnly get() = menuSource
 }

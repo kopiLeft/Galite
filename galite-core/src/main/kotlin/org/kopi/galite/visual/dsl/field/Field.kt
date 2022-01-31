@@ -19,6 +19,7 @@ package org.kopi.galite.visual.dsl.field
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.WindowElement
 
 /**
  * A field represents a visual component that can hold values
@@ -27,7 +28,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
  *
  * @param domain the field's domain
  */
-abstract class Field<T>(open val domain: Domain<T>) {
+abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): WindowElement(ident) {
   /** Field's label (text on the left) */
   var label: String? = null
 

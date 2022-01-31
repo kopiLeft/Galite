@@ -431,7 +431,7 @@ open class FormField<T>(internal val block: Block,
     }
 
     vField.setInfo(
-      getIdent(),
+      ident,
       fieldIndex,
       posInArray,
       options,
@@ -504,11 +504,6 @@ open class FormField<T>(internal val block: Block,
   private val _isInternal = access[0] == VConstants.ACS_HIDDEN
           && access[1] == VConstants.ACS_HIDDEN
           && access[2] == VConstants.ACS_HIDDEN
-
-  /**
-   * Returns the ident of this field
-   */
-  fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
 
   /**
    * Returns true if it is certain that the field will never be entered
@@ -654,7 +649,7 @@ open class FormField<T>(internal val block: Block,
 
   override fun genLocalization(writer: LocalizationWriter) {
     if (!_isInternal) {
-      (writer as FormLocalizationWriter).genField(label, label, help)
+      (writer as FormLocalizationWriter).genField(ident, label, help)
     }
   }
 

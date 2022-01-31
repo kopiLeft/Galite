@@ -31,6 +31,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.dsl.common.WindowElement
 import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -55,7 +56,7 @@ import org.kopi.galite.visual.visual.VException
 open class Block(val title: String,
                  var buffer: Int,
                  var visible: Int)
-  : FormElement(), VConstants {
+  : WindowElement(), VConstants {
 
   internal var options: Int = 0 // the block options
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
@@ -73,9 +74,12 @@ open class Block(val title: String,
 
   var border: Border = Border.NONE // the border of the block
   var align: FormBlockAlign? = null // the type of alignment in form
+  var pageNumber = 0 // Sets the page number
   open val help: String? = null // the help
 
-  lateinit var form: Form
+  lateinit var shortcut: String // the shortcut of this block
+  lateinit var form: Form // the form containing this block
+
 
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
@@ -392,7 +396,7 @@ open class Block(val title: String,
    *
    * @param window        the actual context of analyse
    */
-  override fun initialize(window: Window) {
+  fun initialize(window: Window) {
     this.form = window as Form
     val bottomRight = Point(0, 0)
 
@@ -811,7 +815,7 @@ open class Block(val title: String,
       if (dropListMap[extension] != null) {
         return extension
       }
-      dropListMap[extension] = field.getIdent()
+      dropListMap[extension] = field.ident
     }
     return null
   }
@@ -951,7 +955,7 @@ open class Block(val title: String,
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
 
-  override fun genLocalization(writer: LocalizationWriter) {
+  fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, fields)
   }
 

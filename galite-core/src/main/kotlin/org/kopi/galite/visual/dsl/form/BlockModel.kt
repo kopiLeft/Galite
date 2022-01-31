@@ -30,10 +30,10 @@ import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VDefaultActor
 
-class BlockModel(vForm: VForm, val block: Block, source: String? = null): VBlock(vForm) {
+class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VBlock(vForm) {
 
   init {
-    initializeBlock(block, source)
+    initializeBlock(block, formSource)
   }
 
   override fun setInfo(form: VForm) {
@@ -43,11 +43,11 @@ class BlockModel(vForm: VForm, val block: Block, source: String? = null): VBlock
   }
 }
 
-class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: String? = null): VFullCalendarBlock(vForm) {
+class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: String? = null): VFullCalendarBlock(vForm) {
 
   init {
     fullCalendarForm = buildFullCalendarForm()
-    initializeBlock(block, source)
+    initializeBlock(block, formSource)
     dateField = block.dateField?.vField as? VDateField
     fromTimeField = block.fromTimeField?.vField as? VTimeField
     toTimeField = block.toTimeField?.vField as? VTimeField
@@ -104,9 +104,10 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, source: Stri
   }
 }
 
-fun VBlock.initializeBlock(block: Block, source: String?) {
+fun VBlock.initializeBlock(block: Block, formSource: String?) {
   handleTriggers(block)
-  this.source = source ?: block.sourceFile
+
+  this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
   title = block.title
   help = block.help
   bufferSize = block.buffer
