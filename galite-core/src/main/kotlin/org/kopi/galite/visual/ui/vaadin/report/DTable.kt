@@ -32,6 +32,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.function.ValueProvider
+import com.vaadin.flow.component.AttachEvent
 
 /**
  * The `DTable` is a table implementing the [UTable]
@@ -84,6 +85,18 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
+  override fun onAttach(attachEvent: AttachEvent) {
+    val page = attachEvent.ui.page
+
+    page.retrieveExtendedClientDetails { details ->
+      element.style["height"] = (details.windowInnerHeight - 200).toString() + "px"
+    }
+
+    page.addBrowserWindowResizeListener { event ->
+      element.style["height"] = (event.height - 200).toString() + "px"
+    }
+  }
+
   /**
    * Builds the grid columns.
    */
@@ -105,11 +118,11 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
    * @return The column name container.
    */
   fun getColumnNameComponent(column: VReportColumn, gridColumn: Column<DReport.ReportModelItem>): Component =
-          VerticalLayout(Span(column.label))
-            .also {
-              it.element.setProperty("title", column.help)
-              columnToHeaderMap[gridColumn] = it
-            }
+    VerticalLayout(Span(column.label))
+      .also {
+        it.element.setProperty("title", column.help)
+        columnToHeaderMap[gridColumn] = it
+      }
 
   /**
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
