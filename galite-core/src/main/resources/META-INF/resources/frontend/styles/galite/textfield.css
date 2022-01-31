@@ -249,6 +249,11 @@
     text-transform: none;
 }
 
+.textarea::part(value) {
+  height: unset !important;
+  overflow: auto !important;
+}
+
 input:disabled:not(input[type="button"]), textarea:disabled {
     color: #676767 !important;
     -webkit-text-fill-color: #676767 !important;

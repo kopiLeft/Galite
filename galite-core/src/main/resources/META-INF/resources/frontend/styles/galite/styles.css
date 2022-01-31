@@ -38,7 +38,7 @@ summary, time, mark, audio, video {
 	vertical-align: baseline;
 }
 
-.k-block .simple .k-textinput {
+.k-block .simple .k-textinput, .textarea {
   color: #000000;
 	font-weight: 500 !important;
 	font-style: normal !important;
