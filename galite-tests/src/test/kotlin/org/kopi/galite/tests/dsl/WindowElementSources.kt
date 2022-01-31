@@ -29,14 +29,14 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
 
-class WindowElementIdents: VApplicationTestBase() {
+class WindowElementSources: VApplicationTestBase() {
 
   @Test
   fun blockSourceTest() {
     val product = Product().also { it.model }.block
     val productInnerBlock = ProductInnerBlock().also { it.model }.block
-    val blockName = Product::class.java.packageName.replace(".", File.separator) + File.separator + "ProductBlock"
-    val formName = ProductInnerBlock::class.java.packageName.replace(".", File.separator) + File.separator + "ProductInnerBlock"
+    val blockName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "ProductBlock"
+    val formName = ProductInnerBlock::class.java.`package`.name.replace(".", File.separator) + File.separator + "ProductInnerBlock"
 
     assertEquals(blockName, product.block._source)
     assertEquals(formName, productInnerBlock.block._source)
@@ -46,9 +46,9 @@ class WindowElementIdents: VApplicationTestBase() {
   fun actorSourceTest() {
     val graph = Product().also { it.model }.graph
     val graphInnerBlock = ProductInnerBlock().also { it.model }.graph
-    val formName = ProductInnerBlock::class.java.packageName.replace(".", File.separator) + File.separator + "Product"
-    val actorName = Product::class.java.packageName.replace(".", File.separator) + File.separator + "Graph"
-    val menuName = Product::class.java.packageName.replace(".", File.separator) + File.separator + "Action"
+    val formName = ProductInnerBlock::class.java.`package`.name.replace(".", File.separator) + File.separator + "Product"
+    val actorName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "Graph"
+    val menuName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "Action"
 
     assertEquals(formName, graph.model!!._actorSource)
     assertEquals(formName, graph.model!!._menuSource)
