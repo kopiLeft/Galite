@@ -121,7 +121,7 @@ abstract class Window(val title: String, val locale: Locale?) {
     command.action = action
 
     if(!actors.contains(item)) {
-      actors.add(item)
+      actor(item)
     }
     commands.add(command)
     return command
