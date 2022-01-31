@@ -52,7 +52,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   protected constructor(parent: DBContextHandler) : super(parent)
 
-  protected constructor(parent: DBContext) : super(parent)
+  protected constructor(parent: DBContext?) : super(parent)
 
   protected constructor() : super()
 

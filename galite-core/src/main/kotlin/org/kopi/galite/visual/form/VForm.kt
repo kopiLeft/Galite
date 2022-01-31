@@ -104,15 +104,14 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   protected constructor(ctxt: DBContextHandler) : super(ctxt)
 
-  protected constructor(ctxt: DBContext) : super(ctxt)
+  protected constructor(ctxt: DBContext?) : super(ctxt)
 
   protected constructor()
 
   /**
    * loads the form
    */
-  protected fun initIntern(enterField: Boolean) {
-    init()
+  protected fun initIntern() {
     if (!ApplicationContext.isGeneratingHelp()) {
       initialise()
       callTrigger(VConstants.TRG_PREFORM)
@@ -122,11 +121,6 @@ abstract class VForm : VWindow, VConstants {
     // localize the form using the default locale
     localize(ApplicationContext.getDefaultLocale())
   }
-
-  /**
-   * load form (from sub class)
-   */
-  protected open fun init() {}
 
   override fun getType(): Int = Constants.MDL_FORM
 

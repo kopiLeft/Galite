@@ -289,5 +289,5 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // ----------------------------------------------------------------------
   // FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VForm by lazy { FormModel(this) }
+  override val model: VForm = FormModel(this)
 }
