@@ -89,11 +89,11 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
     val page = attachEvent.ui.page
 
     page.retrieveExtendedClientDetails { details ->
-      element.style["height"] = (details.windowInnerHeight - 200).toString() + "px"
+      height = (details.windowInnerHeight - 200).toString() + "px"
     }
 
     page.addBrowserWindowResizeListener { event ->
-      element.style["height"] = (event.height - 200).toString() + "px"
+      height = (event.height - 200).toString() + "px"
     }
   }
 
