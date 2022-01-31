@@ -17,9 +17,9 @@
 
 package org.kopi.galite.tests.chart
 
-import java.math.BigDecimal
 import kotlin.test.assertEquals
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import org.junit.Test

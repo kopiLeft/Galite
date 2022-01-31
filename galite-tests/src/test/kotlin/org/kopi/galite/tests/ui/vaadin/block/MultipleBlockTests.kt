@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.block
 
 import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.transactions.transaction

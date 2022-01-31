@@ -19,6 +19,7 @@
 package org.kopi.galite.visual.chart
 
 import java.math.BigDecimal
+
 import org.kopi.galite.visual.visual.VColor
 
 /**

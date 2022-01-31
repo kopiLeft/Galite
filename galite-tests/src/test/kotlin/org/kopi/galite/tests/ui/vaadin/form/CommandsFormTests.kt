@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.form
 
 import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
