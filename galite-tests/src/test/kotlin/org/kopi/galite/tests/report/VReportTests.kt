@@ -19,6 +19,7 @@ package org.kopi.galite.tests.report
 import java.awt.event.KeyEvent
 import java.io.File
 import java.io.FileInputStream
+import java.math.BigDecimal
 import java.util.Locale
 import java.util.Scanner
 
@@ -44,7 +45,6 @@ import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VActor
 
 /**
@@ -264,25 +264,25 @@ class VReportTests: JApplicationTestBase() {
         this[id] = 1
         this[name] = "Hichem"
         this[age] = 26
-        this[salary] = Decimal("2000.88")
+        this[salary] = BigDecimal("2000.88")
       }
       add {
         this[id] = 2
         this[name] = "Sarra"
         this[age] = 23
-        this[salary] = Decimal("2000.55")
+        this[salary] = BigDecimal("2000.55")
       }
       add {
         this[id] = 3
         this[name] = "Houssem"
         this[age] = 25
-        this[salary] = Decimal("2000.44")
+        this[salary] = BigDecimal("2000.44")
       }
       add {
         this[id] = 4
         this[name] = "Zied"
         this[age] = 24
-        this[salary] = Decimal("2000.33")
+        this[salary] = BigDecimal("2000.33")
       }
     }
   }

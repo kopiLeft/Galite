@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.dsl
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import kotlin.test.assertEquals
@@ -27,7 +28,6 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.type.Decimal
 
 class ReportTriggersTests: VApplicationTestBase() {
   fun init() : VReport {
@@ -62,7 +62,7 @@ class ReportTriggersTests: VApplicationTestBase() {
   fun `test sumDecimal trigger`() {
     val reportModel = init()
 
-    assertEquals(Decimal("298.7"), reportModel.model.getRow(0)!!.data[3])
+    assertEquals(BigDecimal("298.70"), reportModel.model.getRow(0)!!.data[3])
   }
 
   @Test
@@ -90,7 +90,7 @@ class ReportTriggersTests: VApplicationTestBase() {
   fun `test avgDecimal trigger`() {
     val reportModel = init()
 
-    assertEquals(Decimal("99.57"), reportModel.model.getRow(0)!!.data[7])
+    assertEquals(BigDecimal("99.57"), reportModel.model.getRow(0)!!.data[7])
   }
 
   @Test
@@ -171,27 +171,27 @@ class ReportWithTriggers : Report(title = "Report", locale = Locale.UK) {
       this[age] = 20
       this[intSum] = 20
       this[count] = 20
-      this[decimalSum] = Decimal("129.7")
+      this[decimalSum] = BigDecimal("129.7")
       this[identicalValue] = 70
-      this[decimalAvg] = Decimal("129.7")
+      this[decimalAvg] = BigDecimal("129.7")
       this[serialInteger] = 70
     }
     add {
       this[age] = 20
       this[intSum] = 30
       this[count] = 30
-      this[decimalSum] = Decimal("149.1")
+      this[decimalSum] = BigDecimal("149.1")
       this[identicalValue] = 70
-      this[decimalAvg] = Decimal("149.1")
+      this[decimalAvg] = BigDecimal("149.1")
       this[serialInteger] = 10
     }
     add {
       this[age] = 30
       this[intSum] = 50
       this[count] = 50
-      this[decimalSum] = Decimal("19.9")
+      this[decimalSum] = BigDecimal("19.9")
       this[identicalValue] = 70
-      this[decimalAvg] = Decimal("19.9")
+      this[decimalAvg] = BigDecimal("19.9")
       this[serialInteger] = 90
     }
   }

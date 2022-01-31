@@ -18,6 +18,7 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 import java.io.File
+import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.tests.desktop.runForm
@@ -40,7 +41,6 @@ import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.FileHandler
 
 /*** Field Access modifiers using Modes ***/
@@ -173,8 +173,8 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
     // test decimal field + min and max value
     val decimal = visit(domain = DECIMAL(width = 10, scale = 5), position = at(9, 1)) {
       label = "decimal"
-      minValue = Decimal.valueOf("1.9")
-      maxValue = Decimal.valueOf("5.9")
+      minValue = BigDecimal("1.9")
+      maxValue = BigDecimal("5.9")
     }
 
     /*** INT ***/
@@ -623,10 +623,10 @@ object IntCode: CodeDomain<Int>() {
   }
 }
 
-object DecimalCode: CodeDomain<Decimal>() {
+object DecimalCode: CodeDomain<BigDecimal>() {
   init {
-    "piece" keyOf Decimal.valueOf("1.00")
-    "per cent" keyOf Decimal.valueOf("0.01")
+    "piece" keyOf BigDecimal("1.00")
+    "per cent" keyOf BigDecimal("0.01")
   }
 }
 object StringCode: CodeDomain<String>() {

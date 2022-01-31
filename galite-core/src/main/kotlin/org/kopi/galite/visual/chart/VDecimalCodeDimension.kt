@@ -18,7 +18,8 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Decimal
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
@@ -37,7 +38,7 @@ class VDecimalCodeDimension(ident: String,
                             type: String,
                             source: String,
                             idents: Array<String>,
-                            private val codes: Array<Decimal?>)
+                            private val codes: Array<BigDecimal?>)
            : VCodeDimension(ident,
                             format,
                             type,

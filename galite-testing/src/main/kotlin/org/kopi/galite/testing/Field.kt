@@ -16,11 +16,14 @@
  */
 package org.kopi.galite.testing
 
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
 import org.kopi.galite.visual.ui.vaadin.field.DatePickerLight
 import org.kopi.galite.visual.ui.vaadin.field.InputTextField
@@ -79,7 +82,7 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
       gridEditorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
     }
     gridEditorField is GridEditorTextField -> {
-      gridEditorField._value = value.toString()
+      gridEditorField._value = if(value is BigDecimal) value.format() else value.toString()
     }
     else -> {
       gridEditorField._value = value

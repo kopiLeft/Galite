@@ -30,7 +30,6 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.type.Decimal
 
 /**
  * Bill Report
@@ -129,7 +128,7 @@ class BillR : Report("Bills_Report", locale = Locale.UK) {
           this[numBill] = result[Bill.numBill]
           this[addressBill] = result[Bill.addressBill]
           this[dateBill] = result[Bill.dateBill]
-          this[amountWithTaxes] = Decimal(result[Bill.amountWithTaxes])
+          this[amountWithTaxes] = result[Bill.amountWithTaxes]
           this[refCmd] = result[Bill.refCmd]
         }
       }

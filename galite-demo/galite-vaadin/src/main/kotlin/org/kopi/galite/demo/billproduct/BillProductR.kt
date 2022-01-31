@@ -29,7 +29,6 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.type.Decimal
 
 /**
  * Products Bill Report
@@ -70,7 +69,7 @@ class BillProductR : Report("Bill Product Report", Locale.UK), IReportDefault by
         add {
           this[quantity] = result[BillProduct.quantity]
           this[amount] = result[BillProduct.amount]
-          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+          this[amountWithTaxes] = result[BillProduct.amountWithTaxes]
         }
       }
     }

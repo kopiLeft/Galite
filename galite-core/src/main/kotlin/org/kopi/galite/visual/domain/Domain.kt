@@ -17,6 +17,8 @@
 
 package org.kopi.galite.visual.domain
 
+import java.math.BigDecimal
+
 import kotlin.reflect.KClass
 
 import org.joda.time.DateTime
@@ -65,7 +67,6 @@ import org.kopi.galite.visual.report.VTimeColumn
 import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
@@ -124,12 +125,12 @@ open class Domain<T>(val width: Int? = null,
                          styled)
           }
         }
-        Decimal::class -> VDecimalField(block.buffer,
-                                        width!!,
-                                        height ?: 6,
-                                        height == null,
-                                        min as? Decimal,
-                                        max as? Decimal)
+        BigDecimal::class -> VDecimalField(block.buffer,
+                                           width!!,
+                                           height ?: 6,
+                                           height == null,
+                                           min as? BigDecimal,
+                                           max as? BigDecimal)
         Boolean::class -> VBooleanField(block.buffer)
         Date::class, java.util.Date::class -> VDateField(block.buffer)
         Month::class -> VMonthField(block.buffer)
@@ -161,7 +162,7 @@ open class Domain<T>(val width: Int? = null,
       when (kClass) {
         Int::class, Long::class ->
           VIntegerDimension(ident, format)
-        Decimal::class ->
+        BigDecimal::class ->
           VDecimalDimension(ident, format, height ?: 6, true)
         String::class ->
           VStringDimension(ident, format)
@@ -189,7 +190,7 @@ open class Domain<T>(val width: Int? = null,
     return with(measure) {
       when (kClass) {
         Int::class, Long::class -> VIntegerMeasure(ident, color)
-        Decimal::class -> VDecimalMeasure(ident, color, height!!)
+        BigDecimal::class -> VDecimalMeasure(ident, color, height!!)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }
@@ -208,7 +209,7 @@ open class Domain<T>(val width: Int? = null,
             ident, options, align.value, groupID, function, width ?: 0,
             height ?: 0, format
           )
-        Decimal::class ->
+        BigDecimal::class ->
           VDecimalColumn(
             ident, options, align.value, groupID, function, width ?: 0,
             height ?: 0, format
@@ -234,7 +235,7 @@ open class Domain<T>(val width: Int? = null,
    * Returns the default alignment
    */
   val defaultAlignment: Int
-    get() = if (kClass == Decimal::class) {
+    get() = if (kClass == BigDecimal::class) {
       VConstants.ALG_RIGHT
     } else {
       VConstants.ALG_LEFT
@@ -245,7 +246,7 @@ open class Domain<T>(val width: Int? = null,
   // ----------------------------------------------------------------------
   fun hasSize(): Boolean =
           when (kClass) {
-            Decimal::class, Int::class, Long::class, String::class -> true
+            BigDecimal::class, Int::class, Long::class, String::class -> true
             else -> false
           }
 

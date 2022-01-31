@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.block
 
+import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -33,7 +35,6 @@ import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -66,7 +67,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     val currentTime        = Time.now()
     val idClt       = formExample.salesBlock.idClient.edit(100)
     val description = formExample.salesBlock.description.edit("description")
-    val price       = formExample.salesBlock.price.edit(Decimal.valueOf("100.2"))
+    val price       = formExample.salesBlock.price.edit(BigDecimal("100.2"))
     val active      = formExample.salesBlock.active.edit(true)
     val date        = formExample.salesBlock.date.edit(currentDate)
     val month       = formExample.salesBlock.month.edit(currentMonth)
@@ -81,7 +82,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     // Check that values are sent to the model
     assertEquals(100, idClt.getModel().getInt(0))
     assertEquals("description", description.getModel().getString(0))
-    assertEquals(Decimal.valueOf("100.20000"), price.getModel().getDecimal(0))
+    assertEquals(BigDecimal("100.20000"), price.getModel().getDecimal(0))
     assertEquals(true, active.getModel().getBoolean(0))
     assertEquals(currentDate, date.getModel().getDate(0))
     assertEquals(currentMonth, month.getModel().getMonth(0))

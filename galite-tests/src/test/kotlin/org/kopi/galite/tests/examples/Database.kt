@@ -28,7 +28,6 @@ import org.kopi.galite.tests.db.createDBSchemaTables
 import org.kopi.galite.tests.db.dropDBSchemaTables
 import org.kopi.galite.tests.db.insertIntoUsers
 import org.kopi.galite.tests.db.TEST_DB_USER
-import org.kopi.galite.visual.type.Decimal
 
 object Training : Table("TRAINING") {
   val id = integer("ID")
@@ -104,10 +103,10 @@ fun initData() {
 }
 
 fun addTrainings() {
-  addTraining("training 1", 3, Decimal("1149.24").value, "informations training 1")
-  addTraining("training 2", 1, Decimal("219.6").value, "informations training 2")
-  addTraining("training 3", 2, Decimal("146.9").value, "informations training 3")
-  addTraining("training 4", 1, Decimal("3129.7").value, "informations training 4")
+  addTraining("training 1", 3, BigDecimal("1149.24"), "informations training 1")
+  addTraining("training 2", 1, BigDecimal("219.6"), "informations training 2")
+  addTraining("training 3", 2, BigDecimal("146.9"), "informations training 3")
+  addTraining("training 4", 1, BigDecimal("3129.7"), "informations training 4")
 }
 
 fun addTraining(name: String, category: Int, amount: BigDecimal, info: String? = null) {

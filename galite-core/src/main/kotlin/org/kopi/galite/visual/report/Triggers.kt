@@ -18,8 +18,9 @@
 
 package org.kopi.galite.visual.report
 
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.dsl.report.ReportField
-import org.kopi.galite.visual.type.Decimal
 
 /**
  * This class implements predefined report triggers
@@ -83,18 +84,18 @@ object Triggers {
   /**
    * Compute the decimal sum in a report column
    */
-  fun sumDecimal(c: ReportField<Decimal>): VCalculateColumn {
+  fun sumDecimal(c: ReportField<BigDecimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
-        var result = Decimal(0, 2)
+        var result = BigDecimal.valueOf(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as? Decimal
+          val value = child.getValueAt(column) as? BigDecimal
 
           if (value != null) {
-            result = result + value
+            result += value
           }
         }
         return result
@@ -129,20 +130,20 @@ object Triggers {
   /**
    * Compute the decimal sum in a report column
    */
-  fun sumNullDecimal(c: ReportField<Decimal>): VCalculateColumn {
+  fun sumNullDecimal(c: ReportField<BigDecimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
         var valueFound = false
-        var result = Decimal(0, 2)
+        var result = BigDecimal.valueOf(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as? Decimal
+          val value = child.getValueAt(column) as? BigDecimal
 
           if (value != null) {
             valueFound = true
-            result = result + value
+            result += value
           }
         }
         return if (valueFound) result else null
@@ -253,27 +254,27 @@ object Triggers {
   /**
    * Compute the decimal average in a report column
    */
-  fun avgDecimal(c: ReportField<Decimal>): VCalculateColumn {
+  fun avgDecimal(c: ReportField<BigDecimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val leafCount = row.leafCount
         var notNullLeafCount = 0.0
-        var result = Decimal(0, 2)
+        var result = BigDecimal.valueOf(0, 2)
         var leaf = row.firstLeaf as? VReportRow
 
         for (i in 0 until leafCount) {
-          val value = leaf!!.getValueAt(column) as? Decimal
+          val value = leaf!!.getValueAt(column) as? BigDecimal
 
           if (value != null) {
-            result = result + value
+            result += value
             notNullLeafCount++
           }
           leaf = leaf.nextLeaf as? VReportRow
         }
         return if (notNullLeafCount != 0.0) {
-          (result / Decimal(notNullLeafCount)).setScale(2)
+          (result / BigDecimal(notNullLeafCount)).setScale(2)
         } else {
-          Decimal(0, 2)
+          BigDecimal.valueOf(0, 2)
         }
       }
     }

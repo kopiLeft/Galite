@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.visual.domain
 
+import java.math.BigDecimal
+
 import org.joda.time.DateTime
 import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
@@ -98,7 +99,7 @@ class TEXT(width: Int,
  * The maximal scale i.e the number of characters standing after the comma has also to be defined.
  * Also the comma has to be counted as a character.
  */
-class DECIMAL(width: Int, scale: Int) : Domain<Decimal>(width, scale)
+class DECIMAL(width: Int, scale: Int) : Domain<BigDecimal>(width, scale)
 
 /**
  * Fraction numbers are [DECIMAL] numbers.
@@ -106,7 +107,7 @@ class DECIMAL(width: Int, scale: Int) : Domain<Decimal>(width, scale)
  * Also the comma has to be counted as a character.
  * Only the width is to be defined in a FRACTION.
  */
-class FRACTION(width: Int) : Domain<Decimal>(width)
+class FRACTION(width: Int) : Domain<BigDecimal>(width)
 
 /**
  * In a BOOL you have to assign a Boolean value to the item you have entered.

@@ -21,7 +21,7 @@ package org.kopi.galite.visual.report
 import java.math.BigDecimal
 
 import org.kopi.galite.visual.form.VDecimalField
-import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
@@ -66,7 +66,7 @@ class VDecimalColumn(ident: String?,
    *           0 if the two operands are equal
    */
   override fun compareTo(object1: Any, object2: Any): Int =
-          (object1 as Decimal).compareTo(object2 as Decimal)
+          (object1 as BigDecimal).compareTo(object2 as BigDecimal)
 
   /**
    * Returns the width of cells in this column in characters
@@ -82,8 +82,7 @@ class VDecimalColumn(ident: String?,
             when(value) {
               null -> ""
               is Int -> value.toString()
-              is BigDecimal -> format(Decimal(value))
-              is Decimal -> if ((value).scale > maxScale || exactScale) (value).setScale(maxScale).toString() else value.toString()
+              is BigDecimal -> if ((value).scale() > maxScale || exactScale) (value).setScale(maxScale).format() else value.format()
               else -> throw InconsistencyException("bad type for $value")
             }
   }

@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.examples
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import org.kopi.galite.visual.chart.VChartType
@@ -26,7 +27,6 @@ import org.kopi.galite.visual.domain.MONTH
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.visual.VColor
 import org.jetbrains.exposed.sql.insert
@@ -167,27 +167,27 @@ class DocumentationChartC :  Chart(
     initDocumentationData()
 
     month.add(Month(2021, 10)) {
-      this[area] = Decimal("34600")
+      this[area] = BigDecimal("34600")
       this[population] = 1056247
     }
 
     month.add(Month(2021, 12)) {
-      this[area] = Decimal("806600")
+      this[area] = BigDecimal("806600")
       this[population] = 439243
     }
 
     city.add("Tunis") {
-      this[area] = Decimal("34600")
+      this[area] = BigDecimal("34600")
       this[population] = 1056247
     }
 
     city.add("Kasserine") {
-      this[area] = Decimal("806600")
+      this[area] = BigDecimal("806600")
       this[population] = 439243
     }
 
     city.add("Bizerte") {
-      this[area] = Decimal("568219")
+      this[area] = BigDecimal("568219")
       this[population] = 368500
     }
   }

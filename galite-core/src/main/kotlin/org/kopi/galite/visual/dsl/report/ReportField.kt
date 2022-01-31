@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.dsl.report
 
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
@@ -26,7 +28,6 @@ import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VCommand
 
 /**
@@ -89,7 +90,7 @@ class ReportField<T>(override val domain: Domain<T>,
 
   fun initialize() {
     init()
-    if(domain.kClass == Decimal::class) {
+    if(domain.kClass == BigDecimal::class) {
       align = FieldAlignment.RIGHT
     }
   }

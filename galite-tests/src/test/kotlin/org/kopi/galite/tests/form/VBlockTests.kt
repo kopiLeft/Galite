@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.form
 
+import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
@@ -44,7 +45,6 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VExecFailedException
@@ -90,7 +90,7 @@ class VBlockTests : VApplicationTestBase() {
       it[id] = 1
       it[trainingName] = "trainingName"
       it[type] = 1
-      it[price] = Decimal("1149.24").value
+      it[price] = BigDecimal("1149.24")
       it[active] = true
     }
     Center.insert {
@@ -179,7 +179,7 @@ class VBlockTests : VApplicationTestBase() {
           it[id] = 1
           it[trainingName] = "trainingName"
           it[type] = 1
-          it[price] = Decimal("1149.24").value
+          it[price] = BigDecimal("1149.24")
           it[active] = true
         }
       }
@@ -532,7 +532,7 @@ class VBlockTests : VApplicationTestBase() {
         it[id] = 1
         it[trainingName] = "trainingName"
         it[type] = 1
-        it[price] = Decimal("1149.24").value
+        it[price] = BigDecimal("1149.24")
         it[active] = true
       }
 

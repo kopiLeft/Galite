@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.examples
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
@@ -28,7 +29,6 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.VColor
 
 object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
@@ -105,17 +105,17 @@ class ChartSample: Chart(
 
   init {
     city.add("Tunis") {
-      this[area] = Decimal("34600")
+      this[area] = BigDecimal("34600")
       this[population] = 1056247
     }
 
     city.add("Kasserine") {
-      this[area] = Decimal("806600")
+      this[area] = BigDecimal("806600")
       this[population] = 439243
     }
 
     city.add("Bizerte") {
-      this[area] = Decimal("568219")
+      this[area] = BigDecimal("568219")
       this[population] = 368500
     }
   }
