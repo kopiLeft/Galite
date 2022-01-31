@@ -19,12 +19,13 @@
 package org.kopi.galite.visual.report
 
 import java.io.Serializable
+import java.math.BigDecimal
 
 import javax.swing.event.EventListenerList
 
 import kotlin.math.max
+import org.kopi.galite.visual.type.format
 
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VExecFailedException
 
@@ -74,7 +75,15 @@ class MReport : Constants, Serializable {
 
     baseRows.forEach {
       if (it!!.getValueAt(column) != null) {
-        max = max(max, it.getValueAt(column).toString().length)
+        val value = it.getValueAt(column).let {
+          if(it is BigDecimal) {
+            it.format()
+          } else {
+            it.toString()
+          }
+        }
+
+        max = max(max, value.length)
       }
     }
     return max + 2
@@ -260,7 +269,7 @@ class MReport : Constants, Serializable {
               0.0
             } else {
               // !!! wael 20070622 : use 0 instead of null values.
-              (baseRows[i]!!.getValueAt(paramColumns[j]) as Decimal).toDouble()
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as BigDecimal).toDouble()
             }
             vm.setValue(params[j], value)
           }
@@ -270,14 +279,14 @@ class MReport : Constants, Serializable {
             max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as Decimal?)!!.toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as BigDecimal).toFloat()
             }
             // calculate max value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
+                (it.getValueAt(paramColumns[j]) as BigDecimal).toFloat()
               }
               if (tmp > max) {
                 max = tmp
@@ -292,14 +301,14 @@ class MReport : Constants, Serializable {
             min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as Decimal).toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as BigDecimal).toFloat()
             }
             // calculate min value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
+                (it.getValueAt(paramColumns[j]) as BigDecimal).toFloat()
               }
               if (tmp < min) {
                 min = tmp
@@ -314,7 +323,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
+                (it.getValueAt(paramColumns[j]) as BigDecimal).toFloat()
               }
               ovr += tmp / baseRows.size
             }
@@ -327,7 +336,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
+                (it.getValueAt(paramColumns[j]) as BigDecimal).toFloat()
               }
               sum += tmp
             }
@@ -336,7 +345,7 @@ class MReport : Constants, Serializable {
         }
       }
       try {
-        baseRows[i]!!.setValueAt(column, Decimal(x.eval(vm, fm)))
+        baseRows[i]!!.setValueAt(column, BigDecimal(x.eval(vm, fm)))
       } catch (e: NumberFormatException) {
         // this exception occurs with INFINITE double values. (ex : division by ZERO)
         // return a null value (can not evaluate expression)

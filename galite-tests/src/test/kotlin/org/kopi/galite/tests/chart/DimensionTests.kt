@@ -17,6 +17,8 @@
 
 package org.kopi.galite.tests.chart
 
+import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 
 import org.junit.Test
@@ -25,7 +27,6 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.visual.Color
 
@@ -42,18 +43,18 @@ class DimensionTests {
     measure1.label = "measure 1"
     measure1.color = Color.RED
     monthDimension.add(Month(2021, 1)) {
-      this[measure1] = Decimal("10.01")
+      this[measure1] = BigDecimal("10.01")
     }
     monthDimension.add(Month(2021, 12)) {
-      this[measure1] = Decimal("22.22")
+      this[measure1] = BigDecimal("22.22")
     }
 
-    assertEquals(Decimal("22.22"), monthDimension.values[1].measureList[measure1])
+    assertEquals(BigDecimal("22.22"), monthDimension.values[1].measureList[measure1])
 
     assertEquals(monthDimension.values[0].getMeasureLabels(), listOf("measure 1"))
-    assertEquals(monthDimension.values[0].getMeasureValues(), listOf(Decimal("10.01")))
+    assertEquals(monthDimension.values[0].getMeasureValues(), listOf(BigDecimal("10.01")))
     assertEquals(monthDimension.values[1].getMeasureLabels(), listOf("measure 1"))
-    assertEquals(monthDimension.values[1].getMeasureValues(), listOf(Decimal("22.22")))
+    assertEquals(monthDimension.values[1].getMeasureValues(), listOf(BigDecimal("22.22")))
   }
 
   /**

@@ -27,7 +27,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VDecimalColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Decimal
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VlibProperties
@@ -45,8 +45,8 @@ class VDecimalField(val bufferSize: Int,
                     private val digits: Int,
                     maxScale: Int,
                     val isFraction: Boolean,
-                    minValue: Decimal?,
-                    maxValue: Decimal?)
+                    minValue: BigDecimal?,
+                    maxValue: BigDecimal?)
   : VField(computeWidth(digits, maxScale, minValue, maxValue), 1) {
   /*
    * ----------------------------------------------------------------------
@@ -67,8 +67,8 @@ class VDecimalField(val bufferSize: Int,
                  digits,
                  maxScale,
                  fraction,
-                 minval?.let { Decimal(it) },
-                 maxval?.let { Decimal(it) }) {
+                 minval?.let { BigDecimal(it) },
+                 maxval?.let { BigDecimal(it) }) {
   }
 
   /**
@@ -87,17 +87,17 @@ class VDecimalField(val bufferSize: Int,
     var max = maxValue
     var nines: Long = 1
 
-    min = Decimal(Int.MIN_VALUE.toDouble())
-    max = Decimal(Int.MAX_VALUE.toDouble())
+    min = BigDecimal(Int.MIN_VALUE.toDouble())
+    max = BigDecimal(Int.MAX_VALUE.toDouble())
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
       }
     }
-    var big = Decimal((nines - 1).toDouble())
+    var big = BigDecimal((nines - 1).toDouble())
 
     big = big.setScale(height)
-    var mbig = Decimal(-(nines / 10 - 1).toDouble())
+    var mbig = BigDecimal(-(nines / 10 - 1).toDouble())
 
     mbig = mbig.setScale(height)
     max = if (max > big) max else big
@@ -159,14 +159,14 @@ class VDecimalField(val bufferSize: Int,
     if ((s == "")) {
       setNull(rec)
     } else {
-      val v: Decimal?
+      val v: BigDecimal?
       try {
         v = scanDecimal(s)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
       if (v != null) {
-        if (v.scale > scale) {
+        if (v.scale() > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
         if (v.compareTo(minValue) == -1) {
@@ -186,7 +186,7 @@ class VDecimalField(val bufferSize: Int,
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Decimal::class
+  override fun getDataType(): KClass<*> = BigDecimal::class
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
@@ -198,17 +198,17 @@ class VDecimalField(val bufferSize: Int,
    * @param     exclude         exclude the current record
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(exclude: Boolean): Decimal? {
-    var sum: Decimal? = null
+  fun computeSum(exclude: Boolean): BigDecimal? {
+    var sum: BigDecimal? = null
 
     for (i in 0 until block!!.bufferSize) {
       if ((!isNullImpl(i)
                       && block!!.isRecordFilled(i)
                       && (!exclude || i != block!!.activeRecord))) {
         if (sum == null) {
-          sum = Decimal(0.0)
+          sum = BigDecimal(0.0)
         }
-        sum = sum + getDecimal(i)
+        sum += getDecimal(i)!!
       }
     }
     return sum
@@ -221,7 +221,7 @@ class VDecimalField(val bufferSize: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(exclude: Boolean, coalesceValue: Decimal): Decimal =
+  fun computeSum(exclude: Boolean, coalesceValue: BigDecimal): BigDecimal =
           computeSum(exclude)?.let { computeSum(exclude) } ?: coalesceValue
 
   /**
@@ -229,7 +229,7 @@ class VDecimalField(val bufferSize: Int,
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(): Decimal? = computeSum(false)
+  fun computeSum(): BigDecimal? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block
@@ -237,7 +237,7 @@ class VDecimalField(val bufferSize: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(coalesceValue: Decimal): Decimal = computeSum(false, coalesceValue)
+  fun computeSum(coalesceValue: BigDecimal): BigDecimal = computeSum(false, coalesceValue)
 
   /**
    * Returns the current scale for the specified record.
@@ -305,7 +305,7 @@ class VDecimalField(val bufferSize: Int,
   /**
    * Sets the field value of given record to a Decimal value.
    */
-  override fun setDecimal(r: Int, v: Decimal?) {
+  override fun setDecimal(r: Int, v: BigDecimal?) {
     // trails (backup) the record if necessary
     var v = v
 
@@ -314,10 +314,10 @@ class VDecimalField(val bufferSize: Int,
                     || (value[r] != null && value[r] != v))) {
       trail(r)
       if (v != null) {
-        if (v.scale != currentScale[r]) {
+        if (v.scale() != currentScale[r]) {
           v = v.setScale(currentScale[r])
         }
-        if (v.compareTo(minValue) == -1) {
+        if (v!!.compareTo(minValue) == -1) {
           v = minValue
         } else if (v.compareTo(maxValue) == 1) {
           v = maxValue
@@ -340,11 +340,9 @@ class VDecimalField(val bufferSize: Int,
   override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
-      setDecimal(r, Decimal(v.toDouble()))
-    } else if(v != null && (v is BigDecimal)) {
-      setDecimal(r, Decimal(v))
+      setDecimal(r, BigDecimal(v.toDouble()))
     } else {
-      setDecimal(r, v as Decimal?)
+      setDecimal(r, v as BigDecimal?)
     }
   }
 
@@ -354,15 +352,7 @@ class VDecimalField(val bufferSize: Int,
    * @param    result       the result row
    * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val bigDecimal = result[column] as? BigDecimal
-
-    return if (bigDecimal == null) {
-      null
-    } else {
-      Decimal(bigDecimal)
-    }
-  }
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? = result[column] as? BigDecimal
 
   /**
    * Is the field value of given record null ?
@@ -372,7 +362,7 @@ class VDecimalField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a Decimal value.
    */
-  override fun getDecimal(r: Int): Decimal = getObject(r) as Decimal
+  override fun getDecimal(r: Int): BigDecimal? = getObject(r) as? BigDecimal
 
   /**
    * Returns the field value of the current record as an object
@@ -383,7 +373,7 @@ class VDecimalField(val bufferSize: Int,
     if (o == null) {
       return ""
     }
-    return toText((o as Decimal).setScale(currentScale[0]))
+    return toText((o as BigDecimal).setScale(currentScale[0]))
   }
 
   override fun toObject(s: String): Any? {
@@ -392,7 +382,7 @@ class VDecimalField(val bufferSize: Int,
     if ((s == "")) {
       return null
     } else {
-      val v: Decimal?
+      val v: BigDecimal?
 
       try {
         v = scanDecimal(s)
@@ -400,7 +390,7 @@ class VDecimalField(val bufferSize: Int,
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
       if (v != null) {
-        if (v.scale > scale) {
+        if (v.scale() > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
         if (v.compareTo(minValue) == -1) {
@@ -443,7 +433,7 @@ class VDecimalField(val bufferSize: Int,
    * Returns the SQL representation of field value of given record.
    */
   override fun getSqlImpl(r: Int): BigDecimal? {
-    return if (value[r] == null) null else value[r]!!.toSql()
+    return value[r]
   }
 
   /**
@@ -472,18 +462,18 @@ class VDecimalField(val bufferSize: Int,
   /**
    * Returns a string representation of a big decimal value wrt the field type.
    */
-  fun formatDecimal(value: Decimal): String {
+  fun formatDecimal(value: BigDecimal): String {
     return toText(value.setScale(currentScale[block!!.activeRecord]))
   }
 
   /**
    * Returns the string representation in human-readable format.
    */
-  fun toText(v: Decimal): String {
+  fun toText(v: BigDecimal): String {
     return if (!isFraction) {
-      v.toString()
+      v.format()
     } else {
-      toFraction(v.toString())
+      toFraction(v.format())
     }
   }
 
@@ -571,11 +561,11 @@ class VDecimalField(val bufferSize: Int,
       }
       field = scale
 
-      if (minValue.scale > field) {
+      if (minValue.scale() > field) {
         minValue = minValue.setScale(field)
       }
 
-      if (maxValue.scale > field) {
+      if (maxValue.scale() > field) {
         maxValue = maxValue.setScale(field)
       }
 
@@ -587,7 +577,7 @@ class VDecimalField(val bufferSize: Int,
       }
     }
 
-  private var value: Array<Decimal?> = arrayOfNulls(2 * bufferSize)
+  private var value: Array<BigDecimal?> = arrayOfNulls(2 * bufferSize)
 
   protected var criticalMinValue = this.minValue
 
@@ -598,7 +588,7 @@ class VDecimalField(val bufferSize: Int,
     /**
      * Parses the string argument as a decimal number in human-readable format.
      */
-    private fun scanDecimal(str: String?): Decimal? {
+    private fun scanDecimal(str: String?): BigDecimal? {
       var negative = false
       var state = 0
       var scale = 0
@@ -768,12 +758,12 @@ class VDecimalField(val bufferSize: Int,
         else -> throw NumberFormatException()
       }
       return if (value == 0L) {
-        Decimal.DEFAULT
+        BigDecimal(0.0)
       } else {
         if (negative) {
           value = -value
         }
-        Decimal(value, scale)
+        BigDecimal.valueOf(value, scale)
       }
     }
 
@@ -783,7 +773,7 @@ class VDecimalField(val bufferSize: Int,
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
      */
-    fun calculateUpperBound(digits: Int, scale: Int): Decimal {
+    fun calculateUpperBound(digits: Int, scale: Int): BigDecimal {
       val asciiBound: CharArray
 
       if (scale == 0) {
@@ -798,7 +788,7 @@ class VDecimalField(val bufferSize: Int,
         }
         asciiBound[digits - scale] = '.'
       }
-      return Decimal(String(asciiBound))
+      return BigDecimal(String(asciiBound))
     }
 
     /**
@@ -809,7 +799,7 @@ class VDecimalField(val bufferSize: Int,
      * @param     minVal          the minimal value the fixnum field can get.
      * @param     maxVal          the maximal value the fixnum field can get.
      */
-    fun computeWidth(digits: Int, scale: Int, minVal: Decimal?, maxVal: Decimal?): Int {
+    fun computeWidth(digits: Int, scale: Int, minVal: BigDecimal?, maxVal: BigDecimal?): Int {
       var upperBound = calculateUpperBound(digits, scale)
       var lowerBound = - upperBound
       if (minVal != null && minVal > lowerBound) {
@@ -818,7 +808,7 @@ class VDecimalField(val bufferSize: Int,
       if (maxVal != null && maxVal < upperBound) {
         upperBound = maxVal.setScale(scale)
       }
-      return max(upperBound.toString().length, lowerBound.toString().length)
+      return max(upperBound.format().length, lowerBound.format().length)
     }
 
     /**

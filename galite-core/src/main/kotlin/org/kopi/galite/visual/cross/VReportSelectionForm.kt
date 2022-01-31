@@ -31,7 +31,7 @@ abstract class VReportSelectionForm : VDictionaryForm {
   protected constructor()
   protected constructor(caller: VForm) : super(caller)
   protected constructor(caller: DBContextHandler) : super(caller)
-  protected constructor(caller: DBContext) : super(caller)
+  protected constructor(caller: DBContext?) : super(caller)
 
   /**
    * Implements interface for COMMAND CreateReport

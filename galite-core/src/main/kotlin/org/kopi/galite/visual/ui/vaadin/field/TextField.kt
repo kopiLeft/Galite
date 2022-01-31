@@ -54,7 +54,8 @@ import com.vaadin.flow.data.binder.Binder
  */
 @CssImport.Container(value = [
   CssImport("./styles/galite/textfield.css"),
-  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field")
+  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field"),
+  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-area")
 ])
 @JsModule("./src/text-field.js")
 class TextField(val model: VField,

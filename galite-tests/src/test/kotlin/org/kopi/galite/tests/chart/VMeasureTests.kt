@@ -19,6 +19,7 @@ package org.kopi.galite.tests.chart
 
 import kotlin.test.assertEquals
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import org.junit.Test
@@ -32,7 +33,6 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.type.Decimal
 
 class VMeasureTests {
   val chart = TestChart()
@@ -73,10 +73,10 @@ object IntegerCode : CodeDomain<Int>() {
   }
 }
 
-object DecimalCode : CodeDomain<Decimal>() {
+object DecimalCode : CodeDomain<BigDecimal>() {
   init {
-    "OK" keyOf Decimal(1.0)
-    "NO" keyOf Decimal(0.0)
+    "OK" keyOf BigDecimal(1.0)
+    "NO" keyOf BigDecimal(0.0)
   }
 }
 

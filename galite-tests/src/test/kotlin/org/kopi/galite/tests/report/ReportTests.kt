@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.report
 
 import java.io.File
+import java.math.BigDecimal
 import java.util.Locale
 
 import kotlin.test.assertEquals
@@ -33,7 +34,6 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.type.Decimal
 
 class ReportTests: VApplicationTestBase() {
 
@@ -60,21 +60,22 @@ class ReportTests: VApplicationTestBase() {
     assertMapsEquals(mapOf(SimpleReport.name to "Sami",
                            SimpleReport.age to 22,
                            SimpleReport.profession to "Journalist",
-                           SimpleReport.salary to Decimal("2000")),
+                           SimpleReport.salary to BigDecimal("2000")
+    ),
                      firstRow)
 
     val secondRow = SimpleReport.getRow(1)
     assertMapsEquals(mapOf(SimpleReport.name to "Sofia",
                            SimpleReport.age to 23,
                            SimpleReport.profession to "Dentist",
-                           SimpleReport.salary to Decimal("2000.55")),
+                           SimpleReport.salary to BigDecimal("2000.55")),
                      secondRow)
 
     val thirdRow = SimpleReport.getRow(2)
     assertMapsEquals(mapOf(SimpleReport.name to "Sofia",
                            SimpleReport.age to 25,
                            SimpleReport.profession to "Baker",
-                           SimpleReport.salary to Decimal("2000.55")),
+                           SimpleReport.salary to BigDecimal("2000.55")),
                      thirdRow)
   }
 
@@ -237,19 +238,19 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
       this[name] = "Sami"
       this[age] = 22
       this[profession] = "Journalist"
-      this[salary] = Decimal("2000")
+      this[salary] = BigDecimal("2000")
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
       this[profession] = "Dentist"
-      this[salary] = Decimal("2000.55")
+      this[salary] = BigDecimal("2000.55")
     }
     add {
       this[age] = 25
       this[profession] = "Baker"
       this[name] = "Sofia"
-      this[salary] = Decimal("2000.55")
+      this[salary] = BigDecimal("2000.55")
     }
   }
 }

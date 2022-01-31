@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.cross
 
 import java.awt.event.KeyEvent
+import java.math.BigDecimal
 import java.sql.SQLException
 import java.util.Locale
 
@@ -62,7 +63,6 @@ import org.kopi.galite.visual.report.VStringColumn
 import org.kopi.galite.visual.report.VTimeColumn
 import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.Message
 import org.kopi.galite.visual.visual.MessageCode
@@ -292,7 +292,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                             1,
                                             null,
                                             (field as VCodeField).labels,
-                                            (field as VCodeField).getCodes() as Array<Decimal?>)
+                                            (field as VCodeField).getCodes() as Array<BigDecimal?>)
         is VBooleanCodeField ->
           columns[col] = VBooleanCodeColumn(null,
                                             null,

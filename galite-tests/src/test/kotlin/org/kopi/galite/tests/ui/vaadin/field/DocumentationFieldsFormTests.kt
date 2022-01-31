@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
+import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -51,7 +53,6 @@ import org.kopi.galite.tests.examples.TestTable
 import org.kopi.galite.tests.examples.TestTable2
 import org.kopi.galite.tests.examples.TestTriggers
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 import org.kopi.galite.visual.ui.vaadin.field.VPasswordField
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
@@ -120,7 +121,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test Decimal minValue`() {
-    val value = Decimal.valueOf("1.5")
+    val value = BigDecimal("1.5")
 
     form.fieldsTypesBlock.decimal.edit(value)
     form.fieldsTypesBlock.int.click()
@@ -129,13 +130,13 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     _expectOne<ErrorNotification>()
 
     // Check that error notification display message, then close the error notification and check that's disappearing
-    expectErrorNotification(MessageCode.getMessage("VIS-00012", Decimal.valueOf("1.9")))
+    expectErrorNotification(MessageCode.getMessage("VIS-00012", BigDecimal("1.9")))
     _expectNone<ErrorNotification>()
   }
 
   @Test
   fun `test Decimal maxValue`() {
-    val value = Decimal.valueOf("6.5")
+    val value = BigDecimal("6.5")
 
     form.fieldsTypesBlock.decimal.edit(value)
     form.fieldsTypesBlock.int.click()
@@ -144,7 +145,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     _expectOne<ErrorNotification>()
 
     // Check that error notification display message, then close the error notification and check that's disappearing
-    expectErrorNotification(MessageCode.getMessage("VIS-00009", Decimal.valueOf("5.9")))
+    expectErrorNotification(MessageCode.getMessage("VIS-00009", BigDecimal("5.9")))
     _expectNone<ErrorNotification>()
   }
 

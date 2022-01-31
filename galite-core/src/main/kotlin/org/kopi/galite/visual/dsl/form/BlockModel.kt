@@ -65,7 +65,8 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: 
     return object : VFullCalendarForm() {
 
       init {
-        initIntern(false)
+        init()
+        initIntern()
         initDefaultActors()
         initDefaultCommands()
       }
@@ -75,7 +76,7 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: 
       override val fullCalendarBlock: VFullCalendarBlock
         get() = this@FullCalendarBlockModel
 
-      override fun init() {
+      fun init() {
 
         val vSimpleBlock = BlockModel(this, this@FullCalendarBlockModel.block, source)
         vSimpleBlock.setInfo(pageNumber, this)

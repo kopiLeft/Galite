@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.examples
 
+import java.math.BigDecimal
 import java.util.Locale
 
 import org.kopi.galite.visual.domain.CodeDomain
@@ -25,7 +26,6 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Triggers
-import org.kopi.galite.visual.type.Decimal
 import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.dsl.common.Icon
@@ -147,8 +147,8 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
       this[lastName] = "Malouli"
       this[age] = 20
       this[age2] = 40
-      this[salary] = Decimal("20.50")
-      this[salary2] = Decimal("40.50")
+      this[salary] = BigDecimal("20.50")
+      this[salary2] = BigDecimal("40.50")
       this[codeDomain] = Days.keyOf("Monday")
     }
     add {
@@ -156,8 +156,8 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
       this[lastName] = "Mouelhi"
       this[age] = 40
       this[age2] = 20
-      this[salary] = Decimal("40.50")
-      this[salary2] = Decimal("20.50")
+      this[salary] = BigDecimal("40.50")
+      this[salary2] = BigDecimal("20.50")
       this[codeDomain] = Days.keyOf("Sunday")
     }
   }

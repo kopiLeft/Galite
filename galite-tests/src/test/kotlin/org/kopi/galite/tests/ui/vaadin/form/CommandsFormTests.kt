@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.form
 
+import java.math.BigDecimal
+
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -46,7 +48,6 @@ import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.report.VDecimalColumn
-import org.kopi.galite.visual.type.Decimal
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.report.DReport
@@ -132,8 +133,8 @@ class CommandsFormTests : GaliteVUITestBase() {
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
       arrayOf("1", "", "", "", ""),
-      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
-      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(BigDecimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(BigDecimal("3129.7")), "yes", ""),
       arrayOf("2", "", "", "", ""),
       arrayOf("3", "", "", "", "")
     ))
@@ -143,10 +144,10 @@ class CommandsFormTests : GaliteVUITestBase() {
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
       arrayOf("1", "", "", "", ""),
-      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
-      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(BigDecimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(BigDecimal("3129.7")), "yes", ""),
       arrayOf("2", "", "", "", ""),
-      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(BigDecimal("146.9")), "yes", ""),
       arrayOf("3", "", "", "", "")
     ))
 
@@ -155,12 +156,12 @@ class CommandsFormTests : GaliteVUITestBase() {
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
       arrayOf("1", "", "", "", ""),
-      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
-      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(BigDecimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(BigDecimal("3129.7")), "yes", ""),
       arrayOf("2", "", "", "", ""),
-      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(BigDecimal("146.9")), "yes", ""),
       arrayOf("3", "", "", "", ""),
-      arrayOf("", "TRAINING 1", reportColumn.format(Decimal("1149.24")), "yes", "")
+      arrayOf("", "TRAINING 1", reportColumn.format(BigDecimal("1149.24")), "yes", "")
     ))
 
     // TEST FOLDING
@@ -170,10 +171,10 @@ class CommandsFormTests : GaliteVUITestBase() {
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
       arrayOf("1", "", "", "", ""),
-      arrayOf("", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes", ""),
-      arrayOf("", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes", ""),
+      arrayOf("", "TRAINING 2", reportColumn.format(BigDecimal("219.6")), "yes", ""),
+      arrayOf("", "TRAINING 4", reportColumn.format(BigDecimal("3129.7")), "yes", ""),
       arrayOf("2", "", "", "", ""),
-      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(BigDecimal("146.9")), "yes", ""),
       arrayOf("3", "", "", "", ""),
     ))
 
@@ -183,7 +184,7 @@ class CommandsFormTests : GaliteVUITestBase() {
       arrayOf("", "", "", "", ""),
       arrayOf("1", "", "", "", ""),
       arrayOf("2", "", "", "", ""),
-      arrayOf("", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes", ""),
+      arrayOf("", "TRAINING 3", reportColumn.format(BigDecimal("146.9")), "yes", ""),
       arrayOf("3", "", "", "", ""),
     ))
   }
@@ -337,10 +338,10 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
-      arrayOf("", "1", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes"),
-      arrayOf("", "1", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes"),
-      arrayOf("", "2", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes"),
-      arrayOf("", "3", "TRAINING 1", reportColumn.format(Decimal("1149.24")), "yes")
+      arrayOf("", "1", "TRAINING 2", reportColumn.format(BigDecimal("219.6")), "yes"),
+      arrayOf("", "1", "TRAINING 4", reportColumn.format(BigDecimal("3129.7")), "yes"),
+      arrayOf("", "2", "TRAINING 3", reportColumn.format(BigDecimal("146.9")), "yes"),
+      arrayOf("", "3", "TRAINING 1", reportColumn.format(BigDecimal("1149.24")), "yes")
     ))
 
     val finalList =  mutableListOf(*list.toTypedArray())
@@ -353,12 +354,12 @@ class CommandsFormTests : GaliteVUITestBase() {
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", ""),
       arrayOf("1", "", "", "", ""),
-      arrayOf("", "", "TRAINING 2", reportColumn.format(Decimal("219.6")), "yes"),
-      arrayOf("", "", "TRAINING 4", reportColumn.format(Decimal("3129.7")), "yes"),
+      arrayOf("", "", "TRAINING 2", reportColumn.format(BigDecimal("219.6")), "yes"),
+      arrayOf("", "", "TRAINING 4", reportColumn.format(BigDecimal("3129.7")), "yes"),
       arrayOf("2", "", "", "", ""),
-      arrayOf("", "", "TRAINING 3", reportColumn.format(Decimal("146.9")), "yes"),
+      arrayOf("", "", "TRAINING 3", reportColumn.format(BigDecimal("146.9")), "yes"),
       arrayOf("3", "", "", "", ""),
-      arrayOf("","", "TRAINING 1", reportColumn.format(Decimal("1149.24")), "yes")
+      arrayOf("","", "TRAINING 1", reportColumn.format(BigDecimal("1149.24")), "yes")
     ))
   }
 
@@ -374,10 +375,10 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     reportTable.expect(arrayOf(
       arrayOf("", "", "", "", "", ""),
-      arrayOf("1", "training 1", Type.labelOf(3), reportColumn.format(Decimal("1149.24")), "yes", "informations training 1"),
-      arrayOf("2", "training 2", Type.labelOf(1), reportColumn.format(Decimal("219.6")), "yes", "informations training 2"),
-      arrayOf("3", "training 3", Type.labelOf(2), reportColumn.format(Decimal("146.9")), "yes", "informations training 3"),
-      arrayOf("4", "training 4", Type.labelOf(1), reportColumn.format(Decimal("3129.7")), "yes", "informations training 4")
+      arrayOf("1", "training 1", Type.labelOf(3), reportColumn.format(BigDecimal("1149.24")), "yes", "informations training 1"),
+      arrayOf("2", "training 2", Type.labelOf(1), reportColumn.format(BigDecimal("219.6")), "yes", "informations training 2"),
+      arrayOf("3", "training 3", Type.labelOf(2), reportColumn.format(BigDecimal("146.9")), "yes", "informations training 3"),
+      arrayOf("4", "training 4", Type.labelOf(1), reportColumn.format(BigDecimal("3129.7")), "yes", "informations training 4")
     ))
   }
 
@@ -398,17 +399,17 @@ class CommandsFormTests : GaliteVUITestBase() {
         )
       }
 
-      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
+      assertArraysEquals(arrayOf(1, "training 1", 3, BigDecimal("1149.240"), true), initialData[0])
+      assertArraysEquals(arrayOf(2, "training 2", 1, BigDecimal("219.600"), true), initialData[1])
+      assertArraysEquals(arrayOf(3, "training 3", 2, BigDecimal("146.900"), true), initialData[2])
+      assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), initialData[3])
     }
 
     form.InsertMode.triggerCommand()
 
     form.block.trainingName.edit("training test")
     form.block.trainingType.editText("Galite")
-    form.block.trainingPrice.edit(Decimal("1000"))
+    form.block.trainingPrice.edit(BigDecimal("1000"))
     form.block.active.edit(true)
 
     form.saveBlock.triggerCommand()
@@ -423,11 +424,11 @@ class CommandsFormTests : GaliteVUITestBase() {
         )
       }
 
-      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), data[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[3])
-      assertArraysEquals(arrayOf(5, "training test", 1, Decimal("1000.000").value, true), data[4])
+      assertArraysEquals(arrayOf(1, "training 1", 3, BigDecimal("1149.240"), true), data[0])
+      assertArraysEquals(arrayOf(2, "training 2", 1, BigDecimal("219.600"), true), data[1])
+      assertArraysEquals(arrayOf(3, "training 3", 2, BigDecimal("146.900"), true), data[2])
+      assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), data[3])
+      assertArraysEquals(arrayOf(5, "training test", 1, BigDecimal("1000.000"), true), data[4])
     }
   }
 
@@ -450,10 +451,10 @@ class CommandsFormTests : GaliteVUITestBase() {
         )
       }
 
-      assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
+      assertArraysEquals(arrayOf(1, "training 1", 3, BigDecimal("1149.240"), true), initialData[0])
+      assertArraysEquals(arrayOf(2, "training 2", 1, BigDecimal("219.600"), true), initialData[1])
+      assertArraysEquals(arrayOf(3, "training 3", 2, BigDecimal("146.900"), true), initialData[2])
+      assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), initialData[3])
     }
 
     form.serialQuery.triggerCommand()
@@ -472,10 +473,10 @@ class CommandsFormTests : GaliteVUITestBase() {
         )
       }
 
-      assertArraysEquals(arrayOf(1, "training test", 3, Decimal("1149.240").value, true), data[0])
-      assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[1])
-      assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[2])
-      assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[3])
+      assertArraysEquals(arrayOf(1, "training test", 3, BigDecimal("1149.240"), true), data[0])
+      assertArraysEquals(arrayOf(2, "training 2", 1, BigDecimal("219.600"), true), data[1])
+      assertArraysEquals(arrayOf(3, "training 3", 2, BigDecimal("146.900"), true), data[2])
+      assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), data[3])
     }
   }
 
@@ -499,10 +500,10 @@ class CommandsFormTests : GaliteVUITestBase() {
       }
     }
     assertEquals(4, initialData.size)
-    assertArraysEquals(arrayOf(1, "training 1", 3, Decimal("1149.240").value, true), initialData[0])
-    assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), initialData[1])
-    assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), initialData[2])
-    assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), initialData[3])
+    assertArraysEquals(arrayOf(1, "training 1", 3, BigDecimal("1149.240"), true), initialData[0])
+    assertArraysEquals(arrayOf(2, "training 2", 1, BigDecimal("219.600"), true), initialData[1])
+    assertArraysEquals(arrayOf(3, "training 3", 2, BigDecimal("146.900"), true), initialData[2])
+    assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), initialData[3])
 
 
     // Delete the foreign key references first.
@@ -528,9 +529,9 @@ class CommandsFormTests : GaliteVUITestBase() {
       }
     }
     assertEquals(3, data.size)
-    assertArraysEquals(arrayOf(2, "training 2", 1, Decimal("219.600").value, true), data[0])
-    assertArraysEquals(arrayOf(3, "training 3", 2, Decimal("146.900").value, true), data[1])
-    assertArraysEquals(arrayOf(4, "training 4", 1, Decimal("3129.700").value, true), data[2])
+    assertArraysEquals(arrayOf(2, "training 2", 1, BigDecimal("219.600"), true), data[0])
+    assertArraysEquals(arrayOf(3, "training 3", 2, BigDecimal("146.900"), true), data[1])
+    assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), data[2])
   }
 
   /**

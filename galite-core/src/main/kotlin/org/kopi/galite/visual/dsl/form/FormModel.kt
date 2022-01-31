@@ -26,83 +26,39 @@ import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.ApplicationContext
 
-class FormModel: VForm {
-  val form: Form
+class FormModel(val form: Form, ctxt: DBContext? = null): VForm(ctxt) {
 
-  internal constructor(form: Form): super() {
-    this.form = form
-    initIntern(false)
-  }
+  init {
+    initialize(form)
+    initIntern()
 
-  internal constructor(form: Form, ctxt: DBContext) : super(ctxt) {
-    this.form = form
-    initIntern(true)
-  }
-
-  internal constructor(form: Form, ctxt: DBContextHandler) : super(ctxt) {
-    this.form = form
-    initIntern(true)
   }
 
   override val locale get() = form.locale ?: ApplicationContext.getDefaultLocale()
-
-  override fun init() {
-    initialize(form)
-  }
 
   override fun formClassName(): String = form.javaClass.name
 }
 
-class DictionaryFormModel: VDictionaryForm {
-  val form: DictionaryForm
+class DictionaryFormModel(val form: DictionaryForm, ctxt: DBContext? = null): VDictionaryForm(ctxt) {
 
-  internal constructor(form: DictionaryForm, ctxt: DBContextHandler) : super(ctxt) {
-    this.form = form
-    initIntern(true)
-  }
-
-  internal constructor(form: DictionaryForm, ctxt: DBContext) : super(ctxt) {
-    this.form = form
-    initIntern(true)
-  }
-
-  internal constructor(form: DictionaryForm): super() {
-    this.form = form
-    initIntern(false)
+  init {
+    initialize(form)
+    initIntern()
   }
 
   override val locale get() = form.locale ?: ApplicationContext.getDefaultLocale()
-
-  override fun init() {
-    initialize(form)
-  }
 
   override fun formClassName(): String = form.javaClass.name
 }
 
-class ReportSelectionFormModel: VReportSelectionForm {
-  val form: ReportSelectionForm
+class ReportSelectionFormModel(val form: ReportSelectionForm, ctxt: DBContext? = null): VReportSelectionForm(ctxt) {
 
-  internal constructor(form: ReportSelectionForm, ctxt: DBContextHandler) : super(ctxt) {
-    this.form = form
-    initIntern(true)
-  }
-
-  internal constructor(form: ReportSelectionForm, ctxt: DBContext) : super(ctxt) {
-    this.form = form
-    initIntern(true)
-  }
-
-  internal constructor(form: ReportSelectionForm): super() {
-    this.form = form
-    initIntern(false)
+  init {
+    initialize(form)
+    initIntern()
   }
 
   override val locale get() = form.locale ?: ApplicationContext.getDefaultLocale()
-
-  override fun init() {
-    initialize(form)
-  }
 
   override fun formClassName(): String = form.javaClass.name
 }

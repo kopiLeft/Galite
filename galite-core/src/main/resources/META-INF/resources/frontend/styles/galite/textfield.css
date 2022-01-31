@@ -248,3 +248,17 @@
 .transform-none::part(value) {
     text-transform: none;
 }
+
+.textarea::part(value) {
+  height: unset !important;
+  overflow: auto !important;
+}
+
+input:disabled:not(input[type="button"]), textarea:disabled {
+    color: #676767 !important;
+    -webkit-text-fill-color: #676767 !important;
+}
+
+:host([disabled]) [part="input-field"] {
+  border-bottom: #dadada 1px dotted !important;
+}
