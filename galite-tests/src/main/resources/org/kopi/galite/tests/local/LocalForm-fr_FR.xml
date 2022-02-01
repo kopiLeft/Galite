@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="form de test">
+    <actor ident="actor0" label="Rapport dynamique" help="" />
+    <block name="InternBlock" title="block interne">
+        <field ident="FLD_0" label="field block interne" help="" />
+    </block>
+</form>
