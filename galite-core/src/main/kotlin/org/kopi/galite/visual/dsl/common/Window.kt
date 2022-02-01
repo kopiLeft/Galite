@@ -47,7 +47,7 @@ abstract class Window(val title: String, val locale: Locale?) {
   abstract val model: VWindow
 
   /** Menus added to this window */
-  internal val menus = mutableListOf<Menu>()
+  val menus = mutableListOf<Menu>()
 
   /**
    * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
@@ -57,10 +57,27 @@ abstract class Window(val title: String, val locale: Locale?) {
    * the menu name in the actor definition.
    */
   fun menu(label: String): Menu {
-    val menu = Menu(label)
+    val menu = Menu(label, sourceFile)
 
     menus.add(menu)
     return menu
+  }
+
+  /**
+   * Adds an actor to this form.
+   *
+   * An Actor is an item to be linked to a command.
+   *
+   * @param actor the actor to add.
+   */
+  fun actor(actor: Actor): Actor {
+    actor.ident = actor.command?.ident ?: "actor${actors.size}"
+
+    if (!menus.contains(actor.menu)) {
+      menus.add(actor.menu)
+    }
+    actors.add(actor)
+    return actor
   }
 
   /**
@@ -77,10 +94,9 @@ abstract class Window(val title: String, val locale: Locale?) {
             help: String,
             command: PredefinedCommand? = null,
             init: (Actor.() -> Unit)? = null): Actor {
-    val number = command?.number ?: 0
-    val ident = command?.ident ?: "actor${actors.size}"
+    val actor = Actor(menu, label, help, command, source = sourceFile)
 
-    val actor = Actor(ident, menu, label, help, number)
+    actor.ident = command?.ident ?: "actor${actors.size}"
     if (init != null) {
       actor.init()
     }
@@ -103,6 +119,10 @@ abstract class Window(val title: String, val locale: Locale?) {
       command.setMode(*modes)
     }
     command.action = action
+
+    if(!actors.contains(item)) {
+      actor(item)
+    }
     commands.add(command)
     return command
   }

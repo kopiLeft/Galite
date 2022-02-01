@@ -85,7 +85,7 @@ class ChartModel(val chart: Chart, context: DBContextHandler? = null): VChart(co
     setTitle(chart.title)
     help = chart.help
     addActors(chart.actors.map { actor ->
-      actor.buildModel(chart.sourceFile)
+      actor.buildModel()
     }.toTypedArray())
     commands = chart.commands.map { command ->
       command.buildModel(this, actors)

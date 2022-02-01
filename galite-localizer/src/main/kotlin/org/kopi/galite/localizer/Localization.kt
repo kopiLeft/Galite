@@ -56,16 +56,21 @@ fun localizeWindows(url: String,
   modules.forEach {
     if (it.objectName != null) {
       val module = Class.forName(it.objectName).kotlin.objectInstance ?: Class.forName(it.objectName).newInstance()
+
       if (module is Window) {
-        val destination = if (output != null) {
-          output + File.separator + module.javaClass.`package`.name.replace(".", "/")
-        } else {
-          "src/main/resources" + File.separator + module.javaClass.`package`.name.replace(".", "/")
-        }
-        module.genLocalization(destination, locale)
+        localizeWindow(module, locale, output)
       }
     }
   }
+}
+
+fun localizeWindow(module: Window, locale: Locale, output: String? = null) {
+  val destination = if (output != null) {
+    output + File.separator + module.javaClass.`package`.name.replace(".", "/")
+  } else {
+    "src/main/resources" + File.separator + module.javaClass.`package`.name.replace(".", "/")
+  }
+  module.genLocalization(destination, locale)
 }
 
 /**

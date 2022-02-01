@@ -31,18 +31,26 @@ import org.kopi.galite.visual.visual.VDefaultActor
  * An Actor is an item to be linked to a command, if its [icon] is specified, it will appear
  * in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar
  *
- * @param ident               the ident
  * @param menu                the containing menu
  * @param label               the label
  * @param help                the help
+ * @param command             a predefined command that can be linked to this actor
+ * @param source              path localization file
  */
-class Actor(val ident: String, val menu: Menu, val label: String, val help: String, val number: Int) {
+open class Actor(val menu: Menu,
+                 val label: String,
+                 val help: String,
+                 val command: PredefinedCommand? = null,
+                 source: String? = null)
+  : WindowElement(source = source) {
+
   // The shortcut key
   var key: Key? = null
     set(key) {
       checkKey(key)
       field = key
     }
+  val number: Int = command?.number ?: 0
 
   // The actor icon
   var icon: Icon? = null
@@ -76,11 +84,11 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
   /**
    * Builds the actor model [VActor] from information provided by this actor.
    */
-  internal fun buildModel(sourceFile: String) : VActor =
+  internal fun buildModel() : VActor =
           if (number == 0) {
-            VActor(menu.label, sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
+            VActor(menu.label, menu.sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
           } else {
-            VDefaultActor(number, menu.label, sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
+            VDefaultActor(number, menu.label, menu.sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
           }.also {
             it.menuName = menu.label
             it.menuItem = label

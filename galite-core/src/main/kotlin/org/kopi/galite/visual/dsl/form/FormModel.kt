@@ -76,7 +76,7 @@ private fun VForm.buildForm(form: Form) {
     it.ident
   }.toTypedArray()
   addActors(form.actors.map { actor ->
-    actor.buildModel(form.sourceFile)
+    actor.buildModel()
   }.toTypedArray())
   commands = form.commands.map { command ->
     command.buildModel(this, actors)

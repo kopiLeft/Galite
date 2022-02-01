@@ -47,7 +47,7 @@ class ReportModel(val report: Report): VReport() {
     help = report.help
     addActors(
       report.actors.map { actor ->
-        actor.buildModel(report.sourceFile)
+        actor.buildModel()
       }.toTypedArray()
     )
     commands = report.commands.map { command ->

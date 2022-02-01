@@ -58,7 +58,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
                                                 noinline init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = ReportField(domain, "ANM_${fields.size}", init, `access$sourceFile`)
+    val field = ReportField(domain, init, "ANM_${fields.size}", `access$sourceFile`)
     fields.add(field)
     return field
   }

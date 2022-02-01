@@ -53,7 +53,8 @@ open class FormField<T>(internal val block: Block,
                         domain: Domain<T>,
                         private val fieldIndex: Int,
                         initialAccess: Int,
-                        var position: FormPosition? = null) : Field<T>(domain) {
+                        var position: FormPosition? = null,
+                        ident: String? = null) : Field<T>(domain, ident) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -431,7 +432,7 @@ open class FormField<T>(internal val block: Block,
     }
 
     vField.setInfo(
-      getIdent(),
+      ident,
       fieldIndex,
       posInArray,
       options,
@@ -505,10 +506,7 @@ open class FormField<T>(internal val block: Block,
           && access[1] == VConstants.ACS_HIDDEN
           && access[2] == VConstants.ACS_HIDDEN
 
-  /**
-   * Returns the ident of this field
-   */
-  fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
+  override var ident: String = if (_isInternal) "ANONYMOUS!@#$%^&*()" else super.ident
 
   /**
    * Returns true if it is certain that the field will never be entered
@@ -654,7 +652,7 @@ open class FormField<T>(internal val block: Block,
 
   override fun genLocalization(writer: LocalizationWriter) {
     if (!_isInternal) {
-      (writer as FormLocalizationWriter).genField(label, label, help)
+      (writer as FormLocalizationWriter).genField(ident, label, help)
     }
   }
 

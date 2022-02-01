@@ -15,25 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.form
+package org.kopi.galite.visual.dsl.common
 
 import java.io.File
 
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.Window
-
 /**
- * A block on a form
- * A block contains fields and reference to database
- *
- * @param     shortcut        the shortcut of this block
+ * An element that can be inserted into a window. it can be form element, report element or chart element.
  */
-abstract class FormElement {
+abstract class WindowElement(ident: String? = null, open val source: String? = null) {
 
-  open lateinit var shortcut: String
-
-  val ident: String = javaClass.name.removePrefix("${javaClass.`package`.name}.")
-          .substringBeforeLast('$')
+  open var ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringAfterLast('$')
 
   /**
@@ -41,25 +32,11 @@ abstract class FormElement {
    */
   internal val sourceFile: String
     get() {
+      if(source != null) {
+        return source!!
+      }
+
       val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
     }
-
-  /**
-   * Make a tuning pass in order to create informations about exported elements
-   *
-   * @param window        the actual context of analyse
-   */
-  abstract fun initialize(window: Window)
-
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
-
-  abstract fun genLocalization(writer: LocalizationWriter)
-
-  /**
-   * Sets the page number
-   */
-  var pageNumber = 0
 }

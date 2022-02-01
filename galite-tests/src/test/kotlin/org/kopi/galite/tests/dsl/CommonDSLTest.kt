@@ -39,7 +39,8 @@ class CommonDSLTests : VApplicationTestBase() {
   @Test
   fun `test Command mode function`() {
     val menu = Menu("Test")
-    val actor = Actor("TActor", menu, "Test Actor", "Test Actor", 0)
+    val actor = Actor(menu, "Test Actor", "Test Actor")
+    actor.ident = "TActor"
     val command = Command(actor)
 
     assertEquals(MOD_ANY, command.mode) // default mode is MOD_ANY

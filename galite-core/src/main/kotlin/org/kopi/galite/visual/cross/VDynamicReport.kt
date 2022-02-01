@@ -128,7 +128,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * @return fields that will represent columns in the dynamic report.
    */
   private fun initFields(fields: Array<VField>): Array<VField> {
-    val processedFields = arrayListOf<VField>()
+    val processedFields = mutableListOf<VField>()
 
     fields.forEach { field ->
       // Images fields cannot be handled in dynamic reports
