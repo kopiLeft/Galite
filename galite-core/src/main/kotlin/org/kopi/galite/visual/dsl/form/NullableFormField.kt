@@ -29,12 +29,14 @@ class NullableFormField<T>(block: Block,
                            domain: Domain<T>,
                            fieldIndex: Int,
                            initialAccess: Int,
-                           position: FormPosition? = null)
+                           position: FormPosition? = null,
+                           ident: String? = null)
             : FormField<T>(block,
                            domain,
                            fieldIndex,
                            initialAccess,
-                           position) {
+                           position,
+                           ident) {
 
   /**
    * Assigns [columns] to this field.

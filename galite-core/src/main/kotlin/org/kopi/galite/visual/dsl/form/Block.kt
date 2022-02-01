@@ -151,7 +151,7 @@ open class Block(val title: String,
                                   position: FormPosition,
                                   init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
     initDomain(domain)
-    val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position)
+    val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
     field.init()
     field.initialize(this)
     fields.add(field)
@@ -209,7 +209,7 @@ open class Block(val title: String,
                                    access: Int,
                                    position: FormPosition? = null): FormField<T?> {
     initDomain(domain)
-    val field = NullableFormField(this, domain, fields.size, access, position)
+    val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
     field.init()
     field.initialize(this)
     fields.add(field)

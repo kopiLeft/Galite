@@ -53,7 +53,8 @@ open class FormField<T>(internal val block: Block,
                         domain: Domain<T>,
                         private val fieldIndex: Int,
                         initialAccess: Int,
-                        var position: FormPosition? = null) : Field<T>(domain) {
+                        var position: FormPosition? = null,
+                        ident: String? = null) : Field<T>(domain, ident) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
