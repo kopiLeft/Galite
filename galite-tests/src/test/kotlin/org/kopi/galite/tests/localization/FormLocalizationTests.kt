@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.local
+package org.kopi.galite.tests.localization
 
 import java.util.Locale
 
@@ -27,6 +27,9 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.tests.localization.actor.ExternActor
+import org.kopi.galite.tests.localization.block.ExternBlock
+import org.kopi.galite.tests.localization.menu.ExternMenu
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.common.Actor
@@ -51,7 +54,7 @@ import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FormLocalTests : GaliteVUITestBase() {
-  val form = LocalForm().also { it.model }
+  val form = LocalizedForm().also { it.model }
   val localizationManager = LocalizationManager(Locale.FRANCE, Locale.FRANCE)
 
   @Before
@@ -64,27 +67,31 @@ class FormLocalTests : GaliteVUITestBase() {
 
   @Test
   fun `test titles of form blocks`() {
-    val internBlock = localizationManager.getBlockLocalizer("org/kopi/galite/tests/local/LocalForm", "InternBlock")
-    val externBlock = localizationManager.getBlockLocalizer("org/kopi/galite/tests/local/ExternBlock", "ExternBlock")
+    val innerBlockLocalizer = localizationManager
+      .getBlockLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "InternBlock")
+    val externBlockLocalizer = localizationManager
+      .getBlockLocalizer("org/kopi/galite/tests/localization/block/ExternBlock", "ExternBlock")
+    val internBlockCaption = _find<VerticalLayout> { classes = "caption-container" }[0]
+      ._get<H4> { classes = "block-title" }
+    val externBlockCaption = _find<VerticalLayout> { classes = "caption-container" }[1]
+      ._get<H4> { classes = "block-title" }
 
-    val internBlockCaption =
-      _find<VerticalLayout> { classes = "caption-container" }[0]._get<H4> { classes = "block-title" }
-    assertEquals(internBlock.getTitle(), internBlockCaption.text)
-
-    val externBlockCaption =
-      _find<VerticalLayout> { classes = "caption-container" }[1]._get<H4> { classes = "block-title" }
-    assertEquals(externBlock.getTitle(), externBlockCaption.text)
+    assertEquals(innerBlockLocalizer.getTitle(), internBlockCaption.text)
+    assertEquals(externBlockLocalizer.getTitle(), externBlockCaption.text)
   }
 
   @Test
   fun `test fields label`() {
-    val internField = localizationManager.getBlockLocalizer("org/kopi/galite/tests/local/LocalForm", "InternBlock")
+    val internField = localizationManager
+      .getBlockLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "InternBlock")
       .getFieldLocalizer("FLD_0")
 
-    val externField = localizationManager.getBlockLocalizer("org/kopi/galite/tests/local/ExternBlock", "ExternBlock")
+    val externField = localizationManager
+      .getBlockLocalizer("org/kopi/galite/tests/localization/block/ExternBlock", "ExternBlock")
       .getFieldLocalizer("FLD_0")
 
-    val externField1 = localizationManager.getBlockLocalizer("org/kopi/galite/tests/local/ExternBlock", "ExternBlock")
+    val externField1 = localizationManager
+      .getBlockLocalizer("org/kopi/galite/tests/localization/block/ExternBlock", "ExternBlock")
       .getFieldLocalizer("FLD_1")
 
     val internLabel = _find<VerticalLayout> { classes = "k-block" }[0]._find<Span> { classes = "label" }[0]
@@ -102,9 +109,9 @@ class FormLocalTests : GaliteVUITestBase() {
     val actorPanel = _get<VActorPanel> { id = "actors" }
     val actors = actorPanel._find<org.kopi.galite.visual.ui.vaadin.actor.Actor> { classes = "k-actor" }
 
-    val reportActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/local/LocalForm", "actor0")
-    val internActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/local/InternActor", "actor1")
-    val listActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/local/List", "actor2")
+    val reportActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "actor0")
+    val internActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/InternActor", "actor1")
+    val listActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/list/List", "actor2")
 
     assertEquals(reportActor.getLabel(), actors[0]._text)
     assertEquals(internActor.getLabel(), actors[1]._text)
@@ -115,8 +122,8 @@ class FormLocalTests : GaliteVUITestBase() {
   fun `test menu names`() {
     val button = _get<Button> { classes = "actors-rootNavigationItem" }
 
-    val internMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/local/InternMenu", "Intern Menu")
-    val externMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/local/ExternMenu", "Extern Menu")
+    val internMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/InternMenu", "Intern Menu")
+    val externMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/ExternMenu", "Extern Menu")
 
     button.click()
     _expect<Dialog> {  }
@@ -146,7 +153,7 @@ class FormLocalTests : GaliteVUITestBase() {
   }
 }
 
-class LocalForm: Form(title = "Form", locale = Locale.FRANCE) {
+class LocalizedForm: Form(title = "Form", locale = Locale.FRANCE) {
 
   val dynamicReport = actor(
     menu = ExternMenu(),
@@ -157,8 +164,8 @@ class LocalForm: Form(title = "Form", locale = Locale.FRANCE) {
     icon = Icon.REPORT
   }
 
-  val internActor = actor(InternActor())
-  val externActor = actor(List())
+  val internActor = actor(ExternActor())
+  val externActor = actor(org.kopi.galite.tests.localization.list.List())
 
   val internBlock = insertBlock(InternBlock())
   val externBlock = insertBlock(ExternBlock())
@@ -177,15 +184,4 @@ class LocalForm: Form(title = "Form", locale = Locale.FRANCE) {
   }
 
   inner class InternMenu : Menu("Intern Menu")
-
-  inner class InternActor: Actor(
-    menu = InternMenu(),
-    label = "Intern Actor",
-    help = "Intern Actorhelp",
-  ) {
-    init {
-      key = Key.F9
-      icon = Icon.COLUMN_CHART
-    }
-  }
 }

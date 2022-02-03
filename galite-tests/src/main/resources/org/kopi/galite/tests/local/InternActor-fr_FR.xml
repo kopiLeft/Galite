@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<insert>
-    <actor ident="actor1" label="ACTOR en Interne" help="Donne la liste des valeurs possibles." />
-</insert>
