@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <block name="ExternBlock" title="Extern Block">
+        <field ident="FLD_0" label="Extern Field" help="" />
+        <field ident="FLD_1" label="Extern Field 2" help="" />
+    </block>
+</form>

@@ -20,13 +20,13 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Border
 
-class ExternBlock: Block("Extern Block", 1, 1) {
+class ExternBlock: Block("Block Externe", 1, 1) {
   val field = visit(domain = INT(30), position = at(1, 1)) {
-    label = "extern field"
+    label = "field externe"
   }
 
   val field3 = visit(domain = INT(30), position = at(2, 1)) {
-    label = "extern field 2"
+    label =  "field externe 2"
   }
 
   init {

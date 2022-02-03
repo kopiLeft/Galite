@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Form for Test">
+    <menu ident="Menu Interne" label="Intern Menu" />
+    <actor ident="actor0" label="Intern Actor" help="" />
+    <block name="InternBlock" title="Intern Block">
+        <field ident="FLD_0" label="field in intern block" help="" />
+    </block>
+</form>

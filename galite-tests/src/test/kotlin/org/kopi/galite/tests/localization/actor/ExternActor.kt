@@ -23,8 +23,8 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class ExternActor: Actor(
   menu = ExternMenu(),
-  label = "Intern Actor",
-  help = "Intern Actorhelp",
+  label = "Actor Externe",
+  help = "Actor Externe help",
 ) {
   init {
     key = Key.F9

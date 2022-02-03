@@ -18,4 +18,4 @@ package org.kopi.galite.tests.localization.menu
 
 import org.kopi.galite.visual.dsl.common.Menu
 
-class ExternMenu : Menu("Extern Menu")
+class ExternMenu : Menu("Menu Externe")

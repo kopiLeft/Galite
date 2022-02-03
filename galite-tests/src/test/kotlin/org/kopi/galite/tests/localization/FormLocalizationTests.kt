@@ -29,12 +29,9 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.localization.actor.ExternActor
 import org.kopi.galite.tests.localization.block.ExternBlock
-import org.kopi.galite.tests.localization.menu.ExternMenu
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.Form
@@ -55,7 +52,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FormLocalTests : GaliteVUITestBase() {
   val form = LocalizedForm().also { it.model }
-  val localizationManager = LocalizationManager(Locale.FRANCE, Locale.FRANCE)
+  val localizationManager = LocalizationManager(Locale.UK, Locale.UK)
 
   @Before
   fun `login to the App`() {
@@ -109,21 +106,19 @@ class FormLocalTests : GaliteVUITestBase() {
     val actorPanel = _get<VActorPanel> { id = "actors" }
     val actors = actorPanel._find<org.kopi.galite.visual.ui.vaadin.actor.Actor> { classes = "k-actor" }
 
-    val reportActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "actor0")
-    val internActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/InternActor", "actor1")
-    val listActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/list/List", "actor2")
+    val internActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "actor0")
+    val externActor = localizationManager.getActorLocalizer("org/kopi/galite/tests/localization/actor/ExternActor", "actor1")
 
-    assertEquals(reportActor.getLabel(), actors[0]._text)
-    assertEquals(internActor.getLabel(), actors[1]._text)
-    assertEquals(listActor.getLabel(), actors[2]._text)
+    assertEquals(internActor.getLabel(), actors[0]._text)
+    assertEquals(externActor.getLabel(), actors[1]._text)
   }
 
   @Test
   fun `test menu names`() {
     val button = _get<Button> { classes = "actors-rootNavigationItem" }
 
-    val internMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/InternMenu", "Intern Menu")
-    val externMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/ExternMenu", "Extern Menu")
+    val internMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "Menu Interne")
+    val externMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/menu/ExternMenu", "Menu Externe")
 
     button.click()
     _expect<Dialog> {  }
@@ -153,35 +148,33 @@ class FormLocalTests : GaliteVUITestBase() {
   }
 }
 
-class LocalizedForm: Form(title = "Form", locale = Locale.FRANCE) {
+class LocalizedForm: Form(title = "Formulaire", locale = Locale.FRANCE) {
+  val  internMenu = menu("Menu Interne")
 
-  val dynamicReport = actor(
-    menu = ExternMenu(),
-    label = "DynamicReport",
-    help = " Create Dynamic Report",
+  val internActor = actor(
+    menu = internMenu,
+    label = "Actor Interne",
+    help = "",
   ) {
     key = Key.F6
     icon = Icon.REPORT
   }
 
-  val internActor = actor(ExternActor())
-  val externActor = actor(org.kopi.galite.tests.localization.list.List())
+  val externActor = actor(ExternActor())
 
   val internBlock = insertBlock(InternBlock())
   val externBlock = insertBlock(ExternBlock())
 
-  inner class InternBlock: Block("Intern Block", 1, 1) {
+  inner class InternBlock: Block("Block Interne", 1, 1) {
     val field = visit(domain = INT(30), position = at(1, 1)) {
-      label = "Intern field"
+      label = "field interne"
     }
 
     init {
       border = Border.LINE
-      command(item = dynamicReport) {}
       command(item = internActor) {}
       command(item = externActor) {}
+
     }
   }
-
-  inner class InternMenu : Menu("Intern Menu")
 }
