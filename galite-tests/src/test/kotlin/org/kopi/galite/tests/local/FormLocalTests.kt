@@ -146,7 +146,7 @@ class FormLocalTests : GaliteVUITestBase() {
   }
 }
 
-class LocalForm: Form(title = "Form", locale = Locale.ENGLISH) {
+class LocalForm: Form(title = "Form", locale = Locale.FRANCE) {
 
   val dynamicReport = actor(
     menu = ExternMenu(),
