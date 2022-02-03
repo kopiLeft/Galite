@@ -20,6 +20,7 @@ import java.util.Locale
 
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.streams.toList
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
@@ -38,16 +39,30 @@ import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.ui.vaadin.window.VActorPanel
+import org.kopi.galite.tests.localization.code.ExternCode
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
+import org.kopi.galite.visual.ui.vaadin.field.VCodeField
+import org.junit.Ignore
+import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.tests.localization.list.ExternList
+import org.kopi.galite.visual.db.Users
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.form.DListDialog
+import org.kopi.galite.visual.ui.vaadin.list.GridListDialog
+import org.kopi.galite.visual.ui.vaadin.list.ListTable
 
 import com.github.mvysny.kaributesting.v10._expect
+import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FormLocalTests : GaliteVUITestBase() {
@@ -79,25 +94,29 @@ class FormLocalTests : GaliteVUITestBase() {
 
   @Test
   fun `test fields label`() {
-    val internField = localizationManager
+    val localizationInternBlock = localizationManager
       .getBlockLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "InternBlock")
-      .getFieldLocalizer("FLD_0")
-
-    val externField = localizationManager
+    val localizationExternBlock = localizationManager
       .getBlockLocalizer("org/kopi/galite/tests/localization/block/ExternBlock", "ExternBlock")
-      .getFieldLocalizer("FLD_0")
 
-    val externField1 = localizationManager
-      .getBlockLocalizer("org/kopi/galite/tests/localization/block/ExternBlock", "ExternBlock")
-      .getFieldLocalizer("FLD_1")
+    val internField = localizationInternBlock.getFieldLocalizer("FLD_0")
+    val codeInternField = localizationInternBlock.getFieldLocalizer("FLD_1")
+    val listInternField = localizationInternBlock.getFieldLocalizer("FLD_2")
+    val externField = localizationExternBlock.getFieldLocalizer("FLD_0")
+    val externField1 = localizationExternBlock.getFieldLocalizer("FLD_1")
 
-    val internLabel = _find<VerticalLayout> { classes = "k-block" }[0]._find<Span> { classes = "label" }[0]
+    val firstBlock = _find<VerticalLayout> { classes = "k-block" }[0]
+    val secondBlock = _find<VerticalLayout> { classes = "k-block" }[1]
+    val internLabel = firstBlock._find<Span> { classes = "label" }[0]
+    val codeInternLabel = firstBlock._find<Span> { classes = "label" }[1]
+    val listInternLabel = firstBlock._find<Span> { classes = "label" }[2]
+    val externLabel = secondBlock._find<Span> { classes = "label" }[0]
+    val externLabel1 = secondBlock._find<Span> { classes = "label" }[1]
+
     assertEquals(internField.getLabel(), internLabel.text)
-
-    val externLabel = _find<VerticalLayout> { classes = "k-block" }[1]._find<Span> { classes = "label" }[0]
+    assertEquals(codeInternField.getLabel(), codeInternLabel.text)
+    assertEquals(listInternField.getLabel(), listInternLabel.text)
     assertEquals(externField.getLabel(), externLabel.text)
-
-    val externLabel1 = _find<VerticalLayout> { classes = "k-block" }[1]._find<Span> { classes = "label" }[1]
     assertEquals(externField1.getLabel(), externLabel1.text)
   }
 
@@ -117,8 +136,10 @@ class FormLocalTests : GaliteVUITestBase() {
   fun `test menu names`() {
     val button = _get<Button> { classes = "actors-rootNavigationItem" }
 
-    val internMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "Menu Interne")
-    val externMenu = localizationManager.getMenuLocalizer("org/kopi/galite/tests/localization/menu/ExternMenu", "Menu Externe")
+    val internMenu = localizationManager
+      .getMenuLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "Menu Interne")
+    val externMenu = localizationManager
+      .getMenuLocalizer("org/kopi/galite/tests/localization/menu/ExternMenu", "Menu Externe")
 
     button.click()
     _expect<Dialog> {  }
@@ -133,8 +154,49 @@ class FormLocalTests : GaliteVUITestBase() {
     val headers = _find<Span> { classes = "header" }.map { it._get<Div> {  } }
 
     assertEquals("File", headers[0].text)
-    assertEquals(internMenu.getLabel(), headers[1].text)
-    assertEquals(externMenu.getLabel(), headers[2].text)
+    assertEquals(externMenu.getLabel(), headers[1].text)
+    assertEquals(internMenu.getLabel(), headers[2].text)
+  }
+
+  @Ignore
+  @Test
+  fun `test code type`() {
+    val localizationType = localizationManager
+      .getTypeLocalizer("org/kopi/galite/tests/localization/ExternCode", "ExternCode")
+    val firstCode = localizationType.getCodeLabel("id$0")
+    val secondCode = localizationType.getCodeLabel("id$1")
+
+    val comboBox = _find<VCodeField> { classes = "k-textinput" }[0]
+    val items = comboBox.content.genericDataView.items.toList()
+
+    assertEquals(firstCode, items[0])
+    assertEquals(secondCode, items[1])
+  }
+
+  @Ignore
+  @Test
+  fun `test list type`() {
+    val localizationList = localizationManager
+      .getListLocalizer("org/kopi/galite/tests/localization/ExternList", "ExternList")
+    val id = localizationList.getColumnTitle("ID")
+    val trainingName = localizationList.getColumnTitle("Name")
+
+    val trainingField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[2]
+    val autofill = trainingField._get<IronIcon> {}
+
+    autofill._clickAndWait(500)
+
+    // Check that the list dialog is displayed
+     _expectOne<GridListDialog>()
+
+    val listDialog = _get<GridListDialog>()
+     listDialog._expectOne<Grid<*>>()
+
+    val grid = _get<DListDialog>()._get<ListTable>()
+    val titles =  grid.model.titles
+
+    assertEquals(id, titles[0])
+    assertEquals(trainingName, titles[1])
   }
 
   companion object {
@@ -143,6 +205,7 @@ class FormLocalTests : GaliteVUITestBase() {
     fun initTestModules() {
       transaction {
         initModules()
+        initDatabase()
       }
     }
   }
@@ -162,19 +225,35 @@ class LocalizedForm: Form(title = "Formulaire", locale = Locale.FRANCE) {
 
   val externActor = actor(ExternActor())
 
+  val autoFill = actor(
+    menu = internMenu,
+    label = "Autofill",
+    help = "Autofill",
+    command = PredefinedCommand.AUTOFILL
+  )
+
   val internBlock = insertBlock(InternBlock())
   val externBlock = insertBlock(ExternBlock())
 
-  inner class InternBlock: Block("Block Interne", 1, 1) {
+  inner class InternBlock: Block("Block Interne", 1, 10) {
+    val u = table(Users)
+
     val field = visit(domain = INT(30), position = at(1, 1)) {
       label = "field interne"
+    }
+
+    val active = visit(domain = ExternCode(), position = at(2, 1)) {
+      label = "code field interne 2"
+    }
+
+    val training = visit(domain = ExternList(), position = at(3, 1)) {
+      label = "nom du formation"
     }
 
     init {
       border = Border.LINE
       command(item = internActor) {}
       command(item = externActor) {}
-
     }
   }
 }
