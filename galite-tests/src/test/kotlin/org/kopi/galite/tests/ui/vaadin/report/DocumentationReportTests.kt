@@ -43,9 +43,9 @@ import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 
 class DocumentationReportTests : GaliteVUITestBase() {
-  val simpleReportForm = DocumentationReport().also { it.model }
-  val triggersReportForm = DocumentationReportTriggers().also { it.model }
-  val triggersReport = DocumentationReportTriggersR().also { it.model }
+  val simpleReportForm = DocumentationReport()
+  val triggersReportForm = DocumentationReportTriggers()
+  val triggersReport = DocumentationReportTriggersR()
 
   @Before
   fun `login to the App`() {

@@ -76,7 +76,7 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.data.provider.SortDirection
 
 class DocumentationFieldsFormTests : GaliteVUITestBase() {
-  val form = DocumentationFieldsForm().also { it.model }
+  val form = DocumentationFieldsForm()
 
   @Before
   fun `login to the App`() {

@@ -30,6 +30,7 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.WindowController
 
@@ -100,6 +101,17 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     }
     block.initialize(this)
     blocks.add(block)
+
+    val vBlock = block.getBlockModel(model)
+    vBlock.setInfo(block.pageNumber, model)
+    vBlock.initIntern()
+    block.fields.forEach { formField ->
+      formField.initialValues.forEach {
+        formField.vField.setObject(it.key, it.value)
+      }
+    }
+
+    model.addBlock(vBlock)
     return block
   }
 
@@ -120,8 +132,19 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     val event = formEventList(formTriggerEvents)
     val formAction = Action(null, method)
     val trigger = FormTrigger(event, formAction)
+
     triggers.add(trigger)
+    for (i in VConstants.TRG_TYPES.indices) {
+      if (trigger.events shr i and 1 > 0) {
+        model.VKT_Triggers[0][i] = trigger
+      }
+    }
+
     return trigger
+  }
+
+  override fun addCommandTrigger() {
+    model.VKT_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
   }
 
   private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent<*>>): Long {
@@ -144,7 +167,10 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    */
   fun page(title: String): FormPage {
     val page = FormPage(pages.size, "Id\$${pages.size}", title, this)
+
     pages.add(page)
+    model.pages.add(page.title)
+
     return page
   }
 
@@ -157,9 +183,9 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage(pages.size, "Id\$${pages.size}", title, this)
+    val page = page(title)
+
     page.init()
-    pages.add(page)
     return page
   }
 
@@ -290,5 +316,15 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // ----------------------------------------------------------------------
   // FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VForm by lazy { FormModel(this) }
+
+  override val model: VForm = object : VForm() {
+    init {
+      source = sourceFile // TODO: move to VWindow
+      setTitle(title)
+    }
+
+    override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale() // TODO!!
+
+    override fun formClassName(): String = this@Form.javaClass.name
+  }
 }

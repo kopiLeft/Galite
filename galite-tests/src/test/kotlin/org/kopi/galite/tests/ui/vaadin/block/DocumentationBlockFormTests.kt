@@ -57,7 +57,7 @@ import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class DocumentationBlockFormTests : GaliteVUITestBase() {
-  val form = DocumentationBlockForm().also { it.model }
+  val form = DocumentationBlockForm()
 
   @Before
   fun `login to the App`() {

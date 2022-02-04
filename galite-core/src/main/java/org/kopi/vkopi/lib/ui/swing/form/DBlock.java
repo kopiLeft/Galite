@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Insets;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -88,11 +89,11 @@ public class DBlock extends JPanel implements UBlock {
   }
 
   protected void createFields() {
-    VField[]  fields = model.getFields();
+    List<VField> fields = model.getFields();
 
-    columnViews = new VFieldUI[fields.length];
-    for (int i = 0; i < fields.length; i++) {
-      columnViews[i] = createFieldDisplays(fields[i]);
+    columnViews = new VFieldUI[fields.size()];
+    for (int i = 0; i < fields.size(); i++) {
+      columnViews[i] = createFieldDisplays(fields.get(i));
     }
   }
 

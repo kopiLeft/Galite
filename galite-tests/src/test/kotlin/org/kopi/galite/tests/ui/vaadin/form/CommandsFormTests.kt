@@ -65,8 +65,8 @@ import com.github.mvysny.kaributesting.v10.expectRow
 
 class CommandsFormTests : GaliteVUITestBase() {
 
-  val form = CommandsForm().also { it.model }
-  val multipleForm = MultipleBlockForm().also { it.model }
+  val form = CommandsForm()
+  val multipleForm = MultipleBlockForm()
 
   @Before
   fun `login to the App`() {

@@ -100,7 +100,7 @@ open class Domain<T>(val width: Int? = null,
    * Builds the form field model
    */
   open fun buildFormFieldModel(formField: FormField<T>): VField {
-    return with(formField) {
+    val model = with(formField) {
       when (kClass) {
         Int::class, Long::class -> VIntegerField(block.buffer,
                                                  width ?: 0,
@@ -152,6 +152,10 @@ open class Domain<T>(val width: Int? = null,
         }
       }
     }
+
+    model.block = formField.block.block
+
+    return model
   }
 
   /**

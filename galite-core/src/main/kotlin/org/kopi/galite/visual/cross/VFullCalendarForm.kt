@@ -55,6 +55,12 @@ abstract class VFullCalendarForm : VForm() {
     addActors(actorsDef.toTypedArray())
   }
 
+  override fun addActors(actorDefs: Array<VActor>?) {
+    val actorDefs = actorDefs.orEmpty()
+
+    actors.addAll(actorDefs)
+  }
+
   fun mode(vararg access: Int): Int {
     var mode = 0
     for (item in access) {
@@ -102,12 +108,11 @@ abstract class VFullCalendarForm : VForm() {
   // Default Commands
   // ----------------------------------------------------------------------
   protected fun initDefaultCommands() {
-    super.commands = arrayOf()
-    block.commands = block.commands?.plus(commandsDef.toTypedArray()) ?: commandsDef.toTypedArray()
+    block.commands.addAll(commandsDef)
 
     commandsDef.forEach {
       val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-      block.VKT_Triggers.add(fieldTriggerArray)
+      block.VKT_Command_Triggers.add(fieldTriggerArray)
     }
   }
 

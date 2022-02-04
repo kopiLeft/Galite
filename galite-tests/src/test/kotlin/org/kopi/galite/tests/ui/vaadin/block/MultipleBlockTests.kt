@@ -44,7 +44,7 @@ import com.github.mvysny.kaributesting.v10.expectRow
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
-  val formExample = FormExample().also { it.model }
+  val formExample = FormExample()
 
   @Before
   fun `login to the App`() {

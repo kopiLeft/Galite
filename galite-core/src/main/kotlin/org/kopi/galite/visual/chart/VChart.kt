@@ -105,21 +105,22 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
   var chartType: VChartType? = null  // chart type
     private set
 
-  protected var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)) // trigger list
-
-  protected var commands: Array<VCommand>? = null // commands
+  val VKT_Chart_Triggers = listOf(arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size))
+  val VKT_Dimension_Triggers = mutableListOf<Array<Trigger?>>()
+  val VKT_Measure_Triggers = mutableListOf<Array<Trigger?>>()
+  val VKT_Commands_Triggers = mutableListOf<Array<Trigger?>>()
   private val activeCommands: ArrayList<VCommand> = ArrayList()
   var printOptions: VPrintOptions = VPrintOptions()
 
   /**
    * The chart dimensions. The actual version supports only one dimension
    */
-  protected lateinit var dimensions: Array<VDimension>
+  internal var dimensions = listOf<VDimension>() // TODO: should be protected
 
   /**
    * The chart measures.
    */
-  protected lateinit var measures: Array<VMeasure>
+  internal val measures = mutableListOf<VMeasure>() // TODO: should be protected
   private val rows: ArrayList<VRow> = ArrayList(500)
 
   init {
@@ -141,7 +142,6 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
 
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
     // localizes the actors in VWindow
-    super.localizeActors(manager)
     localize(manager)
     manager = null
   }
@@ -274,7 +274,7 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
           cmdPieView = it
         }
         else -> {
-          setCommandEnabled(it, getColumnCount() + i + 1, true)
+          setCommandEnabled(it, i, true)
         }
       }
     }
@@ -433,12 +433,12 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
     var enable = enable
 
     if (enable) {
-      // we need to check if VKT_Triggers is initialized
+      // we need to check if VKT_Commands_Triggers is not empty
       // ex : org.kopi.galite.visual.cross.VDynamicReport
-      if (VKT_Triggers != null && hasTrigger(CConstants.TRG_CMDACCESS, index)) {
+      if (VKT_Commands_Triggers.isNotEmpty() && hasCommandTrigger(CConstants.TRG_CMDACCESS, index)) {
 
         val active = try {
-          (callTrigger(CConstants.TRG_CMDACCESS, index) as Boolean)
+          (callCommandTrigger(CConstants.TRG_CMDACCESS, index) as Boolean)
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
           true
@@ -498,13 +498,41 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  protected fun callTrigger(event: Int, index: Int = 0): Any? {
+  protected fun callTrigger(event: Int): Any? {
+    return callTrigger(event, 0, VKT_Chart_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  protected fun callDimensionTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Dimension_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  protected fun callMeasureTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Measure_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  protected fun callCommandTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Commands_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  private fun callTrigger(event: Int, index: Int, triggers: List<Array<Trigger?>>): Any? {
     return when (CConstants.TRG_TYPES[event]) {
       CConstants.TRG_VOID -> {
-        executeVoidTrigger(VKT_Triggers[index][event])
+        executeVoidTrigger(triggers[index][event])
         null
       }
-      CConstants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
+      CConstants.TRG_OBJECT -> executeObjectTrigger(triggers[index][event])
       else -> throw InconsistencyException("BAD TYPE" + CConstants.TRG_TYPES[event])
     }
   }
@@ -512,7 +540,12 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
   /**
    * Returns true if there is trigger associated with given event.
    */
-  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != null
+  internal fun hasTrigger(event: Int): Boolean = VKT_Chart_Triggers[0][event] != null
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  internal fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Commands_Triggers[index][event] != null
 
   /**
    * Returns the dimension column.
@@ -612,9 +645,4 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
    * @throws VException Visual errors.
    */
   protected abstract fun init()
-
-  /**
-   * Adds a data row to this chart.
-   */
-  abstract fun add()
 }

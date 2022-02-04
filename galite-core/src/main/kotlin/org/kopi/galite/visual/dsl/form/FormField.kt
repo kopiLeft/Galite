@@ -184,6 +184,11 @@ open class FormField<T>(internal val block: Block,
     }
     command.action = action
     commands.add(command)
+
+    // FIELDS COMMANDS TRIGGERS
+    // TODO : Add field commands triggers here
+    block.block.VKT_Field_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
+
     return command
   }
 
@@ -406,9 +411,15 @@ open class FormField<T>(internal val block: Block,
     return self
   }
 
+  private val _isInternal = access[0] == VConstants.ACS_HIDDEN
+          && access[1] == VConstants.ACS_HIDDEN
+          && access[2] == VConstants.ACS_HIDDEN
+
   ///////////////////////////////////////////////////////////////////////////
   // FIELD MODEL
   ///////////////////////////////////////////////////////////////////////////
+
+  override var ident: String = if (_isInternal) "ANONYMOUS!@#$%^&*()" else super.ident
 
   /**
    * The field model based on the field type.
@@ -441,7 +452,7 @@ open class FormField<T>(internal val block: Block,
       columns?.getColumnsModels()?.toTypedArray(), // TODO
       columns?.index?.indexNumber ?: 0,
       columns?.priority ?: 0,
-      commands.map { it.buildModel(block.block, form.actors) }.toTypedArray(),
+      commands.map { it.buildModel(block.block, it.item.model) }.toTypedArray(),
       position?.getPositionModel(),
       align.value,
       null // TODO
@@ -501,12 +512,6 @@ open class FormField<T>(internal val block: Block,
    */
   val isInternal: Boolean
     get() = vField.isInternal()
-
-  private val _isInternal = access[0] == VConstants.ACS_HIDDEN
-          && access[1] == VConstants.ACS_HIDDEN
-          && access[2] == VConstants.ACS_HIDDEN
-
-  override var ident: String = if (_isInternal) "ANONYMOUS!@#$%^&*()" else super.ident
 
   /**
    * Returns true if it is certain that the field will never be entered

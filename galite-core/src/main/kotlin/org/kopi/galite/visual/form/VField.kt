@@ -75,6 +75,7 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VModel
 import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.VlibProperties
 
 /**
@@ -1701,7 +1702,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (isNull(block!!.activeRecord) || list == null) {
       return
     }
-    val alreadyProtected: Boolean = getForm().inTransaction()
+    val alreadyProtected: Boolean = VWindow.inTransaction()
 
     if (this !is VStringField) {
       var exists = false
@@ -2194,17 +2195,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Calls trigger for given event.
    */
-  fun callTrigger(event: Int): Any? = block!!.callTrigger(event, index + 1)
+  fun callTrigger(event: Int): Any? = block!!.callFieldTrigger(event, index)
 
   /**
    * Calls trigger for given event.
    */
-  fun callProtectedTrigger(event: Int): Any? = block!!.callProtectedTrigger(event, index + 1)
+  fun callProtectedTrigger(event: Int): Any? = block!!.callProtectedFieldTrigger(event, index)
 
   /**
    * return if there is trigger associated with event
    */
-  fun hasTrigger(event: Int): Boolean = block!!.hasTrigger(event, index + 1)
+  fun hasTrigger(event: Int): Boolean = block!!.hasFieldTrigger(event, index)
 
   /**
    * Calls trigger for given event.

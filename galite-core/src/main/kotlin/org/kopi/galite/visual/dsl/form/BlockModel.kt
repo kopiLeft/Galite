@@ -19,14 +19,8 @@ package org.kopi.galite.visual.dsl.form
 import java.util.Locale
 
 import org.kopi.galite.visual.cross.VFullCalendarForm
-import org.kopi.galite.visual.dsl.common.Command
-import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.form.VTimeField
-import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VDefaultActor
 
@@ -43,17 +37,25 @@ class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VB
   }
 }
 
-class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: String? = null): VFullCalendarBlock(vForm) {
+fun VBlock.initializeBlock(block: Block, formSource: String?) {
+  this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
+  title = block.title
+  help = block.help
+  bufferSize = block.buffer
+  displaySize = block.visible
+  pageNumber = block.pageNumber
+  border = block.border.value
+  maxRowPos = block.maxRowPos
+  maxColumnPos = block.maxColumnPos
+  displayedFields = block.displayedFields
+  name = block.ident
+  options = block.options
+  access = block.access
+  alignment = block.align?.getBlockAlignModel()
+  dropListMap = block.dropListMap
+}
 
-  init {
-    fullCalendarForm = buildFullCalendarForm()
-    initializeBlock(block, formSource)
-    dateField = block.dateField?.vField as? VDateField
-    fromTimeField = block.fromTimeField?.vField as? VTimeField
-    toTimeField = block.toTimeField?.vField as? VTimeField
-    fromField = block.fromField?.vField as? VTimestampField
-    toField = block.toField?.vField as? VTimestampField
-  }
+class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
 
   override fun setInfo(form: VForm) {
     block.fields.forEach {
@@ -61,18 +63,17 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: 
     }
   }
 
-  private fun buildFullCalendarForm(): VFullCalendarForm {
+  fun buildFullCalendarForm(): VFullCalendarForm {
     return object : VFullCalendarForm() {
 
       init {
         init()
-        initIntern()
         initDefaultActors()
         initDefaultCommands()
       }
 
       override val locale: Locale?
-        get() = form.locale
+        get() = this@FullCalendarBlockModel.block.form.locale
       override val fullCalendarBlock: VFullCalendarBlock
         get() = this@FullCalendarBlockModel
 
@@ -90,104 +91,15 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: 
                           || actor.code == CMD_NEWITEM)
 
         }.toTypedArray()
-        addActors(defaultActors.requireNoNulls())
+        addActors(defaultActors)
 
         dBContext = vSimpleBlock.dBContext
-        blocks = arrayOf(vSimpleBlock)
+        addBlock(vSimpleBlock)
         source = vSimpleBlock.source
         setTitle(vSimpleBlock.title)
-        pages = arrayOf()
-        pagesIdents = arrayOf()
       }
 
       override fun formClassName(): String = block.javaClass.name
     }
   }
-}
-
-fun VBlock.initializeBlock(block: Block, formSource: String?) {
-  handleTriggers(block)
-
-  this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-  title = block.title
-  help = block.help
-  bufferSize = block.buffer
-  displaySize = block.visible
-  pageNumber = block.pageNumber
-  border = block.border.value
-  maxRowPos = block.maxRowPos
-  maxColumnPos = block.maxColumnPos
-  displayedFields = block.displayedFields
-  commands = block.commands.map { command ->
-    command.buildModel(this, form.actors)
-  }.toTypedArray()
-  name = block.ident
-  options = block.options
-  access = block.access
-  tables = block.tables.map {
-    it.table
-  }.toTypedArray()
-  fields = block.fields.map { formField ->
-    formField.vField
-  }.toTypedArray()
-  indices = block.indices.map {
-    it.message
-  }.toTypedArray()
-  indicesIdents = block.indices.map {
-    it.ident
-  }.toTypedArray()
-  alignment = block.align?.getBlockAlignModel()
-  dropListMap = block.dropListMap
-}
-
-/**
- * Handling triggers
- */
-fun VBlock.handleTriggers(block: Block) {
-  // BLOCK TRIGGERS
-  val blockTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-
-  block.triggers.forEach { trigger ->
-    for (i in VConstants.TRG_TYPES.indices) {
-      if (trigger.events shr i and 1 > 0) {
-        blockTriggerArray[i] = trigger
-      }
-    }
-    VKT_Triggers[0] = blockTriggerArray
-  }
-
-  // FIELD TRIGGERS
-  block.fields.forEach { field ->
-    val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-
-    field.triggers.forEach { trigger ->
-      for (i in VConstants.TRG_TYPES.indices) {
-        if (trigger.events shr i and 1 > 0) {
-          fieldTriggerArray[i] = trigger
-        }
-      }
-    }
-    VKT_Triggers.add(fieldTriggerArray)
-  }
-
-  // COMMANDS TRIGGERS
-  block.commands.forEach {
-    val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-    // TODO : Add commands triggers here
-    VKT_Triggers.add(fieldTriggerArray)
-  }
-
-  // FIELDS COMMANDS TRIGGERS
-  val fieldsCommands = getFieldsCommands(block)
-  fieldsCommands.forEach {
-    val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-    // TODO : Add field commands triggers here
-    VKT_Triggers.add(fieldTriggerArray)
-  }
-}
-
-fun getFieldsCommands(block: Block): List<Command> {
-  return block.fields.map {
-    it.commands
-  }.flatten()
 }

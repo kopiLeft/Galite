@@ -22,7 +22,6 @@ import java.awt.event.KeyEvent
 import java.io.File
 import java.net.MalformedURLException
 import java.text.MessageFormat
-import java.util.Locale
 
 import kotlin.jvm.Throws
 
@@ -96,8 +95,9 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
-  protected var VKT_Triggers: MutableList<Array<Trigger?>>? = null
-  var commands: Array<VCommand?>? = null
+  var VKT_Report_Triggers = mutableListOf<Array<Trigger?>>(arrayOfNulls(Constants.TRG_TYPES.size))
+  var VKT_Fields_Triggers = mutableListOf<Array<Trigger?>>()
+  var VKT_Commands_Triggers = mutableListOf<Array<Trigger?>>()
   private val activeCommands = ArrayList<VCommand>()
   var printOptions: PConfig = PConfig() // The print options
   var media: String? = null             // The media for this document
@@ -138,7 +138,6 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
 
   /**
    * initialise fields
-   * @exception        org.kopi.galite.visual.visual.VException        may be raised by triggers
    */
   protected abstract fun init()
 
@@ -146,6 +145,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
    * build everything after loading
    */
   protected fun build() {
+    init()
     model.build()
     model.createTree()
     (getDisplay() as UReport?)?.build()
@@ -164,7 +164,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
         vCommand.getIdent() == "ColumnInfo" -> cmdColumnInfo = vCommand
         vCommand.getIdent() == "EditColumnData" -> cmdEditColumn = vCommand
         else -> {
-          setCommandEnabled(vCommand, model.getModelColumnCount() + i + 1, true)
+          setCommandEnabled(vCommand, i, true)
         }
       }
     }
@@ -176,19 +176,16 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+  override fun getLocalizationManger(): LocalizationManager {
+    return LocalizationManager(ApplicationContext.getDefaultLocale(), ApplicationContext.getDefaultLocale())
+  }
+
   /**
    * Localizes this report
    *
-   * @param     locale  the locale to use
    */
-  open fun localize(locale: Locale?) {
-    var manager: LocalizationManager?
-    manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
-
-    // localizes the actors in VWindow
-    super.localizeActors(manager)
+  open fun localize() {
     localize(manager)
-    manager = null
   }
 
   /**
@@ -223,12 +220,12 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
     var enable = enable
 
     if (enable) {
-      // we need to check if VKT_Triggers is initialized
+      // we need to check if VKT_Triggers is not empty
       // ex : org.kopi.galite.visual.cross.VDynamicReport
-      if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
+      if (VKT_Commands_Triggers.isNotEmpty() && hasCommandTrigger(Constants.TRG_CMDACCESS, index)) {
 
         val active: Boolean = try {
-          callTrigger(Constants.TRG_CMDACCESS, index) as Boolean
+          callCommandTrigger(Constants.TRG_CMDACCESS, index) as Boolean
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
           true
@@ -533,14 +530,35 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  internal fun callTrigger(event: Int, index: Int = 0): Any? {
+  internal fun callCommandTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Commands_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  internal fun callTrigger(event: Int): Any? {
+    return callTrigger(event, 0, VKT_Report_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  internal fun callFieldTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Fields_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  private fun callTrigger(event: Int, index: Int, triggers: List<Array<Trigger?>>): Any? {
     return when (Constants.TRG_TYPES[event]) {
       Constants.TRG_VOID -> {
-        executeVoidTrigger(VKT_Triggers!![index][event])
+        executeVoidTrigger(triggers[index][event])
         null
       }
-      Constants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers!![index][event])
-      Constants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers!![index][event])
+      Constants.TRG_OBJECT -> executeObjectTrigger(triggers[index][event])
+      Constants.TRG_BOOLEAN -> executeBooleanTrigger(triggers[index][event])
       else -> throw InconsistencyException("BAD TYPE" + Constants.TRG_TYPES[event])
     }
   }
@@ -548,7 +566,12 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Returns true if there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != null
+  protected fun hasTrigger(event: Int): Boolean = VKT_Report_Triggers[0][event] != null
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  protected fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Commands_Triggers[index][event] != null
 
   fun setMenu() {
     if (!built) {
@@ -605,7 +628,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
-                                                          commands!!.requireNoNulls(),
+                                                          commands,
                                                           model,
                                                           help)
 
@@ -647,9 +670,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   }
 
   private fun initDefaultCommands() {
-    commands = arrayOfNulls(actors.size)
     actors.forEachIndexed { index, vActor ->
-      commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
+      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent))
     }
   }
 }

@@ -152,25 +152,22 @@ class VMenuTree constructor(ctxt: DBContext?,
     createActor(CMD_INFORMATION, "Help", "Information", null, 0, 0)
     createActor(CMD_HELP, "Help", "Help", "help", KeyEvent.VK_F1, 0)
     addActors(treeActors.requireNoNulls())
-    localizeActors(ApplicationContext.getDefaultLocale())
     createTree(isSuperUser || loadFavorites)
     localizeRootMenus(ApplicationContext.getDefaultLocale())
   }
 
-  // ----------------------------------------------------------------------
-  // IMPLEMENTATIONS
-  // ----------------------------------------------------------------------
-  /**
-   * Localize this menu tree
-   *
-   * @param     locale  the locale to use
-   */
-  fun localizeActors(locale: Locale?) {
-    var manager: LocalizationManager?
+  override fun getLocalizationManger(): LocalizationManager {
+    return LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
+  }
 
-    manager = LocalizationManager(locale, Locale.getDefault())
+  /**
+   * Localize this menu tree actors
+   *
+   * @param     actors  the actors to localize
+   */
+  override fun localizeActors(vararg actors: VActor) {
     try {
-      super.localizeActors(manager) // localizes the actors in VWindow
+      super.localizeActors(*actors) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble(
         "MenuTree Actor localization",
@@ -180,7 +177,6 @@ class VMenuTree constructor(ctxt: DBContext?,
       )
       exitProcess(1)
     }
-    manager = null
   }
 
   /**

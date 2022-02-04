@@ -20,7 +20,6 @@ package org.kopi.galite.visual.dsl.common
 import java.io.File
 import java.util.Locale
 
-import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.VWindow
 
 /**
@@ -77,6 +76,7 @@ abstract class Window(val title: String, val locale: Locale?) {
       menus.add(actor.menu)
     }
     actors.add(actor)
+    model.addActor(actor.buildModel())
     return actor
   }
 
@@ -96,12 +96,12 @@ abstract class Window(val title: String, val locale: Locale?) {
             init: (Actor.() -> Unit)? = null): Actor {
     val actor = Actor(menu, label, help, command, source = sourceFile)
 
-    actor.ident = command?.ident ?: "actor${actors.size}"
     if (init != null) {
       actor.init()
     }
 
-    actors.add(actor)
+    actor(actor)
+
     return actor
   }
 
@@ -124,9 +124,13 @@ abstract class Window(val title: String, val locale: Locale?) {
       actor(item)
     }
     commands.add(command)
+    model.commands.add(command.buildModel(model, item.model))
+    addCommandTrigger()
+
     return command
   }
 
+  open fun addCommandTrigger() {}
 
   /**
    * Resets window to initial state

@@ -47,11 +47,10 @@ import org.kopi.galite.visual.visual.VException
  * A block is created in order to either view the content of a database, to insert
  * new data in the database or to update existing data in the database.
  *
- * @param        title                 the title of the block
- * @param        buffer                the buffer size of this block
- * @param        visible               the number of visible elements
- * @param        ident                 the simple identifier of this block
- * @param        shortcut              the shortcut of this block
+ * @param        title                 the title of the block.
+ * @param        buffer                the buffer size of this block.
+ * @param        visible               the number of visible elements.
+ * @param        form                  the form to which belongs the block.
  */
 open class Block(val title: String,
                  var buffer: Int,
@@ -109,7 +108,16 @@ open class Block(val title: String,
     val event = blockEventList(blockTriggers)
     val blockAction = Action(null, method)
     val trigger = FormTrigger(event, blockAction)
+
     triggers.add(trigger)
+
+    // BLOCK TRIGGERS
+    for (i in VConstants.TRG_TYPES.indices) {
+      if (trigger.events shr i and 1 > 0) {
+        block.VKT_Block_Triggers[0][i] = trigger
+      }
+    }
+
     return trigger
   }
 
@@ -134,6 +142,7 @@ open class Block(val title: String,
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     tables.add(formBlockTable)
+    block.tables.add(formBlockTable.table)
 
     return table
   }
@@ -154,6 +163,8 @@ open class Block(val title: String,
     val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
     field.init()
     field.initialize(this)
+    field.addFieldTrigger()
+    block.fields.add(field.vField)
     fields.add(field)
     return field
   }
@@ -212,8 +223,24 @@ open class Block(val title: String,
     val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
     field.init()
     field.initialize(this)
+    field.addFieldTrigger()
+    block.fields.add(field.vField)
     fields.add(field)
     return field as FormField<T?>
+  }
+
+  fun FormField<*>.addFieldTrigger() {
+    // FIELD TRIGGERS
+    val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+
+    triggers.forEach { trigger ->
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          fieldTriggerArray[i] = trigger
+        }
+      }
+    }
+    this@Block.block.VKT_Field_Triggers.add(fieldTriggerArray)
   }
 
   inline fun <reified T> initDomain(domain: Domain<T>) {
@@ -296,7 +323,11 @@ open class Block(val title: String,
    */
   fun index(message: String): FormBlockIndex {
     val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message, indices.size)
+
     indices.add(formBlockIndex)
+    block.indices.add(formBlockIndex.message)
+    block.indicesIdents.add(formBlockIndex.ident)
+
     return formBlockIndex
   }
 
@@ -317,6 +348,13 @@ open class Block(val title: String,
     }
     command.action = action
     commands.add(command)
+
+    // COMMANDS TRIGGERS
+    // TODO : Add commands triggers here
+    block.VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
+
+    block.commands.add(command.buildModel(block, item.model))
+
     return command
   }
 
@@ -964,16 +1002,39 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   /** The block model */
-  lateinit var block: VBlock
+  open val block: VBlock = object : VBlock() {
+    override fun setInfo(form: VForm) {
+      this@Block.fields.forEach {
+        it.setInfo(super.source, form)
+      }
+    }
+  }
 
-  val isModelInitialized: Boolean get() = ::block.isInitialized
+  var isModelInitialized = false
 
   /** Returns block model */
-  open fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
-    val blockModel = BlockModel(vForm, this, source)
+  open fun getBlockModel(vForm: VForm): VBlock {
+    block.form = vForm
+    block.initializeBlock(this, vForm.source)
+    isModelInitialized = true
+    return block
+  }
 
-    block = blockModel
-
-    return blockModel
+  fun VBlock.initializeBlock(block: Block, formSource: String?) {
+    this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
+    title = block.title
+    help = block.help
+    bufferSize = block.buffer
+    displaySize = block.visible
+    pageNumber = block.pageNumber
+    border = block.border.value
+    maxRowPos = block.maxRowPos
+    maxColumnPos = block.maxColumnPos
+    displayedFields = block.displayedFields
+    name = block.ident
+    options = block.options
+    access = block.access
+    alignment = block.align?.getBlockAlignModel()
+    dropListMap = block.dropListMap
   }
 }

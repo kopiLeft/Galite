@@ -39,7 +39,7 @@ import org.kopi.galite.visual.dsl.form.Block
 
 class TriggersTests : GaliteVUITestBase() {
 
-  val form = FormToTestTriggers().also { it.model }
+  val form = FormToTestTriggers()
 
   @Before
   fun `login to the App`() {

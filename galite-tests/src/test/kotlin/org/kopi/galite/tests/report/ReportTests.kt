@@ -90,7 +90,6 @@ class ReportTests: VApplicationTestBase() {
 
     val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
-    SimpleReport.initFields()
     SimpleReport.genLocalization()
 
     val generatedFile = File("${sourceFilePath}/SimpleReport-${SimpleReport.locale}.xml")
@@ -204,7 +203,7 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     group = age
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 

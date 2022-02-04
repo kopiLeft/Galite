@@ -243,11 +243,9 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
       val localCommands = model.command
       localCommands?.forEachIndexed { index, localCommand ->
         if (localCommand.isActive(getBlock().getMode())) {
-          val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
-                                                 getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
+          val active = if (getBlock().hasFieldCommandTrigger(VConstants.TRG_CMDACCESS, index)) {
             try {
-              (getBlock().callTrigger(VConstants.TRG_CMDACCESS,
-                                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
+              (getBlock().callFieldCommandTrigger(VConstants.TRG_CMDACCESS, index) as Boolean)
             } catch (e: VException) {
               // consider that the command is active of any error occurs
               true

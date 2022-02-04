@@ -261,7 +261,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest1() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
 
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
@@ -281,7 +281,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest2() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_LT)
       fields[6].setSearchOperator(VConstants.SOP_NE)
@@ -305,7 +305,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest3() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_GT)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
@@ -329,7 +329,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest4() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_LE)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
@@ -353,7 +353,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest5() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_GE)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
@@ -384,7 +384,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchRecord with existing ID scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       //fetch record search with id 1 and there is no exception
@@ -396,7 +396,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchRecord no such element test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
 
@@ -409,7 +409,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchRecord too many rows scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       initSampleFormTables()
@@ -427,7 +427,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord valid scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       FormSample.tb1.name.value = "AUDREY"
@@ -459,7 +459,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord exec failed scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     assertThrows(VExecFailedException::class.java) {
       FormSample.tb1.block.fetchNextRecord(3)
     }
@@ -467,7 +467,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save insert simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       SchemaUtils.createSequence(userSequence)
@@ -495,7 +495,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save update simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       initSampleFormTables()
@@ -650,7 +650,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `delete simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       var count = User.select { User.id eq 1 }.count()
@@ -712,7 +712,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getSearchColumns test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     assertEquals(listOf(FormSample.tb1.id.columns?.getColumnsModels()?.get(0)?.column,
                         FormSample.tb1.ts.columns?.getColumnsModels()?.get(0)?.column,
                         FormSample.tb1.uc.columns?.getColumnsModels()?.get(0)?.column,
@@ -726,7 +726,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       User.insert {
@@ -757,7 +757,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load with set id value simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
 
@@ -783,7 +783,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load no row exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       FormSample.tb1.id.value = 2
@@ -841,7 +841,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup valid scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
 
@@ -865,7 +865,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup no matching value exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
 
@@ -882,7 +882,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup no table found exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 1
@@ -902,7 +902,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup not unique value exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       User.insert {
@@ -926,7 +926,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `buildQueryDialog test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       FormSample.tb1.block.clear()
@@ -1017,7 +1017,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `leave block test`() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
     val blockModel = formSample.tb1.block
 
     formSample.model.getActiveBlock()?.leave(false)
@@ -1067,7 +1067,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `enter test`() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
     val blockModel = formSample.tb1.block
 
     blockModel.enter()
@@ -1077,7 +1077,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getReportSearchColumns test`() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
 
     assertEquals(
       listOf(

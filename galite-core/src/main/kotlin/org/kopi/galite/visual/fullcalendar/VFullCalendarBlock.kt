@@ -46,7 +46,7 @@ import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 
-abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
+abstract class VFullCalendarBlock() : VBlock() {
 
   lateinit var fullCalendarForm: VFullCalendarForm
   var dateField: VDateField? = null

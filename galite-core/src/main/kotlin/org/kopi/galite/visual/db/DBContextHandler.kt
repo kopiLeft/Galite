@@ -42,9 +42,4 @@ interface DBContextHandler {
    * @return true, if the transaction should be retried.
    */
   fun retryProtected(): Boolean
-
-  /**
-   * Returns whether this object handles a transaction at this time.
-   */
-  fun inTransaction(): Boolean
 }
