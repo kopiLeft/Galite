@@ -22,6 +22,7 @@ import java.math.BigDecimal
 import kotlin.test.assertIs
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.FormField
@@ -38,7 +39,7 @@ import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Week
 
-class DomainTests {
+class DomainTests : VApplicationTestBase() {
 
     @Test
     fun buildFormFieldTest() {

@@ -20,6 +20,7 @@ package org.kopi.galite.tests.chart
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.chart.CConstants
 import org.kopi.galite.visual.chart.VColumnFormat
 import org.kopi.galite.visual.chart.VDimension
@@ -31,7 +32,7 @@ import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 
-class VDimensionTests {
+class VDimensionTests : VApplicationTestBase() {
 
   @Test
   fun personalizedVDimension() {

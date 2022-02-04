@@ -24,10 +24,11 @@ import java.nio.charset.Charset
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.util.Charset437
 import org.kopi.galite.visual.util.Encoder437
 
-class Charset437Tests {
+class Charset437Tests : VApplicationTestBase() {
   val testChar: Charset437 = Charset437()
   val ibm437 = Charset.forName("IBM437")
   val testEncoder: Encoder437 = testChar.newEncoder() as Encoder437
