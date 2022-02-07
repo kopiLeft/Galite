@@ -32,6 +32,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.function.ValueProvider
+import com.vaadin.flow.component.AttachEvent
 
 /**
  * The `DTable` is a table implementing the [UTable]
@@ -83,6 +84,18 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    val page = attachEvent.ui.page
+
+    page.retrieveExtendedClientDetails { details ->
+      height = (details.windowInnerHeight - 200).toString() + "px"
+    }
+
+    page.addBrowserWindowResizeListener { event ->
+      height = (event.height - 200).toString() + "px"
+    }
+  }
 
   /**
    * Builds the grid columns.
