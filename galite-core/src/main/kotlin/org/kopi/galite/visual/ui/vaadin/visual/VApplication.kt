@@ -24,7 +24,7 @@ import java.util.MissingResourceException
 import java.util.ResourceBundle
 
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.PrintManager
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
@@ -233,8 +233,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean?) {
         if (yes == true) {
-          // close DB connection
-          closeConnection()
           // show welcome screen
           gotoWelcomeView()
         }
@@ -245,7 +243,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun startApplication() {
-    menu = VMenuTree(dBContext)
+    menu = VMenuTree(dBConnection)
     menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref, this)
     mainWindow!!.addMainWindowListener(this)
@@ -272,9 +270,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
           }
         }
     }
-
-    // Close database connection
-    closeConnection()
   }
 
   override fun allowQuit(): Boolean =
@@ -328,13 +323,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     requireNotNull(database) { "The database url shouldn't be null" }
     requireNotNull(driver) { "The jdbc driver shouldn't be null" }
 
-    dBContext = login(database,
-                      driver,
-                      username,
-                      password,
-                      schema)
+    dBConnection = login(database,
+                         driver,
+                         username,
+                         password,
+                         schema)
     // check if context is created
-    if (dBContext == null) {
+    if (dBConnection == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
     } else {
       // set query trace level
@@ -349,10 +344,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var isGeneratingHelp: Boolean = false
 
-  override var dBContext: DBContext? = null
+  override var dBConnection: Connection? = null
 
   override val userName: String
-    get() = dBContext!!.connection.userName
+    get() = dBConnection!!.userName
 
   override lateinit var defaultLocale: Locale
 
@@ -385,7 +380,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * The database URL.
    */
   val url: String
-    get() = dBContext!!.connection.url
+    get() = dBConnection!!.url
 
   /**
    * This methods is called at the beginning
@@ -477,21 +472,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected fun setTraceLevel() {
 
-  }
-
-  /**
-   * Closes the database connection
-   */
-  protected fun closeConnection() {
-    try {
-      if (dBContext != null) {
-        dBContext!!.close()
-        dBContext = null
-      }
-    } catch (e: SQLException) {
-      // we don't care, we reinitialize the connection
-      dBContext = null
-    }
   }
 
   /**

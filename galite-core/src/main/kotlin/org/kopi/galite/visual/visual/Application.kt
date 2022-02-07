@@ -22,7 +22,7 @@ import java.util.Date
 import java.util.Locale
 
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.PrintManager
 
@@ -39,9 +39,9 @@ interface Application : MessageListener {
    * @param username The user name.
    * @param password The user password.
    * @param schema The database schema.
-   * @return The [DBContext] containing database connection information.
+   * @return The [Connection] containing database connection information.
    */
-  fun login(database: String, driver: String, username: String, password: String, schema: String?): DBContext?
+  fun login(database: String, driver: String, username: String, password: String, schema: String?): Connection?
 
   /**
    * Signs out from the application.
@@ -87,9 +87,9 @@ interface Application : MessageListener {
   val isGeneratingHelp: Boolean
 
   /**
-   * The [DBContext] containing user connection information.
+   * The [Connection] containing user connection information.
    */
-  val dBContext: DBContext?
+  val dBConnection: Connection?
 
   /**
    * The connected user name.

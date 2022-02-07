@@ -27,7 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
 import org.kopi.galite.visual.base.UComponent;
-import org.kopi.galite.visual.db.DBContext;
+import org.kopi.galite.visual.db.Connection;
 import org.kopi.galite.visual.l10n.LocalizationManager;
 import org.kopi.galite.visual.print.PrintManager;
 import org.kopi.galite.visual.visual.Application;
@@ -187,7 +187,7 @@ public abstract class JApplication implements Application {
    * @return The database URL.
    */
   public String getURL() {
-    return context.getConnection().getUrl();
+    return context.getUrl();
   }
 
   /**
@@ -342,13 +342,13 @@ public abstract class JApplication implements Application {
   private boolean connectToDatabase() {
     if (options.username != null) {
       try {
-        context = new DBContext();
-        context.createConnection(options.driver,
-                options.database,
-                options.username,
-                options.password,
-                options.lookupUserId,
-                options.schema);
+        context = Connection.Companion
+                .createConnection(options.database,
+                                  options.driver,
+                                  options.username,
+                                  options.password,
+                                  options.lookupUserId,
+                                  options.schema);
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();
@@ -402,7 +402,7 @@ public abstract class JApplication implements Application {
 
 
   public String getUserName() {
-    return context.getConnection().getUserName();
+    return context.getUserName();
   }
 
 
@@ -459,7 +459,7 @@ public abstract class JApplication implements Application {
 
   private ApplicationOptions       		options;
   private VMenuTree                      	menuTree;
-  private DBContext                     	context;
+  private Connection                   context;
   private boolean                       	isGeneratingHelp;
   private SplashScreen                  	splash;
   private Registry                      	registry;

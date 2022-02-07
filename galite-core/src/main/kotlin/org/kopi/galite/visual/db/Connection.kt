@@ -18,7 +18,6 @@
 
 package org.kopi.galite.visual.db
 
-import java.sql.Connection
 import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Database
@@ -60,9 +59,9 @@ class Connection {
    * @param     lookupUserId        lookup user id in table of Users ?
    * @param     schema              the database schema to set as current schema
    */
-  constructor(connection: Connection,
-              lookupUserId: Boolean = true,
-              schema: Schema? = null) {
+  private constructor(connection: java.sql.Connection,
+                      lookupUserId: Boolean = true,
+                      schema: Schema? = null) {
     val configuration = databaseConfig(schema)
 
     dbConnection = Database.connect({ connection }, databaseConfig = configuration)
@@ -82,12 +81,29 @@ class Connection {
    * @param        lookupUserId    lookup user id in table of users ?
    * @param        schema          the database schema to set as current schema
    */
-  constructor(url: String,
-              driver: String,
-              userName: String,
-              password: String,
-              lookupUserId: Boolean = true,
-              schema: Schema? = null) {
+  private constructor(url: String,
+                      driver: String,
+                      userName: String,
+                      password: String,
+                      lookupUserId: Boolean = true,
+                      schema: String? = null)
+          : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) })
+
+  /**
+   * Creates a connection with Exposed and opens it.
+   *
+   * @param        url             the URL of the database to connect to
+   * @param        userName        the name of the database user
+   * @param        password        the password of the database user
+   * @param        lookupUserId    lookup user id in table of users ?
+   * @param        schema          the database schema to set as current schema
+   */
+  private constructor(url: String,
+                      driver: String,
+                      userName: String,
+                      password: String,
+                      lookupUserId: Boolean = true,
+                      schema: Schema? = null) {
     val configuration = databaseConfig(schema)
 
     dbConnection = Database.connect(url = url,
@@ -109,11 +125,9 @@ class Connection {
    * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
    */
-  constructor(
-    dataSource: javax.sql.DataSource,
-    lookupUserId: Boolean = true,
-    schema: Schema? = null
-  ) {
+  private constructor(dataSource: javax.sql.DataSource,
+                      lookupUserId: Boolean = true,
+                      schema: Schema? = null) {
     val configuration = databaseConfig(schema)
 
     dbConnection = Database.connect(dataSource, databaseConfig = configuration)
@@ -162,6 +176,70 @@ class Connection {
   }
 
   companion object {
+
+    /**
+     * Creates a connection with Exposed from JDBC Connection
+     *
+     * @param     connection          the JDBC connection
+     * @param     lookupUserId        lookup user id in table of Users ?
+     * @param     schema              the database schema to set as current schema
+     */
+    fun createConnection(connection: java.sql.Connection,
+                         lookupUserId: Boolean = true,
+                         schema: Schema? = null): Connection {
+      return Connection(connection, lookupUserId, schema)
+    }
+
+    /**
+     * Creates a connection with Exposed and opens it.
+     *
+     * @param        url             the URL of the database to connect to
+     * @param        userName        the name of the database user
+     * @param        password        the password of the database user
+     * @param        lookupUserId    lookup user id in table of users ?
+     * @param        schema          the database schema to set as current schema
+     */
+    fun createConnection(url: String,
+                         driver: String,
+                         userName: String,
+                         password: String,
+                         lookupUserId: Boolean = true,
+                         schema: String? = null): Connection {
+      return Connection(url, driver, userName, password, lookupUserId, schema)
+    }
+
+
+    /**
+     * Creates a connection with Exposed and opens it.
+     *
+     * @param        url             the URL of the database to connect to
+     * @param        userName        the name of the database user
+     * @param        password        the password of the database user
+     * @param        lookupUserId    lookup user id in table of users ?
+     * @param        schema          the database schema to set as current schema
+     */
+    fun createConnection(url: String,
+                         driver: String,
+                         userName: String,
+                         password: String,
+                         lookupUserId: Boolean = true,
+                         schema: Schema? = null): Connection {
+      return Connection(url, driver, userName, password, lookupUserId, schema)
+    }
+
+    /**
+     * Creates a connection with Exposed from a datasource.
+     *
+     * @param     dataSource      the dataSource
+     * @param     lookupUserId    lookup user id in table of users ?
+     * @param     schema          the current database schema
+     */
+    fun createConnection(dataSource: javax.sql.DataSource,
+                         lookupUserId: Boolean = true,
+                         schema: Schema? = null): Connection {
+      return Connection(dataSource, lookupUserId, schema)
+    }
+
     // -1 not yet determined
     private const val USERID_TO_DETERMINE = -1
 

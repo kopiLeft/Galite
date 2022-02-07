@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.visual
 
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 
 /**
  * An interface for stand alone apps that can be executed from the
@@ -28,7 +28,7 @@ interface Executable {
   /**
    * MenuTree sets the context of new executable to the default connection
    */
-  var dBContext: DBContext?
+  var dBConnection: Connection?
 
   /**
    * The start method called every time the user launch this app from menu

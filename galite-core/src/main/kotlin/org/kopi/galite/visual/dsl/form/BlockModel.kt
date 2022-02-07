@@ -92,7 +92,7 @@ class FullCalendarBlockModel(vForm: VForm, val block: FullCalendar, formSource: 
         }.toTypedArray()
         addActors(defaultActors.requireNoNulls())
 
-        dBContext = vSimpleBlock.dBContext
+        dBConnection = vSimpleBlock.dBConnection
         blocks = arrayOf(vSimpleBlock)
         source = vSimpleBlock.source
         setTitle(vSimpleBlock.title)
