@@ -21,7 +21,7 @@ package org.kopi.galite.visual.visual
 import kotlin.jvm.Throws
 
 import org.kopi.galite.visual.base.Image
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.l10n.ModuleLocalizer
@@ -95,7 +95,7 @@ class Module(val id: Int,
    *
    * @param    context        the context where to look for application
    */
-  fun run(context: DBContext) {
+  fun run(context: Connection) {
     startForm(context, objectName, description, smallIcon)
   }
 
@@ -157,7 +157,7 @@ class Module(val id: Int,
 
     @JvmOverloads
     @Throws(VException::class)
-    fun startForm(ctxt: DBContext,
+    fun startForm(ctxt: Connection,
                   objectName: String?,
                   description: String,
                   icon: Image? = null): Executable? {
@@ -172,7 +172,7 @@ class Module(val id: Int,
         if (form is VWindow) {
           form.smallIcon = icon
         }
-        form.dBContext = ctxt
+        form.dBConnection = ctxt
         form.doNotModal()
         form
       } catch (v: VException) {
@@ -181,7 +181,7 @@ class Module(val id: Int,
       } catch (t: Throwable) {
         ApplicationContext.reportTrouble(
           "Form loading",
-          "Module.startForm(DBContext ctxt, " +
+          "Module.startForm(Connection ctxt, " +
                   "String object, String description, ImageIcon icon)",
           t.message,
           t

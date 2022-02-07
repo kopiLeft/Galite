@@ -23,7 +23,7 @@ import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
 import org.kopi.galite.visual.ui.vaadin.report.DReport
@@ -93,11 +93,9 @@ open class VApplicationTestBase : ApplicationTestBase() {
             username: String,
             password: String,
             schema: String?
-    ): DBContext? {
+    ): Connection? {
       return try {
-        DBContext().apply {
-          createConnection(driver, database, username, password, true, schema)
-        }
+        Connection.createConnection(database, driver, username, password, true, schema)
       } catch (exception: Throwable) {
         null
       }

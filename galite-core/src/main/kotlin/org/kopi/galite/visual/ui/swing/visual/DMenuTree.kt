@@ -88,7 +88,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
           setWaitInfo(getString("menu_form_started"))
           getModel().performAsyncAction(object : Action("menu_form_started") {
             override fun execute() {
-              module.run(getModel().dBContext!!)
+              module.run(getModel().dBConnection!!)
               unsetWaitInfo()
             }
           })
@@ -167,7 +167,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
         (tree.model as DefaultTreeModel).nodeChanged(node)
       } else if (node.isLeaf) {
         setWaitInfo(getString("menu_form_started"))
-        module.run(getModel().dBContext!!)
+        module.run(getModel().dBConnection!!)
         unsetWaitInfo()
       }
     }

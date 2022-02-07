@@ -23,12 +23,11 @@ import org.kopi.galite.demo.ConfigurationManager
 import org.kopi.galite.demo.GaliteRegistry
 import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.demo.database.initDatabase
-import org.kopi.galite.demo.database.initModules
 import org.kopi.galite.demo.database.testDriver
 import org.kopi.galite.demo.database.testPassword
 import org.kopi.galite.demo.database.testURL
 import org.kopi.galite.demo.database.testUser
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.visual.ApplicationConfiguration
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
@@ -105,19 +104,17 @@ class GaliteApplication : JApplication(GaliteRegistry()) {
     username: String,
     password: String,
     schema: String?
-  ): DBContext? {
+  ): Connection? {
     val username = "admin"
     val password = "admin"
     return try {
-      DBContext().apply {
-        createConnection(driver, database, username, password, true, schema)
-      }
+      Connection.createConnection(database, driver, username, password, true, schema)
     } catch (exception: Throwable) {
       null
     }
   }
 
-  override val dBContext: DBContext? = null
+  override val dBConnection: Connection? = null
   override var isGeneratingHelp: Boolean = false
   override val isNoBugReport: Boolean
     get() = true

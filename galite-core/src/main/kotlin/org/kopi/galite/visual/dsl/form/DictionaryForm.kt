@@ -19,7 +19,7 @@ package org.kopi.galite.visual.dsl.form
 import java.util.Locale
 
 import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.VException
@@ -72,10 +72,10 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    */
   fun add(parent: Window): Int = model.add(parent.model)
 
-  var dBContext: DBContext?
-    get() = model.dBContext
+  var dBConnection: Connection?
+    get() = model.dBConnection
     set(value) {
-      model.dBContext = value
+      model.dBConnection = value
     }
 
   /**

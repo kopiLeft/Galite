@@ -38,7 +38,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.FAVORITENId
 import org.kopi.galite.visual.db.Favorites
 import org.kopi.galite.visual.db.GroupParties
@@ -61,7 +61,7 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
-class VMenuTree constructor(ctxt: DBContext?,
+class VMenuTree constructor(ctxt: Connection?,
                             var isSuperUser: Boolean,
                             val menuTreeUser: String?,
                             private val groupName: String?,
@@ -70,7 +70,7 @@ class VMenuTree constructor(ctxt: DBContext?,
    * Constructs a new instance of VMenuTree.
    * @param ctxt the context where to look for application
    */
-  constructor(ctxt: DBContext?) : this(ctxt, false, null, true)
+  constructor(ctxt: Connection?) : this(ctxt, false, null, true)
 
   /**
    * Constructs a new instance of VMenuTree.
@@ -79,7 +79,7 @@ class VMenuTree constructor(ctxt: DBContext?,
    * @param userName the user name
    * @param loadFavorites should load favorites ?
    */
-  constructor(ctxt: DBContext?,
+  constructor(ctxt: Connection?,
               isSuperUser: Boolean,
               userName: String?,
               loadFavorites: Boolean) : this(ctxt, isSuperUser, userName, null, loadFavorites)
@@ -199,7 +199,7 @@ class VMenuTree constructor(ctxt: DBContext?,
   /**
    * Returns the ID of the current user
    */
-  override fun getUserID(): Int = dBContext!!.connection.getUserID()
+  override fun getUserID(): Int = dBConnection!!.getUserID()
 
   /**
    * Creates a new actor

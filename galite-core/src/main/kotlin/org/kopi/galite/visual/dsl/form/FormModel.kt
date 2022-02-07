@@ -17,7 +17,7 @@
 package org.kopi.galite.visual.dsl.form
 
 import org.kopi.galite.visual.cross.VReportSelectionForm
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -25,7 +25,7 @@ import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.ApplicationContext
 
-class FormModel(val form: Form, ctxt: DBContext? = null): VForm(ctxt) {
+class FormModel(val form: Form, ctxt: Connection? = null): VForm(ctxt) {
 
   init {
     initialize(form)
@@ -37,7 +37,7 @@ class FormModel(val form: Form, ctxt: DBContext? = null): VForm(ctxt) {
   override fun formClassName(): String = form.javaClass.name
 }
 
-class DictionaryFormModel(val form: DictionaryForm, ctxt: DBContext? = null): VDictionaryForm(ctxt) {
+class DictionaryFormModel(val form: DictionaryForm, ctxt: Connection? = null): VDictionaryForm(ctxt) {
 
   init {
     initialize(form)
@@ -49,7 +49,7 @@ class DictionaryFormModel(val form: DictionaryForm, ctxt: DBContext? = null): VD
   override fun formClassName(): String = form.javaClass.name
 }
 
-class ReportSelectionFormModel(val form: ReportSelectionForm, ctxt: DBContext? = null): VReportSelectionForm(ctxt) {
+class ReportSelectionFormModel(val form: ReportSelectionForm, ctxt: Connection? = null): VReportSelectionForm(ctxt) {
 
   init {
     initialize(form)
