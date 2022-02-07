@@ -60,8 +60,6 @@ abstract class VFullCalendarBlock() : VBlock() {
    */
   override fun isMulti(): Boolean = true
 
-  override fun initIntern() { }
-
   /**
    * Fetch full calendar entries from database. This will select all entries between
    * the first day and the last day of a specific [date].

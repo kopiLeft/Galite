@@ -153,8 +153,6 @@ open class Domain<T>(val width: Int? = null,
       }
     }
 
-    model.block = formField.block.block
-
     return model
   }
 

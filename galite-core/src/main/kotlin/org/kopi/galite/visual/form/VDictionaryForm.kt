@@ -21,6 +21,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.db.DBContext
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VWindow
@@ -97,7 +98,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   override fun prepareForm() {
     block = getBlock(0)
-    assert(!block!!.isMulti()) { threadInfo() }
+    assert(!block!!.isMulti() || block is VFullCalendarBlock) { threadInfo() }
 
     if (newRecord) {
       if (getBlock(0) == null) {
