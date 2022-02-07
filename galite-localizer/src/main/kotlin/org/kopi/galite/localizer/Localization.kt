@@ -24,7 +24,7 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.db.Symbols
 import org.kopi.galite.visual.dsl.common.Window
@@ -49,9 +49,7 @@ fun localizeWindows(url: String,
                     locale: Locale,
                     schema: String? = null,
                     output: String? = null) {
-  val dBContext = DBContext().also {
-    it.createConnection(driver, url, userName, password, false, schema)
-  }
+  val dBConnection = Connection.createConnection(url, driver, userName, password, false, schema)
   val modules = fetchModules()
   modules.forEach {
     if (it.objectName != null) {

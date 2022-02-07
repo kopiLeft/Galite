@@ -105,7 +105,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
 
   init {
     if (ctxt != null) {
-      dBContext = ctxt.dBContext
+      dBConnection = ctxt.dBConnection
     }
   }
 

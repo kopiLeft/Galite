@@ -26,7 +26,7 @@ import java.util.Locale
 import javax.swing.event.EventListenerList
 
 import org.jetbrains.annotations.TestOnly
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
@@ -101,7 +101,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   protected constructor(ctxt: DBContextHandler) : super(ctxt)
 
-  protected constructor(ctxt: DBContext?) : super(ctxt)
+  protected constructor(ctxt: Connection?) : super(ctxt)
 
   protected constructor()
 
@@ -451,7 +451,7 @@ abstract class VForm : VWindow, VConstants {
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by string formatters
    */
   fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
-    dBContext = parent.dBContext
+    dBConnection = parent.dBConnection
     return getBlock(0).singleMenuQuery(showUniqueItem)
   }
   // ----------------------------------------------------------------------

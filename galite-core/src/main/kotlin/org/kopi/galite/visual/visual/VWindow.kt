@@ -30,7 +30,7 @@ import kotlin.jvm.Throws
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.kopi.galite.visual.base.Image
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.XInterruptProtectedException
@@ -40,10 +40,10 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 /**
  * Creates a window
  *
- * @param dBContext The database context for this object.
- * if if is specified, it will create a window with a DB context
+ * @param dBConnection The database connection for this object.
+ * if if is specified, it will create a window with a connection
  */
-abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.getDBContext())
+abstract class VWindow(override var dBConnection: Connection? = ApplicationContext.getDBConnection())
   : DBContextHandler, Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -81,7 +81,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Creates a window with DB context handler
    */
-  protected constructor(ctxt: DBContextHandler) : this(ctxt.dBContext)
+  protected constructor(ctxt: DBContextHandler) : this(ctxt.dBConnection)
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
@@ -502,12 +502,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? = dBContext!!.connection.userName
+  open fun getUserName(): String? = dBConnection!!.userName
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int = dBContext!!.connection.getUserID()
+  open fun getUserID(): Int = dBConnection!!.getUserID()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING

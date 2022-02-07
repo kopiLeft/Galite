@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.visual
 
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 
 /**
  * A logout module that simply call [Application.logout]
@@ -28,7 +28,7 @@ class LogoutModule : Executable {
   /**
    * MenuTree sets the context of new executable to the default connection
    */
-  override var dBContext: DBContext? = null
+  override var dBConnection: Connection? = null
 
   /**
    * The start method called every time the user launch this app from menu

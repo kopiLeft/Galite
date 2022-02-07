@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.demo.database.initDatabase
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.visual.ApplicationConfiguration
@@ -61,11 +61,9 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
           username: String,
           password: String,
           schema: String?
-  ): DBContext? {
+  ): Connection? {
     return try {
-      DBContext().apply {
-        createConnection(driver, database, username, password, true, schema)
-      }
+      Connection.createConnection(database, driver, username, password, true, schema)
     } catch (exception: Throwable) {
       null
     }

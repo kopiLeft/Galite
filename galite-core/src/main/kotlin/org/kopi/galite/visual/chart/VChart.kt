@@ -125,7 +125,7 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
 
   init {
     if (context != null) {
-      dBContext = context.dBContext
+      dBConnection = context.dBConnection
     }
   }
 

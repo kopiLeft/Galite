@@ -23,9 +23,9 @@ package org.kopi.galite.visual.db
  */
 interface DBContextHandler {
   /**
-   * The database context for this object.
+   * The database connection for this object.
    */
-  var dBContext: DBContext?
+  var dBConnection: Connection?
 
   /**
    * Returns true if the exception allows a retry of the

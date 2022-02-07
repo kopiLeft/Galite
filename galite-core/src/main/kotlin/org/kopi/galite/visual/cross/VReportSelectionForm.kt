@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.cross
 
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VDictionaryForm
@@ -31,7 +31,7 @@ abstract class VReportSelectionForm : VDictionaryForm {
   protected constructor()
   protected constructor(caller: VForm) : super(caller)
   protected constructor(caller: DBContextHandler) : super(caller)
-  protected constructor(caller: DBContext?) : super(caller)
+  protected constructor(caller: Connection?) : super(caller)
 
   /**
    * Implements interface for COMMAND CreateReport
@@ -41,7 +41,7 @@ abstract class VReportSelectionForm : VDictionaryForm {
     try {
       setWaitInfo(Message.getMessage("report_generation"))
       val report = reportBuilder()
-      report.dBContext = dBContext
+      report.dBConnection = dBConnection
       report.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoRowException) {
@@ -59,7 +59,7 @@ abstract class VReportSelectionForm : VDictionaryForm {
       b.validate()
       try {
         report.setWaitInfo(Message.getMessage("report_generation"))
-        report.dBContext = report.dBContext
+        report.dBConnection = report.dBConnection
         report.doNotModal()
         report.unsetWaitInfo()
       } catch (e: VNoRowException) {

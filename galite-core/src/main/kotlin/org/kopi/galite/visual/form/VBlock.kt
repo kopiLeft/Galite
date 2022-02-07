@@ -59,7 +59,7 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.DBForeignKeyException
@@ -2212,8 +2212,8 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
     // build the order by query
     val orderBy = mutableListOf<Pair<Column<*>, SortOrder>>()
     var size = 0
-    // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
-    // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
+    // val maxCharacters: Int = form.dBConnection.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
+    // val maxColumns: Int = form.dBConnection.defaultConnection.getMaximumColumnsInOrderBy() //TODO
 
     for (i in 0 until elems) {
 
@@ -2451,8 +2451,8 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
 
     /* ... and now their order */
     var orderSize = 0
-    //val maxCharacters: Int = form.getDBContext().getDefaultConnection().getMaximumCharactersCountInOrderBy() TODO
-    //val maxColumns: Int = form.getDBContext().getDefaultConnection().getMaximumColumnsInOrderBy() TODO
+    //val maxCharacters: Int = form.getDBConnection().getDefaultConnection().getMaximumCharactersCountInOrderBy() TODO
+    //val maxColumns: Int = form.getDBConnection().getDefaultConnection().getMaximumColumnsInOrderBy() TODO
 
     val orderBys = mutableListOf<Pair<Column<*>, SortOrder>>()
 
@@ -3605,8 +3605,8 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
     }
   }
 
-  override var dBContext: DBContext?
-    get() = form.dBContext
+  override var dBConnection: Connection?
+    get() = form.dBConnection
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
   override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)

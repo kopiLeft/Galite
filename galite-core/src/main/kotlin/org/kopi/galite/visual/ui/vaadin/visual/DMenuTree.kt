@@ -141,7 +141,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
         }
       } else if (module.objectName != null) {
         setWaitInfo(VlibProperties.getString("menu_form_started"))
-        module.run(getModel().dBContext!!)
+        module.run(getModel().dBConnection!!)
         unsetWaitInfo()
       }
     }

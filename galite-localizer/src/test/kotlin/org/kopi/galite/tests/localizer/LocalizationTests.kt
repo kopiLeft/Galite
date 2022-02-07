@@ -24,7 +24,7 @@ import kotlin.test.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.localizer.localizeWindows
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.visual.Registry
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
@@ -51,7 +51,7 @@ class LocalizationTests {
     fun init() {
       initDatabase()
       VApplication.instance = object : JApplication(Registry("", null)) {
-        override val dBContext get() = DBContext()
+        override val dBConnection get() = null
         override val defaultLocale get() = Locale.UK
         override val isNoBugReport get() = true
         override fun login(
@@ -60,8 +60,8 @@ class LocalizationTests {
           username: String,
           password: String,
           schema: String?
-        ): DBContext {
-          return DBContext()
+        ): Connection? {
+          return null
         }
       }
     }
