@@ -29,7 +29,6 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.enter
-import org.kopi.galite.testing.open
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
@@ -44,16 +43,16 @@ import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class FormTriggersTests : GaliteVUITestBase() {
 
-  val form = TestTriggersForm().also { it.model }
-  val report = ReportTriggersTest().also { it.model }
-  val chart = ReportTriggersTest().also { it.model }
+  val form = TestTriggersForm.also { it.model }
+  val report = ReportTriggersTest.also { it.model }
+  val chart = ChartTriggersTest.also { it.model }
 
   @Before
   fun `login to the App`() {
     login()
 
     // Open the form
-    form.open()
+    form.model.doNotModal()
   }
 
   @Test
@@ -88,41 +87,40 @@ class FormTriggersTests : GaliteVUITestBase() {
     form.resetForm.triggerCommand()
     expectConfirmNotification(true)
 
-    form.report.triggerCommand()
+    report.model.doNotModal()
     report.quit.triggerCommand()
 
-    form.graph.triggerCommand()
+    chart.model.doNotModal()
     chart.quit.triggerCommand()
 
     form.quit.triggerCommand()
     expectConfirmNotification(true)
 
     val expectedTriggersList = listOf("ACCESS FIELD Trigger", "INIT FORM Trigger", "INIT BLOCK Trigger",
-                                      "PREFORM FORM Trigger", "ACCESS FIELD Trigger", "INIT FORM Trigger",
-                                      "INIT BLOCK Trigger", "PREFORM FORM Trigger", "VALUE FIELD Trigger",
-                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "PREFORM FORM Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
                                       "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
-                                      "ACCESS BLOCK Trigger", "PREBLK BLOCK Trigger", "ACCESS FIELD Trigger",
-                                      "ACCESS BLOCK Trigger", "VALBLK BLOCK Trigger", "PREQRY BLOCK Trigger",
-                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
-                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
-                                      "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
-                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
-                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
-                                      "POSTQRY BLOCK Trigger", "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger",
-                                      "PREDEL BLOCK Trigger", "PREDEL FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "PREBLK BLOCK Trigger", "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "VALBLK BLOCK Trigger", "PREQRY BLOCK Trigger", "ACCESS FIELD Trigger",
                                       "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
                                       "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
-                                      "POSTDEL BLOCK Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
-                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
-                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
-                                      "VALUE FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger",
-                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "PREFLD FIELD Trigger",
-                                      "ACCESS BLOCK Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "POSTQRY BLOCK Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "PREDEL BLOCK Trigger",
+                                      "PREDEL FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
                                       "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
-                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "ACCESS BLOCK Trigger",
-                                      "PREVAL FIELD Trigger", "VALUE FIELD Trigger", "FORMAT FIELD Trigger",
-                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALIDATE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "POSTDEL BLOCK Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "PREFLD FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS BLOCK Trigger", "PREVAL FIELD Trigger",
+                                      "VALUE FIELD Trigger", "FORMAT FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALIDATE FIELD Trigger",
                                       "POSTCHG FIELD Trigger", "POSTFLD FIELD Trigger", "ACCESS BLOCK Trigger",
                                       "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS FIELD Trigger",
                                       "DEFAULT BLOCK Trigger", "VALUE FIELD Trigger", "DEFAULT FIELD Trigger",
@@ -160,11 +158,10 @@ class FormTriggersTests : GaliteVUITestBase() {
                                       "PREREC FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger",
                                       "POSTREC FIELD Trigger", "VALREC FIELD Trigger", "PREBLK BLOCK Trigger",
                                       "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "CHANGED FORM Trigger",
-                                      "RESET FORM Trigger", "ACCESS BLOCK Trigger", "VALBLK BLOCK Trigger",
-                                      "PREREPORT REPORT Trigger", "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger",
-                                      "POSTREPORT REPORT Trigger", "CHARTTYPE CHART Trigger", "INITCHART CHART Trigger",
-                                      "CHARTTYPE CHART Trigger", "CHARTTYPE CHART Trigger", "PRECHART CHART Trigger",
-                                      "ACCESS BLOCK Trigger", "POSTCHART CHART Trigger", "CHANGED FORM Trigger",
+                                      "RESET FORM Trigger", "ACCESS BLOCK Trigger","PREREPORT REPORT Trigger",
+                                      "POSTREPORT REPORT Trigger", "CHARTTYPE CHART Trigger",
+                                      "INITCHART CHART Trigger", "CHARTTYPE CHART Trigger", "CHARTTYPE CHART Trigger",
+                                      "PRECHART CHART Trigger", "POSTCHART CHART Trigger", "CHANGED FORM Trigger",
                                       "POSTFORM FORM Trigger")
 
     assertEquals(expectedTriggersList, list)
@@ -188,7 +185,7 @@ class FormTriggersTests : GaliteVUITestBase() {
   }
 }
 
-class TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", locale = Locale.UK) {
+object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", locale = Locale.UK) {
   val action = menu("Action")
 
   val quit = actor(
@@ -335,12 +332,12 @@ class TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", lo
 
     command(item = report) {
       createReport {
-        ReportTriggersTest()
+        ReportTriggersTest
       }
     }
 
     command(item = graph) {
-      showChart(ChartTriggersTest())
+      showChart(ChartTriggersTest)
     }
 
     // test PREQRY block trigger
