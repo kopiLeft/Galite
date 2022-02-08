@@ -23,7 +23,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 
-class ReportTriggersTest : Report(title = "Report to test triggers", locale = Locale.UK) {
+object ReportTriggersTest : Report(title = "Report to test triggers", locale = Locale.UK) {
   val action = menu("Action")
 
   val quit = actor(

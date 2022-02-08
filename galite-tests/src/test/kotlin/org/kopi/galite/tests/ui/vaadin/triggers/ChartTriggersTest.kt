@@ -25,7 +25,7 @@ import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.common.Icon
 
-class ChartTriggersTest : Chart(locale = Locale.UK, title = "Chart to test triggers") {
+object ChartTriggersTest : Chart(locale = Locale.UK, title = "Chart to test triggers") {
   val action = menu("Action")
 
   val quit = actor(
