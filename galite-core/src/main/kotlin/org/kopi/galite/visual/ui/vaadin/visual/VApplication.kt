@@ -360,21 +360,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------
-  /**
-   * Attaches the given component to the application.
-   * @param component The component to be attached.
-   */
-  fun attachComponent(component: Component?) {
-
-  }
-
-  /**
-   * Detaches the given component from the application.
-   * @param component The component to be detached.
-   */
-  fun detachComponent(component: Component?) {
-    remove(component)
-  }
 
   /**
    * The database URL.
