@@ -151,7 +151,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
       override fun execute() {
         try {
           setWaitInfo(VlibProperties.getString("menu_form_started"))
-          module.run(model.dBContext!!)
+          module.run(model.dBConnection!!)
         } finally {
           unsetWaitInfo()
         }

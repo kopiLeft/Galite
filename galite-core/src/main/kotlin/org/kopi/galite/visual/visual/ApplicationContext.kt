@@ -31,7 +31,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.mailer.Mailer
 
@@ -100,10 +100,10 @@ abstract class ApplicationContext {
     fun getRegistry(): Registry = applicationContext.getApplication().registry
 
     /**
-     * Returns the application [DBContext].
-     * @return The application [DBContext].
+     * Returns the application [Connection].
+     * @return The application [Connection].
      */
-    fun getDBContext(): DBContext? = applicationContext.getApplication().dBContext
+    fun getDBConnection(): Connection? = applicationContext.getApplication().dBConnection
 
     /**
      * Returns `true` if the [Application] should only generate help.

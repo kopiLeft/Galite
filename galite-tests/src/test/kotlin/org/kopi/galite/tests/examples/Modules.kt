@@ -23,6 +23,7 @@ import org.kopi.galite.tests.localization.LocalizedForm
 import org.kopi.galite.tests.ui.vaadin.field.FormToTestFormPopUp
 import org.kopi.galite.tests.ui.vaadin.field.FormWithColoredFields
 import org.kopi.galite.tests.ui.vaadin.triggers.FormToTestTriggers
+import org.kopi.galite.tests.ui.vaadin.triggers.TestTriggersForm
 
 fun initModules() {
   transaction {
@@ -45,6 +46,7 @@ fun initModules() {
     insertIntoModule("2014", "org/kopi/galite/test/Menu", 105, "2000", FormToTestFormPopUp::class)
     insertIntoModule("2015", "org/kopi/galite/test/Menu", 105, "2000", TestFieldsVisibilityForm::class)
     insertIntoModule("2016", "org/kopi/galite/test/Menu", 105, "2000", FormWithColoredFields::class)
-    insertIntoModule("2017", "org/kopi/galite/test/Menu", 106, "2000", LocalizedForm::class)
+    insertIntoModule("2017", "org/kopi/galite/test/Menu", 106, "2000", TestTriggersForm::class)
+    insertIntoModule("2018", "org/kopi/galite/test/Menu", 107, "2000", LocalizedForm::class)
   }
 }

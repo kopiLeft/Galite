@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.db.DBContext
+import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.visual.VExecFailedException
@@ -52,7 +52,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   protected constructor(parent: DBContextHandler) : super(parent)
 
-  protected constructor(parent: DBContext?) : super(parent)
+  protected constructor(parent: Connection?) : super(parent)
 
   protected constructor() : super()
 
@@ -62,7 +62,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
   fun editWithID(parent: VWindow, id: Int): Int {
-    dBContext = parent.dBContext
+    dBConnection = parent.dBConnection
     editID = id
     doModal(parent)
     newRecord = false
@@ -76,7 +76,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
   fun openForQuery(parent: VWindow): Int {
-    dBContext = parent.dBContext
+    dBConnection = parent.dBConnection
     lookup = true
     doModal(parent)
     lookup = false
@@ -89,7 +89,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
    */
   fun newRecord(parent: VWindow): Int {
     newRecord = true
-    dBContext = parent.dBContext
+    dBConnection = parent.dBConnection
     doModal(parent)
     newRecord = false
     return iD

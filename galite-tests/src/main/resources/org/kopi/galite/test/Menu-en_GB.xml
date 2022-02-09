@@ -22,5 +22,6 @@
     <module ident="2014" label="Form to test form appear in PopUp" />
     <module ident="2015" label="Form to test fields visibility changes" />
     <module ident="2016" label="Form to test fields coloring" />
-    <module ident="2017" label="Form to test localisation" />
+    <module ident="2017" label="Form for triggers test" />
+    <module ident="2018" label="Form to test localisation" />
 </modules>
