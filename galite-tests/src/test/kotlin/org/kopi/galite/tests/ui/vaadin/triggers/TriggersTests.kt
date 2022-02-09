@@ -93,7 +93,6 @@ class TriggersTests : GaliteVUITestBase() {
     assertEquals("50", field.value)
   }
 
-  @Ignore
   @Test
   fun `test ACTION field trigger`() {
     val field = form.salesSimpleBlock.description.findField()
@@ -170,24 +169,24 @@ class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", local
       label = "Description"
       help = "The item description"
     }
-    val information = visit(domain = STRING(25), position = at(2, 2)) {
+    val information = visit(domain = STRING(25), position = at(3, 2)) {
       label = "information"
       help = "The item information"
       trigger(VALUE) {
         "sales information"
       }
     }
-    val action = visit(domain =  STRING(25), position = at(3, 1)) {
+    val action = visit(domain =  STRING(25), position = at(4, 1)) {
       label = "action"
       help = "The item action"
       trigger(ACTION) {
         description.value = "item description"
       }
     }
-    val defaultValueFromBlock = visit(domain =  STRING(25), position = at(4, 1)) {
+    val defaultValueFromBlock = visit(domain =  STRING(25), position = at(5, 1)) {
       label = "default value from block"
     }
-    val defaultValueFromField = visit(domain =  STRING(25), position = at(5, 1)) {
+    val defaultValueFromField = visit(domain =  STRING(25), position = at(6, 1)) {
       label = "default value from field"
       trigger(DEFAULT) {
         this.value = "Default field value"
