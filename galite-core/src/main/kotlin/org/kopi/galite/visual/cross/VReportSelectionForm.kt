@@ -17,21 +17,14 @@
  */
 package org.kopi.galite.visual.cross
 
-import org.kopi.galite.visual.db.Connection
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VDictionaryForm
-import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.report.VNoRowException
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.visual.Message
 import org.kopi.galite.visual.visual.MessageCode
 
-abstract class VReportSelectionForm : VDictionaryForm {
-  protected constructor()
-  protected constructor(caller: VForm) : super(caller)
-  protected constructor(caller: DBContextHandler) : super(caller)
-  protected constructor(caller: Connection?) : super(caller)
+abstract class VReportSelectionForm protected constructor() : VDictionaryForm() {
 
   /**
    * Implements interface for COMMAND CreateReport

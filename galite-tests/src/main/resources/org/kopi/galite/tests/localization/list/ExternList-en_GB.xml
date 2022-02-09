@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+    <type ident="ExternList">
+        <list>
+            <listdesc column="ID" title="identifier" />
+            <listdesc column="Name" title="training" />
+        </list>
+    </type>
+</insert>

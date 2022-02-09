@@ -78,11 +78,6 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
     addActors(arrayOf(f12))
   }
 
-  /**
-   * Creates a window with DB context handler
-   */
-  protected constructor(ctxt: DBContextHandler) : this(ctxt.dBConnection)
-
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------

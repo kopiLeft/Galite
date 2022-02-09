@@ -26,13 +26,12 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.References
 import org.kopi.galite.visual.util.base.InconsistencyException
 
 object VDatabaseUtils {
 
-  fun checkForeignKeys_(context: DBContextHandler, id: Int, queryTable: Table){
+  fun checkForeignKeys_(id: Int, queryTable: Table){
 
     transaction {
       val query1 = References.slice(References.table, References.column, References.action)
@@ -61,7 +60,7 @@ object VDatabaseUtils {
             val query2 = auxTable.slice(auxTable.id)
                     .select { auxTable.column eq id }
             query2.forEach {
-              checkForeignKeys(context, it[auxTable.id], query1Row[References.table])
+              checkForeignKeys(it[auxTable.id], query1Row[References.table])
             }
             auxTable.deleteWhere { auxTable.column eq id }
           }
@@ -78,7 +77,7 @@ object VDatabaseUtils {
     }
   }
 
-  fun checkForeignKeys(context: DBContextHandler, id: Int, table: String) {
+  fun checkForeignKeys(id: Int, table: String) {
     // FIXME : this should be re-implemented
     transaction {
 
@@ -108,7 +107,7 @@ object VDatabaseUtils {
             val query2 = auxTable.slice(auxTable.id)
                     .select { auxTable.column eq id }
             query2.forEach {
-              checkForeignKeys(context, it[auxTable.id], query1Row[References.table])
+              checkForeignKeys(it[auxTable.id], query1Row[References.table])
             }
             auxTable.deleteWhere { auxTable.column eq id }
           }
@@ -125,7 +124,7 @@ object VDatabaseUtils {
     }
   }
 
-  fun deleteRecords(context: DBContextHandler, table: String, condition: String?) {
+  fun deleteRecords(table: String, condition: String?) {
     // FIXME : this should be re-implemented
     transaction {
       val auxTable = object : Table(table) {
@@ -138,7 +137,7 @@ object VDatabaseUtils {
       }
 
       query.forEach {
-        checkForeignKeys(context, it[auxTable.id], table)
+        checkForeignKeys(it[auxTable.id], table)
         Table(table).deleteAll()
       }
     }

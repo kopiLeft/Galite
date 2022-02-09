@@ -39,6 +39,7 @@ import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._fireDomEvent
 import com.github.mvysny.kaributesting.v10._fireEvent
+import com.github.mvysny.kaributesting.v10._focus
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
@@ -206,6 +207,9 @@ fun <T> FormField<T>.click(): UField {
     field.wrappedField
   }
 
+  if(editorField is TextField) {
+    editorField._get<InputTextField<*>>().content._focus()
+  }
   (editorField as ClickNotifier<*>)._clickAndWait(50)
 
   return field
