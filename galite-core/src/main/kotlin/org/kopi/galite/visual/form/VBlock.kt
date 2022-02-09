@@ -3429,7 +3429,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         activeRecord = recno
         throw VExecFailedException(MessageCode.getMessage("VIS-00019"))
       }
-      VDatabaseUtils.checkForeignKeys_(form, id, tables!![0])
+      VDatabaseUtils.checkForeignKeys_(id, tables!![0])
 
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)

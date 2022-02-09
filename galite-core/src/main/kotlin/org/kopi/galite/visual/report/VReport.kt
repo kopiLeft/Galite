@@ -29,7 +29,6 @@ import kotlin.jvm.Throws
 import org.apache.poi.ss.formula.functions.T
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
@@ -59,8 +58,7 @@ import org.kopi.galite.visual.visual.WindowController
  *
  * @param ctxt Database context handler
  */
-abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
-  : VWindow(), Constants, VConstants, Printable {
+abstract class VReport internal constructor() : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
     const val TYP_PDF = 2
@@ -102,12 +100,6 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   var printOptions: PConfig = PConfig() // The print options
   var media: String? = null             // The media for this document
   var help: String? = null
-
-  init {
-    if (ctxt != null) {
-      dBConnection = ctxt.dBConnection
-    }
-  }
 
   override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_REPORT
 

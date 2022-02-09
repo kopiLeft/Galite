@@ -28,7 +28,6 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.ChartLocalizer
 import org.kopi.galite.visual.l10n.LocalizationManager
@@ -68,10 +67,9 @@ import com.lowagie.text.Rectangle
  *
  * Other chart implementations can be provided by extending this class.
  *
- * @param context The database context handler.
  * @throws VException Visual errors.
  */
-abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants, Printable {
+abstract class VChart() : VWindow(), CConstants, Printable {
 
   companion object {
     const val TYP_PDF = 1
@@ -121,12 +119,6 @@ abstract class VChart(context: DBContextHandler? = null) : VWindow(), CConstants
    */
   protected lateinit var measures: Array<VMeasure>
   private val rows: ArrayList<VRow> = ArrayList(500)
-
-  init {
-    if (context != null) {
-      dBConnection = context.dBConnection
-    }
-  }
 
   // ----------------------------------------------------------------------
   // LOCALIZATION

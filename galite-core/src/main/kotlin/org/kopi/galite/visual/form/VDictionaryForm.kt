@@ -18,14 +18,12 @@
 package org.kopi.galite.visual.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.db.Connection
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VWindow
 
-abstract class VDictionaryForm : VForm, VDictionary {
+abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
 
   // ----------------------------------------------------------------------
   // QUERY SEARCH
@@ -49,12 +47,6 @@ abstract class VDictionaryForm : VForm, VDictionary {
     private set
 
   var isMenuQuery = false
-
-  protected constructor(parent: DBContextHandler) : super(parent)
-
-  protected constructor(parent: Connection?) : super(parent)
-
-  protected constructor() : super()
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages

@@ -20,12 +20,11 @@ import java.util.Locale
 
 import org.kopi.galite.visual.chart.CConstants
 import org.kopi.galite.visual.chart.VChart
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.ApplicationContext
 
-class ChartModel(val chart: Chart, context: DBContextHandler? = null): VChart(context) {
+class ChartModel(val chart: Chart): VChart() {
 
   init {
     init()

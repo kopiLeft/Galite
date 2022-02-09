@@ -27,7 +27,6 @@ import javax.swing.event.EventListenerList
 
 import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.db.Connection
-import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
@@ -102,9 +101,6 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
-  protected constructor(ctxt: DBContextHandler) : super(ctxt)
-
-  protected constructor(ctxt: Connection?) : super(ctxt)
 
   protected constructor()
 

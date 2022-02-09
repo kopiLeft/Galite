@@ -25,7 +25,7 @@ import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.ApplicationContext
 
-class FormModel(val form: Form, ctxt: Connection? = null): VForm(ctxt) {
+class FormModel(val form: Form): VForm() {
 
   init {
     initialize(form)
@@ -37,7 +37,7 @@ class FormModel(val form: Form, ctxt: Connection? = null): VForm(ctxt) {
   override fun formClassName(): String = form.javaClass.name
 }
 
-class DictionaryFormModel(val form: DictionaryForm, ctxt: Connection? = null): VDictionaryForm(ctxt) {
+class DictionaryFormModel(val form: DictionaryForm): VDictionaryForm() {
 
   init {
     initialize(form)
@@ -49,7 +49,7 @@ class DictionaryFormModel(val form: DictionaryForm, ctxt: Connection? = null): V
   override fun formClassName(): String = form.javaClass.name
 }
 
-class ReportSelectionFormModel(val form: ReportSelectionForm, ctxt: Connection? = null): VReportSelectionForm(ctxt) {
+class ReportSelectionFormModel(val form: ReportSelectionForm): VReportSelectionForm() {
 
   init {
     initialize(form)
