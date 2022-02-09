@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+    <type ident="ExternCode">
+        <code>
+            <codedesc ident="id$0" label="True" />
+            <codedesc ident="id$1" label="False" />
+        </code>
+    </type>
+</insert>
