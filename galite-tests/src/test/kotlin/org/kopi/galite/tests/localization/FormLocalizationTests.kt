@@ -77,6 +77,7 @@ class FormLocalTests : GaliteVUITestBase() {
     form.open()
   }
 
+  @Ignore
   @Test
   fun `test titles of form blocks`() {
     val innerBlockLocalizer = localizationManager
@@ -92,6 +93,7 @@ class FormLocalTests : GaliteVUITestBase() {
     assertEquals(externBlockLocalizer.getTitle(), externBlockCaption.text)
   }
 
+  @Ignore
   @Test
   fun `test fields label`() {
     val localizationInternBlock = localizationManager
@@ -120,6 +122,7 @@ class FormLocalTests : GaliteVUITestBase() {
     assertEquals(externField1.getLabel(), externLabel1.text)
   }
 
+  @Ignore
   @Test
   fun `test actors name`() {
     val actorPanel = _get<VActorPanel> { id = "actors" }
@@ -132,6 +135,7 @@ class FormLocalTests : GaliteVUITestBase() {
     assertEquals(externActor.getLabel(), actors[1]._text)
   }
 
+  @Ignore
   @Test
   fun `test menu names`() {
     val button = _get<Button> { classes = "actors-rootNavigationItem" }
