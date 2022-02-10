@@ -33,8 +33,12 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.Page
 import com.vaadin.flow.function.ValueProvider
 import com.vaadin.flow.shared.Registration
+
+import elemental.json.JsonObject
+import elemental.json.JsonValue
 
 /**
  * The `DTable` is a table implementing the [UTable]
@@ -91,13 +95,17 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   override fun onAttach(attachEvent: AttachEvent) {
     val page = attachEvent.ui.page
 
-    page.retrieveExtendedClientDetails { details ->
-      attachEvent.ui.internals.extendedClientDetails = null
-      height = (details.windowInnerHeight - 200).toString() + "px"
-    }
+    page.setWindowHeight()
 
     browserWindowResizeListener = page.addBrowserWindowResizeListener { event ->
       height = (event.height - 200).toString() + "px"
+    }
+  }
+
+  private fun Page.setWindowHeight() {
+    val js = "return Vaadin.Flow.getBrowserDetailsParameters();"
+    executeJs(js).then {
+      height = ((it as JsonObject).get<JsonValue>("v-wh").asNumber() - 200).toString() + "px"
     }
   }
 
