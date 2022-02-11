@@ -36,33 +36,40 @@ class PivotTable() {
     Row(arrayOf("Aglukkaq Leona", "Female", 45)),
     Row(arrayOf("Albas Dan", "Male", 36))
   )
+
+  var groupingRows: List<Int> = listOf()
+  var groupingColumns: List<Int> = listOf()
+  var sum: Int? = null
   var columns = mutableListOf<VReportColumn>()
 }
 
 fun main() {
-  pivot(listOf(0), listOf(1), 2)
+  val pivot = PivotTable()
+  pivot.groupingRows = listOf(0, 1)
+  pivot.groupingColumns = listOf(1)
+  pivot.sum = 2
+  pivot.print()
 }
 
-fun pivot(rows: List<Int>, cols: List<Int>, sum: Int) {
-  val p = PivotTable()
-  val grouped: MutableMap<Grouping, List<Row>> = p.rows.groupBy(rows, cols)
+fun PivotTable.print() {
+  val grouped: MutableMap<Grouping, List<Row>> = rows.groupBy(groupingRows, groupingColumns)
   val groupedColumns: Set<Any?> = grouped.uniqueValues(1)
   print(',')
   groupedColumns.stream().forEach { t: Any? -> print("$t,") }
   println()
-  val years = grouped.uniqueValues(0)
+  val groupedRows = grouped.uniqueValues(0)
 
-  years.stream()
+  groupedRows.stream()
     .forEach { y ->
       print("$y,")
       groupedColumns.stream().forEach { t: Any? ->
-        val yt = Grouping(mapOf(0 to y, 1 to t))
-        val players_ = grouped[yt]
-        if (players_ != null) {
-          val total = players_
+        val grouping = Grouping(mapOf(0 to y, 1 to t))
+        val rows = grouped[grouping]
+        if (sum!= null && rows != null) {
+          val total = rows
             .stream()
             .collect(Collectors.summingLong {
-              (it.getValueAt(sum) as Number).toLong()
+              (it.getValueAt(sum!!) as Number).toLong()
             })
           print(total)
         }
