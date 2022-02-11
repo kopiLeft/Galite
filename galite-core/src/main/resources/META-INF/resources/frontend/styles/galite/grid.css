@@ -235,3 +235,8 @@
 :host([theme~="shown-filter"]) #scroller #table #header [part~="row"]:nth-of-type(2) {
     display: flex;
 }
+
+[part~="cell"]:not([part~="header-cell"]):focus {
+    background-color: #009bd4 !important;
+    color: #ffffff !important;
+}
