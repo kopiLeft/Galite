@@ -65,7 +65,6 @@ vaadin-grid-cell-content, .k-listdialog {
 
 .filter-text::part(input-field) {
     border-radius: 0;
-    border-bottom: none;
 }
 
 .filter-text::part(input-field):focus-within {

@@ -147,7 +147,7 @@ pre {
     font-size: 12px !important;
 }
 
-.multiple ::part(value):focus {
+.multiple ::part(input-field):focus-within {
     outline : none;
     background: none;
     border-bottom: #009bd4 1px solid;
