@@ -198,3 +198,8 @@ vaadin-button.k-actor::after, vaadin-button.k-actor::before {
 .vaadin-menu-item:not(:last-child) {
     border-bottom: 1px solid #dadada;
 }
+
+.actor-navigationItem vaadin-icon, .actor-navigationItem-disabled vaadin-icon {
+    width: 30px;
+    font-size: 1em !important;
+}
