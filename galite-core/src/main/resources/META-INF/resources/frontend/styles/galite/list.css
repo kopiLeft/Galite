@@ -63,12 +63,13 @@ vaadin-grid-cell-content, .k-listdialog {
     padding: 0;
 }
 
-.filter-text {
-    border-right: 1px solid #ddd;
-}
-
 .filter-text::part(input-field) {
     border-radius: 0;
+    border-bottom: none;
+}
+
+.filter-text::part(input-field):focus-within {
+    border-bottom: #009bd4 1px solid;
 }
 
 .filter-text {

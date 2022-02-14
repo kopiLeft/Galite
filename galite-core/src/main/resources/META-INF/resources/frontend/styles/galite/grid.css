@@ -236,7 +236,12 @@
     display: flex;
 }
 
-[part~="cell"]:not([part~="header-cell"]):focus {
+[part~="cell"]:not([part~="header-cell"]):focus,
+[part~="cell"]:not([part~="header-cell"]):active {
     background-color: #009bd4 !important;
     color: #ffffff !important;
+}
+
+:host([navigating]) [part~="cell"]:focus::before {
+    box-shadow: none;
 }
