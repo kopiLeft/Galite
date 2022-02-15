@@ -22,6 +22,7 @@
 ::part(cell header-cell) {
     background: #f2f2f2;
     color: #505050;
+    user-select: none;
 }
 
 ::part(cell) {
@@ -38,6 +39,10 @@ vaadin-grid > vaadin-grid-cell-content {
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.750rem;
+}
+
+::part(resize-handle)::before {
+    width: 1px !important;
 }
 
 ::part(resize-handle) {
