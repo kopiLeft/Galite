@@ -29,6 +29,7 @@ import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
+import org.kopi.galite.visual.form.VConstants
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
@@ -47,6 +48,7 @@ import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
 import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.shared.Registration
 
@@ -56,7 +58,7 @@ import com.vaadin.flow.shared.Registration
  *
  * Protected constructor to use to create other types of fields.
  */
-open class InputTextField<C> internal constructor(internal val internalField: C)
+open class InputTextField<C> internal constructor(protected val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
       HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
@@ -243,6 +245,19 @@ open class InputTextField<C> internal constructor(internal val internalField: C)
     super.setAlignment(align)
     this.align = align.toString().toLowerCase()
   }*/
+
+  /**
+   * Sets the alignment of a text field.
+   * @param align The text field alignment.
+   */
+  fun setAlign(align: Int) {
+    if(internalField is com.vaadin.flow.component.textfield.TextField) {
+      when (align) {
+        VConstants.ALG_RIGHT -> internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        VConstants.ALG_CENTER -> internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER)
+      }
+    }
+  }
 
   /**
    * Returns `true` if the auto complete function should be used.

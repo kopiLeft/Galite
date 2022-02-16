@@ -308,6 +308,7 @@ class TextField(val model: VField,
 
     setValidator(text)
     setTextTransform(text)
+    text.setAlign(align)
     if (noEdit) {
       text.setTextValidator(NoeditValidator(maxLength))
       text.isReadOnly = true
@@ -348,13 +349,6 @@ class TextField(val model: VField,
       }
     } else {
       VInputButtonField(size)
-    }
-
-    if(text.internalField is TextField) {
-      when (align) {
-        VConstants.ALG_RIGHT -> text.internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-        VConstants.ALG_CENTER ->text.internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER)
-      }
     }
 
     text.size = size
