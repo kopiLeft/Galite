@@ -82,7 +82,7 @@ open class DFieldHandler internal constructor(rowController: VFieldUI) : Abstrac
   override fun valueChanged(r: Int) {
     val dispRow: Int = getRowController().blockView.getDisplayLine(r)
     if (dispRow != -1) {
-      if (getRowController().displays != null) {
+      if (getRowController().isDisplayInitialized) {
         getRowController().displays[dispRow]!!.updateText()
       }
       if (getRowController().detailDisplay != null) {

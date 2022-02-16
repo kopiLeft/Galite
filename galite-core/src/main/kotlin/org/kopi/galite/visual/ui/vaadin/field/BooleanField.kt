@@ -59,8 +59,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     setLabel(trueRepresentation, falseRepresentation)
     content.add(yes)
     content.add(no)
-    // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
-    // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
     add(content)
     yes.addValueChangeListener(::onYesChange)
     no.addValueChangeListener(::onNoChange)

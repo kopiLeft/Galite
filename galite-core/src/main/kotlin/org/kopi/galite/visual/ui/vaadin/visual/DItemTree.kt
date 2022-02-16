@@ -50,8 +50,6 @@ import com.vaadin.flow.component.textfield.TextField
  * The implementation is based on [DWindow]
  *
  * @param model The item tree model.
- *
- * TODO Externalize favorites handling.
  */
 class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
 

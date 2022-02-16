@@ -24,11 +24,6 @@ import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.selectAll
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
 
 class Utils {
   companion object {
@@ -82,8 +77,6 @@ class Utils {
       }
     }
 
-    fun toSql(date: Date?): String = TODO()
-
     fun toSql(l: String?): String {
       return if (l == null) {
         NULL_LITERAL
@@ -100,12 +93,6 @@ class Utils {
         b.toString()
       }
     }
-
-    fun toSql(t: Time?): String = TODO()
-    fun toSql(d: Int?): String = d?.toString() ?: NULL_LITERAL
-    fun toSql(t: Timestamp?): String? = TODO()
-    fun toSql(t: Week?): String = TODO()
-    fun toSql(m: Month?): String = TODO()
 
     const val NULL_LITERAL = "NULL"
   }

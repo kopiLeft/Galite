@@ -124,7 +124,7 @@ class DBlockDropHandler(private val block: VBlock) {
    * @throws VException Visual errors.
    */
   private fun handleDrop(file: File, flavor: String?): Boolean {
-    val target: VField = block.getDropTarget(flavor.orEmpty()) ?: return false // TODO: orEmpty() ?
+    val target: VField = block.getDropTarget(flavor.orEmpty()) ?: return false
     target.onBeforeDrop()
     return if (target is VStringField) {
       if (target.width < file.absolutePath.length) {

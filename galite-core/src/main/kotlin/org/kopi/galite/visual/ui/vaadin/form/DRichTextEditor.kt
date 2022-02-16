@@ -35,9 +35,7 @@ class DRichTextEditor(
         options: Int,
         height: Int,
         detail: Boolean
-) : DField(model, label, align, options, detail),
-        UTextField
-/*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
+) : DField(model, label, align, options, detail), UTextField {
 
   //---------------------------------------------------
   // DATA MEMBERS

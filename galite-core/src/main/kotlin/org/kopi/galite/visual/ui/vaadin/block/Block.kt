@@ -73,15 +73,6 @@ abstract class Block(private val dropHandler: DBlockDropHandler?,
   }
 
   /**
-   * Sets the block title.
-   * @param title The block title.
-   */
-  fun setTitle(title: String?) {
-    element.setAttribute("title", title)
-    // TODO
-  }
-
-  /**
    * Switches the block view.
    * Switch is only performed when it is a multi block.
    * @param detail Should be switch to the detail view ?

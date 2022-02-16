@@ -234,7 +234,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
    * @return The chart data to be used.
    */
   protected abstract fun createChartData(name: String?)
-  /** : ChartData TODO */
 
   //---------------------------------------------------
   // INNER CLASSES

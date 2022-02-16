@@ -68,7 +68,6 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>, override val so
     values.add(dimensionValue)
   }
 
-  // TODO add Decimal types
   val model: VDimension
     get() {
       val format: VColumnFormat? = if (formatTrigger != null) {
