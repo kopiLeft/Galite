@@ -171,18 +171,15 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
 
     /*** DECIMAL ***/
     // test decimal field + min and max value
-    val decimal = visit(domain = DECIMAL(width = 10, scale = 5), position = at(9, 1)) {
+    val decimal = visit(domain = DECIMAL(width = 10, scale = 5) { min = BigDecimal("1.9"); max = BigDecimal("5.9") },
+                        position = at(9, 1)) {
       label = "decimal"
-      minValue = BigDecimal("1.9")
-      maxValue = BigDecimal("5.9")
     }
 
     /*** INT ***/
     // test int field + min and max value
-    val int = visit(domain = INT(3), position = at(10, 1)) {
+    val int = visit(domain = INT(3) { min = 1; max = 100 }, position = at(10, 1)) {
       label = "int"
-      minValue = 1
-      maxValue = 100
     }
 
     /*** CODE ***/

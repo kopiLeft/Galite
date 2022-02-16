@@ -179,11 +179,9 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
       options(FieldOption.NOECHO)
       access { Access.SKIPPED }
     }
-    val age = visit(domain = INT(3), position = follow(name)) {
+    val age = visit(domain = INT(3) { min = 0; max = 90 }, position = follow(name)) {
       label = "age"
       help = "The user age"
-      minValue = 0
-      maxValue = 90
       columns(u.age) {
         priority = 1
       }

@@ -30,9 +30,17 @@ import org.kopi.galite.visual.type.Week
  * Integer field type is LONG is used to insert integers.
  * Only the text width is to be defined.
  */
-class LONG(width: Int) : Domain<Long>(width)
+class LONG(width: Int, init: Domain<Long>.() -> Unit = {}) : Domain<Long>(width) {
+  init {
+    init()
+  }
+}
 
-class INT(width: Int) : Domain<Int>(width)
+class INT(width: Int, init: Domain<Int>.() -> Unit = {}) : Domain<Int>(width) {
+  init {
+    init()
+  }
+}
 
 /**
  * A STRING is used to enter characters which can be either letters, numbers or both.
@@ -99,7 +107,11 @@ class TEXT(width: Int,
  * The maximal scale i.e the number of characters standing after the comma has also to be defined.
  * Also the comma has to be counted as a character.
  */
-class DECIMAL(width: Int, scale: Int) : Domain<BigDecimal>(width, scale)
+class DECIMAL(width: Int, scale: Int, init: Domain<BigDecimal>.() -> Unit = {}) : Domain<BigDecimal>(width, scale) {
+  init {
+    init()
+  }
+}
 
 /**
  * Fraction numbers are [DECIMAL] numbers.
@@ -107,7 +119,11 @@ class DECIMAL(width: Int, scale: Int) : Domain<BigDecimal>(width, scale)
  * Also the comma has to be counted as a character.
  * Only the width is to be defined in a FRACTION.
  */
-class FRACTION(width: Int) : Domain<BigDecimal>(width)
+class FRACTION(width: Int, init: Domain<BigDecimal>.() -> Unit = {}) : Domain<BigDecimal>(width) {
+  init {
+    init()
+  }
+}
 
 /**
  * In a BOOL you have to assign a Boolean value to the item you have entered.

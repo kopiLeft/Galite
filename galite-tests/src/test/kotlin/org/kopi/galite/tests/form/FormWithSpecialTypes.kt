@@ -111,10 +111,10 @@ class BlockWithSpecialTypes : Block("Test block", 1, 1) {
     columns(p.ts)
   }
 
-  val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
+  val price = visit(domain = DECIMAL(width = 10, scale = 5) { min = BigDecimal("1.9") },
+                    position = at(1, 1)) {
     label = "price"
     help = "The price"
-    minValue = BigDecimal("1.9")
     columns(p.price)
   }
 

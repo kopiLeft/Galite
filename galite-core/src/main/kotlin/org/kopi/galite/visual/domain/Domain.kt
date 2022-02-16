@@ -92,6 +92,30 @@ open class Domain<T>(val width: Int? = null,
   val ident: String = this::class.java.simpleName
 
   /**
+   * Sets the minimum value of a number domain.
+   */
+  var <U> Domain<U>.min : U? where U : Comparable<U>?, U : Number?
+    get() = min
+    set(value) {
+      min = value
+    }
+
+  /**
+   * Sets the maximum value of a number domain.
+   */
+  var <U> Domain<U>.max : U? where U : Comparable<U>?, U : Number?
+    get() = max
+    set(value) {
+      max = value
+    }
+
+  /** the minimum value that cannot exceed  */
+  private var min : T? = null
+
+  /** the maximum value that cannot exceed  */
+  private var max : T? = null
+
+  /**
    * Determines the field data type
    */
   var kClass: KClass<*>? = null
