@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VDateColumn
 import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
@@ -191,8 +192,8 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  override fun getDate(r: Int): LocalDate {
-    return getObject(r) as LocalDate
+  override fun getDate(r: Int): LocalDate? {
+    return getObject(r) as? LocalDate
   }
 
   /**
@@ -329,7 +330,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
       if (handler == null || force) {
         setDate(record, LocalDate.now())
       } else {
-        setDate(record, handler.selectDate(getDate(record)))
+        setDate(record, handler.selectDate(getDate(record)!!))
       }
       true
     }
@@ -361,7 +362,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
           // not valid, get now
           setDate(record, LocalDate.now())
         }
-        setDate(record, getDate(record).plusDays(if (desc) -1 else 1))
+        setDate(record, getDate(record)?.plusDays(if (desc) -1 else 1))
       }
     }
   }
@@ -399,7 +400,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
      *
      */
     fun toText(value: LocalDate): String {
-      return value.toString()
+      return value.format()
     }
   }
 }

@@ -186,7 +186,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  override fun getMonth(r: Int): Month = getObject(r) as Month
+  override fun getMonth(r: Int): Month? = getObject(r) as? Month
 
   /**
    * Returns the field value of the current record as an object
@@ -313,7 +313,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           // not valid, get now
           setMonth(record, Month.now())
         }
-        setMonth(record, getMonth(record).add(if (desc) -1 else 1))
+        setMonth(record, getMonth(record)?.add(if (desc) -1 else 1))
       }
     }
   }

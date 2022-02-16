@@ -20,6 +20,7 @@ package org.kopi.galite.visual.report
 
 import java.io.Serializable
 import java.math.BigDecimal
+import java.time.LocalDate
 
 import javax.swing.event.EventListenerList
 
@@ -76,10 +77,16 @@ class MReport : Constants, Serializable {
     baseRows.forEach {
       if (it!!.getValueAt(column) != null) {
         val value = it.getValueAt(column).let {
-          if(it is BigDecimal) {
-            it.format()
-          } else {
-            it.toString()
+          when (it) {
+            is BigDecimal -> {
+              it.format()
+            }
+            is LocalDate -> {
+              it.format()
+            }
+            else -> {
+              it.toString()
+            }
           }
         }
 

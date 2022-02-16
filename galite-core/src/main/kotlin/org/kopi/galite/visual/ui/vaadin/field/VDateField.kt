@@ -21,6 +21,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Optional
 
+import org.kopi.galite.visual.type.format
+
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.ComponentEventListener
@@ -66,7 +68,7 @@ class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifi
   override fun setPresentationValue(newPresentationValue: String?) {
     val date = TimestampValidator.parseDate(newPresentationValue.orEmpty())
 
-    content.value = date?.toString() ?: newPresentationValue.orEmpty()
+    content.value = date?.format() ?: newPresentationValue.orEmpty()
   }
 }
 

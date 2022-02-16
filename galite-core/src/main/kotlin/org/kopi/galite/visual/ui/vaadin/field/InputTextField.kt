@@ -112,12 +112,16 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   }
 
   private fun format(s: Any?): String? =
-    if (s is LocalDate) {
-      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-    } else if (s is BigDecimal) {
-      s.format()
-    } else {
-      s?.toString()
+    when (s) {
+      is LocalDate -> {
+        s.format()
+      }
+      is BigDecimal -> {
+        s.format()
+      }
+      else -> {
+        s?.toString()
+      }
     }
 
   override fun initContent(): C = internalField

@@ -1262,7 +1262,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getDate(): LocalDate = getDate(block!!.currentRecord)
+  fun getDate(): LocalDate? = getDate(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a int value.
@@ -1281,7 +1281,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getMonth(): Month = getMonth(block!!.currentRecord)
+  fun getMonth(): Month? = getMonth(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a string value.
@@ -1395,7 +1395,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getDate(r: Int): LocalDate {
+  open fun getDate(r: Int): LocalDate? {
     throw InconsistencyException()
   }
 
@@ -1404,7 +1404,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getMonth(r: Int): Month {
+  open fun getMonth(r: Int): Month? {
     throw InconsistencyException()
   }
 

@@ -131,7 +131,9 @@ class DGridTextEditorField(
     super.reset()
   }
 
-  override fun getText(): String? = editor.value?.toString()
+  override fun getText(): String? {
+    return editor.value?.toString()
+  }
 
   override fun setHasCriticalValue(b: Boolean) {}
 

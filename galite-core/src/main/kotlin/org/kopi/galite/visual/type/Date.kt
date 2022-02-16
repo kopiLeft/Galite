@@ -16,23 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.report
+package org.kopi.galite.visual.type
 
-import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-import org.kopi.galite.visual.type.format
-
-open class VCellFormat {
-  /**
-   *   Return a formatted string of the Object
-   * @return the value formatted
-   */
-  open fun format(value: Any?): String {
-    return when (value) {
-      is LocalDate -> value.format()
-      is BigDecimal -> value.format()
-      else -> value?.toString() ?: ""
-    }
-  }
+/**
+ * Format date on 
+ */
+fun LocalDate.format(): String {
+  return format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 }
