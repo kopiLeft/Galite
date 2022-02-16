@@ -15,8 +15,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
   id("org.jetbrains.kotlin.jvm") version "1.6.10" apply false
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
@@ -38,10 +36,6 @@ subprojects {
   dependencies {
     "implementation"(kotlin("stdlib"))
     "implementation"(kotlin("reflect"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
   }
 }
 

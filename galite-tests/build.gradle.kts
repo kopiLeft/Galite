@@ -70,10 +70,6 @@ dependencies {
 }
 
 tasks {
-  compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-  }
-
   findByName("bootJar")?.apply {
     enabled = false
   }

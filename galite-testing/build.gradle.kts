@@ -37,12 +37,6 @@ dependencies {
   implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
 }
 
-tasks {
-  compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-  }
-}
-
 dependencyManagement {
   imports {
     mavenBom("com.vaadin:vaadin-bom:${Versions.VAADIN}")

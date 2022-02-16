@@ -28,9 +28,3 @@ dependencies {
   testImplementation("com.h2database", "h2", Versions.H2)
   testImplementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 }
-
-tasks {
-  compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-  }
-}
