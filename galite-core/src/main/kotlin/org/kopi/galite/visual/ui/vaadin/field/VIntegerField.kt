@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 /**
  * An integer field.
@@ -30,6 +31,7 @@ class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextFi
     internalField.element.setProperty("min", minval)
     internalField.element.setProperty("max", maxval)
     this.width = width.toString()
+    internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
   }
 
   override fun setMaxLength(maxLength: Int) {

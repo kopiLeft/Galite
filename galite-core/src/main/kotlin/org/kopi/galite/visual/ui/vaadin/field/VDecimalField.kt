@@ -22,6 +22,7 @@ import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.dependency.JsModule
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 /**
  * A decimal field.
@@ -36,6 +37,7 @@ class VDecimalField(col: Int,
   init {
     internalField.pattern = "[0-9-.,]*"
     internalField.isPreventInvalidInput = true
+    internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
     val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
     if (dfs!!.decimalSeparator != '.') {

@@ -39,6 +39,7 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.binder.Binder
 
 /**
@@ -347,6 +348,13 @@ class TextField(val model: VField,
       }
     } else {
       VInputButtonField(size)
+    }
+
+    if(text.internalField is TextField) {
+      when (align) {
+        VConstants.ALG_RIGHT -> text.internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        VConstants.ALG_CENTER ->text.internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER)
+      }
     }
 
     text.size = size

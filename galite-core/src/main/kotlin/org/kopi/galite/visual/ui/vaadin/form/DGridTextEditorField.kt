@@ -46,6 +46,7 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
@@ -153,6 +154,12 @@ class DGridTextEditorField(
     if (columnView.hasAutofill()) {
       editor.setAutofill()
     }
+
+    when (align) {
+      VConstants.ALG_RIGHT -> editor.wrappedField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      VConstants.ALG_CENTER -> editor.wrappedField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER)
+    }
+
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     //editor.setConvertType(getConvertType(columnView.model))
     return editor

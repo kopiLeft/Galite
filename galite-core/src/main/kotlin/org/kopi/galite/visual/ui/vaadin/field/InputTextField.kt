@@ -56,7 +56,7 @@ import com.vaadin.flow.shared.Registration
  *
  * Protected constructor to use to create other types of fields.
  */
-open class InputTextField<C> internal constructor(protected val internalField: C)
+open class InputTextField<C> internal constructor(internal val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
       HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
