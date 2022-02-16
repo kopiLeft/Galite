@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.form
 
-import java.sql.Date
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -247,7 +247,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): Date? = if(value[r] == null) null else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): LocalDate? = if(value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another

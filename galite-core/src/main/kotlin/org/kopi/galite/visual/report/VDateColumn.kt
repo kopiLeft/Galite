@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Date
+import java.time.LocalDate
 
 /**
  * Represents a report column description
@@ -55,7 +55,7 @@ class VDateColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Date).compareTo(object2 as Date)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as LocalDate).compareTo(object2 as LocalDate)
 
   /**
    * Returns the width of cells in this column in characters

@@ -17,9 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Optional
-
-import org.kopi.galite.visual.type.Date
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.ComponentEvent
@@ -52,7 +52,7 @@ class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifi
     }
     internalField.addPickerListener {
       if(it.value.isNotEmpty()) {
-        val date = Date.parse(it.value, "yyyy-MM-dd").toString()
+        val date = LocalDate.parse(it.value, DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
 
         if(content.value != date) {
           // Synchronize value with textfield

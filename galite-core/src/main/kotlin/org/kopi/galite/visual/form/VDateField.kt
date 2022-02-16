@@ -27,7 +27,6 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VDateColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
@@ -109,12 +108,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
     when {
       month == 0 -> {
-        val now: Date = Date.now()
-        month = now.month
+        val now: LocalDate = LocalDate.now()
+        month = now.monthValue
         year = now.year
       }
       year == -2 -> {
-        val now: Date = Date.now()
+        val now: LocalDate = LocalDate.now()
         year = now.year
       }
       year < 50 -> {
@@ -132,7 +131,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    setDate(rec, Date(year, month, day))
+    setDate(rec, LocalDate.of(year, month, day))
   }
 
   // ----------------------------------------------------------------------
@@ -149,7 +148,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Sets the field value of given record to a date value.
    */
-  override fun setDate(r: Int, v: Date?) {
+  override fun setDate(r: Int, v: LocalDate?) {
     if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r]!! != v) {
@@ -167,7 +166,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * Warning:	This method will become inaccessible to kopi users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setDate(r, v as? Date)
+    setDate(r, v as? LocalDate)
   }
 
   /**
@@ -177,8 +176,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val date = result[column]) {
-      is LocalDate -> Date(date)
-      is java.sql.Date -> Date(date)
+      is java.sql.Date -> date.toLocalDate()
       else -> null
     }
   }
@@ -193,8 +191,8 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  override fun getDate(r: Int): Date {
-    return getObject(r) as Date
+  override fun getDate(r: Int): LocalDate {
+    return getObject(r) as LocalDate
   }
 
   /**
@@ -204,7 +202,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     return value[r]
   }
 
-  override fun toText(o: Any?): String = if (o == null) "" else Companion.toText(o as Date)
+  override fun toText(o: Any?): String = if (o == null) "" else Companion.toText(o as LocalDate)
 
   override fun toObject(s: String): Any? {
     if (s == "") {
@@ -229,12 +227,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
     when {
       month == 0 -> {
-        val now: Date = Date.now()
-        month = now.month
+        val now: LocalDate = LocalDate.now()
+        month = now.monthValue
         year = now.year
       }
       year == -2 -> {
-        val now: Date = Date.now()
+        val now: LocalDate = LocalDate.now()
         year = now.year
       }
       year < 50 -> {
@@ -252,7 +250,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    return Date(year, month, day)
+    return LocalDate.of(year, month, day)
   }
 
   /**
@@ -269,7 +267,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): java.sql.Date? = if (value[r] == null) null else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): LocalDate? = if (value[r] == null) null else value[r]
 
   /**
    * Copies the value of a record to another
@@ -292,7 +290,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * Returns the data type handled by this field.
    */
   override fun getDataType(): KClass<*> {
-    return Date::class
+    return LocalDate::class
   }
 
   // ----------------------------------------------------------------------
@@ -302,7 +300,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns a string representation of a date value wrt the field type.
    */
-  fun formatDate(value: Date): String = Companion.toText(value)
+  fun formatDate(value: LocalDate): String = Companion.toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
@@ -329,7 +327,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         true
       }
       if (handler == null || force) {
-        setDate(record, Date.now())
+        setDate(record, LocalDate.now())
       } else {
         setDate(record, handler.selectDate(getDate(record)))
       }
@@ -361,9 +359,9 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
           checkType(getText(record))
         } catch (e: VException) {
           // not valid, get now
-          setDate(record, Date.now())
+          setDate(record, LocalDate.now())
         }
-        setDate(record, getDate(record).add(if (desc) -1 else 1))
+        setDate(record, getDate(record).plusDays(if (desc) -1 else 1))
       }
     }
   }
@@ -372,7 +370,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
 
-  private var value: Array<Date?> = arrayOfNulls(2 * bufferSize)
+  private var value: Array<LocalDate?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     internal fun stringToInt(input: String): Int {
@@ -400,7 +398,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     /**
      *
      */
-    fun toText(value: Date): String {
+    fun toText(value: LocalDate): String {
       return value.toString()
     }
   }

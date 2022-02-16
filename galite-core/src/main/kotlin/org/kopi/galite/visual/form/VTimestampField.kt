@@ -19,6 +19,7 @@
 package org.kopi.galite.visual.form
 
 import java.time.Instant
+import java.time.LocalDate
 import java.util.StringTokenizer
 
 import kotlin.math.min
@@ -28,7 +29,6 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTimestampColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.visual.Message
 import org.kopi.galite.visual.visual.MessageCode
@@ -116,12 +116,12 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     }
     when {
       month == 0 -> {
-        val now = Date.now()
-        month = now.month
+        val now = LocalDate.now()
+        month = now.monthValue
         year = now.year
       }
       year == -2 -> {
-        val now = Date.now()
+        val now = LocalDate.now()
         year = now.year
       }
       year < 50 -> {

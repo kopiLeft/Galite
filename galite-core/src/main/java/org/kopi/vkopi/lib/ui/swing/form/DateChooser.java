@@ -41,6 +41,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -53,7 +54,6 @@ import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import org.kopi.galite.visual.type.Date;
 import org.kopi.galite.visual.type.Month;
 import org.kopi.galite.visual.type.Week;
 import org.kopi.galite.visual.visual.VlibProperties;
@@ -76,8 +76,8 @@ public class DateChooser extends JPanel implements ActionListener {
    * Construct a new <code>DateChooser</code>. The date for the chooser will
    * be initialized to the current date.
    */
-  public DateChooser(Date date) {
-    selectedDate = date == null ? Date.Companion.now() : date;
+  public DateChooser(LocalDate date) {
+    selectedDate = date == null ? LocalDate.now() : date;
 
     setLayout(new BorderLayout(5, 5));
     setOpaque(false);
@@ -188,7 +188,7 @@ public class DateChooser extends JPanel implements ActionListener {
     Object	o = evt.getSource();
 
     if (o == todayButton) {
-      selectedDate = Date.Companion.now();
+      selectedDate = LocalDate.now();
       okay = true;
       dispose();
     } else {
@@ -217,14 +217,14 @@ public class DateChooser extends JPanel implements ActionListener {
   /**
    * @return the current selected date (can be null)
    */
-  public Date getSelectedDate() {
+  public LocalDate getSelectedDate() {
     return selectedDate;
   }
 
   /**
    *
    */
-  public void setSelectedDate(Date selectedDate) {
+  public void setSelectedDate(LocalDate selectedDate) {
     this.selectedDate = selectedDate;
   }
 
@@ -236,14 +236,14 @@ public class DateChooser extends JPanel implements ActionListener {
   }
 
   private void incrementDay(int count) {
-    selectedDate = selectedDate.add(count);
+    selectedDate = selectedDate.plusDays(count);
   }
 
   private void incrementMonth(int count) {
     Month	m = new Month(selectedDate).add(count);
 
-    if (selectedDate.getDay() < m.getLastDay().getDay()) {
-      selectedDate = new Date(m.getYear(), m.getMonth(), selectedDate.getDay());
+    if (selectedDate.getDayOfMonth() < m.getLastDay().getDayOfMonth()) {
+      selectedDate = LocalDate.of(m.getYear(), m.getMonth(), selectedDate.getDayOfMonth());
     } else {
       selectedDate = m.getLastDay();
     }
@@ -256,27 +256,27 @@ public class DateChooser extends JPanel implements ActionListener {
   /**
    * Returns the number of days in the specified month
    */
-  /*package*/ static int getDaysInMonth(Date d) {
-    return new Month(d).getLastDay().getDay();
+  /*package*/ static int getDaysInMonth(LocalDate d) {
+    return new Month(d).getLastDay().getDayOfMonth();
   }
 
   private void updateCalendar() {
-    firstDay = new Date(selectedDate.getYear(), selectedDate.getMonth(), 1).getWeekday();
+    firstDay = LocalDate.of(selectedDate.getYear(), selectedDate.getMonth(), 1).getDayOfWeek().getValue();
 
     yearLabel.setText(String.valueOf(selectedDate.getYear()));
-    monthLabel.setText(MONTH_NAMES[selectedDate.getMonth() - 1]);
+    monthLabel.setText(MONTH_NAMES[selectedDate.getMonthValue() - 1]);
   }
 
   /*package*/ void refresh() {
     cal.repaint();
   }
 
-  public static Date getDate(final Container container, final Component field, final Date date) {
+  public static LocalDate getDate(final Container container, final Component field, final LocalDate date) {
     final DateChooser	chooser = new DateChooser(date);
     return chooser.doModal(container, field, date);
   }
 
-  private Date doModal(final Container parent, final Component field, final Date date) {
+  private LocalDate doModal(final Container parent, final Component field, final LocalDate date) {
     popup = new JPopupMenu() {
       /**
 		 * Comment for <code>serialVersionUID</code>
@@ -440,7 +440,7 @@ public class DateChooser extends JPanel implements ActionListener {
     VlibProperties.getString("Dec")
   };
 
-  private Date				selectedDate;
+  private LocalDate				selectedDate;
 
   private boolean			okay;
   private JPopupMenu			popup;
@@ -474,7 +474,7 @@ public class DateChooser extends JPanel implements ActionListener {
     highlightColor = new Color(180, 180, 240);
     addMouseListener(new MouseAdapter() {
         public void mouseClicked(MouseEvent evt) {
-          final Date selectedDate = CalendarPane.this.dateChooser.getSelectedDate();
+          final LocalDate selectedDate = CalendarPane.this.dateChooser.getSelectedDate();
 
           Insets ins = getInsets();
           int x0 = ((getSize().width - getPreferredSize().width) / 2);
@@ -495,7 +495,7 @@ public class DateChooser extends JPanel implements ActionListener {
           int	day = (7 * y) + x - (dp - 1);
 
           if (day >= 1 && day <= DateChooser.getDaysInMonth(selectedDate)) {
-            CalendarPane.this.dateChooser.setSelectedDate(new Date(selectedDate.getYear(), selectedDate.getMonth(), day));
+            CalendarPane.this.dateChooser.setSelectedDate(LocalDate.of(selectedDate.getYear(), selectedDate.getMonth(), day));
             CalendarPane.this.dateChooser.refresh();
             CalendarPane.this.dateChooser.setOkay(true);
             CalendarPane.this.dateChooser.dispose();
@@ -542,7 +542,7 @@ public class DateChooser extends JPanel implements ActionListener {
 
     // $$$ graf 010214 : simplify end of loop test
     for (int d = 1; d <= DateChooser.getDaysInMonth(dateChooser.getSelectedDate()); d++) {
-      gc.setColor(d == dateChooser.getSelectedDate().getDay() ? highlightColor : Color.lightGray);
+      gc.setColor(d == dateChooser.getSelectedDate().getDayOfMonth() ? highlightColor : Color.lightGray);
       gc.fill3DRect(xp, yp, CELL_SIZE, CELL_SIZE, true);
 
       gc.setColor((x > 4) ? WEEKEND_COLOR : Color.black);
@@ -556,7 +556,7 @@ public class DateChooser extends JPanel implements ActionListener {
       // Print the number of the week just for the last line (value for the column KW)
       // if the last week of the month finish the the next month
       if (x == 7 || d == DateChooser.getDaysInMonth(dateChooser.getSelectedDate())) {
-        Week		week = new Week(new Date(dateChooser.getSelectedDate().getYear(), dateChooser.getSelectedDate().getMonth(), d));
+        Week		week = new Week(LocalDate.of(dateChooser.getSelectedDate().getYear(), dateChooser.getSelectedDate().getMonth(), d));
 
         gc.setColor(WEEK_NUMBER_COLOR);
         // x0 + 1 : to put the text a litle more on the right

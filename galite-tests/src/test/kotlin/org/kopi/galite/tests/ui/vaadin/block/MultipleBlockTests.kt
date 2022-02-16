@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.block
 
 import java.math.BigDecimal
+import java.time.LocalDate
 
 import kotlin.test.assertEquals
 
@@ -34,7 +35,6 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -61,7 +61,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
 
     // Enters values to fields
     val currentTimestamp   = Timestamp.now()
-    val currentDate        = Date.now()
+    val currentDate        = LocalDate.now()
     val currentWeek        = Week.now()
     val currentMonth       = Month.now()
     val currentTime        = Time.now()

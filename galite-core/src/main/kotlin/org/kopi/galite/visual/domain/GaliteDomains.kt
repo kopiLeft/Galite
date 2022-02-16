@@ -17,9 +17,9 @@
 package org.kopi.galite.visual.domain
 
 import java.math.BigDecimal
+import java.time.LocalDate
 
 import org.joda.time.DateTime
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
@@ -115,7 +115,7 @@ class FRACTION(width: Int) : Domain<BigDecimal>(width)
  */
 object BOOL : Domain<Boolean>()
 
-object DATE : Domain<Date>()
+object DATE : Domain<LocalDate>()
 
 object MONTH : Domain<Month>()
 
