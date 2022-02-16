@@ -46,7 +46,6 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
