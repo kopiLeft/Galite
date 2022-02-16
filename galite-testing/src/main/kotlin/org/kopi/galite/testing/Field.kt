@@ -80,14 +80,14 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
   val oldValue = gridEditorField._value
   gridEditorField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
 
-  when {
-    gridEditorField is GridEditorTimestampField -> {
+  when (gridEditorField) {
+    is GridEditorTimestampField -> {
       gridEditorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
     }
-    gridEditorField is GridEditorDateField -> {
+    is GridEditorDateField -> {
       gridEditorField._value = (value as LocalDate).format()
     }
-    gridEditorField is GridEditorTextField -> {
+    is GridEditorTextField -> {
       gridEditorField._value = if(value is BigDecimal) value.format() else value.toString()
     }
     else -> {
