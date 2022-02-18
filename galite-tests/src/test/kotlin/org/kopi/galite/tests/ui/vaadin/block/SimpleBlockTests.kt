@@ -43,6 +43,7 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
+import org.kopi.galite.visual.type.format
 
 class SimpleBlockTests: GaliteVUITestBase() {
   val testFieldsVisibilityForm = TestFieldsVisibilityForm().also { it.model }
@@ -89,7 +90,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     assertEquals(currentDate, date.getModel().getDate(0))
     assertEquals(currentMonth, month.getModel().getMonth(0))
     assertEquals(Timestamp.parse(currentTimestamp.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"), timestamp.getModel().getTimestamp(0))
-    assertEquals(currentTime.toString(), time.getModel().getTime(0).toString())
+    assertEquals(currentTime.format(), time.getModel().getTime(0).toString())
     assertEquals(currentWeek, week.getModel().getWeek(0))
     assertEquals(1, codeDomain.getModel().getObject(0))
   }
