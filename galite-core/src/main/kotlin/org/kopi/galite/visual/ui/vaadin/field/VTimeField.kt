@@ -49,7 +49,7 @@ class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
     val time = TimestampValidator.parseTime(newPresentationValue.orEmpty())
 
     content.value = if(time != null) {
-      LocalTime.of(time.hours, time.minutes, time.seconds)
+      LocalTime.of(time.hour, time.minute, time.second)
     } else {
       null
     }

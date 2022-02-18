@@ -20,6 +20,7 @@ package org.kopi.galite.visual.fullcalendar
 import java.sql.SQLException
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Calendar
 
 import org.jetbrains.exposed.sql.Column
@@ -39,7 +40,6 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.visual.Message
@@ -213,8 +213,8 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
       val entry = if(dateField != null) {
         val values = mutableMapOf<VField, Any?>()
         lateinit var date: LocalDate
-        lateinit var start: Time
-        lateinit var end: Time
+        lateinit var start: LocalTime
+        lateinit var end: LocalTime
 
         for (i in 0 until query_cnt) {
           val vField = query_tab[i]!!
@@ -225,10 +225,10 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
               date = value as LocalDate
             }
             fromTimeField -> {
-              start = value as Time
+              start = value as LocalTime
             }
             toTimeField -> {
-              end = value as Time
+              end = value as LocalTime
             }
             else -> values[vField] = value
           }
@@ -288,11 +288,9 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
   fun set(startDateTime: Timestamp, endDateTime: Timestamp) {
     if (dateField != null) {
-      val start = startDateTime.toCalendar()
-      val end = endDateTime.toCalendar()
-      dateField!!.setDate(LocalDate.from(start.toInstant()))
-      fromTimeField!!.setTime(Time(start))
-      toTimeField!!.setTime(Time(end))
+      dateField!!.setDate(LocalDate.from(startDateTime.toSql()))
+      fromTimeField!!.setTime(LocalTime.from(startDateTime.toSql()))
+      toTimeField!!.setTime(LocalTime.from(endDateTime.toSql()))
     } else {
       fromField!!.setTimestamp(startDateTime)
       toField!!.setTimestamp(endDateTime)

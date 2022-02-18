@@ -17,7 +17,9 @@
  */
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Time
+import java.time.LocalTime
+
+import org.kopi.galite.visual.type.format
 
 /**
  * Represents a time chart column.
@@ -29,7 +31,7 @@ class VTimeDimension(ident: String, format: VColumnFormat?) : VDimension(ident, 
   override fun toString(value: Any?): String {
     return when (value) {
       null -> CConstants.EMPTY_TEXT
-      is Time -> value.toString()
+      is LocalTime -> value.format()
       else -> value.toString()
     }
   }

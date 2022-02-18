@@ -23,6 +23,7 @@ import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
 import java.time.LocalDate
+import java.time.LocalTime
 
 import javax.swing.event.EventListenerList
 
@@ -62,7 +63,6 @@ import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -1061,7 +1061,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTime(v: Time?) {
+  fun setTime(v: LocalTime?) {
     setTime(block!!.currentRecord, v)
   }
 
@@ -1181,7 +1181,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setTime(r: Int, v: Time?) {
+  open fun setTime(r: Int, v: LocalTime?) {
     throw InconsistencyException()
   }
 
@@ -1295,7 +1295,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTime(): Time = getTime(block!!.currentRecord)
+  fun getTime(): LocalTime? = getTime(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a week value.
@@ -1447,7 +1447,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getTime(r: Int): Time {
+  open fun getTime(r: Int): LocalTime? {
     throw InconsistencyException()
   }
 

@@ -19,6 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 import org.kopi.galite.visual.type.format
@@ -119,6 +120,9 @@ open class InputTextField<C> internal constructor(protected val internalField: C
         s.format()
       }
       is BigDecimal -> {
+        s.format()
+      }
+      is LocalTime -> {
         s.format()
       }
       else -> {

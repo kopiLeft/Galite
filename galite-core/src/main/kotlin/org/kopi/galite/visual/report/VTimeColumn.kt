@@ -18,7 +18,11 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Time
+import java.sql.Time
+import java.time.LocalTime
+
+import org.kopi.galite.visual.type.format
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents a report column description
@@ -43,7 +47,7 @@ class VTimeColumn(ident: String?,
                   function,
                   5,  // width, default time format
                   1,
-                  format) {
+                  format ?: VTimeFormat()) {
   /**
    * Compares two objects.
    *
@@ -54,7 +58,7 @@ class VTimeColumn(ident: String?,
    * 0 if the two operands are equal
    */
   override fun compareTo(object1: Any, object2: Any): Int {
-    return (object1 as Time).compareTo(object2 as Time)
+    return (object1 as LocalTime).compareTo(object2 as LocalTime)
   }
 
   /**
@@ -64,5 +68,19 @@ class VTimeColumn(ident: String?,
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatTimeColumn(this, index)
+  }
+
+  /**
+   * Default time formatter.
+   */
+  private class VTimeFormat : VCellFormat() {
+
+    override fun format(value: Any?): String =
+      when(value) {
+        null -> ""
+        is LocalTime -> value.format()
+        is Time -> value.toLocalTime().format()
+        else -> throw InconsistencyException("bad type for $value")
+      }
   }
 }

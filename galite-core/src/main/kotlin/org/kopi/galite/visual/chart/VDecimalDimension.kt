@@ -20,6 +20,7 @@ package org.kopi.galite.visual.chart
 
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 import org.kopi.galite.visual.type.format
 
 /**
@@ -46,6 +47,8 @@ class VDecimalDimension(ident: String,
               if (value.scale() > maxScale || exactScale) value.setScale(maxScale).format()
               else value.format()
             } else if (value is LocalDate) {
+              value.format()
+            } else if (value is LocalTime) {
               value.format()
             } else {
               value.toString()

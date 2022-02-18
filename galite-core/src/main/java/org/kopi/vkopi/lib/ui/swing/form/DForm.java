@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.DefaultSingleSelectionModel;
@@ -58,7 +59,6 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldException;
 import org.kopi.galite.visual.form.VForm;
-import org.kopi.galite.visual.type.Time;
 import org.kopi.galite.visual.util.AWTToPS;
 import org.kopi.galite.visual.util.PrintJob;
 import org.kopi.galite.visual.util.base.InconsistencyException;
@@ -739,7 +739,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
             PdfPTable foot = new PdfPTable(2);
 
             foot.addCell(createCell(((VForm) getModel()).getName(), 7, Color.black, Color.white, Element.ALIGN_LEFT, false));
-            foot.addCell(createCell(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + Time.Companion.now().format("HH:mm"),
+            foot.addCell(createCell(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
                     7, Color.black, Color.white, Element.ALIGN_RIGHT, false));
             foot.setTotalWidth(pageSize.getWidth() - document.leftMargin() - document.rightMargin());
             foot.writeSelectedRows(0, -1, document.leftMargin(), document.bottomMargin() + foot.getTotalHeight(), cb);

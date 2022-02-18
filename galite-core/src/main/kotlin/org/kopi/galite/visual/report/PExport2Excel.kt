@@ -22,6 +22,7 @@ import java.awt.Color
 import java.io.OutputStream
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -38,7 +39,6 @@ import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.kopi.galite.visual.report.UReport.UTable
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -130,7 +130,8 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
-    footer.right = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + Time.now().format("HH:mm")
+    footer.right = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +
+            " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     sheetIndex += 1
     val ps = sheet!!.printSetup
 
