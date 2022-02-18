@@ -146,13 +146,14 @@ class DGridTextEditorField(
   override fun createEditor(): GridEditorTextField {
 
     val editor: GridEditorTextField = createEditorField()
-    //editor.setAlignment(columnView.getModel().getAlign()) TODO
-    //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength())
+    editor.setAlignment(columnView.model.align)
+    //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength()) TODO
     //editor.setHasAutocomplete(columnView.getModel().hasAutocomplete())
     //editor.setNavigationDelegationMode(getNavigationDelegationMode())
     if (columnView.hasAutofill()) {
       editor.setAutofill()
     }
+
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     //editor.setConvertType(getConvertType(columnView.model))
     return editor

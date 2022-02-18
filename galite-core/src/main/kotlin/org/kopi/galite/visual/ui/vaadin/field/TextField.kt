@@ -307,6 +307,7 @@ class TextField(val model: VField,
 
     setValidator(text)
     setTextTransform(text)
+    text.setAlign(align)
     if (noEdit) {
       text.setTextValidator(NoeditValidator(maxLength))
       text.isReadOnly = true
