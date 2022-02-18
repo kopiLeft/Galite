@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.time.LocalDate
+import java.time.LocalTime
+
 import org.kopi.galite.visual.form.ModelTransformer
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VCodeField
@@ -30,6 +33,7 @@ import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorEnumField
@@ -132,7 +136,17 @@ class DGridTextEditorField(
   }
 
   override fun getText(): String? {
-    return editor.value?.toString()
+    return when (val value: Any? = editor.value) {
+      is LocalDate -> {
+        value.format()
+      }
+      is LocalTime -> {
+        value.format()
+      }
+      else -> {
+        value?.toString()
+      }
+    }
   }
 
   override fun setHasCriticalValue(b: Boolean) {}
