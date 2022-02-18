@@ -330,7 +330,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String = if (value[r] == null) VConstants.EMPTY_TEXT else value[r].toString()
+  override fun getTextImpl(r: Int): String = if (value[r] == null) VConstants.EMPTY_TEXT else value[r]!!.format()
 
   /**
    * Returns the SQL representation of field value of given record.
