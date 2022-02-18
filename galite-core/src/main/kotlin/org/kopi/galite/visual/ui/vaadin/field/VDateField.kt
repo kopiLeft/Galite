@@ -54,7 +54,7 @@ class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifi
     }
     internalField.addPickerListener {
       if(it.value.isNotEmpty()) {
-        val date = LocalDate.parse(it.value, DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+        val date = LocalDate.parse(it.value, DateTimeFormatter.ofPattern("yyyy-MM-dd")).format()
 
         if(content.value != date) {
           // Synchronize value with textfield

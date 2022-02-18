@@ -177,6 +177,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val date = result[column]) {
+      is LocalDate -> date
       is java.sql.Date -> date.toLocalDate()
       else -> null
     }

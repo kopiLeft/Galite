@@ -47,5 +47,5 @@ class VDateColumn(title: String,
   /**
    * Returns a string representation of value
    */
-  override fun formatObject(value: Any?): Any = (value as LocalDate).format()
+  override fun formatObject(value: Any?): Any = (value as? LocalDate)?.format() ?: VConstants.EMPTY_TEXT
 }
