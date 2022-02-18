@@ -368,8 +368,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   override fun filterHidden() {
     access {
-      grid.element.themeList.remove("shown-filter")
-      grid.element.themeList.add("hidden-filter")
+      if (filterRow != null) {
+        grid.element.themeList.remove("shown-filter")
+        grid.element.themeList.add("hidden-filter")
+      }
     }
   }
 
