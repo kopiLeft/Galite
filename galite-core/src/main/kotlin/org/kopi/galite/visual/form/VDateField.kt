@@ -269,7 +269,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): LocalDate? = if (value[r] == null) null else value[r]
+  override fun getSqlImpl(r: Int): LocalDate? = value[r]
 
   /**
    * Copies the value of a record to another

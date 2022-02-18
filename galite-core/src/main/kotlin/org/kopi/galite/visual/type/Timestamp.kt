@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
@@ -177,8 +178,8 @@ class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp, Instant>
         )
       )
 
-    fun from(date: LocalDate, time: Time): Timestamp =
-      Timestamp(toCalendar(date.year, date.monthValue, date.dayOfMonth, time.hours, time.minutes, time.seconds))
+    fun from(date: LocalDate, time: LocalTime): Timestamp =
+      Timestamp(toCalendar(date.year, date.monthValue, date.dayOfMonth, time.hour, time.minute, time.second))
 
     /**
      * create an instance of calendar to represent datetime.

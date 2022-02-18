@@ -25,14 +25,14 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTimeColumn
-import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
 class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
-  private var value: Array<Time?> = arrayOfNulls(2 * bufferSize)
+  private var value: Array<LocalTime?> = arrayOfNulls(2 * bufferSize)
 
   override fun hasAutofill(): Boolean = true
 
@@ -166,7 +166,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        setTime(rec, Time(hours, minutes))
+        setTime(rec, LocalTime.of(hours, minutes))
       }
     }
   }
@@ -185,7 +185,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Sets the field value of given record to a time value.
    */
-  override fun setTime(r: Int, v: Time?) {
+  override fun setTime(r: Int, v: LocalTime?) {
     if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && !value[r]?.equals(v)!!) {
@@ -204,7 +204,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
    */
   override fun setObject(r: Int, v: Any?) {
-    setTime(r, v as? Time)
+    setTime(r, v as? LocalTime)
   }
 
   /**
@@ -214,8 +214,8 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val tmp = result[column]) {
-      is java.sql.Time ->  Time(tmp)
-      is LocalTime -> Time(tmp)
+      is LocalTime -> tmp
+      is java.sql.Time ->  tmp.toLocalTime()
       else -> null
     }
   }
@@ -228,14 +228,14 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Returns the field value of given record as a time value.
    */
-  override fun getTime(r: Int): Time = getObject(r) as Time
+  override fun getTime(r: Int): LocalTime? = getObject(r) as? LocalTime
 
   /**
    * Returns the field value of the current record as an object
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String = if (o == null) "" else (o as Time).toString()
+  override fun toText(o: Any?): String = if (o == null) "" else (o as LocalTime).format()
 
   override fun toObject(s: String): Any? {
     return if (s == "") {
@@ -322,7 +322,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        Time(hours, minutes)
+        LocalTime.of(hours, minutes)
       }
     }
   }
@@ -335,7 +335,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else value[r]!!.toSql()  // TODO("NOT SUPPORTED YET")
+  override fun getSqlImpl(r: Int): LocalTime? = value[r]
 
   /**
    * Copies the value of a record to another
@@ -356,7 +356,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Time::class
+  override fun getDataType(): KClass<*> = LocalTime::class
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
@@ -366,7 +366,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list == null) {
-      setTime(block!!.activeRecord, Time.now())
+      setTime(block!!.activeRecord, LocalTime.now())
       true
     } else {
       super.fillField(handler)
@@ -384,7 +384,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         super.enumerateValue(desc)
       }
       isNull(record) -> {
-        setTime(record, Time.now())
+        setTime(record, LocalTime.now())
       }
       else -> {
         // try to read time
@@ -392,9 +392,9 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
           checkType(getText(record))
         } catch (e: VException) {
           // not valid, get now
-          setTime(record, Time.now())
+          setTime(record, LocalTime.now())
         }
-        setTime(record, getTime(record).add(if (desc) -1 else 1))
+        setTime(record, getTime(record)?.plusSeconds(if (desc) -1 else 1))
       }
     }
   }

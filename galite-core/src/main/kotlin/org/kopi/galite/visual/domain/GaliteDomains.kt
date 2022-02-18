@@ -18,11 +18,11 @@ package org.kopi.galite.visual.domain
 
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 
 import org.joda.time.DateTime
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 
@@ -141,7 +141,7 @@ object TIMESTAMP : Domain<Timestamp>()
 
 object DATETIME : Domain<DateTime>()
 
-object TIME : Domain<Time>()
+object TIME : Domain<LocalTime>()
 
 /**
  * This field type is used to insert an illustration or a picture.

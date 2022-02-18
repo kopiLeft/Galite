@@ -21,6 +21,7 @@ package org.kopi.galite.visual.report
 import java.io.Serializable
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 
 import javax.swing.event.EventListenerList
 
@@ -82,6 +83,9 @@ class MReport : Constants, Serializable {
               it.format()
             }
             is LocalDate -> {
+              it.format()
+            }
+            is LocalTime -> {
               it.format()
             }
             else -> {

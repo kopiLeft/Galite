@@ -20,6 +20,7 @@ package org.kopi.galite.visual.report
 
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 
 import org.kopi.galite.visual.type.format
 
@@ -31,6 +32,7 @@ open class VCellFormat {
   open fun format(value: Any?): String {
     return when (value) {
       is LocalDate -> value.format()
+      is LocalTime -> value.format()
       is BigDecimal -> value.format()
       else -> value?.toString() ?: ""
     }

@@ -19,8 +19,8 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalTime
 
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 
 /**
@@ -172,7 +172,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       return LocalDate.of(year, month, day)
     }
 
-    fun parseTime(time: String): Time? {
+    fun parseTime(time: String): LocalTime? {
       var hours = -1
       var minutes = 0
       var seconds = 0
@@ -298,7 +298,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       return if (hours == -1) {
         null
       } else {
-        Time(hours, minutes, seconds)
+        LocalTime.of(hours, minutes, seconds)
       }
     }
   }

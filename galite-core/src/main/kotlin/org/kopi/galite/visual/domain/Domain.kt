@@ -19,6 +19,7 @@ package org.kopi.galite.visual.domain
 
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalTime
 
 import kotlin.reflect.KClass
 
@@ -69,7 +70,6 @@ import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.visual.VColor
@@ -160,7 +160,7 @@ open class Domain<T>(val width: Int? = null,
           VDateField(block.buffer)
         Month::class -> VMonthField(block.buffer)
         Week::class -> VWeekField(block.buffer)
-        Time::class -> VTimeField(block.buffer)
+        org.joda.time.LocalTime::class, LocalTime::class -> VTimeField(block.buffer)
         Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
         Image::class -> VImageField(block.buffer, width!!, height!!)
         else -> {
@@ -193,7 +193,7 @@ open class Domain<T>(val width: Int? = null,
           VDateDimension(ident, format)
         Month::class -> VMonthDimension(ident, format)
         Week::class -> VWeekDimension(ident, format)
-        Time::class -> VTimeDimension(ident, format)
+        org.joda.time.LocalTime::class, LocalTime::class -> VTimeDimension(ident, format)
         Timestamp::class -> VTimestampDimension(ident, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
@@ -239,7 +239,7 @@ open class Domain<T>(val width: Int? = null,
           VMonthColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Week::class ->
           VWeekColumn(ident, options, align.value, groupID, function, width ?: 0, format)
-        Time::class ->
+        org.joda.time.LocalTime::class, LocalTime::class ->
           VTimeColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Timestamp::class ->
           VTimestampColumn(ident, options, align.value, groupID, function, width ?: 0, format)
