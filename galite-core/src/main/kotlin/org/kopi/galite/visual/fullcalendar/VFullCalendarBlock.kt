@@ -112,6 +112,7 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
       }
     } catch (e: Exception) {
       if (e.message != null) {
+        e.printStackTrace()
         form.error(e.message!!)
       }
       return listOf()
@@ -189,9 +190,9 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
     } else {
       val fromColumn = fromField!!.getColumn(0)!!.column
       val toColumn = toField!!.getColumn(0)!!.column
-      val firstDayOfWeek = Instant.from(week.getFirstDay())
+      val firstDayOfWeek = java.sql.Timestamp.valueOf(week.getFirstDay().atStartOfDay())
       val lastDay =  week.getLastDay()
-      val firstDayOfNextWeek = Instant.from(lastDay.plusDays(1))
+      val firstDayOfNextWeek = java.sql.Timestamp.valueOf(lastDay.plusDays(1).atStartOfDay())
 
       tables!!.slice(columns)
         .select {
