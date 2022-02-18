@@ -49,5 +49,5 @@ class VDecimalColumn(title: String,
   /**
    * Returns a string representation of value
    */
-  override fun formatObject(value: Any?): Any = (value as BigDecimal).format()
+  override fun formatObject(value: Any?): Any = (value as? BigDecimal)?.format() ?: VConstants.EMPTY_TEXT
 }

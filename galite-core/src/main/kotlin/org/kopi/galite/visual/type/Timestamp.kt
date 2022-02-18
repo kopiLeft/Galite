@@ -20,6 +20,7 @@ package org.kopi.galite.visual.type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -176,8 +177,8 @@ class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp, Instant>
         )
       )
 
-    fun from(date: Date, time: Time): Timestamp =
-      Timestamp(toCalendar(date.year, date.month, date.day, time.hours, time.minutes, time.seconds))
+    fun from(date: LocalDate, time: Time): Timestamp =
+      Timestamp(toCalendar(date.year, date.monthValue, date.dayOfMonth, time.hours, time.minutes, time.seconds))
 
     /**
      * create an instance of calendar to represent datetime.

@@ -23,12 +23,13 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import kotlin.math.max
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
@@ -227,11 +228,15 @@ class PExport2PDF(
                             Color.black,
                             Color.white,
                             Constants.ALG_LEFT, false))
-    foot.addCell(createCell(Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm"), 7.0,
-                            Color.black,
-                            Color.white,
-                            Constants.ALG_RIGHT,
-                            false))
+    foot.addCell(
+      createCell(
+        LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + Time.now().format("HH:mm"), 7.0,
+        Color.black,
+        Color.white,
+        Constants.ALG_RIGHT,
+        false
+      )
+    )
     return foot
   }
 

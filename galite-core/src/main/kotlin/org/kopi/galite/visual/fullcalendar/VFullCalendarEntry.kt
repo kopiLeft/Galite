@@ -17,8 +17,8 @@
 
 package org.kopi.galite.visual.fullcalendar
 
+import java.time.LocalDate
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.visual.VColor
@@ -34,7 +34,7 @@ data class VFullCalendarEntry(val start: Timestamp,
                               val end: Timestamp,
                               val values: MutableMap<VField, Any?>) {
 
-  constructor(date: Date,
+  constructor(date: LocalDate,
               start: Time,
               end: Time,
               values: MutableMap<VField, Any?>)
@@ -42,9 +42,9 @@ data class VFullCalendarEntry(val start: Timestamp,
               Timestamp.from(date, end),
               values)
 
-  val startDate: Date get() = Date(start.toCalendar())
+  val startDate: LocalDate get() = LocalDate.from(start.toSql())
 
-  val endDate: Date get() = Date(end.toCalendar())
+  val endDate: LocalDate get() = LocalDate.from(end.toSql())
 
   val description: String?
     get() {

@@ -19,10 +19,11 @@ package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VImageField
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.ImageField
@@ -141,7 +142,7 @@ class DImageField(
    * @return The dynamic image name.
    */
   protected fun createFileName(baseName: String): String =
-          baseName + Date.now().format("yyyyMMddHHmmssSSS") + ".png"
+          baseName + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".png"
   //---------------------------------------------------
   // STREAM RESOURCE
   //---------------------------------------------------

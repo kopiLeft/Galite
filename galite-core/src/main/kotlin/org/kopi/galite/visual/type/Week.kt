@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.type
 
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
@@ -36,7 +37,7 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
   /**
    * Constructs a Week from a Date
    */
-  constructor(date: Date) : this(iso8601(date.year, date.month, date.day))
+  constructor(date: LocalDate) : this(iso8601(date.year, date.monthValue, date.dayOfMonth))
 
   /**
    * Clones this object.
@@ -101,7 +102,7 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
    * Returns the date specified by this week and a day of week.
    * @param    weekday        the day of week (monday = 1, sunday = 7)
    */
-  fun getDate(weekday: Int): Date {
+  fun getDate(weekday: Int): LocalDate {
     val year: Int
     val month: Int
     val day: Int
@@ -115,24 +116,24 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
       month = calendar[Calendar.MONTH] + 1
       day = calendar[Calendar.DAY_OF_MONTH]
     }
-    return Date(year, month, day)
+    return LocalDate.of(year, month, day)
   }
 
   /**
    * Returns the first day of this week.
    */
-  open fun getFirstDay(): Date = getDate(1)
+  open fun getFirstDay(): LocalDate = getDate(1)
 
   /**
    * Returns the last day of this week.
    */
-  open fun getLastDay(): Date = getDate(7)
+  open fun getLastDay(): LocalDate = getDate(7)
 
   /**
    * Transforms this week into a date (the first day of the week)
    */
   @Deprecated("")
-  open fun getDate(): Date = getDate(1)
+  open fun getDate(): LocalDate = getDate(1)
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION

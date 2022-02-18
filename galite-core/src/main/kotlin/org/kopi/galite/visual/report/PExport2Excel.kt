@@ -21,6 +21,8 @@ package org.kopi.galite.visual.report
 import java.awt.Color
 import java.io.OutputStream
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -35,7 +37,6 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -66,12 +67,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     /**
      * Set the value of the cell to the specified date value.
      */
-    protected fun setCellValue(cell: Cell, value: Date) {
+    protected fun setCellValue(cell: Cell, value: LocalDate) {
       val cal = GregorianCalendar()
       cal.clear()
       cal[Calendar.YEAR] = value.year
-      cal[Calendar.MONTH] = value.month - 1
-      cal[Calendar.DAY_OF_MONTH] = value.day
+      cal[Calendar.MONTH] = value.monthValue - 1
+      cal[Calendar.DAY_OF_MONTH] = value.dayOfMonth
       cell.setCellValue(cal)
     }
   }
@@ -129,7 +130,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
-    footer.right = Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm")
+    footer.right = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + Time.now().format("HH:mm")
     sheetIndex += 1
     val ps = sheet!!.printSetup
 
@@ -184,7 +185,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
           }
         } else if (orig is Boolean) {
           cell.setCellValue(orig)
-        } else if (orig is Date) {
+        } else if (orig is LocalDate) {
           setCellValue(cell, orig)
         } else if (orig is Timestamp || orig is java.sql.Timestamp) {
           // date columns can be returned as a timestamp by the jdbc driver.

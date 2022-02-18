@@ -16,8 +16,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.time.LocalDate
+
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
 import org.kopi.galite.visual.ui.vaadin.calendar.DTimeGridCalendar
@@ -54,9 +55,9 @@ class DFullCalendarBlock(parent: DForm, model: VFullCalendarBlock) : DBlock(pare
     timeGridCalendar.refreshEntries()
   }
 
-  override fun getSelectedDate(): Date = timeGridCalendar.getSelectedDate()
+  override fun getSelectedDate(): LocalDate = timeGridCalendar.getSelectedDate()
 
-  override fun goToDate(date: Date) {
+  override fun goToDate(date: LocalDate) {
     timeGridCalendar.goToDate(date)
   }
 

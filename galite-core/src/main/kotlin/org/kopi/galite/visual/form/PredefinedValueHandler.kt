@@ -20,9 +20,9 @@ package org.kopi.galite.visual.form
 
 import java.awt.Color
 import java.io.Serializable
+import java.time.LocalDate
 
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.visual.VExecFailedException
 
 interface PredefinedValueHandler : Serializable {
@@ -33,7 +33,7 @@ interface PredefinedValueHandler : Serializable {
 
   fun selectColor(color: Color): Color?
 
-  fun selectDate(date: Date): Date
+  fun selectDate(date: LocalDate): LocalDate
 
   @Throws(VExecFailedException::class)
   fun selectImage(): ByteArray?

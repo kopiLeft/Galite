@@ -35,10 +35,6 @@ open class Month(private var scalar: Int) : Type<Month, Int>() {
   /**
    * Constructs a Month from a Date
    */
-  constructor(date: Date) : this(date.year, date.month)
-  /**
-   * Constructs a Month from a Date
-   */
   constructor(date: LocalDate) : this(date.year, date.monthValue)
 
   /**
@@ -120,20 +116,20 @@ open class Month(private var scalar: Int) : Type<Month, Int>() {
   /**
    * Returns the first day of this month.
    */
-  open fun getFirstDay(): Date = Date(scalar / 12, scalar % 12 + 1, 1)
+  open fun getFirstDay(): LocalDate = LocalDate.of(getYear(), getMonth(), 1)
 
   /**
    * Returns the last day of this month.
    */
-  open fun getLastDay(): Date =
+  open fun getLastDay(): LocalDate =
           // this is the first day of the next month - 1 day.
-          Date((scalar + 1) / 12, (scalar + 1) % 12 + 1, 1).add(-1)
+          LocalDate.of((scalar + 1) / 12, (scalar + 1) % 12 + 1, 1).minusDays(1)
 
   /**
    * Transforms this month in a date (the first day of the month)
    */
   @Deprecated("")
-  open fun getDate(): Date = getFirstDay()
+  open fun getDate(): LocalDate = getFirstDay()
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -162,12 +158,12 @@ open class Month(private var scalar: Int) : Type<Month, Int>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): java.sql.Date {
+  override fun toSql(): LocalDate {
     val year = scalar / 12
     val month = scalar % 12 + 1
 
     //return "{fn MONTH($year, $month)}" TODO
-    return getDate().toSql()
+    return getDate()
   }
 
   override fun hashCode(): Int {

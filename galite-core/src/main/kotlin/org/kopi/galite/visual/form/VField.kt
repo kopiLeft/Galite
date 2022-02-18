@@ -22,6 +22,7 @@ import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
+import java.time.LocalDate
 
 import javax.swing.event.EventListenerList
 
@@ -60,7 +61,6 @@ import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
@@ -1009,7 +1009,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setDate(v: Date?) {
+  fun setDate(v: LocalDate?) {
     setDate(block!!.currentRecord, v)
   }
 
@@ -1122,7 +1122,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setDate(r: Int, v: Date?) {
+  open fun setDate(r: Int, v: LocalDate?) {
     throw InconsistencyException()
   }
 
@@ -1262,7 +1262,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getDate(): Date = getDate(block!!.currentRecord)
+  fun getDate(): LocalDate? = getDate(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a int value.
@@ -1281,7 +1281,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getMonth(): Month = getMonth(block!!.currentRecord)
+  fun getMonth(): Month? = getMonth(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a string value.
@@ -1395,7 +1395,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getDate(r: Int): Date {
+  open fun getDate(r: Int): LocalDate? {
     throw InconsistencyException()
   }
 
@@ -1404,7 +1404,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getMonth(r: Int): Month {
+  open fun getMonth(r: Int): Month? {
     throw InconsistencyException()
   }
 

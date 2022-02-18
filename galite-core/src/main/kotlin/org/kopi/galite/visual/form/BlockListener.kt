@@ -19,9 +19,8 @@
 package org.kopi.galite.visual.form
 
 import java.io.Serializable
+import java.time.LocalDate
 import java.util.EventListener
-
-import org.kopi.galite.visual.type.Date
 
 interface BlockListener : EventListener, Serializable {
   fun blockClosed()
@@ -36,8 +35,8 @@ interface BlockListener : EventListener, Serializable {
   fun filterHidden()
   fun filterShown()
   fun refreshEntries()
-  fun getSelectedDate(): Date?
-  fun goToDate(date: Date)
+  fun getSelectedDate(): LocalDate?
+  fun goToDate(date: LocalDate)
   fun enter()
 
   // please do not use!

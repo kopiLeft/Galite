@@ -22,6 +22,8 @@ import java.awt.event.KeyEvent
 import java.io.File
 import java.net.MalformedURLException
 import java.text.MessageFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import kotlin.jvm.Throws
@@ -35,7 +37,6 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.ApplicationConfiguration
@@ -321,7 +322,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
     }
     exporter.export(file)
     unsetWaitInfo()
-    fireFileProduced(file, pageTitle + "_" + Date.now().format("yyyyMMdd") + extension)
+    fireFileProduced(file, pageTitle + "_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + extension)
   }
 
   /**
