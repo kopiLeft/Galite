@@ -1,3 +1,32 @@
+## What's Changed
+* Domain: Move min, max properties from Field to Domain by @hfazai
+* Remove useless DBContextHandler as Connection is fully handled by Exposed by @hfazai
+* DSL: Chart dimension can accept lambda function to format values by @hfazai
+* VBump: Exposed 0.37.3 by @hfazai
+* VaadinUI: Date fields shouldn't accept invalid values by @hfazai in [#538](https://github.com/kopiLeft/Galite/pull/538)
+* Generate a report (pdf, xls, xlsx, csv) containing only visible column by @h-haddad in [#537](https://github.com/kopiLeft/Galite/pull/537)
+* Fix incorrect title in the help viewer by @hfazai in [#540](https://github.com/kopiLeft/Galite/pull/540)
+* VaadinUI: Delete added spaces to decimal field by @hfazai in [#542](https://github.com/kopiLeft/Galite/pull/542)
+* Improvement in style of textarea by @h-haddad in [#544](https://github.com/kopiLeft/Galite/pull/544)
+* Change the color and the bottom border of the skipped field by @h-haddad in [#543](https://github.com/kopiLeft/Galite/pull/543)
+* Remove Decimal class in favor to BigDecimal by @hfazai in [#541](https://github.com/kopiLeft/Galite/pull/541)
+* Associate window elements to localization files based on class name by @hfazai in [#545](https://github.com/kopiLeft/Galite/pull/545)
+* Icrement the report height to fit the window size by @h-haddad in [#546](https://github.com/kopiLeft/Galite/pull/546) and [#551](https://github.com/kopiLeft/Galite/pull/551)
+* Remove DBContext class in favor to Connection by @hfazai in [#549](https://github.com/kopiLeft/Galite/pull/549)
+* Adding test to check the order of execution of triggers by @h-haddad in [#550](https://github.com/kopiLeft/Galite/pull/550)
+* Adding test for block, label, actor and menu localization by @h-haddad in [#547](https://github.com/kopiLeft/Galite/pull/547)
+* Display icons for actors in Navigation Menu by @h-haddad in [#552](https://github.com/kopiLeft/Galite/pull/552)
+* Fix the contents align for Decimal and int fields by @h-haddad in [#557](https://github.com/kopiLeft/Galite/pull/557)
+* Improvement in report style when reordering and resizing columns by @h-haddad in [#554](https://github.com/kopiLeft/Galite/pull/554)
+* Fix show and hide filter behaviour in multi block by @h-haddad in [#555](https://github.com/kopiLeft/Galite/pull/555)
+* Adding a background color for report cell when focus by @h-haddad in [#553](https://github.com/kopiLeft/Galite/pull/553)
+* Remove Date type in favor to java LocalDate by @hfazai in [#556](https://github.com/kopiLeft/Galite/pull/556)
+* Remove Time type in favor to LocalTime by @hfazai in [#558](https://github.com/kopiLeft/Galite/pull/558)
+* Full Calendar: Fix conversion of Date to Timestamp by @hfazai
+* Gradle: Remove jvmTarget from options of kotlin compile task by @hfazai
+
+**Full Changelog**: [1.0.0-beta.4 ... 1.0.0](https://github.com/kopiLeft/Galite/compare/1.0.0-beta.4...1.0.0)
+
 # 1.0.0-beta.4
 ## What's Changed
 * Full calendar block should be in insert mode when inserting new entry
