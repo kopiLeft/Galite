@@ -64,7 +64,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
       HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
         where C: AbstractField<*, out Any>, C: Focusable<*>
-      /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
+      /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler TODO*/ {
 
   /**
    * Returns the parent window of this text field.
