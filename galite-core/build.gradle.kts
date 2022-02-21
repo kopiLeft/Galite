@@ -34,7 +34,7 @@ dependencies {
   api("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 
   // Vaadin dependencies
-  implementation("com.vaadin", "vaadin-core") {
+  api("com.vaadin", "vaadin-core") {
     excludeWebJars()
     exclude("org.slf4j", "slf4j-ext")
   }

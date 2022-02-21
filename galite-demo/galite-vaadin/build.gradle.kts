@@ -16,7 +16,6 @@
  */
 
 import org.kopi.galite.gradle.Versions
-import org.kopi.galite.gradle.excludeWebJars
 
 plugins {
   kotlin("jvm") apply true
@@ -42,10 +41,6 @@ dependencies {
   testImplementation(project(":galite-tests"))
 
   implementation(kotlin("test-junit"))
-
-  implementation("com.vaadin", "vaadin-core") {
-    excludeWebJars()
-  }
 
   // Logging
   implementation("org.slf4j", "slf4j-simple", Versions.SLF4J)

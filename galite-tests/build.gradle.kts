@@ -36,9 +36,6 @@ dependencies {
 
   implementation(kotlin("test-junit"))
 
-  implementation("com.vaadin", "vaadin-core") {
-    excludeWebJars()
-  }
   implementation("com.vaadin", "vaadin-spring-boot-starter") {
     excludeWebJars()
     exclude(module = "spring-boot-starter-logging")
