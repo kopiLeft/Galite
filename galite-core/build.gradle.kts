@@ -31,6 +31,7 @@ dependencies {
   api("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
   api("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
   api("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {

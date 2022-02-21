@@ -53,9 +53,6 @@ dependencies {
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.KARIBU_TESTING)
 
-  // Exposed dependencies
-  implementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
-
   implementation("com.h2database", "h2", Versions.H2)
 
   // EnhancedDialog dependency

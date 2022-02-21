@@ -55,9 +55,6 @@ dependencies {
 
   implementation("org.jdom", "jdom2", Versions.JDOM)
 
-  // Exposed dependencies
-  implementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
-
   implementation("com.h2database", "h2", Versions.H2)
   implementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.POSTGRES_NG)
 
