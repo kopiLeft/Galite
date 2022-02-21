@@ -16,6 +16,7 @@
  */
 
 import org.kopi.galite.gradle.Versions
+import org.kopi.galite.gradle.excludeWebJars
 
 plugins {
   kotlin("jvm") apply true
@@ -26,6 +27,10 @@ dependencies {
   implementation(project(":galite-core"))
 
   implementation(kotlin("test-junit"))
+
+  implementation("com.vaadin", "vaadin-core") {
+    excludeWebJars()
+  }
 
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.KARIBU_TESTING)
