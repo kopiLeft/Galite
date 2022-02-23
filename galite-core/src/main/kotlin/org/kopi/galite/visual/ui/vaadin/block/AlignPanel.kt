@@ -42,7 +42,7 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
   //---------------------------------------------------
   private var components: MutableList<Component>? = mutableListOf()
   private var aligns: MutableList<ComponentConstraint>? = mutableListOf()
-  private val ui = UI.getCurrent() // TODO
+  private val ui = UI.getCurrent()
 
   init {
     className = "k-align-pane"
@@ -189,7 +189,6 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
   }
 
   private fun addTooltipToField(label: Label, field: Component) {
-    // TODO: Add an advanced tooltip to render all the label component instead of using title attribute.
     field.element.setAttribute("title", label.text)
   }
 

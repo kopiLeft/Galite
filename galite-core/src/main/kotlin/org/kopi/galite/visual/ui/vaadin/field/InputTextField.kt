@@ -84,11 +84,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   init {
     className = Styles.TEXT_INPUT
-    addKeyPressListener(::onKeyPress)
-    addKeyUpListener(::onKeyUp)
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     // addKeyDownListener(::onKeyDown) TODO
+    //addKeyPressListener(::onKeyPress)
+    //addKeyUpListener(::onKeyUp)
     addFocusListener(::onFocus)
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
@@ -470,15 +470,6 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   override fun focus() {
     internalField.focus()
-  }
-
-  protected open fun onLoad() {
-    //super.onLoad() TODO
-    //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
-    //  fun execute() {
-    //    parent = WidgetUtils.getParent(this@VInputTextField, VWindow::class.java)
-    //  }
-    //})
   }
 
   open fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {

@@ -187,7 +187,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
           (currentWindow as Window).goBackToLastFocusedTextField()
           window.isVisible = true
         }
-        //windowsMenu.setCurrent(item) TODO
         windowsMenu.hideMenu()
       }
     }
@@ -379,8 +378,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
     }
     if (currentWindow is Window) {
       (currentWindow as Window).goBackToLastFocusedTextField()
-      // fireWindowVisible(currentWindow) TODO
     }
-    // windowsMenu.setCurrent(currentWindow) TODO
   }
 }

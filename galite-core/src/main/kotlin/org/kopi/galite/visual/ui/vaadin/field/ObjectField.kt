@@ -40,12 +40,10 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
    * Creates a new `ObjectField` instance.
    */
   init {
-    //registerRpc(rpc) TODO
     element.setAttribute("hideFocus", "true")
     element.setProperty("outline", "0px")
     NavigationHandler().createNavigatorKeys()
     addJSKeyDownListener(keyNavigators)
-    //sinkEvents(Event.ONKEYDOWN) TODO
   }
 
   //---------------------------------------------------

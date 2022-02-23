@@ -317,10 +317,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     }
   }
 
-  /*override fun getRecordFromDisplayLine(line: Int): Int {
-    TODO()
-  }*/
-
   override fun validRecordNumberChanged() {
     // optimized to not fire an item set change if the number
     // of valid records is not changed
