@@ -95,7 +95,7 @@ open class DBlock(val parent: DForm,
     // info changes done when the block listener is not yet
     // installed.
     for (i in 0 until model.bufferSize) {
-      if (model.getRecordInfoAt(i) !== 0) {
+      if (model.getRecordInfoAt(i) != 0) {
         fireRecordInfoChanged(i, model.getRecordInfoAt(i))
       }
     }

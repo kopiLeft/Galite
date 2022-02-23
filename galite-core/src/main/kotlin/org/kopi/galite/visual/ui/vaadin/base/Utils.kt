@@ -22,7 +22,6 @@ import java.util.concurrent.CompletableFuture
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
-import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.VColor
@@ -189,12 +188,16 @@ object Utils : Utils() {
    * @return true if the given two objects are equals.
    */
   fun equals(o1: Any?, o2: Any?): Boolean {
-    return if (o1 == null) {
-      o2 == null
-    } else if (o2 == null) {
-      false
-    } else {
-      o1 == o2
+    return when {
+      o1 == null -> {
+        o2 == null
+      }
+      o2 == null -> {
+        false
+      }
+      else -> {
+        o1 == o2
+      }
     }
   }
 

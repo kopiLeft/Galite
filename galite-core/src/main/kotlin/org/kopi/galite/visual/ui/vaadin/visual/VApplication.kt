@@ -62,7 +62,6 @@ import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.WindowController
 
 import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog

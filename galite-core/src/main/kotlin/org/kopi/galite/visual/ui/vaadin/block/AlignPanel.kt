@@ -35,7 +35,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
  *
  * @param align The alignment info
  */
-class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div() {
+class AlignPanel(var align: BlockAlignment?, private val targetBlockName: String) : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -151,7 +151,7 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
     }
   }
 
-  fun setComponentPosition(component: Component, left: Double, top: Int) {
+  private fun setComponentPosition(component: Component, left: Double, top: Int) {
     ui.access {
       component.element.style["position"] = "absolute"
       component.element.style["left"] = left.toString() + "px"

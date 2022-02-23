@@ -240,10 +240,9 @@ abstract class DField(internal var model: VFieldUI,
   // ABSTRACT METHODS
   //-------------------------------------------------
   /**
-   * Returns the object associed to record r
+   * Returns the object associated to current record
    *
-   * @param        r the position of the record
-   * @return        the displayed value at this position
+   * @return        the displayed value at current position
    */
   abstract override fun getObject(): Any?
 
@@ -263,9 +262,6 @@ abstract class DField(internal var model: VFieldUI,
    * @return `true` if the field model is focused.
    */
   protected fun modelHasFocus(): Boolean {
-    if (getModel() == null) {
-      return false
-    }
     val block = getModel().block
     return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(position)
   }
@@ -290,11 +286,7 @@ abstract class DField(internal var model: VFieldUI,
    * @return The field access.
    */
   protected fun getAccessAt(at: Int): Int {
-    return if (getModel() != null) {
-      getModel().getAccess(getBlockView().getRecordFromDisplayLine(at))
-    } else {
-      VConstants.ACS_SKIPPED
-    }
+    return getModel().getAccess(getBlockView().getRecordFromDisplayLine(at))
   }
 
   /**
@@ -303,11 +295,7 @@ abstract class DField(internal var model: VFieldUI,
    * @return The foreground color.
    */
   protected fun getForegroundAt(at: Int): VColor? {
-    return if (model != null) {
-      getModel().getForeground(getBlockView().getRecordFromDisplayLine(at))
-    } else {
-      null
-    }
+    return getModel().getForeground(getBlockView().getRecordFromDisplayLine(at))
   }
 
   /**
@@ -316,11 +304,7 @@ abstract class DField(internal var model: VFieldUI,
    * @return The background color.
    */
   protected fun getBackgroundAt(at: Int): VColor? {
-    return if (model != null) {
-      getModel().getBackground(getBlockView().getRecordFromDisplayLine(at))
-    } else {
-      null
-    }
+    return getModel().getBackground(getBlockView().getRecordFromDisplayLine(at))
   }
 
   /**
@@ -460,9 +444,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoNextField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextField()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoNextField()
       }
     })
   }
@@ -470,9 +452,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoPrevField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
       }
     })
   }
@@ -480,9 +460,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoNextEmptyMustfill() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
       }
     })
   }
@@ -490,9 +468,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoPrevRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.gotoPrevRecord()
-        }
+        getModel().block!!.gotoPrevRecord()
       }
     })
   }
@@ -500,9 +476,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoNextRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.gotoNextRecord()
-        }
+        getModel().block!!.gotoNextRecord()
       }
     })
   }
@@ -510,9 +484,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoFirstRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
       }
     })
   }
@@ -520,9 +492,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun gotoLastRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
       }
     })
   }

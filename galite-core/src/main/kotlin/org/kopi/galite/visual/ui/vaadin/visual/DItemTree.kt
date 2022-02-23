@@ -142,8 +142,8 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
         item.isSelected = false
         // tree.setIcon(item) TODO
       }
-      val Grandsons = tree.getChildrenOf(item.id)
-      if (Grandsons != null && Grandsons.isNotEmpty()) {
+      val grandsons = tree.getChildrenOf(item.id)
+      if (grandsons != null && grandsons.isNotEmpty()) {
         unselectAll(item.id)
       }
     }
@@ -175,8 +175,8 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
         item.isDefaultItem = false
         // tree.setIcon(item) TODO
       }
-      val Grandsons = tree.getChildrenOf(item.id)
-      if (Grandsons != null && Grandsons.isNotEmpty()) {
+      val grandsons = tree.getChildrenOf(item.id)
+      if (grandsons != null && grandsons.isNotEmpty()) {
         setDefault(item.id)
       }
     }

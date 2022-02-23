@@ -29,7 +29,6 @@ class VSelect : Component(), HasSize, HasItems<String> {
 
   private lateinit var selectedValue: String
   private var items = mutableListOf<String>()
-  private val INSERT_AT_END = -1
 
   init {
     addChangeHandler { event: DomEvent? ->
@@ -96,5 +95,9 @@ class VSelect : Component(), HasSize, HasItems<String> {
   fun addChangeHandler(listener: (DomEvent?) -> Unit) {
     element.addEventListener("change", listener)
             .addEventData("event.target.value")
+  }
+
+  companion object {
+    private const val INSERT_AT_END = -1
   }
 }

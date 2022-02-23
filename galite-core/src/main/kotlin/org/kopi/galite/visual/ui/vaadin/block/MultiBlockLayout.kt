@@ -68,8 +68,4 @@ class MultiBlockLayout : AbstractBlockLayout() {
   override fun layoutAlignedComponents() {
     TODO("Not yet implemented")
   }
-
-  override fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int) {
-    TODO("Not yet implemented")
-  }
 }

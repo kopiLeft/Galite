@@ -126,7 +126,7 @@ class DGridTextEditorField(
     super.updateFocus()
   }
 
-  override val nullRepresentation: String?
+  override val nullRepresentation: String
     get() = ""
 
   override fun reset() {

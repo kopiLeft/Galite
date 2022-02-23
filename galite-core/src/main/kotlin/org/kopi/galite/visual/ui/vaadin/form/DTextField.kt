@@ -345,7 +345,7 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toGui(modelTxt: String?): String? {
+    override fun toGui(modelTxt: String?): String {
       return if (modelTxt == null || "" == modelTxt) {
         VlibProperties.getString("scan-ready")
       } else if (!field.field.isReadOnly) {
@@ -374,11 +374,11 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(source: String?): String? {
+    override fun toModel(source: String?): String {
       return convertFixedTextToSingleLine(source, col, row)
     }
 
-    override fun toGui(source: String?): String? {
+    override fun toGui(source: String?): String {
       val target = StringBuffer()
       val length = source!!.length
       var usedRows = 1

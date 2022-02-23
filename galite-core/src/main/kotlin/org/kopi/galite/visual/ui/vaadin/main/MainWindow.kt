@@ -253,7 +253,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
    * Removes a main window listener.
    * @param l the listener to be removed.
    */
-  fun RemoveMainWindowListener(l: MainWindowListener) {
+  fun removeMainWindowListener(l: MainWindowListener) {
     listeners.add(l)
   }
 

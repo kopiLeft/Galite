@@ -99,7 +99,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
         }
       } else {
         val description = buildDescription(model, tooltip)
-        if (description != null) {
+        if (description.isNotEmpty()) {
           element.setProperty("title", Utils.createTooltip(description))
         }
       }
@@ -176,7 +176,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param tooltip The initial field tooltip.
    * @return The full field description.
    */
-  protected fun buildDescription(model: VFieldUI, tooltip: String?): String? {
+  protected fun buildDescription(model: VFieldUI, tooltip: String?): String {
     var description = tooltip.orEmpty()
     val commands = model.getAllCommands()
     if (commands.isNotEmpty()) {

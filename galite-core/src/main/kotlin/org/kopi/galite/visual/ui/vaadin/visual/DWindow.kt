@@ -312,9 +312,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   /**
-   * Use [.closeWindow] or [.close] instead.
+   * Use [closeWindow] or [close] instead.
    */
-  @Deprecated("")
+  @Deprecated("", ReplaceWith("closeWindow()"))
   fun close() {
     closeWindow()
   }
@@ -861,7 +861,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     access(currentUI) {
       var resourceName = name.trim { it <= ' ' }
 
-      resourceName = resourceName.replace("[^a-zA-Z0-9\\._]+".toRegex(), " ")
+      resourceName = resourceName.replace("[^a-zA-Z0-9._]+".toRegex(), " ")
 
       if (VaadinSession.getCurrent().browser.isFirefox) {
         resourceName = resourceName.replace("\\s".toRegex(), "_")

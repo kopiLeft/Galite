@@ -612,15 +612,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   }
 
   /**
-   * Orders the columns by chart position in the model.
-   * @return The chart position order.
-   */
-  protected val columnsOrder: Array<Any?>
-    get() {
-      TODO()
-    }
-
-  /**
    * Updates the column access for a given column identified by the associated field model.
    * @param f The field model.
    */

@@ -105,13 +105,13 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
+  private fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
     if (value == null) {
       isVisible = false
     }
   }
 
-  fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
+  private fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
     isVisible = true
   }
 

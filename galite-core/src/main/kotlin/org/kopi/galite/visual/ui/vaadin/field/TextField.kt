@@ -194,12 +194,8 @@ class TextField(val model: VField,
       is org.kopi.galite.visual.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        if (model.minValue != null) {
-          minval = model.minValue.toDouble()
-        }
-        if (model.maxValue != null) {
-          maxval = model.maxValue.toDouble()
-        }
+        minval = model.minValue.toDouble()
+        maxval = model.maxValue.toDouble()
       }
       is VMonthField -> {
         // month field

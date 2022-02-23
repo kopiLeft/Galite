@@ -312,7 +312,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // --------------------------------------------------
   // UMenuTree IMPLEMENTATION
   // --------------------------------------------------
-  override fun getTree(): UMenuTree.UTree? = tree
+  override fun getTree(): UMenuTree.UTree = tree
   // --------------------------------------------------
   // LISTENERS
   // --------------------------------------------------
