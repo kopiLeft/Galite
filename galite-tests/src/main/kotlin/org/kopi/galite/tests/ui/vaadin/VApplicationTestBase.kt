@@ -82,10 +82,7 @@ open class VApplicationTestBase : ApplicationTestBase() {
     override val title get() = "Galite demo"
     override val supportedLocales
       get() =
-        arrayOf(Locale.FRANCE,
-                Locale("de", "AT"),
-                Locale("ar", "TN"),
-                Locale.UK)
+        arrayOf(Locale.UK)
 
     override fun login(
             database: String,
