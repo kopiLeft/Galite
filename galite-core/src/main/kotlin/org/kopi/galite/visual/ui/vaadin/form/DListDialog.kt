@@ -124,7 +124,7 @@ class DListDialog(
         pattern = ""
       }
       if (it.toInt() != 0) {
-        pattern += it.toLowerCase()[0]
+        pattern += it.lowercase()[0]
       }
       onSearch()
     }

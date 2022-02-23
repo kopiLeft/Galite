@@ -297,7 +297,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
           hiddenColumnsCount += 1
           newColumnOrder[i] = model.getDisplayOrder(i)
         } else {
-          newColumnOrder[i] = visibleColumns!![i - hiddenColumnsCount]
+          newColumnOrder[i] = visibleColumns[i - hiddenColumnsCount]
         }
       }
       model.columnMoved(newColumnOrder)

@@ -68,9 +68,9 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
   
   override val logoHref get() = "http://[mywebsite]"
   
-  override val alternateLocale get() = Locale("de", "AT")
+  override val alternateLocale get() = Locale.UK
   
-  override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
+  override val supportedLocales get() = arrayOf(Locale.UK, Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
 
   companion object {
     init {

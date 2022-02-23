@@ -24,9 +24,9 @@ class GridEditorEnumField(width: Int, private val enumerations: Array<String>?) 
 
   override fun check(text: String): Boolean {
     if (enumerations != null && text != null) {
-      val s = text.toLowerCase()
+      val s = text.lowercase()
       for (i in enumerations.indices) {
-        if (enumerations.get(i).toLowerCase().startsWith(s)) {
+        if (enumerations.get(i).lowercase().startsWith(s)) {
           return true
         }
       }

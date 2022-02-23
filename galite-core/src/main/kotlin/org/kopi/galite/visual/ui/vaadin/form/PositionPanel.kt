@@ -155,7 +155,7 @@ class PositionPanel : HorizontalLayout() {
    */
   fun setCurrent(current: Int) {
     this.current = current
-    info.setValue(current.toString())
+    info.value = current.toString()
   }
 
   /**

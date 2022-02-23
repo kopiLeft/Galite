@@ -39,8 +39,8 @@ class StringValidator(
       when (convertType) {
         TextField.ConvertType.NONE -> {
         }
-        TextField.ConvertType.UPPER -> text = text.toUpperCase()
-        TextField.ConvertType.LOWER -> text = text.toLowerCase()
+        TextField.ConvertType.UPPER -> text = text.uppercase()
+        TextField.ConvertType.LOWER -> text = text.lowercase()
         TextField.ConvertType.NAME -> text = convertName(text)
         else -> throw RuntimeException()
       }
@@ -65,7 +65,7 @@ class StringValidator(
    * @param     source          the source text.
    */
   private fun convertName(source: String): String {
-    val chars = source.toLowerCase().toCharArray()
+    val chars = source.lowercase().toCharArray()
     var found = false
     for (i in chars.indices) {
       if (!found && Character.isLetter(chars[i])) {

@@ -65,7 +65,7 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
    */
   protected fun intValue(): Int {
     return try {
-      value!!.toInt()
+      value.toInt()
     } catch (e: NumberFormatException) {
       throw InvalidEditorFieldException(this, "00006")
     }

@@ -111,7 +111,7 @@ class FileUploader : Receiver {
       accepted = false
       mimeTypes = mimeType!!.split(",".toRegex()).toTypedArray()
       for (mimeType in mimeTypes) {
-        if (event.getMIMEType().startsWith(getParentMIMEType(mimeType))) {
+        if (event.mimeType.startsWith(getParentMIMEType(mimeType))) {
           accepted = true
           break
         }

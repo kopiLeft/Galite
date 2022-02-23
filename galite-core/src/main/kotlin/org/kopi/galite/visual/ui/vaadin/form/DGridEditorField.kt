@@ -170,14 +170,13 @@ abstract class DGridEditorField<T>(
 
   /**
    * Updates a given field label.
-   * @param label The label to be updated.
    */
   protected fun updateLabel() {
     if (label != null) {
-      val was: Boolean = label.isEnabled()
+      val was: Boolean = label.isEnabled
       val will: Boolean = access >= VConstants.ACS_VISIT
       if (was != will) {
-        label.setEnabled(will)
+        label.isEnabled = will
       }
     }
   }

@@ -295,7 +295,7 @@ class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible),
   }
 
   fun getTool(tool: Tool): Element? {
-    val tag = tool.name.toLowerCase()
+    val tag = tool.name.lowercase()
 
     return element.children.filter { element: Element ->
       element.tag.endsWith(tag)

@@ -36,7 +36,7 @@ class BlockDropWrapper(val layout: Component, dropHandler: DBlockDropHandler) : 
 
   init {
     val dropArea = VerticalLayout()
-    upload.setAcceptedFileTypes(*dropHandler.acceptedFlavors.map { ".${it.toLowerCase()}" }.toTypedArray())
+    upload.setAcceptedFileTypes(*dropHandler.acceptedFlavors.map { ".${it.lowercase()}" }.toTypedArray())
     upload.element.themeList.add("drop-wrapper-upload")
     dropArea.add(layout)
     upload.element.appendChild(dropArea.element)
@@ -76,7 +76,7 @@ class BlockDropWrapper(val layout: Component, dropHandler: DBlockDropHandler) : 
 
   private fun maybeReset() {
     if (buffer !is MultiFileMemoryBuffer) {
-      upload.element.setPropertyJson("files", Json.createArray());
+      upload.element.setPropertyJson("files", Json.createArray())
     }
   }
 }

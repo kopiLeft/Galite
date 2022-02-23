@@ -306,7 +306,7 @@ open class DTextField(
   // DFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getObject(): Any? {
-    return wrappedField!!.value
+    return wrappedField.value
   }
 
   override fun setBlink(blink: Boolean) {

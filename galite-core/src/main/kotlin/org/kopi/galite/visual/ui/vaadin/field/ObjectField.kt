@@ -132,7 +132,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
    * Returns `true` if this object field is `null`.
    * @return `true` if this object field is `null`.
    */
-  override abstract val isNull: Boolean
+  abstract override val isNull: Boolean
 
   /**
    * Sets the object field color properties.

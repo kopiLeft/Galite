@@ -70,16 +70,16 @@ class DecimalFormatSymbols(var currencySymbol: String?,
   //---------------------------------------------------
 
   override fun hashCode(): Int {
-    return nullHash(currencySymbol) * 3 + nullHash(internationalCurrencySymbol) * 5 + decimalSeparator.toInt() * 7 + digit.toInt() * 11
-    + nullHash(exponentSeparator) * 13
-    + groupingSeparator.toInt() * 17
-    + nullHash(infinity) * 19
-    + minusSign.toInt() * 23
-    + monetaryDecimalSeparator.toInt() * 29
-    + nullHash(naN) * 31
-    + patternSeparator.toInt() * 37 + percent.toInt() * 41
-    + perMill.toInt() * 43
-    + zeroDigit.toInt() * 53
+    return nullHash(currencySymbol) * 3 + nullHash(internationalCurrencySymbol) * 5 + decimalSeparator.code * 7 + digit.code * 11 +
+            nullHash(exponentSeparator) * 13 +
+            groupingSeparator.code * 17 +
+            nullHash(infinity) * 19 +
+            minusSign.code * 23 +
+            monetaryDecimalSeparator.code * 29 +
+            nullHash(naN) * 31 +
+            patternSeparator.code * 37 + percent.code * 41 +
+            perMill.code * 43 +
+            zeroDigit.code * 53
   }
 
 

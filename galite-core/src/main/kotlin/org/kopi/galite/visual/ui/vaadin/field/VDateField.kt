@@ -204,7 +204,7 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
   }
 
   override fun setMaxHeight(maxHeight: String?) {
-    textField.setMaxHeight(maxHeight)
+    textField.maxHeight = maxHeight
   }
 
   override fun setMaxHeight(maxHeight: Float, unit: com.vaadin.flow.component.Unit?) {

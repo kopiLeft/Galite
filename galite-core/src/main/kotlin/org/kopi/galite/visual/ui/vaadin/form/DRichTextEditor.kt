@@ -101,7 +101,7 @@ class DRichTextEditor(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      editor.setValue(newModelTxt)
+      editor.value = newModelTxt
     }
   }
 
