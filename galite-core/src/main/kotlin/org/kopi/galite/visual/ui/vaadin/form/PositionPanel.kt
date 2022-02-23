@@ -37,7 +37,7 @@ class PositionPanel : HorizontalLayout() {
   // DATA MEMBERS
   //---------------------------------------------------
   private val popup = Dialog()
-  private var listeners: MutableList<PositionPanelListener>?
+  private val listeners = mutableListOf<PositionPanelListener>()
   private val first: Button
   private val last: Button
   private val left: Button
@@ -56,7 +56,6 @@ class PositionPanel : HorizontalLayout() {
   init {
     // setStyleName(Styles.POSITION_PANEL) TODO
     isSpacing = true // TODO
-    listeners = ArrayList<PositionPanelListener>()
     first = Button()
     last = Button()
     left = Button()
@@ -172,7 +171,7 @@ class PositionPanel : HorizontalLayout() {
    * @param l The listener object.
    */
   fun addPositionPanelListener(l: PositionPanelListener) {
-    listeners!!.add(l)
+    listeners.add(l)
   }
 
   /**
@@ -180,7 +179,7 @@ class PositionPanel : HorizontalLayout() {
    * @param l The listener object.
    */
   fun removePositionPanelListener(l: PositionPanelListener) {
-    listeners!!.remove(l)
+    listeners.remove(l)
   }
 
   /**

@@ -51,12 +51,12 @@ abstract class DGridEditorField<T>(
    * Returns the field editor hold by this component.
    */
   val editor: GridEditorField<T> by lazy {
-    createEditor().also {
-      it.dGridEditorField = this
-      it.addClickListener {
+    createEditor().also { editor ->
+      editor.dGridEditorField = this
+      editor.addClickListener {
         onClick()
       }
-      it.addAttachListener {
+      editor.addAttachListener {
         currentUI = it.ui
       }
     }

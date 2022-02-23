@@ -20,7 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.list
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
-import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.ApplicationContext
 
 import com.vaadin.componentfactory.EnhancedDialog

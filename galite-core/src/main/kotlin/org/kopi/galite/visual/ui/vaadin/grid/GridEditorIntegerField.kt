@@ -37,8 +37,7 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
 
   override fun check(text: String): Boolean {
     for (element in text) {
-      val c = element
-      if (!(Character.isDigit(c) || c == '.' || c == '-')) {
+      if (!(Character.isDigit(element) || element == '.' || element == '-')) {
         return false
       }
     }

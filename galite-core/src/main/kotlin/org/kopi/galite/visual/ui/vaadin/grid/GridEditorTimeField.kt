@@ -24,9 +24,8 @@ package org.kopi.galite.visual.ui.vaadin.grid
 class GridEditorTimeField: GridEditorTextField(5) {
 
   override fun check(text: String): Boolean {
-    for (i in 0 until text.length) {
-      val c = text[i]
-      if (!(c >= '0' && c <= '9' || c == ':')) {
+    for (element in text) {
+      if (!(element in '0'..'9' || element == ':')) {
         return false
       }
     }

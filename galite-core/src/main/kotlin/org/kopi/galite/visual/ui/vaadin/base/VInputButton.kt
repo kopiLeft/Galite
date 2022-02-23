@@ -65,9 +65,7 @@ open class VInputButton(caption: String? = null) : Input(), ClickNotifier<VInput
   }
 
   /**
-   * Sets the button caption
-   *
-   * @param caption The button caption.
+   * The button caption
    */
   var caption: String?
     get() = value

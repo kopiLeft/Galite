@@ -149,49 +149,41 @@ abstract class GridEditorField<T> protected constructor() : AbstractCompositeFie
   interface NavigationListener {
     /**
      * Fired when a goto next field event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoNextField()
 
     /**
      * Fired when a goto previous field event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoPrevField()
 
     /**
      * Fired when a goto next block event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoNextBlock()
 
     /**
      * Fired when a goto previous record event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoPrevRecord()
 
     /**
      * Fired when a goto next field event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoNextRecord()
 
     /**
      * Fired when a goto first record event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoFirstRecord()
 
     /**
      * Fired when a goto last record event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoLastRecord()
 
     /**
      * Fired when a goto next empty mandatory field event is called by the user.
-     * @param event The navigation event object
      */
     fun onGotoNextEmptyMustfill()
   }

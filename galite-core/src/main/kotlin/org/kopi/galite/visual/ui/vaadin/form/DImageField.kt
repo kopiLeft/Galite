@@ -141,7 +141,7 @@ class DImageField(
    * @param baseName The base name.
    * @return The dynamic image name.
    */
-  protected fun createFileName(baseName: String): String =
+  private fun createFileName(baseName: String): String =
           baseName + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".png"
   //---------------------------------------------------
   // STREAM RESOURCE

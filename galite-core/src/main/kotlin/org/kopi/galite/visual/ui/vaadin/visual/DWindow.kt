@@ -480,7 +480,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
 
   /**
    * Reports if a message is shown while in a transaction.
-   * @param The message to be displayed.
+   * @param message The message to be displayed.
    */
   protected fun verifyNotInTransaction(message: String) {
     if (getModel()!!.inTransaction() && debugMessageInTransaction()) {

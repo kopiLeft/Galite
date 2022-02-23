@@ -244,7 +244,7 @@ class DBlockDropHandler(private val block: VBlock) {
 
     /**
      * Creates a temporary file.
-     * @param directory The parent directory.
+     *
      * @param defaultName The default file name.
      * @return The created temporary file.
      * @throws IOException I/O errors.

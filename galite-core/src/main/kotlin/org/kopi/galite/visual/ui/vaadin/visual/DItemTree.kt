@@ -69,8 +69,6 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
   init {
     val content = VerticalLayout(tree)
     tree.addItemClickListener(ItemClickHandler())
-    //tree.addCollapseListener(DItemTree.CollapseHandler())
-    //tree.addExpandListener(DItemTree.ExpandHandler())
     content.className = "itemtree"
     /*tree.addItemSetChangeListener(object : ItemSetChangeListener() { TODO
       fun containerItemSetChange(event: ItemSetChangeEvent?) {
@@ -211,7 +209,8 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
 
   /**
    * Remove all children of an item
-   * @param parentId the parent ID
+   *
+   * @param parent the parent
    */
   fun removeChildren(parent: Item) {
     val children = tree.getChildrenOf(parent.id)
@@ -482,7 +481,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
   // --------------------------------------------------
   /**
    * The `ItemClickHandler` is the item tree implementation
-   * of the [ItemClickListener].
+   * of the item click listener.
    */
   private inner class ItemClickHandler : ComponentEventListener<ItemClickEvent<TreeNode>> {
     override fun onComponentEvent(event: ItemClickEvent<TreeNode>) {
@@ -497,24 +496,4 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
       }
     }
   }
-
-  /**
-   * The `CollapseHandler` is the item tree implementation
-   * of the [CollapseListener].
-   */
-  /*private inner class CollapseHandler : ComponentEventListener<CollapseEvent<TreeNode, TreeGrid<TreeNode>>> {
-    override fun onComponentEvent(event: CollapseEvent<TreeNode, TreeGrid<TreeNode>>) {
-      tree.valueChanged()
-    }
-  }*/
-
-  /**
-   * The `ExpandHandler` is the item tree implementation
-   * of the [ExpandListener].
-   */
-  /*private inner class ExpandHandler : ComponentEventListener<ExpandEvent<TreeNode, TreeGrid<TreeNode>>> {
-    override fun onComponentEvent(event: ExpandEvent<TreeNode, TreeGrid<TreeNode>>) {
-      tree.valueChanged()
-    }
-  }*/
 }

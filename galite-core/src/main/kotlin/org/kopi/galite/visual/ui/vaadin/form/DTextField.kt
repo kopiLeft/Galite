@@ -25,6 +25,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.field.VDateField
 import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.contextmenu.ContextMenu

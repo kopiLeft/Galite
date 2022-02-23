@@ -25,6 +25,7 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
+import org.kopi.galite.visual.visual.VException
 
 /**
  * The `VPredefinedValueHandler` is the VAADIN implementation of
@@ -55,7 +56,7 @@ class VPredefinedValueHandler(model: VFieldUI,
    * This method will open the file chooser to select an image.
    * @return the selected image from the user file system
    * @throws VException
-   * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
+   * @see org.kopi.galite.visual.form.PredefinedValueHandler.selectImage
    */
   override fun selectImage(): ByteArray? = FileUploader().upload("image/*")
 }

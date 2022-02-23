@@ -47,7 +47,7 @@ object Utils : Utils() {
   //---------------------------------------------------
   /**
    * Returns image from theme
-   * @param img Must be an image from resource theme path separator is "/"
+   * @param image Must be an image from resource theme path separator is "/"
    * @return An Image or null if not found.
    */
   fun getImage(image: String): Image {

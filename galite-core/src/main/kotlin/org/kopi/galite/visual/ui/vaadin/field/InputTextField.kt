@@ -20,7 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.field
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
@@ -653,11 +652,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     return oracle
   }
 
-  *//**
+  /**
    * Sets the suggestion oracle used to create suggestions.
    *
    * @param oracle the oracle
-   *//*
+   */
   fun setOracle(oracle: SuggestOracle?) {
     this.oracle = oracle
   }
@@ -685,8 +684,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
    * Shows the suggestions beginning with the given query string.
    * @param query The searched text.
    */
-  /*package*/
-  fun showSuggestions(query: String?) {
+  internal fun showSuggestions(query: String?) {
     if (!hasAutocomplete) {
       return
     }

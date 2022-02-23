@@ -202,11 +202,11 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         editRecord(rec + 1)
       }
 
-      *//**
+      /**
      * Returns the column view associated with the given grid position
      * @param position The field position in the grid.
      * @return The column view.
-     *//*
+     */
         protected fun getColumnView(position: Int): DGridBlockFieldUI? {
           for (columnView in columnViews) {
             if (columnView != null && model.getFieldPos(columnView.model) == position) {
