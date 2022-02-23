@@ -128,6 +128,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
     styleManager = StyleManager(currentUI!!)
+    currentUI!!.element.style["--background-color"] = "#009bd4"
+    currentUI!!.element.style["--background-hover-color"] = "#d9f0f8"
+    currentUI!!.element.style["--actor-hover-color"] = "#547988"
+    currentUI!!.element.style["--disabled-actor-color"] = "#82cfe9"
   }
 
   // ---------------------------------------------------------------------

@@ -33,7 +33,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param trueRepresentation The representation of the true value.
  * @param falseRepresentation The representation of the false false
  */
-@CssImport("./styles/galite/checkbox.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/checkbox.css"),
+  CssImport(value = "./styles/galite/checkbox.css", themeFor = "vaadin-checkbox")
+])
 class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean?>() {
 
   /**

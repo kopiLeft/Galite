@@ -18,7 +18,7 @@
 
 :host([theme~="k-windowsMenu"]) [part="header"] {
 	position: relative;
-	color: #009bd4;
+	color: var(--background-color);
 	font-style: normal !important;
     background: #f2f2f2;
 }
@@ -46,7 +46,7 @@
 }
 
 .window-items-container .item:hover {
-    background: #d9f0f8;
+    background: var(--background-hover-color);
     cursor: pointer;
 }
 

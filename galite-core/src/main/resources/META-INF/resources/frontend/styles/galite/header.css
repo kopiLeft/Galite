@@ -67,12 +67,13 @@
 /*
  * Change the dots' style
  */
-::part(overflow-button) {
+#module_list::part(overflow-button) {
     --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.800rem;
     border-right: 1px solid #dadada;
+    border-radius: 0;
     height: 61px;
     background-color: var(--lumo-tint);
     box-sizing: border-box;
@@ -82,7 +83,7 @@
  * Change the dots' style when hovered
  */
 ::part(overflow-button):hover {
-    background-color: #d9f0f8;
+    background-color: var(--background-hover-color);
 }
 
 /**
@@ -101,7 +102,7 @@
 }
 
 :host([theme~="module_list"]) [part~="menu-bar-button"]:hover {
-    background-color: #d9f0f8;
+    background-color: var(--background-hover-color);
 }
 
 :host([theme~="module_list"]) {
@@ -115,7 +116,7 @@
 }
 
 #welcome ::part(menu-bar-button):hover {
-    background-color: #d9f0f8;
+    background-color: var(--background-hover-color);
 }
 
 /**

@@ -89,7 +89,7 @@ vaadin-password-field {
 #user_name:focus {
     outline : none;
     background: none;
-    border-bottom: #009bd4 1px solid;
+    border-bottom: var(--background-color) 1px solid;
 }
 
 /**
@@ -109,7 +109,7 @@ vaadin-password-field {
  * Login Button
  */
 #login_button {
-    background: #009bd4;
+    background: var(--background-color);
     color: white;
     padding: 4px 6px;
     font-family: Arial, sans-serif;
@@ -191,7 +191,7 @@ vaadin-password-field {
  * Styles for hovered text zones.
  */
 #user_password::part(input-field):hover, #user_name:hover {
-    background: #d9f0f8;
+    background: var(--background-hover-color);
 }
 
 /**
@@ -199,7 +199,7 @@ vaadin-password-field {
  */
 #user_password:focus, #user_name:focus {
     background: none;
-    border-bottom: #009bd4 1px solid;
+    border-bottom: var(--background-color) 1px solid;
 }
 
 #user_password::part(input-field) {
@@ -240,7 +240,7 @@ vaadin-password-field {
  */
 .k-loginBox input[type="button"] {
     display: inline-block;
-    background: #009bd4;
+    background: var(--background-color);
     color: #ffffff;
     padding: 4px 6px;
     font-family: Arial, sans-serif !important;
