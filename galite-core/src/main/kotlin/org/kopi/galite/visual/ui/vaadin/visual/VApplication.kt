@@ -125,12 +125,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun onAttach(attachEvent: AttachEvent) {
-    currentUI = attachEvent.ui
+    val ui = attachEvent.ui
+
+    currentUI = ui
     styleManager = StyleManager(currentUI!!)
-    currentUI!!.element.style["--background-color"] = "#009bd4"
-    currentUI!!.element.style["--background-hover-color"] = "#d9f0f8"
-    currentUI!!.element.style["--actor-hover-color"] = "#547988"
-    currentUI!!.element.style["--disabled-actor-color"] = "#82cfe9"
+    ui.element.style["--background-color"] = theme.backgroundColor
+    ui.element.style["--background-hover-color"] = theme.backgroundHoverColor
+    ui.element.style["--actor-hover-color"] = theme.actorHoverColor
+    ui.element.style["--disabled-actor-color"] = theme.disabledActorColor
   }
 
   // ---------------------------------------------------------------------
@@ -627,6 +629,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * The page title.
    */
   open val title: String? = null
+
+  /**
+   * The theme is the colors used in the user interface.
+   * The default theme is blue.
+   */
+  open val theme: Theme = Theme("#009bd4", "#d9f0f8", "#547988", "#82cfe9")
 
   override fun getPageTitle(): String? {
     return pageTitle
