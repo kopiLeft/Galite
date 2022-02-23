@@ -36,6 +36,7 @@ import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.ColumnResizeEvent
+import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant
@@ -533,6 +534,8 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
 
+          setAlignment(column, columnView.editorField.columnView.model.align)
+
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
@@ -663,5 +666,19 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }
     }
+  }
+
+  /**
+   * Sets the alignment of a column in multi block.
+   * @param column The column.
+   * @param align The column alignment.
+   */
+  fun setAlignment(column: Grid.Column<GridBlockItem>, align: Int) {
+    column.textAlign =
+      when(align) {
+        VConstants.ALG_RIGHT -> ColumnTextAlign.END
+        VConstants.ALG_CENTER -> ColumnTextAlign.CENTER
+        else -> ColumnTextAlign.START
+      }
   }
 }
