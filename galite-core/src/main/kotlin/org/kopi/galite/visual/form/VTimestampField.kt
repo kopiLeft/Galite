@@ -81,19 +81,23 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {
+      checkConstraint(null)
       setNull(rec)
     } else {
-      parseTimestamp(rec, s as String)
+      val timestamp = parseTimestamp(s as String)
+
+      checkConstraint(timestamp)
+      setTimestamp(rec, timestamp)
     }
   }
 
-  internal fun parseTimestamp(rec: Int, s: String) {
+  internal fun parseTimestamp(s: String): Timestamp {
     val timestamp = s.split("[ T]".toRegex(), 2)
     val date = parseDate(timestamp[0])
     val time = parseTime(timestamp[1])
-    setTimestamp(rec, Timestamp("$date $time"))
-  }
 
+    return Timestamp("$date $time")
+  }
 
   private fun parseDate(s: String): String {
     var day = 0

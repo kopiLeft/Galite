@@ -90,6 +90,7 @@ open class Domain<T>(val width: Int? = null,
   protected var fixed: Fixed = Fixed.UNDEFINED
   protected var convert: Convert = Convert.NONE
   val ident: String = this::class.java.simpleName
+  private var constraint: Constraint<T>? = null
 
   /**
    * Sets the minimum value of a number domain.
@@ -121,10 +122,20 @@ open class Domain<T>(val width: Int? = null,
   var kClass: KClass<*>? = null
 
   /**
+   * Defines a [constraint] that the field value should verify. Otherwise an error [message] is displayed to the user.
+   *
+   * @param message the error message to display.
+   * @param constraint the constraint that the field value should verify.
+   */
+  fun check(message: String, constraint: (value: T) -> Boolean) {
+    this.constraint = Constraint(message, constraint)
+  }
+
+  /**
    * Builds the form field model
    */
   open fun buildFormFieldModel(formField: FormField<T>): VField {
-    return with(formField) {
+    val model = with(formField) {
       when (kClass) {
         Int::class, Long::class -> VIntegerField(block.buffer,
                                                  width ?: 0,
@@ -177,6 +188,13 @@ open class Domain<T>(val width: Int? = null,
         }
       }
     }
+
+    if (constraint != null) {
+      model.constraint = constraint!!.constraint as (value: Any?) -> Boolean
+      model.constraintMessage = constraint!!.message
+    }
+
+    return model
   }
 
   /**

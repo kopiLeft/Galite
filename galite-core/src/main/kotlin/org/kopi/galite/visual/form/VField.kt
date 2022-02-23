@@ -199,6 +199,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   private lateinit var background: Array<VColor?> // background colors for this field.
 
+  var constraint: ((value: Any?) -> Boolean)? = null
+
+  var constraintMessage: String? = null
+
   init {
     setDimension(width, height)
   }
@@ -450,6 +454,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun checkType(s: Any?) {
     checkType(block!!.activeRecord, s)
+  }
+
+  /**
+   * Check that value verifies the constraint defined by the user (on exit)
+   *
+   * @param     s               the object to check
+   */
+  fun checkConstraint(s: Any?) {
+    if (constraint?.invoke(s) == false) {
+      if(constraintMessage != null) {
+        throw VFieldException(this, constraintMessage)
+      } else {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00071"))
+      }
+    }
   }
 
   /**

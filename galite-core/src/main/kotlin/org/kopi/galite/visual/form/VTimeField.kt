@@ -83,6 +83,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {
+      checkConstraint(null)
       setNull(rec)
     } else {
       var hours = -1
@@ -166,7 +167,10 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        setTime(rec, LocalTime.of(hours, minutes))
+        val time = LocalTime.of(hours, minutes)
+
+        checkConstraint(time)
+        setTime(rec, time)
       }
     }
   }

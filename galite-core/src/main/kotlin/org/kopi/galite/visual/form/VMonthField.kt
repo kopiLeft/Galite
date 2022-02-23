@@ -87,9 +87,10 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
     val s = (s as? String).orEmpty()
 
     if (s == "") {
+      checkConstraint(null)
       setNull(rec)
     } else {
-      if (s.indexOf(".") != -1 && s.indexOf(".") == s.lastIndexOf(".")) {
+      val month = if (s.indexOf(".") != -1 && s.indexOf(".") == s.lastIndexOf(".")) {
         // one "." and only one
         try {
           val month = s.substring(0, s.indexOf(".")).toInt()
@@ -102,7 +103,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           }
 
           if (isMonth(month, year)) {
-            setMonth(rec, Month(year, month))
+            Month(year, month)
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -116,7 +117,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {
-            setMonth(rec, Month(year, month))
+            Month(year, month)
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -126,6 +127,9 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
       } else {
         throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
       }
+
+      checkConstraint(month)
+      setMonth(rec, month)
     }
   }
 

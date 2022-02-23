@@ -82,13 +82,17 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     val s = s as? String
 
     if (s == "") {
+      checkConstraint(null)
       setNull(rec)
     } else {
-      parseDate(rec, s)
+      val date = parseDate(s)
+
+      checkConstraint(date)
+      setDate(rec, date)
     }
   }
 
-  private fun parseDate(rec: Int, s: String?) {
+  private fun parseDate(s: String?): LocalDate? {
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
@@ -132,7 +136,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    setDate(rec, LocalDate.of(year, month, day))
+    return LocalDate.of(year, month, day)
   }
 
   // ----------------------------------------------------------------------

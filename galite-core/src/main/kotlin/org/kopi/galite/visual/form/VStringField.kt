@@ -101,6 +101,7 @@ open class VStringField(val bufferSize: Int,
     var s = s as? String
 
     if (s == null || s == "") {
+      checkConstraint(null)
       setNull(rec)
     } else {
       when (convert and VConstants.FDO_CONVERT_MASK) {
@@ -114,6 +115,7 @@ open class VStringField(val bufferSize: Int,
       if (!checkText(s)) {
         throw VExecFailedException()
       }
+      checkConstraint(s)
       setString(rec, s)
     }
   }
