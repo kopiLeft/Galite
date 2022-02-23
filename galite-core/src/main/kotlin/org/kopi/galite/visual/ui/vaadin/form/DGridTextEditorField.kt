@@ -25,8 +25,8 @@ import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
-import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VDecimalField
+import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
@@ -36,9 +36,9 @@ import org.kopi.galite.visual.form.VWeekField
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorEnumField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorIntegerField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorMonthField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextAreaField

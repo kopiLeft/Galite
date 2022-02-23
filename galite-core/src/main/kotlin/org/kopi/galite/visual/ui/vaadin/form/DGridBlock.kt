@@ -48,10 +48,10 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.provider.Query
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.internal.ExecutionContext
-import com.vaadin.flow.data.provider.Query
 
 /**
  * Grid based chart block implementation.

@@ -24,7 +24,6 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.visual.VWindow
 
 /**
