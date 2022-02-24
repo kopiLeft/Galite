@@ -35,7 +35,7 @@ class IPPPrinter(name: String,
                  private val port: Int,
                  private val printer: String,
                  private val user: String,
-                 private val attributesForMedia: List<Array<String>>)
+                 private val attributesForMedia: List<Array<String?>>)
   : AbstractPrinter(name), Printer {
 
   fun getMediaTypes(): List<*> {
@@ -56,7 +56,7 @@ class IPPPrinter(name: String,
     } else {
       attributesForMedia.forEach { att ->
         if (att.size == 2 && att[0] == media) {
-          return if (att[1] == null) null else att[1].split(" ").toTypedArray()
+          return if (att[1] == null) null else att[1]!!.split(" ").toTypedArray()
         }
       }
       null

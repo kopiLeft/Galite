@@ -54,10 +54,6 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
     }
   }
 
-  protected fun isNumeric(): Boolean {
-    return true
-  }
-
   /**
    * Returns the integer value of this editor field.
    * @return The integer value of this editor field.

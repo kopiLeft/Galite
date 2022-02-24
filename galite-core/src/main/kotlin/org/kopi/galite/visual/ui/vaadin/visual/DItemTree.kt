@@ -273,7 +273,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
    * @param item item to edit or add new child
    * @param newItem if true, it is a new item to insert
    */
-  protected fun showInputDialog(
+  internal fun showInputDialog(
     item: Item,
     newItem: Boolean
   ) {

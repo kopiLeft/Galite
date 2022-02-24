@@ -85,11 +85,7 @@ abstract class DGridEditorField<T>(
   override fun getBlockView(): DGridBlock = columnView.blockView as DGridBlock
 
   override fun getAccess(): Int {
-    return if (getModel() != null) {
-      getModel().getAccess(getBlockView().getRecordFromDisplayLine(position))
-    } else {
-      VConstants.ACS_SKIPPED
-    }
+    return getModel().getAccess(getBlockView().getRecordFromDisplayLine(position))
   }
 
   override fun setBlink(blink: Boolean) {
@@ -223,9 +219,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoNextField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextField()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoNextField()
       }
     })
   }
@@ -233,9 +227,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoPrevField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
       }
     })
   }
@@ -243,9 +235,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoNextBlock() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_BLOCK") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.gotoNextBlock()
-        }
+        getModel().block!!.form.gotoNextBlock()
       }
     })
   }
@@ -253,9 +243,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoPrevRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoPrevRecord()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoPrevRecord()
       }
     })
   }
@@ -263,9 +251,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoNextRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextRecord()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoNextRecord()
       }
     })
   }
@@ -273,9 +259,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoFirstRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
       }
     })
   }
@@ -283,9 +267,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoLastRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
       }
     })
   }
@@ -293,9 +275,7 @@ abstract class DGridEditorField<T>(
   override fun onGotoNextEmptyMustfill() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
-        }
+        getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
       }
     })
   }
@@ -369,11 +349,7 @@ abstract class DGridEditorField<T>(
    * @return The foreground color.
    */
   protected fun getForegroundAt(at: Int): VColor? {
-    return if (getModel() != null) {
-      getModel().getForeground(getBlockView().getRecordFromDisplayLine(at))
-    } else {
-      null
-    }
+    return getModel().getForeground(getBlockView().getRecordFromDisplayLine(at))
   }
 
   /**
@@ -382,11 +358,7 @@ abstract class DGridEditorField<T>(
    * @return The background color.
    */
   protected fun getBackgroundAt(at: Int): VColor? {
-    return if (getModel() != null) {
-      getModel().getBackground(getBlockView().getRecordFromDisplayLine(at))
-    } else {
-      null
-    }
+    return getModel().getBackground(getBlockView().getRecordFromDisplayLine(at))
   }
 
   /**
@@ -408,9 +380,6 @@ abstract class DGridEditorField<T>(
    * @return `true` if the field model is focused.
    */
   fun modelHasFocus(): Boolean {
-    if (getModel() == null) {
-      return false
-    }
     val block = getModel().block
     return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(position)
   }

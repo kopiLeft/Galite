@@ -966,7 +966,7 @@ class MReport : Constants, Serializable {
   fun getColumnName(column: Int): String {
     val label = accessibleColumns[column]!!.label
 
-    if (label == null || label.isEmpty()) {
+    if (label.isEmpty()) {
       return ""
     }
     return if (accessibleColumns[column]!!.isFolded) label.substring(0, 1) else label

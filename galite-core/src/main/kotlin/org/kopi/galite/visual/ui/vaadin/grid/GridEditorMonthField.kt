@@ -73,10 +73,6 @@ class GridEditorMonthField: GridEditorTextField(7) {
     }
   }
 
-  protected fun isNumeric(): Boolean {
-    return true
-  }
-
   /**
    * Returns the string representation of the given month.
    * @param year The month year.

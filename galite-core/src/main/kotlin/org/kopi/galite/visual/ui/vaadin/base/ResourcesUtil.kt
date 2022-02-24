@@ -21,10 +21,6 @@ package org.kopi.galite.visual.ui.vaadin.base
  * Resources utilities.
  */
 object ResourcesUtil {
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private const val THEME_RESOURCE_PREFIX = "theme://resource/"
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

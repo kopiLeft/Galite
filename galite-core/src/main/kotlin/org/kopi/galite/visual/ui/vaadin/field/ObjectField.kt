@@ -206,7 +206,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
      * @param modifiers The modifiers.
      * @param navigationAction lambda representing the action to perform
      */
-    protected fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
+    private fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
       val navigator = KeyNavigator(this@ObjectField, key, modifiers, navigationAction)
       val keyNavigator = navigator.getKey()
 

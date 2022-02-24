@@ -123,19 +123,6 @@ object Utils : Utils() {
   }
 
   /**
-   * Returns the corresponding CSS color of a given [VColor].
-   * @param color The color model.
-   * @return The CSS color.
-   */
-  fun getCSSColor(color: VColor?): String {
-    return if (color == null) {
-      "inherit;"
-    } else {
-      "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ") ;"
-    }
-  }
-
-  /**
    * Returns the string representation of the given [VColor].
    * @param color The color model.
    * @return The equivalent String color or empty string if the color is `null`.
@@ -146,19 +133,6 @@ object Utils : Utils() {
     } else {
       "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ")"
     }
-  }
-
-  /**
-   * Builds a list of identifiers.
-   * @param size The list size.
-   * @return The resulting list.
-   */
-  fun buildIdList(size: Int): List<Int> {
-    val list: MutableList<Int> = ArrayList(size)
-    for (i in 0 until size) {
-      list.add(i)
-    }
-    return list
   }
 
   /**
@@ -294,15 +268,6 @@ object Utils : Utils() {
     }
 
     return mainWindow
-  }
-
-  /**
-   * Returns the complete theme resource URL of the given resource path.
-   * @param resourcePath The theme complete resource path.
-   * @return The URL of the given theme resource.
-   */
-  fun getThemeResourceURL(resourcePath: String): String {
-    TODO()
   }
 
   // --------------------------------------------------

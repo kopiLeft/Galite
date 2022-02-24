@@ -103,11 +103,11 @@ class DListDialog(
   /**
    * invoked when the user clicks outside the overlay or presses the escape key.
    */
-  fun onClose(event: DialogCloseActionEvent?) {
+  private fun onClose(event: DialogCloseActionEvent?) {
     doSelectFromDialog(-1, true, false)
   }
 
-  fun onKeyDown(event: KeyDownEvent) {
+  private fun onKeyDown(event: KeyDownEvent) {
     if (event.key == Key.BACKSPACE) {
       pattern = if (pattern != null && pattern!!.length > 1) {
         pattern!!.substring(0, pattern!!.length - 1)
@@ -118,7 +118,7 @@ class DListDialog(
     doKeyAction(event.key)
   }
 
-  open fun onKeyPress(event: KeyPressEvent) {
+  private fun onKeyPress(event: KeyPressEvent) {
     event.key.keys.forEach {
       if (pattern == null) {
         pattern = ""
@@ -134,7 +134,7 @@ class DListDialog(
    * Allows access to the key events.
    * @param keyCode The key code.
    */
-  protected fun doKeyAction(keyCode: Key) {
+  private fun doKeyAction(keyCode: Key) {
     if (tableItems.isEmpty()) {
       return
     }
@@ -196,7 +196,7 @@ class DListDialog(
    * The selected row will be set to the first visible row when
    * the selected row is null
    */
-  protected fun ensureTableSelection() {
+  private fun ensureTableSelection() {
     if (table!!.selectedItems.isEmpty()) {
       table!!.select(tableItems.first())
     }
@@ -232,7 +232,7 @@ class DListDialog(
    * @return The next item ID according to the currently selected one.
    */
 
-  protected val nextItemId: ListTable.ListDialogItem
+  private val nextItemId: ListTable.ListDialogItem
    get() {
     return if (table!!.selectedItems.first() == tableItems.last()) {
       tableItems.last()
@@ -245,7 +245,7 @@ class DListDialog(
    * Returns the previous item ID according to the currently selected one.
    * @return The previous item ID according to the currently selected one.
    */
-  protected val prevItemId: ListTable.ListDialogItem
+  private val prevItemId: ListTable.ListDialogItem
     get() {
       return if (table!!.selectedItems.first() == tableItems.first()) {
         tableItems.first()
@@ -258,7 +258,7 @@ class DListDialog(
    * Looks for the next page item ID starting from the selected row.
    * @return The next page item ID.
    */
-  protected val nextPageItemId: ListTable.ListDialogItem?
+  private val nextPageItemId: ListTable.ListDialogItem?
     get() {
       var nextPageItemId = table!!.selectedItems.first()
       var i = 0
@@ -273,7 +273,7 @@ class DListDialog(
    * Looks for the previous page item ID starting from the selected row.
    * @return The previous page item ID.
    */
-  protected val prevPageItemId: ListTable.ListDialogItem?
+  private val prevPageItemId: ListTable.ListDialogItem?
     get() {
       var prevPageItemId = table!!.selectedItems.first()
       var i = 0
@@ -291,7 +291,7 @@ class DListDialog(
    * Handles the client response after thread release.
    * @return The selected position.
    */
-  protected fun handleClientResponse(): Int =
+  private fun handleClientResponse(): Int =
           when {
             escaped -> -1
             doNewForm -> {
@@ -312,7 +312,7 @@ class DListDialog(
    * @return The selected item.
    * @throws VException Visual errors.
    */
-  protected fun doNewForm(form: VForm?, cstr: VDictionary?): Int =
+  private fun doNewForm(form: VForm?, cstr: VDictionary?): Int =
           if (form != null && cstr != null) {
             cstr.add(form)
           } else {
@@ -322,7 +322,7 @@ class DListDialog(
   /**
    * Prepares the dialog content.
    */
-  protected fun prepareDialog() {
+  private fun prepareDialog() {
     val table = ListTable(model)
     super.table = table
     table.select(tableItems.first())
@@ -358,7 +358,7 @@ class DListDialog(
   /**
    * Shows the dialog and wait until it is closed from client side.
    */
-  protected fun showDialogAndWait() {
+  internal fun showDialogAndWait() {
     startAndWaitAndPush(lock, currentUI) {
       showListDialog()
     }
@@ -368,14 +368,14 @@ class DListDialog(
    * Returns the current application instance.
    * @return Tshe current application instance.
    */
-  protected val application: VApplication
+  private val application: VApplication
     get() = ApplicationContext.applicationContext.getApplication() as VApplication
 
   /**
    * Handles the too many rows case.
    * This will show a user notification.
    */
-  protected fun handleTooManyRows() {
+  private fun handleTooManyRows() {
     val lock = Object()
     val application = application
     val notice = InformationNotification(
@@ -400,7 +400,7 @@ class DListDialog(
    * @param escaped Was the list escaped ?
    * @param doNewForm Should we do a new dictionary form ?
    */
-  protected fun doSelectFromDialog(selectedPos: Int, escaped: Boolean, doNewForm: Boolean) {
+  private fun doSelectFromDialog(selectedPos: Int, escaped: Boolean, doNewForm: Boolean) {
     this.selectedPos = selectedPos
     this.escaped = escaped
     this.doNewForm = doNewForm

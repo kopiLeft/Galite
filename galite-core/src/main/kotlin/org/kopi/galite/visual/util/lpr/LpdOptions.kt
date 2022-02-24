@@ -25,8 +25,8 @@ import gnu.getopt.LongOpt
 
 open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options(name) {
 
-  var localHost = "localhost"
-  var printHost = "localhost"
+  var localHost: String? = "localhost"
+  var printHost: String? = "localhost"
   var proxyHost: String? = null
   var remotePort = -1
   var sourcePort = -1

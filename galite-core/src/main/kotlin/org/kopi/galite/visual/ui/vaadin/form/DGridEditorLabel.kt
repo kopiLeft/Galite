@@ -93,12 +93,10 @@ class DGridEditorLabel(text: String?,
    * @return The full field description.
    */
   fun buildDescription(model: VFieldUI, tooltip: String?): String {
-    var tooltip = tooltip
     var description: String
     val commands = model.getAllCommands()
-    if (tooltip == null) {
-      tooltip = "" // avoid writing null in help tooltip.
-    }
+    val tooltip = tooltip.orEmpty() // avoid writing null in help tooltip.
+
     description = tooltip
     if (commands.isNotEmpty()) {
       description = "<html>$tooltip"

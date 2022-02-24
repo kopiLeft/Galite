@@ -281,7 +281,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
             Color(0, 128, 128),
             Color(0, 0, 128)
     )
-    private val ADDITIONAL_COLORS: Array<Color> = arrayOf<Color>(
+    private val ADDITIONAL_COLORS: Array<Color> = arrayOf(
             Color(128, 0, 0),
             Color(139, 0, 0),
             Color(165, 42, 42),

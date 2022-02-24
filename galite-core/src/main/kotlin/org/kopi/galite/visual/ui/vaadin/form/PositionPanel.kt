@@ -186,10 +186,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the next position.
    */
   protected fun fireGotoNextPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoNextPosition()
-      }
+    for (l in listeners) {
+      l.gotoNextPosition()
     }
   }
 
@@ -197,10 +195,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the previous position.
    */
   protected fun fireGotoPrevPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoPrevPosition()
-      }
+    for (l in listeners) {
+      l.gotoPrevPosition()
     }
   }
 
@@ -208,10 +204,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the last position.
    */
   protected fun fireGotoLastPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoLastPosition()
-      }
+    for (l in listeners) {
+      l.gotoLastPosition()
     }
   }
 
@@ -219,10 +213,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the last position.
    */
   protected fun fireGotoFirstPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoFirstPosition()
-      }
+    for (l in listeners) {
+      l.gotoFirstPosition()
     }
   }
 
@@ -231,10 +223,8 @@ class PositionPanel : HorizontalLayout() {
    * @param posno The position number.
    */
   protected fun fireGotoPosition(posno: Int) {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoPosition(posno)
-      }
+    for (l in listeners) {
+      l.gotoPosition(posno)
     }
   }
 

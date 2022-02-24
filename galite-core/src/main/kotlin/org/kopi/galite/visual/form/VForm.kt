@@ -26,7 +26,6 @@ import java.util.Locale
 import javax.swing.event.EventListenerList
 
 import org.jetbrains.annotations.TestOnly
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
@@ -47,7 +46,7 @@ import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.WindowBuilder
 import org.kopi.galite.visual.visual.WindowController
 
-abstract class VForm : VWindow, VConstants {
+abstract class VForm protected constructor() : VWindow(), VConstants {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -101,8 +100,6 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
-
-  protected constructor()
 
   /**
    * loads the form
@@ -193,7 +190,7 @@ abstract class VForm : VWindow, VConstants {
   override fun enableCommands() {
     super.enableCommands()
     // Form-level commands are always enabled
-    commands?.forEach { command ->
+    commands.forEach { command ->
       command.setEnabled(true)
     }
   }
@@ -227,12 +224,11 @@ abstract class VForm : VWindow, VConstants {
    * @param     locale  the locale to use
    */
   fun localize(locale: Locale?) {
-    var manager: LocalizationManager?
+    val manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
     super.localizeActors(manager) // localizes the actors in VWindow
     localize(manager)
-    manager = null
   }
 
   /**
@@ -748,7 +744,7 @@ abstract class VForm : VWindow, VConstants {
     }
   }
 
-  fun showHelp(form: VForm?) {
+  fun showHelp() {
     VHelpViewer().showHelp(genHelp())
   }
 
@@ -811,17 +807,8 @@ abstract class VForm : VWindow, VConstants {
       append("\n")
 
       // support better message
-      if (blocks != null) {
-        for (i in blocks.indices) {
-          val block: VBlock = blocks[i]
-          if (block != null) {
-            append(blocks[i].toString())
-          } else {
-            append("Block ")
-            append(i)
-            append(" is null \n")
-          }
-        }
+      for (i in blocks.indices) {
+        append(blocks[i].toString())
       }
     } catch (e: Exception) {
       append("exception while retrieving form information. \n")

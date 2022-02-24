@@ -106,14 +106,6 @@ open class DTextField(
    * @return `true` if there is a difference between the old and the new text.
    */
   protected fun isChanged(oldText: String?, newText: String?): Boolean {
-    var oldText = oldText
-    var newText = newText
-    if (oldText == null) {
-      oldText = "" // replace null by empty string to avoid null pointer exceptions
-    }
-    if (newText == null) {
-      newText = ""
-    }
     return oldText != newText
   }
 
@@ -215,23 +207,6 @@ open class DTextField(
   }
 
   /**
-   * Checks the given text.
-   *
-   * @param s The text to be checked.
-   * @param changed Is value changed ?
-   */
-  private fun checkText(s: String?, changed: Boolean) {
-    val text = transformer!!.toModel(s ?: "")
-    if (!transformer!!.checkFormat(text)) {
-      return
-    }
-    if (getModel().checkText(text!!) && changed) {
-      getModel().isChangedUI = true
-    }
-    getModel().setChanged(changed)
-  }
-
-  /**
    * Check the given text against model definition.
    *
    * @param s The text to be verified.
@@ -253,24 +228,6 @@ open class DTextField(
       })
     }
   }
-
-  // --------------------------------------------------
-  // UTILS
-  // --------------------------------------------------
-
-  /**
-   * Returns the field width.
-   * @return The field width.
-   */
-  val fieldWidth: Float
-    get() = this.field.width.toFloat()
-
-  /**
-   * Returns the field width unit.
-   * @return The field width unit.
-   */
-  /*val fieldWidthUnits: Unit TODO
-    get() = this.field.getWidthUnits()*/
 
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION

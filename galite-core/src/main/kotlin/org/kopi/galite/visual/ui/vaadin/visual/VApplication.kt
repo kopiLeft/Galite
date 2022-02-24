@@ -377,9 +377,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * you should use it to define [Locale], debugMode...
    */
   fun initialize() {
-    if (registry != null) {
-      registry.buildDependencies()
-    }
+    registry.buildDependencies()
     // set locale from initialization.
     setLocalizationContext(getInitializationLocale()) // TODO
   }
@@ -424,13 +422,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // default application locale is initialized
     // from application descriptor file (web.xml)
     defaultLocale = locale
-    if (defaultLocale == null) {
-      // if no valid local is defined in the application descriptor
-      // pick the locale from the extra locale given with application
-      // specifics.
-      // This is only to be share that we start with a language.
-      defaultLocale = alternateLocale
-    }
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
 

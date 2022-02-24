@@ -118,7 +118,7 @@ abstract class DObjectField(model: VFieldUI,
    * @param action The action to be executed.
    */
   protected fun performAction(action: Action?) {
-    if (action != null && model != null) {
+    if (action != null) {
       getModel().getForm().performAsyncAction(action)
     }
   }

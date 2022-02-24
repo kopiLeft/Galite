@@ -24,7 +24,7 @@ import gnu.getopt.LongOpt
 class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(name) {
 
   var copies = 1
-  var filetype = "l"
+  var filetype: String? = "l"
   var indent = -1
   var job: String? = null
   var mail = false
@@ -32,7 +32,7 @@ class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(n
   var remove = false
   var dataFirst = false
   var title: String? = null
-  var tmpdir = "/tmp/"
+  var tmpdir: String? = "/tmp/"
   var width = -1
   var windows = false
   var printClass: String? = null

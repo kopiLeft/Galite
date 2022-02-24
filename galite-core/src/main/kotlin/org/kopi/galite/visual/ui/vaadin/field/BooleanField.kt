@@ -231,7 +231,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   /**
    * Handles the component visibility according to its value.
    */
-  protected fun handleComponentVisiblity() {
+  internal fun handleComponentVisiblity() {
     isVisible = value != null
   }
 

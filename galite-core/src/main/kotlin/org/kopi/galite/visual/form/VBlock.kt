@@ -3823,18 +3823,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         append(fetchPosition)
         append("\n")
         append("CURRENT RECORD:\n")
-        if (fields != null) {
-          for (i in fields.indices) {
-            if (fields[i] != null) {
-              append(fields[i].toString())
-            } else {
-              append("Field ")
-              append(i)
-              append(" is null\n")
-            }
-          }
-        } else {
-          append("No information about fields available.\n")
+        for (i in fields.indices) {
+          append(fields[i].toString())
         }
       } catch (e: Exception) {
         append("Exception while retrieving bock information. \n")

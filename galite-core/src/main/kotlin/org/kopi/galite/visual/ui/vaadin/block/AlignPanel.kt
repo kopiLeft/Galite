@@ -201,22 +201,7 @@ class AlignPanel(var align: BlockAlignment?, private val targetBlockName: String
    * Calculates the size of the content panel.
    */
   protected fun setPanelSize() {
-    if (aligns == null) {
-      return
-    }
-    var width = 0
-    var height = 0
-    var i = 0
-    for (child in children) {
-      val align = aligns!![i]
-      if (align.x != -1) {
-        //width = width.coerceAtLeast(child.element.getAbsoluteRight())
-        //height = height.coerceAtLeast(child.element.getOffsetTop() + child.element.getClientHeight())
-      }
-      i++
-    }
-    //setWidth("${width}px") TODO
-    //setHeight("${height}px")
+    // TODO
   }
 
   /**

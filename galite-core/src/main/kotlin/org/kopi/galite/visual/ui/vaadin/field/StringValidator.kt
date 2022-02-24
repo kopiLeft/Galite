@@ -52,14 +52,6 @@ class StringValidator(
   }
 
   /**
-   * Returns the convert type of this validator.
-   * @return The convert type of this validator.
-   */
-  fun getConvertType(): TextField.ConvertType {
-    return convertType
-  }
-
-  /**
    * Convert the first letter in each word in the source text into upper case.
    *
    * @param     source          the source text.

@@ -427,7 +427,7 @@ abstract class VChart() : VWindow(), CConstants, Printable {
     if (enable) {
       // we need to check if VKT_Triggers is initialized
       // ex : org.kopi.galite.visual.cross.VDynamicReport
-      if (VKT_Triggers != null && hasTrigger(CConstants.TRG_CMDACCESS, index)) {
+      if (hasTrigger(CConstants.TRG_CMDACCESS, index)) {
 
         val active = try {
           (callTrigger(CConstants.TRG_CMDACCESS, index) as Boolean)

@@ -191,7 +191,7 @@ class DGridMultiBlock(parent: DForm,
   /**
    * Updates the state of the detail display
    */
-  protected fun updateDetailDisplay() {
+  internal fun updateDetailDisplay() {
     for (columnView in columnViews) {
       if (columnView?.detailDisplay != null) {
         columnView.detailDisplay!!.updateAccess()

@@ -22,7 +22,6 @@ import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.dom.Element
 
 class VActorsRootNavigationItem : Button() {
 
@@ -73,13 +72,5 @@ class VActorsRootNavigationItem : Button() {
    */
   fun setActorsNavigationPanel(panel: VActorsNavigationPanel) {
     menu.setNavigationPanel(panel)
-  }
-
-  /**
-   * Returns the icon DOM element.
-   * @return The icon DOM element.
-   */
-  fun getIconElement(): Element? {
-    return icon.element
   }
 }

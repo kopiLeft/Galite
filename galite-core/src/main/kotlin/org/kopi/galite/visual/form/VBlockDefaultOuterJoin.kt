@@ -93,12 +93,12 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                 if (rootTable == table) {
                   getJoinCondition(rootTable, field.getColumn(tableColumn)!!._getTable(), joinTables)
                 }
-              } else if (isJoinedTable(field.getColumn(j)!!.column.table)) { // FIXME!
+              } else if (isJoinedTable(field.getColumn(j)!!.column.table)) {
                 // the table for this column is present in the outer join tree
                 // as caster outer joins do not work, we assume that the
                 // condition will apply to the root
                 if (j == rootColumn) {
-                  condition = if (condition != null) { // TODO Improve this!
+                  condition = if (condition != null) {
                     condition and (field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column)
                   } else {
                     field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column

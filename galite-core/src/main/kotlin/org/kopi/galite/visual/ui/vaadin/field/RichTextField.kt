@@ -204,7 +204,7 @@ class RichTextField(
    * @return `true` if this field is empty.
    */
   override val isNull: Boolean
-    get() =  value == null
+    get() = value == null
 
   /**
    * Checks the internal value of this field.

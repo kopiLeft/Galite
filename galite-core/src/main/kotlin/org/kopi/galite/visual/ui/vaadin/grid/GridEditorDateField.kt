@@ -40,10 +40,6 @@ class GridEditorDateField: GridEditorTextField(10) {
     parseDate(value)
   }
 
-  protected fun isNumeric(): Boolean {
-    return true
-  }
-
   /**
    * Parses the given date input.
    *

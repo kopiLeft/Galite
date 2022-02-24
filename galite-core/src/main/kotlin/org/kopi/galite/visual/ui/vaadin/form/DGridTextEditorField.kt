@@ -387,14 +387,6 @@ class DGridTextEditorField(
    * @return `true` if there is a difference between the old and the new text.
    */
   private fun isChanged(oldText: String?, newText: String?): Boolean {
-    var oldText: String? = oldText
-    var newText: String? = newText
-    if (oldText == null) {
-      oldText = "" // replace null by empty string to avoid null pointer exceptions
-    }
-    if (newText == null) {
-      newText = ""
-    }
     return oldText != newText
   }
   // ----------------------------------------------------------------------

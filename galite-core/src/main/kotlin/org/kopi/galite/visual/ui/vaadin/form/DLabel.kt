@@ -73,12 +73,12 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     // TODO
   }
 
-  override fun init(text: String?, toolTip: String?) {
-    tooltip = toolTip
+  override fun init(text: String?, help: String?) {
+    tooltip = help
     access(currentUI) {
       this.text = text
-      if (toolTip != null) {
-        element.setProperty("title", toolTip)
+      if (help != null) {
+        element.setProperty("title", help)
       }
     }
   }

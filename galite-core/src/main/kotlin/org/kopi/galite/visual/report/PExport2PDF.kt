@@ -144,7 +144,7 @@ class PExport2PDF(
         }
       }
       document.open()
-      if (firstPageHeader != null && firstPageHeader != "") {
+      if (firstPageHeader != "") {
         try {
           val page = document.pageSize
 

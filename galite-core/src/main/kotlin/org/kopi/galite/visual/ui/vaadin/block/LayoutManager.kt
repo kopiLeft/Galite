@@ -129,7 +129,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
      * @param col The starting column.
      * @return The list of the constraint beside the starting column.
      */
-    protected fun getBesideConstraints(row: Int, col: Int): List<ConstraintWrapper> {
+    internal fun getBesideConstraints(row: Int, col: Int): List<ConstraintWrapper> {
       val constraints: MutableList<ConstraintWrapper>
       constraints = ArrayList()
       for (c in this.constraints!!) {
@@ -146,7 +146,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
      * @param col The starting column.
      * @return The list of the constraint beside the starting column.
      */
-    protected fun getBottomConstraints(row: Int, col: Int): List<ConstraintWrapper> {
+    internal fun getBottomConstraints(row: Int, col: Int): List<ConstraintWrapper> {
       val constraints: MutableList<ConstraintWrapper>
       constraints = ArrayList()
       for (c in this.constraints!!) {

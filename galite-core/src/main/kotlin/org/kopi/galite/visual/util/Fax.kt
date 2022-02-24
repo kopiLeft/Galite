@@ -38,7 +38,7 @@ import java.util.zip.DeflaterOutputStream
 import org.kopi.galite.visual.base.Utils
 
 @Deprecated("replaced by the class HylaFAXUtils")
-class Fax(var port: Int, var host: String) {
+class Fax(var port: Int, var host: String = HFAX_HOST) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -57,11 +57,6 @@ class Fax(var port: Int, var host: String) {
     if (port == 0) {
       port = HFAX_PORT
     }
-
-    if (host == null) {
-      host = HFAX_HOST
-    }
-    this.host = host
 
     // Create socket
     clnt = Socket(host, port)

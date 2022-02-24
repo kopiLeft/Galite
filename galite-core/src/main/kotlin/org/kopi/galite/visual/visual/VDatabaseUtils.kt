@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.visual
 
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.deleteAll
@@ -124,14 +125,13 @@ object VDatabaseUtils {
     }
   }
 
-  fun deleteRecords(table: String, condition: String?) {
-    // FIXME : this should be re-implemented
+  fun deleteRecords(table: String, condition: Op<Boolean>?) {
     transaction {
       val auxTable = object : Table(table) {
         var id = integer("ID")
       }
-      val query: org.jetbrains.exposed.sql.Query = if (condition != null && condition.isNotEmpty()) {
-        auxTable.slice(auxTable.id).select { auxTable.id eq condition as Int }.forUpdate()
+      val query = if (condition != null) {
+        auxTable.slice(auxTable.id).select { condition }.forUpdate()
       } else {
         auxTable.slice(auxTable.id).selectAll().forUpdate()
       }
