@@ -34,6 +34,12 @@ body {
   font-size: 1.33rem;
   text-decoration: none;
   color: black;
+  cursor: pointer;
+}
+
+.link:hover:not(:first-of-type) {
+  transform: scale(1.3);
+  color: darkblue;
 }
 
 .link:first-of-type {
@@ -72,8 +78,7 @@ body {
 }
 
 .main-logo {
-  width: 350px;
-  margin-top: -4em;
+  width: 200px;
 }
 
 .main-paragraph {
@@ -185,10 +190,13 @@ a.btn:visited {
 }
 
 .feature-img {
-  width: 200px;
-  margin-left: auto;
-  margin-right: auto;
   display: block;
+  padding: 25px 0px 25px 0px;
+}
+
+.icon {
+  text-align: center;
+  font-size: 120px;
 }
 
 .feature:hover {
@@ -313,6 +321,20 @@ footer a:hover {
   text-decoration: underline;
 }
 
+.container-footer-logo {
+  display: flex;
+}
+
+.footer-logo {
+  width: 100px;
+  margin-left: 5px;
+}
+
+#img-text {
+  font-size: 10px;
+  margin-top: 5px;
+}
+
 /* dsl code */
 
 code.hljs {
@@ -422,6 +444,11 @@ code.hljs {
   display:inline-block;
   color: #cfd0c7;
   margin-left: 2px;
+}
+
+.tab:hover {
+    color: white;
+    border-bottom: 3px solid gray;
 }
 
 #panels {
@@ -561,6 +588,9 @@ code.hljs {
     flex-direction: column;
     align-items: center;
   }
+  .main-actions > .btn {
+      margin-right: 0 !important;
+  }
   .link {
     padding: 5px;
     font-size: 20px;
@@ -576,9 +606,6 @@ code.hljs {
   }
   #features-section > h2 {
     margin-bottom: 30px;
-  }
-  .feature-img {
-    width: 100px;
   }
   .features-box {
     flex-wrap: wrap;
@@ -640,6 +667,9 @@ code.hljs {
   .ui-screenshots img {
     max-width: 95%;
   }
+  .container-footer-logo {
+      flex-direction: column;
+  }
 }
 
 /* Media Query for low resolution  Tablets, Ipads */
@@ -667,7 +697,7 @@ code.hljs {
     padding: 0;
   }
   .main-logo {
-    margin-top: -2em;
+    margin-top: -1em;
     margin-left: 1em;
   }
   .main-paragraph {
@@ -744,6 +774,9 @@ code.hljs {
   .ui-screenshots img {
     max-width: 95%;
   }
+  .container-footer-logo {
+    flex-direction: column;
+  }
 }
 
 /* Media Query for Tablets Ipads portrait mode */
@@ -753,9 +786,7 @@ code.hljs {
     width: 180px;
   }
   .main-logo {
-    width: 280px;
-    height: 240px;
-    margin-top: -2em;
+    margin-top: -1em;
     margin-left: 1em;
   }
   .main-paragraph {
@@ -841,24 +872,18 @@ code.hljs {
 /* Media Query for Laptops and Desktops */
 
 @media (min-width: 1025px) and (max-width: 1280px) {
-  .main-logo {
-    width: 100%;
-    height: 280px;
-  }
   #header-container {
     min-height: 340px;
   }
   #top-container {
     background: none !important;
+    margin-top: -2em;
   }
   .main-actions {
     margin-left: 35px;
   }
   .btn {
     padding: 0.7rem 1.2rem;
-  }
-  .feature-img {
-    width: 150px;
   }
   .features-box {
     flex-wrap: wrap;

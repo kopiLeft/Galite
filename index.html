@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css" />
     <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/material.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
@@ -60,7 +60,6 @@
         <div id="links">
           <a class="link" onClick="change()">
             <i id= "switch" class="fas fa-moon"></i>
-            <!-- <i class="far fa-lightbulb"></i> -->
           </a>
           <a class="link" href="https://github.com/kopiLeft">
             <i class="fab fa-github"></i>
@@ -79,7 +78,7 @@
       <h2>STRENGHTS & ADVANTAGES</h2>
       <div class="features-box">
         <div class="feature">
-          <img src="images/generic.png" class="feature-img"/>
+          <span class="icon"><i class="fas fa-cogs feature-img"></i></span>
           <h2 class="feature-title">Generic</h2>
           <p class="feature-paragraph">
             Make it easy to build a full fledged application based on business
@@ -87,7 +86,7 @@
           </p>
         </div>
         <div class="feature">
-          <img src="images/extendible.png" class="feature-img"/>
+          <span class="icon"><i class="fas fa-door-open feature-img"></i></span>
           <h2 class="feature-title">Extendible</h2>
           <p class="feature-paragraph">
             It provide a collections of component that can be combined in order
@@ -95,7 +94,7 @@
           </p>
         </div>
         <div class="feature">
-          <img src="images/devFriendly.png" class="feature-img"/>
+          <span class="icon"><i class="fas fa-heart-pulse feature-img"></i></span>
           <h2 class="feature-title">Developer friendly</h2>
           <p class="feature-paragraph">
             Galite provide a domain specific language that is easy to use in
@@ -103,7 +102,7 @@
           </p>
         </div>
         <div class="feature">
-          <img src="images/speed.png" class="feature-img"/>
+          <span class="icon"><i class="fas fa-gauge-high feature-img"></i></span>
           <h2 class="feature-title">Productive</h2>
           <p class="feature-paragraph">
             Galite take into consideration the time to market,
@@ -145,40 +144,15 @@
                       <span>
                         <pre class="dsl-code">
                           <code class="language-kotlin">
-class ClientForm : ReportSelectionForm() {
-  override val locale = Locale.UK
-  override val title = "Clients"
-  val action = menu("Action")
-  val quit = actor(
-    ident = "quit",
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
-    key = Key.ESCAPE          // key is optional here
-    icon = Icon.QUIT          // icon is optional here
-  }
-  val showHideFilter = actor(
-          ident = "ShowHideFilter",
-          menu = action,
-          label = "ShowHideFilter",
-          help = " Show Hide Filter",
-  ) {
-    key = Key.F4
-    icon = Icon.SEARCH_OP
-  }
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
+class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK),
+                            IFormDefault by FormDefaultImpl() {
+
+  init {
+    insertMenus()
+    insertCommands()
   }
 
   val list = actor(
-          ident = "list",
           menu = action,
           label = "list",
           help = "Display List",
@@ -187,18 +161,7 @@ class ClientForm : ReportSelectionForm() {
     icon = Icon.LIST
   }
 
-  val saveBlock = actor(
-          ident = "saveBlock",
-          menu = action,
-          label = "Save Block",
-          help = " Save Block",
-  ) {
-    key = Key.F9
-    icon = Icon.SAVE
-  }
-
   val interSave = actor(
-          ident = "interSave",
           menu = action,
           label = "Save and load",
           help = " Save and load",
@@ -207,15 +170,7 @@ class ClientForm : ReportSelectionForm() {
     icon = Icon.SAVE
   }
 
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
-
   val dynamicReport = actor(
-          ident = "dynamicReport",
           menu = action,
           label = "DynamicReport",
           help = " Create Dynamic Report",
@@ -223,41 +178,14 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6
     icon = Icon.REPORT
   }
-  val helpForm = actor(
-          ident = "helpForm",
-          menu = action,
-          label = "Help",
-          help = " Help"
-  ) {
-    key = Key.F1
-    icon = Icon.HELP
-  }
-  val graph = actor (
-          ident =  "graph",
-          menu =   action,
-          label =  "Graph",
-          help =   "show graph values",
-  ) {
-    key  =  Key.F9
-    icon =  Icon.COLUMN_CHART
-  }
-
-  val helpCmd = command(item = helpForm) {
-    showHelp()
-  }
-  val quitCmd = command(item = quit) {
-    quitForm()
-  }
 
   val clientsPage= page("Clients")
-  val contactsPage= page("Contacts")
   val detailsPage= page("Details")
   val clientsBlock = clientsPage.insertBlock(Clients())
-  val k = contactsPage.insertBlock(Clients())
   val salesBlock = clientsPage.insertBlock(Sales())
 
 
-  inner class Clients : Block(1, 100, "Clients") {
+  inner class Clients : Block("Clients", 1, 100) {
     val c = table(Client)
 
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
@@ -269,22 +197,30 @@ class ClientForm : ReportSelectionForm() {
     val fstnameClt = visit(domain = STRING(25), position = at(2, 1)) {
       label = "First Name"
       help = "The client first name"
-      columns(c.firstNameClt)
+      columns(c.firstNameClt) {
+        priority = 1
+      }
     }
     val nameClt = visit(domain = STRING(25), position = at(2, 2)) {
       label = "Last name"
       help = "The client last name"
-      columns(c.lastNameClt)
+      columns(c.lastNameClt) {
+        priority = 2
+      }
     }
     val ageClt = visit(domain = INT(3), position = at(2, 3)) {
       label = "Age"
       help = "The client age"
-      columns(c.ageClt)
+      columns(c.ageClt) {
+        priority = 3
+      }
     }
     val email = visit(domain = STRING(25), position = at(3, 1)) {
       label = "Email"
       help = "The mail adress"
-      columns(c.mail)
+      columns(c.mail) {
+        priority = 4
+      }
     }
     val addressClt = visit(domain = STRING(20), position = at(3, 2)) {
       label = "Address"
@@ -319,24 +255,20 @@ class ClientForm : ReportSelectionForm() {
 
     init {
       command(item = report) {
-        createReport(ClientR())
+        createReport {
+          ClientR()
+        }
       }
       command(item = dynamicReport) {
         createDynamicReport()
       }
-      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
-        showChart(ChartSample())
-      }
       command(item = list) {
         recursiveQuery()
-      }
-      command(item = saveBlock) {
-        saveBlock()
       }
     }
   }
 
-  inner class Sales : Block(10, 10, "Sales") {
+  inner class Sales : Block("Sales", 10, 10) {
     val C = table(Client)
     val S = table(Purchase)
     val P = table(Product)
@@ -384,19 +316,15 @@ class ClientForm : ReportSelectionForm() {
       }
 
       command(item = report) {
-        createReport(ClientR())
+        createReport {
+          ClientR()
+        }
       }
       command(item = dynamicReport) {
         createDynamicReport()
       }
-      command(item = graph, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
-        showChart(ChartSample())
-      }
       command(item = list) {
         recursiveQuery()
-      }
-      command(item = saveBlock) {
-        saveBlock()
       }
       command(item = interSave) {
         val b = salesBlock.block
@@ -434,15 +362,10 @@ class ClientForm : ReportSelectionForm() {
                     <span>
                         <pre class="dsl-code">
                           <code class="language-kotlin">
-class ClientR : Report() {
-  override val locale = Locale.UK
-
-  override val title = "Clients_Report"
-
+class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   val action = menu("Action")
 
   val csv = actor(
-          ident = "CSV",
           menu = action,
           label = "CSV",
           help = "CSV Format",
@@ -452,7 +375,6 @@ class ClientR : Report() {
   }
 
   val xls = actor(
-          ident = "XLS",
           menu = action,
           label = "XLS",
           help = "Excel (XLS) Format",
@@ -462,7 +384,6 @@ class ClientR : Report() {
   }
 
   val xlsx = actor(
-          ident = "XLSX",
           menu = action,
           label = "XLSX",
           help = "Excel (XLSX) Format",
@@ -472,7 +393,6 @@ class ClientR : Report() {
   }
 
   val pdf = actor(
-          ident = "PDF",
           menu = action,
           label = "PDF",
           help = "PDF Format",
@@ -482,7 +402,6 @@ class ClientR : Report() {
   }
 
   val editColumnData = actor(
-    ident = "EditColumnData",
     menu = action,
     label = "Edit Column Data",
     help = "Edit Column Data",
@@ -492,7 +411,6 @@ class ClientR : Report() {
   }
 
   val helpForm = actor(
-          ident = "helpForm",
           menu = action,
           label = "Help",
           help = " Help"
@@ -619,10 +537,11 @@ class ClientR : Report() {
                     <span>
                         <pre class="dsl-code">
                           <code class="language-kotlin">
-class ChartSample: Chart() {
-  override val locale = Locale.UK
-  override val title = "Area/population per city"
-  override val help = "This chart presents the area/population per city"
+class ChartSample : Chart(
+  locale = Locale.UK,
+  title = "Area/population per city",
+  help = "This chart presents the area/population per city"
+) {
 
   val action = menu("Action")
 
@@ -641,12 +560,8 @@ class ChartSample: Chart() {
   val city = dimension(STRING(10)) {
     label = "dimension"
 
-    format {
-      object : VColumnFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
+    format { value ->
+      value?.toUpperCase()
     }
   }
 
@@ -655,25 +570,24 @@ class ChartSample: Chart() {
     chartType = VChartType.BAR
   }
 
-  /* This is the type that will be taken
-  because CHARTTYPE is executed after INIT */
+  // This is the type that will be taken because CHARTTYPE is executed after INIT
   val type = trigger(CHARTTYPE) {
     VChartType.BAR
   }
 
   init {
     city.add("Tunis") {
-      this[area] = Decimal("34600")
+      this[area] = BigDecimal("34600")
       this[population] = 1056247
     }
 
     city.add("Kasserine") {
-      this[area] = Decimal("806600")
+      this[area] = BigDecimal("806600")
       this[population] = 439243
     }
 
     city.add("Bizerte") {
-      this[area] = Decimal("568219")
+      this[area] = BigDecimal("568219")
       this[population] = 368500
     }
   }
@@ -706,7 +620,11 @@ class ChartSample: Chart() {
     </section>
     <footer id="footer">
       <p>Copyright &#9400; 2013-2022 kopiLeft Services SARL, Tunis TN.</p>
-      <p>Code licensed under an <a href = "https://github.com/kopiLeft/Galite/blob/master/COPYING">LGPLv2.1</a> License. </p>
+      <p>Code licensed under an <a href = "https://github.com/kopiLeft/Galite/blob/master/COPYING">LGPLv2.1 License</a>.</p>
+      <div class="container-footer-logo">
+        <p id="img-text">Supported and developed by :</p>
+        <img src="images/logo_kopileft.png" class="footer-logo" />
+      </div>
     </footer>
 
     <script>
