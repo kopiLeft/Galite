@@ -205,7 +205,11 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   // ----------------------------------------------------------------------
   // CHART MODEL
   // ----------------------------------------------------------------------
-  override val model: VChart by lazy { ChartModel(this) }
+  override val model: VChart by lazy {
+    ChartModel(this).also {
+      isModelInitialized = true
+    }
+  }
 
   @PublishedApi
   internal val `access$sourceFile`: String get() = sourceFile

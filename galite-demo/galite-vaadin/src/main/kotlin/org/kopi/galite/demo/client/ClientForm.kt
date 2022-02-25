@@ -76,7 +76,6 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
   val clientsBlock = clientsPage.insertBlock(Clients())
   val salesBlock = clientsPage.insertBlock(Sales())
 
-
   inner class Clients : Block("Clients", 1, 100) {
     val c = table(Client)
 

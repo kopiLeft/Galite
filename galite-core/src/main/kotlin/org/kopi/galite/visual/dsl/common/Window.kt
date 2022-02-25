@@ -43,6 +43,8 @@ abstract class Window(val title: String, val locale: Locale?) {
   /** Triggers added to this window */
   internal var triggers = mutableListOf<Trigger>()
 
+  internal var isModelInitialized: Boolean = false
+
   /** The model generated from this class. */
   abstract val model: VWindow
 

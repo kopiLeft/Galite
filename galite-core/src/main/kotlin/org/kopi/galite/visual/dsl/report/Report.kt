@@ -257,6 +257,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
     initFields()
     ReportModel(this).also { r ->
       pageTitle?.let { r.setPageTitle(it) }
+      isModelInitialized = true
     }
   }
 

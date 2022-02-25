@@ -134,5 +134,9 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
   // ----------------------------------------------------------------------
   // DICTIONARY FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VDictionaryForm by lazy { DictionaryFormModel(this) }
+  override val model: VDictionaryForm by lazy {
+    DictionaryFormModel(this).also {
+      isModelInitialized = true
+    }
+  }
 }
