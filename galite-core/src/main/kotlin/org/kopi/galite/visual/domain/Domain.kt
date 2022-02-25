@@ -127,7 +127,7 @@ open class Domain<T>(val width: Int? = null,
    * @param message the error message to display.
    * @param constraint the constraint that the field value should verify.
    */
-  fun check(message: String, constraint: (value: T) -> Boolean) {
+  fun check(message: String? = null, constraint: (value: T?) -> Boolean) {
     this.constraint = Constraint(message, constraint)
   }
 
