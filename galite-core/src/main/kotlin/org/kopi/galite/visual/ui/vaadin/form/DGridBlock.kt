@@ -534,7 +534,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
 
-          setAlignment(column, columnView.editorField.columnView.model.align)
+          setAlignment(column, columnView.model.align)
 
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
