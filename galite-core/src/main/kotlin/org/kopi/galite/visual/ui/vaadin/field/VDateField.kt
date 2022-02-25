@@ -106,6 +106,8 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
 
   override fun setValue(value: String?) {
     textField.value = value
+    // Use setTimeout to set the value only after the element is attached
+    element.executeJs("setTimeout(function(){$0._inputValue = $1},0)", element, value)
   }
 
   override fun getValue(): String? {
