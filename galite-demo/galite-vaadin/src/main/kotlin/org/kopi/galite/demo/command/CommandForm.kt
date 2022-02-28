@@ -18,8 +18,7 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
@@ -30,9 +29,8 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class CommandForm : ReportSelectionForm(title = "Commands", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class CommandForm : FormDefault(title = "Commands", locale = Locale.UK) {
   val page = page("Command")
 
   init {

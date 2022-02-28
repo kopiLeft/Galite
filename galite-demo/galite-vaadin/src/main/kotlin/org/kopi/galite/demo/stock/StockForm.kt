@@ -18,17 +18,15 @@ package org.kopi.galite.demo.stock
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.database.Stock
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class StockForm : ReportSelectionForm(title = "Stocks", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class StockForm : FormDefault(title = "Stocks", locale = Locale.UK) {
 
   val page = page("Stock")
 

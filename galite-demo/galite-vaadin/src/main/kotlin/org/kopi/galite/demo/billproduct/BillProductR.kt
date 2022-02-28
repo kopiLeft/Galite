@@ -20,20 +20,18 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.common.IReportDefault
-import org.kopi.galite.demo.common.ReportDefaultImpl
+import org.kopi.galite.demo.common.ReportDefault
 import org.kopi.galite.demo.database.BillProduct
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
-import org.kopi.galite.visual.dsl.report.Report
 
 /**
  * Products Bill Report
  */
-class BillProductR : Report("Bill Product Report", Locale.UK), IReportDefault by ReportDefaultImpl() {
+class BillProductR : ReportDefault("Bill Product Report", Locale.UK) {
 
   val greeting = actor(
           menu = action,

@@ -19,7 +19,6 @@ package org.kopi.galite.visual.dsl.form
 import java.util.Locale
 
 import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.VException
@@ -71,12 +70,6 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * @throws VException Any visual errors that occurs during edit operation.
    */
   fun add(parent: Window): Int = model.add(parent.model)
-
-  var dBConnection: Connection?
-    get() = model.dBConnection
-    set(value) {
-      model.dBConnection = value
-    }
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages

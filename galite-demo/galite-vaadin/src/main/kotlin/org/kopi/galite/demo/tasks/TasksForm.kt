@@ -18,16 +18,14 @@ package org.kopi.galite.demo.tasks
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Task
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.dsl.form.FullCalendar
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class TasksForm : ReportSelectionForm(title = "Tasks", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class TasksForm : FormDefault(title = "Tasks", locale = Locale.UK) {
 
   init {
     insertMenus()
