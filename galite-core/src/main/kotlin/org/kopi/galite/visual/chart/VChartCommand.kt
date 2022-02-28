@@ -50,7 +50,7 @@ class VChartCommand(private val chart: VChart, actor: VActor)
   }
 
   override fun performAction(action: Action, block: Boolean) {
-    chart.performAction(action, block)
+    chart.performAsyncAction(action)
   }
 
   override fun performAsyncAction(action: Action) {

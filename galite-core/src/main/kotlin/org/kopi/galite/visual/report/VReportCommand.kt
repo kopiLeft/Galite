@@ -52,7 +52,7 @@ class VReportCommand(
    */
   @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action, block)"))
   override fun performAction(action: Action, block: Boolean) {
-    report.performAction(action, block)
+    report.performAsyncAction(action)
     /*try {
       executeVoidTrigger(getTrigger());
     } catch (Exception e) {

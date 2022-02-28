@@ -197,7 +197,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                         getColumnGroups(field),
                                         null,
                                         field.width,
-                                        (field as VDecimalField).getScale(0),
+                                        field.getScale(0),
                                         null)
         is VIntegerField ->
           // hidden field ID of the block will represent the last column in the report.

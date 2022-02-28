@@ -179,7 +179,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       try {
         val writer = ChartLocalizationWriter()
         genLocalization(writer)
-        writer.write(localizationDestination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")

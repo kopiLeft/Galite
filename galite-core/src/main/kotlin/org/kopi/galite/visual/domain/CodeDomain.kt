@@ -106,7 +106,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                                 codes.map { it.ident }.toTypedArray(),
                                                 codes.map { it.value as? Boolean }.toTypedArray())
         BigDecimal::class -> VDecimalCodeDimension(ident,
-                                                   true, // FIXME: do we need this?
                                                    format,
                                                    this@CodeDomain.ident,
                                                    source,
