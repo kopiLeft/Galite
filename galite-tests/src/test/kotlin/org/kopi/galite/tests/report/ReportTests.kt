@@ -105,7 +105,7 @@ class ReportTests: VApplicationTestBase() {
     val ageField      = rootElement.children[7]
     assertEquals("report", rootElement.name)
     assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
-    assertEquals("Action", actionMenu.getAttributeValue("ident"))
+    assertEquals("actor0", actionMenu.getAttributeValue("ident"))
     assertEquals("Action", actionMenu.getAttributeValue("label"))
     assertEquals("actor0", greetingActor.getAttributeValue("ident"))
     assertEquals("Greeting", greetingActor.getAttributeValue("label"))
