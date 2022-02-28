@@ -24,7 +24,6 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.List
 import kotlin.collections.all
@@ -331,11 +330,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   val isDroppable: Boolean
     get() = dropListMap.isNotEmpty()
 
-  fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.toLowerCase())
+  fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.lowercase())
 
   val acceptedFlavors: MutableSet<String> get() = dropListMap.keys
 
-  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()])
+  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.lowercase()])
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -411,14 +410,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   @Suppress("UNCHECKED_CAST")
   open fun executeIntegerTrigger(trigger: Trigger?): Int {
     return (trigger?.action?.method as () -> Int).invoke()
-  }
-
-  /**
-   * implemented for compatibility with old gui
-   */
-  @Deprecated("")
-  fun refresh(x: Boolean) {
-    fireBlockChanged()
   }
 
   /**
@@ -3526,14 +3517,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // create a visual exception
   }
 
-  /**
-   * Checks if a foreign key is referenced in the view SYSTEMREFERENZEN
-   * TODO: Remove this cause it is depending on SYSTEMREFERENZEN table.
-   */
-  @Deprecated("")
-  protected fun convertForeignKeyException(name: String?): VExecFailedException {
-    TODO()
-  }
   // ----------------------------------------------------------------------
   // ACTOR HANDLING (TBC)
   // ----------------------------------------------------------------------
