@@ -25,10 +25,13 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.Triggers
 import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.report.triggers.avgDecimal
+import org.kopi.galite.visual.report.triggers.avgInteger
+import org.kopi.galite.visual.report.triggers.sumDecimal
+import org.kopi.galite.visual.report.triggers.sumInteger
 
 /**
  * test field triggers [compute]
@@ -67,7 +70,7 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
     help = "age"
     compute {
       // Computes the average of ages
-      Triggers.avgInteger(this)
+      avgInteger()
     }
   }
 
@@ -77,7 +80,7 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
     help = "age2"
     compute {
       // Computes the sum of ages
-      Triggers.sumInteger(this)
+      sumInteger()
     }
   }
 
@@ -87,7 +90,7 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
     help = "salary"
     compute {
       // Computes the sum of salary
-      Triggers.sumDecimal(this)
+      sumDecimal()
     }
   }
 
@@ -97,7 +100,7 @@ class DocumentationReportTriggersR : Report(title = "Report to test triggers", l
     help = "salary"
     compute {
       // Computes the sum of salary2
-      Triggers.avgDecimal(this)
+      avgDecimal()
     }
   }
 

@@ -32,8 +32,9 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.triggers.avgDecimal
+import org.kopi.galite.visual.report.triggers.avgInteger
 
 class ReportTests: VApplicationTestBase() {
 
@@ -214,7 +215,7 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     compute {
       // Computes the average of ages
-      Triggers.avgInteger(this)
+      avgInteger()
     }
   }
 
@@ -229,7 +230,7 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     compute {
       // Computes the average of ages
-      Triggers.avgDecimal(this)
+      avgDecimal()
     }
   }
 
