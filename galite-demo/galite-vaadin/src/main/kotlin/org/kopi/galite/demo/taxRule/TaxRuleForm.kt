@@ -42,7 +42,7 @@ class TaxRuleForm : FormDefault(title = "TaxRules", locale = Locale.UK) {
 
   val list = actor(
           menu = action,
-          label = "list",
+          label = "List",
           help = "Display List",
   ) {
     key = Key.F1

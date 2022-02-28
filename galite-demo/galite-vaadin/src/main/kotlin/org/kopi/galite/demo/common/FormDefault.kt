@@ -48,8 +48,7 @@ open class FormDefault(title: String, locale: Locale? = null): ReportSelectionFo
     insertMode
     save
     delete
-    createReport
-    createDynamicReport
+    dynamicReport
     help
     showHideFilter
     report
@@ -103,15 +102,13 @@ open class FormDefault(title: String, locale: Locale? = null): ReportSelectionFo
 
   val delete by lazy { actor(DeleteActor()) }
 
-  val createReport by lazy { actor(ReportActor()) }
+  val report by lazy { actor(ReportActor()) }
 
-  val createDynamicReport by lazy { actor(CreateDynamicReportActor()) }
+  val dynamicReport by lazy { actor(DynamicReportActor()) }
 
   val help by lazy { actor(HelpActor()) }
 
   val showHideFilter by lazy { actor(ShowHideFilterActor()) }
-
-  val report by lazy { actor(ReportActor()) }
 
   // -------------------------------------------------------------------
   // FORM-LEVEL COMMANDS
@@ -209,7 +206,7 @@ class BreakActor: Actor(
   }
 }
 
-class CreateDynamicReportActor: Actor(
+class DynamicReportActor: Actor(
   menu = ActionMenu(),
   label = "Dyn report",
   help = "Create a dynamic report.",

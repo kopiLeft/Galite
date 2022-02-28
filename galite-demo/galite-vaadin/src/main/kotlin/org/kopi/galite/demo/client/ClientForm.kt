@@ -44,7 +44,7 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
 
   val list = actor(
           menu = action,
-          label = "list",
+          label = "List",
           help = "Display List",
   ) {
     key = Key.F10
@@ -58,15 +58,6 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
   ) {
     key = Key.F11
     icon = Icon.SAVE
-  }
-
-  val dynamicReport = actor(
-          menu = action,
-          label = "DynamicReport",
-          help = " Create Dynamic Report",
-  ) {
-    key = Key.F6
-    icon = Icon.REPORT
   }
 
   val clientsPage= page("Clients")

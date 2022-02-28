@@ -40,20 +40,11 @@ class CommandForm : FormDefault(title = "Commands", locale = Locale.UK) {
 
   val list = actor(
           menu = action,
-          label = "list",
+          label = "List",
           help = "Display List",
   ) {
     key = Key.F1
     icon = Icon.LIST
-  }
-
-  val dynamicReport = actor(
-    menu = action,
-    label = "DynamicReport",
-    help = " Create Dynamic Report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
   }
 
   val tb1 = page.insertBlock(BlockCommand()) {
