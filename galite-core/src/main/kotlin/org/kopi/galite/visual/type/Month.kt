@@ -73,6 +73,21 @@ open class Month(private var scalar: Int) : Type<Month, Int>() {
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
   /**
+   * This add [w] months to this month
+   */
+  operator fun plus(w: Int): Month = add(w)
+
+  /**
+   * This subtract [w] months to this month
+   */
+  operator fun minus(w: Int): Month = add(-w)
+
+  /**
+   * This returns the difference in week between the two months
+   */
+  operator fun minus(w: Month): Int = subtract(w)
+
+  /**
    * Returns a Month with the specified number of months added to this Month.
    */
   fun add(months: Int): Month {
