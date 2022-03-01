@@ -18,6 +18,10 @@
 
 package org.kopi.galite.visual.type
 
+import org.jetbrains.exposed.sql.vendors.OracleDialect
+import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
+import org.jetbrains.exposed.sql.vendors.currentDialect
+
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -156,11 +160,21 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): String {
+  override fun toSql(): Int {
     val year = scalar / 53
     val week = scalar % 53 + 1
-    //return "{fn WEEK($year, $week)}"
-    TODO("NOT SUPPORTED YET")
+
+    return when (currentDialect) {
+      is PostgreSQLDialect -> {
+        year * 100 + week
+      }
+      is OracleDialect -> {
+        year * 100 + week
+      }
+      else -> {
+        TODO("NOT SUPPORTED YET")
+      }
+    }
   }
 
   override fun hashCode(): Int {
