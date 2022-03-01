@@ -227,8 +227,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * Returns the TreeNode instance that is selected in the tree.
    * If nothing is selected, null is returned.
    */
-  protected val selectedNode: DefaultMutableTreeNode?
-    protected get() {
+  internal val selectedNode: DefaultMutableTreeNode?
+    get() {
       val selPath = tree.selectionPath
       return if (selPath != null) {
         selPath.lastPathComponent as DefaultMutableTreeNode

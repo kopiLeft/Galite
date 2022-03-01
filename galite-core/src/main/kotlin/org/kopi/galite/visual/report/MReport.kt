@@ -698,23 +698,23 @@ class MReport : Constants, Serializable {
    * @param     pos         position of the node.
    */
   private fun addRowsInArray(node: VReportRow?, pos: Int): Int {
-    var pos = pos
+    var position = pos
 
     if (node!!.visible) {
-      visibleRows!![pos++] = node
+      visibleRows!![position++] = node
       for (i in 0 until node.childCount) {
         val row = node.getChildAt(i) as VReportRow
 
         if (row.level == 0) {
           if (row.visible) {
-            visibleRows!![pos++] = row
+            visibleRows!![position++] = row
           }
         } else {
-          pos = addRowsInArray(node.getChildAt(i) as VReportRow, pos)
+          position = addRowsInArray(node.getChildAt(i) as VReportRow, position)
         }
       }
     }
-    return pos
+    return position
   }
   // --------------------------------------------------------------------
   // EVENTS FROM DISPLAY

@@ -68,7 +68,7 @@ class VBooleanCodeColumn(ident: String?,
 
   init {
     if (codes.size > 2) {
-      throw InconsistencyException()
+      throw InconsistencyException("Can't define more than two codes for a boolean column")
     }
   }
 }

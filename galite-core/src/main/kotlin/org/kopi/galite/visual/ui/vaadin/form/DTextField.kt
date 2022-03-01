@@ -317,7 +317,7 @@ open class DTextField(
       return guiTxt
     }
 
-    override fun checkFormat(software: String?): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return true
     }
   }
@@ -332,17 +332,17 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(source: String?): String {
-      return convertFixedTextToSingleLine(source, col, row)
+    override fun toModel(guiTxt: String?): String {
+      return convertFixedTextToSingleLine(guiTxt, col, row)
     }
 
-    override fun toGui(source: String?): String {
+    override fun toGui(modelTxt: String?): String {
       val target = StringBuffer()
-      val length = source!!.length
+      val length = modelTxt!!.length
       var usedRows = 1
       var start = 0
       while (start < length) {
-        val line = source.substring(start, (start + col).coerceAtMost(length))
+        val line = modelTxt.substring(start, (start + col).coerceAtMost(length))
         var last = -1
         var i = line.length - 1
         while (last == -1 && i >= 0) {
@@ -365,7 +365,7 @@ open class DTextField(
       return target.toString()
     }
 
-    override fun checkFormat(source: String?): Boolean = source!!.length <= row * col
+    override fun checkFormat(guiTxt: String?): Boolean = guiTxt!!.length <= row * col
   }
 
   /**

@@ -86,10 +86,10 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that text is valid (during typing)
    */
   override fun checkText(s: String): Boolean {
-    val s = s.toLowerCase()
+    val s = s.lowercase()
 
     for (i in labels.indices) {
-      if (labels[i].toLowerCase().startsWith(s)) {
+      if (labels[i].lowercase().startsWith(s)) {
         return true
       }
     }
@@ -113,12 +113,12 @@ abstract class VCodeField(val bufferSize: Int,
        */
       var found = -1
 
-      s = s!!.toLowerCase()
+      s = s!!.lowercase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
-        if (labels[i].toLowerCase().startsWith(s)) {
-          if (labels[i].toLowerCase() == s) {
+        if (labels[i].lowercase().startsWith(s)) {
+          if (labels[i].lowercase() == s) {
             found = i
             break
           }
@@ -140,7 +140,7 @@ abstract class VCodeField(val bufferSize: Int,
 
           var count = 0
           labels.forEach { label ->
-            if (label.toLowerCase().startsWith(s)) {
+            if (label.lowercase().startsWith(s)) {
               count++
             }
           }
@@ -150,7 +150,7 @@ abstract class VCodeField(val bufferSize: Int,
           var j = 0
 
           while (i < labels.size) {
-            if (labels[i].toLowerCase().startsWith(s)) {
+            if (labels[i].lowercase().startsWith(s)) {
               codes[j] = codes[i]
               selectedToModel[j] = i
               j++
@@ -235,7 +235,7 @@ abstract class VCodeField(val bufferSize: Int,
       val suggestions: MutableList<Array<String?>>
       suggestions = ArrayList()
       for (i in labels.indices) {
-        if (labels[i].toLowerCase().contains(query.toLowerCase())) {
+        if (labels[i].lowercase().contains(query.lowercase())) {
           suggestions.add(arrayOf(labels[i]))
         }
       }

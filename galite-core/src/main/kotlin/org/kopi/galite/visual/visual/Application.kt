@@ -119,7 +119,7 @@ interface Application : MessageListener {
   /**
    * The print manager of the application instance.
    */
-  var printManager: PrintManager
+  var printManager: PrintManager?
 
   /**
    * The printer manger of the application.

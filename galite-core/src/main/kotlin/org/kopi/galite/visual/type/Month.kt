@@ -159,10 +159,6 @@ open class Month(private var scalar: Int) : Type<Month, Int>() {
    * Represents the value in sql
    */
   override fun toSql(): LocalDate {
-    val year = scalar / 12
-    val month = scalar % 12 + 1
-
-    //return "{fn MONTH($year, $month)}" TODO
     return getDate()
   }
 

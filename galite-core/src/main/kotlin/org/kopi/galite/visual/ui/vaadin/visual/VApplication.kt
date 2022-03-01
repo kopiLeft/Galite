@@ -283,7 +283,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var applicationConfiguration: ApplicationConfiguration? = null
 
-  override lateinit var printManager: PrintManager
+  override var printManager: PrintManager? = null
 
   override lateinit var printerManager: PrinterManager
 

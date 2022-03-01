@@ -180,7 +180,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                         field.align,
                                         getColumnGroups(field),
                                         null,
-                                        1,
                                         null)
         is VDateField ->
           columns[col] = VDateColumn(null,
@@ -239,7 +238,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                      field.align,
                                      getColumnGroups(field),
                                      null,
-                                     field.width,
                                      null)
         is VTimestampField ->
           columns[col] = VTimestampColumn(null,
@@ -247,7 +245,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                           field.align,
                                           getColumnGroups(field),
                                           null,
-                                          field.width,
                                           null)
         is VWeekField ->
           columns[col] = VWeekColumn(field.name,
@@ -255,7 +252,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                      field.align,
                                      getColumnGroups(field),
                                      null,
-                                     field.width,
                                      null)
         is VStringCodeField ->
           columns[col] = VStringCodeColumn(null,

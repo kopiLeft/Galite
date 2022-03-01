@@ -570,12 +570,11 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
             number: String,
             jobId: String) {
       val fax = Fax(port, host)
-      val filename: String
-
       fax.login(user)
       fax.command("IDLE 900")
       fax.command("TZONE LOCAL")
-      filename = fax.sendbuffer(inputStream)
+
+      val filename = fax.sendbuffer(inputStream)
       fax.setNewJob(number, user, jobId)
       fax.command("JPARM DOCUMENT $filename")
       fax.command("JSUBM")
@@ -746,15 +745,14 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
      */
     private fun getQueue(port: Int, host: String, user: String, qname: String): String {
       val fax = Fax(port, host)
-      val ret: String // Get status information
-
       fax.login(user)
       fax.command("IDLE 900")
       fax.command("TZONE LOCAL")
       fax.command("JOBFMT \" %j| %J| %o| %e| %a| %P| %D| %s\"")
       fax.command("RCVFMT \" %f| %t| %s| %p| %h| %e\"")
       fax.command("MDMFMT \"Modem %m (%n): %s\"")
-      ret = fax.infoS(qname)
+
+      val ret = fax.infoS(qname) // Get status information
       fax.endCon()
 
       return ret
