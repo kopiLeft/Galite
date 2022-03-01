@@ -156,7 +156,12 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): Int = scalar
+  override fun toSql(): Int {
+    val year = scalar / 53
+    val week = scalar % 53 + 1
+
+    return year * 100 + week
+  }
 
   override fun hashCode(): Int {
     return scalar

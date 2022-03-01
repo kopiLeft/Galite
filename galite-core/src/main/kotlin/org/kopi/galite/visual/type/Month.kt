@@ -158,8 +158,11 @@ open class Month(private var scalar: Int) : Type<Month, Int>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): LocalDate {
-    return getDate()
+  override fun toSql(): Int {
+    val year = scalar / 12
+    val month = scalar % 12 + 1
+
+    return year * 100 + month
   }
 
   override fun hashCode(): Int {

@@ -78,8 +78,8 @@ fun <T> ReportField<*>.toType0(value: T): Any? {
     is ExposedBlob -> value
     is Int -> {
       when (domain.kClass) {
-        Month::class -> Month(value)
-        Week::class -> Week(value)
+        Month::class -> Month(value / 100, value % 100)
+        Week::class -> Week(value / 100, value % 100)
         else -> null
       }
     }
