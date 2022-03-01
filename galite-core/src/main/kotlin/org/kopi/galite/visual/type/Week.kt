@@ -58,6 +58,21 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
   /**
+   * This add [w] weeks to this week
+   */
+  operator fun plus(w: Int): Week = add(w)
+
+  /**
+   * This subtract [w] weeks to this week
+   */
+  operator fun minus(w: Int): Week = add(-w)
+
+  /**
+   * This returns the difference in week between the two weeks
+   */
+  operator fun minus(w: Week): Int = subtract(w)
+
+  /**
    * Returns a Week with the specified number of weeks added to this Week.
    */
   fun add(weeks: Int): Week = Week((scalar + weeks) / 53, (scalar + weeks) % 53 + 1)
