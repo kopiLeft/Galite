@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,12 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-domain")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
+/**
+ * The convert option used in order to modify the String's case.
+ */
+enum class Convert {
+
+  /**
+   * Converts the first letter of each word to capital letter.
+   */
+  NAME,
+
+  /**
+   * Convert the whole text to capital letters.
+   */
+  UPPER,
+
+  /**
+   * Converts the whole text to normal letters.
+   */
+  LOWER,
+
+  /**
+   * No conversion.
+   */
+  NONE
+}

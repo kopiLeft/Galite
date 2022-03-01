@@ -15,11 +15,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-domain")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
+plugins {
+  kotlin("jvm") apply true
+}

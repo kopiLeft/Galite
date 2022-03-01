@@ -14,12 +14,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-domain")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
+/**
+ * A constraint that the field value should verify. Otherwise an error [message] is displayed to the user.
+ *
+ * @param message the error message to display.
+ * @param constraint the constraint that the field value should verify.
+ */
+class Constraint<T>(val message: String?, val constraint: (value: T) -> Boolean)

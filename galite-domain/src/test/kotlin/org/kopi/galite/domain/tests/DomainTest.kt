@@ -15,11 +15,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-domain")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
+package org.kopi.galite.domain.tests
+
+import java.util.regex.Pattern
+
+import org.kopi.galite.domain.Domain
+
+object EMailAddress: Domain<String>() {
+  private val VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+                                                          Pattern.CASE_INSENSITIVE)
+
+  init {
+    max = 320 // maximum length of the text value
+    pattern = VALID_EMAIL_ADDRESS_REGEX // should respect RFC 3696
+
+    check("Value should be...") { value ->
+      value != "" // Just an example...
+    }
+  }
+}

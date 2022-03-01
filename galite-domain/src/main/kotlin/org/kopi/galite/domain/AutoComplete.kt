@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,12 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-domain")
-include("galite-localizer")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
+/**
+ * The auto complete type
+ */
+enum class AutoComplete {
+
+  /**
+   * Automatically complete the entry with values starting with the entered value
+   */
+  LEFT,
+
+  /**
+   * Automatically complete the entry with values containing the entered value
+   */
+  CENTER
+}
