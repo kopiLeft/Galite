@@ -15,15 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain.type
 
-package org.kopi.galite.visual.type
+import java.math.BigDecimal
+import java.math.RoundingMode
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+infix fun BigDecimal.shr(count: Int): BigDecimal {
+  return setScale(count, RoundingMode.FLOOR)
+}
 
-/**
- * Format date on 
- */
-fun LocalDate.format(): String {
-  return format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+infix fun BigDecimal.ushr(count: Int): BigDecimal {
+  return setScale(count, RoundingMode.HALF_UP)
+}
+
+infix fun BigDecimal.shl(count: Int): BigDecimal {
+  return setScale(count, RoundingMode.UP)
 }

@@ -16,14 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.type
+package org.kopi.galite.domain.type
 
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 /**
- * Format the localtime value.
+ * This class is the super-class for types
  */
-fun LocalTime.format(): String {
-  return format(DateTimeFormatter.ofPattern("HH:mm"))
+abstract class Type<U, V> : Type0<V>, Comparable<U> {
+  /**
+   * Format the object depending on the current language
+   */
+  override fun toString(): String = toString(Locale.getDefault())
 }

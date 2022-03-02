@@ -89,6 +89,24 @@ open class Domain<T> {
     }
 
   /**
+   * Sets the minimum value of a number domain.
+   */
+  var Domain<BigDecimal>.precision : Int?
+    get() = precision
+    set(value) {
+      precision = value
+    }
+
+  /**
+   * Sets the maximum value of a number domain.
+   */
+  public var Domain<BigDecimal>.scale : Int?
+    get() = scale
+    set(value) {
+      scale = value
+    }
+
+  /**
    * Defines a [constraint] that the field value should verify. Otherwise an error [message] is displayed to the user.
    *
    * @param message the error message to display.
@@ -108,8 +126,10 @@ open class Domain<T> {
   internal val ident: String = this::class.java.simpleName
   private var min : T? = null // the minimum value that cannot exceed
   private var max : T? = null // the maximum value that cannot exceed
-  private var minWidth : Int? = null // the minimum width in char of this field
-  private var maxWidth : Int? = null // the maximum width in char of this field
+  var minWidth : Int? = null // the minimum width in char of this field
+  var maxWidth : Int? = null // the maximum width in char of this field
+  var precision : Int? = null // the minimum width in char of this field
+  var scale : Int? = null // the maximum width in char of this field
   private var constraint: Constraint<T>? = null
 
   // ----------------------------------------------------------------------

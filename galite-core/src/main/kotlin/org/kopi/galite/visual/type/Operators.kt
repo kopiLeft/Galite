@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,15 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.visual.type
 
-import org.kopi.galite.gradle.Versions
+import java.math.BigDecimal
+import java.math.RoundingMode
 
-plugins {
-  kotlin("jvm") apply true
+infix fun BigDecimal.shr(count: Int): BigDecimal {
+  return setScale(count, RoundingMode.FLOOR)
 }
 
-dependencies {
-  implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
+infix fun BigDecimal.ushr(count: Int): BigDecimal {
+  return setScale(count, RoundingMode.HALF_UP)
+}
+
+infix fun BigDecimal.shl(count: Int): BigDecimal {
+  return setScale(count, RoundingMode.UP)
 }

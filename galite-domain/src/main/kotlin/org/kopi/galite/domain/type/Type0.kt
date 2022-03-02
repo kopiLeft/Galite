@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,14 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.kopi.galite.gradle.Versions
+package org.kopi.galite.domain.type
 
-plugins {
-  kotlin("jvm") apply true
-}
+import java.util.Locale
 
-dependencies {
-  implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
+/**
+ * This height level interface for all types.
+ */
+interface Type0<T> {
+  /**
+   * Compares two objects
+   */
+  override fun equals(other: Any?): Boolean
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  fun toString(locale: Locale): String
+
+  /**
+   * Represents the value in sql
+   */
+  fun toSql(): Any
 }

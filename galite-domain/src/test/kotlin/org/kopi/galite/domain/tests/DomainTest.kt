@@ -19,7 +19,9 @@ package org.kopi.galite.domain.tests
 
 import java.util.regex.Pattern
 
+import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.column
 
 object EMailAddress: Domain<String>() {
   private val VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
@@ -32,5 +34,16 @@ object EMailAddress: Domain<String>() {
     check("Value should be...") { value ->
       value != "" // Just an example...
     }
+  }
+}
+
+class User: Table("User") {
+  val email = column("Email", EMailAddress) {
+    title = "Email" // Label
+    default = "" // Default value
+    readonly = true // Read only?
+    help = "An email" // The help text
+    required = true // Required value?
+    unique = true // Unique?
   }
 }
