@@ -123,12 +123,12 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   internal var help: String? = null // the help on this block
-  internal val tables = mutableListOf<Table>() // names of database tables
+  internal var tables = mutableListOf<Table>() // names of database tables
   internal var options = 0 // block options
   internal lateinit var access: IntArray // access flags for each mode
-  internal val indices = mutableListOf<String>() // error messages for violated indices
-  internal val indicesIdents = mutableListOf<String>() // error messages for violated indices
-  internal val commands = mutableListOf<VCommand>() // commands
+  internal var indices = mutableListOf<String>() // error messages for violated indices
+  internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
+  internal var commands = mutableListOf<VCommand>() // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp: Array<VActor>? = field
@@ -136,11 +136,11 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
       return temp
     }
 
-  val fields = mutableListOf<VField>() // fields
-  internal val VKT_Block_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
-  internal val VKT_Field_Triggers = mutableListOf<Array<Trigger?>>()
-  internal val VKT_Command_Triggers = mutableListOf<Array<Trigger?>>()
-  internal val VKT_Field_Command_Triggers = mutableListOf<Array<Trigger?>>()
+  var fields = mutableListOf<VField>() // fields
+  internal var VKT_Block_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
+  internal var VKT_Field_Triggers = mutableListOf<Array<Trigger?>>()
+  internal var VKT_Command_Triggers = mutableListOf<Array<Trigger?>>()
+  internal var VKT_Field_Command_Triggers = mutableListOf<Array<Trigger?>>()
 
   // current mode
   private var mode = 0
@@ -327,10 +327,6 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
   protected open fun setInfo(form: VForm) {
     // Do nothing, should be redefined if some info
     // has to be set
-  }
-
-  fun build() {
-    //  default does nothing
   }
 
   /**
@@ -2775,7 +2771,6 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
     for (i in fields.indices) {
       fields[i].block = this
     }
-    build()
     for (i in fields.indices) {
       fields[i].build()
     }

@@ -1020,7 +1020,7 @@ open class Block(val title: String,
     return block
   }
 
-  fun VBlock.initializeBlock(block: Block, formSource: String?) {
+  private fun VBlock.initializeBlock(block: Block, formSource: String?) {
     this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
     title = block.title
     help = block.help

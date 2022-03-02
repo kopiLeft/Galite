@@ -30,6 +30,7 @@ import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.WindowController
@@ -104,7 +105,9 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
     val vBlock = block.getBlockModel(model)
     vBlock.setInfo(block.pageNumber, model)
-    vBlock.initIntern()
+    if(vBlock !is VFullCalendarBlock) {
+      vBlock.initIntern()
+    }
     block.fields.forEach { formField ->
       formField.initialValues.forEach {
         formField.vField.setObject(it.key, it.value)

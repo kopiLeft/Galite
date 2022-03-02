@@ -38,6 +38,8 @@ class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VB
 }
 
 fun VBlock.initializeBlock(block: Block, formSource: String?) {
+  val model = block.block
+
   this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
   title = block.title
   help = block.help
@@ -53,6 +55,21 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   access = block.access
   alignment = block.align?.getBlockAlignModel()
   dropListMap = block.dropListMap
+
+  fields = block.fields.map { formField ->
+    formField.vField
+  }.toMutableList()
+
+  // Initialize from model
+  VKT_Block_Triggers = model.VKT_Block_Triggers
+  VKT_Field_Triggers = model.VKT_Field_Triggers
+  VKT_Command_Triggers = model.VKT_Command_Triggers
+  VKT_Field_Command_Triggers = model.VKT_Field_Command_Triggers
+  commands = model.commands
+  tables = model.tables
+  fields = model.fields
+  indices = model.indices
+  indicesIdents = model.indicesIdents
 }
 
 class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
