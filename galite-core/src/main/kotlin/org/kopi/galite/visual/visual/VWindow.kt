@@ -341,6 +341,16 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   }
 
   /**
+   * Open an URL in the navigator.
+   * @param url The URL to navigate to.
+   */
+  open fun openURL(url: String) {
+    if (display != null) {
+      display!!.openURL(url)
+    }
+  }
+
+  /**
    * setProgressDialog
    */
   fun setProgressDialog(message: String, currentJob: Int) {
