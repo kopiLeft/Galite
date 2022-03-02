@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.time.LocalDate
+
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.form.Alignment
 import org.kopi.galite.visual.form.UBlock
@@ -25,7 +27,6 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
@@ -94,7 +95,7 @@ open class DBlock(val parent: DForm,
     // info changes done when the block listener is not yet
     // installed.
     for (i in 0 until model.bufferSize) {
-      if (model.getRecordInfoAt(i) !== 0) {
+      if (model.getRecordInfoAt(i) != 0) {
         fireRecordInfoChanged(i, model.getRecordInfoAt(i))
       }
     }
@@ -522,8 +523,8 @@ open class DBlock(val parent: DForm,
   override fun filterShown() {}
 
   override fun refreshEntries() {}
-  override fun getSelectedDate(): Date? = null
-  override fun goToDate(date: Date) {}
+  override fun getSelectedDate(): LocalDate? = null
+  override fun goToDate(date: LocalDate) {}
   override fun enter() {}
 
   override fun getCurrentDisplay(): UBlock? = this

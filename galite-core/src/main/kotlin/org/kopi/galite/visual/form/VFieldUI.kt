@@ -56,7 +56,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   private val commands: Array<VCommand>? // commands
   lateinit var displays: Array<UField?> // the object displayed on screen
     private set
-  private lateinit var dl: ULabel // label text
+  val isDisplayInitialized get() = ::displays.isInitialized
+  private var dl: ULabel? = null // label text
   private var dlDetail: ULabel? = null // label text (chart)
   var detailDisplay: UField? = null // the object displayed on screen (detail)
     private set
@@ -307,10 +308,10 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
    * resetLabel
    */
   fun resetLabel() {
-    dl.init(model.label, model.toolTip)
+    dl!!.init(model.label, model.toolTip)
 
     if (dlDetail != null) {
-      dl.init(model.label, model.toolTip)
+      dl!!.init(model.label, model.toolTip)
     }
   }
 
@@ -503,7 +504,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
         displays[0]!!.position = 0
         displays[0]!!.updateText()
       }
-      if (displays != null) {
+      if (isDisplayInitialized) {
         for (i in displays.indices) {
           fireAccessHasChanged(i) // update access
         }
@@ -526,7 +527,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
       if (getBlock().isChart() && blockView.inDetailMode()) {
         detailDisplay
       } else {
-        if (displays == null) null else displays[blockView.getDisplayLine()]
+        if (!isDisplayInitialized) null else displays[blockView.getDisplayLine()]
       }
     }
 
@@ -578,7 +579,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     // update only the necessary Display in the column
     val rowInDisplay = blockView.getDisplayLine(recno)
 
-    if (displays != null) {
+    if (isDisplayInitialized) {
       if (rowInDisplay != -1) {
         // -1 means currently not displayed
         displays[rowInDisplay]!!.updateAccess()
@@ -595,7 +596,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   fun fireColorHasChanged(recno: Int) {
     val rowInDisplay = blockView.getDisplayLine(recno)
 
-    if (displays != null) {
+    if (isDisplayInitialized) {
       if (rowInDisplay != -1) {
         // -1 means currently not displayed
         displays[rowInDisplay]!!.updateColor()
@@ -613,7 +614,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
    * Clears all display fields.
    */
   open fun scrollTo(toprec: Int) {
-    if (displays != null) {
+    if (isDisplayInitialized) {
       displays.forEach {
         it!!.updateFocus()
         it.updateAccess()
@@ -720,7 +721,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     }
   }
 
-  fun getLabel(): ULabel = dl
+  fun getLabel(): ULabel? = dl
 
   fun getDetailLabel(): ULabel? = dlDetail
 }

@@ -192,9 +192,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
   fun setPosition(current: Int, total: Int) {
     currentPosition = current
     totalPositions = total
-    if (blockInfo != null) {
-      blockInfo.setPosition(current, total)
-    }
+    blockInfo.setPosition(current, total)
   }
 
   //---------------------------------------------------
@@ -244,7 +242,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  protected fun setContent(pageCount: Int, titles: Array<String>, separator: String?) {
+  private fun setContent(pageCount: Int, titles: Array<String>, separator: String?) {
     // TODO
   }
 
@@ -298,16 +296,14 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
    * @param l The listener to be removed.
    */
   fun removePositionPanelListener(l: PositionPanelListener) {
-    if (blockInfo != null) {
-      blockInfo.removePositionPanelListener(l)
-    }
+    blockInfo.removePositionPanelListener(l)
   }
 
   /**
    * Fires a page selection event.
    * @param page The page index.
    */
-  protected fun firePageSelected(page: Int) {
+  private fun firePageSelected(page: Int) {
     for (l in listeners) {
       l.onPageSelection(page)
     }
@@ -316,7 +312,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
   /**
    * Requests to go to the next position.
    */
-  protected fun fireGotoNextPosition() {
+  private fun fireGotoNextPosition() {
     for (l in listeners) {
       l.gotoNextPosition()
     }
@@ -325,7 +321,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
   /**
    * Requests to go to the previous position.
    */
-  protected fun fireGotoPrevPosition() {
+  private fun fireGotoPrevPosition() {
     for (l in listeners) {
       l.gotoPrevPosition()
     }
@@ -334,7 +330,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
   /**
    * Requests to go to the last position.
    */
-  protected fun fireGotoLastPosition() {
+  private fun fireGotoLastPosition() {
     for (l in listeners) {
       l.gotoLastPosition()
     }
@@ -343,7 +339,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
   /**
    * Requests to go to the last position.
    */
-  protected fun fireGotoFirstPosition() {
+  private fun fireGotoFirstPosition() {
     for (l in listeners) {
       l.gotoFirstPosition()
     }
@@ -353,7 +349,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
    * Requests to go to the specified position.
    * @param posno The position number.
    */
-  protected fun fireGotoPosition(posno: Int) {
+  private fun fireGotoPosition(posno: Int) {
     for (l in listeners) {
       l.gotoPosition(posno)
     }

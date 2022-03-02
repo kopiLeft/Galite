@@ -31,7 +31,7 @@ import org.kopi.galite.visual.visual.VWindow
 /**
  * Text field key navigation.
  */
-class KeyNavigator(private val model: VField?, private val box: InputTextField<*>?) : TextFieldListener {
+class KeyNavigator(private val model: VField, private val box: InputTextField<*>?) : TextFieldListener {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -39,9 +39,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoNextField() {
     performAction(object : Action("keyKEY_TAB") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.getActiveBlock()!!.gotoNextField()
-        }
+        model.block!!.form.getActiveBlock()!!.gotoNextField()
       }
     })
   }
@@ -49,9 +47,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoPrevField() {
     performAction(object : Action("keyKEY_STAB") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.getActiveBlock()!!.gotoPrevField()
-        }
+        model.block!!.form.getActiveBlock()!!.gotoPrevField()
       }
     })
   }
@@ -59,9 +55,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoNextBlock() {
     performAction(object : Action("keyKEY_BLOCK") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.gotoNextBlock()
-        }
+        model.block!!.form.gotoNextBlock()
       }
     })
   }
@@ -69,9 +63,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoPrevRecord() {
     performAction(object : Action("keyKEY_REC_UP") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.gotoPrevRecord()
-        }
+        model.block!!.gotoPrevRecord()
       }
     })
   }
@@ -79,9 +71,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoNextRecord() {
     performAction(object : Action("keyKEY_REC_DOWN") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.gotoNextRecord()
-        }
+        model.block!!.gotoNextRecord()
       }
     })
   }
@@ -89,9 +79,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoFirstRecord() {
     performAction(object : Action("keyKEY_REC_FIRST") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.getActiveBlock()!!.gotoFirstRecord()
-        }
+        model.block!!.form.getActiveBlock()!!.gotoFirstRecord()
       }
     })
   }
@@ -99,9 +87,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoLastRecord() {
     performAction(object : Action("keyKEY_REC_LAST") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.getActiveBlock()!!.gotoLastRecord()
-        }
+        model.block!!.form.getActiveBlock()!!.gotoLastRecord()
       }
     })
   }
@@ -109,9 +95,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun gotoNextEmptyMustfill() {
     performAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
-        }
+        model.block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
       }
     })
   }
@@ -119,9 +103,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun closeWindow() {
     performAction(object : Action("keyKEY_ESCAPE") {
       override fun execute() {
-        if (model != null) {
-          model.block!!.form.close(VWindow.CDE_QUIT)
-        }
+        model.block!!.form.close(VWindow.CDE_QUIT)
       }
     })
   }
@@ -129,15 +111,13 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun printForm() {
     performAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
-        if (model != null) {
-          try {
-            val job = model.getDisplay()!!.getBlockView().getFormView().printForm()
-            PrinterManager.getPrinterManager().getCurrentPrinter().print(job!!)
-          } catch (e: PrintException) {
-            throw VExecFailedException(e.message)
-          } catch (e: IOException) {
-            throw VExecFailedException(e.message)
-          }
+        try {
+          val job = model.getDisplay()!!.getBlockView().getFormView().printForm()
+          PrinterManager.getPrinterManager().getCurrentPrinter().print(job!!)
+        } catch (e: PrintException) {
+          throw VExecFailedException(e.message)
+        } catch (e: IOException) {
+          throw VExecFailedException(e.message)
         }
       }
     })
@@ -146,9 +126,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun previousEntry() {
     performAction(object : Action("keyKEY_LIST_UP") {
       override fun execute() {
-        if (model != null) {
-          (model.getDisplay() as DField).rowController.previousEntry()
-        }
+        (model.getDisplay() as DField).rowController.previousEntry()
       }
     })
   }
@@ -156,15 +134,13 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   override fun nextEntry() {
     performAction(object : Action("keyKEY_LIST_UP") {
       override fun execute() {
-        if (model != null) {
-          (model.getDisplay() as DField).rowController.nextEntry()
-        }
+        (model.getDisplay() as DField).rowController.nextEntry()
       }
     })
   }
 
   override fun onQuery(query: String?) {
-    model!!.getForm().performAsyncAction(object : Action() {
+    model.getForm().performAsyncAction(object : Action() {
       override fun execute() {
         val suggestions = model.getSuggestions(query)
         if (box != null && suggestions != null) {
@@ -184,7 +160,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
   }*/
 
   override fun autofill() {
-    (model!!.getDisplay() as DField).performAutoFillAction()
+    (model.getDisplay() as DField).performAutoFillAction()
   }
 
   /**
@@ -192,7 +168,7 @@ class KeyNavigator(private val model: VField?, private val box: InputTextField<*
    * @param action The action to be executed.
    */
   protected fun performAction(action: Action?) {
-    if (action != null && model != null) {
+    if (action != null) {
       model.getForm().performAsyncAction(action)
     }
   }

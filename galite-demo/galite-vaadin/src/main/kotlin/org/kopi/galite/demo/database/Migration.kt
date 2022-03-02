@@ -346,9 +346,9 @@ fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref:
 fun addTasks() {
   val currentWeek = Week.now()
 
-  addTask(currentWeek.getDate(1).toSql().toLocalDate(), LocalTime.of(8, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
-  addTask(currentWeek.getDate(1).toSql().toLocalDate(), LocalTime.of(14, 0, 0), LocalTime.of(16, 0, 0), "Codage", "desc 2")
-  addTask(currentWeek.getDate(4).toSql().toLocalDate(), LocalTime.of(11, 0, 0), LocalTime.of(12, 30, 0), "Validation", "desc 2")
+  addTask(currentWeek.getDate(1), LocalTime.of(8, 0, 0), LocalTime.of(10, 30, 0), "Conception", "desc 2")
+  addTask(currentWeek.getDate(1), LocalTime.of(14, 0, 0), LocalTime.of(16, 0, 0), "Codage", "desc 2")
+  addTask(currentWeek.getDate(4), LocalTime.of(11, 0, 0), LocalTime.of(12, 30, 0), "Validation", "desc 2")
 }
 
 fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: String, description2: String) {

@@ -26,7 +26,6 @@ import java.util.Locale
 import javax.swing.event.EventListenerList
 
 import org.jetbrains.annotations.TestOnly
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
@@ -47,7 +46,7 @@ import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.WindowBuilder
 import org.kopi.galite.visual.visual.WindowController
 
-abstract class VForm : VWindow, VConstants {
+abstract class VForm protected constructor() : VWindow(), VConstants {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -98,8 +97,6 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
-
-  protected constructor()
 
   init {
     localize()
@@ -742,7 +739,7 @@ abstract class VForm : VWindow, VConstants {
     }
   }
 
-  fun showHelp(form: VForm?) {
+  fun showHelp() {
     VHelpViewer().showHelp(genHelp())
   }
 

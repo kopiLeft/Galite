@@ -38,8 +38,7 @@ class DecimalValidator(
   override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '-' || c == ' ' || c == ',' || c == '/'
 
   override fun checkType(field: InputTextField<*>, text: String) {
-    if ("" == text) {
-    } else {
+    if ("" != text) {
       val v = try {
         scanBigDecimal(text)
       } catch (e: NumberFormatException) {
@@ -145,22 +144,26 @@ class DecimalValidator(
     }
     val precomma = str.substring(0, dot)
     val fract = Integer.valueOf(str.substring(dot + 1, str.length)).toInt()
-    return if (fract * 64 % 1000000 != 0) {
-      str
-    } else if (fract == 0) {
-      precomma
-    } else {
-      var num: Int
-      var den = 64
-      num = fract * den / 1000000
-      while (num % 2 == 0) {
-        num /= 2
-        den /= 2
+    return when {
+      fract * 64 % 1000000 != 0 -> {
+        str
       }
-      when (precomma) {
-        "0" -> "$num/$den"
-        "-0" -> "-$num/$den"
-        else -> "$precomma $num/$den"
+      fract == 0 -> {
+        precomma
+      }
+      else -> {
+        var num: Int
+        var den = 64
+        num = fract * den / 1000000
+        while (num % 2 == 0) {
+          num /= 2
+          den /= 2
+        }
+        when (precomma) {
+          "0" -> "$num/$den"
+          "-0" -> "-$num/$den"
+          else -> "$precomma $num/$den"
+        }
       }
     }
   }

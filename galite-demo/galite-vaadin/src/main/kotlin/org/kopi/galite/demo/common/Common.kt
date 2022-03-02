@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2021 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2021 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,16 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.window
+package org.kopi.galite.demo.common
 
-import java.io.Serializable
+import org.kopi.galite.visual.dsl.common.Menu
 
-/**
- * A generic close listener for notifying with a close event.
- */
-interface CloseListener : Serializable {
-  /**
-   * Fired when a dialog or a popup is closed.
-   */
-  fun onClose()
-}
+class ActionMenu : Menu("Action")
+
+class EditMenu : Menu("Edit")
+
+class FileMenu : Menu("File")

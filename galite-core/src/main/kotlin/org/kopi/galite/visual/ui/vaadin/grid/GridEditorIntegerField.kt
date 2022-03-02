@@ -37,8 +37,7 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
 
   override fun check(text: String): Boolean {
     for (element in text) {
-      val c = element
-      if (!(Character.isDigit(c) || c == '.' || c == '-')) {
+      if (!(Character.isDigit(element) || element == '.' || element == '-')) {
         return false
       }
     }
@@ -55,17 +54,13 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
     }
   }
 
-  protected fun isNumeric(): Boolean {
-    return true
-  }
-
   /**
    * Returns the integer value of this editor field.
    * @return The integer value of this editor field.
    */
   protected fun intValue(): Int {
     return try {
-      value!!.toInt()
+      value.toInt()
     } catch (e: NumberFormatException) {
       throw InvalidEditorFieldException(this, "00006")
     }

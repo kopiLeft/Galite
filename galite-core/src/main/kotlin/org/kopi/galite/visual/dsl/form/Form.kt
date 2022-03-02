@@ -201,7 +201,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * Shows to the user want to show a help about this form.
    */
   fun showHelp() {
-    model.showHelp(model)
+    model.showHelp()
   }
 
   /**

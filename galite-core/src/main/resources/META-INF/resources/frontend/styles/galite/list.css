@@ -25,7 +25,7 @@
 }
 
 .k-listdialog-table::part(cell header-cell) {
-    color: #009bd4;
+    color: var(--background-color);
 }
 
 /*
@@ -56,19 +56,19 @@ tr:nth-child(2) th {
 }
 
 .k-listdialog ::part(row):hover {
-    color: blue;
+    color: var(--background-color);
 }
 
 vaadin-grid-cell-content, .k-listdialog {
     padding: 0;
 }
 
-.filter-text {
-    border-right: 1px solid #ddd;
-}
-
 .filter-text::part(input-field) {
     border-radius: 0;
+}
+
+.filter-text::part(input-field):focus-within {
+    border-bottom: var(--background-color) 1px solid;
 }
 
 .filter-text {

@@ -29,7 +29,7 @@ class VImage : Image(), Focusable<VImage> {
   //---------------------------------------------------
   /**
    * Sets the image border.
-   * @param width The image border.
+   * @param border The image border.
    */
   fun setBorder(border: Int) {
     element.setProperty("border", border.toString())

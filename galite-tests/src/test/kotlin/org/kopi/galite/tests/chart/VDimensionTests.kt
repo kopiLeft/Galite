@@ -17,6 +17,7 @@
 
 package org.kopi.galite.tests.chart
 
+import java.time.LocalTime
 import kotlin.test.assertEquals
 
 import org.junit.Test
@@ -28,7 +29,6 @@ import org.kopi.galite.visual.chart.VStringDimension
 import org.kopi.galite.visual.chart.VTimeDimension
 import org.kopi.galite.visual.chart.VTimestampDimension
 import org.kopi.galite.visual.chart.VWeekDimension
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 
@@ -79,7 +79,7 @@ class VDimensionTests : VApplicationTestBase() {
     val vTimeDimension = VTimeDimension("VTimeDimension", null)
 
     assertEquals(CConstants.EMPTY_TEXT, vTimeDimension.format(null))
-    assertEquals("23:30", vTimeDimension.format(Time(23, 30, 0)))
+    assertEquals("23:30", vTimeDimension.format(LocalTime.of(23, 30, 0)))
   }
 
   @Test

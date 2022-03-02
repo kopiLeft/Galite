@@ -35,14 +35,14 @@ import com.vaadin.flow.data.provider.ListDataProvider
  *
  * @param align The alignment info
  */
-class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div() {
+class AlignPanel(var align: BlockAlignment?, private val targetBlockName: String) : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private var components: MutableList<Component>? = mutableListOf()
   private var aligns: MutableList<ComponentConstraint>? = mutableListOf()
-  private val ui = UI.getCurrent() // TODO
+  private val ui = UI.getCurrent()
 
   init {
     className = "k-align-pane"
@@ -151,7 +151,7 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
     }
   }
 
-  fun setComponentPosition(component: Component, left: Double, top: Int) {
+  private fun setComponentPosition(component: Component, left: Double, top: Int) {
     ui.access {
       component.element.style["position"] = "absolute"
       component.element.style["left"] = left.toString() + "px"
@@ -189,7 +189,6 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
   }
 
   private fun addTooltipToField(label: Label, field: Component) {
-    // TODO: Add an advanced tooltip to render all the label component instead of using title attribute.
     field.element.setAttribute("title", label.text)
   }
 
@@ -202,22 +201,7 @@ class AlignPanel(var align: BlockAlignment?, val targetBlockName: String) : Div(
    * Calculates the size of the content panel.
    */
   protected fun setPanelSize() {
-    if (aligns == null) {
-      return
-    }
-    var width = 0
-    var height = 0
-    var i = 0
-    for (child in children) {
-      val align = aligns!![i]
-      if (align.x != -1) {
-        //width = width.coerceAtLeast(child.element.getAbsoluteRight())
-        //height = height.coerceAtLeast(child.element.getOffsetTop() + child.element.getClientHeight())
-      }
-      i++
-    }
-    //setWidth("${width}px") TODO
-    //setHeight("${height}px")
+    // TODO
   }
 
   /**

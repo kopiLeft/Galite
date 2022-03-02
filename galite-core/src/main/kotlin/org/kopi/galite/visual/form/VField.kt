@@ -22,6 +22,8 @@ import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
+import java.time.LocalDate
+import java.time.LocalTime
 
 import javax.swing.event.EventListenerList
 
@@ -60,9 +62,7 @@ import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -1010,7 +1010,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setDate(v: Date?) {
+  fun setDate(v: LocalDate?) {
     setDate(block!!.currentRecord, v)
   }
 
@@ -1062,7 +1062,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTime(v: Time?) {
+  fun setTime(v: LocalTime?) {
     setTime(block!!.currentRecord, v)
   }
 
@@ -1123,7 +1123,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setDate(r: Int, v: Date?) {
+  open fun setDate(r: Int, v: LocalDate?) {
     throw InconsistencyException()
   }
 
@@ -1182,7 +1182,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setTime(r: Int, v: Time?) {
+  open fun setTime(r: Int, v: LocalTime?) {
     throw InconsistencyException()
   }
 
@@ -1263,7 +1263,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getDate(): Date = getDate(block!!.currentRecord)
+  fun getDate(): LocalDate? = getDate(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a int value.
@@ -1282,7 +1282,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getMonth(): Month = getMonth(block!!.currentRecord)
+  fun getMonth(): Month? = getMonth(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a string value.
@@ -1296,7 +1296,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTime(): Time = getTime(block!!.currentRecord)
+  fun getTime(): LocalTime? = getTime(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a week value.
@@ -1396,7 +1396,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getDate(r: Int): Date {
+  open fun getDate(r: Int): LocalDate? {
     throw InconsistencyException()
   }
 
@@ -1405,7 +1405,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getMonth(r: Int): Month {
+  open fun getMonth(r: Int): Month? {
     throw InconsistencyException()
   }
 
@@ -1448,7 +1448,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getTime(r: Int): Time {
+  open fun getTime(r: Int): LocalTime? {
     throw InconsistencyException()
   }
 

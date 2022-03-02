@@ -35,9 +35,7 @@ class DRichTextEditor(
         options: Int,
         height: Int,
         detail: Boolean
-) : DField(model, label, align, options, detail),
-        UTextField
-/*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
+) : DField(model, label, align, options, detail), UTextField {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -103,7 +101,7 @@ class DRichTextEditor(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      editor.setValue(newModelTxt)
+      editor.value = newModelTxt
     }
   }
 
@@ -159,82 +157,11 @@ class DRichTextEditor(
   // ----------------------------------------------------------------------
   // NAVIGATION
   // ----------------------------------------------------------------------
-  fun onGotoNextField() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextField()
-        }
-      }
-    })
-  }
-
-  fun onGotoPrevField() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
-        }
-      }
-    })
-  }
 
   fun onGotoNextBlock() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_BLOCK") {
       override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.gotoNextBlock()
-        }
-      }
-    })
-  }
-
-  fun onGotoPrevRecord() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoPrevRecord()
-        }
-      }
-    })
-  }
-
-  fun onGotoNextRecord() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextRecord()
-        }
-      }
-    })
-  }
-
-  fun onGotoFirstRecord() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
-        }
-      }
-    })
-  }
-
-  fun onGotoLastRecord() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
-        }
-      }
-    })
-  }
-
-  fun onGotoNextEmptyMustfill() {
-    getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
-      override fun execute() {
-        if (getModel() != null) {
-          getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
-        }
+        getModel().block!!.form.gotoNextBlock()
       }
     })
   }

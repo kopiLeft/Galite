@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.io.Serializable
-
 /**
  * The field listener that notifies registered objects with
  * actions performed on a field.

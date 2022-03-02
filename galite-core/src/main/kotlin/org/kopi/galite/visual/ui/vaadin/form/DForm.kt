@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.form
 
 import java.io.File
+import java.time.LocalDate
 
 import org.kopi.galite.visual.form.BlockListener
 import org.kopi.galite.visual.form.BlockRecordListener
@@ -28,7 +29,6 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldException
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.util.PrintJob
@@ -80,7 +80,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * Creates the block view for a given block model
    * @param blockModel The block model.
    */
-  protected fun createViewForBlock(blockModel: VBlock): DBlock {
+  internal fun createViewForBlock(blockModel: VBlock): DBlock {
     val blockView: DBlock
     if (blockModel is VFullCalendarBlock) {
       blockView = DFullCalendarBlock(this, blockModel)
@@ -317,8 +317,8 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockChanged() {}
     override fun blockCleared() {}
     override fun refreshEntries() {}
-    override fun getSelectedDate(): Date? = null
-    override fun goToDate(date: Date) {}
+    override fun getSelectedDate(): LocalDate? = null
+    override fun goToDate(date: LocalDate) {}
     override fun enter() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
       access(currentUI) {

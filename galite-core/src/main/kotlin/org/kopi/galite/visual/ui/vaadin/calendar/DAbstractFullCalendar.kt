@@ -22,7 +22,6 @@ import java.util.Calendar
 
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
@@ -79,13 +78,13 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     updateEntries()
   }
 
-  fun getSelectedDate() : Date {
-    return Date(datePicker.value)
+  fun getSelectedDate() : LocalDate {
+    return datePicker.value
   }
 
-  fun goToDate(date: Date) {
+  fun goToDate(date: LocalDate) {
     access(currentUI) {
-      calendar.gotoDate(LocalDate.of(date.year, date.month, date.day))
+      calendar.gotoDate(date)
     }
   }
 
@@ -98,7 +97,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   private fun updateEntries() {
     model.form.performAsyncAction(object : Action("Fetch entries") {
       override fun execute() {
-        val queryList = model.fetchEntries(Date(datePicker.value))
+        val queryList = model.fetchEntries(datePicker.value)
         updateEntries(queryList)
       }
     })
@@ -149,7 +148,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
       if (event.isFromClient) {
         model.form.performAsyncAction(object : Action("Selected date changed") {
           override fun execute() {
-            model.dateChanged(Date(event.oldValue), Date(event.value))
+            model.dateChanged(event.oldValue, event.value)
           }
         })
       }

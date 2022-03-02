@@ -57,7 +57,7 @@ summary, time, mark, audio, video {
 }
 
 ::part(input-field):hover {
-	background: #d9f0f8 !important;
+	background: var(--background-hover-color) !important;
 }
 
 /**
@@ -69,7 +69,7 @@ summary, time, mark, audio, video {
 
 .k-block .simple ::part(input-field):focus-within, .kopi .k-textareainput:focus {
 	background: none;
-	border-bottom: #009bd4 1px solid;
+	border-bottom: var(--background-color) 1px solid;
 }
 
 .galite *, .k-popup-window > *, .k-window-container > *, .k-form * {
@@ -147,10 +147,10 @@ pre {
     font-size: 12px !important;
 }
 
-.multiple ::part(value):focus {
+.multiple ::part(input-field):focus-within {
     outline : none;
     background: none;
-    border-bottom: #009bd4 1px solid;
+    border-bottom: var(--background-color) 1px solid;
 }
 
 .download-file-buttons, .k-upload-buttons {
@@ -161,7 +161,7 @@ pre {
 .download-file-buttons vaadin-button, .k-upload-buttons .k-input-button {
 	display: inline-block;
 	margin: 18px 8px 0 auto;
-	background: #009bd4;
+	background: var(--background-color);
 	color: #ffffff;
 	font-family: Arial, sans-serif !important;
 	font-weight: 500 !important;

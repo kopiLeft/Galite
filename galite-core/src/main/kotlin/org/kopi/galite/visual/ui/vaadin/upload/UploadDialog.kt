@@ -58,8 +58,7 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
   // IMPLEMENTATIONS
   //---------------------------------------------------
   /**
-   * Sets the upload widget image.
-   * @param connection The application connection.
+   * Sets the upload image.
    */
   protected fun setImage() {
     //image.setName("upload")
@@ -90,10 +89,6 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
   /**
    * Returns the selected file.
    * @return The selected file.
-   */
-  /**
-   * Sets the selected file.
-   * @param file The selected file.
    */
   /*var selectedFile: String?
     get() = upload.fu.getFilename()

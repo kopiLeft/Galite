@@ -18,9 +18,9 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
 
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 
 /**
@@ -80,7 +80,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       return Timestamp.from(date, time)
     }
 
-    fun parseDate(date: String): Date? {
+    fun parseDate(date: String): LocalDate? {
       // Date check
       var month = 0
       var year = -2
@@ -127,10 +127,10 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
         return retryParseDate(tokens)
       }
 
-      return Date(year, month, day)
+      return LocalDate.of(year, month, day)
     }
 
-    private fun retryParseDate(tokens: List<String>): Date? {
+    private fun retryParseDate(tokens: List<String>): LocalDate? {
       var day = 0
       var month = 0
       var year = DateValidator.stringToInt(tokens[0])
@@ -169,10 +169,10 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
         return null
       }
 
-      return Date(year, month, day)
+      return LocalDate.of(year, month, day)
     }
 
-    fun parseTime(time: String): Time? {
+    fun parseTime(time: String): LocalTime? {
       var hours = -1
       var minutes = 0
       var seconds = 0
@@ -298,7 +298,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       return if (hours == -1) {
         null
       } else {
-        Time(hours, minutes, seconds)
+        LocalTime.of(hours, minutes, seconds)
       }
     }
   }

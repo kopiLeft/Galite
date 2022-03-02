@@ -54,8 +54,6 @@ class VInputButtonField(size: Int) : InputTextField<TextField>(TextField()),
 
   override fun setEnabled(enabled: Boolean) {}
 
-  override fun onLoad() {}
-
   companion object {
     /**
      * TODO use font metric to detected the

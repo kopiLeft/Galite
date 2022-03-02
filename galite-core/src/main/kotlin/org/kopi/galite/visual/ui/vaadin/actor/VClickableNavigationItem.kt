@@ -17,14 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.actor
 
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
+import com.flowingcode.vaadin.addons.ironicons.IronIconEnum
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 
 open class VClickableNavigationItem : VNavigationItem() {
-  private val DEPENDENT_STYLENAME_DISABLED_ITEM = "disabled"
 
   override fun setDescription(key: Key?, keyModifier: KeyModifier?) {
     if (key != null && key != Key.UNIDENTIFIED) {
@@ -36,12 +35,16 @@ open class VClickableNavigationItem : VNavigationItem() {
   }
 
   override fun setIcon(iconName: Any?) {
-    icon = if (iconName is VaadinIcon) {
-      Icon(iconName)
-    } else if (iconName is IronIcons) {
-      iconName.create()
-    } else {
-      Icon("")
+    icon = when (iconName) {
+      is VaadinIcon -> {
+        Icon(iconName)
+      }
+      is IronIconEnum -> {
+        iconName.create()
+      }
+      else -> {
+        Icon("")
+      }
     }
   }
 
@@ -54,5 +57,9 @@ open class VClickableNavigationItem : VNavigationItem() {
       "actor-navigationItem-$DEPENDENT_STYLENAME_DISABLED_ITEM"
     }
     super.setEnabled(isEnabled)
+  }
+
+  companion object {
+    private const val DEPENDENT_STYLENAME_DISABLED_ITEM = "disabled"
   }
 }

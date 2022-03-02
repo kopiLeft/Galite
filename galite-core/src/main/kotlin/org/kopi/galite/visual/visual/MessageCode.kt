@@ -66,9 +66,6 @@ object MessageCode {
     }
     val domain = key.substring(0, 3)
     val ident = key.substring(4, 9)
-    if (ApplicationContext.getRegistry() == null) {
-      throw InconsistencyException("No Registry set for this application.")
-    }
     val src = ApplicationContext.getRegistry().getMessageSource(domain)
             ?: throw InconsistencyException("No message source found for module '"
                                                     + domain + "'")

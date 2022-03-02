@@ -17,6 +17,8 @@
 package org.kopi.galite.tests.ui.vaadin.block
 
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalTime
 
 import kotlin.test.assertEquals
 
@@ -38,11 +40,10 @@ import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
+import org.kopi.galite.visual.type.format
 
 class SimpleBlockTests: GaliteVUITestBase() {
   val testFieldsVisibilityForm = TestFieldsVisibilityForm()
@@ -63,10 +64,10 @@ class SimpleBlockTests: GaliteVUITestBase() {
 
     // Enters values to fields
     val currentTimestamp   = Timestamp.now()
-    val currentDate        = Date.now()
+    val currentDate        = LocalDate.now()
     val currentWeek        = Week.now()
     val currentMonth       = Month.now()
-    val currentTime        = Time.now()
+    val currentTime        = LocalTime.now()
     val idClt       = formExample.salesSimpleBlock.idClt.edit(100)
     val description = formExample.salesSimpleBlock.description.edit("description")
     val price       = formExample.salesSimpleBlock.price.edit(BigDecimal("100.2"))
@@ -89,7 +90,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     assertEquals(currentDate, date.getModel().getDate(0))
     assertEquals(currentMonth, month.getModel().getMonth(0))
     assertEquals(Timestamp.parse(currentTimestamp.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"), timestamp.getModel().getTimestamp(0))
-    assertEquals(currentTime.toString(), time.getModel().getTime(0).toString())
+    assertEquals(currentTime.format(), time.getModel().getTime(0).toString())
     assertEquals(currentWeek, week.getModel().getWeek(0))
     assertEquals(1, codeDomain.getModel().getObject(0))
   }

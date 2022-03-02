@@ -17,6 +17,8 @@
 package org.kopi.galite.testing
 
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalTime
 
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
@@ -31,8 +33,10 @@ import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
 import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorBooleanField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimeField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimestampField
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
@@ -78,11 +82,17 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
   val oldValue = gridEditorField._value
   gridEditorField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
 
-  when {
-    gridEditorField is GridEditorTimestampField -> {
+  when (gridEditorField) {
+    is GridEditorTimestampField -> {
       gridEditorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
     }
-    gridEditorField is GridEditorTextField -> {
+    is GridEditorTimeField -> {
+      gridEditorField._value = (value as LocalTime).format()
+    }
+    is GridEditorDateField -> {
+      gridEditorField._value = (value as LocalDate).format()
+    }
+    is GridEditorTextField -> {
       gridEditorField._value = if(value is BigDecimal) value.format() else value.toString()
     }
     else -> {

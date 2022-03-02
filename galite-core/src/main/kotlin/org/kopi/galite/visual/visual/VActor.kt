@@ -70,7 +70,7 @@ open class VActor(var menuIdent: String,
   // ACTIONS HANDLING
   // ----------------------------------------------------------------------
   fun performAction() {
-    handler!!.performAction(object : Action("$menuItem in $menuName") {
+    handler!!.performAsyncAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
         action?.let { it() }
@@ -88,7 +88,7 @@ open class VActor(var menuIdent: String,
        */
       override fun isCancellable(): Boolean =
               !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
-    }, false)
+    })
   }
 
   fun performBasicAction() {

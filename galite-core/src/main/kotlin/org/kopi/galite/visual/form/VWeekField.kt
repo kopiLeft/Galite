@@ -354,7 +354,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = if(value[r] == null) null else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): Int? = value[r]?.toSql()
 
   /**
    * Copies the value of a record to another

@@ -24,6 +24,7 @@ import java.awt.Insets;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.util.List;
+import java.time.LocalDate;
 
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -38,7 +39,6 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.ViewBlockAlignment;
-import org.kopi.galite.visual.type.Date;
 import org.kopi.galite.visual.util.base.InconsistencyException;
 import org.kopi.galite.visual.visual.VException;
 import org.kopi.galite.visual.visual.VExecFailedException;
@@ -499,10 +499,10 @@ public class DBlock extends JPanel implements UBlock {
   public void filterShown() {}
 
   @Override
-  public void goToDate(Date date) {}
+  public void goToDate(LocalDate date) {}
 
   @Override
-  public Date getSelectedDate() {
+  public LocalDate getSelectedDate() {
     return null;
   }
 

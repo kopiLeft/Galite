@@ -70,7 +70,7 @@ open class DFieldHandler internal constructor(rowController: VFieldUI) : Abstrac
 
   override fun searchOperatorChanged() {
     val operator: Int = model.getSearchOperator()
-    val info: String? = if (operator == VConstants.SOP_EQ) null else VConstants.OPERATOR_NAMES.get(operator)
+    val info: String? = if (operator == VConstants.SOP_EQ) null else VConstants.OPERATOR_NAMES[operator]
     if (getRowController().getLabel() != null) {
       (getRowController().getLabel() as DLabel).infoText = info
     }
@@ -82,7 +82,7 @@ open class DFieldHandler internal constructor(rowController: VFieldUI) : Abstrac
   override fun valueChanged(r: Int) {
     val dispRow: Int = getRowController().blockView.getDisplayLine(r)
     if (dispRow != -1) {
-      if (getRowController().displays != null) {
+      if (getRowController().isDisplayInitialized) {
         getRowController().displays[dispRow]!!.updateText()
       }
       if (getRowController().detailDisplay != null) {

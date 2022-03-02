@@ -24,15 +24,21 @@ import org.kopi.galite.visual.report.VIntegerColumn
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.report.VSeparatorColumn
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.DetachEvent
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.Page
 import com.vaadin.flow.function.ValueProvider
-import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.shared.Registration
+
+import elemental.json.JsonObject
+import elemental.json.JsonValue
 
 /**
  * The `DTable` is a table implementing the [UTable]
@@ -69,6 +75,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 
   lateinit var cellStyler: ReportCellStyler
+  lateinit var browserWindowResizeListener: Registration
 
   init {
     setItems(model)
@@ -88,13 +95,22 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   override fun onAttach(attachEvent: AttachEvent) {
     val page = attachEvent.ui.page
 
-    page.retrieveExtendedClientDetails { details ->
-      height = (details.windowInnerHeight - 200).toString() + "px"
-    }
+    page.setWindowHeight()
 
-    page.addBrowserWindowResizeListener { event ->
+    browserWindowResizeListener = page.addBrowserWindowResizeListener { event ->
       height = (event.height - 200).toString() + "px"
     }
+  }
+
+  private fun Page.setWindowHeight() {
+    val js = "return Vaadin.Flow.getBrowserDetailsParameters();"
+    executeJs(js).then {
+      height = ((it as JsonObject).get<JsonValue>("v-wh").asNumber() - 200).toString() + "px"
+    }
+  }
+
+  override fun onDetach(detachEvent: DetachEvent) {
+    browserWindowResizeListener.remove()
   }
 
   /**

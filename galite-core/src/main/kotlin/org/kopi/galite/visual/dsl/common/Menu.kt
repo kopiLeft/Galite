@@ -29,7 +29,6 @@ open class Menu(val label: String, source: String? = null): WindowElement(source
   // ----------------------------------------------------------------------
 
   fun genLocalization(writer: LocalizationWriter) {
-    // FIXME : change first parameter label to ident
-    writer.genMenuDefinition(label, label)
+    writer.genMenuDefinition(ident, label)
   }
 }

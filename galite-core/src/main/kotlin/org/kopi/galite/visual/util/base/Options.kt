@@ -150,8 +150,8 @@ abstract class Options(private val name: String?) {
   /**
    * Processes a string argument.
    */
-  protected fun getString(g: Getopt, defaultValue: String?): String {
-    return if (g.optarg != null) g.optarg else defaultValue!!
+  protected fun getString(g: Getopt, defaultValue: String?): String? {
+    return if (g.optarg != null) g.optarg else defaultValue
   }
 
   protected fun addString(array: Array<String?>?, str: String?): Array<String?> {

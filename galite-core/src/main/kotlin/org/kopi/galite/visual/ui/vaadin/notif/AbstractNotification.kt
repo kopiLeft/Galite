@@ -144,23 +144,6 @@ abstract class AbstractNotification(title: String?,
     }
   }
 
-  /**
-   * Creates the notification content.
-   */
-  fun createContent() {
-    content.addComponentAsFirst(icon)
-    content.add(message)
-    super.setContent(content)
-  }
-
-  /**
-   * Should we go back to the last focused field when the notification is closed ?
-   * @return `true` if we should go back to the last focused field when the notification is closed.
-   */
-  protected fun goBackToLastFocusedWindow(): Boolean {
-    return true
-  }
-
   //-------------------------------------------------
   // ABSTRACT METHODS / PROPERTIES
   //-------------------------------------------------

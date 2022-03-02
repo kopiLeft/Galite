@@ -22,7 +22,6 @@ import org.kopi.galite.visual.form.Alignment
 import org.kopi.galite.visual.form.UMultiBlock
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VRuntimeException
@@ -176,7 +175,6 @@ class DGridMultiBlock(parent: DForm,
     }
   }
 
-  // TODO: require test where itemHasDetailVisible != null
   override fun enterRecord(recno: Int) {
     if (inDetailMode() && itemHasDetailVisible != null) {
       grid.setDetailsVisible(itemHasDetailVisible, false)
@@ -193,7 +191,7 @@ class DGridMultiBlock(parent: DForm,
   /**
    * Updates the state of the detail display
    */
-  protected fun updateDetailDisplay() {
+  internal fun updateDetailDisplay() {
     for (columnView in columnViews) {
       if (columnView?.detailDisplay != null) {
         columnView.detailDisplay!!.updateAccess()

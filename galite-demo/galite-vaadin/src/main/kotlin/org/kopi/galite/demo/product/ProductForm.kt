@@ -18,8 +18,7 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
@@ -30,9 +29,8 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class ProductForm : ReportSelectionForm(title = "Products", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class ProductForm : FormDefault(title = "Products", locale = Locale.UK) {
   val page = page("Product")
 
   init {

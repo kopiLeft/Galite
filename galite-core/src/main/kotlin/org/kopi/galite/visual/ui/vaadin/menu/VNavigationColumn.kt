@@ -37,7 +37,8 @@ class VNavigationColumn(val ident : String?) : VerticalLayout(), HasStyle {
 
   /**
    * Sets the header item of this navigation column.
-   * @param header The header item.
+   *
+   * @param headerName The header name.
    */
   fun setHeader(headerName: String?) {
     header.setCaption(headerName)

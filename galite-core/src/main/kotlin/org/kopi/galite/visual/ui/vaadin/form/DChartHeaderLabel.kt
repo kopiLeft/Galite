@@ -27,9 +27,8 @@ import org.kopi.galite.visual.ui.vaadin.label.SortableLabelListener
  *
  * @param text The label text.
  * @param help The label help.
- * @param index The field index.
+ * @param fieldIndex The field index.
  * @param sortModel The sort model.
- * @param commands The fields command.
  */
 class DChartHeaderLabel internal constructor(text: String?,
                                              help: String?,

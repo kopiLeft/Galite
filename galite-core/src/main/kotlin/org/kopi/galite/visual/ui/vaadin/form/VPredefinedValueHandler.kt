@@ -18,15 +18,14 @@
 package org.kopi.galite.visual.ui.vaadin.form
 
 import java.awt.Color
+import java.time.LocalDate
 
 import org.kopi.galite.visual.form.AbstractPredefinedValueHandler
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
-
-import com.vaadin.flow.component.Component
+import org.kopi.galite.visual.visual.VException
 
 /**
  * The `VPredefinedValueHandler` is the VAADIN implementation of
@@ -49,7 +48,7 @@ class VPredefinedValueHandler(model: VFieldUI,
     return null
   }
 
-  override fun selectDate(date: Date): Date {
+  override fun selectDate(date: LocalDate): LocalDate {
     return date
   }
 
@@ -57,7 +56,7 @@ class VPredefinedValueHandler(model: VFieldUI,
    * This method will open the file chooser to select an image.
    * @return the selected image from the user file system
    * @throws VException
-   * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
+   * @see org.kopi.galite.visual.form.PredefinedValueHandler.selectImage
    */
   override fun selectImage(): ByteArray? = FileUploader().upload("image/*")
 }

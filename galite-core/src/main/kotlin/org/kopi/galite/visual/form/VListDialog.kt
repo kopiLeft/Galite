@@ -18,12 +18,13 @@
 
 package org.kopi.galite.visual.form
 
+import java.time.LocalDate
+
 import kotlin.math.max
 
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.Module
 import org.kopi.galite.visual.visual.UIFactory
@@ -228,8 +229,8 @@ class VListDialog(list: Array<VListColumn?>,
             is Boolean -> {
               value1 && !(value2 as Boolean)
             }
-            is Date -> {
-              value1 > value2 as Date
+            is LocalDate -> {
+              value1 > value2 as LocalDate
             }
             else -> {
               false

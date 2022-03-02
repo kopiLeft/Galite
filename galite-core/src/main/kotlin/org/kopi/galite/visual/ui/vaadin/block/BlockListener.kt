@@ -29,10 +29,4 @@ interface BlockListener : Serializable {
    * @param value The new scroll position.
    */
   fun onScroll(value: Int)
-
-  /**
-   * Updates the scroll position.
-   * @param value The scroll position.
-   */
-  fun updateScrollPos(value: Int)
 }

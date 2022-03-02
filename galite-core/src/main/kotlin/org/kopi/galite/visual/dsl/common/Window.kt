@@ -42,6 +42,8 @@ abstract class Window(val title: String, val locale: Locale?) {
   /** Triggers added to this window */
   internal var triggers = mutableListOf<Trigger>()
 
+  internal var isModelInitialized: Boolean = false
+
   /** The model generated from this class. */
   abstract val model: VWindow
 
@@ -58,6 +60,19 @@ abstract class Window(val title: String, val locale: Locale?) {
   fun menu(label: String): Menu {
     val menu = Menu(label, sourceFile)
 
+    menu.ident = "actor${actors.size}"
+    menus.add(menu)
+    return menu
+  }
+
+  /**
+   * Adds a menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
+   *
+   * @param menu                the menu
+   * @return                     the menu. It is used later to adding actors to this menu by specifying
+   * the menu name in the actor definition.
+   */
+  fun menu(menu: Menu): Menu {
     menus.add(menu)
     return menu
   }

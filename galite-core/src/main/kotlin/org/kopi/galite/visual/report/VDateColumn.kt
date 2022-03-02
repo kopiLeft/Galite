@@ -18,7 +18,10 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Date
+import java.time.LocalDate
+
+import org.kopi.galite.visual.type.format
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents a report column description
@@ -45,7 +48,7 @@ class VDateColumn(ident: String?,
                   function,
                   10,  // width, default date format
                   1,
-                  format) {
+                  format ?: VDateFormat()) {
   /**
    * Compare two objects.
    *
@@ -55,7 +58,7 @@ class VDateColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Date).compareTo(object2 as Date)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as LocalDate).compareTo(object2 as LocalDate)
 
   /**
    * Returns the width of cells in this column in characters
@@ -64,5 +67,19 @@ class VDateColumn(ident: String?,
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatDateColumn(this, index)
+  }
+
+  /**
+   * Default date formatter.
+   */
+  private class VDateFormat : VCellFormat() {
+
+    override fun format(value: Any?): String =
+      when(value) {
+        null -> ""
+        is LocalDate -> value.format()
+        is java.sql.Date -> value.toLocalDate().format()
+        else -> throw InconsistencyException("bad type for $value")
+      }
   }
 }

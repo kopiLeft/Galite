@@ -235,3 +235,14 @@
 :host([theme~="shown-filter"]) #scroller #table #header [part~="row"]:nth-of-type(2) {
     display: flex;
 }
+
+:host([theme~="report"]) [part~="cell"]:not([part~="header-cell"]):focus,
+  :host([theme~="report"]) [part~="cell"]:not([part~="header-cell"]):active,
+  :host([theme~="report"]) [part~="cell"]:not([part~="header-cell"]):hover {
+    background-color: var(--background-color) !important;
+    color: #ffffff !important;
+}
+
+:host([navigating]) [part~="cell"]:focus::before {
+    box-shadow: none;
+}

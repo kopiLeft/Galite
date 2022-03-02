@@ -64,11 +64,9 @@ class BlockWithAllFieldVisibilityTypes : Block("Block With All Field Visibility 
     help = "hidden field"
   }
 
-  val visitField = visit(domain = INT(3), position = at(1, 1)) {
+  val visitField = visit(domain = INT(3) { min = 10; max = 50 }, position = at(1, 1)) {
     label = "visit field"
     help = "visit field"
-    minValue = 10
-    maxValue = 50
   }
 
   val mustFillField = mustFill(domain = STRING(50), position = at(2, 1)) {
@@ -95,11 +93,9 @@ class BlockWithDifferentTypes : Block("Block With Different Types", 1, 1) {
     label = "lower string field"
     help = "lower string field"
   }
-  val intField = visit(domain = INT(3), position = at(2, 1)) {
+  val intField = visit(domain = INT(3) { min = 10; max = 50 }, position = at(2, 1)) {
     label = "visit field"
     help = "visit field"
-    minValue = 10
-    maxValue = 50
   }
   val decimalField = visit(domain = DECIMAL(5, 2), position = at(3, 1)) {
     label = "decimal field"

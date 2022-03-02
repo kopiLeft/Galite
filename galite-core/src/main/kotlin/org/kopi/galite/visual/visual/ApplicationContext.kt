@@ -204,7 +204,7 @@ abstract class ApplicationContext {
             null
           }
           val sender = try {
-            defaultConfiguration.getStringFor("debugging.mail.sender")
+            defaultConfiguration.getStringFor("debugging.mail.sender") ?: throw PropertyException()
           } catch (e: PropertyException) {
             throw Exception("Couldn't find the debugging mail sender while sending an error report mail", e)
           }

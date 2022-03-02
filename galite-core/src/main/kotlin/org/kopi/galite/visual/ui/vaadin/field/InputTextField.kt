@@ -19,7 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.LocalTime
 
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
@@ -29,6 +29,7 @@ import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
+import org.kopi.galite.visual.form.VConstants
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
@@ -47,6 +48,7 @@ import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
 import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.shared.Registration
 
@@ -61,7 +63,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
       HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
         where C: AbstractField<*, out Any>, C: Focusable<*>
-      /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
+      /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler TODO*/ {
 
   /**
    * Returns the parent window of this text field.
@@ -81,11 +83,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   init {
     className = Styles.TEXT_INPUT
-    addKeyPressListener(::onKeyPress)
-    addKeyUpListener(::onKeyUp)
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     // addKeyDownListener(::onKeyDown) TODO
+    //addKeyPressListener(::onKeyPress)
+    //addKeyUpListener(::onKeyUp)
     addFocusListener(::onFocus)
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
@@ -112,12 +114,19 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   }
 
   private fun format(s: Any?): String? =
-    if (s is LocalDate) {
-      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-    } else if (s is BigDecimal) {
-      s.format()
-    } else {
-      s?.toString()
+    when (s) {
+      is LocalDate -> {
+        s.format()
+      }
+      is BigDecimal -> {
+        s.format()
+      }
+      is LocalTime -> {
+        s.format()
+      }
+      else -> {
+        s?.toString()
+      }
     }
 
   override fun initContent(): C = internalField
@@ -243,6 +252,19 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     super.setAlignment(align)
     this.align = align.toString().toLowerCase()
   }*/
+
+  /**
+   * Sets the alignment of a text field.
+   * @param align The text field alignment.
+   */
+  fun setAlign(align: Int) {
+    if(internalField is com.vaadin.flow.component.textfield.TextField) {
+      when (align) {
+        VConstants.ALG_RIGHT -> internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        VConstants.ALG_CENTER -> internalField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER)
+      }
+    }
+  }
 
   /**
    * Returns `true` if the auto complete function should be used.
@@ -449,15 +471,6 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     internalField.focus()
   }
 
-  protected open fun onLoad() {
-    //super.onLoad() TODO
-    //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
-    //  fun execute() {
-    //    parent = WidgetUtils.getParent(this@VInputTextField, VWindow::class.java)
-    //  }
-    //})
-  }
-
   open fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
     // this is called twice on Chrome when e.g. changing tab while prompting
     // field focused - do not change settings on the second time
@@ -639,11 +652,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     return oracle
   }
 
-  *//**
+  /**
    * Sets the suggestion oracle used to create suggestions.
    *
    * @param oracle the oracle
-   *//*
+   */
   fun setOracle(oracle: SuggestOracle?) {
     this.oracle = oracle
   }
@@ -671,8 +684,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
    * Shows the suggestions beginning with the given query string.
    * @param query The searched text.
    */
-  /*package*/
-  fun showSuggestions(query: String?) {
+  internal fun showSuggestions(query: String?) {
     if (!hasAutocomplete) {
       return
     }

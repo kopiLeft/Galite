@@ -78,7 +78,6 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
     chart.model.addRow(arrayOf(value), measureList.values.toTypedArray())
   }
 
-  // TODO add Decimal types
   val model: VDimension
     get() {
       val format: VColumnFormat? = if (formatTrigger != null) {

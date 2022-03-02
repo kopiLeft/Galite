@@ -101,6 +101,6 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
    * Returns the grid block view attached with this field handler.
    * @return The grid block view attached with this field handler.
    */
-  protected val blockView: DGridBlock
+  internal val blockView: DGridBlock
     get() = getRowController().blockView as DGridBlock
 }

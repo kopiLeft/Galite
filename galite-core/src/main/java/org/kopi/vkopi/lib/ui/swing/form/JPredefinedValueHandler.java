@@ -24,6 +24,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.io.File;
 import java.io.FileInputStream;
+import java.time.LocalDate;
 
 import javax.swing.JColorChooser;
 
@@ -31,7 +32,6 @@ import org.kopi.galite.visual.form.AbstractPredefinedValueHandler;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VForm;
-import org.kopi.galite.visual.type.Date;
 import org.kopi.galite.visual.visual.Message;
 import org.kopi.galite.visual.visual.VExecFailedException;
 
@@ -60,7 +60,7 @@ public class JPredefinedValueHandler extends AbstractPredefinedValueHandler {
     /**
      *
      */
-    public Date selectDate(Date date) {
+    public LocalDate selectDate(LocalDate date) {
         return DateChooser.getDate((Container) getForm().getDisplay(), (Component) getField().getDisplay(), date);
     }
 

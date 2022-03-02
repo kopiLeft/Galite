@@ -102,7 +102,7 @@ class RootMenu(id: Int, name: String) {
    * @param manager The localization manager.
    */
   fun localize(manager: LocalizationManager?) {
-    if (manager != null && rootModule != null) {
+    if (manager != null) {
       rootModule.localize(manager)
     }
   }

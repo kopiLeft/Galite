@@ -23,13 +23,14 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 import kotlin.math.max
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -94,19 +95,18 @@ class PExport2PDF(
   override fun export(out: OutputStream) {
     try {
       val paper: PPaperType = PPaperType.getPaperTypeFromCode(printConfig.papertype)
-      val paperSize: Rectangle
-
-      paperSize = if (printConfig.paperlayout == "Landscape") {
+      val paperSize = if (printConfig.paperlayout == "Landscape") {
         Rectangle(paper.height.toFloat(), paper.width.toFloat())
       } else {
         Rectangle(paper.width.toFloat(), paper.height.toFloat())
       }
+
       firstPage = true
       val head = createHeader()
       val firstPageHead = createFirstPageHeader()
       val foot = createFooter(0, 0)
 
-      if (firstPageHeader != null && firstPageHeader != "") {
+      if (firstPageHeader.isNotEmpty()) {
         firstPageHead.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin
       }
       head.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin
@@ -143,7 +143,7 @@ class PExport2PDF(
         }
       }
       document.open()
-      if (firstPageHeader != null && firstPageHeader != "") {
+      if (firstPageHeader != "") {
         try {
           val page = document.pageSize
 
@@ -227,11 +227,16 @@ class PExport2PDF(
                             Color.black,
                             Color.white,
                             Constants.ALG_LEFT, false))
-    foot.addCell(createCell(Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm"), 7.0,
-                            Color.black,
-                            Color.white,
-                            Constants.ALG_RIGHT,
-                            false))
+    foot.addCell(
+      createCell(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " +
+                LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
+        7.0,
+        Color.black,
+        Color.white,
+        Constants.ALG_RIGHT,
+        false
+      )
+    )
     return foot
   }
 

@@ -485,7 +485,7 @@ open class Block(val title: String,
    */
   fun getTableNum(table: FormBlockTable): Int {
     val indexOfTable = tables.indexOf(table)
-    return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
+    return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException("Table ${table.name} not found.")
   }
 
   // ----------------------------------------------------------------------
@@ -779,7 +779,7 @@ open class Block(val title: String,
    * @exception        VException        an exception may occur during DB access
    */
   open fun insertMode() {
-    Commands.insertMode(block)
+    block.insertMode()
   }
 
   /**
@@ -849,7 +849,7 @@ open class Block(val title: String,
    */
   fun addDropList(dropList: Array<out String>, field: FormField<*>): String? {
     for (i in dropList.indices) {
-      val extension = dropList[i].toLowerCase()
+      val extension = dropList[i].lowercase()
       if (dropListMap[extension] != null) {
         return extension
       }

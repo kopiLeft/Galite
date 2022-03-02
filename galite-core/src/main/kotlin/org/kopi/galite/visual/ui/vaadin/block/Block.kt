@@ -48,37 +48,8 @@ abstract class Block(private val dropHandler: DBlockDropHandler?,
    */
   var isAnimationEnabled = false // TODO
 
-  /**
-   * The scroll page size.
-   */
-  var scrollPageSize = 0
-
-  /**
-   * The max scroll value.
-   */
-  var maxScrollValue = 0
-
-  /**
-   * Should we enable scroll bar ?
-   */
-  var enableScroll = false
-
-  /**
-   * The scroll value
-   */
-  var scrollValue = 0
-
   init {
     className = Styles.BLOCK
-  }
-
-  /**
-   * Sets the block title.
-   * @param title The block title.
-   */
-  fun setTitle(title: String?) {
-    element.setAttribute("title", title)
-    // TODO
   }
 
   /**
@@ -138,14 +109,6 @@ abstract class Block(private val dropHandler: DBlockDropHandler?,
         setContent(layout as Component)
       }
     }
-  }
-
-  /**
-   * Fired when the scroll position has changed.
-   * @param value The new scroll position.
-   */
-  protected fun fireOnScroll(value: Int) {
-    // TODO
   }
 
   /**
@@ -224,15 +187,6 @@ abstract class Block(private val dropHandler: DBlockDropHandler?,
     // not handled.
   }
 
-  open fun  updateScroll() {
-    if (layout != null) {
-      layout!!.updateScroll(scrollPageSize,
-                            maxScrollValue,
-                            enableScroll,
-                            scrollValue)
-    }
-  }
-
   /**
    * Refreshes the display of this block.
    */
@@ -241,10 +195,6 @@ abstract class Block(private val dropHandler: DBlockDropHandler?,
   }
 
   abstract fun inDetailMode(): Boolean
-
-  fun updateScrollPos(value: Int) {
-    fireOnScroll(value)
-  }
 
   //---------------------------------------------------
   // ABSTRACT METHODS

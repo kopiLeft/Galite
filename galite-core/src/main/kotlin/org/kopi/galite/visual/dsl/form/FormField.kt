@@ -102,34 +102,6 @@ open class FormField<T>(internal val block: Block,
     }
   }
 
-  /** the minimum value that cannot exceed  */
-  internal var min : T? = null
-
-  /** the maximum value that cannot exceed  */
-  internal var max : T? = null
-
-  /**
-   * Sets the minimum value of a number field.
-   */
-  var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
-    get() {
-      return min
-    }
-    set(value) {
-      min = value
-    }
-
-  /**
-   * Sets the maximum value of a number field.
-   */
-  var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
-    get() {
-      return max
-    }
-    set(value) {
-      max = value
-    }
-
   /**
    * Returns the field value of the current record number [record]
    *

@@ -22,7 +22,6 @@ import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
-import org.junit.Ignore
 import org.kopi.galite.visual.db.Users
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
@@ -211,7 +210,6 @@ class FieldsTests : GaliteVUITestBase() {
     }
   }
 
-  @Ignore
   @Test
   fun `open form via field`() {
     val form = FormToTestFormPopUp()
@@ -247,6 +245,18 @@ class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = 
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
+  )
+  val newItem = actor(
+    menu = edit,
+    label = "NewItem",
+    help = "NewItem",
+    command = PredefinedCommand.NEW_ITEM
+  )
+  val editItem = actor(
+    menu = edit,
+    label = "Edit Item",
+    help = "Edit Item",
+    command = PredefinedCommand.EDIT_ITEM
   )
 
   val userListBlock = insertBlock(UsersListBlock()) {

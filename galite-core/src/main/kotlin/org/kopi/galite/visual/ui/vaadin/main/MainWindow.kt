@@ -187,7 +187,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
           (currentWindow as Window).goBackToLastFocusedTextField()
           window.isVisible = true
         }
-        //windowsMenu.setCurrent(item) TODO
         windowsMenu.hideMenu()
       }
     }
@@ -254,14 +253,14 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
    * Removes a main window listener.
    * @param l the listener to be removed.
    */
-  fun RemoveMainWindowListener(l: MainWindowListener) {
+  fun removeMainWindowListener(l: MainWindowListener) {
     listeners.add(l)
   }
 
   /**
    * Fires on support action.
    */
-  protected fun fireOnSupport() {
+  internal fun fireOnSupport() {
     for (l in listeners) {
       l.onSupport()
     }
@@ -270,7 +269,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
   /**
    * Fires on help action.
    */
-  protected fun fireOnHelp() {
+  internal fun fireOnHelp() {
     for (l in listeners) {
       l.onHelp()
     }
@@ -279,7 +278,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
   /**
    * Fires on admin action.
    */
-  protected fun fireOnAdmin() {
+  internal fun fireOnAdmin() {
     for (l in listeners) {
       l.onAdmin()
     }
@@ -288,7 +287,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
   /**
    * Fires on logout action.
    */
-  protected fun fireOnLogout() {
+  internal fun fireOnLogout() {
     for (l in listeners) {
       l.onLogout()
     }
@@ -297,7 +296,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
   /**
    * Fires on user action.
    */
-  protected fun fireOnUser() {
+  internal fun fireOnUser() {
     for (l in listeners) {
       l.onUser()
     }
@@ -379,8 +378,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
     }
     if (currentWindow is Window) {
       (currentWindow as Window).goBackToLastFocusedTextField()
-      // fireWindowVisible(currentWindow) TODO
     }
-    // windowsMenu.setCurrent(currentWindow) TODO
   }
 }

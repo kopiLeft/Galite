@@ -49,10 +49,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
   override val supportedLocales
     get() =
       arrayOf(
-        Locale.UK,
-        Locale.FRANCE,
-        Locale("de", "AT"),
-        Locale("ar", "TN")
+        Locale.UK
       )
 
   override fun login(

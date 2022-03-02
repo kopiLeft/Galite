@@ -123,7 +123,7 @@ class VWindowController : WindowController() {
    * Shows a modal window in a popup view. This will handle
    * a window view not in a tabsheet but in a non modal
    * popup window.
-   * @param application The application instance.
+
    * @param view The window view.
    * @param title The window title.
    */

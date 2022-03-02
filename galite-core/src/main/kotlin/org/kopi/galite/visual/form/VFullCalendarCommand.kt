@@ -52,7 +52,7 @@ class VFullCalendarCommand(
    */
   @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action, block)"))
   override fun performAction(action: Action, block: Boolean) {
-    form.performAction(action, block)
+    form.performAsyncAction(action)
   }
 
   /**

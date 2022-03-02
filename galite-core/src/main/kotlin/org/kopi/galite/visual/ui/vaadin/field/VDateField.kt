@@ -17,9 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Optional
 
-import org.kopi.galite.visual.type.Date
+import org.kopi.galite.visual.type.format
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.ComponentEvent
@@ -52,7 +54,7 @@ class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifi
     }
     internalField.addPickerListener {
       if(it.value.isNotEmpty()) {
-        val date = Date.parse(it.value, "yyyy-MM-dd").toString()
+        val date = LocalDate.parse(it.value, DateTimeFormatter.ofPattern("yyyy-MM-dd")).format()
 
         if(content.value != date) {
           // Synchronize value with textfield
@@ -66,7 +68,7 @@ class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifi
   override fun setPresentationValue(newPresentationValue: String?) {
     val date = TimestampValidator.parseDate(newPresentationValue.orEmpty())
 
-    content.value = date?.toString() ?: newPresentationValue.orEmpty()
+    content.value = date?.format() ?: newPresentationValue.orEmpty()
   }
 }
 
@@ -104,6 +106,8 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
 
   override fun setValue(value: String?) {
     textField.value = value
+    // Use setTimeout to set the value only after the element is attached
+    element.executeJs("setTimeout(function(){$0._inputValue = $1},0)", element, value)
   }
 
   override fun getValue(): String? {
@@ -202,7 +206,7 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
   }
 
   override fun setMaxHeight(maxHeight: String?) {
-    textField.setMaxHeight(maxHeight)
+    textField.maxHeight = maxHeight
   }
 
   override fun setMaxHeight(maxHeight: Float, unit: com.vaadin.flow.component.Unit?) {

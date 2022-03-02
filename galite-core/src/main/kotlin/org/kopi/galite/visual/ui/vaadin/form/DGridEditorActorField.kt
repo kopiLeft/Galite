@@ -57,12 +57,6 @@ class DGridEditorActorField(
       override fun convertToModel(value: String?, context: ValueContext?): Result<Any?>? = null
 
       override fun convertToPresentation(value: Any?, context: ValueContext?): String? = null
-
-      val modelType: Class<Any> // TODO
-        get() = Any::class.java
-
-      val presentationType: Class<String> // TODO
-        get() = String::class.java
     }
   }
 

@@ -17,11 +17,13 @@
  */
 package org.kopi.galite.visual.list
 
+import java.time.LocalTime
+
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.type.Time
+import org.kopi.galite.visual.type.format
 
 /**
  * Represents a list column.
@@ -39,5 +41,10 @@ class VTimeColumn(title: String,
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Time::class
+  override fun getDataType(): KClass<*> = LocalTime::class
+
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any = (value as? LocalTime)?.format() ?: VConstants.EMPTY_TEXT
 }

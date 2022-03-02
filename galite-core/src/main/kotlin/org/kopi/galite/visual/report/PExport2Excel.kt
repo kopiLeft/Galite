@@ -21,6 +21,9 @@ package org.kopi.galite.visual.report
 import java.awt.Color
 import java.io.OutputStream
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -35,9 +38,7 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
@@ -54,7 +55,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     private set
   private var sheet: Sheet? = null
   private var format: DataFormat? = null
-  private val datatype: IntArray = IntArray(columnCount)
+  private val datatype = arrayOfNulls<CellType>(columnCount)
   private val dataformats: ShortArray = ShortArray(columnCount)
   private val widths: ShortArray = ShortArray(columnCount)
   private var sheetIndex = 0
@@ -66,12 +67,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     /**
      * Set the value of the cell to the specified date value.
      */
-    protected fun setCellValue(cell: Cell, value: Date) {
+    protected fun setCellValue(cell: Cell, value: LocalDate) {
       val cal = GregorianCalendar()
       cal.clear()
       cal[Calendar.YEAR] = value.year
-      cal[Calendar.MONTH] = value.month - 1
-      cal[Calendar.DAY_OF_MONTH] = value.day
+      cal[Calendar.MONTH] = value.monthValue - 1
+      cal[Calendar.DAY_OF_MONTH] = value.dayOfMonth
       cell.setCellValue(cal)
     }
   }
@@ -129,7 +130,8 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
-    footer.right = Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm")
+    footer.right = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +
+            " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     sheetIndex += 1
     val ps = sheet!!.printSetup
 
@@ -171,25 +173,25 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
 
   protected fun setCellValue(cell: Cell, cellPos: Int, data: String?, orig: Any?) {
     if (data != null && orig != null) {
-      if (datatype[cellPos] == CellType.STRING.code) {
+      if (datatype[cellPos] == CellType.STRING) {
         cell.setCellValue(data.replace('\n', ' '))
       } else {
         if (orig is BigDecimal) {
           cell.setCellValue(orig.toDouble())
         } else if (orig is Int) {
-          if (datatype[cellPos] == CellType.BOOLEAN.code) {
+          if (datatype[cellPos] == CellType.BOOLEAN) {
             cell.setCellValue(orig.toDouble() == 1.0)
           } else {
             cell.setCellValue(orig.toDouble())
           }
         } else if (orig is Boolean) {
           cell.setCellValue(orig)
-        } else if (orig is Date) {
+        } else if (orig is LocalDate) {
           setCellValue(cell, orig)
         } else if (orig is Timestamp || orig is java.sql.Timestamp) {
           // date columns can be returned as a timestamp by the jdbc driver.
           cell.setCellValue(data)
-          datatype[cellPos] = CellType.STRING.code
+          datatype[cellPos] = CellType.STRING
         } else if (orig is Month) {
           setCellValue(cell, orig.getFirstDay())
         } else if (orig is Week) {
@@ -203,7 +205,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
                                                + " " + orig.javaClass + " of " + orig)
         }
       }
-      cell.cellType = CellType.forInt(datatype[cellPos])
+      cell.cellType = datatype[cellPos]
     } else {
       cell.cellType = CellType.BLANK
     }
@@ -219,7 +221,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   protected fun getDataFormat(cellPos: Int): Short {
-    return if (datatype[cellPos] != CellType.STRING.code) {
+    return if (datatype[cellPos] != CellType.STRING) {
       dataformats[cellPos]
     } else {
       -1
@@ -232,25 +234,25 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
 
   override fun formatStringColumn(column: VReportColumn, index: Int) {
     dataformats[index] = 0
-    datatype[index] = CellType.STRING.code
+    datatype[index] = CellType.STRING
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatWeekColumn(column: VReportColumn, index: Int) {
     dataformats[index] = 0
-    datatype[index] = CellType.STRING.code
+    datatype[index] = CellType.STRING
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatDateColumn(column: VReportColumn, index: Int) {
     dataformats[index] = format!!.getFormat("dd.mm.yyyy")
-    datatype[index] = CellType.NUMERIC.code
+    datatype[index] = CellType.NUMERIC
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatMonthColumn(column: VReportColumn, index: Int) {
     dataformats[index] = format!!.getFormat("mm.yyyy")
-    datatype[index] = CellType.NUMERIC.code
+    datatype[index] = CellType.NUMERIC
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
@@ -260,31 +262,31 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       decimalFormat += if (i == 0) ".0" else "0"
     }
     dataformats[index] = format!!.getFormat(decimalFormat)
-    datatype[index] = CellType.NUMERIC.code
+    datatype[index] = CellType.NUMERIC
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatIntegerColumn(column: VReportColumn, index: Int) {
     dataformats[index] = format!!.getFormat("0")
-    datatype[index] = CellType.NUMERIC.code
+    datatype[index] = CellType.NUMERIC
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatBooleanColumn(column: VReportColumn, index: Int) {
     dataformats[index] = 0 // General type
-    datatype[index] = CellType.BOOLEAN.code
+    datatype[index] = CellType.BOOLEAN
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatTimeColumn(column: VReportColumn, index: Int) {
     dataformats[index] = 0
-    datatype[index] = CellType.STRING.code
+    datatype[index] = CellType.STRING
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
   override fun formatTimestampColumn(column: VReportColumn, index: Int) {
     dataformats[index] = 0
-    datatype[index] = CellType.STRING.code
+    datatype[index] = CellType.STRING
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 

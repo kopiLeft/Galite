@@ -66,16 +66,19 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
    * A component constraint wrapper
    */
   class ConstraintWrapper(val constraint: ComponentConstraint,
-                          colSpan: Int,
-                          rowSpan: Int) {
+                          var colSpan: Int,
+                          var rowSpan: Int) {
+
+    var column = constraint.x
+    var row = constraint.y
+    lateinit var component: Component
 
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun equals(obj: Any?): Boolean {
-      if (obj is ConstraintWrapper) {
-        val w = obj
-        return column == w.column && row == w.row && colSpan == w.colSpan && rowSpan == w.rowSpan
+    override fun equals(other: Any?): Boolean {
+      if (other is ConstraintWrapper) {
+        return column == other.column && row == other.row && colSpan == other.colSpan && rowSpan == other.rowSpan
       }
       return false
     }
@@ -83,12 +86,6 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
     override fun hashCode(): Int {
       return column + row + colSpan + rowSpan
     }
-
-    var column = constraint.x
-    var row = constraint.y
-    var colSpan = colSpan
-    var rowSpan = rowSpan
-    lateinit var component: Component
   }
 
   /**
@@ -132,7 +129,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
      * @param col The starting column.
      * @return The list of the constraint beside the starting column.
      */
-    protected fun getBesideConstraints(row: Int, col: Int): List<ConstraintWrapper> {
+    internal fun getBesideConstraints(row: Int, col: Int): List<ConstraintWrapper> {
       val constraints: MutableList<ConstraintWrapper>
       constraints = ArrayList()
       for (c in this.constraints!!) {
@@ -149,7 +146,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
      * @param col The starting column.
      * @return The list of the constraint beside the starting column.
      */
-    protected fun getBottomConstraints(row: Int, col: Int): List<ConstraintWrapper> {
+    internal fun getBottomConstraints(row: Int, col: Int): List<ConstraintWrapper> {
       val constraints: MutableList<ConstraintWrapper>
       constraints = ArrayList()
       for (c in this.constraints!!) {

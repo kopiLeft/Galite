@@ -24,7 +24,6 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.visual.VWindow
 
 /**
@@ -36,8 +35,13 @@ import org.kopi.galite.visual.visual.VWindow
  */
 fun <T> Window.transaction(message: String? = null,
                            db: Database? = null,
-                           statement: Transaction.() -> T): T =
-        model.transaction(message, db, statement)
+                           statement: Transaction.() -> T): T {
+  return if (isModelInitialized) {
+    model.transaction(message, db, statement)
+  } else {
+    org.jetbrains.exposed.sql.transactions.transaction(db, statement)
+  }
+}
 
 /**
  * Starts a protected transaction.
@@ -53,8 +57,13 @@ fun <T> Window.transaction(message: String? = null,
                            transactionIsolation: Int,
                            repetitionAttempts: Int,
                            db: Database? = null,
-                           statement: Transaction.() -> T): T =
-        model.transaction(message, transactionIsolation, repetitionAttempts, db, statement)
+                           statement: Transaction.() -> T): T {
+  return if (isModelInitialized) {
+    model.transaction(message, transactionIsolation, repetitionAttempts, db, statement)
+  } else {
+    org.jetbrains.exposed.sql.transactions.transaction(db, statement)
+  }
+}
 
 /**
  * Starts a protected transaction.

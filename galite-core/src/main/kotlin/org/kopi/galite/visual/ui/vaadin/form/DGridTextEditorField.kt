@@ -17,24 +17,28 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.time.LocalDate
+import java.time.LocalTime
+
 import org.kopi.galite.visual.form.ModelTransformer
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
-import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VDecimalField
+import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
+import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorEnumField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorIntegerField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorMonthField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextAreaField
@@ -65,10 +69,10 @@ class DGridTextEditorField(
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  protected var inside = false
-  protected var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
+  private var inside = false
+  private var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
   private var selectionAfterUpdateDisabled = false
-  protected var transformer: ModelTransformer
+  private var transformer: ModelTransformer
 
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
@@ -122,7 +126,7 @@ class DGridTextEditorField(
     super.updateFocus()
   }
 
-  override val nullRepresentation: String?
+  override val nullRepresentation: String
     get() = ""
 
   override fun reset() {
@@ -131,7 +135,19 @@ class DGridTextEditorField(
     super.reset()
   }
 
-  override fun getText(): String? = editor.value?.toString()
+  override fun getText(): String? {
+    return when (val value: Any? = editor.value) {
+      is LocalDate -> {
+        value.format()
+      }
+      is LocalTime -> {
+        value.format()
+      }
+      else -> {
+        value?.toString()
+      }
+    }
+  }
 
   override fun setHasCriticalValue(b: Boolean) {}
 
@@ -146,13 +162,14 @@ class DGridTextEditorField(
   override fun createEditor(): GridEditorTextField {
 
     val editor: GridEditorTextField = createEditorField()
-    //editor.setAlignment(columnView.getModel().getAlign()) TODO
-    //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength())
+    editor.setAlignment(columnView.model.align)
+    //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength()) TODO
     //editor.setHasAutocomplete(columnView.getModel().hasAutocomplete())
     //editor.setNavigationDelegationMode(getNavigationDelegationMode())
     if (columnView.hasAutofill()) {
       editor.setAutofill()
     }
+
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     //editor.setConvertType(getConvertType(columnView.model))
     return editor
@@ -184,7 +201,7 @@ class DGridTextEditorField(
    * Creates an editor field according to the field model.
    * @return The created editor field.
    */
-  protected fun createEditorField(): GridEditorTextField {
+  private fun createEditorField(): GridEditorTextField {
     return if (getModel() is VStringField) {
       // string field & text area
       if (getModel().height > 1) {
@@ -223,7 +240,7 @@ class DGridTextEditorField(
    * Creates a string editor for the grid block.
    * @return The created editor
    */
-  protected fun createStringEditorField(): GridEditorTextField {
+  private fun createStringEditorField(): GridEditorTextField {
     return GridEditorTextField(getModel().width)
   }
 
@@ -231,7 +248,7 @@ class DGridTextEditorField(
    * Creates a text editor for the grid block.
    * @return The created editor
    */
-  protected fun createTextEditorField(): GridEditorTextAreaField {
+  private fun createTextEditorField(): GridEditorTextAreaField {
     val scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
     return GridEditorTextAreaField(if (scanner) 40 else getModel().width,
                                    getModel().height,
@@ -243,7 +260,7 @@ class DGridTextEditorField(
    * Creates an integer editor for the grid block.
    * @return The created editor
    */
-  protected fun createIntegerEditorField(): GridEditorIntegerField {
+  private fun createIntegerEditorField(): GridEditorIntegerField {
     val model = getModel() as VIntegerField
     return GridEditorIntegerField(model.width,
                                   model.maxValue,
@@ -254,7 +271,7 @@ class DGridTextEditorField(
    * Creates a deciaml editor for the grid block.
    * @return The created editor
    */
-  protected fun createFixnumEditorField(): GridEditorDecimalField {
+  private fun createFixnumEditorField(): GridEditorDecimalField {
     val model = getModel() as VDecimalField
     return GridEditorDecimalField(model.width,
                                   model.maxValue.toDouble(),
@@ -267,7 +284,7 @@ class DGridTextEditorField(
    * Creates an month editor for the grid block.
    * @return The created editor
    */
-  protected fun createEnumEditorField(): GridEditorEnumField {
+  private fun createEnumEditorField(): GridEditorEnumField {
     return GridEditorEnumField(getModel().width, (getModel() as VCodeField).labels)
   }
 
@@ -275,7 +292,7 @@ class DGridTextEditorField(
    * Creates an month editor for the grid block.
    * @return The created editor
    */
-  protected fun createMonthEditorField(): GridEditorMonthField {
+  private fun createMonthEditorField(): GridEditorMonthField {
     return GridEditorMonthField()
   }
 
@@ -283,7 +300,7 @@ class DGridTextEditorField(
    * Creates an date editor for the grid block.
    * @return The created editor
    */
-  protected fun createDateEditorField(): GridEditorDateField {
+  private fun createDateEditorField(): GridEditorDateField {
     return GridEditorDateField()
   }
 
@@ -291,7 +308,7 @@ class DGridTextEditorField(
    * Creates an time editor for the grid block.
    * @return The created editor
    */
-  protected fun createTimeEditorField(): GridEditorTimeField {
+  private fun createTimeEditorField(): GridEditorTimeField {
     return GridEditorTimeField()
   }
 
@@ -299,7 +316,7 @@ class DGridTextEditorField(
    * Creates an time stamp editor for the grid block.
    * @return The created editor
    */
-  protected fun createTimestampEditorField(): GridEditorTimestampField {
+  private fun createTimestampEditorField(): GridEditorTimestampField {
     return GridEditorTimestampField()
   }
 
@@ -307,14 +324,14 @@ class DGridTextEditorField(
    * Creates an week editor for the grid block.
    * @return The created editor
    */
-  protected fun createWeekEditorField(): GridEditorWeekField {
+  private fun createWeekEditorField(): GridEditorWeekField {
     return GridEditorWeekField()
   }
 
   /**
    * Reinstalls the focus listener.
    */
-  protected fun reInstallSelectionFocusListener() {
+  private fun reInstallSelectionFocusListener() {
     removeSelectionFocusListener()
     addSelectionFocusListener()
   }
@@ -370,14 +387,6 @@ class DGridTextEditorField(
    * @return `true` if there is a difference between the old and the new text.
    */
   private fun isChanged(oldText: String?, newText: String?): Boolean {
-    var oldText: String? = oldText
-    var newText: String? = newText
-    if (oldText == null) {
-      oldText = "" // replace null by empty string to avoid null pointer exceptions
-    }
-    if (newText == null) {
-      newText = ""
-    }
     return oldText != newText
   }
   // ----------------------------------------------------------------------

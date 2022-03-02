@@ -34,7 +34,7 @@ class VerifyConfiguration private constructor() {
     var hostname: String
 
     val failureSender = try {
-      ApplicationConfiguration.getConfiguration()!!.getStringFor("debugging.mail.sender")
+      ApplicationConfiguration.getConfiguration()!!.getStringFor("debugging.mail.sender") ?: throw PropertyException()
     } catch (e: PropertyException) {
       throw Exception("Couldn't find the debugging mail sender while sending an error report mail", e)
     }

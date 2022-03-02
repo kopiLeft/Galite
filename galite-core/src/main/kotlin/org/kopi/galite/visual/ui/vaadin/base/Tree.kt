@@ -210,7 +210,6 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
     /**
      * Set icon according to module accessibility.
      * @param access The module accessibility.
-     * @param item The tree item.
      * @param isLeaf Is it a leaf node ?
      */
     fun setIcon(access: Int, isLeaf: Boolean) {

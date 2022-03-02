@@ -34,7 +34,7 @@
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #009bd4;
+    color: var(--background-color);
 }
 
 .columns-selector-button:hover {

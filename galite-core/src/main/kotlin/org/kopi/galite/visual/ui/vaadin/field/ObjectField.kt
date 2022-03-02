@@ -40,12 +40,10 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
    * Creates a new `ObjectField` instance.
    */
   init {
-    //registerRpc(rpc) TODO
     element.setAttribute("hideFocus", "true")
     element.setProperty("outline", "0px")
     NavigationHandler().createNavigatorKeys()
     addJSKeyDownListener(keyNavigators)
-    //sinkEvents(Event.ONKEYDOWN) TODO
   }
 
   //---------------------------------------------------
@@ -134,7 +132,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
    * Returns `true` if this object field is `null`.
    * @return `true` if this object field is `null`.
    */
-  override abstract val isNull: Boolean
+  abstract override val isNull: Boolean
 
   /**
    * Sets the object field color properties.
@@ -208,7 +206,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
      * @param modifiers The modifiers.
      * @param navigationAction lambda representing the action to perform
      */
-    protected fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
+    private fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
       val navigator = KeyNavigator(this@ObjectField, key, modifiers, navigationAction)
       val keyNavigator = navigator.getKey()
 

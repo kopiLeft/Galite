@@ -18,6 +18,8 @@
 package org.kopi.galite.visual.domain
 
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalTime
 
 import kotlin.reflect.KClass
 
@@ -66,10 +68,8 @@ import org.kopi.galite.visual.report.VStringColumn
 import org.kopi.galite.visual.report.VTimeColumn
 import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.visual.VColor
@@ -90,6 +90,30 @@ open class Domain<T>(val width: Int? = null,
   protected var fixed: Fixed = Fixed.UNDEFINED
   protected var convert: Convert = Convert.NONE
   val ident: String = this::class.java.simpleName
+
+  /**
+   * Sets the minimum value of a number domain.
+   */
+  var <U> Domain<U>.min : U? where U : Comparable<U>?, U : Number?
+    get() = min
+    set(value) {
+      min = value
+    }
+
+  /**
+   * Sets the maximum value of a number domain.
+   */
+  var <U> Domain<U>.max : U? where U : Comparable<U>?, U : Number?
+    get() = max
+    set(value) {
+      max = value
+    }
+
+  /** the minimum value that cannot exceed  */
+  private var min : T? = null
+
+  /** the maximum value that cannot exceed  */
+  private var max : T? = null
 
   /**
    * Determines the field data type
@@ -132,10 +156,11 @@ open class Domain<T>(val width: Int? = null,
                                            min as? BigDecimal,
                                            max as? BigDecimal)
         Boolean::class -> VBooleanField(block.buffer)
-        Date::class, java.util.Date::class -> VDateField(block.buffer)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
+          VDateField(block.buffer)
         Month::class -> VMonthField(block.buffer)
         Week::class -> VWeekField(block.buffer)
-        Time::class -> VTimeField(block.buffer)
+        org.joda.time.LocalTime::class, LocalTime::class -> VTimeField(block.buffer)
         Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
         Image::class -> VImageField(block.buffer, width!!, height!!)
         else -> {
@@ -162,24 +187,16 @@ open class Domain<T>(val width: Int? = null,
   open fun buildDimensionModel(dimension: ChartDimension<*>, format: VColumnFormat?): VDimension {
     return with(dimension) {
       when (kClass) {
-        Int::class, Long::class ->
-          VIntegerDimension(ident, format)
-        BigDecimal::class ->
-          VDecimalDimension(ident, format, height ?: 6, true)
-        String::class ->
-          VStringDimension(ident, format)
-        Boolean::class ->
-          VBooleanDimension(ident, format)
-        Date::class, java.util.Date::class ->
+        Int::class, Long::class -> VIntegerDimension(ident, format)
+        BigDecimal::class -> VDecimalDimension(ident, format, height ?: 6, true)
+        String::class -> VStringDimension(ident, format)
+        Boolean::class -> VBooleanDimension(ident, format)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
           VDateDimension(ident, format)
-        Month::class ->
-          VMonthDimension(ident, format)
-        Week::class ->
-          VWeekDimension(ident, format)
-        Time::class ->
-          VTimeDimension(ident, format)
-        Timestamp::class ->
-          VTimestampDimension(ident, format)
+        Month::class -> VMonthDimension(ident, format)
+        Week::class -> VWeekDimension(ident, format)
+        org.joda.time.LocalTime::class, LocalTime::class -> VTimeDimension(ident, format)
+        Timestamp::class -> VTimestampDimension(ident, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }
@@ -217,17 +234,17 @@ open class Domain<T>(val width: Int? = null,
             height ?: 0, format
           )
         Boolean::class ->
-          VBooleanColumn(ident, options, align.value, groupID, function, width ?: 0, format)
-        Date::class, java.util.Date::class ->
+          VBooleanColumn(ident, options, align.value, groupID, function, format)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
           VDateColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Month::class ->
           VMonthColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Week::class ->
-          VWeekColumn(ident, options, align.value, groupID, function, width ?: 0, format)
-        Time::class ->
-          VTimeColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VWeekColumn(ident, options, align.value, groupID, function, format)
+        org.joda.time.LocalTime::class, LocalTime::class ->
+          VTimeColumn(ident, options, align.value, groupID, function, format)
         Timestamp::class ->
-          VTimestampColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VTimestampColumn(ident, options, align.value, groupID, function, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }

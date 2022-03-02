@@ -18,13 +18,9 @@
 package org.kopi.galite.visual.dsl.report
 
 import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalTime
 
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import org.kopi.galite.visual.type.Date
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Type0
 import org.kopi.galite.visual.type.Week
@@ -79,16 +75,14 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
  */
 fun <T> ReportField<*>.toType0(value: T): Any? {
   return when(value) {
-    is LocalDate -> Date(value)
     is ExposedBlob -> value
     is Int -> {
       when (domain.kClass) {
-        Month::class -> Month(value)
-        Week::class -> Week(value)
+        Month::class -> Month(value / 100, value % 100)
+        Week::class -> Week(value / 100, value % 100)
         else -> null
       }
     }
-    is LocalTime -> Time(value)
     is Instant -> Timestamp(value)
     else -> null
   }

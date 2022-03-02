@@ -18,8 +18,6 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Date
-
 /**
  * Represents a date chart column.
  *
@@ -30,7 +28,6 @@ class VDateDimension(ident: String, format: VColumnFormat?) : VDimension(ident, 
   public override fun toString(value: Any?): String =
           when (value) {
             null -> CConstants.EMPTY_TEXT
-            is Date -> value.toString()
             else -> value.toString()
           }
 }

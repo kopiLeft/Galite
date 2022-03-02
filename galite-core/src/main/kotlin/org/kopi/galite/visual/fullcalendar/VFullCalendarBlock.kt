@@ -18,6 +18,9 @@
 package org.kopi.galite.visual.fullcalendar
 
 import java.sql.SQLException
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Calendar
 
 import org.jetbrains.exposed.sql.Column
@@ -37,8 +40,6 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.type.Date
-import org.kopi.galite.visual.type.Time
 import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.visual.Message
@@ -66,7 +67,7 @@ abstract class VFullCalendarBlock() : VBlock() {
    *
    * @param date the date
    */
-  fun fetchEntries(date: Date): List<VFullCalendarEntry> {
+  fun fetchEntries(date: LocalDate): List<VFullCalendarEntry> {
     var entries: List<VFullCalendarEntry>?
 
     try {
@@ -109,6 +110,7 @@ abstract class VFullCalendarBlock() : VBlock() {
       }
     } catch (e: Exception) {
       if (e.message != null) {
+        e.printStackTrace()
         form.error(e.message!!)
       }
       return listOf()
@@ -176,21 +178,19 @@ abstract class VFullCalendarBlock() : VBlock() {
 
     val query = if(dateField != null) {
       val dateColumn = dateField!!.getColumn(0)!!.column
-      val startDate = week.getFirstDay().toSql()
-      val lastDay =  week.getLastDay().toCalendar()
-      lastDay.add(Calendar.DAY_OF_MONTH, 1)
-      val endDate = Date(lastDay).toSql()
+      val startDate = week.getFirstDay()
+      val lastDay =  week.getLastDay()
+      lastDay.plusDays(1)
 
       tables!!.slice(columns)
-        .select { (dateColumn greaterEq startDate) and (dateColumn less endDate) }
+        .select { (dateColumn greaterEq startDate) and (dateColumn less lastDay) }
         .orderBy(*orderBys.toTypedArray())
     } else {
       val fromColumn = fromField!!.getColumn(0)!!.column
       val toColumn = toField!!.getColumn(0)!!.column
-      val firstDayOfWeek = week.getFirstDay().toCalendar().toInstant()
-      val lastDay =  week.getLastDay().toCalendar()
-      lastDay.add(Calendar.DAY_OF_MONTH, 1)
-      val firstDayOfNextWeek = lastDay.toInstant()
+      val firstDayOfWeek = java.sql.Timestamp.valueOf(week.getFirstDay().atStartOfDay())
+      val lastDay =  week.getLastDay()
+      val firstDayOfNextWeek = java.sql.Timestamp.valueOf(lastDay.plusDays(1).atStartOfDay())
 
       tables!!.slice(columns)
         .select {
@@ -210,9 +210,9 @@ abstract class VFullCalendarBlock() : VBlock() {
 
       val entry = if(dateField != null) {
         val values = mutableMapOf<VField, Any?>()
-        lateinit var date: Date
-        lateinit var start: Time
-        lateinit var end: Time
+        lateinit var date: LocalDate
+        lateinit var start: LocalTime
+        lateinit var end: LocalTime
 
         for (i in 0 until query_cnt) {
           val vField = query_tab[i]!!
@@ -220,13 +220,13 @@ abstract class VFullCalendarBlock() : VBlock() {
 
           when (vField) {
             dateField -> {
-              date = value as Date
+              date = value as LocalDate
             }
             fromTimeField -> {
-              start = value as Time
+              start = value as LocalTime
             }
             toTimeField -> {
-              end = value as Time
+              end = value as LocalTime
             }
             else -> values[vField] = value
           }
@@ -286,18 +286,16 @@ abstract class VFullCalendarBlock() : VBlock() {
 
   fun set(startDateTime: Timestamp, endDateTime: Timestamp) {
     if (dateField != null) {
-      val start = startDateTime.toCalendar()
-      val end = endDateTime.toCalendar()
-      dateField!!.setDate(Date(start))
-      fromTimeField!!.setTime(Time(start))
-      toTimeField!!.setTime(Time(end))
+      dateField!!.setDate(LocalDate.from(startDateTime.toSql()))
+      fromTimeField!!.setTime(LocalTime.from(startDateTime.toSql()))
+      toTimeField!!.setTime(LocalTime.from(endDateTime.toSql()))
     } else {
       fromField!!.setTimestamp(startDateTime)
       toField!!.setTimestamp(endDateTime)
     }
   }
 
-  internal fun dateChanged(oldDate: Date, newDate: Date) {
+  internal fun dateChanged(oldDate: LocalDate, newDate: LocalDate) {
     goToDate(newDate)
 
     if(Week(oldDate) != Week(newDate)) {
@@ -305,7 +303,7 @@ abstract class VFullCalendarBlock() : VBlock() {
     }
   }
 
-  fun goToDate(date: Date) {
+  fun goToDate(date: LocalDate) {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 
@@ -344,7 +342,7 @@ abstract class VFullCalendarBlock() : VBlock() {
     }
   }
 
-  fun getSelectedDate(): Date? {
+  fun getSelectedDate(): LocalDate? {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 
@@ -355,7 +353,7 @@ abstract class VFullCalendarBlock() : VBlock() {
       i -= 2
     }
 
-    return Date.now()
+    return LocalDate.now()
   }
 
   /**

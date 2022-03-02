@@ -37,9 +37,9 @@
 
 .richtext:focus-within {
     --wysiwyg-editable: {
-        border-left: #009bd4 1px solid;
-        border-right: #009bd4 1px solid;
-        border-bottom: #009bd4 1px solid;
+        border-left: var(--background-color) 1px solid;
+        border-right: var(--background-color) 1px solid;
+        border-bottom: var(--background-color) 1px solid;
         overflow: auto;
         line-height: 1.5em;
     };

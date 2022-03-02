@@ -40,7 +40,7 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
     return if (detail) {
       super.createDisplay(label, model, detail)
     } else {
-      var field: DGridEditorField<*>
+      val field: DGridEditorField<*>
       when (model.getType()) {
         VField.MDL_FLD_EDITOR, VField.MDL_FLD_TEXT -> if (model is VBooleanField) {
           field = DGridEditorBooleanField(this, label as? DGridEditorLabel, model.align, model.options)
@@ -114,7 +114,7 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
    * Returns true if the column view has a chart display for this field model.
    * @return True if the column view has a chart display for this field model.
    */
-  fun hasDisplays(): Boolean = displays != null // TODO: display is nullable or not?
+  fun hasDisplays(): Boolean = isDisplayInitialized
 
   override val blockView: DGridBlock
     get() = super.blockView as DGridBlock

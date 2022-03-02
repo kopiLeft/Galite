@@ -37,7 +37,7 @@ class PositionPanel : HorizontalLayout() {
   // DATA MEMBERS
   //---------------------------------------------------
   private val popup = Dialog()
-  private var listeners: MutableList<PositionPanelListener>?
+  private val listeners = mutableListOf<PositionPanelListener>()
   private val first: Button
   private val last: Button
   private val left: Button
@@ -56,7 +56,6 @@ class PositionPanel : HorizontalLayout() {
   init {
     // setStyleName(Styles.POSITION_PANEL) TODO
     isSpacing = true // TODO
-    listeners = ArrayList<PositionPanelListener>()
     first = Button()
     last = Button()
     left = Button()
@@ -155,7 +154,7 @@ class PositionPanel : HorizontalLayout() {
    */
   fun setCurrent(current: Int) {
     this.current = current
-    info.setValue(current.toString())
+    info.value = current.toString()
   }
 
   /**
@@ -172,7 +171,7 @@ class PositionPanel : HorizontalLayout() {
    * @param l The listener object.
    */
   fun addPositionPanelListener(l: PositionPanelListener) {
-    listeners!!.add(l)
+    listeners.add(l)
   }
 
   /**
@@ -180,17 +179,15 @@ class PositionPanel : HorizontalLayout() {
    * @param l The listener object.
    */
   fun removePositionPanelListener(l: PositionPanelListener) {
-    listeners!!.remove(l)
+    listeners.remove(l)
   }
 
   /**
    * Requests to go to the next position.
    */
   protected fun fireGotoNextPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoNextPosition()
-      }
+    for (l in listeners) {
+      l.gotoNextPosition()
     }
   }
 
@@ -198,10 +195,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the previous position.
    */
   protected fun fireGotoPrevPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoPrevPosition()
-      }
+    for (l in listeners) {
+      l.gotoPrevPosition()
     }
   }
 
@@ -209,10 +204,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the last position.
    */
   protected fun fireGotoLastPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoLastPosition()
-      }
+    for (l in listeners) {
+      l.gotoLastPosition()
     }
   }
 
@@ -220,10 +213,8 @@ class PositionPanel : HorizontalLayout() {
    * Requests to go to the last position.
    */
   protected fun fireGotoFirstPosition() {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoFirstPosition()
-      }
+    for (l in listeners) {
+      l.gotoFirstPosition()
     }
   }
 
@@ -232,10 +223,8 @@ class PositionPanel : HorizontalLayout() {
    * @param posno The position number.
    */
   protected fun fireGotoPosition(posno: Int) {
-    for (l in listeners!!) {
-      if (l != null) {
-        l.gotoPosition(posno)
-      }
+    for (l in listeners) {
+      l.gotoPosition(posno)
     }
   }
 

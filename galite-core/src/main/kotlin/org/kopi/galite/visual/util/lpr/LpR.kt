@@ -119,7 +119,7 @@ open class LpR {
     options.job = jobID
     initControl()
     for (i in 0 until options.copies) {
-      addControl(options.filetype[0], "dfA" + options.job + client.printHost)
+      addControl(options.filetype!![0], "dfA" + options.job + client.printHost)
     }
 
     // unlink file after printing
@@ -281,7 +281,7 @@ open class LpR {
 
   private fun initControl() {
     control = StringBuffer()
-    addControl('H', client.printHost)
+    addControl('H', client.printHost!!)
     addControl('P', client.user!!)
     if (options.indent != -1) {
       addControl('I', "" + options.indent)
@@ -291,12 +291,12 @@ open class LpR {
       addControl('M', client.user!!)
     }
     if (options.burst) {
-      if (options.job == null) "XXX" else options.job?.let { addControl('J', it) }
-      if (options.printClass == null) client.localHost else options.printClass?.let { addControl('C', it) }
+      addControl('J', (if (options.job == null) "XXX" else options.job)!!)
+      addControl('C', (if (options.printClass == null) client.localHost else options.printClass)!!)
       addControl('L', client.user!!)
     }
     if (options.filetype != null
-            && (options.filetype[0] == 'c' || options.filetype[0] == 'l' || options.filetype[0] == 'p')) {
+            && (options.filetype!![0] == 'c' || options.filetype!![0] == 'l' || options.filetype!![0] == 'p')) {
       addControl('W', "" + options.width)
     }
   }

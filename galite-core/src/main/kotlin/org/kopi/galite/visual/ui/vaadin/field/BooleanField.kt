@@ -33,7 +33,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param trueRepresentation The representation of the true value.
  * @param falseRepresentation The representation of the false false
  */
-@CssImport("./styles/galite/checkbox.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/checkbox.css"),
+  CssImport(value = "./styles/galite/checkbox.css", themeFor = "vaadin-checkbox")
+])
 class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean?>() {
 
   /**
@@ -59,8 +62,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     setLabel(trueRepresentation, falseRepresentation)
     content.add(yes)
     content.add(no)
-    // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
-    // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
     add(content)
     yes.addValueChangeListener(::onYesChange)
     no.addValueChangeListener(::onNoChange)
@@ -107,13 +108,13 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
+  private fun onBlur(event: BlurNotifier.BlurEvent<AbstractField<Boolean?>>) {
     if (value == null) {
       isVisible = false
     }
   }
 
-  fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
+  private fun onFocus(event: FocusNotifier.FocusEvent<AbstractField<Boolean?>>) {
     isVisible = true
   }
 
@@ -230,7 +231,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   /**
    * Handles the component visibility according to its value.
    */
-  protected fun handleComponentVisiblity() {
+  internal fun handleComponentVisiblity() {
     isVisible = value != null
   }
 

@@ -23,6 +23,7 @@ import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.form.VConstants
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
@@ -31,6 +32,7 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 /**
  * A text field used as editor
@@ -120,6 +122,17 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
       } else {
         element.classList.remove("$className-blink")
       }
+    }
+  }
+
+  /**
+   * Sets the alignment of a text field.
+   * @param align The text field alignment.
+   */
+  fun setAlignment(align: Int) {
+    when (align) {
+      VConstants.ALG_RIGHT -> wrappedField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      VConstants.ALG_CENTER -> wrappedField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER)
     }
   }
 
