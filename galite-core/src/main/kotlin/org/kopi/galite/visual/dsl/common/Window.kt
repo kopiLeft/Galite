@@ -150,6 +150,14 @@ abstract class Window(val title: String, val locale: Locale?) {
     model.reset()
   }
 
+  /**
+   * Open an URL in the navigator.
+   * @param url The URL to navigate to.
+   */
+  open fun openURL(url: String) {
+    model.openURL(url)
+  }
+
   abstract fun genLocalization(destination: String? = null, locale: Locale? = this.locale)
 
   /**
