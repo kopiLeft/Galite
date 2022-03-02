@@ -558,9 +558,9 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
             } else {
                 if (tabbedBlockPanel.isEnabledAt(pageNumber)) {
                     // tab is visible (another visible block there?)
-                    for (int i = 0; i < blocks.length; i++) {
-                        if (pageNumber == blocks[i].getPageNumber()
-                                && blocks[i].isAccessible()) {
+                    for (int i = 0; i < blocks.size(); i++) {
+                        if (pageNumber == blocks.get(i).getPageNumber()
+                                && blocks.get(i).isAccessible()) {
                             return;
                         }
                     }
