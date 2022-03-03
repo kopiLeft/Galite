@@ -199,7 +199,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   private lateinit var background: Array<VColor?> // background colors for this field.
 
-  var constraint: ((value: Any?) -> Boolean)? = null
+  var constraint: ((value: Any) -> Boolean)? = null
 
   var constraintMessage: String? = null
 
@@ -461,7 +461,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    * @param     s               the object to check
    */
-  fun checkConstraint(s: Any?) {
+  fun checkConstraint(s: Any) {
     if (constraint?.invoke(s) == false) {
       if(constraintMessage != null) {
         throw VFieldException(this, constraintMessage)

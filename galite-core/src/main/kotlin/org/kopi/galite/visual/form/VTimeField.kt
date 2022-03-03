@@ -83,7 +83,6 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {
-      checkConstraint(null)
       setNull(rec)
     } else {
       var hours = -1

@@ -104,7 +104,6 @@ class VIntegerField(val bufferSize: Int,
     val s = s as? String
 
     if (s == "") {
-      checkConstraint(null)
       setNull(rec)
     } else {
       val v = try {

@@ -87,7 +87,6 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
     val s = (s as? String).orEmpty()
 
     if (s == "") {
-      checkConstraint(null)
       setNull(rec)
     } else {
       val month = if (s.indexOf(".") != -1 && s.indexOf(".") == s.lastIndexOf(".")) {

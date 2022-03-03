@@ -82,7 +82,6 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     val s = s as? String
 
     if (s == "") {
-      checkConstraint(null)
       setNull(rec)
     } else {
       val date = parseDate(s)
@@ -92,7 +91,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
   }
 
-  private fun parseDate(s: String?): LocalDate? {
+  private fun parseDate(s: String?): LocalDate {
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")

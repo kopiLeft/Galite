@@ -113,7 +113,7 @@ class FieldConstraintsTests: GaliteVUITestBase() {
 object Date20s : Domain<LocalDate>() {
   init {
     check(message = "Year should be > 2000") { value ->
-      value != null && value.isAfter(LocalDate.of(2000, 1, 1))
+      value.isAfter(LocalDate.of(2000, 1, 1))
     }
   }
 }
@@ -121,7 +121,7 @@ object Date20s : Domain<LocalDate>() {
 object Odd : Domain<Int>(5) {
   init {
     check(message = "You should enter an odd number") { value ->
-      value != null && value % 2 != 0
+      value % 2 != 0
     }
   }
 }

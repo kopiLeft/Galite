@@ -82,7 +82,6 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     val s = s as? String
 
     if (s == "") {
-      checkConstraint(null)
       setNull(rec)
     } else {
       val week = parseWeek(s)

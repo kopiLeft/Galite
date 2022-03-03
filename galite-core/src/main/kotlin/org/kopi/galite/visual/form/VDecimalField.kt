@@ -157,7 +157,6 @@ class VDecimalField(val bufferSize: Int,
     val scale: Int = currentScale[rec]
 
     if ((s == "")) {
-      checkConstraint(null)
       setNull(rec)
     } else {
       val v: BigDecimal?
@@ -179,8 +178,9 @@ class VDecimalField(val bufferSize: Int,
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
         }
+
+        checkConstraint(v)
       }
-      checkConstraint(v)
       setDecimal(rec, v)
     }
   }

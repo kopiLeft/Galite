@@ -81,7 +81,6 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {
-      checkConstraint(null)
       setNull(rec)
     } else {
       val timestamp = parseTimestamp(s as String)
