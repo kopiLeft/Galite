@@ -35,23 +35,6 @@ class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChart
     TODO()
   }
 
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun isVisible(): Boolean {
-    // TODO
-   return true
-  }
-
-  override fun setVisible(visible: Boolean) {
-    TODO("Not yet implemented")
-  }
-
   override fun setColorsList(): Boolean {
     return true
   }
