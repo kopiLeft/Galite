@@ -53,9 +53,11 @@
 /**
  * Autofill icon styles
  */
-.k-textinput iron-icon {
+.k-textinput iron-icon, .editor-field iron-icon {
     color: var(--background-color);
-    margin-top: -5px;
+    position: absolute;
+    right: 0;
+    font-size: var(--lumo-icon-size-s);
 }
 
 /**
@@ -191,13 +193,13 @@
 /**
  * Button fields styles.
  */
-.k-textinput-action::part(input-field) {
+.k-textinput-action input {
     cursor: pointer;
 }
 
 .k-textinput-action::part(input-field):hover {
-    background-color: var(--background-color);
-    color: #ffffff;
+    background-color: var(--background-color) !important;
+    color: #ffffff !important;
 }
 
 .k-textinput-action::part(input-field):active {
@@ -249,7 +251,7 @@
     text-transform: none;
 }
 
-.textarea::part(value) {
+.textarea textarea {
   height: unset !important;
   overflow: auto !important;
 }

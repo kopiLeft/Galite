@@ -24,6 +24,7 @@ import java.util.Optional
 import org.kopi.galite.visual.type.format
 
 import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.DomEvent
@@ -91,7 +92,10 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
     textField.pattern = "[0-9/\\.]*"
     textField.maxLength = 10
 
-    icon.style["cursor"] = "pointer"
+    add(textField)
+  }
+
+  override fun onAttach(attachEvent: AttachEvent?) {
     icon.element.executeJs(
       """
               this.addEventListener("click", event => {
@@ -101,7 +105,7 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
       element
     )
 
-    add(textField)
+    element.executeJs("setTimeout(function(){$0._inputValue = $1},0)", element, value)
   }
 
   override fun setValue(value: String?) {

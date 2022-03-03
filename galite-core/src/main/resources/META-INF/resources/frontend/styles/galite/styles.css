@@ -126,6 +126,7 @@ pre {
 
 .help-container {
     overflow: hidden;
+    padding-top: 0;
 }
 
 .help-content {
@@ -179,4 +180,12 @@ pre {
 
 .k-imagefield img {
   margin-top: 10px;
+}
+
+date-picker-light .input vaadin-icon:hover {
+    color: var(--lumo-contrast-90pct);
+}
+
+.enhanced-dialog-content .k-window {
+    gap: 0 !important;
 }

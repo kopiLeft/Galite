@@ -17,7 +17,7 @@
  */
 
 [part~='input-field'] {
-    background-color: transparent !important;
+    background-color: unset;
     border-bottom: #dadada 1px solid;
     border-radius: unset;
 }
@@ -71,12 +71,20 @@ vaadin-date-time-picker {
     background: white;
 }
 
-vaadin-date-time-picker-time-text-field, vaadin-date-time-picker-date-text-field {
+:host([theme~="galite-date"]),
+  :host([theme~="galite-time"]),
+  :host([theme~="galite-timestamp"]) {
     color: inherit;
 }
 
-:host([theme~="galite-date"]),
-  :host([theme~="galite-time"]),
-  :host([theme~="galite-timestamp"]) #customField {
-    color: inherit;
+:host([theme~="galite-time"]) [part~="input-field"] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    --lumo-text-field-size: var(--lumo-space-l);
+}
+
+:host([theme~="galite-time"]) [part~="toggle-button"],
+  :host([theme~="galite-timestamp"]) [part~="toggle-button"],
+   :host([theme~="galite-date"]) [part~='input-field'] [name~="suffix"] {
+    cursor: pointer;
 }

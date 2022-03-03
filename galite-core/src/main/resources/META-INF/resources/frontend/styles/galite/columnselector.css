@@ -56,3 +56,9 @@
     padding-right: var(--lumo-space-m);
     padding-left: var(--lumo-space-m);
 }
+
+.column-item-selector ::part(checkbox) {
+    width: calc(1em + 2px);
+    height: calc(1em + 2px);
+    margin: 0.1875em;
+}

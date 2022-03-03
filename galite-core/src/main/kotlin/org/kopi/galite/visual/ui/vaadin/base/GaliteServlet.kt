@@ -127,7 +127,6 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
       session.lock()
       println(
         request!!.remoteAddr.toString() + " - - "
-                + session.csrfToken + " - "
                 + Date(session.lastRequestTimestamp) + " - "
                 + session.browser.browserApplication + " - "
                 + request.method + " / "

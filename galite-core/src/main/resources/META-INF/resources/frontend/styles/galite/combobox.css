@@ -45,8 +45,10 @@
     background: none;
 }
 
-[part~='input-field']:hover {
-	background: var(--background-hover-color) !important;
+:host([theme~="galite-combobox"]) [part='toggle-button']::before {
+    content: var(--lumo-icons-chevron-down);
+    color: var(--background-color);
+    cursor: pointer;
 }
 
 :host {
