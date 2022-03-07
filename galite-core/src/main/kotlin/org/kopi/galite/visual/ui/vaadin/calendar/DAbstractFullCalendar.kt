@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.calendar
 
+import java.time.Instant
 import java.time.LocalDate
-import java.util.Calendar
+import java.time.LocalDateTime
 
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.visual.Action
@@ -109,8 +109,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     val newEntries = (entries - currentEntries.toSet()).map { fcEntry ->
       val record = fcEntry.values[model.idField] as Int
       val entry = FullCalendarEntry(record, fcEntry)
-      val start = fcEntry.start.sqlTimestamp.toLocalDateTime()
-      val end = fcEntry.end.sqlTimestamp.toLocalDateTime()
+      val start = LocalDateTime.from(fcEntry.start)
+      val end = LocalDateTime.from(fcEntry.end)
 
       entry.title = fcEntry.description
       entry.setStart(start, calendar.timezone)
@@ -168,11 +168,13 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
       model.form.performAsyncAction(object : Action("entry time edited") {
         override fun execute() {
           val newEntry = it.applyChangesOnEntry()
-          val newStart = Timestamp.from(newEntry.start)
-          val newEnd = Timestamp.from(newEntry.end)
+          val newStart = newEntry.start
+          val newEnd = newEntry.end
 
           check(newStart, newEnd)
-          model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
+          model.openForEdit((it.entry as FullCalendarEntry).record,
+                            Instant.from(newStart),
+                            Instant.from(newEnd))
         }
       })
     }
@@ -180,11 +182,13 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
       model.form.performAsyncAction(object : Action("entry time edited") {
         override fun execute() {
           val newEntry = it.applyChangesOnEntry()
-          val newStart = Timestamp.from(newEntry.start)
-          val newEnd = Timestamp.from(newEntry.end)
+          val newStart = newEntry.start
+          val newEnd = newEntry.end
 
           check(newStart, newEnd)
-          model.openForEdit((it.entry as FullCalendarEntry).record, newStart, newEnd)
+          model.openForEdit((it.entry as FullCalendarEntry).record,
+                            Instant.from(newStart),
+                            Instant.from(newEnd))
         }
       })
     }
@@ -193,22 +197,19 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     calendar.addTimeslotsSelectedListener {
       model.form.performAsyncAction(object : Action("new entry") {
         override fun execute() {
-          val start = Timestamp.from(it.startDateTime)
-          val end = Timestamp.from(it.endDateTime)
+          val start = it.startDateTime
+          val end = it.endDateTime
 
           check(start, end)
-          model.openForEdit(start, end)
+          model.openForEdit(Instant.from(start), Instant.from(end))
         }
       })
     }
   }
 
   @Deprecated("to be removed when dateField is not supported")
-  private fun check(startDateTime: Timestamp, endDateTime: Timestamp) {
-    val start = startDateTime.toCalendar()
-    val end = endDateTime.toCalendar()
-
-    if(model.dateField != null && start.get(Calendar.DAY_OF_WEEK) != end.get(Calendar.DAY_OF_WEEK)) {
+  private fun check(startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
+    if(model.dateField != null && startDateTime.dayOfWeek != endDateTime.dayOfWeek) {
       updateEntries(calendar.entries.map { (it as FullCalendarEntry).model })
       throw VExecFailedException(MessageCode.getMessage("VIS-00070"))
     }
@@ -227,7 +228,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   class FullCalendarEntry(val record: Int, val model: VFullCalendarEntry) : Entry() {
     val updatedModel: VFullCalendarEntry
       get() {
-        return model.copy(Timestamp.from(start), Timestamp.from(end))
+        return model.copy(Instant.from(start), Instant.from(end))
       }
   }
 }

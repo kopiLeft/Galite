@@ -20,7 +20,9 @@ package org.kopi.galite.visual.report
 
 import java.io.Serializable
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import javax.swing.event.EventListenerList
@@ -75,22 +77,16 @@ class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
     var max = 0
 
-    baseRows.forEach {
-      if (it!!.getValueAt(column) != null) {
-        val value = it.getValueAt(column).let {
-          when (it) {
-            is BigDecimal -> {
-              it.format()
-            }
-            is LocalDate -> {
-              it.format()
-            }
-            is LocalTime -> {
-              it.format()
-            }
-            else -> {
-              it.toString()
-            }
+    baseRows.forEach { row ->
+      if (row!!.getValueAt(column) != null) {
+        val value = row.getValueAt(column).let { value ->
+          when (value) {
+            is BigDecimal -> value.format()
+            is LocalDate -> value.format()
+            is LocalTime -> value.format()
+            is Instant -> value.format()
+            is LocalDateTime -> value.format()
+            else -> value.toString()
           }
         }
 

@@ -17,11 +17,8 @@
 
 package org.kopi.galite.visual.dsl.report
 
-import java.time.Instant
-
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Type0
 import org.kopi.galite.visual.type.Week
 
@@ -83,7 +80,6 @@ fun <T> ReportField<*>.toType0(value: T): Any? {
         else -> null
       }
     }
-    is Instant -> Timestamp(value)
     else -> null
   }
 }

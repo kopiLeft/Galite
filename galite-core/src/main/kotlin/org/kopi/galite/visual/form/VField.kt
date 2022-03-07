@@ -22,6 +22,7 @@ import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -63,7 +64,6 @@ import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.Action
@@ -1079,7 +1079,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(v: Timestamp?) {
+  fun setTimestamp(v: Instant?) {
     setTimestamp(block!!.currentRecord, v)
   }
 
@@ -1190,7 +1190,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setTimestamp(r: Int, v: Timestamp?) {
+  open fun setTimestamp(r: Int, v: Instant?) {
     throw InconsistencyException()
   }
 
@@ -1309,7 +1309,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTimestamp(): Timestamp = getTimestamp(block!!.currentRecord)
+  fun getTimestamp(): Instant? = getTimestamp(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a time value.
@@ -1456,7 +1456,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getTimestamp(r: Int): Timestamp {
+  open fun getTimestamp(r: Int): Instant? {
     throw InconsistencyException()
   }
 

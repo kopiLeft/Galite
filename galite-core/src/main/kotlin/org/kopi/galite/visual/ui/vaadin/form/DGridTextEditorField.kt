@@ -17,7 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import org.kopi.galite.visual.form.ModelTransformer
@@ -137,15 +139,11 @@ class DGridTextEditorField(
 
   override fun getText(): String? {
     return when (val value: Any? = editor.value) {
-      is LocalDate -> {
-        value.format()
-      }
-      is LocalTime -> {
-        value.format()
-      }
-      else -> {
-        value?.toString()
-      }
+      is LocalDate -> value.format()
+      is LocalTime -> value.format()
+      is Instant -> value.format()
+      is LocalDateTime -> value.format()
+      else -> value?.toString()
     }
   }
 

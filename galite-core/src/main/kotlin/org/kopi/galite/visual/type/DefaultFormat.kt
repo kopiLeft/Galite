@@ -18,7 +18,10 @@
 package org.kopi.galite.visual.type
 
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -35,6 +38,39 @@ fun LocalDate.format(): String {
 fun LocalTime.format(): String {
   return format(DateTimeFormatter.ofPattern("HH:mm"))
 }
+
+/**
+ * Format the local date time using default formatter [normal].
+ */
+fun LocalDateTime.format(): String  = format(normal.format(java.sql.Timestamp.valueOf(this)), nano)
+
+/**
+ * Format the instant using default formatter [normal].
+ */
+fun Instant.format(): String = format(normal.format(java.sql.Timestamp.from(this)), nano)
+
+/**
+ * Format the instant using a [pattern].
+ */
+fun Instant.format(pattern: String): String = SimpleDateFormat(pattern).format(java.sql.Timestamp.from(this))
+
+private fun format(datetime: String, nanos: Int): String {
+  val tmp = StringBuffer(datetime)
+  when {
+    nanos >= 100 -> {
+      tmp.append(nanos)
+    }
+    nanos >= 10 -> {
+      tmp.append("0$nanos")
+    }
+    else -> {
+      tmp.append("00$nanos")
+    }
+  }
+  return tmp.toString()
+}
+
+val normal = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
 
 fun BigDecimal.format(): String {
   val str = this.toString()
