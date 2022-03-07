@@ -165,7 +165,7 @@ class TextField(val model: VField,
     inputField = createTextField()
     inputField.isEnabled = enabled
     add(inputField)
-    if (hasAutofill) {
+    if (hasAutofill && type != Type.DATE) {
       autofill = IronIcons.ARROW_DROP_DOWN.create()
       autofill!!.style["cursor"] = "pointer" // TODO: move to css
       autofill!!.addClickListener {
