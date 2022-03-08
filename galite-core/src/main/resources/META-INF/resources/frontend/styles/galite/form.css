@@ -47,7 +47,7 @@
     width: 0;
     left: 5%;
     bottom: 0;
-    background-color: #009bd4;
+    background-color: var(--background-color);
     margin-bottom: -4px;
 }
 
@@ -59,7 +59,7 @@
     font-weight: 500 !important;
     font-style: normal !important;
     color: #000000;
-    border-bottom: 3px solid #009bd4;
+    border-bottom: 3px solid var(--background-color);
 }
 
 /**

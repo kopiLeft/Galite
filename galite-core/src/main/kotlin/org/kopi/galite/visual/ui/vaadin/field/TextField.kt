@@ -194,12 +194,8 @@ class TextField(val model: VField,
       is org.kopi.galite.visual.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        if (model.minValue != null) {
-          minval = model.minValue.toDouble()
-        }
-        if (model.maxValue != null) {
-          maxval = model.maxValue.toDouble()
-        }
+        minval = model.minValue.toDouble()
+        maxval = model.maxValue.toDouble()
       }
       is VMonthField -> {
         // month field
@@ -225,12 +221,8 @@ class TextField(val model: VField,
       is VDecimalField -> {
         // fixnum field
         type = Type.DECIMAL
-        if (model.minValue != null) {
-          minval = model.minValue.toDouble()
-        }
-        if (model.maxValue != null) {
-          maxval = model.maxValue.toDouble()
-        }
+        minval = model.minValue.toDouble()
+        maxval = model.maxValue.toDouble()
         maxScale = model.maxScale
         fraction = model.isFraction
 

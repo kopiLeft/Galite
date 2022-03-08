@@ -509,17 +509,13 @@ class VDecimalField(val bufferSize: Int,
   }
 
   private fun checkCriticalValue() {
-    if (criticalMinValue != null) {
-      if (value[0] != null && value[0]!! < criticalMinValue!!) {
-        setHasCriticalValue(true)
-        return
-      }
+    if (value[0] != null && value[0]!! < criticalMinValue) {
+      setHasCriticalValue(true)
+      return
     }
-    if (criticalMaxValue != null) {
-      if (value[0] != null && value[0]!! > criticalMaxValue!!) {
-        setHasCriticalValue(true)
-        return
-      }
+    if (value[0] != null && value[0]!! > criticalMaxValue) {
+      setHasCriticalValue(true)
+      return
     }
     setHasCriticalValue(false)
   }

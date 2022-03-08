@@ -43,10 +43,6 @@ class DGridEditorImageField(
     (editor as GridEditorImageField).setImageHeight(height)
   }
 
-  companion object {
-    private var keyCounter = 0
-  }
-
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------

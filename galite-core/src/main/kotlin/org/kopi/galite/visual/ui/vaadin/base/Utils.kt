@@ -22,7 +22,6 @@ import java.util.concurrent.CompletableFuture
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
-import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.visual.VColor
@@ -48,7 +47,7 @@ object Utils : Utils() {
   //---------------------------------------------------
   /**
    * Returns image from theme
-   * @param img Must be an image from resource theme path separator is "/"
+   * @param image Must be an image from resource theme path separator is "/"
    * @return An Image or null if not found.
    */
   fun getImage(image: String): Image {
@@ -124,19 +123,6 @@ object Utils : Utils() {
   }
 
   /**
-   * Returns the corresponding CSS color of a given [VColor].
-   * @param color The color model.
-   * @return The CSS color.
-   */
-  fun getCSSColor(color: VColor?): String {
-    return if (color == null) {
-      "inherit;"
-    } else {
-      "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ") ;"
-    }
-  }
-
-  /**
    * Returns the string representation of the given [VColor].
    * @param color The color model.
    * @return The equivalent String color or empty string if the color is `null`.
@@ -147,19 +133,6 @@ object Utils : Utils() {
     } else {
       "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ")"
     }
-  }
-
-  /**
-   * Builds a list of identifiers.
-   * @param size The list size.
-   * @return The resulting list.
-   */
-  fun buildIdList(size: Int): List<Int> {
-    val list: MutableList<Int> = ArrayList(size)
-    for (i in 0 until size) {
-      list.add(i)
-    }
-    return list
   }
 
   /**
@@ -189,12 +162,16 @@ object Utils : Utils() {
    * @return true if the given two objects are equals.
    */
   fun equals(o1: Any?, o2: Any?): Boolean {
-    return if (o1 == null) {
-      o2 == null
-    } else if (o2 == null) {
-      false
-    } else {
-      o1 == o2
+    return when {
+      o1 == null -> {
+        o2 == null
+      }
+      o2 == null -> {
+        false
+      }
+      else -> {
+        o1 == o2
+      }
     }
   }
 
@@ -291,15 +268,6 @@ object Utils : Utils() {
     }
 
     return mainWindow
-  }
-
-  /**
-   * Returns the complete theme resource URL of the given resource path.
-   * @param resourcePath The theme complete resource path.
-   * @return The URL of the given theme resource.
-   */
-  fun getThemeResourceURL(resourcePath: String): String {
-    TODO()
   }
 
   // --------------------------------------------------

@@ -107,10 +107,12 @@ open class SortableLabel(text: String?) : Label() {
     }
   }
 
-  /**
-   * Constants defining the current direction of the sort.
-   */
-  var SORT_NONE = 0
-  var SORT_ASC = 1
-  var SORT_DESC = 2
+  companion object {
+    /**
+     * Constants defining the current direction of the sort.
+     */
+    const val SORT_NONE = 0
+    const val SORT_ASC = 1
+    const val SORT_DESC = 2
+  }
 }

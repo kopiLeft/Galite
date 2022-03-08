@@ -91,8 +91,8 @@ open class Utils : org.kopi.galite.visual.util.base.Utils() {
     fun getTempFile(prefix: String,
                     extension: String?,
                     deleteOnExit: Boolean = true): File {
-      val extension = extension ?: "tmp"
-      val file: File = File.createTempFile(prefix, ".$extension")
+      val extensionOrTmp = extension ?: "tmp"
+      val file: File = File.createTempFile(prefix, ".$extensionOrTmp")
       if (deleteOnExit) {
         file.deleteOnExit()
       }

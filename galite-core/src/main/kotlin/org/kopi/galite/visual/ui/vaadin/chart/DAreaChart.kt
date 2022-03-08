@@ -34,20 +34,4 @@ class DAreaChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChar
   override fun createChartData(name: String?) {
     TODO()
   }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun isVisible(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setVisible(visible: Boolean) {
-    TODO("Not yet implemented")
-  }
 }

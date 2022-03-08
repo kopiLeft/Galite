@@ -36,6 +36,7 @@ import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.ColumnResizeEvent
+import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant
@@ -48,10 +49,10 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.provider.Query
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.internal.ExecutionContext
-import com.vaadin.flow.data.provider.Query
 
 /**
  * Grid based chart block implementation.
@@ -202,11 +203,11 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         editRecord(rec + 1)
       }
 
-      *//**
+      /**
      * Returns the column view associated with the given grid position
      * @param position The field position in the grid.
      * @return The column view.
-     *//*
+     */
         protected fun getColumnView(position: Int): DGridBlockFieldUI? {
           for (columnView in columnViews) {
             if (columnView != null && model.getFieldPos(columnView.model) == position) {
@@ -316,10 +317,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       super.getRecordFromDisplayLine(line)
     }
   }
-
-  /*override fun getRecordFromDisplayLine(line: Int): Int {
-    TODO()
-  }*/
 
   override fun validRecordNumberChanged() {
     // optimized to not fire an item set change if the number
@@ -537,6 +534,8 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
 
+          setAlignment(column, columnView.model.align)
+
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
@@ -616,15 +615,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   }
 
   /**
-   * Orders the columns by chart position in the model.
-   * @return The chart position order.
-   */
-  protected val columnsOrder: Array<Any?>
-    get() {
-      TODO()
-    }
-
-  /**
    * Updates the column access for a given column identified by the associated field model.
    * @param f The field model.
    */
@@ -676,5 +666,19 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }
     }
+  }
+
+  /**
+   * Sets the alignment of a column in multi block.
+   * @param column The column.
+   * @param align The column alignment.
+   */
+  fun setAlignment(column: Grid.Column<GridBlockItem>, align: Int) {
+    column.textAlign =
+      when(align) {
+        VConstants.ALG_RIGHT -> ColumnTextAlign.END
+        VConstants.ALG_CENTER -> ColumnTextAlign.CENTER
+        else -> ColumnTextAlign.START
+      }
   }
 }

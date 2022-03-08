@@ -119,7 +119,6 @@
 
 .block-filter-text {
     padding: 0;
-    border-bottom: #a3a3a3 1px solid !important;
     --lumo-text-field-size: var(--lumo-size-xxs);
     height: 100%;
 }

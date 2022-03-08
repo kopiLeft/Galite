@@ -64,8 +64,7 @@ object Message {
                  params: Any? = null): String {
     val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
-    val manager = if (ApplicationContext.applicationContext != null
-            && ApplicationContext.applicationContext.getApplication() != null) {
+    val manager = if (ApplicationContext.isApplicationContextInitialized) {
       ApplicationContext.getLocalizationManager()
     } else {
       LocalizationManager(Locale.getDefault(), null)

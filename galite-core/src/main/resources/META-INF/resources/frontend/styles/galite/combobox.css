@@ -38,7 +38,7 @@
 }
 
 :host([theme~="galite-combobox"]) [part="input-field"]:focus-within {
-	border-bottom: #009bd4 1px solid;
+	border-bottom: var(--background-color) 1px solid;
 }
 
 :host([theme~="galite-combobox"])  [part~='input-field']::after {
@@ -46,7 +46,7 @@
 }
 
 [part~='input-field']:hover {
-	background: #d9f0f8 !important;
+	background: var(--background-hover-color) !important;
 }
 
 :host {

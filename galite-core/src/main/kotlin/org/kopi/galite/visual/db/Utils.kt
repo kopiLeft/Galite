@@ -18,8 +18,6 @@
 
 package org.kopi.galite.visual.db
 
-import java.lang.RuntimeException
-
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal

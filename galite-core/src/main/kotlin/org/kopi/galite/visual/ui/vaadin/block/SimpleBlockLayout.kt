@@ -99,7 +99,6 @@ open class SimpleBlockLayout(col: Int, line: Int, open val block: Block) : Abstr
       for (y in components!![0].indices) {
         for (x in components!!.indices) {
           if (components!![x][y] != null && aligns!![x][y] != null) {
-            // TODO
             manager.setComponent(components!![x][y]!!,
                                  aligns!![x][y]!!,
                                  aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),
@@ -180,10 +179,6 @@ open class SimpleBlockLayout(col: Int, line: Int, open val block: Block) : Abstr
 
   override fun clear() {
     TODO("Not yet implemented")
-  }
-
-  override fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int) {
-    // no scroll bar for simple layouts TODO
   }
 
 

@@ -37,23 +37,19 @@ class GridEditorDateField: GridEditorTextField(10) {
   }
 
   override fun validate() {
-    parseDate(value.orEmpty())
-  }
-
-  protected fun isNumeric(): Boolean {
-    return true
+    parseDate(value)
   }
 
   /**
    * Parses the given date input.
-   * @param f The input field.
+   *
    * @param s The date text.
    */
   private fun parseDate(s: String) {
     var day = 0
     var month = 0
     var year = -2
-    val tokens = s.split("#|\\.|/".toRegex()).toTypedArray()
+    val tokens = s.split("[#./]".toRegex()).toTypedArray()
     if (tokens.isEmpty()) {
       throw InvalidEditorFieldException(this, "00003")
     }
@@ -67,21 +63,27 @@ class GridEditorDateField: GridEditorTextField(10) {
     if (tokens.size > 3 || day == -1 || month == -1 || year == -1) {
       throw InvalidEditorFieldException(this, "00003")
     }
-    if (month == 0) {
-      val now = Date()
-      month = now.month + 1
-      year = now.year + 1900
-    } else if (year == -2) {
-      val now = Date()
-      year = now.year + 1900
-    } else if (year < 50) {
-      year += 2000
-    } else if (year < 100) {
-      year += 1900
-    } else if (year < 1000) {
-      // less than 4 digits cause an error in database while paring the
-      // sql statement
-      throw InvalidEditorFieldException(this, "00003")
+    when {
+      month == 0 -> {
+        val now = Date()
+        month = now.month + 1
+        year = now.year + 1900
+      }
+      year == -2 -> {
+        val now = Date()
+        year = now.year + 1900
+      }
+      year < 50 -> {
+        year += 2000
+      }
+      year < 100 -> {
+        year += 1900
+      }
+      year < 1000 -> {
+        // less than 4 digits cause an error in database while paring the
+        // sql statement
+        throw InvalidEditorFieldException(this, "00003")
+      }
     }
     if (!isDate(day, month, year)) {
       throw InvalidEditorFieldException(this, "00003")

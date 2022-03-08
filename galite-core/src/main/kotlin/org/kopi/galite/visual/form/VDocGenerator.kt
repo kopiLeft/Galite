@@ -165,7 +165,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\end{description}")
       }
     }
-    if (fields != null && fields.isNotEmpty()) {
+    if (fields.isNotEmpty()) {
       if (countNNull > 0) {
         latexPrinter.println("\\item{Felder}")
         latexPrinter.println("\\begin{description}")

@@ -250,17 +250,17 @@ open class Domain<T>(val width: Int? = null,
             height ?: 0, format
           )
         Boolean::class ->
-          VBooleanColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VBooleanColumn(ident, options, align.value, groupID, function, format)
         org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
           VDateColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Month::class ->
           VMonthColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Week::class ->
-          VWeekColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VWeekColumn(ident, options, align.value, groupID, function, format)
         org.joda.time.LocalTime::class, LocalTime::class ->
-          VTimeColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VTimeColumn(ident, options, align.value, groupID, function, format)
         Timestamp::class ->
-          VTimestampColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VTimestampColumn(ident, options, align.value, groupID, function, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }

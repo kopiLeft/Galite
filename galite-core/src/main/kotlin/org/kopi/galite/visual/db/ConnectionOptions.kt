@@ -105,14 +105,14 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
 
   companion object {
     private val LONGOPTS = arrayOf(
-            LongOpt("database", LongOpt.REQUIRED_ARGUMENT, null, 'b'.toInt()),
-            LongOpt("driver", LongOpt.REQUIRED_ARGUMENT, null, 'd'.toInt()),
-            LongOpt("username", LongOpt.REQUIRED_ARGUMENT, null, 'u'.toInt()),
-            LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'p'.toInt()),
-            LongOpt("lookupUserId", LongOpt.NO_ARGUMENT, null, 'U'.toInt()),
-            LongOpt("trace", LongOpt.OPTIONAL_ARGUMENT, null, 't'.toInt()),
-            LongOpt("properties", LongOpt.REQUIRED_ARGUMENT, null, 'q'.toInt()),
-            LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.toInt())
+      LongOpt("database", LongOpt.REQUIRED_ARGUMENT, null, 'b'.code),
+      LongOpt("driver", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
+      LongOpt("username", LongOpt.REQUIRED_ARGUMENT, null, 'u'.code),
+      LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'p'.code),
+      LongOpt("lookupUserId", LongOpt.NO_ARGUMENT, null, 'U'.code),
+      LongOpt("trace", LongOpt.OPTIONAL_ARGUMENT, null, 't'.code),
+      LongOpt("properties", LongOpt.REQUIRED_ARGUMENT, null, 'q'.code),
+      LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.code)
     )
   }
 }

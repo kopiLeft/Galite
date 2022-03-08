@@ -15,16 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.window
-
-import java.io.Serializable
+package org.kopi.galite.domain
 
 /**
- * A generic close listener for notifying with a close event.
+ * The convert option used in order to modify the String's case.
  */
-interface CloseListener : Serializable {
+enum class Convert {
+
   /**
-   * Fired when a dialog or a popup is closed.
+   * Converts the first letter of each word to capital letter.
    */
-  fun onClose()
+  NAME,
+
+  /**
+   * Convert the whole text to capital letters.
+   */
+  UPPER,
+
+  /**
+   * Converts the whole text to normal letters.
+   */
+  LOWER,
+
+  /**
+   * No conversion.
+   */
+  NONE
 }

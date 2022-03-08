@@ -18,7 +18,7 @@
 
 .k-notification-title, .k-popup-window-caption {
 	position: relative;
-	color: #009bd4;
+	color: var(--background-color);
 	font-family: Arial, sans-serif !important;
 	font-weight: 700 !important;
 	font-style: normal !important;
@@ -60,7 +60,7 @@
 .k-notification-buttons vaadin-button {
 	display: inline-block;
 	margin: 18px 8px 0 auto;
-	background: #009bd4;
+	background: var(--background-color);
 	color: #ffffff;
 	font-family: Arial, sans-serif !important;
 	font-weight: 500 !important;

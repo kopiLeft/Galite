@@ -116,7 +116,7 @@ class DBooleanField(
     }
   }
 
-  override fun getObject(): Any? = wrappedField!!.value
+  override fun getObject(): Any? = wrappedField.value
 
   override fun setBlink(b: Boolean) {
     access(currentUI) {
@@ -138,20 +138,20 @@ class DBooleanField(
    * Returns the true representation of this boolean field.
    * @return The true representation of this boolean field.
    */
-  protected val trueRepresentation: String?
+  internal val trueRepresentation: String?
     get() = getModel().toText(true)
 
   /**
    * Returns the false representation of this boolean field.
    * @return The false representation of this boolean field.
    */
-  protected val falseRepresentation: String?
+  internal val falseRepresentation: String?
     get() = getModel().toText(false)
 
   /**
    * Gets the focus to this field.
    */
-  protected fun enterMe() {
+  internal fun enterMe() {
     access(currentUI) {
       field.setFocus(true)
     }

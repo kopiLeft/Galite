@@ -26,14 +26,12 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * Represents a decimal code chart column.
  *
  * @param ident         The column identifier.
- * @param isDimension   Is it a dimension column ?
  * @param type          The column type.
  * @param source        The column localization source.
  * @param idents        The column labels.
  * @param codes         The column codes.
  */
 class VDecimalCodeDimension(ident: String,
-                            isDimension: Boolean,
                             format: VColumnFormat?,
                             type: String,
                             source: String,

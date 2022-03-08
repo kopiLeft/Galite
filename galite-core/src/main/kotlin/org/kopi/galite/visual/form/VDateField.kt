@@ -131,10 +131,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         // sql statement
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
-      !isDate(day, month, year) -> {
-        throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
-      }
     }
+
+    if (!isDate(day, month, year)) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
+    }
+
     return LocalDate.of(year, month, day)
   }
 

@@ -24,7 +24,7 @@
 .k-progress~::part(overlay) h4 {
 	position: relative;
 	background: #f2f2f2;
-	color: #009bd4;
+	color: var(--background-color);
 	font-family: Arial, sans-serif !important;
 	font-weight: 700 !important;
 	font-style: normal;
@@ -58,4 +58,16 @@
 	width: 5px;
 	height: 15px;
 	margin: 1px;
+}
+
+.v-loading-indicator {
+  background: var(--background-color);
+}
+
+.login-progress-bar::part(value)::before {
+  background: var(--background-color);
+}
+.login-progress-bar::part(value) {
+  --lumo-progress-indeterminate-progress-bar-background: linear-gradient( to right, var(--background-color) 10%, var(--background-color));
+  --lumo-progress-indeterminate-progress-bar-background-reverse: linear-gradient( to right, var(--background-color) 10%, var(--background-color));
 }

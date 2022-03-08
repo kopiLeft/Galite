@@ -39,7 +39,7 @@
 }
 
 :host:hover {
-	background: #d9f0f8;
+	background: var(--background-hover-color);
 }
 
 [part~='input-field']::after {
@@ -48,7 +48,7 @@
 
 [part~='input-field']:focus-within {
 	background: none;
-	border-bottom: #009bd4 1px solid;
+	border-bottom: var(--background-color) 1px solid;
 }
 
 [part~='value'] {

@@ -20,7 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.field
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
@@ -84,11 +83,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   init {
     className = Styles.TEXT_INPUT
-    addKeyPressListener(::onKeyPress)
-    addKeyUpListener(::onKeyUp)
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     // addKeyDownListener(::onKeyDown) TODO
+    //addKeyPressListener(::onKeyPress)
+    //addKeyUpListener(::onKeyUp)
     addFocusListener(::onFocus)
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
@@ -472,15 +471,6 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     internalField.focus()
   }
 
-  protected open fun onLoad() {
-    //super.onLoad() TODO
-    //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
-    //  fun execute() {
-    //    parent = WidgetUtils.getParent(this@VInputTextField, VWindow::class.java)
-    //  }
-    //})
-  }
-
   open fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
     // this is called twice on Chrome when e.g. changing tab while prompting
     // field focused - do not change settings on the second time
@@ -662,11 +652,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     return oracle
   }
 
-  *//**
+  /**
    * Sets the suggestion oracle used to create suggestions.
    *
    * @param oracle the oracle
-   *//*
+   */
   fun setOracle(oracle: SuggestOracle?) {
     this.oracle = oracle
   }
@@ -694,8 +684,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
    * Shows the suggestions beginning with the given query string.
    * @param query The searched text.
    */
-  /*package*/
-  fun showSuggestions(query: String?) {
+  internal fun showSuggestions(query: String?) {
     if (!hasAutocomplete) {
       return
     }

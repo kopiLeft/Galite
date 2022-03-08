@@ -15,15 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.domain
 
-package org.kopi.galite.visual.type
-
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-
-/**
- * Format the localtime value.
- */
-fun LocalTime.format(): String {
-  return format(DateTimeFormatter.ofPattern("HH:mm"))
+enum class Fixed {
+  ON,
+  OFF,
+  UNDEFINED
 }

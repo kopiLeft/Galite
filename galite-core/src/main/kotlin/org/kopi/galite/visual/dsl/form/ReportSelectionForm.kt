@@ -41,5 +41,9 @@ abstract class ReportSelectionForm(title: String, locale: Locale? = null) : Dict
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
-  override val model: VReportSelectionForm by lazy { ReportSelectionFormModel(this) }
+  override val model: VReportSelectionForm by lazy {
+    ReportSelectionFormModel(this).also {
+      isModelInitialized = true
+    }
+  }
 }

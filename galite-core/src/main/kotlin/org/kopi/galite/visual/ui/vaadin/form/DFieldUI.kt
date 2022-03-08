@@ -94,7 +94,7 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
 
   /**
    * If the fields values are set in the model before display creation,
-   * The [org.kopi.galite.ui.vaadin.form.DFieldHandler.valueChanged] is not called since the
+   * The [org.kopi.galite.visual.ui.vaadin.form.DFieldHandler.valueChanged] is not called since the
    * listener is not registered yet. We will call the value change event for
    * every block record here to fill out the client side cached values.
    */

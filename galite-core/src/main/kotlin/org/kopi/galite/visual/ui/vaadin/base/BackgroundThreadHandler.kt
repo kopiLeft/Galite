@@ -18,7 +18,6 @@
 package org.kopi.galite.visual.ui.vaadin.base
 
 import java.util.concurrent.ExecutionException
-import java.util.concurrent.Executors
 
 import com.vaadin.flow.component.UI
 
@@ -176,7 +175,5 @@ object BackgroundThreadHandler {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-
-  var executor = Executors.newCachedThreadPool()
   private val uiThreadLocal = ThreadLocal<UI?>()
 }

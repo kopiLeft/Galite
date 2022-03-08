@@ -24,7 +24,6 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 
 open class VClickableNavigationItem : VNavigationItem() {
-  private val DEPENDENT_STYLENAME_DISABLED_ITEM = "disabled"
 
   override fun setDescription(key: Key?, keyModifier: KeyModifier?) {
     if (key != null && key != Key.UNIDENTIFIED) {
@@ -58,5 +57,9 @@ open class VClickableNavigationItem : VNavigationItem() {
       "actor-navigationItem-$DEPENDENT_STYLENAME_DISABLED_ITEM"
     }
     super.setEnabled(isEnabled)
+  }
+
+  companion object {
+    private const val DEPENDENT_STYLENAME_DISABLED_ITEM = "disabled"
   }
 }

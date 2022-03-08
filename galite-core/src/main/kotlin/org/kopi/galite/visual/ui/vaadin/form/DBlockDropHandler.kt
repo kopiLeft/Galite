@@ -244,7 +244,7 @@ class DBlockDropHandler(private val block: VBlock) {
 
     /**
      * Creates a temporary file.
-     * @param directory The parent directory.
+     *
      * @param defaultName The default file name.
      * @return The created temporary file.
      * @throws IOException I/O errors.
@@ -297,7 +297,7 @@ class DBlockDropHandler(private val block: VBlock) {
       val name = file.name
       val index = name.lastIndexOf('.')
       if (index > 0 && index < name.length - 1) {
-        extension = name.substring(index + 1).toLowerCase()
+        extension = name.substring(index + 1).lowercase()
       }
       return extension
     }

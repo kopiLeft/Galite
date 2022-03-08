@@ -80,7 +80,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * Creates the block view for a given block model
    * @param blockModel The block model.
    */
-  protected fun createViewForBlock(blockModel: VBlock): DBlock {
+  internal fun createViewForBlock(blockModel: VBlock): DBlock {
     val blockView: DBlock
     if (blockModel is VFullCalendarBlock) {
       blockView = DFullCalendarBlock(this, blockModel)

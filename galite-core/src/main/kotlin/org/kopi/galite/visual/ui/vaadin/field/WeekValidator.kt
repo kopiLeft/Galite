@@ -74,13 +74,17 @@ class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
         } else {
           -1
         }
-        4 -> if (buffer[bp] in '0'..'9') {
-          year = buffer[bp] - '0'
-          state = 5
-        } else if (buffer[bp] == '\u0000') {
-          state = 0
-        } else {
-          state = -1
+        4 -> when {
+          buffer[bp] in '0'..'9' -> {
+            year = buffer[bp] - '0'
+            state = 5
+          }
+          buffer[bp] == '\u0000' -> {
+            state = 0
+          }
+          else -> {
+            state = -1
+          }
         }
         5 -> if (buffer[bp] in '0'..'9') {
           year = 10 * year + (buffer[bp] - '0')
@@ -88,13 +92,17 @@ class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
         } else {
           state = -1
         }
-        6 -> if (buffer[bp] in '0'..'9') {
-          year = 10 * year + (buffer[bp] - '0')
-          state = 7
-        } else if (buffer[bp] == '\u0000') {
-          state = 0
-        } else {
-          state = -1
+        6 -> when {
+          buffer[bp] in '0'..'9' -> {
+            year = 10 * year + (buffer[bp] - '0')
+            state = 7
+          }
+          buffer[bp] == '\u0000' -> {
+            state = 0
+          }
+          else -> {
+            state = -1
+          }
         }
         7 -> if (buffer[bp] in '0'..'9') {
           year = 10 * year + (buffer[bp] - '0')

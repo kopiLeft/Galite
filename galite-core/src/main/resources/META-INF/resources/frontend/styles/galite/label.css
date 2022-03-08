@@ -62,6 +62,6 @@
  * Label having action styles
  */
 .k-label-has-action span.action {
-    color: #009bd4;
+    color: var(--background-color);
     padding-left: 2px;
 }

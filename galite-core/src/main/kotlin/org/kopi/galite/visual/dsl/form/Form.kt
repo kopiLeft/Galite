@@ -175,7 +175,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * Shows to the user want to show a help about this form.
    */
   fun showHelp() {
-    model.showHelp(model)
+    model.showHelp()
   }
 
   /**
@@ -290,5 +290,9 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // ----------------------------------------------------------------------
   // FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VForm by lazy { FormModel(this) }
+  override val model: VForm by lazy {
+    FormModel(this).also {
+      isModelInitialized = true
+    }
+  }
 }

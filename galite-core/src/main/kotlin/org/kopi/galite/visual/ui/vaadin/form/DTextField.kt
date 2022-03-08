@@ -25,6 +25,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.field.VDateField
 import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
 
 import com.vaadin.flow.component.contextmenu.ContextMenu
@@ -105,14 +106,6 @@ open class DTextField(
    * @return `true` if there is a difference between the old and the new text.
    */
   protected fun isChanged(oldText: String?, newText: String?): Boolean {
-    var oldText = oldText
-    var newText = newText
-    if (oldText == null) {
-      oldText = "" // replace null by empty string to avoid null pointer exceptions
-    }
-    if (newText == null) {
-      newText = ""
-    }
     return oldText != newText
   }
 
@@ -214,23 +207,6 @@ open class DTextField(
   }
 
   /**
-   * Checks the given text.
-   *
-   * @param s The text to be checked.
-   * @param changed Is value changed ?
-   */
-  private fun checkText(s: String?, changed: Boolean) {
-    val text = transformer!!.toModel(s ?: "")
-    if (!transformer!!.checkFormat(text)) {
-      return
-    }
-    if (getModel().checkText(text!!) && changed) {
-      getModel().isChangedUI = true
-    }
-    getModel().setChanged(changed)
-  }
-
-  /**
    * Check the given text against model definition.
    *
    * @param s The text to be verified.
@@ -252,24 +228,6 @@ open class DTextField(
       })
     }
   }
-
-  // --------------------------------------------------
-  // UTILS
-  // --------------------------------------------------
-
-  /**
-   * Returns the field width.
-   * @return The field width.
-   */
-  val fieldWidth: Float
-    get() = this.field.width.toFloat()
-
-  /**
-   * Returns the field width unit.
-   * @return The field width unit.
-   */
-  /*val fieldWidthUnits: Unit TODO
-    get() = this.field.getWidthUnits()*/
 
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
@@ -306,7 +264,7 @@ open class DTextField(
   // DFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getObject(): Any? {
-    return wrappedField!!.value
+    return wrappedField.value
   }
 
   override fun setBlink(blink: Boolean) {
@@ -345,7 +303,7 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toGui(modelTxt: String?): String? {
+    override fun toGui(modelTxt: String?): String {
       return if (modelTxt == null || "" == modelTxt) {
         VlibProperties.getString("scan-ready")
       } else if (!field.field.isReadOnly) {
@@ -359,7 +317,7 @@ open class DTextField(
       return guiTxt
     }
 
-    override fun checkFormat(software: String?): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return true
     }
   }
@@ -374,17 +332,17 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(source: String?): String? {
-      return convertFixedTextToSingleLine(source, col, row)
+    override fun toModel(guiTxt: String?): String {
+      return convertFixedTextToSingleLine(guiTxt, col, row)
     }
 
-    override fun toGui(source: String?): String? {
+    override fun toGui(modelTxt: String?): String {
       val target = StringBuffer()
-      val length = source!!.length
+      val length = modelTxt!!.length
       var usedRows = 1
       var start = 0
       while (start < length) {
-        val line = source.substring(start, (start + col).coerceAtMost(length))
+        val line = modelTxt.substring(start, (start + col).coerceAtMost(length))
         var last = -1
         var i = line.length - 1
         while (last == -1 && i >= 0) {
@@ -407,7 +365,7 @@ open class DTextField(
       return target.toString()
     }
 
-    override fun checkFormat(source: String?): Boolean = source!!.length <= row * col
+    override fun checkFormat(guiTxt: String?): Boolean = guiTxt!!.length <= row * col
   }
 
   /**

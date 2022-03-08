@@ -31,9 +31,9 @@ class EnumValidator(private val enumerations: Array<String>?,
   //---------------------------------------------------
   override fun validate(text: String?): Boolean {
     if (enumerations != null && text != null) {
-      val s = text.toLowerCase()
+      val s = text.lowercase()
       for (i in enumerations.indices) {
-        if (enumerations[i].toLowerCase().startsWith(s)) {
+        if (enumerations[i].lowercase().startsWith(s)) {
           return true
         }
       }
@@ -52,11 +52,11 @@ class EnumValidator(private val enumerations: Array<String>?,
        * -2:  two (or more) matches: cannot choose
        */
       var found = -1
-      val newText = text.toLowerCase()
+      val newText = text.lowercase()
       var i = 0
       while (found != -2 && i < enumerations!!.size) {
-        if (enumerations[i].toLowerCase().startsWith(newText)) {
-          if (enumerations[i].toLowerCase() == newText) {
+        if (enumerations[i].lowercase().startsWith(newText)) {
+          if (enumerations[i].lowercase() == newText) {
             found = i
             break
           }

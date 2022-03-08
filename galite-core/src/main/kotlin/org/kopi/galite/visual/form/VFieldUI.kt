@@ -57,7 +57,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   lateinit var displays: Array<UField?> // the object displayed on screen
     private set
   val isDisplayInitialized get() = ::displays.isInitialized
-  private lateinit var dl: ULabel // label text
+  private var dl: ULabel? = null // label text
   private var dlDetail: ULabel? = null // label text (chart)
   var detailDisplay: UField? = null // the object displayed on screen (detail)
     private set
@@ -310,10 +310,10 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
    * resetLabel
    */
   fun resetLabel() {
-    dl.init(model.label, model.toolTip)
+    dl!!.init(model.label, model.toolTip)
 
     if (dlDetail != null) {
-      dl.init(model.label, model.toolTip)
+      dl!!.init(model.label, model.toolTip)
     }
   }
 
@@ -723,7 +723,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     }
   }
 
-  fun getLabel(): ULabel = dl
+  fun getLabel(): ULabel? = dl
 
   fun getDetailLabel(): ULabel? = dlDetail
 }

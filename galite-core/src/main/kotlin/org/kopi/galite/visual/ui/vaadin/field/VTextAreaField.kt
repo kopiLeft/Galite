@@ -21,7 +21,6 @@ import com.vaadin.flow.component.textfield.TextArea
 
 /**
  * A text area input zone.
- * TODO : All the class must be implemented
  */
 class VTextAreaField : InputTextField<TextArea>(TextArea()) {
 

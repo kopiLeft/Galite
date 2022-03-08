@@ -78,23 +78,6 @@ open class Label : VAnchorPanel(), HasEnabled {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  /*override fun setVisible(visible: Boolean) { TODO
-    if (!visible) {
-      element.style.setVisibility(Visibility.HIDDEN)
-      if (DOM.getParent(element) != null) {
-        DOM.getParent(element).getStyle().setVisibility(Visibility.HIDDEN)
-      }
-    } else {
-      element.style.setVisibility(Visibility.VISIBLE)
-      if (DOM.getParent(element) != null) {
-        DOM.getParent(element).getStyle().setVisibility(Visibility.VISIBLE)
-      }
-    }
-    // now, we try to set the scroll bar visibility
-    // cause the block may be fully invisible.
-    handleChartLayoutVisiblility()
-  }*/
-
   override fun setWidth(width: String?) {
     if (width == null || width == "") {
       return  // don't override calculated width
@@ -142,47 +125,6 @@ open class Label : VAnchorPanel(), HasEnabled {
     marker.className = "action"
     marker.text = "*"
   }
-
-  /*override fun setEnabled(enabled: Boolean) { TODO
-    enabled = enabled
-    if (!enabled) {
-      addStyleName("v-disabled")
-      label.addStyleName("v-disabled")
-      info.addStyleName("v-disabled")
-    } else {
-      removeStyleName("v-disabled")
-      label.removeStyleName("v-disabled")
-      info.removeStyleName("v-disabled")
-    }
-  }*/
-
-  /*protected open fun onLoad() { TODO
-    super.onLoad()
-    Scheduler.get().scheduleFinally(object : ScheduledCommand() {
-      fun execute() {
-        // The chart layout can be null if the label belongs to a simple block
-        chartLayout = WidgetUtils.getParent(this@VLabel, VChartBlockLayout::class.java)
-      }
-    })
-  }*/
-
-  /*open fun clear() { TODO
-    super.clear()
-    info = null
-    label = null
-    marker = null
-    chartLayout = null
-  }*/
-
-  /**
-   * Handles the chart layout caption and scroll bar visibililty.
-   */
-  /*protected open fun handleChartLayoutVisiblility() { TODO
-    if (chartLayout != null) {
-      //chartLayout.maybeHideOrShowScrollBar();
-      chartLayout.handleLayoutVisibility()
-    }
-  }*/
 
   fun addStyleDependentName(dependentClassName: String) {
     if(className != null) {

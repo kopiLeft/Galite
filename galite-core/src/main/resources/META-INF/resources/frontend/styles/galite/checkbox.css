@@ -20,7 +20,7 @@
  * Boolean field style
  */
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-primary-color : #009bd4;
+    --lumo-primary-color : var(--background-color);
 }
 
 .true::part(checkbox), .false::part(checkbox) {
@@ -33,6 +33,10 @@
 
 .k-boolean-field-content vaadin-checkbox.false {
     margin-left: 0;
+}
+
+:host([checked]) [part='checkbox'] {
+    background-color: var(--background-color);
 }
 
 .true::part(checkbox)::after, .false::part(checkbox)::after {
@@ -70,7 +74,7 @@
 }
 
 .editor-booleanfield {
-    --lumo-primary-color: #009bd4;
+    --lumo-primary-color: var(--background-color);
 }
 
 .k-boolean-field-content {
@@ -79,7 +83,7 @@
 }
 
 .k-boolean-field-content:focus-within {
-    border-bottom: 1px solid #009bd4;
+    border-bottom: 1px solid var(--background-color);
 }
 
 vaadin-checkbox label {
@@ -87,5 +91,5 @@ vaadin-checkbox label {
 }
 
 .editor-booleanfield {
-    --lumo-primary-color: #009bd4;
+    --lumo-primary-color: var(--background-color);
 }

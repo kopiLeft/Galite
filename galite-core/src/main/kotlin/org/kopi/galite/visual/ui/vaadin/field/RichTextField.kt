@@ -55,13 +55,6 @@ class RichTextField(
 
   private val editor = FocusableWysiwygE(true)
 
-  /**
-   * Minimal field width to see the toolbar in 56 px height (2 lines)
-   */
-  private val MIN_WIDTH = 540
-  private val LINE_HEIGHT = 20
-  private val TOOLBAR_HEIGHT = 66
-
   init {
     editor.className ="richtext"
     editor.placeholder = ""
@@ -76,6 +69,15 @@ class RichTextField(
     }
     createNavigatorKeys()
     editor.addJSKeyDownListener(editor.keyNavigators)
+  }
+
+  companion object {
+    /**
+     * Minimal field width to see the toolbar in 56 px height (2 lines)
+     */
+    private const val MIN_WIDTH = 540
+    private const val LINE_HEIGHT = 20
+    private const val TOOLBAR_HEIGHT = 66
   }
 
   /**
@@ -191,7 +193,7 @@ class RichTextField(
     editor.value = newPresentationValue
   }
 
-  override fun getValue() = editor.value
+  override fun getValue(): String? = editor.value
 
   override fun setValue(value: String?) {
     editor.value = value
@@ -202,7 +204,7 @@ class RichTextField(
    * @return `true` if this field is empty.
    */
   override val isNull: Boolean
-    get() =  value == null
+    get() = value == null
 
   /**
    * Checks the internal value of this field.
@@ -225,7 +227,7 @@ class RichTextField(
   /**
    * Creates the navigation actions.
    */
-  fun createNavigatorKeys() {
+  private fun createNavigatorKeys() {
     addKeyNavigator(Key.ENTER, KeyModifier.of("Control")) { parent.gotoNextEmptyMustfill() }
     addKeyNavigator(Key.ENTER, KeyModifier.of("Shift")) { parent.onGotoNextBlock() }
     addKeyNavigator(Key.PAGE_DOWN, KeyModifier.of("Shift")) { parent.gotoNextRecord() }
@@ -295,7 +297,7 @@ class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible),
   }
 
   fun getTool(tool: Tool): Element? {
-    val tag = tool.name.toLowerCase()
+    val tag = tool.name.lowercase()
 
     return element.children.filter { element: Element ->
       element.tag.endsWith(tag)

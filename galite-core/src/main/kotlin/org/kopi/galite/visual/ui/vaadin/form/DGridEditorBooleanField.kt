@@ -50,7 +50,6 @@ class DGridEditorBooleanField(
   // CONSTRUCTOR
   //---------------------------------------------------
   init {
-    // editor.setLabel(label.text) TODO
     editor.addValueChangeListener(this)
   }
   //---------------------------------------------------
@@ -148,7 +147,7 @@ class DGridEditorBooleanField(
       getModel().block!!.activeField = getModel()
     }
     val text = getModel().toText(event.value)
-    if (getModel().checkText(text!!)) { // TODO:nullable?
+    if (getModel().checkText(text!!)) {
       getModel().isChangedUI = true
       getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
     }
@@ -163,20 +162,20 @@ class DGridEditorBooleanField(
    * Returns the true representation of this boolean field.
    * @return The true representation of this boolean field.
    */
-  protected val trueRepresentation: String?
+  internal val trueRepresentation: String?
     get() = getModel().toText(true)
 
   /**
    * Returns the false representation of this boolean field.
    * @return The false representation of this boolean field.
    */
-  protected val falseRepresentation: String?
+  internal val falseRepresentation: String?
     get() = getModel().toText(false)
 
   /**
    * Gets the focus to this field.
    */
-  protected fun enterMe() {
+  internal fun enterMe() {
     /*BackgroundThreadHandler.access(Runnable {  TODO
       getEditor().focus()
     })*/

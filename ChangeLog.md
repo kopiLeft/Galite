@@ -1,3 +1,15 @@
+# 1.0.1
+## What's Changed
+* Adding the feature of setting custom colors to the user interface by @hfazai
+* Gradle: Add exposed-jdbc dependency to galite-core by @hfazai
+* Code cleaning and removing unused code by @hfazai
+* Add ability to change CSS colors via variables from Vapplication by @h-haddad in [#560](https://github.com/kopiLeft/Galite/pull/560)
+* Set default align to right for numeric fields in multi block by @h-haddad in [#561](https://github.com/kopiLeft/Galite/pull/561)
+* VaadinUI: Use setTimeout to set date field value only after the element is attached by @hfazai in [#562](https://github.com/kopiLeft/Galite/pull/562)
+
+**Full Changelog**: [1.0.0 ... 1.0.1](https://github.com/kopiLeft/Galite/compare/1.0.0...1.0.1)
+
+# 1.0.0
 ## What's Changed
 * Domain: Move min, max properties from Field to Domain by @hfazai
 * Remove useless DBContextHandler as Connection is fully handled by Exposed by @hfazai

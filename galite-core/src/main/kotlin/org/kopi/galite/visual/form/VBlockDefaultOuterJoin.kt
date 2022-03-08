@@ -32,21 +32,23 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   /**
    * constructs an outer join tree.
    */
-  private fun getJoinCondition(rootTable: Int, table: Int): Join {
-    var joinTables: Join? = null
+  private fun getJoinCondition(rootTable: Table, table: Table): Join {
+    lateinit var joinTables: Join
 
     if (table == rootTable) {
-      joinTables = Join(tables!![table])
-      addToJoinedTables(tables!![rootTable])
+      joinTables = Join(table)
+      addToJoinedTables(rootTable)
+    } else {
+      throw Exception("Use root table instead of ${table.tableName}")
     }
 
-    return getJoinCondition(rootTable, table, joinTables!!)
+    return getJoinCondition(rootTable, table, joinTables)
   }
 
   /**
    * constructs an outer join tree.
    */
-  private fun getJoinCondition(rootTable: Int, table: Int, joinTables: Join): Join {
+  private fun getJoinCondition(rootTable: Table, table: Table, joinTables: Join): Join {
     var field: VField
     var additionalConstraint: (SqlExpressionBuilder.() -> Op<Boolean>)? = null
     var condition: Op<Boolean>? = null
@@ -75,7 +77,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
               if(!isJoinedTable(field.getColumn(tableColumn)!!.column.table)) {
 
                 if (rootTable == table) {
-                  val joinTable = tables!![field.getColumn(tableColumn)!!._getTable()]
+                  val joinTable = field.getColumn(tableColumn)!!.getTable()
 
                   // start of an outer join
                   addToJoinedTables(field.getColumn(tableColumn)!!.getTable())
@@ -91,14 +93,14 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   addToProcessedFields(i)
                 }
                 if (rootTable == table) {
-                  getJoinCondition(rootTable, field.getColumn(tableColumn)!!._getTable(), joinTables)
+                  getJoinCondition(rootTable, field.getColumn(tableColumn)!!.getTable(), joinTables)
                 }
-              } else if (isJoinedTable(field.getColumn(j)!!.column.table)) { // FIXME!
+              } else if (isJoinedTable(field.getColumn(j)!!.column.table)) {
                 // the table for this column is present in the outer join tree
                 // as caster outer joins do not work, we assume that the
                 // condition will apply to the root
                 if (j == rootColumn) {
-                  condition = if (condition != null) { // TODO Improve this!
+                  condition = if (condition != null) {
                     condition and (field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column)
                   } else {
                     field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column
@@ -114,7 +116,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                 }
               } else {
                 if (rootTable == table) {
-                  val joinTable = tables!![field.getColumn(j)!!._getTable()]
+                  val joinTable = field.getColumn(j)!!.getTable()
 
                   // start of an outer join
                   addToJoinedTables(field.getColumn(j)!!.getTable())
@@ -130,7 +132,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   addToProcessedFields(i)
                 }
                 if (rootTable == table) {
-                  getJoinCondition(rootTable, field.getColumn(j)!!._getTable(), joinTables)
+                  getJoinCondition(rootTable, field.getColumn(j)!!.getTable(), joinTables)
                 }
               }
             }
@@ -184,13 +186,13 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     }
 
     // first search join condition for the block main table.
-    var searchTablesCondition = getJoinCondition(0, 0)
+    var searchTablesCondition = getJoinCondition(tables!![0], tables!![0])
 
     // search join condition for other lookup tables  not joined with main table.
     for (i in 1 until tables!!.size) {
       if (!isJoinedTable(tables!![i])) {
         // all not joined tables need to be ran through
-        searchTablesCondition = getJoinCondition(i, i, searchTablesCondition)
+        searchTablesCondition = getJoinCondition(tables!![i], tables!![i], searchTablesCondition)
       }
     }
     return searchTablesCondition
@@ -232,7 +234,6 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
   private fun isProcessedField(field: Int): Boolean = processedFields!!.contains(field.toString())
 
-  private var block: VBlock? = block
   private var fields: Array<VField> = block.fields
   private var joinedTables: ArrayList<Table>? = ArrayList()
   private var processedFields: ArrayList<String>? = ArrayList()

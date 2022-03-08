@@ -62,7 +62,6 @@ import org.kopi.galite.visual.visual.VlibProperties
 import org.kopi.galite.visual.visual.WindowController
 
 import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog
@@ -126,8 +125,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun onAttach(attachEvent: AttachEvent) {
-    currentUI = attachEvent.ui
+    val ui = attachEvent.ui
+
+    currentUI = ui
     styleManager = StyleManager(currentUI!!)
+    ui.element.style["--background-color"] = theme.backgroundColor
+    ui.element.style["--background-hover-color"] = theme.backgroundHoverColor
+    ui.element.style["--actor-hover-color"] = theme.actorHoverColor
+    ui.element.style["--disabled-actor-color"] = theme.disabledActorColor
   }
 
   // ---------------------------------------------------------------------
@@ -278,7 +283,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var applicationConfiguration: ApplicationConfiguration? = null
 
-  override lateinit var printManager: PrintManager
+  override var printManager: PrintManager? = null
 
   override lateinit var printerManager: PrinterManager
 
@@ -372,9 +377,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * you should use it to define [Locale], debugMode...
    */
   fun initialize() {
-    if (registry != null) {
-      registry.buildDependencies()
-    }
+    registry.buildDependencies()
     // set locale from initialization.
     setLocalizationContext(getInitializationLocale()) // TODO
   }
@@ -419,13 +422,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // default application locale is initialized
     // from application descriptor file (web.xml)
     defaultLocale = locale
-    if (defaultLocale == null) {
-      // if no valid local is defined in the application descriptor
-      // pick the locale from the extra locale given with application
-      // specifics.
-      // This is only to be share that we start with a language.
-      defaultLocale = alternateLocale
-    }
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
 
@@ -624,6 +620,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * The page title.
    */
   open val title: String? = null
+
+  /**
+   * The theme is the colors used in the user interface.
+   * The default theme is blue.
+   */
+  open val theme: Theme = Theme("#009bd4", "#d9f0f8", "#547988", "#82cfe9")
 
   override fun getPageTitle(): String? {
     return pageTitle

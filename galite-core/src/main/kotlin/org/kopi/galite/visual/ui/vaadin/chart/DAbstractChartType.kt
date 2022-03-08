@@ -19,16 +19,12 @@ package org.kopi.galite.visual.ui.vaadin.chart
 
 import java.awt.Color
 import java.io.OutputStream
-import java.io.Serializable
 import java.util.Random
 
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VDataSeries
-import org.kopi.galite.visual.chart.VDimensionData
 import org.kopi.galite.visual.chart.VPrintOptions
 
 import com.github.appreciated.apexcharts.ApexCharts
@@ -60,15 +56,15 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
   //---------------------------------------------------
   override fun build() {
     val apex = ApexCharts()
-    val dimensions = mutableListOf<String>()
+    val labels = mutableListOf<String>()
     val names = mutableListOf<String>()
     val values = mutableListOf<Pair<String, Double?>>()
 
-    dataSeries.forEachIndexed { i, serie ->
-      val dimension: VDimensionData = serie.dimension
-      val measures = serie.getMeasures()
+    dataSeries.forEach { series ->
+      val dimension = series.dimension
+      val measures = series.getMeasures()
 
-      dimensions.add(dimension.value.toString())
+      labels.add(dimension.value.toString())
 
       measures.forEach {
         values.add(it.name to it.value?.toDouble())
@@ -81,49 +77,43 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
     }
 
-    val finalValues = mutableListOf<List<Double?>>()
-
-    for (name in names) {
-      finalValues.add(values.filter { it.first == name }.map { it.second })
+    val finalValues = names.map { name ->
+      values.filter { it.first == name }.map { it.second }
     }
 
-    val series = mutableListOf<Series<Double>>()
-
-    finalValues.forEachIndexed { index, value ->
-      series.add(Series(names[index], *value.toTypedArray()))
+    val series = finalValues.mapIndexed { index, value ->
+      Series(names[index], *value.toTypedArray())
     }
 
     when (type) {
       Type.pie -> {
         finalValues.forEach {
-          val chart = ApexCharts()
-
-          chart.setChart(ChartBuilder.get().withType(type).build())
-          chart.setSeries(*it.toTypedArray())
-          chart.setLabels(*dimensions.toTypedArray())
-          add(chart)
+          apex.setChart(ChartBuilder.get().withType(type).build())
+          apex.setSeries(*it.toTypedArray())
+          apex.setLabels(*labels.toTypedArray())
         }
       }
 
       Type.bar, Type.line, Type.area -> {
         apex.setChart(ChartBuilder.get().withType(type).build())
         apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*dimensions.toTypedArray()).build())
-        apex.setLabels(*dimensions.toTypedArray())
+        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
+        apex.setLabels(*labels.toTypedArray())
       }
 
       Type.rangeBar -> {
         apex.setChart(ChartBuilder.get().withType(Type.bar).build())
         apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*dimensions.toTypedArray()).build())
+        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
         apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
 
       }
-    }
-    if (type != Type.pie) {
-      super.add(apex)
+      else -> {
+        throw Exception("Unsupported chart type.")
+      }
     }
 
+    super.add(apex)
   }
 
   override fun refresh() {
@@ -151,54 +141,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
    */
   protected open fun setColorsList(): Boolean {
     return false
-  }
-
-  /**
-   * Creates the charts series map.
-   * @param dataSeries The data series model
-   * @return The charts series map.
-   */
-  protected fun createDefaultChartsSerie(dataSeries: Array<VDataSeries>): Map<String, DefaultChartsSeries> {
-    val chartsSeries: MutableMap<String, DefaultChartsSeries>
-    chartsSeries = HashMap()
-    for (data in dataSeries) {
-      fillChartsSeriesMap(chartsSeries, data)
-    }
-    return chartsSeries
-  }
-
-  /**
-   * Fills the charts series map with data from a given series model.
-   * @param chartsSeries The charts series map.
-   * @param data The data series model.
-   */
-  protected fun fillChartsSeriesMap(chartsSeries: MutableMap<String, DefaultChartsSeries>, data: VDataSeries) {
-    for (measure in data.getMeasures()) {
-      if (!chartsSeries.containsKey(measure.name)) {
-        chartsSeries[measure.name] = DefaultChartsSeries(measure.name)
-      }
-      chartsSeries[measure.name]!!.values.add(measure.value)
-    }
-  }
-
-  /**
-   * Returns the chart series to be appended to chart data.
-   * @param dataSeries The data series model.
-   * @return the chart series to be appended to chart data.
-   */
-  protected fun createChartSeries(dataSeries: Array<VDataSeries>) {
-    TODO()
-  }
-
-  /**
-   * Creates a new charts series from a given name and values.
-   * @param name The chart series name.
-   * @param labels The list of X axis labels
-   * @param values The chart series values.
-   * @return The charts series object.
-   */
-  protected fun createChartSeries(labels: List<Comparable<*>?>, name: String?, values: List<Any?>) {
-    TODO()
   }
 
   /**
@@ -235,36 +177,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
    */
   protected abstract fun createChartData(name: String?)
 
-  //---------------------------------------------------
-  // INNER CLASSES
-  //---------------------------------------------------
-  /**
-   * A default charts series used for all chart types except the
-   * Pie chart which will be drawn differently.
-   *
-   * @param name The series name.
-   */
-  class DefaultChartsSeries(name: Comparable<*>) : Serializable {
-
-    /**
-     * The series name.
-     */
-    val name = name.toString()
-
-    /**
-     * The series values.
-     */
-    val values: MutableList<Any?>
-
-    /**
-     * Creates a new Charts series instance.
-     */
-    init {
-      Color(255, 0, 0)
-      values = ArrayList()
-    }
-  }
-
   companion object {
     // colors
     private val BASIC_COLORS: Array<Color> = arrayOf(
@@ -281,7 +193,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
             Color(0, 128, 128),
             Color(0, 0, 128)
     )
-    private val ADDITIONAL_COLORS: Array<Color> = arrayOf<Color>(
+    private val ADDITIONAL_COLORS: Array<Color> = arrayOf(
             Color(128, 0, 0),
             Color(139, 0, 0),
             Color(165, 42, 42),

@@ -132,7 +132,7 @@ internal class LpdClient(var options: LpdOptions) {
   /**
    * the local hostname.
    */
-  var localHost: String
+  var localHost: String?
     get() = options.localHost
     set(localHost) {
       options.localHost = localHost
@@ -148,7 +148,7 @@ internal class LpdClient(var options: LpdOptions) {
   /**
    * the print hostname.
    */
-  var printHost: String
+  var printHost: String?
     get() = options.printHost
     set(printHost) {
       options.printHost = printHost

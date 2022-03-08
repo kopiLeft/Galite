@@ -125,11 +125,11 @@ abstract class ApplicationConfiguration {
    *
    * @return the property
    */
-  abstract fun getStringFor(key: String): String
+  abstract fun getStringFor(key: String): String?
 
-  abstract fun getBooleanFor(key: String): Boolean
+  abstract fun getBooleanFor(key: String): Boolean?
 
-  abstract fun getIntFor(key: String): Int // no more languages defined // no languages
+  abstract fun getIntFor(key: String): Int? // no more languages defined // no languages
 
   /**
    * returns options for a language

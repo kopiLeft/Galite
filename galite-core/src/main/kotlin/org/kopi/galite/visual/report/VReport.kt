@@ -213,6 +213,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
    * Enables/disables the actor.
    */
   fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
+    @Suppress("NAME_SHADOWING")
     var enable = enable
 
     if (enable) {

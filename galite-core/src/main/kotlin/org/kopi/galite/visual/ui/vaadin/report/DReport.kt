@@ -82,8 +82,8 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     table.isColumnReorderingAllowed = true
     table.cellStyler = ReportCellStyler(model, parameters!!, table)
     // 200 px is approximately the header window size + the actor pane size
-    ui.ifPresent {
-      it.page.retrieveExtendedClientDetails {
+    ui.ifPresent { ui ->
+      ui.page.retrieveExtendedClientDetails {
         table.setHeight(it.windowInnerHeight.toFloat() - 200, Unit.PIXELS)
       }
     }
@@ -297,7 +297,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
           hiddenColumnsCount += 1
           newColumnOrder[i] = model.getDisplayOrder(i)
         } else {
-          newColumnOrder[i] = visibleColumns!![i - hiddenColumnsCount]
+          newColumnOrder[i] = visibleColumns[i - hiddenColumnsCount]
         }
       }
       model.columnMoved(newColumnOrder)

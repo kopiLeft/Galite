@@ -47,7 +47,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     var day = 0
     var month = 0
     var year = -2
-    val tokens = s.split("#|\\.|/".toRegex()).toTypedArray()
+    val tokens = s.split("[#./]".toRegex()).toTypedArray()
     if (tokens.isEmpty()) {
       throw CheckTypeException(f, "00003")
     }

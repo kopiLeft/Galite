@@ -163,7 +163,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
         no.value = true
       }
     }
-    handleComponentVisiblity()
+    handleComponentVisibility()
   }
 
   override fun setPresentationValue(newPresentationValue: Boolean?) {
@@ -201,7 +201,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     if (value == true || value == null) {
       setModelValue(value, event.isFromClient)
     }
-    handleComponentVisiblity()
+    handleComponentVisibility()
   }
 
   private fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
@@ -213,13 +213,13 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     if (value == false || value == null) {
       setModelValue(value, event.isFromClient)
     }
-    handleComponentVisiblity()
+    handleComponentVisibility()
   }
 
   /**
    * Handles the component visibility according to its value.
    */
-  protected fun handleComponentVisiblity() {
+  private fun handleComponentVisibility() {
     isVisible = value != null
   }
 

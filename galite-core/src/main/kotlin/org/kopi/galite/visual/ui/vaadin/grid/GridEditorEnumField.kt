@@ -23,10 +23,10 @@ package org.kopi.galite.visual.ui.vaadin.grid
 class GridEditorEnumField(width: Int, private val enumerations: Array<String>?) : GridEditorTextField(width) {
 
   override fun check(text: String): Boolean {
-    if (enumerations != null && text != null) {
-      val s = text.toLowerCase()
+    if (enumerations != null) {
+      val s = text.lowercase()
       for (i in enumerations.indices) {
-        if (enumerations.get(i).toLowerCase().startsWith(s)) {
+        if (enumerations[i].lowercase().startsWith(s)) {
           return true
         }
       }

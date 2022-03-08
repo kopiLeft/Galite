@@ -19,8 +19,7 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
@@ -34,10 +33,9 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.visual.VExecFailedException
 
-class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
 
   init {
     insertMenus()
@@ -46,7 +44,7 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
 
   val list = actor(
           menu = action,
-          label = "list",
+          label = "List",
           help = "Display List",
   ) {
     key = Key.F10
@@ -62,20 +60,10 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK), I
     icon = Icon.SAVE
   }
 
-  val dynamicReport = actor(
-          menu = action,
-          label = "DynamicReport",
-          help = " Create Dynamic Report",
-  ) {
-    key = Key.F6
-    icon = Icon.REPORT
-  }
-
   val clientsPage= page("Clients")
   val detailsPage= page("Details")
   val clientsBlock = clientsPage.insertBlock(Clients())
   val salesBlock = clientsPage.insertBlock(Sales())
-
 
   inner class Clients : Block("Clients", 1, 100) {
     val c = table(Client)

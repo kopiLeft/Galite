@@ -34,8 +34,12 @@ class DGridBlockFilter(
 
   override fun test(item: GridBlockItem): Boolean {
     for (field in filterFields) {
-      val value = if (ignoreCase) formatObject(item, field.model).toString().toLowerCase() else formatObject(item, field.model).toString()
-      val filterString = if (ignoreCase) field.value.toLowerCase() else field.value
+      val value = if (ignoreCase)  {
+        formatObject(item, field.model).toString().lowercase()
+      } else {
+        formatObject(item, field.model).toString()
+      }
+      val filterString = if (ignoreCase) field.value.lowercase() else field.value
 
       if (onlyMatchPrefix) {
         if (!value.startsWith(filterString)) {
@@ -72,31 +76,30 @@ class DGridBlockFilter(
     return field.toText(o)
   }
 
-  override fun equals(obj: Any?): Boolean {
-    if (obj == null) {
+  override fun equals(other: Any?): Boolean {
+    if (other == null) {
       return false
     }
 
     for (i in filterFields.indices) {
       val field = filterFields[i]
-      val filterString = if (ignoreCase) field.value.toLowerCase() else field.value
+      val filterString = if (ignoreCase) field.value.lowercase() else field.value
 
       // Only ones of the objects of the same class can be equal
-      if (obj !is DGridBlockFilter) {
+      if (other !is DGridBlockFilter) {
         return false
       }
-      val o = obj
-      val otherField = o.filterFields[i]
-      val otherFilterString = if (ignoreCase) otherField.value.toLowerCase() else otherField.value
+      val otherField = other.filterFields[i]
+      val otherFilterString = if (ignoreCase) otherField.value.lowercase() else otherField.value
 
       // Checks the properties one by one
       if (otherFilterString != filterString) {
         return false
       }
-      if (ignoreCase != o.ignoreCase) {
+      if (ignoreCase != other.ignoreCase) {
         return false
       }
-      if (onlyMatchPrefix != o.onlyMatchPrefix) {
+      if (onlyMatchPrefix != other.onlyMatchPrefix) {
         return false
       }
     }

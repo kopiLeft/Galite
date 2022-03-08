@@ -40,11 +40,11 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.PConfig
-import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
+import org.kopi.galite.visual.report.triggers.avgDecimal
 import org.kopi.galite.visual.visual.VActor
 
 /**
@@ -255,7 +255,7 @@ class VReportTests: JApplicationTestBase() {
       align = FieldAlignment.LEFT
       compute {
         // Computes the average of ages
-        Triggers.avgDecimal(this)
+        avgDecimal()
       }
     }
 
