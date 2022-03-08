@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Optional
 
 import org.kopi.galite.visual.type.format
@@ -37,6 +35,7 @@ import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.ShortcutRegistration
 import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -44,34 +43,41 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.shared.Registration
 
 /**
- * An Date field.
+ * A Date field.
  */
-class VDateField : InputTextField<DatePickerLight>(DatePickerLight()), KeyNotifier {
+@CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-text-field")
+class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
 
-  fun addDateValueChangeListener(listener: (fromClient: Boolean) -> Unit) {
-    internalField.addValueChangeListener {
-      listener(it.isFromClient)
-    }
-    internalField.addPickerListener {
-      if(it.value.isNotEmpty()) {
-        val date = LocalDate.parse(it.value, DateTimeFormatter.ofPattern("yyyy-MM-dd")).format()
-
-        if(content.value != date) {
-          // Synchronize value with textfield
-          content.value = date
-        }
-      }
-      listener(it.isFromClient)
-    }
+  override fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
+    internalField.picker.addValueChangeListener(listener)
+    internalField.addValueChangeListener(listener)
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
     val date = TimestampValidator.parseDate(newPresentationValue.orEmpty())
 
-    content.value = date?.format() ?: newPresentationValue.orEmpty()
+    internalField.picker.value = date
+    internalField.value = date?.format() ?: newPresentationValue.orEmpty()
   }
 }
 
+// Issue: https://github.com/vaadin/flow-components/issues/1158
+// TODO: Remove this workaround when the ticket is resolved.
+@CssImport(value = "./styles/galite/datepicker.css", themeFor = "vaadin-date-picker-text-field")
+class DateField: TextField() {
+  val picker = DatePicker()
+
+  init {
+    picker.element.themeList.add("date-picker-suffix")
+    suffixComponent = picker
+    picker.addValueChangeListener {
+      value = it.value?.format() ?: ""
+    }
+  }
+}
+
+// Issue: https://github.com/vaadin/flow-components/issues/1158
+// TODO: Remove this workaround when the ticket is resolved.
 @Tag("date-picker-light")
 @JsModule("./src/date-picker-light.js")
 @CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-text-field")
