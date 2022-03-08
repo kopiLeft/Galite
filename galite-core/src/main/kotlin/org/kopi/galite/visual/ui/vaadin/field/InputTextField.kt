@@ -20,7 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.field
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 import org.kopi.galite.visual.type.format
@@ -121,7 +120,6 @@ open class InputTextField<C> internal constructor(protected val internalField: C
       is BigDecimal -> s.format()
       is LocalTime -> s.format()
       is Instant -> s.format()
-      is LocalDateTime -> s.format()
       else -> s?.toString()
     }
 

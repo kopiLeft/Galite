@@ -84,7 +84,7 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
 
   when (gridEditorField) {
     is GridEditorTimestampField -> {
-      gridEditorField._value = (value as Instant).format()
+      gridEditorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     is GridEditorTimeField -> {
       gridEditorField._value = (value as LocalTime).format()

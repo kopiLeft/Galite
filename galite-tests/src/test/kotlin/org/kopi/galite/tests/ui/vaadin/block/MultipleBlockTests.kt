@@ -87,7 +87,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     assertEquals(true, active.getModel().getBoolean(0))
     assertEquals(currentDate, date.getModel().getDate(0))
     assertEquals(currentMonth, month.getModel().getMonth(0))
-    assertEquals(currentTimestamp, timestamp.getModel().getTimestamp(0))
+    assertEquals(currentTimestamp.defaultFormat(), timestamp.getModel().getTimestamp(0).defaultFormat())
     assertEquals(currentTime.format(), time.getModel().getTime(0).toString())
     assertEquals(currentWeek, week.getModel().getWeek(0))
     assertEquals(1, codeDomain.getModel().getObject(0))
