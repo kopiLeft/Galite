@@ -16,12 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+:host([theme~="date-picker-suffix"]) {
+    --lumo-text-field-size: unset;
+}
+
 :host([theme~="date-picker-suffix"]) [part~='value'] {
     display: none;
 }
 
 :host([theme~="date-picker-suffix"]) [part~='input-field'] {
     border: none;
+    padding: 0;
 }
 
 :host([theme~="date-picker-suffix"]) .vaadin-text-field-container {
