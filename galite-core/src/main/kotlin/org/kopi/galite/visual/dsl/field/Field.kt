@@ -39,18 +39,6 @@ abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): Wind
   open var hidden: Boolean? = false
 
   /**
-   * Checks if the value passed to the field doesn't exceed the length of the field's domain
-   *
-   * @param value passed value
-   * @return true if the domain is not defined or the value's length doesn't exceed the domain size,
-   * and returns false otherwise.
-   */
-  fun checkLength(value: T): Boolean = when (domain.width) {
-    null -> true
-    else -> value.toString().length <= domain.width!!
-  }
-
-  /**
    * Generates localization for this field
    *
    * @param writer The localization writer.
