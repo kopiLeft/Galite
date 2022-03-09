@@ -146,6 +146,22 @@ class FieldsTests : GaliteVUITestBase() {
   }
 
   @Test
+  fun `test big number error`() {
+    //put value less greater than max (50)
+    form.blockWithDifferentTypes.intField.edit(1111)
+    form.blockWithDifferentTypes.decimalField.click()
+    expectErrorNotification(MessageCode.getMessage("VIS-00009", 50))
+  }
+
+  @Test
+  fun `test invalid decimal error`() {
+    //put value with invalid scale (> 2)
+    form.blockWithDifferentTypes.decimalField.edit(BigDecimal("11111111.1111111111"))
+    form.blockWithDifferentTypes.intField.click()
+    expectErrorNotification(MessageCode.getMessage("VIS-00011", 2))
+  }
+
+  @Test
   fun `test decimal field`() {
     form.blockWithDifferentTypes.decimalField.edit(BigDecimal("999999"))
     form.blockWithDifferentTypes.intField.click()
