@@ -65,7 +65,7 @@ inline fun <reified T> Table.column(name: String,
         Month::class -> month(name)
         Week::class -> week(name)
         org.joda.time.LocalTime::class, java.time.LocalTime::class -> time(name)
-        Instant::class, LocalDateTime::class, DateTime::class -> timestamp(name)
+        Instant::class, LocalDateTime::class -> timestamp(name)
         DateTime::class -> datetime(name)
         ExposedBlob::class -> blob(name)
         else -> {
