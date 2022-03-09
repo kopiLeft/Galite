@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Locale
 import java.util.StringTokenizer
 
@@ -304,7 +305,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val tmp = result[column]) {
       is Timestamp -> tmp.toInstant()
-      is LocalDateTime -> Instant.from(tmp)
+      is LocalDateTime -> Instant.from(tmp.atZone(ZoneId.systemDefault()))
       is Instant -> tmp
       else -> null
     }

@@ -20,6 +20,7 @@ package org.kopi.galite.visual.ui.vaadin.calendar
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
@@ -109,8 +110,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     val newEntries = (entries - currentEntries.toSet()).map { fcEntry ->
       val record = fcEntry.values[model.idField] as Int
       val entry = FullCalendarEntry(record, fcEntry)
-      val start = LocalDateTime.from(fcEntry.start)
-      val end = LocalDateTime.from(fcEntry.end)
+      val start = LocalDateTime.ofInstant(fcEntry.start, ZoneId.systemDefault())
+      val end = LocalDateTime.ofInstant(fcEntry.end, ZoneId.systemDefault())
 
       entry.title = fcEntry.description
       entry.setStart(start, calendar.timezone)
