@@ -81,7 +81,7 @@ class DeliveryForm : ReportSelectionForm(" Delivery Form", Locale.UK) {
   /**
    * Insert Block
    */
-  val deliveryPage = page("Quote")
+  val deliveryPage = page("Delivery")
   val deliveryBlock = deliveryPage.insertBlock(Delivery())
 
   inner class Delivery : Block("Delivery", 1, 100) {

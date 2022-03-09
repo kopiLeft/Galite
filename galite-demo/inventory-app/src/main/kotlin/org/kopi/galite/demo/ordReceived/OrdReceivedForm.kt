@@ -16,7 +16,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import java.util.*
 
-class OrdReceivedForm : ReportSelectionForm("Order Received", Locale.UK) {
+class OrdReceivedForm : ReportSelectionForm("Form Order Received", Locale.UK) {
   val action: Menu = menu("action")
 
   val list = actor(
@@ -81,10 +81,10 @@ class OrdReceivedForm : ReportSelectionForm("Order Received", Locale.UK) {
   /**
    * Insert Block
    */
-  val ordReceivedPage = page("OrdReceived")
+  val ordReceivedPage = page("Order Received")
   val ordReceivedBlock = ordReceivedPage.insertBlock(OrdReceived())
 
-  inner class OrdReceived : Block("Delivery", 1, 100) {
+  inner class OrdReceived : Block("Order Received", 1, 100) {
     val o = table(OrdReceived)
 
     val idRec = hidden(INT(5))

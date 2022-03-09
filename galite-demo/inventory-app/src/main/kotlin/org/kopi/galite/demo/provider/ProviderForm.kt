@@ -95,7 +95,7 @@ class ProviderForm : ReportSelectionForm("Provider Form", Locale.UK) {
 
     val fName = mustFill(STRING(15), at(1, 1))
     {
-      label = "FirstName"
+      label = "First Name"
       help = "FirstName"
       columns(p.firstName)
       {
@@ -103,9 +103,9 @@ class ProviderForm : ReportSelectionForm("Provider Form", Locale.UK) {
       }
     }
 
-    val lName = mustFill(STRING(15), at(1, 1))
+    val lName = mustFill(STRING(15), at(1, 2))
     {
-      label = "LastName"
+      label = "Last Name"
       help = "LastName"
       columns(p.lastName)
       {
@@ -113,7 +113,7 @@ class ProviderForm : ReportSelectionForm("Provider Form", Locale.UK) {
       }
     }
 
-    val addr = visit(STRING(15), at(1, 2))
+    val addr = visit(STRING(15), at(2, 1))
     {
       label = "Address"
       help = "Address"
@@ -123,7 +123,7 @@ class ProviderForm : ReportSelectionForm("Provider Form", Locale.UK) {
       }
     }
 
-    val accNum = mustFill(STRING(15), at(2, 1))
+    val accNum = mustFill(STRING(15), at(2, 2))
     {
       label = "Account Number"
       help = "Account Number"
@@ -133,7 +133,7 @@ class ProviderForm : ReportSelectionForm("Provider Form", Locale.UK) {
       }
     }
 
-    val tel = mustFill(INT(8), at(2, 2))
+    val tel = mustFill(INT(8), at(2, 3))
     {
       label = "Telephone"
       help = "Telephone"

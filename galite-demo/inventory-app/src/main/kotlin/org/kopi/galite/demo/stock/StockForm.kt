@@ -15,7 +15,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import java.util.*
 
-class StockForm : ReportSelectionForm("Stock Form", Locale.UK) {
+class StockForm : ReportSelectionForm("Form Stock", Locale.UK) {
   val action: Menu = menu("action")
 
   val list = actor(
@@ -83,13 +83,13 @@ class StockForm : ReportSelectionForm("Stock Form", Locale.UK) {
   val stockPage = page("Stock")
   val stockkBlock = stockPage.insertBlock(Stock())
 
-  inner class Stock : Block("Product", 1, 100) {
+  inner class Stock : Block("Stock", 1, 100) {
     val s = table(Stocks)
 
     val idS = hidden(INT(5))
     {
       label = "ID"
-      help = "ID  Stock"
+      help = "ID Stock"
       columns(s.idS)
     }
     val qty = mustFill(INT(5), at(1, 1))

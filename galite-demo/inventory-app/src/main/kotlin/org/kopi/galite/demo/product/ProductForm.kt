@@ -1,7 +1,6 @@
 package org.kopi.galite.demo.product
 
 import org.kopi.galite.demo.database.Product
-import org.kopi.galite.demo.order.OrderR
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -13,6 +12,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
+import java.math.BigDecimal
 import java.util.*
 
 class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
@@ -34,7 +34,6 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
     key = Key.F11
     icon = Icon.BREAK
   }
-
   val new = actor(
     menu = action,
     label = "New",
@@ -59,7 +58,6 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
   ) {
     key = Key.F2
   }
-
   val dynamicReport = actor(
     menu = action,
     label = "DynamicReport",
@@ -80,12 +78,12 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
   /**
    * Insert Block
    */
-  val productPage = page("Facture client")
+  val productPage = page("Product")
   val productBlock = productPage.insertBlock(Product())
+
 
   inner class Product : Block("Product", 1, 100) {
     val p = table(Product)
-
     val idP = hidden(INT(5))
     {
       label = "ID"
@@ -118,8 +116,9 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
       label = "Qyantity"
       help = "Quantity"
       columns(p.qtyP)
-      {
-        priority = 2
+      value=1
+      trigger(VALIDATE)   {
+        priceT()
       }
     }
 
@@ -134,11 +133,14 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
     {
       label = "Price/Unity"
       help = "Price/Unity"
+      value= BigDecimal(0)
       columns(p.priceUP)
-
+      trigger(VALIDATE){
+        priceT()
+      }
     }
 
-    val priceTP = mustFill(DECIMAL(10, 5), at(3, 2))
+    val priceTP = skipped(DECIMAL(10, 5), at(3, 2))
     {
       label = "Price/Total"
       help = "Price/Total"
@@ -146,15 +148,19 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
       {
         priority = 1
       }
+      trigger(VALUE){
+        (BigDecimal(qtyP.value) * priceUP.value)
+      }
     }
 
+    fun priceT()  {
+      priceTP.value = (BigDecimal(qtyP.value) * priceUP.value)
+    }
     init {
       border = Border.LINE
-
       command(item = reset) {
         resetBlock()
       }
-
       command(item = new) {
         insertMode()
       }
@@ -173,7 +179,6 @@ class ProductForm : ReportSelectionForm("Product Form", Locale.UK) {
         saveBlock()
       }
     }
-
 
   }
 }

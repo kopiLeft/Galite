@@ -92,6 +92,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * The sorted records array.
    */
+
   lateinit var sortedRecords: IntArray
     protected set
 

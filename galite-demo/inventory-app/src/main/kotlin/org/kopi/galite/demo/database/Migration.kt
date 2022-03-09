@@ -83,8 +83,8 @@ fun initDatabase() {
     createDBSchemaTables()
     createApplicationTables()
     insertIntoUsers(testUser, "administrator")
-    addProviders()
     addClients()
+    addProviders()
     addProducts()
     addOrders()
     addBills()
@@ -121,8 +121,8 @@ fun dropApplicationTables() {
 }
 
 val list_Of_GShopApplicationTables = listOf(
-  Client,
-  Product, Provider, Stocks, Order, OrdReceived, Delivery, Bill, Quote
+  Client, Provider,
+  Product, Stocks, Order, OrdReceived, Delivery, Bill, Quote
 )
 
 val listOfSequences = listOf(
@@ -273,7 +273,6 @@ fun addClients() {
 
 fun addProduct(priceU: BigDecimal, priceT: BigDecimal, cat: String, name: String, qty: Int, vatP: BigDecimal) {
   Product.insert {
-    //it[idPro] = Providerid.nextIntVal()
     it[Product.idP] = Productid.nextIntVal()
     it[nameP] = name
     it[qtyP] = qty

@@ -122,8 +122,8 @@ class BillForm : ReportSelectionForm("Bill Form", Locale.UK) {
 
     val payDate = visit(DATE, at(2, 2))
     {
-      label = "Payment Method"
-      help = "Payment Method"
+      label = "Payment Date"
+      help = "Payment Date"
       columns(b.payDate)
       { priority = 1 }
     }

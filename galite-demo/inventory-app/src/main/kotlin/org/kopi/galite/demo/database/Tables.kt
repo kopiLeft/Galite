@@ -31,24 +31,9 @@ object Client : Table("CLIENT") {
 
 object Order : Table("ORDER") {
   val idOrd = integer("ID")
-  //val idCl = integer("CLIENT_ORDER").references(Client.idCl)
-  //val idP = integer("PRODUCT_ORDER").references(Product.idP)
   val qtyOrd = integer("QUANTITY_ORDER")
   val dateOrd = date("DATE_ORDER")
   override val primaryKey = PrimaryKey(Order.idOrd)
-}
-
-object Product : Table("PRODUCT") {
-  val idP = integer("ID")
-
-  // val idPro = integer ("PROVIDER_PRODUCT").references(Provider.idPro)
-  val nameP = varchar("NAME_PRODUCT", 10)
-  val qtyP = integer("QUANTITY_PRODUCT")
-  val vatP = decimal("VALUE_ADD_TAX_PRODUCT", 2, 1)
-  val priceUP = decimal("PRICE_UNITY ", 10, 5)
-  val priceTP = decimal("PRICE/TOTAL", 10, 5)
-  val category = varchar("CATEGORY", 10)
-  override val primaryKey = PrimaryKey(Product.idP)
 }
 
 object Provider : Table("PROVIDER") {
@@ -61,10 +46,19 @@ object Provider : Table("PROVIDER") {
   override val primaryKey = PrimaryKey(Provider.idPro)
 }
 
+object Product : Table("PRODUCT") {
+  val idP = integer("ID")
+  val nameP = varchar("NAME_PRODUCT", 10)
+  val qtyP = integer("QUANTITY_PRODUCT")
+  val vatP = decimal("VALUE_ADD_TAX_PRODUCT", 2, 1)
+  val priceUP = decimal("PRICE_UNITY ", 10, 5)
+  val priceTP = decimal("PRICE/TOTAL", 10, 5)
+  val category = varchar("CATEGORY", 10)
+  override val primaryKey = PrimaryKey(idP)
+}
+
 object Bill : Table("BILL") {
   val idB = integer("ID")
-
-  // val idOrd = integer("ORDER_BILL").references(Order.idOrd)
   val date = date("DATE")
   val priceT = decimal("TOTAL_PRICE", 10, 5)
   val payMeth = varchar("PAYMENT_METHOD", 10)
@@ -74,9 +68,6 @@ object Bill : Table("BILL") {
 
 object Delivery : Table("DELIVERY") {
   val idD = integer("ID")
-
-  // val idP= integer("PRODUCT_DELIVERY").references(Product.idP)
-  //val idPro = integer("PROVIDER_DELIVERY").references(Provider.idPro)
   val name = varchar("NAME", 20)
   val delay = date("DELAY")
   override val primaryKey = PrimaryKey(Delivery.idD)
@@ -84,16 +75,12 @@ object Delivery : Table("DELIVERY") {
 
 object OrdReceived : Table("ORDRED_RECEIVED") {
   val idRec = integer("ID")
-
-  //val idOrd = integer("ORDER_ORDRECEIVED").references(Order.idOrd)
   val total = decimal("TOTAL", 10, 5)
   override val primaryKey = PrimaryKey(OrdReceived.idRec)
 }
 
 object Stocks : Table("STOCK") {
   val idS = integer("ID")
-
-  //val idP =integer("PRODUCT_STOCK").references(Product.idP)
   val qty = integer("QUANTITY")
   val type = varchar("TYPE_ARTICLE", 15)
   override val primaryKey = PrimaryKey(Stocks.idS)
@@ -101,9 +88,6 @@ object Stocks : Table("STOCK") {
 
 object Quote : Table("QUOTE") {
   val idQ = integer("ID")
-
-  //val idPro = integer("PROVIDER_QUOTE").references(Provider.idPro)
-  // val idP = integer ("PRODUCT_QUOTE").references(Product.idP)
   val date = date("Date")
   override val primaryKey = PrimaryKey(Quote.idQ)
 }
