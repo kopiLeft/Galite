@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modules>
+    <!--Clients-->
+    <module ident="1000" label="Client" help="Client" />
+    <module ident="1001" label="Client form" help="Client " />
+
+    <!--Provider-->
+    <module ident="2000" label="Provider" help="Provider" />
+    <module ident="2001" label="Provider form" help="Provider" />
+
+    <!--Product-->
+    <module ident="3000" label="Product" help="Product" />
+    <module ident="3001" label="Product form" help="Product" />
+
+    <!--Bill-->
+    <module ident="4000" label="Bill" help="Bill" />
+    <module ident="4001" label="Bill form" help="Bill" />
+
+    <!--Order-->
+    <module ident="5000" label="Order" help="Order" />
+    <module ident="5001" label="Order form" help="Order" />
+
+    <!--OrderReceived-->
+    <module ident="6000" label="OrdReceived " help="OrdReceived" />
+    <module ident="6001" label="OrdReceived form" help="OrdReceived" />
+
+    <!--Delivery-->
+    <module ident="7000" label="Delivery " help="Delivery" />
+    <module ident="7001" label="Delivery form" help="Delivery" />
+
+    <!--Quote-->
+    <module ident="8000" label="Quote " help="Quote" />
+    <module ident="8001" label="Quote form" help="Quote " />
+
+    <!--Stock-->
+    <module ident="9000" label="Stock " help="Stock" />
+    <module ident="9001" label="Stock form" help="Stock" />
+</modules>
