@@ -22,12 +22,13 @@ import kotlin.test.assertEquals
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.ListDomain
 
 /**
  * Contains tests of list-domain creation and manipulation
  */
-class ListDomainTests {
+class ListDomainTests : VApplicationTestBase() {
 
   /**
    * Tests the creation of a simple list domain

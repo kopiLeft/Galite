@@ -51,6 +51,12 @@ class VBooleanCodeColumn(ident: String?,
                 format,
                 names) {
 
+  init {
+    if (codes.size > 2) {
+      throw InconsistencyException("Can't define more than two codes for a boolean column")
+    }
+  }
+
   override fun compareTo(object1: Any, object2: Any): Int {
     return if (object1 == object2) 0 else if (true == object1) 1 else -1
   }
@@ -64,11 +70,5 @@ class VBooleanCodeColumn(ident: String?,
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatBooleanColumn(this, index)
-  }
-
-  init {
-    if (codes.size > 2) {
-      throw InconsistencyException("Can't define more than two codes for a boolean column")
-    }
   }
 }

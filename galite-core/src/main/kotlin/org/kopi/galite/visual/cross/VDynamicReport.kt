@@ -20,7 +20,6 @@ package org.kopi.galite.visual.cross
 import java.awt.event.KeyEvent
 import java.math.BigDecimal
 import java.sql.SQLException
-import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
@@ -127,7 +126,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * @param     fields  block fields.
    * @return fields that will represent columns in the dynamic report.
    */
-  private fun initFields(fields: Array<VField>): Array<VField> {
+  private fun initFields(fields: List<VField>): Array<VField> {
     val processedFields = mutableListOf<VField>()
 
     fields.forEach { field ->
@@ -314,7 +313,7 @@ class VDynamicReport(block: VBlock) : VReport() {
       }
       col++
     }
-    model.columns = columns
+    model.columns = columns.toMutableList()
     if (block.isMulti() && isFetched) {
       for (i in 0 until block.bufferSize) {
         if (block.isRecordFilled(i)) {
@@ -336,7 +335,7 @@ class VDynamicReport(block: VBlock) : VReport() {
         }
       }
     } else {
-      val alreadyProtected: Boolean = block.form.inTransaction()
+      val alreadyProtected: Boolean = inTransaction()
       try {
         while (true) {
           try {
@@ -418,7 +417,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   }
 
   // methods overridden from VReport
-  override fun localize(locale: Locale?) {
+  override fun localize() {
     // report columns inherit their localization from the Block.
     // actors are localized with VlibProperties.
   }
@@ -475,13 +474,18 @@ class VDynamicReport(block: VBlock) : VReport() {
     number++
   }
 
+  override fun addActors(actorDefs: Array<VActor>?) {
+    val actorDefs = actorDefs.orEmpty()
+
+    actors.addAll(actorDefs)
+  }
+
   // ----------------------------------------------------------------------
   // Default Commands
   // ----------------------------------------------------------------------
   private fun initDefaultCommands() {
-    commands = arrayOfNulls(actorsDef.size)
     for (i in 0..10) {
-      commands!![i] = VReportCommand(this, actorsDef[i]!!)
+      commands.add(VReportCommand(this, actorsDef[i]!!))
     }
   }
 

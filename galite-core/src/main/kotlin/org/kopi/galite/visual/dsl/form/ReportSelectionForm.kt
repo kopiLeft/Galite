@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
  * Represents a report selection form.
@@ -41,9 +42,14 @@ abstract class ReportSelectionForm(title: String, locale: Locale? = null) : Dict
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
-  override val model: VReportSelectionForm by lazy {
-    ReportSelectionFormModel(this).also {
-      isModelInitialized = true
+  override val model: VReportSelectionForm = object : VReportSelectionForm() {
+    init {
+      source = sourceFile // TODO: move to VWindow
+      setTitle(title)
     }
+
+    override val locale get() = this@ReportSelectionForm.locale ?: ApplicationContext.getDefaultLocale()
+
+    override fun formClassName(): String = this@ReportSelectionForm.javaClass.name
   }
 }

@@ -21,9 +21,10 @@ import java.awt.Color
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.report.ColumnStyle
 
-class ColumnStyleTests {
+class ColumnStyleTests : VApplicationTestBase() {
 
   var columnStyle = ColumnStyle()
 

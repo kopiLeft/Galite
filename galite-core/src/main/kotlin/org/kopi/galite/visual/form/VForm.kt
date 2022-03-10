@@ -53,16 +53,13 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
   // ----------------------------------------------------------------------
   // static (from DSL) data
   override var source: String? = null // qualified name of source file
-  lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String>
-  internal lateinit var pagesIdents: Array<String>
-  internal var help: String? = null //the name of this field
-  internal val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
+  val blocks = mutableListOf<VBlock>()
+  val pages = mutableListOf<String>()
+  val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
 
   // dynamic data
   private val blockMoveAllowed = true
   private var activeBlock: VBlock? = null
-  internal lateinit var commands: Array<VCommand> // commands
 
   private val formListener = EventListenerList()
 
@@ -101,6 +98,10 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
 
+  init {
+    localize()
+  }
+
   /**
    * loads the form
    */
@@ -109,10 +110,6 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
       initialise()
       callTrigger(VConstants.TRG_PREFORM)
     }
-    initActors()
-
-    // localize the form using the default locale
-    localize(ApplicationContext.getDefaultLocale())
   }
 
   override fun getType(): Int = Constants.MDL_FORM
@@ -196,6 +193,17 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
   }
 
   /**
+   * Adds and localizes a block to this form.
+   *
+   * @param block the block to add.
+   */
+  fun addBlock(block: VBlock) {
+    blocks.add(block)
+    block.localize(manager, locale)
+    addActors(block.actors)
+  }
+
+  /**
    * addCommand in menu
    */
   override fun addActors(actorDefs: Array<VActor>?) {
@@ -221,13 +229,8 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
   /**
    * Localize this form
    *
-   * @param     locale  the locale to use
    */
-  fun localize(locale: Locale?) {
-    val manager: LocalizationManager?
-
-    manager = LocalizationManager(locale, Locale.getDefault())
-    super.localizeActors(manager) // localizes the actors in VWindow
+  fun localize() {
     localize(manager)
   }
 
@@ -245,21 +248,13 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
         pages[i] = loc.getPage(i)
       }
     }
-    blocks.forEach { block ->
-      block.localize(manager, locale)
-    }
   }
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  open fun initActors() {
-    for (i in blocks.indices) {
-      addActors(blocks[i].actors)
-    }
-  }
-
   open fun prepareForm() {
+    initIntern()
     val block: VBlock? = getActiveBlock()
 
     block?.leave(false)
@@ -807,8 +802,8 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
       append("\n")
 
       // support better message
-      for (i in blocks.indices) {
-        append(blocks[i].toString())
+      blocks.forEach { block ->
+        append(block.toString())
       }
     } catch (e: Exception) {
       append("exception while retrieving form information. \n")

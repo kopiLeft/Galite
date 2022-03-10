@@ -21,6 +21,7 @@ import java.util.Locale
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
+import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
 
 /**
@@ -127,9 +128,14 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
   // ----------------------------------------------------------------------
   // DICTIONARY FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VDictionaryForm by lazy {
-    DictionaryFormModel(this).also {
-      isModelInitialized = true
+  override val model: VDictionaryForm = object : VDictionaryForm() {
+    init {
+      source = sourceFile // TODO: move to VWindow
+      setTitle(title)
     }
+
+    override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale() // TODO: !!
+
+    override fun formClassName(): String = this@DictionaryForm.javaClass.name
   }
 }

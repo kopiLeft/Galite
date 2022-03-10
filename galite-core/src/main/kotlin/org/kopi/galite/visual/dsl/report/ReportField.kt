@@ -28,6 +28,7 @@ import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.visual.VCommand
 
 /**
@@ -91,10 +92,14 @@ class ReportField<T>(override val domain: Domain<T>,
     }
 
   fun initialize() {
-    init()
+    initField()
     if(domain.kClass == BigDecimal::class) {
       align = FieldAlignment.RIGHT
     }
+  }
+
+  fun initField() {
+    init()
   }
 
   /**
@@ -125,6 +130,29 @@ class ReportField<T>(override val domain: Domain<T>,
     return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it
     }
+  }
+
+  lateinit var columnModel: VReportColumn
+
+  fun buildReportColumn(): VReportColumn {
+    val function: VCalculateColumn? = if (computeTrigger != null) {
+      computeTrigger!!.action.method() as VCalculateColumn
+    } else {
+      null
+    }
+
+    val format: VCellFormat? = if (formatTrigger != null) {
+      formatTrigger!!.action.method() as VCellFormat
+    } else {
+      null
+    }
+
+    columnModel = domain.buildReportFieldModel(this, function, format).also { column ->
+      column.label = label ?: ""
+      column.help = help
+    }
+
+    return columnModel
   }
 
   // ----------------------------------------------------------------------

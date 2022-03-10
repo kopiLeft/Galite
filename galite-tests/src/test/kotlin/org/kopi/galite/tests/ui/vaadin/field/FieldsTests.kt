@@ -66,7 +66,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FieldsTests : GaliteVUITestBase() {
 
-  val form = TestFieldsForm().also { it.model }
+  val form = TestFieldsForm()
 
   @Before
   fun `login to the App`() {
@@ -228,7 +228,7 @@ class FieldsTests : GaliteVUITestBase() {
 
   @Test
   fun `open form via field`() {
-    val form = FormToTestFormPopUp().also { it.model }
+    val form = FormToTestFormPopUp()
     form.open()
 
     val field = form.userListBlock.user.findField() as Focusable<*>

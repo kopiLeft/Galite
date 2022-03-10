@@ -38,7 +38,7 @@ abstract class VReportColumn(
         val ident: String?,
         val options: Int,
         val align: Int,
-        val groups: Int,
+        var groups: Int,
         val function: VCalculateColumn?,
         var width: Int,
         var height: Int,

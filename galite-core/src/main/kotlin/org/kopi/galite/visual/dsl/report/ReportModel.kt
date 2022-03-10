@@ -30,121 +30,36 @@ import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.visual.ApplicationContext
 
-class ReportModel(val report: Report): VReport() {
+open class ReportModel(val report: Report): VReport() {
 
   init {
-    init()
-
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
-  }
-
-  override val locale: Locale get() = report.locale ?: ApplicationContext.getDefaultLocale()
-
-  override fun init() {
     setTitle(report.title)
     setPageTitle(report.title)
     help = report.help
-    addActors(
-      report.actors.map { actor ->
-        actor.buildModel()
-      }.toTypedArray()
-    )
-    commands = report.commands.map { command ->
-      command.buildModel(this, actors)
-    }.toTypedArray()
-
     source = report.sourceFile
 
     if (report.reportCommands) {
       addDefaultReportCommands()
     }
 
-    model.addReportColumns()
-    model.addReportLines()
+    model.columns.add(VSeparatorColumn()) // TODO!!!
 
-    handleTriggers(report.triggers)
+    // localize the report using the default locale
+    localize()
+  }
+
+  override fun init() {
+    report.fields.forEach {
+      it.initField()
+
+      if (it.group != null) {
+        it.groupID = report.fields.indexOf(it.group)
+        it.columnModel.groups = it.groupID
+      }
+    }
   }
 
   override fun add() {
     // TODO
-  }
-
-  fun MReport.addReportColumns() {
-    val userFields = report.fields.map {
-      if (it.group != null) {
-        it.groupID = report.fields.indexOf(it.group)
-      }
-
-      val function: VCalculateColumn? = if (it.computeTrigger != null) {
-        it.computeTrigger!!.action.method() as VCalculateColumn
-      } else {
-        null
-      }
-
-      val format: VCellFormat? = if (it.formatTrigger != null) {
-        it.formatTrigger!!.action.method() as VCellFormat
-      } else {
-        null
-      }
-
-      it.domain.buildReportFieldModel(it, function, format).also { column ->
-        column.label = it.label ?: ""
-        column.help = it.help
-      }
-    }
-    columns = (userFields + VSeparatorColumn()).toTypedArray()
-  }
-
-  private fun MReport.addReportLines() {
-    report.reportRows.forEach {
-      val list = report.fields.map { field ->
-        it.data[field]
-      }
-
-      // Last null value is added for the separator column
-      addLine((list + listOf(null)).toTypedArray())
-    }
-  }
-
-  /**
-   * Handling triggers
-   */
-  fun handleTriggers(triggers: MutableList<Trigger>) {
-    // REPORT TRIGGERS
-    VKT_Triggers = mutableListOf(arrayOfNulls(Constants.TRG_TYPES.size))
-    val reportTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
-
-    triggers.forEach { trigger ->
-      for (i in VConstants.TRG_TYPES.indices) {
-        if (trigger.events shr i and 1 > 0) {
-          reportTriggerArray[i] = trigger
-        }
-      }
-      VKT_Triggers!![0] = reportTriggerArray
-    }
-
-    // FIELD TRIGGERS
-    report.fields.forEach {
-      val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
-      if (it.computeTrigger != null) {
-        fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!
-      }
-      if (it.formatTrigger != null) {
-        fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!
-      }
-      // TODO : Add field triggers here
-      VKT_Triggers!!.add(fieldTriggerArray)
-    }
-
-    // TODO: for separator column
-    VKT_Triggers!!.add(arrayOfNulls(Constants.TRG_TYPES.size))
-
-    // COMMANDS TRIGGERS
-    commands?.forEach {
-      val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
-      // TODO : Add commands triggers here
-      VKT_Triggers!!.add(fieldTriggerArray)
-    }
   }
 }

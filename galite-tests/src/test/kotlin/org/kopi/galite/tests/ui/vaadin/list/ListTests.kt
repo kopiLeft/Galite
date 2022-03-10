@@ -41,7 +41,7 @@ import com.vaadin.flow.component.grid.Grid
 
 class ListTests: GaliteVUITestBase() {
 
-  private val formWithList = CommandsForm().also { it.model } // initialize the model
+  private val formWithList = CommandsForm()
 
   @Before
   fun `login to the App`() {

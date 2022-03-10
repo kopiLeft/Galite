@@ -70,9 +70,9 @@ import com.vaadin.flow.component.textfield.TextField
 
 class MultipleBlockFormTests : GaliteVUITestBase() {
 
-  val multipleBlockSaveForm = FormToTestSaveMultipleBlock().also { it.model }
-  val multipleForm = MultipleBlockForm().also { it.model }
-  val formExample = FormExample().also { it.model }
+  val multipleBlockSaveForm = FormToTestSaveMultipleBlock()
+  val multipleForm = MultipleBlockForm()
+  val formExample = FormExample()
 
   @Before
   fun `login to the App`() {
@@ -214,7 +214,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test add command`() {
-    val form = MultipleBlockForm().also { it.model }
+    val form = MultipleBlockForm()
     form.query.triggerCommand()
 
     // Check that the list dialog contains a grid

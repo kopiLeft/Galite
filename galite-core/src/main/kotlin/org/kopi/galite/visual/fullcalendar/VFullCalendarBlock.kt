@@ -47,7 +47,7 @@ import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 
-abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
+abstract class VFullCalendarBlock() : VBlock() {
 
   lateinit var fullCalendarForm: VFullCalendarForm
   var dateField: VDateField? = null
@@ -60,8 +60,6 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
    * Returns true if this block can display more than one record.
    */
   override fun isMulti(): Boolean = true
-
-  override fun initIntern() { }
 
   /**
    * Fetch full calendar entries from database. This will select all entries between

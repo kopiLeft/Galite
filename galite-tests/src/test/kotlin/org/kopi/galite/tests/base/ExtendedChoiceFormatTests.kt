@@ -20,10 +20,11 @@ package org.kopi.galite.tests.base
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.base.ExtendedChoiceFormat
 import org.kopi.galite.visual.base.ExtendedMessageFormat
 
-class ExtendedChoiceFormatTests {
+class ExtendedChoiceFormatTests : VApplicationTestBase() {
 
   val extendedChoiceFormat = ExtendedChoiceFormat(doubleArrayOf(0.0, 0.5, 1.0), arrayOf("zero", "half", "one"), true)
 

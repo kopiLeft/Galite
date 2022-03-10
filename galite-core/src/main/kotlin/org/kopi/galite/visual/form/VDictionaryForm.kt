@@ -19,6 +19,7 @@ package org.kopi.galite.visual.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VWindow
@@ -89,7 +90,7 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
 
   override fun prepareForm() {
     block = getBlock(0)
-    assert(!block!!.isMulti()) { threadInfo() }
+    assert(!block!!.isMulti() || block is VFullCalendarBlock) { threadInfo() }
 
     if (newRecord) {
       if (getBlock(0) == null) {
@@ -138,7 +139,7 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
     isRecursiveQuery = true
     savedData = arrayListOf()
     savedState = arrayListOf()
-    val fields: Array<VField> = block!!.fields
+    val fields = block!!.fields
     fields.forEach { field ->
       savedData!!.add(field.getObject(0))
     }
@@ -150,7 +151,7 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
   private fun retrieveFilledField() {
     isRecursiveQuery = false
     super.reset()
-    val fields: Array<VField> = block!!.fields
+    val fields = block!!.fields
     for (i in fields.indices) {
       fields[i].setObject(0, savedData!!.elementAt(i))
     }
