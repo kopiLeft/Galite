@@ -277,11 +277,12 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.`package`.name.replace(".", "/")
+        ?: (this.javaClass.classLoader.getResource("")?.path +
+                this.javaClass.`package`.name.replace(".", "/"))
       try {
         val writer = ReportLocalizationWriter()
         genLocalization(writer)
-        writer.write(localizationDestination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")

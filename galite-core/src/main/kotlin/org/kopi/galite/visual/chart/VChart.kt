@@ -95,8 +95,6 @@ abstract class VChart : VWindow(), CConstants, Printable {
   private var cmdLineView: VCommand? = null
   private var cmdAreaView: VCommand? = null
   private var cmdPieView: VCommand? = null
-
-  override lateinit var source: String
   private var built = false
   private var pageTitle = ""
   var help: String? = null

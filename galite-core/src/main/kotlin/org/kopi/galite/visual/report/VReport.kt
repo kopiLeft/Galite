@@ -90,7 +90,6 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   private var cmdUnfoldColumn: VCommand? = null
   private var cmdColumnInfo: VCommand? = null
   private var cmdEditColumn: VCommand? = null
-  override lateinit var source: String // The source for this document
   val model: MReport = MReport()
   private var built = false
   private var pageTitle = ""

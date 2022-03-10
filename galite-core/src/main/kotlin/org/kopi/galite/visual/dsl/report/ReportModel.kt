@@ -18,17 +18,8 @@
 
 package org.kopi.galite.visual.dsl.report
 
-import java.util.Locale
-
-import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.report.Constants
-import org.kopi.galite.visual.report.MReport
-import org.kopi.galite.visual.report.VCalculateColumn
-import org.kopi.galite.visual.report.VCellFormat
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
-import org.kopi.galite.visual.visual.ApplicationContext
 
 open class ReportModel(val report: Report): VReport() {
 

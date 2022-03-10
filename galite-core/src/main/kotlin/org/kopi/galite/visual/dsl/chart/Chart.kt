@@ -38,7 +38,7 @@ import org.kopi.galite.visual.visual.ApplicationContext
  * In fact, all you have to do to create a chart is to define the dimensions you need and their measures,
  * then you will have to write a constructor that will load data into these fields.
  *
- * With this Charts, you will also be able to print or export the created chart to different file formats.
+ * With these charts, you will also be able to print or export the created chart to different file formats.
  *
  *
  * @param title The title of this form.
@@ -230,8 +230,8 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path +
-              this.javaClass.`package`.name.replace(".", "/")
+        ?: (this.javaClass.classLoader.getResource("")?.path +
+                this.javaClass.`package`.name.replace(".", "/"))
       try {
         val writer = ChartLocalizationWriter()
         genLocalization(writer)

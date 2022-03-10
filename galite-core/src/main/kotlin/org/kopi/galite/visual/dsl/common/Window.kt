@@ -30,9 +30,6 @@ import org.kopi.galite.visual.visual.VWindow
  */
 abstract class Window(val title: String, val locale: Locale?) {
 
-  /** The window options */
-  internal var options: Int? = null
-
   /** Actors added to this window */
   internal val actors = mutableListOf<Actor>()
 
@@ -43,9 +40,6 @@ abstract class Window(val title: String, val locale: Locale?) {
   internal var triggers = mutableListOf<Trigger>()
 
   internal var isModelInitialized: Boolean = false
-
-  /** The model generated from this class. */
-  abstract val model: VWindow
 
   /** Menus added to this window */
   val menus = mutableListOf<Menu>()
@@ -153,6 +147,9 @@ abstract class Window(val title: String, val locale: Locale?) {
   fun reset() {
     model.reset()
   }
+
+  /** The model generated from this class. */
+  abstract val model: VWindow
 
   abstract fun genLocalization(destination: String? = null, locale: Locale? = this.locale)
 

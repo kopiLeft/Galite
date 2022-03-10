@@ -52,7 +52,6 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   // static (from DSL) data
-  override var source: String? = null // qualified name of source file
   val blocks = mutableListOf<VBlock>()
   val pages = mutableListOf<String>()
   val VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
