@@ -110,7 +110,7 @@ open class Actor(val menu: Menu,
   /**
    * Builds the actor model [VActor] from information provided by this actor.
    */
-  internal fun buildModel() : VActor =
+  private fun buildModel() : VActor =
           if (number == 0) {
             VActor(menu.label, menu.sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
           } else {

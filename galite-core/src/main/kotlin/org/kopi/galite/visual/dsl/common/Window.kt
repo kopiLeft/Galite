@@ -85,7 +85,7 @@ abstract class Window(val title: String, val locale: Locale?) {
       menus.add(actor.menu)
     }
     actors.add(actor)
-    model.addActor(actor.buildModel())
+    model.addActor(actor.model)
     return actor
   }
 
