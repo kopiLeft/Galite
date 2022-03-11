@@ -79,8 +79,6 @@ abstract class Window(val title: String, val locale: Locale?) {
    * @param actor the actor to add.
    */
   fun actor(actor: Actor): Actor {
-    actor.ident = actor.command?.ident ?: "actor${actors.size}"
-
     if (!menus.contains(actor.menu)) {
       menus.add(actor.menu)
     }
@@ -103,11 +101,7 @@ abstract class Window(val title: String, val locale: Locale?) {
             help: String,
             command: PredefinedCommand? = null,
             init: (Actor.() -> Unit)? = null): Actor {
-    val actor = Actor(menu, label, help, command, source = sourceFile)
-
-    if (init != null) {
-      actor.init()
-    }
+    val actor = Actor(menu, label, help, command, "actor${actors.size}", sourceFile, init)
 
     actor(actor)
 

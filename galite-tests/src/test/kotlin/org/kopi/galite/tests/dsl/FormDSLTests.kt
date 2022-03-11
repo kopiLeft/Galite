@@ -235,13 +235,13 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
 
-    assertEquals(1, formModel._getCommands().size)
+    assertEquals(1, formModel.commands.size)
 
-    assertEquals(form.resetForm.ident, formModel._getCommands()[0].item)
-    assertEquals(form.resetForm.ident, formModel._getCommands()[0].actor!!.actorIdent)
-    assertEquals(form.resetForm.menu.label, formModel._getCommands()[0].actor!!.menuIdent)
-    assertEquals(form.resetForm.icon?.iconName, formModel._getCommands()[0].actor!!.iconName)
-    assertEquals(form.resetForm.help, formModel._getCommands()[0].actor!!.help)
+    assertEquals(form.resetForm.ident, formModel.commands[0].item)
+    assertEquals(form.resetForm.ident, formModel.commands[0].actor!!.actorIdent)
+    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!.menuIdent)
+    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!.iconName)
+    assertEquals(form.resetForm.help, formModel.commands[0].actor!!.help)
   }
 
   @Test

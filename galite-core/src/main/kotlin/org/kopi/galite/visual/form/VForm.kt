@@ -21,11 +21,9 @@ import java.io.File
 import java.lang.Error
 import java.net.MalformedURLException
 import java.sql.SQLException
-import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
@@ -813,7 +811,4 @@ abstract class VForm protected constructor() : VWindow(), VConstants {
   fun printFormScreen(): PrintJob? {
     return (getDisplay() as UForm).printForm()
   }
-
-  @TestOnly
-  fun _getCommands() = commands
 }
