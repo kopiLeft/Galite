@@ -55,7 +55,6 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @param        title                  the title of the block
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
-   * @param        formPage              the page containing the block
    */
   fun block(
           title: String,

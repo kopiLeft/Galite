@@ -122,18 +122,13 @@ abstract class Window(val title: String, val locale: Locale?) {
    * @param action  the action function.
    */
   fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
-    val command = Command(item)
-
-    if (modes.isNotEmpty()) {
-      command.setMode(*modes)
-    }
-    command.action = action
+    val command = Command(item, modes, model, action = action)
 
     if(!actors.contains(item)) {
       actor(item)
     }
     commands.add(command)
-    model.commands.add(command.buildModel(model, item.model))
+    model.commands.add(command.model)
     addCommandTrigger()
 
     return command

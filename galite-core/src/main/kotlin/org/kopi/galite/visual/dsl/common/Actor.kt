@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.visual.VDefaultActor
+import org.kopi.galite.visual.visual.VHelpGenerator
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -69,6 +70,31 @@ open class Actor(val menu: Menu,
   }
 
   // ----------------------------------------------------------------------
+  // ACTIONS HANDLING
+  // ----------------------------------------------------------------------
+  fun performAction() {
+    model.performAction()
+  }
+
+  fun performBasicAction() {
+    model.performBasicAction()
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  fun helpOnCommand(help: VHelpGenerator) {
+    model.helpOnCommand(help)
+  }
+
+  // --------------------------------------------------------------------
+  // DEBUG
+  // --------------------------------------------------------------------
+  override fun toString(): String {
+    return model.toString()
+  }
+
+  // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
   fun genLocalization(writer: LocalizationWriter) {
@@ -79,7 +105,7 @@ open class Actor(val menu: Menu,
   // ACTOR MODEL
   // ----------------------------------------------------------------------
 
-  var model: VActor? = null
+  var model: VActor = buildModel()
 
   /**
    * Builds the actor model [VActor] from information provided by this actor.

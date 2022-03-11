@@ -149,12 +149,8 @@ open class FormField<T>(internal val block: Block,
    * @param action  the action function.
    */
   fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
-    val command = Command(item)
+    val command = Command(item, modes, block.block, action = action)
 
-    if (modes.isNotEmpty()) {
-      command.setMode(*modes)
-    }
-    command.action = action
     commands.add(command)
 
     // FIELDS COMMANDS TRIGGERS
@@ -424,7 +420,7 @@ open class FormField<T>(internal val block: Block,
       columns?.getColumnsModels()?.toTypedArray(), // TODO
       columns?.index?.indexNumber ?: 0,
       columns?.priority ?: 0,
-      commands.map { it.buildModel(block.block, it.item.model) }.toTypedArray(),
+      commands.map { it.model }.toTypedArray(),
       position?.getPositionModel(),
       align.value,
       null // TODO

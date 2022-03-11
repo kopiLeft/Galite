@@ -37,9 +37,6 @@ open class VCommand(private var mode: Int,
     killed = true
   }
 
-  /**
-   * Returns the actor
-   */
   open fun setEnabled(enabled: Boolean) {
     this.actor?.let {
       if (!killed) {

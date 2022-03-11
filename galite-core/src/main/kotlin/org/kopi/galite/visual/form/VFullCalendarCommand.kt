@@ -32,9 +32,7 @@ class VFullCalendarCommand(
   actor: VActor,
   mode: Int
 ) : VCommand(mode, null, actor, actor.number, actor.actorIdent), ActionHandler {
-  /**
-   * Returns the actor
-   */
+
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
       actor!!.isEnabled = enabled

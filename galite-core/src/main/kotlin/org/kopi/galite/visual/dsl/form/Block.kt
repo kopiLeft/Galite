@@ -341,19 +341,15 @@ open class Block(val title: String,
    * @param action  the action function.
    */
   fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
-    val command = Command(item)
+    val command = Command(item, modes, block, action = action)
 
-    if (modes.isNotEmpty()) {
-      command.setMode(*modes)
-    }
-    command.action = action
     commands.add(command)
 
     // COMMANDS TRIGGERS
     // TODO : Add commands triggers here
     block.VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
 
-    block.commands.add(command.buildModel(block, item.model))
+    block.commands.add(command.model)
 
     return command
   }
