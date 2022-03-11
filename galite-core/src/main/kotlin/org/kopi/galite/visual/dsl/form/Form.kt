@@ -319,9 +319,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // FORM MODEL
   // ----------------------------------------------------------------------
 
-  override val model: VForm = object : VForm() {
+  override val model: VForm = object : VForm(sourceFile) {
     init {
-      source = sourceFile // TODO: move to VWindow
       setTitle(title)
     }
 

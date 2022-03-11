@@ -128,9 +128,8 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
   // ----------------------------------------------------------------------
   // DICTIONARY FORM MODEL
   // ----------------------------------------------------------------------
-  override val model: VDictionaryForm = object : VDictionaryForm() {
+  override val model: VDictionaryForm = object : VDictionaryForm(sourceFile) {
     init {
-      source = sourceFile // TODO: move to VWindow
       setTitle(title)
     }
 

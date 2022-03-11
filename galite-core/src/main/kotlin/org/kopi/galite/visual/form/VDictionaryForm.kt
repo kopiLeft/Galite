@@ -24,7 +24,7 @@ import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VRuntimeException
 import org.kopi.galite.visual.visual.VWindow
 
-abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
+abstract class VDictionaryForm protected constructor(source: String? = null) : VForm(source), VDictionary {
 
   // ----------------------------------------------------------------------
   // QUERY SEARCH

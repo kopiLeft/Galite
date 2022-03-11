@@ -24,7 +24,7 @@ import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.Message
 import org.kopi.galite.visual.visual.MessageCode
 
-abstract class VChartSelectionForm : VDictionaryForm() {
+abstract class VChartSelectionForm(source: String? = null) : VDictionaryForm(source) {
 
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS

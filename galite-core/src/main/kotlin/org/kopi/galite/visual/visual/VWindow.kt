@@ -40,10 +40,11 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 /**
  * Creates a window
  *
+ * @param source The localization source of this window.
  * @param dBConnection The database connection for this object.
  * if is specified, it will create a window with a connection
  */
-abstract class VWindow(override var dBConnection: Connection? = ApplicationContext.getDBConnection())
+abstract class VWindow(var source: String? = null, override var dBConnection: Connection? = ApplicationContext.getDBConnection())
   : DBContextHandler, Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -59,7 +60,6 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
-  var source: String? = null // The localization source of this window.
   open val locale: Locale? = null
 
   // localize the form using the default locale

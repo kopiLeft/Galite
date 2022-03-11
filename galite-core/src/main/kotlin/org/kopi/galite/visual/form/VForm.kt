@@ -44,7 +44,7 @@ import org.kopi.galite.visual.visual.VWindow
 import org.kopi.galite.visual.visual.WindowBuilder
 import org.kopi.galite.visual.visual.WindowController
 
-abstract class VForm protected constructor() : VWindow(), VConstants {
+abstract class VForm protected constructor(source: String? = null) : VWindow(source), VConstants {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
