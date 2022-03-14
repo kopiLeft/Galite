@@ -3584,10 +3584,6 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
     }
   }
 
-  override var dBConnection: Connection?
-    get() = form.dBConnection
-    set(value) = throw InconsistencyException("CALL IT ON FORM")
-
   override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()

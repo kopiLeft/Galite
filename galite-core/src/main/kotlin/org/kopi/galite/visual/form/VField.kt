@@ -1949,7 +1949,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     } else {
       val selected = if (lineCount == 0 && newForm != null && isNull(block!!.activeRecord)) {
-        newForm.add(getForm())
+        newForm.add()
       } else {
         if (lineCount == MAX_LINE_COUNT - 1) {
           getForm().notice(MessageCode.getMessage("VIS-00028"))

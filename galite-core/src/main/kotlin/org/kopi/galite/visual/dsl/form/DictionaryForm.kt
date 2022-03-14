@@ -39,11 +39,10 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * database query. The returned integer represents the identifier
    * of the selected record after the search operation.
    *
-   * @param parent The parent window.
    * @return The selected ID of the searched record.
    * @throws VException Any visual errors that occurs during search operation.
    */
-  fun search(parent: Window): Int = model.search(parent.model)
+  fun search(): Int = model.search()
 
   /**
    * Edits an existing record.
@@ -52,12 +51,11 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * database query. The returned integer represents the identifier
    * of the edited record after the edit operation.
    *
-   * @param parent The parent window.
    * @param id The record ID to be edited.
    * @return The edited record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun edit(parent: Window, id: Int): Int = model.edit(parent.model, id)
+  fun edit(id: Int): Int = model.edit(id)
 
   /**
    * Adds a new record.
@@ -66,31 +64,30 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * database query. The returned integer represents the identifier
    * of the created record.
    *
-   * @param parent The parent window.
    * @return The created record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun add(parent: Window): Int = model.add(parent.model)
+  fun add(): Int = model.add()
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun editWithID(parent: Window, id: Int): Int = model.editWithID(parent.model, id)
+  fun editWithID(id: Int): Int = model.editWithID(id)
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun openForQuery(parent: Window): Int = model.openForQuery(parent.model)
+  fun openForQuery(): Int = model.openForQuery()
 
   /**
    * create a new record and returns id
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun newRecord(parent: Window): Int = model.newRecord(parent.model)
+  fun newRecord(): Int = model.newRecord()
 
   /**
    * close the form

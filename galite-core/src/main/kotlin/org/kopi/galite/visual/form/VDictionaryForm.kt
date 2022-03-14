@@ -22,7 +22,6 @@ import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
 
 abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
 
@@ -54,10 +53,9 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
    *
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun editWithID(parent: VWindow, id: Int): Int {
-    dBConnection = parent.dBConnection
+  fun editWithID(id: Int): Int {
     editID = id
-    doModal(parent)
+    doModal()
     newRecord = false
     editID = -1
     return iD
@@ -68,10 +66,9 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
    *
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun openForQuery(parent: VWindow): Int {
-    dBConnection = parent.dBConnection
+  fun openForQuery(): Int {
     lookup = true
-    doModal(parent)
+    doModal()
     lookup = false
     return iD
   }
@@ -80,10 +77,9 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
    * create a new record and returns id
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun newRecord(parent: VWindow): Int {
+  fun newRecord(): Int {
     newRecord = true
-    dBConnection = parent.dBConnection
-    doModal(parent)
+    doModal()
     newRecord = false
     return iD
   }
@@ -123,16 +119,16 @@ abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
   // ----------------------------------------------------------------------
   // VDICTIONARY IMPLEMENTATION
   // ----------------------------------------------------------------------
-  override fun search(parent: VWindow): Int {
-    return openForQuery(parent)
+  override fun search(): Int {
+    return openForQuery()
   }
 
-  override fun edit(parent: VWindow, id: Int): Int {
-    return editWithID(parent, id)
+  override fun edit(id: Int): Int {
+    return editWithID(id)
   }
 
-  override fun add(parent: VWindow): Int {
-    return newRecord(parent)
+  override fun add(): Int {
+    return newRecord()
   }
 
   fun saveFilledField() {

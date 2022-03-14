@@ -330,7 +330,7 @@ public class DListDialog extends JPanel implements UListDialog {
      */
     private int doNewForm(final VForm form, final VDictionary cstr) throws VException {
         if (form != null && cstr != null) {
-            return cstr.add(form);
+            return cstr.add();
         } else {
             return VListDialog.Companion.getNEW_CLICKED();
         }

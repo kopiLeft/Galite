@@ -110,7 +110,6 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
         }.toTypedArray()
         addActors(defaultActors)
 
-        dBConnection = vSimpleBlock.dBConnection
         addBlock(vSimpleBlock)
         source = vSimpleBlock.source
         setTitle(vSimpleBlock.title)

@@ -36,7 +36,6 @@ abstract class VChartSelectionForm : VDictionaryForm() {
     b.validate()
     try {
       chart.setWaitInfo(Message.getMessage("chart_generation"))
-      chart.dBConnection = chart.dBConnection
       chart.doNotModal()
       chart.unsetWaitInfo()
     } catch (e: VNoChartRowException) {
@@ -54,7 +53,6 @@ abstract class VChartSelectionForm : VDictionaryForm() {
     try {
       setWaitInfo(Message.getMessage("chart_generation"))
       val chart = createChart()
-      chart.dBConnection = dBConnection
       chart.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoChartRowException) {

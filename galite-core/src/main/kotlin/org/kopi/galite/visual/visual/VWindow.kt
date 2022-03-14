@@ -43,7 +43,7 @@ import org.kopi.galite.visual.l10n.LocalizationManager
  * @param dBConnection The database connection for this object.
  * if is specified, it will create a window with a connection
  */
-abstract class VWindow(override var dBConnection: Connection? = ApplicationContext.getDBConnection())
+abstract class VWindow(val dBConnection: Connection? = ApplicationContext.getDBConnection())
   : DBContextHandler, Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -87,13 +87,6 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
    * @exception        VException        an exception may be raised by triggers
    */
   fun doModal(frame: Frame): Boolean = WindowController.windowController.doModal(this)
-
-  /**
-   * doModal
-   * modal call to this form
-   * @exception        VException        an exception may be raised by triggers
-   */
-  fun doModal(f: VWindow): Boolean = WindowController.windowController.doModal(this)
 
   /**
    * doModal

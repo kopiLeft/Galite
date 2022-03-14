@@ -22,10 +22,6 @@ package org.kopi.galite.visual.db
  * Interface for object that executes transactions and query to databases.
  */
 interface DBContextHandler {
-  /**
-   * The database connection for this object.
-   */
-  var dBConnection: Connection?
 
   /**
    * Returns true if the exception allows a retry of the
