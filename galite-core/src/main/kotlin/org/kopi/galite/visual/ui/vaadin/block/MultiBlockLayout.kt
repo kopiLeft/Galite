@@ -21,7 +21,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 
 /**
- * The multiple block layout widget composed of a simple
+ * The multiple block layout component composed of a simple
  * block layout and a chart block layout.
  */
 class MultiBlockLayout : AbstractBlockLayout() {
