@@ -101,8 +101,11 @@ abstract class Window(val title: String, val locale: Locale?) {
             help: String,
             command: PredefinedCommand? = null,
             init: (Actor.() -> Unit)? = null): Actor {
-    val actor = Actor(menu, label, help, command, "actor${actors.size}", sourceFile, init)
+    val actor = Actor(menu, label, help, command, "actor${actors.size}", sourceFile)
 
+    if (init != null) {
+      actor.init()
+    }
     actor(actor)
 
     return actor

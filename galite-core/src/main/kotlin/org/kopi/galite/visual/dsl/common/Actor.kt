@@ -43,8 +43,7 @@ open class Actor(val menu: Menu,
                  val help: String,
                  val command: PredefinedCommand? = null,
                  ident: String? = command?.ident,
-                 source: String? = null,
-                 val init: (Actor.() -> Unit)? = null)
+                 source: String? = null)
   : WindowElement(ident, source) {
 
   // The shortcut key
@@ -57,19 +56,27 @@ open class Actor(val menu: Menu,
 
   // The actor icon
   var icon: Icon? = null
+    set(value) {
+      model.iconName = value?.iconName
+      field = value
+    }
 
   private var keyCode = 0
+    set(value) {
+      model.acceleratorKey = value
+      field = value
+    }
   private var keyModifier = 0
+    set(value) {
+      model.acceleratorModifier = value
+      field = value
+    }
 
   override var ident: String = super.ident
     set(value) {
       model.actorIdent = value
       field = value
     }
-
-  init {
-    init?.let { it() }
-  }
 
   private fun checkKey(key: Key?) {
     if (key == null) {

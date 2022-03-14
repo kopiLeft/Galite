@@ -48,6 +48,12 @@ openForm("Client form", 200)
 
 To simulate a click on an actor, which triggers a command action, you can use `Actor.triggerCommand(duration)`. The `duration` parameter represents how much time it takes for the command to finish its action.
 
+### Actors
+
+* `Actor.findActor()`: Finds and returns the actor's component.
+* `Actor.getNavigationItem()`: Finds and returns the navigation item of the actor.
+* `Actor.openActorsNavigationPanel()`: Opens the popup containing the actors' navigation panel and returns that component.
+
 ### Blocks
 
 The function `Block.findBlock()` returns the Vaadin component created for a form block.
