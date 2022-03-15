@@ -90,12 +90,7 @@ class VHelpViewer : VWindow() {
    * @param     locale  the locale to use
    */
   fun localize(locale: Locale) {
-    var manager: LocalizationManager?
-    manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
-
-    // localizes the actors in VWindow
-    super.localizeActors(manager)
-    manager = null
+    // Add localization here if you have new items in the help viewer.
   }
 
   /**

@@ -62,7 +62,6 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
 fun Component.inputValueExpression(): String {
   return when (this) {
     is VTimeField -> "this.focusElement.inputElement.value"
-    is VDateField -> "this._inputValue"
     is VTimeStampField -> "this.__datePicker.$.input.inputElement.value + ' ' + this.__timePicker.focusElement.inputElement.value"
     else -> "this.value"
   }

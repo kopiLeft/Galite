@@ -40,7 +40,7 @@ class VHelpGenerator : VHelpGenerator() {
    * prints a compilation unit
    */
   fun helpOnReport(name: String,
-                   commands: Array<VCommand>?,
+                   commands: List<VCommand>,
                    model: MReport,
                    help: String?): String? {
     return try {

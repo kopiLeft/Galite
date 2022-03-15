@@ -51,11 +51,11 @@ class Command(val item: Actor) {
   /**
    * Builds the command model [VCommand] from information provided by this command.
    */
-  internal fun buildModel(handler: ActionHandler, formActors: Array<VActor?>) : VCommand {
+  internal fun buildModel(handler: ActionHandler, formActor: VActor?) : VCommand {
     model = VCommand(
       mode,
       handler,
-      formActors.find { it?.actorIdent ==  item.ident },
+      formActor,
       -1,
       item.ident,
       action

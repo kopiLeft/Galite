@@ -23,6 +23,7 @@ import java.math.BigDecimal
 import java.util.Locale
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.chart.VDecimalCodeMeasure
 import org.kopi.galite.visual.chart.VDecimalMeasure
@@ -34,7 +35,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
 
-class VMeasureTests {
+class VMeasureTests : VApplicationTestBase() {
   val chart = TestChart()
 
   @Test

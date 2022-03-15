@@ -46,8 +46,8 @@ import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.type.format
 
 class SimpleBlockTests: GaliteVUITestBase() {
-  val testFieldsVisibilityForm = TestFieldsVisibilityForm().also { it.model }
-  val formExample = FormExample().also { it.model }
+  val testFieldsVisibilityForm = TestFieldsVisibilityForm()
+  val formExample = FormExample()
 
   @Before
   fun `login to the App`() {

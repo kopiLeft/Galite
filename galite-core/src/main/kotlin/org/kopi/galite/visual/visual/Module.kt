@@ -172,7 +172,6 @@ class Module(val id: Int,
         if (form is VWindow) {
           form.smallIcon = icon
         }
-        form.dBConnection = ctxt
         form.doNotModal()
         form
       } catch (v: VException) {

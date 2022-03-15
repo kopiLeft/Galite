@@ -39,7 +39,7 @@ import com.vaadin.flow.component.tabs.Tabs
  * @param titles The pages title.
  */
 @CssImport("./styles/galite/form.css")
-class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
+class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelListener {
 
   /**
    * The current position
@@ -70,7 +70,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  private fun setContent(pageCount: Int, titles: Array<String>) {
+  private fun setContent(pageCount: Int, titles: List<String>) {
     if (pageCount == 0) {
       setContent(pages[0]!!)
     } else {
@@ -204,7 +204,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  fun init(pageCount: Int, titles: Array<String>) {
+  fun init(pageCount: Int, titles: List<String>) {
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {

@@ -42,7 +42,7 @@ import org.kopi.galite.visual.visual.MessageCode
 
 class VFieldTests : JApplicationTestBase() {
 
-  val FormSample = FormSample().also { it.model }
+  val FormSample = FormSample()
 
   @Test
   fun getListIDTest() {

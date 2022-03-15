@@ -28,10 +28,11 @@ import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.visual.VCommand
 
 /**
- * This class represents the definition of a report field
+ * This class represents the definition of a report field.
  *
  * @param domain      The domain of this field.
  * @param ident       The identifier of this field, used to identify the field the localization file.
@@ -48,12 +49,13 @@ class ReportField<T>(override val domain: Domain<T>,
    *
    * Example :
    *
-   * val Customers = field()
-   * val InvoiceNum = field() {
-   *  group = Articles
+   * val invoice = field()
+   *
+   * val customer = field() {
+   *   group = invoice
    * }
    *
-   * In this report, you can click on the InvoiceNum field to group customers.
+   * In this report, you can click on the customer field to group invoices.
    *
    */
   var group: ReportField<*>? = null
@@ -80,8 +82,9 @@ class ReportField<T>(override val domain: Domain<T>,
    */
   private val isHidden: Boolean get() = options and Constants.CLO_HIDDEN > 0
 
-
-  /** Field's help that describes the expected value of an input field */
+  /**
+   * true if the field is hidden, false otherwise
+   */
   override var hidden: Boolean? = false
     set(value) {
       options = if (value == true) Constants.CLO_HIDDEN else Constants.CLO_VISIBLE
@@ -89,10 +92,14 @@ class ReportField<T>(override val domain: Domain<T>,
     }
 
   fun initialize() {
-    init()
+    initField()
     if(domain.kClass == BigDecimal::class) {
       align = FieldAlignment.RIGHT
     }
+  }
+
+  fun initField() {
+    init()
   }
 
   /**
@@ -123,6 +130,29 @@ class ReportField<T>(override val domain: Domain<T>,
     return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it
     }
+  }
+
+  lateinit var columnModel: VReportColumn
+
+  fun buildReportColumn(): VReportColumn {
+    val function: VCalculateColumn? = if (computeTrigger != null) {
+      computeTrigger!!.action.method() as VCalculateColumn
+    } else {
+      null
+    }
+
+    val format: VCellFormat? = if (formatTrigger != null) {
+      formatTrigger!!.action.method() as VCellFormat
+    } else {
+      null
+    }
+
+    columnModel = domain.buildReportFieldModel(this, function, format).also { column ->
+      column.label = label ?: ""
+      column.help = help
+    }
+
+    return columnModel
   }
 
   // ----------------------------------------------------------------------

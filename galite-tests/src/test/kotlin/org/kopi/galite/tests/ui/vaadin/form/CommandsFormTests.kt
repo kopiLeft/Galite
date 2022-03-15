@@ -35,7 +35,7 @@ import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.findForms
-import org.kopi.galite.testing.findMultipleBlock
+import org.kopi.galite.testing.findMultiBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
@@ -65,8 +65,8 @@ import com.github.mvysny.kaributesting.v10.expectRow
 
 class CommandsFormTests : GaliteVUITestBase() {
 
-  val form = CommandsForm().also { it.model }
-  val multipleForm = MultipleBlockForm().also { it.model }
+  val form = CommandsForm()
+  val multipleForm = MultipleBlockForm()
 
   @Before
   fun `login to the App`() {
@@ -654,7 +654,7 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     val simpleField = multipleForm.block.trainingID.findField()
     val multipleField = multipleForm.block2.centerName.findField()
-    val multipleBlock = multipleForm.block2.findMultipleBlock()
+    val multipleBlock = multipleForm.block2.findMultiBlock()
 
     multipleForm.block.trainingID.edit(10)
     multipleForm.block2.centerName.edit("center name")

@@ -19,9 +19,10 @@ package org.kopi.galite.tests.report
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.report.Point
 
-class PointTests {
+class PointTests : VApplicationTestBase() {
   val origin = Point()
   val customPoint = Point(4, 5)
   val customPoint2 = Point(4, 5)

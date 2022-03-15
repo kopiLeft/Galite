@@ -34,7 +34,6 @@ abstract class VReportSelectionForm protected constructor() : VDictionaryForm() 
     try {
       setWaitInfo(Message.getMessage("report_generation"))
       val report = reportBuilder()
-      report.dBConnection = dBConnection
       report.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoRowException) {
@@ -52,7 +51,6 @@ abstract class VReportSelectionForm protected constructor() : VDictionaryForm() 
       b.validate()
       try {
         report.setWaitInfo(Message.getMessage("report_generation"))
-        report.dBConnection = report.dBConnection
         report.doNotModal()
         report.unsetWaitInfo()
       } catch (e: VNoRowException) {

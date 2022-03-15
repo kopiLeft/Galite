@@ -33,8 +33,8 @@ class WindowElementSources: VApplicationTestBase() {
 
   @Test
   fun blockSourceTest() {
-    val product = Product().also { it.model }.block
-    val productInnerBlock = ProductInnerBlock().also { it.model }.block
+    val product = Product().block
+    val productInnerBlock = ProductInnerBlock().block
     val blockName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "ProductBlock"
     val formName = ProductInnerBlock::class.java.`package`.name.replace(".", File.separator) + File.separator + "ProductInnerBlock"
 
@@ -44,8 +44,8 @@ class WindowElementSources: VApplicationTestBase() {
 
   @Test
   fun actorSourceTest() {
-    val graph = Product().also { it.model }.graph
-    val graphInnerBlock = ProductInnerBlock().also { it.model }.graph
+    val graph = Product().graph
+    val graphInnerBlock = ProductInnerBlock().graph
     val formName = ProductInnerBlock::class.java.`package`.name.replace(".", File.separator) + File.separator + "Product"
     val actorName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "Graph"
     val menuName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "Action"

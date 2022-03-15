@@ -66,7 +66,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FieldsTests : GaliteVUITestBase() {
 
-  val form = TestFieldsForm().also { it.model }
+  val form = TestFieldsForm()
 
   @Before
   fun `login to the App`() {
@@ -146,6 +146,22 @@ class FieldsTests : GaliteVUITestBase() {
   }
 
   @Test
+  fun `test big number error`() {
+    //put value less greater than max (50)
+    form.blockWithDifferentTypes.intField.edit(1111)
+    form.blockWithDifferentTypes.decimalField.click()
+    expectErrorNotification(MessageCode.getMessage("VIS-00009", 50))
+  }
+
+  @Test
+  fun `test invalid decimal error`() {
+    //put value with invalid scale (> 2)
+    form.blockWithDifferentTypes.decimalField.edit(BigDecimal("11111111.1111111111"))
+    form.blockWithDifferentTypes.intField.click()
+    expectErrorNotification(MessageCode.getMessage("VIS-00011", 2))
+  }
+
+  @Test
   fun `test decimal field`() {
     form.blockWithDifferentTypes.decimalField.edit(BigDecimal("999999"))
     form.blockWithDifferentTypes.intField.click()
@@ -212,7 +228,7 @@ class FieldsTests : GaliteVUITestBase() {
 
   @Test
   fun `open form via field`() {
-    val form = FormToTestFormPopUp().also { it.model }
+    val form = FormToTestFormPopUp()
     form.open()
 
     val field = form.userListBlock.user.findField() as Focusable<*>

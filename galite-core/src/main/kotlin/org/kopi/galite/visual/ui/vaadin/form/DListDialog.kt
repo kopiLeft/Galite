@@ -314,7 +314,7 @@ class DListDialog(
    */
   private fun doNewForm(form: VForm?, cstr: VDictionary?): Int =
           if (form != null && cstr != null) {
-            cstr.add(form)
+            cstr.add()
           } else {
             VListDialog.NEW_CLICKED
           }

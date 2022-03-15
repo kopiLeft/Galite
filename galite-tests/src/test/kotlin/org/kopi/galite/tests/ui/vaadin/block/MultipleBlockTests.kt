@@ -31,7 +31,7 @@ import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.editText
 import org.kopi.galite.testing.enter
-import org.kopi.galite.testing.findMultipleBlock
+import org.kopi.galite.testing.findMultiBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.initModules
@@ -45,7 +45,7 @@ import com.github.mvysny.kaributesting.v10.expectRow
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
-  val formExample = FormExample().also { it.model }
+  val formExample = FormExample()
 
   @Before
   fun `login to the App`() {
@@ -125,7 +125,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     // Go to the next record
     formExample.salesBlock.editRecord(1)
 
-    val block = formExample.salesBlock.findMultipleBlock()
+    val block = formExample.salesBlock.findMultiBlock()
     block.grid.expectRow(0, "", "", "", "", "", "", "", "", "", "Kotlin")
   }
 

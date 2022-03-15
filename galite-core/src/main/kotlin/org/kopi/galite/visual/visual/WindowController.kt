@@ -25,7 +25,7 @@ import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Creates the GUI, opens the window, form, ...
- * Handles actions initialized by the user
+ * Handle actions initialized by the user
  */
 abstract class WindowController : Serializable {
 

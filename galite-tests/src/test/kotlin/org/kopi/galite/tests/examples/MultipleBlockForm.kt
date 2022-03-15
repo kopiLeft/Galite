@@ -203,7 +203,7 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     }
   }
 
-  class SimpleBlock : Block("Simple block", 1, 1) {
+  inner class SimpleBlock : Block("Simple block", 1, 1) {
     val contact = visit(domain = STRING(20), position = at(1, 1)) {
       label = "contact"
       help = "The contact"

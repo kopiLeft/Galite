@@ -58,18 +58,6 @@ class DChart(model: VWindow) : DWindow(model), UChart {
 //    TODO()
   }
 
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun focus() {
-//    TODO()
-  }
-
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------

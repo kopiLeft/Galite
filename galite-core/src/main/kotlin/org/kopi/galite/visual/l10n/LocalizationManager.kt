@@ -102,7 +102,7 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
    *
    * @param     source          the source qualified name
    */
-  fun getReportLocalizer(source: String): ReportLocalizer {
+  fun getReportLocalizer(source: String?): ReportLocalizer {
     return ReportLocalizer(this, getDocument(source))
   }
 
@@ -111,7 +111,7 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
    *
    * @param     source          the source qualified name
    */
-  fun getChartLocalizer(source: String): ChartLocalizer {
+  fun getChartLocalizer(source: String?): ChartLocalizer {
     return ChartLocalizer(this, getDocument(source))
   }
 

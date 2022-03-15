@@ -23,10 +23,11 @@ import kotlin.test.assertFailsWith
 import org.jdom2.Document
 import org.jdom2.Element
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.l10n.FormLocalizer
 import org.kopi.galite.visual.util.base.InconsistencyException
 
-class FormLocalizerTests {
+class FormLocalizerTests : VApplicationTestBase() {
 
   @Test
   fun formLocalizer() {

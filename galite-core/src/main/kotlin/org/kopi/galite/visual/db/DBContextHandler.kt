@@ -22,10 +22,6 @@ package org.kopi.galite.visual.db
  * Interface for object that executes transactions and query to databases.
  */
 interface DBContextHandler {
-  /**
-   * The database connection for this object.
-   */
-  var dBConnection: Connection?
 
   /**
    * Returns true if the exception allows a retry of the
@@ -42,9 +38,4 @@ interface DBContextHandler {
    * @return true, if the transaction should be retried.
    */
   fun retryProtected(): Boolean
-
-  /**
-   * Returns whether this object handles a transaction at this time.
-   */
-  fun inTransaction(): Boolean
 }

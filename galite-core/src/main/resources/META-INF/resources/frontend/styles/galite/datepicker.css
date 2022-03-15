@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,23 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.report
 
-import kotlin.test.assertEquals
+:host([theme~="date-picker-suffix"]) {
+    --lumo-text-field-size: unset;
+}
 
-import org.junit.Test
-import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.report.VCellFormat
+:host([theme~="date-picker-suffix"]) [part~='value'] {
+    display: none;
+}
 
-class VCellFormatTests : VApplicationTestBase() {
-  @Test
-  fun testCellFormat() {
-    val vcell = VCellFormat()
-    val objectCell = TestCell()
-    assertEquals("544", vcell.format(544))
-    assertEquals("", vcell.format(null))
-    assertEquals("TestCell(name=myName, age=88)", vcell.format(objectCell))
-  }
+:host([theme~="date-picker-suffix"]) [part~='input-field'] {
+    border: none;
+    padding: 0;
+}
 
-  data class TestCell(val name: String = "myName", val age: Int = 88)
+:host([theme~="date-picker-suffix"]) .vaadin-text-field-container {
+    width: unset;
 }
