@@ -357,15 +357,15 @@ abstract class VChart : VWindow(), CConstants, Printable {
     try {
       exported = when (type) {
         TYP_PDF -> {
-          (getDisplay() as UChart).type!!.exportToPDF(destination, printOptions)
+          (getDisplay() as UChart).getType()!!.exportToPDF(destination, printOptions)
           true
         }
         TYP_PNG -> {
-          (getDisplay() as UChart).type!!.exportToPNG(destination, printOptions.imageWidth, printOptions.imageHeight)
+          (getDisplay() as UChart).getType()!!.exportToPNG(destination, printOptions.imageWidth, printOptions.imageHeight)
           true
         }
         TYP_JPEG -> {
-          (getDisplay() as UChart).type!!.exportToJPEG(destination, printOptions.imageWidth, printOptions.imageHeight)
+          (getDisplay() as UChart).getType()!!.exportToJPEG(destination, printOptions.imageWidth, printOptions.imageHeight)
           true
         }
         else -> throw InconsistencyException("Export type unknown")
@@ -390,7 +390,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
     }
     chartType = type
     type.createDataSeries(this)
-    (getDisplay() as UChart).type = ChartTypeFactory.chartTypeFactory.createTypeView(getTitle(), type)
+    (getDisplay() as UChart).setType(ChartTypeFactory.getChartTypeFactory().createTypeView(getTitle(), type))
     if (refresh) {
       refresh()
       (getDisplay() as UChart).typeChanged()

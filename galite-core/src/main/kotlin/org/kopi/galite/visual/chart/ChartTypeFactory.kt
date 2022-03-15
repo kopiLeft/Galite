@@ -33,6 +33,25 @@ abstract class ChartTypeFactory {
     /**
      * The `ChartTypeFactory` instance.
      */
-    lateinit var chartTypeFactory: ChartTypeFactory
+    private lateinit var chartTypeFactory: ChartTypeFactory
+
+    //---------------------------------------------------------------------
+    // ACCESSORS
+    //---------------------------------------------------------------------
+    /**
+     * Returns the `ChartTypeFactory` instance.
+     * @return The ChartTypeFactory instance.
+     */
+    fun getChartTypeFactory(): ChartTypeFactory {
+      return chartTypeFactory
+    }
+
+    /**
+     * Sets the `ChartTypeFactory` instance.
+     * @param factory The ChartTypeFactory instance.
+     */
+    fun setChartTypeFactory(factory: ChartTypeFactory) {
+      chartTypeFactory = factory
+    }
   }
 }
