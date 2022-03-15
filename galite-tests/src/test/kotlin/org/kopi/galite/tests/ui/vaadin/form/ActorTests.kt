@@ -23,7 +23,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.getNavigationItem
-import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.domain.INT
@@ -40,10 +39,6 @@ class ActorTests : GaliteVUITestBase() {
 
   @Before
   fun `login to the App`() {
-    transaction {
-      initData()
-    }
-
     login()
 
     // Open the form
@@ -53,7 +48,7 @@ class ActorTests : GaliteVUITestBase() {
   @Test
   fun `actor navigation panel contains actors with icon and acceleratorKey`() {
     form.autoFill.getNavigationItem()
-    form.list.getNavigationItem()
+    form.reset.getNavigationItem()
   }
 
   companion object {
@@ -75,7 +70,7 @@ class ActorsForm : Form(title = "Commands Form", locale = Locale.UK) {
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
-  val list = actor(ResetBlock())
+  val reset = actor(ResetBlock())
 
   init {
     insertBlock(Training())
@@ -89,7 +84,7 @@ class ActorsForm : Form(title = "Commands Form", locale = Locale.UK) {
     }
 
     init {
-      command(item = list) {}
+      command(item = reset) {}
     }
   }
 
