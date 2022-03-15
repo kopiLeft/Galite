@@ -89,13 +89,6 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    */
   fun newRecord(): Int = model.newRecord()
 
-  /**
-   * close the form
-   */
-  fun close(code: Int) {
-    model.close(code)
-  }
-
   fun saveFilledField() {
     model.saveFilledField()
   }
