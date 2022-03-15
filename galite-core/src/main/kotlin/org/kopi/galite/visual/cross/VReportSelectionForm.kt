@@ -24,7 +24,7 @@ import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.visual.Message
 import org.kopi.galite.visual.visual.MessageCode
 
-abstract class VReportSelectionForm protected constructor() : VDictionaryForm() {
+abstract class VReportSelectionForm protected constructor(source: String? = null) : VDictionaryForm(source) {
 
   /**
    * Implements interface for COMMAND CreateReport

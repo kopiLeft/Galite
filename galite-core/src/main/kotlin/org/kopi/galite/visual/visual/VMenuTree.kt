@@ -65,7 +65,7 @@ class VMenuTree constructor(ctxt: Connection?,
                             var isSuperUser: Boolean,
                             val menuTreeUser: String?,
                             private val groupName: String?,
-                            loadFavorites: Boolean) : VWindow(ctxt) {
+                            loadFavorites: Boolean) : VWindow(dBConnection = ctxt) {
   /**
    * Constructs a new instance of VMenuTree.
    * @param ctxt the context where to look for application

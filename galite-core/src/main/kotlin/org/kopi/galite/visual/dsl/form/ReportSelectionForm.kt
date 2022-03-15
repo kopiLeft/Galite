@@ -42,9 +42,8 @@ abstract class ReportSelectionForm(title: String, locale: Locale? = null) : Dict
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
-  override val model: VReportSelectionForm = object : VReportSelectionForm() {
+  override val model: VReportSelectionForm = object : VReportSelectionForm(sourceFile) {
     init {
-      source = sourceFile // TODO: move to VWindow
       setTitle(title)
     }
 

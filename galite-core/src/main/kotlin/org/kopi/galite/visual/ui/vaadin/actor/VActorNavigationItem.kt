@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.actor
 
+import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Key
@@ -52,4 +53,6 @@ class VActorNavigationItem(text: String,
   }
 
   override fun getClassname(): String = "actor-navigationItem"
+
+  val _icon = icon @TestOnly get
 }

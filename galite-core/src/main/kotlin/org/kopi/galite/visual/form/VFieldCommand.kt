@@ -34,9 +34,6 @@ class VFieldCommand(private val form: VForm,
              type,
              "Standard $type"), ActionHandler, Serializable {
 
-  /**
-   * Returns the actor
-   */
   override fun setEnabled(enabled: Boolean) {
     if (actor == null) {
       handler = this

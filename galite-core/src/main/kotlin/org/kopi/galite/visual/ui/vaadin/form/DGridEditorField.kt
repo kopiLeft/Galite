@@ -134,7 +134,9 @@ abstract class DGridEditorField<T>(
   // UCOMPONENT
   // ----------------------------------------------------------------------
 
-  override fun isEnabled(): Boolean = editor.isEnabled
+  override fun isEnabled(): Boolean {
+    return editor.isEnabled
+  }
 
   override fun setEnabled(enabled: Boolean) {
     editor.isEnabled = enabled

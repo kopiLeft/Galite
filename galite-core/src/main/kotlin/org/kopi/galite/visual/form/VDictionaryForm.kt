@@ -23,7 +23,7 @@ import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VRuntimeException
 
-abstract class VDictionaryForm protected constructor() : VForm(), VDictionary {
+abstract class VDictionaryForm protected constructor(source: String? = null) : VForm(source), VDictionary {
 
   // ----------------------------------------------------------------------
   // QUERY SEARCH

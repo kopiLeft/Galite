@@ -31,8 +31,11 @@ import org.kopi.galite.visual.dsl.common.FieldList
 import org.kopi.galite.visual.dsl.common.ListDescription
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_ANY
 import org.kopi.galite.visual.list.VList
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.ActionHandler
 
 class CommonDSLTests : VApplicationTestBase() {
 
@@ -41,7 +44,13 @@ class CommonDSLTests : VApplicationTestBase() {
     val menu = Menu("Test")
     val actor = Actor(menu, "Test Actor", "Test Actor")
     actor.ident = "TActor"
-    val command = Command(actor)
+    val command = Command(actor, arrayOf(),
+                          object : ActionHandler {
+                            override fun executeVoidTrigger(VKT_Type: Int) {}
+                            override fun executeVoidTrigger(trigger: Trigger?) {}
+                            override fun performAsyncAction(action: Action) {}
+                            override fun performAction(action: Action, block: Boolean) {}
+                          })
 
     assertEquals(MOD_ANY, command.mode) // default mode is MOD_ANY
 
