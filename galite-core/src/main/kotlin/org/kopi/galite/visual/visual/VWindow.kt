@@ -44,7 +44,7 @@ import org.kopi.galite.visual.l10n.LocalizationManager
  * @param dBConnection The database connection for this object.
  * if is specified, it will create a window with a connection
  */
-abstract class VWindow(var source: String? = null, override var dBConnection: Connection? = ApplicationContext.getDBConnection())
+abstract class VWindow(var source: String? = null, val dBConnection: Connection? = ApplicationContext.getDBConnection())
   : DBContextHandler, Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -87,13 +87,6 @@ abstract class VWindow(var source: String? = null, override var dBConnection: Co
    * @exception        VException        an exception may be raised by triggers
    */
   fun doModal(frame: Frame): Boolean = WindowController.windowController.doModal(this)
-
-  /**
-   * doModal
-   * modal call to this form
-   * @exception        VException        an exception may be raised by triggers
-   */
-  fun doModal(f: VWindow): Boolean = WindowController.windowController.doModal(this)
 
   /**
    * doModal
@@ -355,6 +348,16 @@ abstract class VWindow(var source: String? = null, override var dBConnection: Co
    */
   fun setInformationText(text: String?) {
     display?.setInformationText(text)
+  }
+
+  /**
+   * Open an URL in the navigator.
+   * @param url The URL to navigate to.
+   */
+  open fun openURL(url: String) {
+    if (display != null) {
+      display!!.openURL(url)
+    }
   }
 
   /**

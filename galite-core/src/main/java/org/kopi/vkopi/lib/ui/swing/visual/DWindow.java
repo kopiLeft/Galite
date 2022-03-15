@@ -720,6 +720,11 @@ public abstract class DWindow extends JPanel implements UWindow {
     }
   }
 
+  @Override
+  public void openURL(String url) throws Exception {
+    throw new Exception("Unsupported operation");
+  }
+
   public void reportError(VRuntimeException e) {
     if (e.getMessage() != null) {
       messageHandler.error(e.getMessage());

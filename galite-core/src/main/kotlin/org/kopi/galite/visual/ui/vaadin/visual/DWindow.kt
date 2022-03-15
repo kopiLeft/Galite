@@ -254,6 +254,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
   }
 
+  override fun openURL(url: String) {
+    access(currentUI) {
+      currentUI?.page?.open(url)
+    }
+  }
+
   /**
    * Disposes the window. Finalize and close this window.
    */

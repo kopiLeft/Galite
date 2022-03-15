@@ -82,7 +82,6 @@ class VDynamicReport(block: VBlock) : VReport() {
 
   init {
     printOptions = PConfig()
-    dBConnection = block.dBConnection
     this.block = block
     fields = initFields(block.fields)
     columns = arrayOfNulls(fields.size)

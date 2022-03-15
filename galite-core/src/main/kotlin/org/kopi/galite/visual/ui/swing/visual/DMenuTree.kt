@@ -296,8 +296,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       return super.isCollapsed(path as TreePath)
     }
 
-    override val selectionRow: Int
-      get() = super.getSelectionRows()[0]
+    override fun getSelectionRow(): Int = super.getSelectionRows()[0]
   }
 
   // --------------------------------------------------------------------

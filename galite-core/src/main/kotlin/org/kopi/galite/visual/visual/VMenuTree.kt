@@ -240,8 +240,8 @@ class VMenuTree constructor(ctxt: Connection?,
         currentDisplay.removeSelectedElement()
         currentDisplay.setMenu()
       }
-      CMD_FOLD -> currentDisplay.getTree()!!.collapseRow(currentDisplay.getTree()!!.selectionRow)
-      CMD_UNFOLD -> currentDisplay.getTree()!!.expandRow(currentDisplay.getTree()!!.selectionRow)
+      CMD_FOLD -> currentDisplay.getTree()!!.collapseRow(currentDisplay.getTree()!!.getSelectionRow())
+      CMD_UNFOLD -> currentDisplay.getTree()!!.expandRow(currentDisplay.getTree()!!.getSelectionRow())
       CMD_INFORMATION -> {
         val versionArray = Utils.getVersion()
         var version = ""

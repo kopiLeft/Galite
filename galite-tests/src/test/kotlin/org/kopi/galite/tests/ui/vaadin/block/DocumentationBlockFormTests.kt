@@ -42,7 +42,7 @@ import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.testing.findActor
-import org.kopi.galite.testing.findMultipleBlock
+import org.kopi.galite.testing.findMultiBlock
 import org.kopi.galite.tests.examples.DocumentationBlockForm
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
@@ -272,7 +272,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
   fun `test PREREC block trigger`() {
     form.triggersMultiBlock.enter()
 
-    val block = form.triggersMultiBlock.findMultipleBlock()
+    val block = form.triggersMultiBlock.findMultiBlock()
     // PREREC : assert that PREREC trigger change the value of the first field when enter block
     block.grid.expectRow(0, "PREREC Trigger", "", "")
   }
@@ -283,7 +283,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     // Go to the next record
     form.triggersMultiBlock.editRecord(1)
 
-    val block = form.triggersMultiBlock.findMultipleBlock()
+    val block = form.triggersMultiBlock.findMultiBlock()
     // POSTREC : assert that POSTREC trigger change the value of the second field
     // VALREC : enter block, then leave it and check valRecTrigger field
     block.grid.expectRow(0, "PREREC Trigger", "POSTREC Trigger", "")
@@ -295,7 +295,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     //leave the block
     form.lastBlock.enter()
 
-    val block = form.triggersMultiBlock.findMultipleBlock()
+    val block = form.triggersMultiBlock.findMultiBlock()
     // VALREC : enter block, then leave it and check valRecTrigger field
     block.grid.expectRow(0, "PREREC Trigger", "POSTREC Trigger", "VALREC Trigger")
   }

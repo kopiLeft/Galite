@@ -147,7 +147,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
     }
   }
 
-  override val selectionRow: Int get() = selectedItem?.let { getModule(it)?.id } ?: 0
+  override fun getSelectionRow(): Int = selectedItem?.let { getModule(it)?.id } ?: 0
 
   @Suppress("INAPPLICABLE_JVM_NAME")
   @JvmName("isExpanded1")

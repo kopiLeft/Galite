@@ -441,7 +441,6 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by string formatters
    */
   fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
-    dBConnection = parent.dBConnection
     return getBlock(0).singleMenuQuery(showUniqueItem)
   }
   // ----------------------------------------------------------------------

@@ -19,12 +19,10 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
 import org.kopi.galite.visual.ui.vaadin.base.Styles
@@ -201,7 +199,7 @@ class TextField(val model: VField,
         // month field
         type = Type.MONTH
       }
-      is VDateField -> {
+      is org.kopi.galite.visual.form.VDateField -> {
         // date field
         type = Type.DATE
       }
@@ -209,7 +207,7 @@ class TextField(val model: VField,
         // week field
         type = Type.WEEK
       }
-      is VTimeField -> {
+      is org.kopi.galite.visual.form.VTimeField -> {
         // time field
         type = Type.TIME
       }
