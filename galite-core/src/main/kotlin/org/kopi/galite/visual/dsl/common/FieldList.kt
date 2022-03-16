@@ -54,9 +54,9 @@ class FieldList<T>(val type: String,
     return hasAction() && access
   }
 
-  fun buildListModel(source: String): VList {
+  fun buildListModel(source: String, ident: String): VList {
     return VList(
-            type,
+            if(!type.isNullOrEmpty()) type else ident,
             source,
             columns.map { it.buildModel() }.toTypedArray(),
             table,

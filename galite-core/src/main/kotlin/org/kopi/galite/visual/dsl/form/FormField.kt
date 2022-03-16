@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.dsl.form
 
+import java.io.File
+
 import kotlin.reflect.KProperty
 
 import org.jetbrains.exposed.sql.Column
@@ -400,8 +402,14 @@ open class FormField<T>(internal val block: Block,
   }
 
   fun setInfo(source: String, form: VForm) {
+    var source = source
+
+    if(!domain.javaClass.simpleName.isNullOrEmpty()) {
+      source = domain.javaClass.`package`.name.replace(".", "/") + File.separatorChar + domain.javaClass.simpleName
+    }
+
     val list = if (domain is ListDomain) {
-      (domain as ListDomain).list.buildListModel(source)
+      (domain as ListDomain).list.buildListModel(source, ident)
     } else {
       null
     }

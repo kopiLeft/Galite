@@ -34,9 +34,6 @@ open class ReportModel(val report: Report): VReport() {
     }
 
     model.columns.add(VSeparatorColumn()) // TODO!!!
-
-    // localize the report using the default locale
-    localize()
   }
 
   override fun init() {
