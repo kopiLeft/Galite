@@ -56,7 +56,7 @@ class FieldList<T>(val type: String,
 
   fun buildListModel(source: String, ident: String): VList {
     return VList(
-            if(!type.isNullOrEmpty()) type else ident,
+            type.ifEmpty { ident },
             source,
             columns.map { it.buildModel() }.toTypedArray(),
             table,

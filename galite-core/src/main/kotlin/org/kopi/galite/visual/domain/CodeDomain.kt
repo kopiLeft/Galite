@@ -65,22 +65,22 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
     return with(formField) {
       when (kClass) {
         Boolean::class -> VBooleanCodeField(block.buffer,
-                                            if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                            this@CodeDomain.ident.ifEmpty { ident },
                                             block.sourceFile,
                                             codes.map { it.ident }.toTypedArray(),
                                             codes.map { it.value as? Boolean }.toTypedArray())
         BigDecimal::class -> VDecimalCodeField(block.buffer,
-                                               if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                               this@CodeDomain.ident.ifEmpty { ident },
                                                block.sourceFile,
                                                codes.map { it.ident }.toTypedArray(),
                                                codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeField(block.buffer,
-                                                     if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                                     this@CodeDomain.ident.ifEmpty { ident },
                                                      block.sourceFile,
                                                      codes.map { it.ident }.toTypedArray(),
                                                      codes.map { it.value as? Int }.toTypedArray())
         String::class -> VStringCodeField(block.buffer,
-                                          if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                          this@CodeDomain.ident.ifEmpty { ident },
                                           block.sourceFile,
                                           codes.map { it.ident }.toTypedArray(),
                                           codes.map { it.value as? String }.toTypedArray())
@@ -101,25 +101,25 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
       when (kClass) {
         Boolean::class -> VBooleanCodeDimension(ident,
                                                 format,
-                                                if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                                this@CodeDomain.ident.ifEmpty { ident },
                                                 source,
                                                 codes.map { it.ident }.toTypedArray(),
                                                 codes.map { it.value as? Boolean }.toTypedArray())
         BigDecimal::class -> VDecimalCodeDimension(ident,
                                                    format,
-                                                   if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                                   this@CodeDomain.ident.ifEmpty { ident },
                                                    source,
                                                    codes.map { it.ident }.toTypedArray(),
                                                    codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeDimension(ident,
                                                          format,
-                                                         if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                                         this@CodeDomain.ident.ifEmpty { ident },
                                                          source,
                                                          codes.map { it.ident }.toTypedArray(),
                                                          codes.map { it.value as? Int }.toTypedArray())
         String::class -> VStringCodeDimension(ident,
                                               format,
-                                              if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                              this@CodeDomain.ident.ifEmpty { ident },
                                               source,
                                               codes.map { it.ident }.toTypedArray(),
                                               codes.map { it.value as? String }.toTypedArray())
@@ -138,13 +138,13 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
       when (kClass) {
         BigDecimal::class -> VDecimalCodeMeasure(ident,
                                                  color,
-                                                 if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                                 this@CodeDomain.ident.ifEmpty { ident },
                                                  measure.source,
                                                  codes.map { it.ident }.toTypedArray(),
                                                  codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeMeasure(ident,
                                                        color,
-                                                       if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+                                                       this@CodeDomain.ident.ifEmpty { ident },
                                                        measure.source,
                                                        codes.map { it.ident }.toTypedArray(),
                                                        codes.map { it.value as? Int }.toTypedArray())
@@ -167,7 +167,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
       when (kClass) {
         Boolean::class -> VBooleanCodeColumn(
           ident,
-          if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+          this@CodeDomain.ident.ifEmpty { ident },
           field.source,
           options,
           align.value,
@@ -180,7 +180,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         BigDecimal::class -> VDecimalCodeColumn(
           ident,
-          if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+          this@CodeDomain.ident.ifEmpty { ident },
           field.source,
           options,
           align.value,
@@ -193,7 +193,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         Int::class, Long::class -> VIntegerCodeColumn(
           ident,
-          if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+          this@CodeDomain.ident.ifEmpty { ident },
           field.source!!,
           options,
           align.value,
@@ -206,7 +206,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         String::class -> VStringCodeColumn(
           ident,
-          if(!this@CodeDomain.ident.isNullOrEmpty()) this@CodeDomain.ident else ident,
+          this@CodeDomain.ident.ifEmpty { ident },
           field.source,
           options,
           align.value,
