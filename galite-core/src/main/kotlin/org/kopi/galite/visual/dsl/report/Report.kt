@@ -20,6 +20,8 @@ package org.kopi.galite.visual.dsl.report
 import java.io.File
 import java.io.IOException
 import java.util.Locale
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
@@ -28,6 +30,7 @@ import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.util.PrintJob
@@ -189,6 +192,45 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
    * Executed after the report is closed.
    */
   val POSTREPORT = ReportTriggerEvent<Unit>(Constants.TRG_POSTREPORT)
+
+  // ----------------------------------------------------------------------
+  // METHODS FOR SQL
+  // ----------------------------------------------------------------------
+  /**
+   * creates an SQL condition, so that the column have to fit the
+   * requirements (value and search operator) of the field.
+   */
+  protected fun <T> buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): Op<Boolean> {
+    return field.getSearchCondition(column) ?: Op.TRUE
+  }
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  protected fun hasTrigger(event: Int): Boolean = model.hasTrigger(event)
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  protected fun hasCommandTrigger(event: Int, index: Int): Boolean = model.hasCommandTrigger(event, index)
+
+  fun setMenu() {
+    model.setMenu()
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP
+  // ----------------------------------------------------------------------
+
+  fun genHelp(): String? = model.genHelp()
+
+  fun showHelp() {
+    model.showHelp()
+  }
+
+  fun addDefaultReportCommands() {
+    model.addDefaultReportCommands()
+  }
 
   /**
    * Creates a printable object

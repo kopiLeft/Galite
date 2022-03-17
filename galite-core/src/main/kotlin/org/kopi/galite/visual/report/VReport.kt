@@ -24,12 +24,11 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 import kotlin.jvm.Throws
 
-import org.apache.poi.ss.formula.functions.T
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
@@ -487,14 +486,8 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
    * creates an SQL condition, so that the column have to fit the
    * requirements (value and search operator) of the field.
    */
-  protected fun buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): String {
-    val condition = field.getSearchCondition(column)
-
-    return if (condition == null) {
-      " TRUE = TRUE "
-    } else {
-      "$column $condition"
-    }
+  internal fun <T> buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): Op<Boolean> {
+    return field.getSearchCondition(column) ?: Op.TRUE
   }
 
   // ----------------------------------------------------------------------
@@ -560,12 +553,12 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   /**
    * Returns true if there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int): Boolean = VKT_Report_Triggers[0][event] != null
+  internal fun hasTrigger(event: Int): Boolean = VKT_Report_Triggers[0][event] != null
 
   /**
    * Returns true if there is trigger associated with given event.
    */
-  protected fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Commands_Triggers[index][event] != null
+  internal fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Commands_Triggers[index][event] != null
 
   fun setMenu() {
     if (!built) {
