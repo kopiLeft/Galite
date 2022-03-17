@@ -22,6 +22,8 @@ import kotlin.test.assertEquals
 
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.tests.ui.vaadin.triggers.ReportTriggersTest.POSTREPORT
+import org.kopi.galite.tests.ui.vaadin.triggers.ReportTriggersTest.PREREPORT
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.report.FieldAlignment
@@ -90,14 +92,14 @@ class ReportDSLTests : VApplicationTestBase() {
     assertEquals(10, reportModel.getRow(2)?.getValueAt(3))
   }
 
-  /* @Test
-   fun `test report triggers`() {
+   @Test
+   fun `test report has triggers`() {
      val report = ReportWithData()
      val reportModel = report.model
 
-     assertEquals(true, reportModel.hasTrigger(VConstants.TRG_INIT))
-     assertEquals(true, reportModel.hasTrigger(VConstants.TRG_PREBLK))
-   }*/
+     assertEquals(true, reportModel._hasTrigger(PREREPORT.event))
+     assertEquals(true, reportModel._hasTrigger(POSTREPORT.event))
+   }
 }
 
 class BasicReport : Report(

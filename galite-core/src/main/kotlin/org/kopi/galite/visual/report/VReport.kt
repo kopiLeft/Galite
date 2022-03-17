@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter
 
 import kotlin.jvm.Throws
 
+import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
@@ -646,4 +647,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
       commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent))
     }
   }
+
+  @TestOnly
+  fun _hasTrigger(event: Int): Boolean = hasTrigger(event)
 }
