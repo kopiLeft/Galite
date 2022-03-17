@@ -27,12 +27,9 @@ import java.time.format.DateTimeFormatter
 
 import kotlin.jvm.Throws
 
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.jetbrains.exposed.sql.Op
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
@@ -55,8 +52,6 @@ import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Represents a report model.
- *
- * @param ctxt Database context handler
  */
 abstract class VReport internal constructor() : VWindow(), Constants, VConstants, Printable {
   companion object {
@@ -145,9 +140,9 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
     // all commands are by default enabled
     activeCommands.clear()
-    commands?.forEachIndexed { i, vCommand ->
+    commands.forEachIndexed { i, vCommand ->
       when {
-        vCommand!!.getIdent() == "Fold" -> cmdFold = vCommand
+        vCommand.getIdent() == "Fold" -> cmdFold = vCommand
         vCommand.getIdent() == "Unfold" -> cmdUnfold = vCommand
         vCommand.getIdent() == "Sort" -> cmdSort = vCommand
         vCommand.getIdent() == "FoldColumn" -> cmdFoldColumn = vCommand
@@ -478,16 +473,6 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
     return if (col != -1 && getSelectedCell().y != -1) {
       model.getRow(getSelectedCell().y)?.getValueAt(col)
     } else null
-  }
-  // ----------------------------------------------------------------------
-  // METHODS FOR SQL
-  // ----------------------------------------------------------------------
-  /**
-   * creates an SQL condition, so that the column have to fit the
-   * requirements (value and search operator) of the field.
-   */
-  internal fun <T> buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): Op<Boolean> {
-    return field.getSearchCondition(column) ?: Op.TRUE
   }
 
   // ----------------------------------------------------------------------
