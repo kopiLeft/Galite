@@ -53,7 +53,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   private var hasEditItem = false // VE
 
   //private	boolean			hasEditItem_S;	// IT !!!!
-  private val commands: Array<VCommand>? // commands
+  private var commands: List<VCommand>? // commands
   lateinit var displays: Array<UField?> // the object displayed on screen
     private set
   val isDisplayInitialized get() = ::displays.isInitialized
@@ -86,7 +86,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     }
     val cmd = model.command
 
-    cmd?.forEach {
+    cmd.forEach {
       val commandText = it.getIdent()
       when {
         commandText == "Increment" -> incrementCommand = it
@@ -274,8 +274,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   fun getAllCommands(): Array<VCommand> {
     val cmds = mutableListOf<VCommand>()
     var i = 0
-    while (commands != null && i < commands.size) {
-      cmds.add(commands[i])
+    while (commands != null && i < commands!!.size) {
+      cmds.add(commands!![i])
       i++
     }
     if (hasEditItem_S()) {

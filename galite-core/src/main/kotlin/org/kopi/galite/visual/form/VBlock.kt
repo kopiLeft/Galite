@@ -59,7 +59,6 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.DBForeignKeyException
@@ -84,7 +83,7 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VWindow
 
-abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
+open class VBlock() : VConstants, DBContextHandler, ActionHandler {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -318,15 +317,10 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
   /**
    * @param page the page number of this block
    */
-  fun setInfo(page: Int, form: VForm) {
+  fun setInfo(page: Int) {
     pageNumber = page
-    setInfo(form)
     buildCstr()
-  }
-
-  protected open fun setInfo(form: VForm) {
-    // Do nothing, should be redefined if some info
-    // has to be set
+    initIntern()
   }
 
   /**

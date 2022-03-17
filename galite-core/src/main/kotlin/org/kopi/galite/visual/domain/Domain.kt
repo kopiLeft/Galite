@@ -173,7 +173,7 @@ open class Domain<T>(val width: Int? = null,
                        styled)
           }
 
-          throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+          throw RuntimeException("Type ${kClass?.qualifiedName} is not supported")
         }
       }
     }

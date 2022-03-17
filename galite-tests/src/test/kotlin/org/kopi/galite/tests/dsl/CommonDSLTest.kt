@@ -71,7 +71,7 @@ class CommonDSLTests : VApplicationTestBase() {
     assertFalse(fieldList.hasAction())
     assertFalse(fieldList.hasShortcut())
 
-    val vFieldList = fieldList.buildListModel("Source")
+    val vFieldList = fieldList.buildListModel()
 
     assertIs<VList>(vFieldList)
     assertEquals(null, vFieldList.action)

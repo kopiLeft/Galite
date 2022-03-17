@@ -40,7 +40,6 @@ import org.kopi.galite.visual.l10n.LocalizationManager
  * @param     hasShortcut         the new form name
  * */
 class VList(private val ident: String,
-            private val source: String,
             val newForm: String?,
             val columns: Array<VListColumn?>,
             val table: ColumnSet,
@@ -50,7 +49,6 @@ class VList(private val ident: String,
             val hasShortcut: Boolean) : VConstants, Serializable {
 
   constructor(ident: String,
-              source: String,
               columns: Array<VListColumn?>,
               table: ColumnSet,
               action: (() -> DictionaryForm)?,
@@ -59,7 +57,6 @@ class VList(private val ident: String,
               newForm: Class<VForm>?,
               hasShortcut: Boolean)
        : this(ident,
-              source,
               newForm?.name,
               columns,
               table,
@@ -67,6 +64,8 @@ class VList(private val ident: String,
               autocompleteType,
               autocompleteLength,
               hasShortcut)
+
+  internal lateinit var source: String
 
   /**
    * Returns the number of columns.

@@ -30,10 +30,10 @@ import org.kopi.galite.visual.dsl.common.WindowElement
  */
 abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): WindowElement(ident) {
   /** Field's label (text on the left) */
-  var label: String? = null
+  open var label: String? = null
 
   /** Field's help that describes the expected value of an input field */
-  var help: String? = null
+  open var help: String? = null
 
   /** true if the field is hidden, false otherwise */
   open var hidden: Boolean? = false

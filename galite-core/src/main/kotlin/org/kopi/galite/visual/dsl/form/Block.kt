@@ -529,13 +529,6 @@ open class Block(val title: String,
   }
 
   /**
-   * @param page the page number of this block
-   */
-  fun setInfo(page: FormPage, form: Form) {
-    block.setInfo(page.pageNumber, form.model)
-  }
-
-  /**
    * Returns true if this block can display more than one record.
    */
   val isMulti: Boolean get() = block.isMulti()
@@ -998,13 +991,7 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   /** The block model */
-  open val block: VBlock = object : VBlock() {
-    override fun setInfo(form: VForm) {
-      this@Block.fields.forEach {
-        it.setInfo(super.source, form)
-      }
-    }
-  }
+  open val block: VBlock = VBlock()
 
   var isModelInitialized = false
 

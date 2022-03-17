@@ -197,7 +197,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
     printer.println("</OL>")
   }
 
-  open fun helpOnFieldCommand(commands: Array<VCommand>?) {
-    commands?.let { helpOnCommands(it) }
+  open fun helpOnFieldCommand(commands: MutableList<VCommand>) {
+    helpOnCommands(commands)
   }
 }

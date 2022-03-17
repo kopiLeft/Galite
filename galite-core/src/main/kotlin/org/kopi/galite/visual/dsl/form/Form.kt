@@ -103,10 +103,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     blocks.add(block)
 
     val vBlock = block.getBlockModel(model)
-    vBlock.setInfo(block.pageNumber, model)
-    if(vBlock !is VFullCalendarBlock) {
-      vBlock.initIntern()
-    }
+    vBlock.setInfo(block.pageNumber)
     block.fields.forEach { formField ->
       formField.initialValues.forEach {
         formField.vField.setObject(it.key, it.value)

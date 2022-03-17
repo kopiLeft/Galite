@@ -29,12 +29,6 @@ class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VB
   init {
     initializeBlock(block, formSource)
   }
-
-  override fun setInfo(form: VForm) {
-    block.fields.forEach {
-      it.setInfo(super.source, form)
-    }
-  }
 }
 
 fun VBlock.initializeBlock(block: Block, formSource: String?) {
@@ -74,12 +68,6 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
 
 class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
 
-  override fun setInfo(form: VForm) {
-    block.fields.forEach {
-      it.setInfo(super.source, form)
-    }
-  }
-
   fun buildFullCalendarForm(): VFullCalendarForm {
     return object : VFullCalendarForm() {
 
@@ -97,8 +85,7 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
       fun init() {
 
         val vSimpleBlock = BlockModel(this, this@FullCalendarBlockModel.block, source)
-        vSimpleBlock.setInfo(pageNumber, this)
-        vSimpleBlock.initIntern()
+        vSimpleBlock.setInfo(pageNumber)
 
         val defaultActors = form.actors.filter { actor ->
           actor is VDefaultActor &&

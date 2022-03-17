@@ -47,7 +47,7 @@ import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 
-abstract class VFullCalendarBlock() : VBlock() {
+open class VFullCalendarBlock : VBlock() {
 
   lateinit var fullCalendarForm: VFullCalendarForm
   var dateField: VDateField? = null
@@ -260,6 +260,10 @@ abstract class VFullCalendarBlock() : VBlock() {
     }
 
     return entries
+  }
+
+  override fun initIntern() {
+    // NOTHING TO DO
   }
 
   fun openForEdit(startDateTime: Timestamp, endDateTime: Timestamp) {

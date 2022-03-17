@@ -232,8 +232,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * printlns a compilation unit
    */
-  override fun helpOnFieldCommand(commands: Array<VCommand>?) {
-    if (commands != null && commands.isNotEmpty()) {
+  override fun helpOnFieldCommand(commands: MutableList<VCommand>) {
+    if (commands.isNotEmpty()) {
       sortCommands(commands)
       latexPrinter.println()
       latexPrinter.println("\\begin{description}")
@@ -269,9 +269,6 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   // ----------------------------------------------------------------------
   // PRIVATE UTILITIES
   // ----------------------------------------------------------------------
-  private fun sortCommands(cmds: Array<VCommand>) { // TODO!!!: remove this
-    sortCommands(cmds.toMutableList())
-  }
   private fun sortCommands(cmds: MutableList<VCommand>) {
     var i = cmds.size
     while (--i >= 0) {

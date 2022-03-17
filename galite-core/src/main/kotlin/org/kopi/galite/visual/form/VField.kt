@@ -106,11 +106,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var height = 0 // max # of lines
     protected set
 
-  private lateinit var access: IntArray // access in each mode
+  internal lateinit var access: IntArray // access in each mode
 
-  private var priority = 0  // order in select results
+  internal var priority = 0  // order in select results
 
-  private var indices = 0  // bitset of unique indices
+  internal var indices = 0  // bitset of unique indices
 
   /**
    * The name of the field is the ident.
@@ -165,7 +165,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       setAccess(-1)
     }
 
-  private var columns: Array<VColumn?>? = null // columns in block's tables
+  internal val columns = mutableListOf<VColumn>() // columns in block's tables
 
   //  private   VFieldUI        ui;             // The UI manager
   private var alias: VField? = null // The alias field
@@ -192,9 +192,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var hasListener = false
 
   var position: VPosition? = null
-    private set
+    internal set
 
-  var command: Array<VCommand>? = null
+  val command = mutableListOf<VCommand>()
 
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
 
@@ -231,10 +231,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun setInfo(name: String,
               index: Int,
               posInArray: Int,
+              list: VList?,
+              pos: VPosition?,
+              align: Int) {
+    this.name = name
+    this.index = index
+    this.posInArray = posInArray
+    this.list = list
+    if (this is VDecimalField || this is VIntegerField) {
+      this.align = VConstants.ALG_RIGHT
+    } else {
+      this.align = align
+    }
+    position = pos
+  }
+
+  /**
+   * set information on the field.
+   */
+  fun setInfo(name: String,
+              index: Int,
+              posInArray: Int,
               options: Int,
               access: IntArray,
               list: VList?,
-              columns: Array<VColumn?>?,
+              columns: Array<VColumn>,
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,
@@ -247,10 +268,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     this.options = options
     this.access = access
     this.list = list
-    this.columns = columns
-    if (columns == null) {
-      this.columns = arrayOfNulls(0)
-    }
+    this.columns.addAll(columns)
     this.indices = indices
     this.priority = priority
     if (this is VDecimalField || this is VIntegerField) {
@@ -259,7 +277,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       this.align = align
     }
     position = pos
-    command = commands
+    command.addAll(commands.orEmpty())
     this.alias = alias
     alias?.addFieldChangeListener(object : FieldChangeListener {
       override fun labelChanged() {}

@@ -35,7 +35,6 @@ import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VException
@@ -60,13 +59,17 @@ open class FormField<T>(internal val block: Block,
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private var options: Int = 0 // the options of the field
+    set(value) {
+      vField.options = value
+      field = value
+    }
   var columns: FormFieldColumns<T>? = null // the column in the database
-  var access: IntArray = IntArray(3) { initialAccess }
-  var commands: MutableList<Command> = mutableListOf() // the commands accessible in this field
-  var triggers = mutableListOf<Trigger>() // the triggers executed by this field
-  var alias: String? = null // the alias of this field
-  var initialValues = mutableMapOf<Int, T>()
+  val commands = mutableListOf<Command>() // the commands accessible in this field
+  val triggers = mutableListOf<Trigger>() // the triggers executed by this field
+  internal var initialValues = mutableMapOf<Int, T>()
   var value: T by this
+
+  val access: IntArray get() = vField.access
 
   private operator fun setValue(any: Any, property: KProperty<*>, value : T) {
     if (!block.isModelInitialized) {
@@ -93,13 +96,17 @@ open class FormField<T>(internal val block: Block,
    * @param fieldOptions the field options
    */
   fun options(vararg fieldOptions: FieldOption) {
+    var foptions = options
+
     fieldOptions.forEach { fieldOption ->
       if (fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
-        options = options and fieldOption.value.inv()
+        foptions = foptions and fieldOption.value.inv()
       }
 
-      options = options or fieldOption.value
+      foptions = foptions or fieldOption.value
     }
+
+    options = foptions
   }
 
   /**
@@ -152,6 +159,7 @@ open class FormField<T>(internal val block: Block,
     val command = Command(item, modes, block.block, action = action)
 
     commands.add(command)
+    vField.command.add(command.model)
 
     // FIELDS COMMANDS TRIGGERS
     // TODO : Add field commands triggers here
@@ -196,57 +204,60 @@ open class FormField<T>(internal val block: Block,
     if (init != null) {
       columns!!.init()
     }
+    vField.indices = columns!!.index?.indexNumber ?: 0
+    vField.priority = columns!!.priority
+    vField.columns.addAll(columns!!.getColumnsModels())
   }
 
   /** changing field visibility in mode query */
   fun onQueryHidden() {
-    this.access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
+    access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
   }
 
   fun onQuerySkipped() {
-    this.access[VConstants.MOD_QUERY] = VConstants.ACS_SKIPPED
+    access[VConstants.MOD_QUERY] = VConstants.ACS_SKIPPED
   }
 
   fun onQueryVisit() {
-    this.access[VConstants.MOD_QUERY] = VConstants.ACS_VISIT
+    access[VConstants.MOD_QUERY] = VConstants.ACS_VISIT
   }
 
   fun onQueryMustFill() {
-    this.access[VConstants.MOD_QUERY] = VConstants.ACS_MUSTFILL
+    access[VConstants.MOD_QUERY] = VConstants.ACS_MUSTFILL
   }
 
   /** changing field visibility in mode insert */
   fun onInsertHidden() {
-    this.access[VConstants.MOD_INSERT] = VConstants.ACS_HIDDEN
+    access[VConstants.MOD_INSERT] = VConstants.ACS_HIDDEN
   }
 
   fun onInsertSkipped() {
-    this.access[VConstants.MOD_INSERT] = VConstants.ACS_SKIPPED
+    access[VConstants.MOD_INSERT] = VConstants.ACS_SKIPPED
   }
 
   fun onInsertVisit() {
-    this.access[VConstants.MOD_INSERT] = VConstants.ACS_VISIT
+    access[VConstants.MOD_INSERT] = VConstants.ACS_VISIT
   }
 
   fun onInsertMustFill() {
-    this.access[VConstants.MOD_INSERT] = VConstants.ACS_MUSTFILL
+    access[VConstants.MOD_INSERT] = VConstants.ACS_MUSTFILL
   }
 
   /** changing field visibility in mode update */
   fun onUpdateHidden() {
-    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_HIDDEN
+    access[VConstants.MOD_UPDATE] = VConstants.ACS_HIDDEN
   }
 
   fun onUpdateSkipped() {
-    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_SKIPPED
+    access[VConstants.MOD_UPDATE] = VConstants.ACS_SKIPPED
   }
 
   fun onUpdateVisit() {
-    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_VISIT
+    access[VConstants.MOD_UPDATE] = VConstants.ACS_VISIT
   }
 
   fun onUpdateMustFill() {
-    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
+    access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
   // ----------------------------------------------------------------------
@@ -379,52 +390,56 @@ open class FormField<T>(internal val block: Block,
     return self
   }
 
-  private val _isInternal = access[0] == VConstants.ACS_HIDDEN
-          && access[1] == VConstants.ACS_HIDDEN
-          && access[2] == VConstants.ACS_HIDDEN
-
   ///////////////////////////////////////////////////////////////////////////
   // FIELD MODEL
   ///////////////////////////////////////////////////////////////////////////
+
+  private val _isInternal = initialAccess == VConstants.ACS_HIDDEN
 
   override var ident: String = if (_isInternal) "ANONYMOUS!@#$%^&*()" else super.ident
 
   /**
    * The field model based on the field type.
    */
-  val vField: VField by lazy {
-    domain.buildFormFieldModel(this).also {
-      it.label = label
-      it.toolTip = help
-    }
-  }
+  val vField: VField = domain.buildFormFieldModel(this)
 
-  fun setInfo(source: String, form: VForm) {
+  override var label: String? = null
+    set(value) {
+      vField.label = value
+      field = value
+    }
+
+  override var help: String? = null
+    set(value) {
+      vField.toolTip = value
+      field = value
+    }
+
+  init {
     val list = if (domain is ListDomain) {
-      (domain as ListDomain).list.buildListModel(source)
+      domain.list.buildListModel()
     } else {
       null
     }
 
-    if (domain is CodeDomain) {
-      (vField as VCodeField).source = source
-    }
+    vField.access = IntArray(3) { initialAccess }
 
     vField.setInfo(
-      ident,
+      this.ident,
       fieldIndex,
       posInArray,
-      options,
-      access,
-      list, // TODO
-      columns?.getColumnsModels()?.toTypedArray(), // TODO
-      columns?.index?.indexNumber ?: 0,
-      columns?.priority ?: 0,
-      commands.map { it.model }.toTypedArray(),
+      list,
       position?.getPositionModel(),
-      align.value,
-      null // TODO
+      align.value
     )
+  }
+
+  fun setInfo(source: String) {
+    if (domain is ListDomain) {
+      (domain as ListDomain<T>).list.model.source = source
+    } else if (domain is CodeDomain) {
+      (vField as VCodeField).source = source
+    }
   }
 
   /**
@@ -452,6 +467,7 @@ open class FormField<T>(internal val block: Block,
                       || block.hasOption(VConstants.BKO_NOCHART))) {
         block.positionField(position)
       }
+      vField.position = position!!.getPositionModel()
     }
   }
 
