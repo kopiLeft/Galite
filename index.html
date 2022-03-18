@@ -44,10 +44,7 @@
           </table>
         </div>
         </div>
-        <div id="bubble-one"></div>
-        <div id="bubble-two"></div>
         <div id="devices-container">
-          <img src="images/devices.png" id="devices"/>
           <div>
             <h2>WHAT IS GALITE</h2>
             <p>
@@ -58,9 +55,6 @@
           </div>
         </div>
         <div id="links">
-          <a class="link" onClick="change()">
-            <i id= "switch" class="fas fa-moon"></i>
-          </a>
           <a class="link" href="https://github.com/kopiLeft">
             <i class="fab fa-github"></i>
           </a>
@@ -78,7 +72,7 @@
       <h2>STRENGHTS & ADVANTAGES</h2>
       <div class="features-box">
         <div class="feature">
-          <span class="icon"><i class="fas fa-cogs feature-img"></i></span>
+          <span class="icon generic"><i class="fas fa-cogs feature-img"></i></span>
           <h2 class="feature-title">Generic</h2>
           <p class="feature-paragraph">
             Make it easy to build a full fledged application based on business
@@ -86,7 +80,7 @@
           </p>
         </div>
         <div class="feature">
-          <span class="icon"><i class="fas fa-door-open feature-img"></i></span>
+          <span class="icon extendible"><i class="fas fa-door-open feature-img"></i></span>
           <h2 class="feature-title">Extendible</h2>
           <p class="feature-paragraph">
             It provide a collections of component that can be combined in order
@@ -94,7 +88,7 @@
           </p>
         </div>
         <div class="feature">
-          <span class="icon"><i class="fas fa-heart-pulse feature-img"></i></span>
+          <span class="icon developer-friendly"><i class="fas fa-heart-pulse feature-img"></i></span>
           <h2 class="feature-title">Developer friendly</h2>
           <p class="feature-paragraph">
             Galite provide a domain specific language that is easy to use in
@@ -102,7 +96,7 @@
           </p>
         </div>
         <div class="feature">
-          <span class="icon"><i class="fas fa-gauge-high feature-img"></i></span>
+          <span class="icon productive"><i class="fas fa-gauge-high feature-img"></i></span>
           <h2 class="feature-title">Productive</h2>
           <p class="feature-paragraph">
             Galite take into consideration the time to market,
@@ -144,12 +138,16 @@
                       <span>
                         <pre class="dsl-code">
                           <code class="language-kotlin">
-class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK),
-                            IFormDefault by FormDefaultImpl() {
+class ClientForm : Form(title = "Clients", locale = Locale.UK) {
+  val action = menu("Action")
 
-  init {
-    insertMenus()
-    insertCommands()
+  val quit = actor(
+    menu = action,
+    label = "Quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = Icon.QUIT
   }
 
   val list = actor(
@@ -179,8 +177,12 @@ class ClientForm : ReportSelectionForm(title = "Clients", locale = Locale.UK),
     icon = Icon.REPORT
   }
 
+  val quitCmd = command(item = quit) {
+    model.close()
+  }
+
   val clientsPage= page("Clients")
-  val detailsPage= page("Details")
+
   val clientsBlock = clientsPage.insertBlock(Clients())
   val salesBlock = clientsPage.insertBlock(Sales())
 
@@ -565,12 +567,6 @@ class ChartSample : Chart(
     }
   }
 
-  // You can either change the chart type in INIT or CHARTTYPE trigger
-  val init = trigger(INITCHART) {
-    chartType = VChartType.BAR
-  }
-
-  // This is the type that will be taken because CHARTTYPE is executed after INIT
   val type = trigger(CHARTTYPE) {
     VChartType.BAR
   }
@@ -621,10 +617,6 @@ class ChartSample : Chart(
     <footer id="footer">
       <p>Copyright &#9400; 2013-2022 kopiLeft Services SARL, Tunis TN.</p>
       <p>Code licensed under an <a href = "https://github.com/kopiLeft/Galite/blob/master/COPYING">LGPLv2.1 License</a>.</p>
-      <div class="container-footer-logo">
-        <p id="img-text">Supported and developed by :</p>
-        <img src="images/logo_kopileft.png" class="footer-logo" />
-      </div>
     </footer>
 
     <script>
@@ -641,11 +633,6 @@ class ChartSample : Chart(
       }
     </script>
     <script>
-   /* window.addEventListener('resize', function(event) {
-     if (window.innerWidth > 767) {
-      topContainer.classList.remove("dark-mode-top-header");
-     }
-    }, true);*/
 
       var check = false;
       function change() {

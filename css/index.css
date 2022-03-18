@@ -98,7 +98,7 @@ body {
 }
 
 #devices-container {
-  margin-top: -2em;
+  margin-top: 10em;
   margin-bottom: 0;
   display: flex;
   justify-content: center;
@@ -181,9 +181,8 @@ a.btn:visited {
 }
 
 .feature {
-  cursor: pointer;
   max-width: 40%;
-  padding: 0 4em 1.8rem;
+  padding: 1em;
   margin-right: 20px;
   margin-bottom: 20px;
   border: 2px solid #ebf2f2;
@@ -196,7 +195,23 @@ a.btn:visited {
 
 .icon {
   text-align: center;
-  font-size: 120px;
+  font-size: 100px;
+}
+
+.icon.generic, .icon.generic + .feature-title {
+   color: slategray;
+}
+
+.icon.extendible, .icon.extendible + .feature-title {
+   color: darkcyan;
+}
+
+.icon.developer-friendly, .icon.developer-friendly + .feature-title {
+   color: tomato;
+}
+
+.icon.productive, .icon.productive + .feature-title {
+   color: mediumseagreen;
 }
 
 .feature:hover {
@@ -205,12 +220,6 @@ a.btn:visited {
 
 .feature:hover h2 {
   color: #28afce;
-}
-
-.feature-dark-mode {
-  box-shadow: none;
-  border-color: #6d7579;
-  background: #1f2327;
 }
 
 .feature-title {
@@ -386,29 +395,6 @@ code.hljs {
   }
 }
 
-/* Animation of ball */
-#bubble-one, #bubble-two {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  margin: 30px 0;
-  border-radius: 50%;
-  animation-name: pulse;
-}
-
-#bubble-one {
-  background-color: #1c87c9;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-}
-
-#bubble-two {
-  margin: 0;
-  background-color: #83bf42;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-}
-
 @keyframes pulse {
   0% { left: 0; }
   50% { left: 30%; }
@@ -476,7 +462,6 @@ code.hljs {
 
 .panel-content span img {
   max-width: 800px;
-  height: 100%;
   margin-right: 20px;
 }
 
@@ -504,48 +489,6 @@ code.hljs {
 #three:checked ~ .tabs #three-tab {
   color: white;
   border-bottom: 3px solid white;
-}
-
-/* dark mode */
-
-.dark-mode {
-  position: relative;
-  background: rgb(48, 48, 48) !important;
-  z-index: 1;
-  color: white;
-}
-
-.dark-mode-header {
-  background: linear-gradient(to right bottom, #eff, #eff, #f6f6f6, #bdd4d0, #b2ccd6) !important;
-}
-
-.dark-mode-top-header {
-  background: linear-gradient(to right bottom, #eff, #eff, #bdd4d0, #bdd4d0, #b2ccd6) !important;
-}
-
-.dark-mode-first-link {
-  border-right: 1px solid white !important;
-}
-
-.dark-mode-white-color {
-  color: white !important;
-}
-
-.dark-mode-white-background {
-  background-color: white !important;
-}
-
-.dark-mode-black-color {
-  color: black !important;
-}
-
-.dark-mode-black-background {
-  background-color: black !important;
-}
-
-.dark-mode-panel {
-  background-color: rgb(48 48 48 / 83%) !important;
-  box-shadow: 1px 10px 10px 5px #f6f6f6 !important;
 }
 
 /* Media Query for Mobile Devices */
@@ -620,10 +563,6 @@ code.hljs {
     margin-left: 20px;
     max-width: 100%;
     padding: 5px;
-  }
-  #bubble-one, #bubble-two {
-    width: 60px;
-    height: 60px;
   }
   #devices-container {
     margin-top: 1em;
@@ -728,10 +667,6 @@ code.hljs {
     width: 100%;
     max-width: 100%;
   }
-  #bubble-one, #bubble-two {
-    width: 60px;
-    height: 60px;
-  }
   #devices-container {
     margin-top: 1em;
     flex-direction: column-reverse;
@@ -821,12 +756,8 @@ code.hljs {
     width: 100%;
     max-width: 100%;
   }
-  #bubble-one, #bubble-two {
-    width: 60px;
-    height: 60px;
-  }
   #devices-container {
-    margin-top: 1em;
+    margin-top: 10em;
   }
   .dsl-title {
     text-align: center;
@@ -892,12 +823,8 @@ code.hljs {
   .feature {
     margin-bottom: 20px;
   }
-  #bubble-one, #bubble-two {
-    width: 80px;
-    height: 80px;
-  }
   #devices-container {
-    margin-top: -1em;
+    margin-top: 10em;
   }
   .dsl-title {
     text-align: center;
