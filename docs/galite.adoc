@@ -410,13 +410,10 @@ In a visual context, the optional message allows to inform the user that the tra
 
 === The new Types
 
-Galite introduces 5 types to the basic types available in the Kotlin language :
+Galite introduces 2 types to the basic types available in the Kotlin language :
 
- * Date      : date values.
  * Month     : Years months values.
  * Week      : Years weeks values.
- * Time      : this type can be used to contain time values (hh:mm:ss).
- * Timestamp : can contain timestamp values.
 
 == Galite application framework
 

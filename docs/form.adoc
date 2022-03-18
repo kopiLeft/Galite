@@ -16,7 +16,6 @@ To define a field you can call one of the 4 functions `mustFill()`, `visit()`, `
 *Syntax*
 [source,kotlin]
 ----
-FieldDeclaration  :
 val fieldName = mustFill(FieldDomain, [FieldPosition]) {
     FieldBody
 }
@@ -152,7 +151,7 @@ If you don't want your field to have a label, you can set the property label to 
 val secondName = visit(domain = STRING(20), position = at(1, 1)) {
     label = "The second Name"
     ...
-  }
+}
 ----
 
 ===== Field Help Text
@@ -291,7 +290,6 @@ Two more option are available with the `columns` function, the index and the pri
 
 [source,kotlin]
 ----
-FieldColumns :
 columns(ColumnList) {
     ColumnsBody
 }
@@ -450,7 +448,6 @@ Once you have defined the columns , you may define the field commands.
 
 [source,kotlin]
 ----
-ModeAndCommands :
 command(item : Actor, [AccessMode]) {
   CommandBody
 }
@@ -612,7 +609,6 @@ To create a block you need first to create a class that extend from Block class 
 *Syntax*
 [source,kotlin]
 ----
-BlockDefinition :
 class Block: Block(blockName : String, buffer: Int, rows: Int) {
     BlockBody
 }
@@ -972,8 +968,7 @@ When creating a form, you will have to include the block and the field definitio
 [source,kotlin]
 ----
 FormDef :
-          FormName ":" QualifiedName [,QualifiedName]*
-          ("title ="  formTitle : String, ["locale ="  formLocalization : String])
+          class FormSample: Form("title ="  formTitle : String, ["locale ="  formLocalization : String])
           {
               [MenuDefinition]
               [ActorDefinition] [TypeDefinition]

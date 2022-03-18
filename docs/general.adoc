@@ -34,7 +34,6 @@ There are also three other options you can use in order to modify the String's c
 [source,kotlin]
 ----
 
-StringType   :
 STRING(
     width: Int,
     height: Int,
@@ -80,7 +79,6 @@ For example, you can write `STRING(40, 10, 4)` or `STRING(40)` but you have to w
 
 [source,java]
 ----
-TextType      :
 TEXT(width: Integer ,height: Integer ,visible: Integer, [FixOption])
 
 [FixOption]   : FIXED.ON
@@ -108,7 +106,6 @@ This field type is used to insert an illustration or a picture. When introducing
 
 [source,kotlin]
 ----
-ImageType :
 IMAGE(width: Int, height: Int)
 ----
 
@@ -135,10 +132,16 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 
 [source,kotlin]
 ----
-DecimalType   :
-DECIMAL(width: Int, scale: Int) {
-    [minValue = 'A decimal value']
-    [maxValue = 'A decimal value']
+DECIMAL(width: Int, scale: Int)
+----
+
+OR
+
+[source,kotlin]
+----
+object CustomDecimal: Domain<Decimal>(width: Int, scale: Int) {
+    min = Decimal.valueOf("1.9")
+    max = Decimal.valueOf("5.9")
 }
 ----
 
@@ -149,8 +152,6 @@ DECIMAL(width: Int, scale: Int) {
 val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
     label = "price"
     help = "The price"
-    minValue = Decimal.valueOf("1.9")
-    maxValue = Decimal.valueOf("5.9")
 }
 ----
 
@@ -162,10 +163,16 @@ Integer field type is INT is used to insert integers. Only the text width is to 
 
 [source,kotlin]
 ----
-IntegerType:
-INT(width: Int) {
-    [minValue = 'An integer value']
-    [maxValue = 'An integer value']
+INT(width: Int)
+----
+
+OR
+
+[source,kotlin]
+----
+object CustomInt: Domain<Int>(width: Int) {
+    min = 1
+    max = 130
 }
 ----
 
@@ -176,8 +183,6 @@ INT(width: Int) {
 val count = visit(domain = INT(3), position = follow(name)) {
     label = "Cars"
     help = "The number of cars"
-    minValue = 1
-    maxValue = 130
 }
 ----
 
@@ -197,7 +202,6 @@ In a CODE BOOL or BOOLEAN you have to assign a Boolean value to the item you hav
 
 [source,kotlin]
 ----
-CodeBooleanType :
 object "NameToUse" : CodeDomain<Boolean>() {
     init {
         CodeBooleanList
@@ -230,7 +234,6 @@ In a CODE INT, you assign to each String item you have entered a INT value.
 
 [source,kotlin]
 ----
-CodeIntegerType :
 object "NameToUse" : CodeDomain<Int>() {
     init {
         CodeIntegerList
@@ -267,7 +270,6 @@ In a CODE DECIMAL, each item you have entered will get a DECIMAL value, i.e inte
 
 [source,kotlin]
 ----
-CodeFixedType :
 object "NameToUse" : CodeDomain<Decimal>() {
     init {
         CodeFixedList
@@ -298,7 +300,6 @@ In a CODE STRING, each item you have entered will get a STRING value, this can b
 
 [source,kotlin]
 ----
-CodeStringType :
 object "NameToUse" : CodeDomain<String>() {
     init {
         CodeStringType
@@ -329,7 +330,6 @@ As you had the possibility to call up a list or a table from the database, with 
 
 [source,kotlin]
 ----
-List        :
 class "ListName" : ListDomain<String>(20) {
     override val table = TableName
 
