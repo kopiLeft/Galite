@@ -655,6 +655,11 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   }
 
   inner class BlockGrid: Grid<GridBlockItem>() {
+    override fun createEditor(): Editor<GridBlockItem> = BlockEditor()
+
+    // --------------------------------------------------
+    // GRID EDITOR
+    // --------------------------------------------------
     inner class BlockEditor : EditorImpl<GridBlockItem>(this, propertySet) {
       private var itemToEdit: GridBlockItem? = null
       private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
@@ -697,9 +702,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
           }
         }
       }
-    }
-    override fun createEditor(): Editor<GridBlockItem> {
-      return BlockEditor()
     }
   }
 }
