@@ -632,64 +632,6 @@ class ChartSample : Chart(
         }
       }
     </script>
-    <script>
-
-      var check = false;
-      function change() {
-        var headerContainer = document.getElementById("header-container");
-        headerContainer.classList.toggle("dark-mode-header");
-
-        if (window.innerWidth <= 767) {
-          var topContainer = document.getElementById("top-container");
-          topContainer.classList.toggle("dark-mode-top-header");
-        }
-
-        var main = document.getElementById("main");
-        main.classList.toggle("dark-mode");
-
-        var swap = document.getElementById("switch");
-        swap.classList.toggle("fa-moon");
-        swap.classList.toggle("fa-lightbulb");
-
-        var links = document.getElementsByClassName("link");
-        links[0].classList.toggle("dark-mode-first-link");
-        for (const li of links) {
-          li.classList.toggle("dark-mode-white-color");
-        }
-
-        for (const li of document.getElementsByClassName("btn")) {
-          li.classList.toggle("dark-mode-black-color");
-        }
-
-        var bubbleOne = document.getElementById("bubble-one");
-        bubbleOne.classList.toggle("dark-mode-black-background");
-        var bubbleTwo = document.getElementById("bubble-two");
-        bubbleTwo.classList.toggle("dark-mode-white-background");
-
-        var featuresSection = document.getElementById("features-section");
-        featuresSection.classList.toggle("dark-mode");
-        featuresSection.classList.toggle("dark-mode-white-color");
-
-        var dslSection = document.getElementById("dsl-section");
-        dslSection.classList.toggle("dark-mode");
-
-        var  uiSection = document.getElementById("ui-section");
-        uiSection.classList.toggle("dark-mode");
-
-        check ^= true;
-      }
-    </script>
-    <script>
-      for (const container of document.getElementsByClassName("feature")) {
-        container.addEventListener('mouseenter', function() {
-        if(check)
-          this.classList.add('feature-dark-mode');
-        })
-        container.addEventListener('mouseleave', function() {
-          this.classList.remove('feature-dark-mode');
-        })
-      }
-    </script>
   </body>
   <script>hljs.highlightAll();</script>
  </html>
