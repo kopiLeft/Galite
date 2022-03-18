@@ -118,5 +118,5 @@ class TaxRuleForm : FormDefault(title = "TaxRules", locale = Locale.UK) {
 }
 
 fun main() {
-  runForm(formName = TaxRuleForm())
+  runForm(form = TaxRuleForm::class)
 }

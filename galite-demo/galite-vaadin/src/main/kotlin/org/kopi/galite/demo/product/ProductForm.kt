@@ -107,5 +107,5 @@ object Tax : CodeDomain<String>() {
 }
 
 fun main() {
-  runForm(formName = ProductForm())
+  runForm(form = ProductForm::class)
 }
