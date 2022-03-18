@@ -62,9 +62,6 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = TimestampValidator
-      .parseTimestamp(newPresentationValue.orEmpty())
-      ?.sqlTimestamp
-      ?.toLocalDateTime()
+    content.value = TimestampValidator.parseTimestamp(newPresentationValue.orEmpty())
   }
 }

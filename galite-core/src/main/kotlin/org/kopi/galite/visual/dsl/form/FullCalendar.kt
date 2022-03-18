@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.visual.dsl.form
 
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -26,7 +27,6 @@ import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.type.Timestamp
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -130,7 +130,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun from(position: FormPosition, init: MustFillFormField<Timestamp>.() -> Unit): FormField<Timestamp> =
+  fun from(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant> =
     from(Domain(), position, init)
 
   /**
@@ -142,7 +142,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T: Timestamp> from(domain: Domain<T>,
+  inline fun <reified T: Instant> from(domain: Domain<T>,
                                          position: FormPosition,
                                          init: MustFillFormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
@@ -156,7 +156,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun to(position: FormPosition, init: MustFillFormField<Timestamp>.() -> Unit): FormField<Timestamp> =
+  fun to(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant> =
     to(Domain(), position, init)
 
   /**
@@ -168,7 +168,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T: Timestamp> to(domain: Domain<T>,
+  inline fun <reified T: Instant> to(domain: Domain<T>,
                                        position: FormPosition,
                                        init: MustFillFormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->

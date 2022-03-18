@@ -18,7 +18,9 @@
 package org.kopi.galite.visual.domain
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import kotlin.reflect.KClass
@@ -70,7 +72,6 @@ import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.visual.VColor
 
@@ -161,7 +162,7 @@ open class Domain<T>(val width: Int? = null,
         Month::class -> VMonthField(block.buffer)
         Week::class -> VWeekField(block.buffer)
         org.joda.time.LocalTime::class, LocalTime::class -> VTimeField(block.buffer)
-        Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
+        Instant::class, LocalDateTime::class, DateTime::class -> VTimestampField(block.buffer)
         Image::class -> VImageField(block.buffer, width!!, height!!)
         else -> {
           if(this@Domain is TEXT) {
@@ -196,7 +197,7 @@ open class Domain<T>(val width: Int? = null,
         Month::class -> VMonthDimension(ident, format)
         Week::class -> VWeekDimension(ident, format)
         org.joda.time.LocalTime::class, LocalTime::class -> VTimeDimension(ident, format)
-        Timestamp::class -> VTimestampDimension(ident, format)
+        Instant::class, LocalDateTime::class, DateTime::class -> VTimestampDimension(ident, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }
@@ -243,7 +244,7 @@ open class Domain<T>(val width: Int? = null,
           VWeekColumn(ident, options, align.value, groupID, function, format)
         org.joda.time.LocalTime::class, LocalTime::class ->
           VTimeColumn(ident, options, align.value, groupID, function, format)
-        Timestamp::class ->
+        Instant::class, LocalDateTime::class, DateTime::class ->
           VTimestampColumn(ident, options, align.value, groupID, function, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }

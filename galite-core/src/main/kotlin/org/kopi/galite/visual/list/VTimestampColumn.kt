@@ -18,11 +18,13 @@
 
 package org.kopi.galite.visual.list
 
+import java.time.Instant
+
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.format
 
 /**
  * Represents a list column.
@@ -46,7 +48,7 @@ class VTimestampColumn(title: String,
    * Returns a representation of value
    */
   override fun formatObject(value: Any?): Any {
-    val stringValue = super.formatObject(value) as String
+    val stringValue = (value as? Instant)?.format() ?: VConstants.EMPTY_TEXT
 
     // this is work around to display the timestamp in yyyy-MM-dd hh:mm:ss format
     // The proper way is to change the method Timestamp#toString(Locale) but this
@@ -54,5 +56,5 @@ class VTimestampColumn(title: String,
     return stringValue.substring(0, 19.coerceAtMost(stringValue.length))
   }
 
-  override fun getDataType(): KClass<*> = Timestamp::class
+  override fun getDataType(): KClass<*> = Instant::class
 }

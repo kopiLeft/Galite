@@ -17,6 +17,9 @@
 
 package org.kopi.galite.domain
 
+import java.time.Instant
+import java.time.LocalDateTime
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
@@ -26,7 +29,6 @@ import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.joda.time.DateTime
 import org.kopi.galite.domain.type.Month
-import org.kopi.galite.domain.type.Timestamp
 import org.kopi.galite.domain.type.Week
 
 class DomainColumn<T>(val column: Column<T>,
@@ -63,7 +65,7 @@ inline fun <reified T> Table.column(name: String,
         Month::class -> month(name)
         Week::class -> week(name)
         org.joda.time.LocalTime::class, java.time.LocalTime::class -> time(name)
-        Timestamp::class -> timestamp(name)
+        Instant::class, LocalDateTime::class -> timestamp(name)
         DateTime::class -> datetime(name)
         ExposedBlob::class -> blob(name)
         else -> {
