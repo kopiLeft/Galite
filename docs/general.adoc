@@ -314,10 +314,11 @@ CodeString     : code : String "keyOf" value : String
 
 [source,kotlin]
 ----
-object ProgrammingLanguage: CodeDomain<String>() {
+object Currency: CodeDomain<String>() {
   init {
-    "JDK" keyOf "Java Development Kit"
-    "JRE" keyOf "Java Runtime Environment"
+    "tnd" keyOf "US Dollar"
+    "usd" keyOf "US Dollar"
+    "tnd" keyOf "Tunisian Dinar"
   }
 }
 ----
