@@ -318,7 +318,7 @@ object Currency: CodeDomain<String>() {
   init {
     "tnd" keyOf "Tunisian Dinar"
     "usd" keyOf "US Dollar"
-    "tnd" keyOf "Tunisian Dinar"
+    "eur" keyOf "Euro"
   }
 }
 ----
