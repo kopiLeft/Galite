@@ -5,7 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<title>Generalities</title>
+<link rel="icon" type="image/png" href="./docs/favicon.png">
+<title>Galite Application Framework :  User guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -436,11 +437,806 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #toc  a:hover {
+          color:black;
+        }
+
+         code.hljs {
+             font-size: 15px !important;
+         }
+    </style>
 </head>
-<body class="article">
+</html>
+
+
+</head>
+<body class="book toc2 toc-left">
 <div id="header">
+<h1>Galite Application Framework :  User guide</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_preface">Preface</a></li>
+<li><a href="#_getting_started">Getting Started</a>
+<ul class="sectlevel2">
+<li><a href="#_entry_point">Entry point</a></li>
+<li><a href="#_galite_standard_tables">Galite standard tables</a></li>
+<li><a href="#_transactions">Transactions</a></li>
+<li><a href="#_the_new_types">The new Types</a></li>
+</ul>
+</li>
+<li><a href="#_galite_application_framework">Galite application framework</a>
+<ul class="sectlevel2">
+<li><a href="#_generalities">Generalities</a>
+<ul class="sectlevel3">
+<li><a href="#_predefined_field_types">Predefined Field Types</a>
+<ul class="sectlevel4">
+<li><a href="#_the_string_field_type">The STRING Field Type</a></li>
+<li><a href="#_the_text_field_type">The TEXT Field Type</a></li>
+<li><a href="#_the_image_field_type">The IMAGE Field Type</a></li>
+<li><a href="#_the_decimal_field_type">The DECIMAL Field Type</a></li>
+<li><a href="#_the_integer_field_type">The INTEGER Field Type</a></li>
+</ul>
+</li>
+<li><a href="#_code_field_types">Code Field Types</a>
+<ul class="sectlevel4">
+<li><a href="#_the_code_types">The CODE types</a></li>
+<li><a href="#_the_select_command">The SELECT command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_visual_galite_forms">Visual Galite Forms</a>
+<ul class="sectlevel3">
+<li><a href="#_creating_form_fields">Creating Form Fields</a>
+<ul class="sectlevel4">
+<li><a href="#_field_access_modifiers">Field Access Modifiers</a></li>
+<li><a href="#_field_position">Field Position</a></li>
+<li><a href="#_field_label">Field label</a></li>
+<li><a href="#_field_help_text">Field Help Text</a></li>
+<li><a href="#_field_types">Field Types</a></li>
+<li><a href="#_field_alignment">Field Alignment</a></li>
+<li><a href="#_field_drop_files">Field Drop files</a></li>
+<li><a href="#_field_options">Field Options</a></li>
+<li><a href="#_field_columns">Field Columns</a></li>
+<li><a href="#_field_commands">Field Commands</a></li>
+<li><a href="#_standard_field_command">Standard Field Command</a></li>
+<li><a href="#_field_command_using_modes">Field Command using Modes</a></li>
+<li><a href="#_field_access_modifiers_using_modes">Field Access modifiers using Modes</a></li>
+<li><a href="#_field_triggers">Field Triggers</a></li>
+</ul>
+</li>
+<li><a href="#_creating_form_blocks">Creating Form Blocks</a>
+<ul class="sectlevel4">
+<li><a href="#_block_types">Block Types</a></li>
+<li><a href="#_block_names">Block Names</a></li>
+<li><a href="#_block_border">Block Border</a></li>
+<li><a href="#_block_alignment">Block Alignment</a></li>
+<li><a href="#_block_help">Block Help</a></li>
+<li><a href="#_block_options">Block Options</a></li>
+<li><a href="#_block_tables">Block Tables</a></li>
+<li><a href="#_block_indexes">Block Indexes</a></li>
+<li><a href="#_block_commands">Block Commands</a></li>
+<li><a href="#_block_triggers">Block Triggers</a></li>
+<li><a href="#_block_fields_declaration">Block Fields Declaration</a></li>
+</ul>
+</li>
+<li><a href="#_creating_forms">Creating Forms</a>
+<ul class="sectlevel4">
+<li><a href="#_form_localization">Form Localization</a></li>
+<li><a href="#_form_title">Form Title</a></li>
+<li><a href="#_menus_definition">Menus Definition</a></li>
+<li><a href="#_actors_definition">Actors Definition</a></li>
+<li><a href="#_types_definition">Types Definition</a></li>
+<li><a href="#_commands_definition">Commands Definition</a></li>
+<li><a href="#_form_commands_declaration">Form Commands Declaration</a></li>
+<li><a href="#_form_triggers_definition">Form Triggers Definition</a></li>
+<li><a href="#_form_pages">Form Pages</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_visual_galite_reports">Visual Galite Reports</a>
+<ul class="sectlevel3">
+<li><a href="#_creating_report_fields">Creating Report Fields</a>
+<ul class="sectlevel4">
+<li><a href="#_report_field_label">Report Field Label</a></li>
+<li><a href="#_report_field_help_text">Report Field Help Text</a></li>
+<li><a href="#_report_field_type">Report Field Type</a></li>
+<li><a href="#_report_field_alignment">Report Field Alignment</a></li>
+<li><a href="#_report_field_options">Report Field Options</a></li>
+<li><a href="#_report_field_group">Report Field Group</a></li>
+<li><a href="#_report_field_command">Report Field Command</a></li>
+<li><a href="#_report_field_triggers">Report Field Triggers</a></li>
+</ul>
+</li>
+<li><a href="#_creating_reports">Creating Reports</a>
+<ul class="sectlevel4">
+<li><a href="#_report_localization">Report Localization</a></li>
+<li><a href="#_report_title">Report Title</a></li>
+<li><a href="#_report_help_text">Report Help Text</a></li>
+<li><a href="#_report_menus_definition">Report Menus Definition</a></li>
+<li><a href="#_report_actors_definition">Report Actors Definition</a></li>
+<li><a href="#_report_types_definition">Report Types Definition</a></li>
+<li><a href="#_report_commands_definition">Report Commands Definition</a></li>
+<li><a href="#_report_triggers_declaration">Report Triggers Declaration</a></li>
+<li><a href="#_report_fields_declaration">Report Fields Declaration</a></li>
+<li><a href="#_report_data_initialization">Report data initialization:</a></li>
+</ul>
+</li>
+<li><a href="#_calling_reports">Calling reports</a></li>
+</ul>
+</li>
+<li><a href="#_visual_galite_charts">Visual Galite Charts</a>
+<ul class="sectlevel3">
+<li><a href="#_creating_charts_dimensions_and_measures">Creating Charts dimensions and measures</a>
+<ul class="sectlevel4">
+<li><a href="#_chart_dimension_measure_label">Chart "dimension / measure" Label</a></li>
+<li><a href="#_chart_dimension_measure_help_text">Chart "dimension / measure" Help Text</a></li>
+<li><a href="#_chart_dimension_type">Chart dimension Type</a></li>
+<li><a href="#_chart_measure_type">Chart measure Type</a></li>
+<li><a href="#_chart_dimension_measure_command">Chart "dimension / measure" Command</a></li>
+<li><a href="#_chart_dimension_measure_triggers">Chart "dimension / measure" Triggers</a></li>
+</ul>
+</li>
+<li><a href="#_creating_charts">Creating Charts</a>
+<ul class="sectlevel4">
+<li><a href="#_chart_localization">Chart Localization</a></li>
+<li><a href="#_chart_title">Chart Title</a></li>
+<li><a href="#_chart_help_text">Chart Help Text</a></li>
+<li><a href="#_chart_menus_definition">Chart Menus Definition</a></li>
+<li><a href="#_chart_actors_definition">Chart Actors Definition</a></li>
+<li><a href="#_chart_types_definition">Chart Types Definition</a></li>
+<li><a href="#_chart_commands_definition">Chart Commands Definition</a></li>
+<li><a href="#_chart_triggers_declaration">Chart Triggers Declaration</a></li>
+<li><a href="#_chart_fields_declaration">Chart Fields Declaration</a></li>
+<li><a href="#_chart_data_initialization">Chart data initialization:</a></li>
+</ul>
+</li>
+<li><a href="#_chart_types">Chart types</a></li>
+<li><a href="#_calling_charts">Calling charts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_the_galite_project_future">The Galite Project Future</a></li>
+</ul>
+</div>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_preface">Preface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Galite Project is a framework that lets you build business applications with few code. It&#8217;s the successor of the <a href="https://github.com/kopiLeft/Kopi">Kopi project</a> which is a framework from the company DMS that allows the development of database applications using Java, JDBC, SWING and Vaadin 7.</p>
+</div>
+<div class="paragraph">
+<p>Galite allows creating database applications in a high level specification language using Kotlin DSL and Exposed.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/galite-architecture.png" alt="650" width="650">
+</div>
+</div>
+<div class="paragraph">
+<p>The basic architecture of Visual Galite package is made of a three strongly independent parts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DSL: The DSL is the Kotlin functions provided for the user to develop an application.</p>
+</li>
+<li>
+<p>Model: The model layer is a set of model classes responsible for structuring and processing data. Also, it contains a high specification interfaces that any UI implementation should respect.</p>
+</li>
+<li>
+<p>UI: The UI is the presentation layer that represents the user interface. This can be extended to implement many technologies (web, mobile, desktop, etc.). For the moment Galite can generate a web application implemented in Vaadin flow (21+).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Organization of This Document</strong></p>
+</div>
+<div class="paragraph">
+<p>This documentation includes two main Chapters:<br></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CHAPTER 1 : Getting Started</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This chapter is intended to show how to configure the application and essential features to query the database.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CHAPTER 2 : The Visual Galite application Framework</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this chapter, we will explore the capabilities of this framework.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started">Getting Started</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_entry_point">Entry point</h3>
+<div class="paragraph">
+<p>Galite provides an entry point to the application that should be implemented to customize the application.</p>
+</div>
+<div class="paragraph">
+<p>If you are creating a Vaadin application, you should implement the class <code>VApplication</code> and specify your application configurations by overriding the class properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Route("")
+class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
+
+  override val sologanImage get() = "galite-slogan.png"
+
+  override val logoImage get() = "galite-logo.png"
+
+  override val logoHref get() = "http://[mywebsite]"
+
+  override val alternateLocale get() = Locale("de", "AT")
+
+  override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
+
+  companion object {
+    init {
+      ApplicationConfiguration.setConfiguration(ConfigurationManager)
+    }
+  }
+
+  object ConfigurationManager : ApplicationConfiguration() {
+    override val version get(): String = "1.0"
+    override val applicationName get(): String = "MyApp"
+    override val informationText get(): String = "info"
+    override val logFile get(): String = "log.txt"
+    override val debugMailRecipient get(): String = "mail@adress"
+    override fun getSMTPServer(): String = "smtp.server"
+    override val faxServer get(): String = "fax.server"
+    override fun mailErrors(): Boolean = false
+    override fun logErrors(): Boolean = true
+    override fun debugMessageInTransaction(): Boolean = true
+
+    // And many other configurations. See ApplicationConfiguration.kt
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Route</code> annotation allows you to define the navigation URL of your web application.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_galite_standard_tables">Galite standard tables</h3>
+<div class="paragraph">
+<p>There is a list of standard database tables used by Galite inorder to manage application modules and users. you may create these tables in your first database migration.</p>
+</div>
+<div class="paragraph">
+<p>The definition of these tables is in the file <a href="https://github.com/kopiLeft/Galite/blob/master/galite-core/src/main/kotlin/org/kopi/galite/visual/db/DBSchema.kt">DBSchema.kt</a>. You can use Exposed to create these tables using <code>SchemaUtils.create(table)</code>.</p>
+</div>
+<div class="paragraph">
+<p>This is the role of every table:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>MODULE</strong>: This table contains the modules of our application.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of changes applied on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(25)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of this module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VATER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the parent of this module, if our module is a form we put here the menu id of this form.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QUELLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(255)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The source name of the module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PRIORITAET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The priority of the module compared to another module. Example module with priority 10 is placed before the module of priority 20 in the same menu.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OBJEKT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(255)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The object name or the class name that contains the code of this module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SYMBOL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The icon of this module.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>BENUTZERRECHTE</strong>: The table <code>User Rights</code> displays the modules that each user is allowed to use.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BENUTZER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZUGRIFF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The access value.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GRUPPENRECHTE</strong>: This table displays the modules that each group of users is allowed to use.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GRUPPE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The group id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZUGRIFF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The access value.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GRUPPENZUGEHOERIGKEITEN</strong>: This table contains the groups that each user belongs to. Each user can belong to many groups.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BENUTZER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZUGRIFF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The access value.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>SYMBOLE</strong>: This table store the icons for each module.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(20)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of this icon.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BEZEICHNUNG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(50)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The description of this icon.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OBJEKT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(50)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This column present the icon of the module.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>FAVORITEN</strong>: This table contains favorite modules for each user.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BENUTZER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MODUL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The module id.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>KOPI_USERS</strong>: This table contains information about the users who use this application</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of changes applied on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(10)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(50)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZEICHEN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(10)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TELEFON</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(20)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The phone number of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EMAIL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(40)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The email of the user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AKTIV</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">is this user active?</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERSTELLTVON</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Creation date of this user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERSTELLTAM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Created by.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GEAENDERTAM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The date of the change for this user.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERSTELLTAM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Changed by.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GRUPPEN</strong>: This table contains the names of the groups</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of last changes on the current row.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KURZNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(10)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short name of the group.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BEZEICHNUNG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">varchar(40)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The short description of the group.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>DUMMY</strong>: This table is for database sequences</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dummy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">char(1)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Table identifier.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_transactions">Transactions</h3>
+<div class="paragraph">
+<p>Every SQL statements should be executed within transaction. This allows to re-execute statements interrupted by deadlock (after asking the user if he wants to) or abort a whole transaction if something is wrong (like if a Java exception is thrown). The syntax is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">transaction("an optional message") {
+  ...
+  ... // a list of Exposed queries
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a visual context, the optional message allows to inform the user that the transaction is being processed. For example: Showing a dialog containing a spinner with the message (For example: "Inserting the record&#8230;&#8203;" or "Loading&#8230;&#8203;", etc..).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_new_types">The new Types</h3>
+<div class="paragraph">
+<p>Galite introduces 2 types to the basic types available in the Kotlin language :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Month     : Years months values.</p>
+</li>
+<li>
+<p>Week      : Years weeks values.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_galite_application_framework">Galite application framework</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The visual Galite Framework is an application framework using the Kotlin DSL in order to create database applications easily.
+In this chapter we will see how to create Galite powered forms, reports and charts.</p>
+</div>
 <div class="sect2">
 <h3 id="_generalities">Generalities</h3>
 <div class="sect3">
@@ -450,7 +1246,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">- DECIMAL                       // used to insert decimal values
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">- DECIMAL                       // used to insert decimal values
 - IMAGE                         // used to insert images
 - INT                           // used to insert integer values
 - TEXT                          // used to insert text values
@@ -487,7 +1283,7 @@ There are also three other options you can use in order to modify the String&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">STRING(
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">STRING(
     width: Int,
     height: Int,
     visibleHeight: Int,
@@ -512,7 +1308,7 @@ styled      :  true   // present rich text
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val name = visit(domain = STRING(40, 10, 4, Fixed.ON, Convert.UPPER), position = at(1, 1)) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(40, 10, 4, Fixed.ON, Convert.UPPER), position = at(1, 1)) {
     label = "Description"
     help = "A description"
 }
@@ -536,7 +1332,7 @@ For example, you can write <code>STRING(40, 10, 4)</code> or <code>STRING(40)</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">TEXT(width: Integer ,height: Integer ,visible: Integer, [FixOption])
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">TEXT(width: Integer ,height: Integer ,visible: Integer, [FixOption])
 
 [FixOption]   : FIXED.ON
                 FIXED.OFF</code></pre>
@@ -547,7 +1343,7 @@ For example, you can write <code>STRING(40, 10, 4)</code> or <code>STRING(40)</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val informations = visit(domain = STRING(80, 50, 10, Fixed.ON, styled = true), position = at(3, 1)) {
     label = "Richtext"
     help = "A Richtext editor"
 }</code></pre>
@@ -568,7 +1364,7 @@ The field is a richtext editor beacause the option <code>styled</code> is set to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">IMAGE(width: Int, height: Int)</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">IMAGE(width: Int, height: Int)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -576,7 +1372,7 @@ The field is a richtext editor beacause the option <code>styled</code> is set to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val image = visit(domain = IMAGE(width = 20, height = 10), position = at(1, 3)) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val image = visit(domain = IMAGE(width = 20, height = 10), position = at(1, 3)) {
     label = "image"
     help = "The product image"
 }</code></pre>
@@ -600,7 +1396,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">DECIMAL(width: Int, scale: Int)</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">DECIMAL(width: Int, scale: Int)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -608,7 +1404,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object CustomDecimal: Domain&lt;Decimal&gt;(width: Int, scale: Int) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object CustomDecimal: Domain&lt;Decimal&gt;(width: Int, scale: Int) {
     min = Decimal.valueOf("1.9")
     max = Decimal.valueOf("5.9")
 }</code></pre>
@@ -619,7 +1415,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val price = visit(domain = DECIMAL(width = 10, scale = 5), position = at(1, 1)) {
     label = "price"
     help = "The price"
 }</code></pre>
@@ -636,7 +1432,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">INT(width: Int)</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">INT(width: Int)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -644,7 +1440,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object CustomInt: Domain&lt;Int&gt;(width: Int) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object CustomInt: Domain&lt;Int&gt;(width: Int) {
     min = 1
     max = 130
 }</code></pre>
@@ -655,7 +1451,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val count = visit(domain = INT(3), position = follow(name)) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val count = visit(domain = INT(3), position = follow(name)) {
     label = "Cars"
     help = "The number of cars"
 }</code></pre>
@@ -688,7 +1484,7 @@ You can also set the minimum and the maximum values for the DECIMAL field with t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;Boolean&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;Boolean&gt;() {
     init {
         CodeBooleanList
     }
@@ -704,7 +1500,7 @@ CodeBoolean     : code : String "keyOf" value : Boolean</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object Situation: CodeDomain&lt;Boolean&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Situation: CodeDomain&lt;Boolean&gt;() {
   init {
     "married" keyOf true
     "single" keyOf false
@@ -727,7 +1523,7 @@ CodeBoolean     : code : String "keyOf" value : Boolean</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;Int&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;Int&gt;() {
     init {
         CodeIntegerList
     }
@@ -743,7 +1539,7 @@ CodeInteger     : code : String "keyOf" value : Int</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object Days: CodeDomain&lt;Int&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Days: CodeDomain&lt;Int&gt;() {
   init {
     "Sunday" keyOf 1
     "Monday" keyOf 2
@@ -771,7 +1567,7 @@ CodeInteger     : code : String "keyOf" value : Int</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;Decimal&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;Decimal&gt;() {
     init {
         CodeFixedList
     }
@@ -787,7 +1583,7 @@ CodeFixed     : code : String "keyOf" value : Decimal</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object Accounting: CodeDomain&lt;Decimal&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Accounting: CodeDomain&lt;Decimal&gt;() {
   init {
     "piece" keyOf Decimal.valueOf("1.00")
     "per cent" keyOf Decimal.valueOf("0.01")
@@ -810,7 +1606,7 @@ CodeFixed     : code : String "keyOf" value : Decimal</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;String&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object "NameToUse" : CodeDomain&lt;String&gt;() {
     init {
         CodeStringType
     }
@@ -826,7 +1622,7 @@ CodeString     : code : String "keyOf" value : String</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">object ProgrammingLanguage: CodeDomain&lt;String&gt;() {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object ProgrammingLanguage: CodeDomain&lt;String&gt;() {
   init {
     "JDK" keyOf "Java Development Kit"
     "JRE" keyOf "Java Runtime Environment"
@@ -845,7 +1641,7 @@ CodeString     : code : String "keyOf" value : String</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">class "ListName" : ListDomain&lt;String&gt;(20) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class "ListName" : ListDomain&lt;String&gt;(20) {
     override val table = TableName
 
     init {
@@ -866,7 +1662,7 @@ ListColumn  : SimpleName "keyOf" TableName.columnName [hasWidth width: Int]</cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">class CurrentDegree(year: Int) : ListDomain&lt;String&gt;(20) {
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class CurrentDegree(year: Int) : ListDomain&lt;String&gt;(20) {
     override val table = query(
         Degree.selectAll {
             Degree.year eq year
@@ -893,11 +1689,3078 @@ As a result of your selection, you will then have a table with two columns which
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_visual_galite_forms">Visual Galite Forms</h3>
+<div class="paragraph">
+<p>The aim of Galite is to enable you to create applications.
+An application is made up of forms. A <strong>form</strong> is a set of <strong>pages</strong> consisting of <strong>blocks</strong>.
+A <strong>block</strong> is nothing else than a table which is divided into columns (vertical) and rows (horizontal).
+A row is made up of <strong>fields</strong>, and each <strong>field</strong> contains a data value at the intersection of a row and a column that can be of different <strong>Types</strong>.
+By the end of this chapter, you will learn how to create a form, but before, you need to learn how to create a field and how to form blocks.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_form_fields">Creating Form Fields</h4>
+<div class="paragraph">
+<p>In Galite, fields are containers in which you can define different types of data.
+To define a field you can call one of the 4 functions <code>mustFill()</code>, <code>visit()</code>, <code>skipped()</code> or <code>hidden()</code>. You can pass the domain and the position of the field in the block as arguments.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val fieldName = mustFill(FieldDomain, [FieldPosition]) {
+    FieldBody
+}
+
+|
+
+val fieldName = visit(FieldDomain, [FieldPosition]) {
+    FieldBody
+}
+
+|
+
+val fieldName = skipped(FieldDomain, [FieldPosition]) {
+    FieldBody
+}
+
+|
+
+val fieldName = hidden(FieldDomain, [FieldPosition]) {
+    FieldBody
+}
+
+FieldBody         : [FieldLabel] [FieldHelp] [FieldAlignment]
+                    [FieldDropList]     [FieldOptions]    [FieldColumns]
+                    [FieldCommands] [FieldTriggers]</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_access_modifiers">Field Access Modifiers</h5>
+<div class="paragraph">
+<p>An access modifier determines the way the application user will have to handle each field in a form as well as the field accessibility. There are 4 sorts of access modifier:</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">AccessModifier:   mustFill()
+                  |
+                  visit()
+                  |
+                  skipped()
+                  |
+                  hidden()</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>mustFill : As indicated, a MUSTFILL field has to be filled by the user.</p>
+</li>
+<li>
+<p>visit    : A VISIT field is a field which the user can fill if he wants to.</p>
+</li>
+<li>
+<p>skipped  : A SKIPPED field is a field which is displayed on the form but which the user can not overwrite. A field is skipped if the user needs to know the information written in it.</p>
+</li>
+<li>
+<p>hidden   : A HIDDEN field that is not displayed on the form as the information it provides is of no importance for the user, this kind of fields is usually used for database table join operations or for ID fields.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As the user moves from a field to another when filling the form, the current field is always colored in red.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val password = mustFill(domain = STRING(20), position = at(2, 1)) {
+  ...
+}
+
+val id = hidden(domain = INT(20)) {
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_position">Field Position</h5>
+<div class="paragraph">
+<p>This entry defines the position of the field in the current block. HIDDEN fields does not have positions, and in multiple block (Defined in the  Blocks creation Section of this document) you may use the NO DETAIL Block option to pass positioning fields.
+There are two possibilities to define the field position.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Absolute Position With the function <code>at()</code></strong></p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">You can define it according to one integer or more: </dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>at(row)</p>
+</li>
+<li>
+<p>at(row , column)</p>
+</li>
+<li>
+<p>at(row, column..multifield)</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FieldPosition : at(row: Int  [,column: Int])
+                |
+                at(rowRange: IntRange,  [,column: Int])
+                |
+                at(row: Int  [,columnRange: IntRange])
+                |
+                at(rowRange: IntRange,  [,columnRange: IntRange])
+                |
+                follow(otherField)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(20), position = at(1, 1..4)) {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first integer indicates the row number while the second defines the column.
+In fact, Galite automatically divides up the window in rows and columns when setting up a form.<br>
+ When defining the width of a column, thus,
+it always adopts the width of the longest field. Since the form wide is not unlimited,
+you can put a long field in two or more columns in order to spare place as it is the case in the example above.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Relative Position With follow</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can also make use of the following structure : <code>follow(otherField)</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val age = visit(domain = INT(3), position = follow(name)) {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you declare a field with the follow function, it means that this field will be placed directly next to the first field defined by the follow property (field "Name") on the same row. The two fields will then form one single column.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_label">Field label</h5>
+<div class="paragraph">
+<p>The field label is optional, you declare it with the label property inside the field body, the syntax is the following :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FieldLabel : label = "NAME OF THE FIELD"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want your field to have a label, you can set the property label to empty.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val secondName = visit(domain = STRING(20), position = at(1, 1)) {
+    label = "The second Name"
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_help_text">Field Help Text</h5>
+<div class="paragraph">
+<p>this property is used to insert an explanation text for the application user in order to help him filling in the form. This Help text will then be displayed when the user places the mouse on the field.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">HelpText:   help = "HELP TEXT"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val lesson = visit(domain = STRING(20), position = at(1, 1)) {
+    label = "lesson"
+    help =  "The lesson you would like to attend"
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_types">Field Types</h5>
+<div class="paragraph">
+<p>The field type is a required entry, you may enter a predefined field type :</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(20), position = at(1, 1)) {
+    ...
+}
+
+val age = visit(domain = INT(3), position = at(1, 2)) {
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use self defined field types that you have previously defined in the type definition section of your form.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val day = mustFill(domain = Days, position = at(1, 1)) {
+    label = "day"
+    help = "The day"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, Days is a type you should have defined previously using standard types, <code>Code</code> types and <code>SELECT</code> command &#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_alignment">Field Alignment</h5>
+<div class="paragraph">
+<p>This property is used to define the localization of the field&#8217;s content inside the field. There are three types of alignment.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>FieldAlignment.RIGHT the value is displayed at the right inside the field</p>
+</li>
+<li>
+<p>FieldAlignment.LEFT the value is displayed at the left inside the field</p>
+</li>
+<li>
+<p>FieldAlignment.CENTER the value is centered in the field</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(20), position = at(1, 1)) {
+    label = "name"
+    align = FieldAlignment.LEFT
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_drop_files">Field Drop files</h5>
+<div class="paragraph">
+<p>This command is used to make a field accept to drop files into it, meaning you can drag files and drop them in your field.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">DroppableDefinition : "droppable" ExtensionList
+ExtentionList       : extension : String [,ExtenstionList]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val cv = visit(domain = STRING(20), position = at(4, 1)) {
+    label = "Cv"
+    help = "The user curriculum vitae"
+    columns(u.cv)
+    droppable("pdf")
+    trigger(ACTION) {
+      FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
+        override fun accept(pathname: File?): Boolean {
+          return (pathname!!.isDirectory
+                  || pathname.name.toLowerCase().endsWith(".pdf"))
+        }
+
+        override val description: String
+          get() = "PDF"
+      })
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, you can drag pdf files and drop them in the field named "cv".</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_options">Field Options</h5>
+<div class="paragraph">
+<p>In this part of the field definition, you can use one or more option from the 9 options available for fields in Galite, here is the a list of these field options defined under the class FieldOption and that you can use them by declaring the function options().</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>NOECHO               : If this option is used, characters typed in the field will not be displayed and a star(*) will be displayed instead, this option is useful for password fields.</p>
+</li>
+<li>
+<p>NOEDIT               : This option makes it impossible to change the data of the field or to overwrite it.</p>
+</li>
+<li>
+<p>SORTABLE             : This option adds two opposed arrows icons(up and down) just before the field, clicking on the icon changes the way data are sorted in the field, you can click the icon three times to have ascending sort, descending sort and default sort,</p>
+</li>
+<li>
+<p>TRANSIENT            : This option make the field transient, meaning that the system can no trail it, if a transaction  calls this field and then this transaction is aborted, the field will not be able to backup or roll-back to its original value, besides this option makes changes ignored for this field.</p>
+</li>
+<li>
+<p>NO DELETE ON UPDATE  : If the field is a lookup is a column of a lookup table, using this option prevent the system to clear the field when inserting new rows or updating rows.</p>
+</li>
+<li>
+<p>NO DETAIL            : If the block is in detailed, using this option on a field make it invisible in the detail.</p>
+</li>
+<li>
+<p>NO CHART             : If the block is multiple, using this option on a field exclude it from the chart.</p>
+</li>
+<li>
+<p>QUERY UPPER          : Whatever the string you input, this option will make Galite transform it to capital letters.</p>
+</li>
+<li>
+<p>QUERY LOWER          : the opposite of the previous option it transform strings to lower case.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val password = mustFill(domain = STRING(20), position = at(2, 1)) {
+    label = "password"
+    help = "The user password"
+    options(FieldOption.NOECHO)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_columns">Field Columns</h5>
+<div class="paragraph">
+<p>The columns method option is used to establish a connection between a certain column in the database with the field.Once such connection established, the field will have a direct access to the database column allowing insertions, modification &#8230;&#8203;+
+You may enter this option in order to specify which table and which column the field refers.<br>
+The same field can refer to more than one column.
+ You can also use the key method option to specify a key column in the database or the nullable method option to specify an outer joint.+
+Two more option are available with the <code>columns</code> function, the index and the priority options.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">columns(ColumnList) {
+    ColumnsBody
+}
+
+ColumnsBody  : [ColumnIndex] [ColumnPriority]
+
+ColumnList   : Column  [, Column ]
+Column       : ["KEY (QualifiedName)"] ["NULLABLE (QualifiedName)"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin"> val id = hidden(domain = INT(20)) {
+    label = "id"
+    help = "The user id"
+    columns(u.id)
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+that a field can be connected to more than one table and column. In this case, the statement you will type will be:
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val id = hidden(domain = INT(20)) {
+    label = "id"
+    help = "The user id"
+    columns(I.NumInvoice, ID.Invoice)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, <code>I</code> is the invoices table and <code>ID</code> is the invoice details table and they have an outer join connection throw columns NumInvoice and Invoice.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Indexes</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This option is used to define a value in the database which is to remain unique so that it can not appear anymore in another field of the same column. you need to use the index method to declare an index in Galite.</p>
+</div>
+<div class="paragraph">
+<p>Let’s sum up with the following syntax:</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ColumnIndex : "val i = index(message : String)"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If two or more fields are given the same index value, it means that two similar combinations of these field values will not be accepted.</p>
+</div>
+<div class="paragraph">
+<p>For example, two different lessons cannot be given in the same room. In this case, the three fields, namely the fields "professor", "time" and "lesson" are to be attributed the same index. Thus, at least one of the three values needs to be changed so that the combination can be accepted by the machine.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val i = index(message = "this should be unique")
+
+val lesson = mustFill(domain = INT(11), position = at(1, 1)) {
+    label = "Lesson"
+    help = "The lesson you have to attend to"
+    column(LEC.Lesson)  {
+        index = i
+    }
+}
+
+val lecturer = mustFill(domain = INT(11), position = at(2, 1)) {
+    label = "Lecturer"
+    column(LES.Lecturer)  {
+        index = i
+    }
+}
+
+val time = mustFill(domain = STRING(20), position = at(3, 1)) {
+    label = "Time"
+    help = "The lesson you have to attend to"
+    column(LES.Time)  {
+        index = i
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, this example would implicate a professor can give two different lessons at the same time. In order to avoid such errors, you can attribute one field two or more indexes. So you can associate the two fields "professor" and "time" together. Thus, you will have:</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val lessonIndex = index("Lesson should be unique")
+val timeIndex = index("Time should be unique")
+
+mustFill(domain = LONG(20)) {
+  label = "Lesson"
+  help = "The lesson you have to attend to"
+  column(LEC.Lesson) {
+    index = lessonIndex
+  }
+}
+
+visit(domain = LONG(10)) {
+  label = "Lecturer"
+  column(T.Lecturer) {
+    index = lessonIndex + timeIndex
+  }
+}
+
+mustFill(domain = STRING(20)) {
+  label = "Time"
+  column(LEC.Time) {
+    index = timeIndex
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, notice that the "Lecturer" field has been associated with two indexes: lessonIndex and timeIndex.</p>
+</div>
+<div class="paragraph">
+<p>The index value is ascendant. When attributing an index value to a field combination, you shall always take the value nexting that you have taken the last.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Priority</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ColumnPriority:   "priority = Integer"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This option is used in order to define the column order within a list when this list is displayed. A priority is always followed by an integer according to the structure given above. The column with the biggest priority value will appear on the extreme left side of the table and the one with the least value will be on the extreme right side.</p>
+</div>
+<div class="paragraph">
+<p>We shall notice that negative values are also permitted in this option. However, the minus sign ("-") standing before the number does not have any influence over its value but simply indicates the way all the information will be sorted out within a column. Actually, the different fields are always sorted in the ascending way, i.e from A to Z in case of an alphabetical text and from 1 to x+1 for numbers. Now, if the integer is preceded by a minus, the column content will be sorted in the other way round.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val i = index(message = "this should be unique")
+
+val surname = mustFill(domain = STRING(20), position = at(1, 1)) {
+    label = "Surname"
+    column(User.Surname)  {
+        priority = 3
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If columns "Surname", "Name" and "Date of Birth" are
+respectively given the priorities 3,4 and 1, "Name" will come
+first and will be followed by "Surname" and "Date of Birth".
+The same order applies with the values 3, -4 and 1, with the only
+difference that the names will be sorted out from Z to A.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, two columns with the same priority will be displayed according to the same order in which the user has listed them.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_commands">Field Commands</h5>
+<div class="paragraph">
+<p>Once you have defined the columns , you may define the field commands.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item : Actor, [AccessMode]) {
+  CommandBody
+}
+
+CommandBody     :   CommandAction
+
+CommandAction   :   KotlinCode
+
+AccessMode      : "arrayOf(" vararg ListOfModes.. ")" |  vararg ListOfModes..</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_standard_field_command">Standard Field Command</h5>
+<div class="paragraph">
+<p>The command can be a Galite predefined command or you can make new Actors and commands you can use in the field command definition.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = clear, Mode.UPDATE, Mode.INSERT, Mode.QUERY) {
+  ...
+}
+
+val clear = actor()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_command_using_modes">Field Command using Modes</h5>
+<div class="paragraph">
+<p>All the previous command definition ways can be preceded by one mode or more. There are three sorts of mode which are to be sorted according to the following hierarchy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>QUERY to start an inquiry within the database</p>
+</li>
+<li>
+<p>INSERT to create a new row in the database</p>
+</li>
+<li>
+<p>UPDATE to enter new information within a row</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = insertMode, Mode.UPDATE, Mode.QUERY) {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have entered a mode for the <code>command</code>, it means this command can only be invoked if the block is in the mode you have determined.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_access_modifiers_using_modes">Field Access modifiers using Modes</h5>
+<div class="paragraph">
+<p>This method type is used to change the access to the field using the block Mode. In fact the access is not changed directly but the higher access possible is set to the indicated access.</p>
+</div>
+<div class="paragraph">
+<p>We have 12 method allow us to change the visibility of our field :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>onQueryHidden()              : in mode Query set field to Hidden access</p>
+</li>
+<li>
+<p>onQuerySkipped()             : in mode Query set field to Skipped access</p>
+</li>
+<li>
+<p>onQueryVisit()               : in mode Query set field to Visit access</p>
+</li>
+<li>
+<p>onQueryMustFill()            : in mode Query set field to MustFill access</p>
+</li>
+<li>
+<p>onInsertHidden()             : in mode Insert set field to Hidden access</p>
+</li>
+<li>
+<p>onInsertSkipped()            : in mode Insert set field to Skipped access</p>
+</li>
+<li>
+<p>onInsertVisit()              : in mode Insert set field to Visit access</p>
+</li>
+<li>
+<p>onInsertMustFill()           : in mode Insert set field to MustFill access</p>
+</li>
+<li>
+<p>onUpdateHidden()             : in mode Update set field to Hidden access</p>
+</li>
+<li>
+<p>onUpdateSkipped()            : in mode Update set field to Skipped access</p>
+</li>
+<li>
+<p>onUpdateVisit()              : in mode Update set field to Visit access</p>
+</li>
+<li>
+<p>onUpdateMustFill()           : in mode Update set field to MustFill access</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin"> val file = visit(domain = STRING(25), position = at(3, 1)) {
+      label = "test"
+      help = "The test"
+      onQueryHidden()
+      onInsertHidden()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, we have determined that the field will be invisible
+if the block is in the <code>QUERY</code> or the <code>INSERT</code> mode.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_field_triggers">Field Triggers</h5>
+<div class="paragraph">
+<p>Triggers are events that you can use to execute actions when they occur, there are field triggers, block triggers and form triggers that you can use following this syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Trigger      : "trigger (" EventList ")" TriggerAction
+
+EventList    : Event [,EventList]
+
+TrigerAction : {KOTLIN code}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Field Triggers are events that concern the fields behavior, here is a list of all Galite field triggers available :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PREFLD     : is executed upon entry of field</p>
+</li>
+<li>
+<p>POSTFLD    : is executed upon exit of field</p>
+</li>
+<li>
+<p>POSTCHG    : is executed on field content change</p>
+</li>
+<li>
+<p>PREVAL     : is executed before validating any new entry</p>
+</li>
+<li>
+<p>VALFLD     : is executed after field change and validation</p>
+</li>
+<li>
+<p>VALIDATE   : this is the same trigger as VALFLD</p>
+</li>
+<li>
+<p>DEFAULT    : Defines the default value of the field to be set if the setDefault() method is called (this method is automatically called when the user choose the insert command)</p>
+</li>
+<li>
+<p>FORMAT     : Not defined actually</p>
+</li>
+<li>
+<p>ACCESS     : ACCESS is a special trigger that defines how a field can be accessed. This trigger must return one of these values ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL.</p>
+</li>
+<li>
+<p>VALUE      : equates the value of two fields</p>
+</li>
+<li>
+<p>AUTOLEAVE  : must return a boolean value, if "true" the cursor will move to the next field</p>
+</li>
+<li>
+<p>PREINS     : is executed before inserting a row of the database</p>
+</li>
+<li>
+<p>PREUPD     : is executed before updating a row of the database</p>
+</li>
+<li>
+<p>PREDEL     : is executed before deleting a row of the database</p>
+</li>
+<li>
+<p>POSTINS    : is executed after inserting a row of the database</p>
+</li>
+<li>
+<p>POSTUPD    : is executed after updating a row of the database</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Examples</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val age = visit(domain = INT(3), position = follow(name)) {
+    label = "age"
+
+    trigger(POSTCHG) {
+      name.value = "userName"
+    }
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in the example above we will assign the value "userName" to the name field each time we change the value of the age field.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>val password = mustFill(domain = STRING(20), position = at(2, 1)) {
+    label = "password"
+
+    trigger(ACCESS) {
+      if (name.value == "hidden") {
+        Access.HIDDEN
+      } else {
+        Access.SKIPPED
+      }
+    }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_creating_form_blocks">Creating Form Blocks</h4>
+<div class="paragraph">
+<p>As you already know, a form is composed of blocks. A block is a set of data which are stocked in the database and shown on a form. A block is created in order to either view the content of a database, to insert new data in the database or to update existing data in the database.
+To create a block you need first to create a class that extend from Block class here we can specify the name, the buffer size and the rows number of the block as parameter, in second part you need to use insertBlock method that allow you to add the block to the form.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Block: Block(blockName : String, buffer: Int, rows: Int) {
+    BlockBody
+}
+
+BlockBody       : [blockBoder] [blockAlignement] [blockHelp]
+                  [blockOptions] [blockTables]
+                  [blocIndices] [blockCommands] [blockTriggers] blockFields
+                  [blockContextFooter]</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_types">Block Types</h5>
+<div class="paragraph">
+<p>There are actually two types of blocks in Galite, the only difference between them in the definition syntax is the buffer Integer.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>single blocks</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A single block is a block in which only one single row of a database table is displayed on the form. Each time, the computer will memorize only one entire row and a certain quantity of ID numbers through which it will retrieve another rows from the database if you want to view them.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block("Commands", 1, 5) {
+  ...
+}
+
+// usage:
+
+val BlockCommand = page.insertBlock(BlockCommand()) {
+...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first integer indicates the block type. In case of a single block, the first integer will always be 1. The second integer indicates the maximal number of the automatically memorized IDs.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple Blocks</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A multiple block is a block in which more than one row are displayed on the form. These rows are retrieved all at once from the database and are memorized by the computer. Actually, you can define the number of the displayed rows which can be less than this of the memorized rows. In this case, there will be no need anymore to retrieve the hidden rows from the database when you want to view them.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class BlockCommand : Block("Commands", 10, 5) {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first integer indicates the number of rows to be automatically memorized while the second defines the number of displayed rows. Notice the first integer value must always be greater than 1.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_names">Block Names</h5>
+<div class="paragraph">
+<p>The example bellow show how to create a block, you need to specify the block title as parameter in the Block class.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class Degree : Block("Degree Block", 10, 5)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_border">Block Border</h5>
+<div class="paragraph">
+<p>You can insert the optional border statement that defines the Block&#8217;s frame type into the init block. Besides, the Title of the block will appear only if the Block&#8217;s Border type has been specified. There are actually four Border options defined into Border enumeration class :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Border.LINE to frame the block with lines.</p>
+</li>
+<li>
+<p>Border.RAISED  to enhance a block by setting it on the foreground.</p>
+</li>
+<li>
+<p>Border.LOWERED to put it at the background.</p>
+</li>
+<li>
+<p>Border.ETCHED  to carve a frame in the form.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree Block", 10, 5) {
+    init {
+        border = Border.LINE
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_alignment">Block Alignment</h5>
+<div class="paragraph">
+<p>Alignment statements are useful to align a block(source block) referring to another one(target block).
+Use the align method and you have to specify the referred block name followed by one or many pairs of two fields  the pairs are separated by a comma.
+As for the pair fields, the one in the left is the source block field while the other one is for the target block field.</p>
+</div>
+<div class="paragraph">
+<p>For Example, let us suppose we have a multiple block Prices with 4 columns,
+with column 3 filled with Quantities and Column 4 with Prices, we also have a single block TotalPriceswith two fields totalQuantity and totalPrices, we want these fields to be aligned with the correct fields of the Prices block, so we specify that the totalQuantity field is aligned with the field quantity of the block Prices, same thing for totalPrice field it&#8217;s aligned with the price field of the block Prices:</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val targetBlock = insertBlock(Prices())
+
+val TotalPrices = block("Total", 1, 1) {
+
+  val totalQuantity = visit(INT(3), position = at(1, 1)) {
+    label = "Total"
+    help = "Total"
+  }
+  val totalPrice = visit(INT(7), position = at(1, 2)) {}
+
+  align(targetBlock, totalQuantity to targetBlock.quantity, totalPrice to targetBlock.price)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_help">Block Help</h5>
+<div class="paragraph">
+<p>This optional command is used to define the help text for each field of the block. You need to set the value of help property.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree Block", 10, 5) {
+    init {
+          border = Border.LINE
+          help = "test"
+          ...
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_options">Block Options</h5>
+<div class="paragraph">
+<p>You need to use options function in your block to specify block options. you can find the list of available options in BlockOption class :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>NOCHART : Disables the chart(grid) rendering of a multiple bloc to make it look like a single block.Only possible on multiple blocks displaying only one row, Besides the fields must be positioned with the AT command.</p>
+</li>
+<li>
+<p>NODETAIL : Disables the positioning of fields and displays the block as a chart (grid), Only possible on multiple blocks, the fields should not be positioned with the AT command.</p>
+</li>
+<li>
+<p>NODELETE :  Prevent the user from removing fields content.</p>
+</li>
+<li>
+<p>NOINSERT :  Prevent the user from inserting data in fields.</p>
+</li>
+<li>
+<p>NOMOVE   :  Prevent the user from moving between records.</p>
+</li>
+<li>
+<p>ACCESS_ON_SKIPPED : Makes the block accessible even if or its fields have SKIPPED access.</p>
+</li>
+<li>
+<p>UPDATE_INDEX : If used, saving a block would delete all its rows and reinsert them one by one, by doing so, you can update the table rows even when you change the index fields without worrying about the "row already exist exception".</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree Block", 10, 5) {
+    init {
+          options(BlockOption.NODETAIL)
+          ...
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_tables">Block Tables</h5>
+<div class="paragraph">
+<p>When making use of this section, you have to type the function table and enter the table name, assign this function to an variable. This variable will further be used as a shorthand in place of the complete table name in order to access to the table. These names refer to certain tables in the database whereby the first table is the one on which the user will work. The remaining tables are the so-called "look-up tables", i.e tables that are associated with the first one.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockTables:   table(vararg ExposedTables)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class School : Block("School", 1, 1) {
+  val L = table(Lessons)
+  val P = table(Lecturers)
+  val R = table(Rooms)
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The user will make use of these look-up tables as references
+when bringing in changes in the principal table.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_indexes">Block Indexes</h5>
+<div class="paragraph">
+<p>If you plan to enter one index or more when defining your fields, you also have to define one index text or more which will appear if you make a mistake by entering an indexed data or a data combination twice. This command can be followed by an error message contained in a string.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">BlockIndices:   "index("  message : String  ")" [BlockIndices]*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">inner class Degree : Block("Degree", 1, 1) {
+  val unique = index(message = "This data already exists")
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_commands">Block Commands</h5>
+<div class="paragraph">
+<p>Block commands are commands accessible only from the block where they are called. There are Three ways to call block commands:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Calling A Standard Command</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Structure of command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" {KOTLIN Code}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate) {
+  validate ()
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Calling The Block Commands With Modes</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Blocks have 3 possible Modes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>QUERY  : When querying the database</p>
+</li>
+<li>
+<p>INSERT : When inserting a new row in the database</p>
+</li>
+<li>
+<p>UPDATE : When updating rows in the database</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can combine these modes with the previous block command structure to have more control over your command
+Use the mode function inside you command body declaration to set the modes :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName, [Modes]")" {}
+
+Modes: Mode*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This means that the command called is only accessible when the block is in the specified Mode.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate, Mode.UPDATE, Mode.QUERY) {
+  validate ()
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Calling The Block Commands With Modes And An Access Modifier</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>in Galite, a field can have different access types or modifiers, here is the definition of the four available access modifiers listed by ascending level.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>HIDDEN : HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.</p>
+</li>
+<li>
+<p>SKIPPED : SKIPPED fields are read only fields, you can read the value but you can&#8217;t modify it.</p>
+</li>
+<li>
+<p>VISIT : fields with this access type are accessible, can be modified but not necessary.</p>
+</li>
+<li>
+<p>MUSTFILL : MUSTFILL fields are accessible fields that the user must fill with a value.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the block command section, you can set the highest access level for the block fields according to the mode in wich the block would be ording to the mode in which the block would be.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">blockVisibility(Access.SKIPPED, Modes.QUERY, Modes.UPDATE)
+blockVisibility(Access.HIDDEN, Modes.UPDATE)
+blockVisibility(Access.VISIT, Modes.QUERY)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the first example, all fields in the block will be either SKIPPED or HIDDEN in the query and update modes and can neither be MUSTFILL nor VISIT.
+For the second example, all the fields in the block will be HIDDEN when the block is in update mode.
+In the last example, all the fields in the block will be either VISIT, SKIPPED or HIDDEN in the query mode and can not be MUSTFILL.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_triggers">Block Triggers</h5>
+<div class="paragraph">
+<p>The block triggers are the same as form triggers on the block level. There are actually 20 block triggers you can use to execute actions once they are fired.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin"> BlocTrigger: "trigger(" TriggerAction : BlocEventList ")"
+
+ BlocEventList: BlockEvent [,BlockEvent]*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Concerning the trigger action, which is the action to execute when the trigger is activated they can by :
+ ** {KOTLIN code}</p>
+</div>
+<div class="paragraph">
+<p>Here is a list of all available block triggers or block events in Galite.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PREQRY  : executed before querying the database</p>
+</li>
+<li>
+<p>POSTQRY : executed after querying the database</p>
+</li>
+<li>
+<p>PREDEL  : executed before a row is deleted</p>
+</li>
+<li>
+<p>POSTDEL : executed after a row is deleted</p>
+</li>
+<li>
+<p>PREINS  : executed before a row is inserted</p>
+</li>
+<li>
+<p>POSTINS : executed after a row is inserted</p>
+</li>
+<li>
+<p>PREUPD  : executed before a row is updated</p>
+</li>
+<li>
+<p>POSTUPD : executed after a row is updated</p>
+</li>
+<li>
+<p>PRESAVE : executed before saving a row</p>
+</li>
+<li>
+<p>PREREC  : executed upon record entry</p>
+</li>
+<li>
+<p>POSTREC : executed upon record exit</p>
+</li>
+<li>
+<p>PREBLK  : executed upon block entry</p>
+</li>
+<li>
+<p>POSTBLK : executed upon block exit</p>
+</li>
+<li>
+<p>VALBLK  : executed upon block validation</p>
+</li>
+<li>
+<p>VALREC  : executed upon record validation</p>
+</li>
+<li>
+<p>DEFAULT : is executed when the block is in the InsertMode. This trigger becomes active when the user presses the key F4. It will then enable the system to load standard values which will be proposed to the user if he wishes to enter new data.</p>
+</li>
+<li>
+<p>INIT    : executed upon block initialization</p>
+</li>
+<li>
+<p>RESET   : executed upon Reset command (ResetForm)</p>
+</li>
+<li>
+<p>CHANGED : a special trigger that returns a boolean value of wether the block have been changed or not, you can use it to bypass the system control for changes this way :</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre> trigger(CHANGED) {
+   return false;
+ }</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ACCESS  : defines whether a block can or not be accessed, it must always return a boolean value</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>  trigger(ACCESS) {
+    return Block.getMode() == MOD_QUERY
+    // Tests if the block is in query mode,
+    this block is only accessible on query mode
+  }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Examples</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">object Degree : Block("Degree block", 10, 5) {
+
+  trigger(PREBLK, INIT) {
+   Kotlin-Code
+  }
+
+  trigger(PREINS) {
+   println("Inserting date");
+   ...
+  }
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_block_fields_declaration">Block Fields Declaration</h5>
+<div class="paragraph">
+<p>In this section, all you have to do is to write at least on block field definition that begins with an access modifier and ends with brace "}", you can enter as much fields as you may need
+following the field definition we saw in the previous chapter.</p>
+</div>
+<div class="paragraph">
+<p><strong>Examples</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = visit(domain = STRING(25), position = at(1, 2)) {
+      label = "Last name"
+      help = "The client name"
+      columns(c.name)
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_creating_forms">Creating Forms</h4>
+<div class="paragraph">
+<p>There are actually two types of forms in Galite, normal forms and BLOC INSERT forms which are special forms containing blocks that you may insert in other forms.<br>
+A form begins always with FORM and ends with END FORM, while a BLOC INSERT form begins with BLOC INSERT and ends with END INSERT.</p>
+</div>
+<div class="paragraph">
+<p>In Galite to create a form you need to extend from this list off classes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Form  : Represents a form.</p>
+</li>
+<li>
+<p>ReportSelectionForm : Represents a report selection form.</p>
+</li>
+<li>
+<p>DictionaryForm : Represents a dictionary form.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When creating a form, you will have to include the block and the field definitions. Moreover, you will have to define the menus as well as the different commands. Finally, you can also define some form triggers. Concretely, the structure is the following:</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">FormDef :
+          class FormSample: Form("title ="  formTitle : String, ["locale ="  formLocalization : String])
+          {
+              [MenuDefinition]
+              [ActorDefinition] [TypeDefinition]
+              [CommandDefinition] [InsertDefinition]
+
+              [FormCommands] [FormsTriggers] [BlocksDefinition]
+          }</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_form_localization">Form Localization</h5>
+<div class="paragraph">
+<p>This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"Form(title =" formTitle : String, "locale =" formLocalization : String")"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LecturersForm : Form(title = "Form", locale = Locale.UK) {}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_form_title">Form Title</h5>
+<div class="paragraph">
+<p>Every form have can have a title (optional).</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"Form(title =" formTitle : String")"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LecturersForm : Form(title = "Lecturers List", locale = Locale.UK) {}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_menus_definition">Menus Definition</h5>
+<div class="paragraph">
+<p>Defining a menu means adding an entry to the menu bar in the top of the form, you can add actors to this menu later by specifying the menu name in the actor definition.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">MenuDefinition: "menu (" label : String ")"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm(title = "List of the Lecturers", locale = Locale.UK) {
+  val file = menu("file")
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_actors_definition">Actors Definition</h5>
+<div class="paragraph">
+<p>An Actor is an item to be linked with a command, if its ICON is specified, it will appear in the icon_toolbar located under the menu bar, otherwise, it will only be accecible from the menu bar.
+ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the actor.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ActorDefinition:  "actor"(
+                    "menu" = SimpleName,
+                    "label" = label : String,
+                    "help" = helpText : String,
+                  ) {
+                    [key = key  : String]
+                    [icon = icon : Icon]
+                  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm(title = "List of the Lecturers", locale = Locale.UK) {
+  val file = menu("file")
+  val cut = actor(
+    menu = file,
+    label = "cut",
+    help = "cut element",
+  ) {
+    key = Key.F2          // key is optional here
+    icon = Icon.CUT       // icon is optional here
+  }
+  ....
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_types_definition">Types Definition</h5>
+<div class="paragraph">
+<p>After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use SELECT commands
+to customize these new types.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersForm : ReportSelectionForm("") {
+
+    object Days: CodeDomain&lt;Int&gt;() {
+      init {
+        "Sunday" keyOf 1
+        "Monday" keyOf 2
+        "Tuesday" keyOf 3
+        "Wednesday" keyOf 4
+        "Thursday" keyOf 5
+        "Friday" keyOf 6
+        "Saturday" keyOf 7
+      }
+    }
+
+    object CurrentDegree : ListDomain&lt;String&gt;(20) {
+      override val table = query(Degree.selectAll())
+
+      init {
+        "Symbol" keyOf Degree.Symbol
+        "Description" keyOf Degree.Description
+      }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_commands_definition">Commands Definition</h5>
+<div class="paragraph">
+<p>In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
+every command have a effective ray of action (VField, VBlock, VForm)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VField, VBlock, VForm.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Command Defined in this section can be form level commands, block level commands or field level commands, this will depend on the action called by the command and where the command is actualy called.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">cmdDef  : "command (" SimpleItemName  ")" { commandBody }
+
+commandBody: { KOTLIN statements }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong>
+Writing the action&#8217;s body :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = PrintBlock) {
+  blockName.validate()
+  blockName.getForm().close(VForm.CDE-Validate)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the different definitions we have made (types, menus, actors,commands), we need to begin the declaration of our form.Here, we will set up the structure and the behaviour of the form throw 4 sections :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Form Options</p>
+</li>
+<li>
+<p>Form Commands</p>
+</li>
+<li>
+<p>Form Triggers</p>
+</li>
+<li>
+<p>Blocks</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_form_commands_declaration">Form Commands Declaration</h5>
+<div class="paragraph">
+<p>There still one more think to know about form command declaration, in fact, you can also control the accessibility to a command by the Mode of the form.+
+A form have 3 possible Modes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>QUERY  : When inquiring the database</p>
+</li>
+<li>
+<p>INSERT : When inserting a row in the database</p>
+</li>
+<li>
+<p>UPDATE : When updating a row in the database</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Syntax to use command with modes is the following :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName, Modes  ")" {}
+
+Modes: Mode*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This means that the command called is only accessible when the block is in the specified Mode.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = Validate, Mode.UPDATE, Mode.QUERY) {
+  validate ()
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_form_triggers_definition">Form Triggers Definition</h5>
+<div class="paragraph">
+<p>Form Triggers are special events that once switched on you can execute a set of actions defined by the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>FormTrigger  :  "trigger(" TriggerAction : FormEventList ")"
+FormEventList:  FormEvent [,FormEvent]*</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Galite actually defines 6 Form Triggers or Form Events :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>INIT      : executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command</p>
+</li>
+<li>
+<p>PREFORM   : executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command</p>
+</li>
+<li>
+<p>POSTFORM  : executed when closing the form</p>
+</li>
+<li>
+<p>QUITFORM  : actually not available</p>
+</li>
+<li>
+<p>RESET     : executed upon ResetForm command</p>
+</li>
+<li>
+<p>CHANGED   : a special trigger that returns a boolean value of whether the form have been changed or not, you can use it to bypass the system control for changes this way :</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>val postform = trigger(POSTFORM) {
+  println("post form trigger works")
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Examples</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>val preform = trigger(INIT) {
+    println("init form trigger works")
+}
+
+val initialisation = trigger(INIT, PREFORM) {
+    //KOTLIN statements
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_form_pages">Form Pages</h5>
+<div class="paragraph">
+<p>You can create Pages in your form using the page function after the trigger declaration section,this is optional and will create a Tab for each page you create under the form&#8217;s toolbar.
+You can put as much blocks you want in each page, the same goes for form without pages.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>val p1 = page("Page1")</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_visual_galite_reports">Visual Galite Reports</h3>
+<div class="paragraph">
+<p>Visual Galite allows you to create dynamic reports. They have a very simple structure, in fact, all you have to do to create such reports
+is to list the definitions of all the fields you need, then you will that will load data into these fields in the init method by creating a query with Exposed syntax.
+The so created reports will have dynamic functions such as sorting and group making, you will also be able to print it or export to different file formats.You can even add other fields
+to the report after it&#8217;s generated, do more calculus, customize the report columns&#8230;&#8203;
+The Galite Reports are generated from Visual Galite forms by different methods that we will see in this chapter, along with the process of making a
+dynamic report.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_report_fields">Creating Report Fields</h4>
+<div class="paragraph">
+<p>As we said in the introduction, the report structure is based on report fields, these fields are declared based on field function and have the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ReportFieldDef: "field(" FieldType ")" {
+                    [FieldLabel] [HelpText]  [FieldAlign] [FieldOptions]
+                    [GroupCommand] [FieldCommands] [FieldTriggers]
+                    }
+
+GroupCommands : "group =" field</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = field(STRING(20)) {
+  label = "name"
+  help = "The user name"
+  align = FieldAlignment.LEFT
+  group = age
+  format { value -&gt;
+    value.toUpperCase()
+  }
+}
+
+val age = field(INT(3)) {
+  label = "age"
+  help = "The user age"
+  align = FieldAlignment.LEFT
+  compute {
+    // Computes the average of ages
+    Triggers.avgInteger(this)
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_label">Report Field Label</h5>
+<div class="paragraph">
+<p>The field label is the name that will be shown in the dynamic report, you can define a label by setting the label variable using String value.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = field(STRING(20)) {
+  label = "Person Name"
+  ...
+}
+
+val age = field(INT(3)) {
+    label = "age"
+    ...
+}
+
+val ID = field(INT(3)) {
+    label = ""
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_help_text">Report Field Help Text</h5>
+<div class="paragraph">
+<p>Help variable is used to insert an explanation text for the application user. This Help text will then be displayed when the user places the mouse on the report field.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = field(STRING(20)) {
+  label = "Person Name"
+  help = "The Person's First Name"
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_type">Report Field Type</h5>
+<div class="paragraph">
+<p>The field type is a required entry, you may enter a predefined field type as parameter for the field function :</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val name = field(STRING(20)) {
+  label = "Person Name"
+  ...
+}
+
+val age = field(INT(3)) {
+    label = "age"
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use self defined field types that you have previously defined in the type definition section of your report.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val objectList = field(Objects) {
+    label = "age"
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, Objects is a type you should have defined previously in type definition section of the report using standard types, CODE types and SELECT command &#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_alignment">Report Field Alignment</h5>
+<div class="paragraph">
+<p>This command is used to define the localization of the field&#8217;s content inside the field. There are three types of alignment.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ALIGN RIGHT the value is displayed at the right inside the field</p>
+</li>
+<li>
+<p>ALIGN LEFT the value is displayed at the left inside the field</p>
+</li>
+<li>
+<p>ALIGN CENTER the value is centered in the field</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Name = field(STRING(10)) {
+    label = "name"
+    align = FieldAlignment.CENTER
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_options">Report Field Options</h5>
+<div class="paragraph">
+<p>There is actually only one option for the dynamic report fields in Galite: the HIDDEN OPTION , if this option is used on a field, he will not be visible the the report.
+This options have to be used on the last visible field of the report to avoid rendering bugs.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Name = field(STRING(10)) {
+    label = "name"
+    hidden
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The field Name will not be visible on the report.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_group">Report Field Group</h5>
+<div class="paragraph">
+<p>You can create clickable groups in your report by using the keyword GROUP in you field followed by the field you want to be grouped by the actual field.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Customers = field(STRING(5)) {
+    label = "Customers"
+}
+
+val Articles = field(STRING(10)) {
+    label = "Articles"
+}
+
+val Articles = field(STRING(10)) {
+    label = "Articles"
+}
+
+val Articles = field(STRING(10)) {
+    label = "Articles"
+}
+
+val InvoiceNum = field(STRING(10)) {
+    label = "InvoiceNum"
+    group = Articles
+    group = Customers
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this report, you can click on the InvoiceNum field to group customers and articles.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_command">Report Field Command</h5>
+<div class="paragraph">
+<p>In report Fields, you can call commands with this syntaxe :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" {KOTLIN Code}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_field_triggers">Report Field Triggers</h5>
+<div class="paragraph">
+<p>Report field triggers are special events that you can catch to execute other actions. In the field body call compute or format function and inside this function specify your code.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Trigger      : TrigerAction : EventList
+
+EventList    : Event [,EventList]*
+
+TrigerAction : compute | format { KOTLIN code }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the two triggers available for report fields :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>FORMAT  : applay style on the field content example change it to uppercase.</p>
+</li>
+<li>
+<p>COMPUTE : executed when the report is displayed and can be used to compute expressions on the report columns and show the result.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val salary = field(DECIMAL(width = 10, scale = 5)) {
+  label = "salary"
+  help = "The user salary"
+  align = FieldAlignment.LEFT
+  compute {
+    // Computes the average of ages
+    Triggers.avgDecimal(this)
+  }
+}
+
+val name = field(STRING(20)) {
+  label = "name"
+  help = "The user name"
+  align = FieldAlignment.LEFT
+  group = age
+  format { value -&gt;
+    value.toUpperCase()
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_creating_reports">Creating Reports</h4>
+<div class="paragraph">
+<p>Visual Galite Dynamic reports have a unique structure, you need to create new class that extend from Report class as described by the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ReportDefinition  :
+class ReportClass : Report(ReportTitle, [ReportHelp], [ReportLocalization]) {
+    [ContextHeader] [ReportDefinitions]
+    [ReportCommands] [ReportTriggers] (ReportFields)
+    [ContextFooter]
+}
+
+ReportTitle       : "title =" Title : String
+
+ReportDefinitions : [MenuDefinition] [ActorDefinition] [TypeDefinition]
+                    [CommandDefinition]
+                    [InsertDefinition]</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_localization">Report Localization</h5>
+<div class="paragraph">
+<p>This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Report(title : String, help: String, locale : Locale)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_title">Report Title</h5>
+<div class="paragraph">
+<p>To set you report title you need to override the title variable of Report class.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_help_text">Report Help Text</h5>
+<div class="paragraph">
+<p>You can enter a help text for the report using the following syntax:</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Report(title : String, help : String, locale : Locale)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Actually every report has a help menu that tries to describe the structure of the report by giving information about its commands and fields in a document, the help text will be on the top of this help menu document.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrdersReport : Report(title = "Orders Report", help = "This report lists purchase orders", locale = Locale.UK) {}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_menus_definition">Report Menus Definition</h5>
+<div class="paragraph">
+<p>Defining a menu means adding an entry to the menu bar in the top of the report, you can add actors to this menu later by specifying the menu name in the actor definition.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">MenuDefinition: val SimpleName = "menu (" label : String ")"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersR : Report(title = "List of the Lecturers", locale = Locale.UK) {
+  val newMenu = menu("newMenu")
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_actors_definition">Report Actors Definition</h5>
+<div class="paragraph">
+<p>An Actor is an item to be linked with a command, if its ICON is specified, it will appear in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar.
+ICON and KEY are optional, the KEY being the keyboard shortcut to assign to the actor.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ActorDefinition:
+actor("menu =" SimpleName,
+      "label =" label : String,
+      "help" = helpText : String
+     ) {
+      [key = key  : String]
+      [icon = icon : Icon]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ListLecturersR : Report(title = "List of the Lecturers", help = "Clients_Report", locale = Locale.UK) {
+ val newMenu = menu("newMenu")
+
+  val printReport = actor(
+          menu = newMenu,
+          label = "Print",
+          help = "Print the report",
+  ) {
+    key = Key.F9         // key is optional here
+    icon = ICON.PRINT    // icon is optional here
+  }
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_types_definition">Report Types Definition</h5>
+<div class="paragraph">
+<p>After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use the LIST and SELECT commands
+to customize these new types.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>TypeDefinition:  "object" SimplName":" CodeDomain&lt;FieldType&gt;() {[TypeList] } | "object" SimplName":" ListDomain&lt;FieldType&gt;() {[TypeList] }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class LisLecturersR : Report("") {
+
+    object Days: CodeDomain&lt;Int&gt;() {
+      init {
+        "Sunday" keyOf 1
+        "Monday" keyOf 2
+        "Tuesday" keyOf 3
+        "Wednesday" keyOf 4
+        "Thursday" keyOf 5
+        "Friday" keyOf 6
+        "Saturday" keyOf 7
+      }
+    }
+
+    object CurrentDegree : ListDomain&lt;String&gt;(20) {
+      override val table = query(Degree.selectAll())
+
+      init {
+        "Symbol" keyOf Degree.Symbol
+        "Description" keyOf Degree.Description
+      }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_commands_definition">Report Commands Definition</h5>
+<div class="paragraph">
+<p>In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the form.
+every command have an effective ray of action (VRField, VReport)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VRField or VReport.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">cmdDef  : "command (" SimpleItemName  ")" { commandBody }
+
+commandBody: { KOTLIN statements }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong>
+Writing the action&#8217;s body :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val PrintReport = command(item = PrintReport) {
+  action = {
+    // KOTLIN code
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_triggers_declaration">Report Triggers Declaration</h5>
+<div class="paragraph">
+<p>Report Triggers are special events that once switched on you can execute a set of actions defined by the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ReportTrigger  :  "trigger(" TriggerAction : ReportEventList ")"
+ReportEventList:  ReportEvent [,FormEvent]*</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Galite actually defines 2 report Triggers or report Events :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PREREPORT  : executed before the report is displayed.</p>
+</li>
+<li>
+<p>POSTREPORT : executed after the report is closed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
+  val preReport = trigger(PREREPORT) {
+    println("---------PREREPORT TRIGGER-------------")
+  }
+
+  val postReport = trigger(POSTREPORT) {
+    println("---------POSTREPORT TRIGGER-------------")
+  }
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_fields_declaration">Report Fields Declaration</h5>
+<div class="paragraph">
+<p>As you already know, a dynamic report is based on field that will be shown as report columns, in this section you have to write at least on field definition or more following
+the definition and the structure we saw in the previous chapter.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_report_data_initialization">Report data initialization:</h5>
+<div class="paragraph">
+<p>You can define the report initial data in the constructor of your report class.
+You can use Exposed Syntax to create query that select data from you database tables, then you need to iterate this query and use the add statement to add the row to the report this function affect you data to the fields</p>
+</div>
+<div class="paragraph">
+<p>For example here is  a dynamic report named UserList with 3 fields (FirstName, LastName, Age), we will retrieve data from the <code>User</code> table on the database. Then affect the query result to our report to create rows.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class UserList : Report("") {
+  init {
+    transaction {
+      User.selectAll().forEach { result -&gt;
+        add {
+          this[firstName] = result[Client.firstNameClt]
+          this[lastName] = result[Client.lastNameClt]
+          this[age] = result[Client.age]
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_calling_reports">Calling reports</h4>
+<div class="paragraph">
+<p>A report is always called from a form, if the caller form extends from the DictionaryForm class you have to do the following steps :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Change DictionaryForm to ReportSelectionForm</p>
+</li>
+<li>
+<p>Add a command that calls the <code>createReport</code> method and pass the report as a parameter to this method.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = report) {
+  createReport(ClientR())
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise you can create a normal form or block command that executes the following code :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   WindowController.windowController.doNotModal(UserList())</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_visual_galite_charts">Visual Galite Charts</h3>
+<div class="paragraph">
+<p>Visual Galite allows you to create charts. They have a very simple structure, in fact, all you have to do to create such charts
+is to define the dimensions you need and their measures, then you will have to load data into these fields in the init section.
+With Galite Charts, you will also be able to print or export the created chart to different file formats.</p>
+</div>
+<div class="paragraph">
+<p>The Visual Galite Charts are generated from Visual Galite form by different methods that we will see in this chapter, along with the process of making a
+visual charts.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_charts_dimensions_and_measures">Creating Charts dimensions and measures</h4>
+<div class="paragraph">
+<p>As we said in the introduction, the chart structure is based on chart dimensions and measures.
+To create a dimension field you need to use dimension function and specify the type of the field, the field have the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDimensionDef: "dimension(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val city = dimension(STRING(10)) {
+  label = "dimension"
+
+  format {
+    object : VColumnFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the measure function to create a measure field, this field have the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDimensionDef: "measure(" DimensionType ")" {[DimensionLabel] [HelpText] DimensionType [DimensionCommands] [DimensionTriggers] }</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_dimension_measure_label">Chart "dimension / measure" Label</h5>
+<div class="paragraph">
+<p>The label is the name that will be shown in the chart, you can define a label by setting the label value.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Name = dimension(STRING(10)) {
+    label = "Person Name"
+    ...
+}
+
+val ID = dimension(STRING(10)) {
+    label = ""
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_dimension_measure_help_text">Chart "dimension / measure" Help Text</h5>
+<div class="paragraph">
+<p>Help variable  is used to insert an explanation text for the application user . This Help text will then be displayed when the user places the mouse on the chart measure or dimension.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Name = dimension(STRING(10)) {
+    label = "Person Name"
+    help = "The Person's First Name"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_dimension_type">Chart dimension Type</h5>
+<div class="paragraph">
+<p>The dimension type is a required entry, you may enter a predefined dimension type :</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Name = dimension(STRING(10)) {
+    label = "Person Name"
+    help = "The Person's First Name"
+}
+
+val Month = dimension(MONTH) {
+    label = "Month"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use self defined field types that you have previously defined in the type definition section of your chart.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val objectList = dimension(Objects) {
+    label = "objects"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, Objects is a type you should have defined previously in type definition section of the chart using standard types, CODE types nd SELECT command &#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_measure_type">Chart measure Type</h5>
+<div class="paragraph">
+<p>The dimension type is a required entry but it is restricted to number types. This means that for a measure you can use only INT and DECIMAL as types. The measure type is checked at the compilation step.
+If you use not a numeric type for a measure, the following compiler error will be revealed :</p>
+</div>
+<div class="paragraph">
+<p>Measure "Measure name" is not numeric.</p>
+</div>
+<div class="paragraph">
+<p>The measure type can be defined with different ways :</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val Name = measure(INT(5)) {
+    label = "Name"
+}
+
+val Name = measure(Price) {
+    label = "Name"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the last example, the price type should be a numeric type otherwise it would not be accepted.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_dimension_measure_command">Chart "dimension / measure" Command</h5>
+<div class="paragraph">
+<p>In chart dimensions or measures, you can call commands with one of the following syntaxes :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">"command (" SimpleItemName  ")" { action = " {KOTLIN Code} }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_dimension_measure_triggers">Chart "dimension / measure" Triggers</h5>
+<div class="paragraph">
+<p>Chart dimensions or measures triggers are special events that you can catch to execute other actions.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">Trigger      : TrigerAction : EventList
+
+EventList    : Event [,EventList]*
+
+TrigerAction : color | format { KOTLIN code }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the two triggers available for chart fields (dimensions &amp; measures) :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>FORMAT  : Called for formatting a dimension value. The trigger should return a org.kopi.galite.visual.chart.VColumnFormat instance. This trigger is not available for measures.</p>
+</li>
+<li>
+<p>COLOR : Called to specify a measure color. The trigger should return a org.kopi.galite.visual.visual.VColor instance. This trigger is not available for dimensions.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val city = dimension(STRING(10)) {
+  label = "dimension"
+  help = "test"
+
+  format {
+    object : VColumnFormat() {
+      override fun format(value: Any?): String {
+        return (value as String).toUpperCase()
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_creating_charts">Creating Charts</h4>
+<div class="paragraph">
+<p>Visual Galite charts have a unique structure, you need to create new class that extend from Chart class as described by the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ChartDefinition   :
+classChartClass : Chart(ChartTitle, [CharttLocalization]) {
+    [ContextHeader] [CharttHelp] [ChartDefinitions]
+    [ChartCommands] [ChartTriggers] (ChartFields)
+    [ContextFooter]
+}
+
+ChartTitle        : "title =" Title : String
+
+ChartDefinitions  : [MenuDefinition] [ActorDefinition] [TypeDefinition]
+                    [CommandDefinition]
+                    [InsertDefinition]</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_localization">Chart Localization</h5>
+<div class="paragraph">
+<p>This is an optional step in which you may define the language of your forms menus and messages, the latter have to be defined in xml files.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart(title = "", locale = Locale.UK)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_title">Chart Title</h5>
+<div class="paragraph">
+<p>To set you chart title you need to override the title variable of Chart class.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart(title = "Area/population per city", locale = Locale.UK) {
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_help_text">Chart Help Text</h5>
+<div class="paragraph">
+<p>You can enter a help text for the chart using the following syntax:</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class ChartSample: Chart(title = titleText :String, help = helpText :String, locale = Locale.UK)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Actually every chart has a help menu that tries to describe the structure of the chart by giving information about its commands and fields in a document, the help text will be on the top of this help menu document.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart(
+  title = "Ordered quantities per month",
+  help = "TThis chart lists the ordered quantities per month",
+  locale = Locale.UK
+) {
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_menus_definition">Chart Menus Definition</h5>
+<div class="paragraph">
+<p>Defining a menu means adding an entry to the menu bar in the top of the chart, you can add actors to this menu later by specifying the menu name in the actor definition. In the menu definition, the LABEL is optional.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">MenuDefinition: val SimpleName = "menu (" label : String ")"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
+  val newMenu = menu("newMenu")
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_actors_definition">Chart Actors Definition</h5>
+<div class="paragraph">
+<p>An Actor is an item to be linked with a command, if its ICON is specified, it will appear in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar.
+ICON,LABEL and KEY are optional, the KEY being the keyboard shortcut to assign to the actor.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">ActorDefinition:  "actor("
+                         "menu =" SimpleName,
+                         "label =" label : String,
+                         "help" = helpText : String,
+                       ) {
+                         [key = key  : String]
+                         [icon = icon : Icon]
+                       }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
+
+  val newMenu = menu("newMenu")
+
+   val printChart = actor(
+            menu = newMenu,
+            label = "Print",
+            help = "Print the chart",
+    ) {
+      key = Key.F9         // key is optional here
+      icon = Icon.Print    // icon is optional here
+    }
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_types_definition">Chart Types Definition</h5>
+<div class="paragraph">
+<p>After having defined your menus and actor, you can enter different field types definitions based on the standard field types or code field types, you can also use the LIST and SELECT commands
+to customize these new types.</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>TypeDefinition:  "object" SimplName":" CodeDomain&lt;FieldType&gt;() {[TypeList] } | "object" SimplName":" ListDomain&lt;FieldType&gt;() {[TypeList] }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">class OrderedChart : Chart("") {
+
+  object Days: CodeDomain&lt;Int&gt;() {
+    init {
+      "Sunday" keyOf 1
+      "Monday" keyOf 2
+      "Tuesday" keyOf 3
+      "Wednesday" keyOf 4
+      "Thursday" keyOf 5
+      "Friday" keyOf 6
+      "Saturday" keyOf 7
+    }
+  }
+
+  object CurrentDegree : ListDomain&lt;String&gt;(20) {
+    override val table = query(Degree.selectAll())
+
+    init {
+      "Symbol" keyOf Degree.Symbol
+      "Description" keyOf Degree.Description
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_commands_definition">Chart Commands Definition</h5>
+<div class="paragraph">
+<p>In this section you may want to define new commands, to do so, all you need is an already defined Actor from which you will call the command in order to execute an Action on the chart.
+every command have an effective ray of action (VDimension | VMeasure, VChart)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simply writing the body of the action using the  ACTION command, the parameters are optional and can be VColumn or VChart.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">cmdDef: "command (" SimpleItemName  ")" { commandBody }
+
+cmdBody: { KOTLIN statements }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="paragraph">
+<p>Calling a local action :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">val print = command(item = printActor) {
+  // KOTLIN code
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_triggers_declaration">Chart Triggers Declaration</h5>
+<div class="paragraph">
+<p>Chart Triggers are special events that once switched on you can execute a set of actions defined by the following syntax :</p>
+</div>
+<div class="paragraph">
+<p><strong>Syntax</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ChartTrigger  :    TriggerAction : ChartEventList
+ChartEventList:    ChartEvent*</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Galite actually defines 4 chart Triggers or chart Events :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PRECHART  : executed before the chart is displayed.</p>
+</li>
+<li>
+<p>INIT      : executed at chart initialization.</p>
+</li>
+<li>
+<p>CHARTTYPE : executed after the chart initialization. This trigger should return org.kopi.galite.visual.chart.VChartType and will a fixed type for the chart.</p>
+</li>
+<li>
+<p>POSTCHART : executed after the chart is closed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class OrderedChart: Chart(title = "Ordered quantities per month", locale = Locale.UK) {
+  val init = trigger(INITCHART) {
+    chartType = VChartType.BAR
+  }
+
+  // This is the type that will be taken because CHARTTYPE is executed after INIT
+  val type = trigger(CHARTTYPE) {
+    VChartType.BAR
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_fields_declaration">Chart Fields Declaration</h5>
+<div class="paragraph">
+<p>As you already know, a chart is based on field that will be shown as chart series, in this section you have to write at least on dimension and one measure definition or more following
+the definition and the structure we saw in the previous chapter.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_chart_data_initialization">Chart data initialization:</h5>
+<div class="paragraph">
+<p>You can fill the chart&#8217;s lines or rows in the constructor of you chart class.
+All you need to do is importing your data (from a variable, file, database query using Exposed&#8230;&#8203;) , declaring a row in the chart then add the <code>add()</code> function to add the row to the chart.
+For example here we have added three dimension and for each dimension we have to specify 2 measures</p>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">init {
+  city.add("Tunis") {
+    this[area] = Decimal("34600")
+    this[population] = 1056247
+  }
+
+  city.add("Kasserine") {
+    this[area] = Decimal("806600")
+    this[population] = 439243
+  }
+
+  city.add("Bizerte") {
+    this[area] = Decimal("568219")
+    this[population] = 368500
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_chart_types">Chart types</h4>
+<div class="paragraph">
+<p>Galite offers five predefined chart types :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Pie charts</p>
+</li>
+<li>
+<p>Bar charts</p>
+</li>
+<li>
+<p>Column charts</p>
+</li>
+<li>
+<p>Line charts</p>
+</li>
+<li>
+<p>Area charts</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The chart type can be defined by calling the setType(VChartType) method. The VChartType class contains the five definitions described above :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>VChartType.PIE</p>
+</li>
+<li>
+<p>VChartType.BAR</p>
+</li>
+<li>
+<p>VChartType.COLUMN</p>
+</li>
+<li>
+<p>VChartType.LINE</p>
+</li>
+<li>
+<p>VChartType.AREA</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If no type is defined, the chart type will be set to the default type which is the VChartType.DEFAULT = VChartType.COLUMN.
+The chart type can be set at INIT trigger or can be fixed using the CHARTTYPE trigger.</p>
+</div>
+<div class="paragraph">
+<p>If you want to define a new type, you need to subclass the VChartType object and define the data series by overriding the createDataSeries(VChart).
+The view implementations should also be provided by implementing the UChartType component. The new chart type should be mentioned in the ChartTypeFactory class
+which is responsible for creating views for every chart type.</p>
+</div>
+<div class="paragraph">
+<p>You should note that calling setType will create the data series and refresh the chart view. So it can be called whenever you want to change the chart type.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_calling_charts">Calling charts</h4>
+<div class="paragraph">
+<p>A chart is always called from a form. You have to do the following steps :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add a command that calls the <code>createReport</code> method and pass the report as a parameter to this method.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Example</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">command(item = graph) {
+  showChart(ChartSample())
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise you can create a normal form or block command that executes the following code :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   WindowController.windowController.doNotModal(ChartSample())</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_galite_project_future">The Galite Project Future</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After reading this document, you should be able to create efficient database applications using the Galite framework, you can also create dynamic reports and charts.
+Actually, the project owners are working on a web version of the Galite framework. This version features many capabilities and is based on the Vaadin framework which is an open source web application framework for rich Internet applications
+Vaadin, uses java as programming language to create web content and web components to render the resulting web page.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-03-18 17:08:03 +0100
+Last updated 2022-03-18 17:11:57 +0100
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
 </body>
 </html>
