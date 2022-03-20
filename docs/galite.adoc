@@ -3,7 +3,7 @@
 :toclevels: 4
 :doctype: book
 :source-highlighter: highlightjs
-:favicon: ./docs/favicon.png
+:favicon: ./images/logo_galite.png
 :docinfo: shared
 
 [preface]
