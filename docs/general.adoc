@@ -316,7 +316,7 @@ CodeString     : code : String "keyOf" value : String
 ----
 object Currency: CodeDomain<String>() {
   init {
-    "tnd" keyOf "US Dollar"
+    "tnd" keyOf "Tunisian Dinar"
     "usd" keyOf "US Dollar"
     "tnd" keyOf "Tunisian Dinar"
   }
