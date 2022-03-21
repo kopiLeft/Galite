@@ -84,5 +84,5 @@ class BlockProvider : Block("Providers", 1, 1) {
 }
 
 fun main() {
-  runForm(formName = ProviderForm())
+  runForm(form = ProviderForm::class)
 }

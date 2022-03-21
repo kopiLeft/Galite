@@ -77,5 +77,5 @@ class BlockBill : Block("Bills", 1, 1) {
 }
 
 fun main() {
-  runForm(formName = BillForm())
+  runForm(form = BillForm::class)
 }

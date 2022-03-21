@@ -229,5 +229,5 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
 }
 
 fun main() {
-  runForm(formName = ClientForm())
+  runForm(form = ClientForm::class)
 }

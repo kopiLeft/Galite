@@ -67,5 +67,5 @@ class StockBlock : Block("Stock", 1, 1) {
 }
 
 fun main() {
-  runForm(formName = StockForm())
+  runForm(form = StockForm::class)
 }

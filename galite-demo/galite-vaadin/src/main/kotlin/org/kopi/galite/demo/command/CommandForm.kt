@@ -127,5 +127,5 @@ object CommandStatus : CodeDomain<String>() {
 }
 
 fun main() {
-  runForm(formName = CommandForm())
+  runForm(form = CommandForm::class)
 }

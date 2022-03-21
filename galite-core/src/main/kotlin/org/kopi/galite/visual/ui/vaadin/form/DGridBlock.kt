@@ -117,43 +117,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    */
   override fun createFields() {
     super.createFields()
-    grid = object : Grid<GridBlockItem>() {
-      override fun createEditor(): Editor<GridBlockItem> {
-        return object : EditorImpl<GridBlockItem>(this, propertySet) {
-          private var itemToEdit: GridBlockItem? = null
-          private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
-
-          override fun closeEditor() {
-            if(!doNotCancelEditor) {
-              super.closeEditor()
-            }
-          }
-
-          override fun editItem(item: GridBlockItem) {
-            if (!inDetailMode()) {
-              updateEditors()
-              doEditItem(item)
-            }
-          }
-
-          // Workaround for https://github.com/vaadin/flow-components/issues/1997
-          fun doEditItem(item: GridBlockItem) {
-            itemToEdit = item
-
-            if (editItemRequest == null) {
-              editItemRequest = SerializableConsumer {
-                super.editItem(itemToEdit)
-                editItemRequest = null
-              }
-              grid.element.node.runWhenAttached { ui: UI ->
-                ui.internals.stateTree
-                  .beforeClientResponse(grid.element.node, editItemRequest)
-              }
-            }
-          }
-        }
-      }
-    }
+    grid = BlockGrid()
     editor = grid.editor
     grid.addSortListener(::sort)
     grid.setSelectionMode(Grid.SelectionMode.NONE)
@@ -514,10 +478,18 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
     grid.addItemClickListener {
       val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
+      val record = it.item.record
 
-      itemToBeEdited = it.item.record
+      if(gridEditorFieldToBeEdited.dGridEditorField.getModel().block?.isRecordAccessible(record) == true) {
+        itemToBeEdited = record
+        gridEditorFieldToBeEdited.dGridEditorField.onClick()
+      } else {
+        val itemToEdit = editor.item
 
-      gridEditorFieldToBeEdited.dGridEditorField.onClick()
+        if(itemToEdit != null) {
+          editor.editItem(itemToEdit)
+        }
+      }
     }
 
     for (i in 0 until model.getFieldCount()) {
@@ -680,5 +652,56 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         VConstants.ALG_CENTER -> ColumnTextAlign.CENTER
         else -> ColumnTextAlign.START
       }
+  }
+
+  inner class BlockGrid: Grid<GridBlockItem>() {
+    override fun createEditor(): Editor<GridBlockItem> = BlockEditor()
+
+    // --------------------------------------------------
+    // GRID EDITOR
+    // --------------------------------------------------
+    inner class BlockEditor : EditorImpl<GridBlockItem>(this, propertySet) {
+      private var itemToEdit: GridBlockItem? = null
+      private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
+
+      override fun getItem(): GridBlockItem? {
+        return itemToEdit
+      }
+
+      override fun cancel() {
+        itemToEdit = null
+        super.cancel()
+      }
+
+      override fun closeEditor() {
+        if(!doNotCancelEditor) {
+          itemToEdit = null
+          super.closeEditor()
+        }
+      }
+
+      override fun editItem(item: GridBlockItem) {
+        if (!inDetailMode()) {
+          updateEditors()
+          doEditItem(item)
+        }
+      }
+
+      // Workaround for https://github.com/vaadin/flow-components/issues/1997
+      fun doEditItem(item: GridBlockItem) {
+        itemToEdit = item
+
+        if (editItemRequest == null) {
+          editItemRequest = SerializableConsumer {
+            super.editItem(itemToEdit)
+            editItemRequest = null
+          }
+          grid.element.node.runWhenAttached { ui: UI ->
+            ui.internals.stateTree
+              .beforeClientResponse(grid.element.node, editItemRequest)
+          }
+        }
+      }
+    }
   }
 }
