@@ -404,7 +404,7 @@ open class FormField<T>(internal val block: Block,
   fun setInfo(source: String, form: VForm) {
     var source = source
 
-    if(!domain.javaClass.simpleName.isNullOrEmpty()) {
+    if(domain::class.qualifiedName != null) {
       source = domain.javaClass.`package`.name.replace(".", "/") + File.separatorChar + domain.javaClass.simpleName
     }
 

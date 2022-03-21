@@ -89,7 +89,7 @@ open class Domain<T>(val width: Int? = null,
   protected var styled: Boolean = false
   protected var fixed: Fixed = Fixed.UNDEFINED
   protected var convert: Convert = Convert.NONE
-  val ident: String = this::class.java.simpleName
+  val ident: String = if(this::class.qualifiedName == null) "" else this::class.java.simpleName
 
   /**
    * Sets the minimum value of a number domain.
