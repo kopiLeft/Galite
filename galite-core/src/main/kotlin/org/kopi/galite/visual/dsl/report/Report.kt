@@ -65,8 +65,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
     domain.kClass = T::class
     var source = `access$sourceFile`
 
-    if(domain.javaClass.`package`.name != "org.kopi.galite.visual.domain"
-        && domain::class.qualifiedName != null) {
+    if(domain::class.qualifiedName != null) {
       source = domain.javaClass.`package`.name.replace(".", "/") + File.separatorChar + domain.javaClass.simpleName
     }
 
