@@ -36,6 +36,9 @@ abstract class Window(val title: String, val locale: Locale?) {
   /** Actors added to this window */
   internal val actors = mutableListOf<Actor>()
 
+  /** Number of internal actors added to this window */
+  internal var internalActorCount = 0
+
   /** Commands added to this window */
   internal var commands = mutableListOf<Command>()
 
@@ -104,7 +107,8 @@ abstract class Window(val title: String, val locale: Locale?) {
             help: String,
             command: PredefinedCommand? = null,
             init: (Actor.() -> Unit)? = null): Actor {
-    val actor = Actor(menu, label, help, command, "actor${actors.size}", sourceFile)
+    val actor = Actor(menu, label, help, command, "actor${internalActorCount}", sourceFile)
+    internalActorCount++
 
     if (init != null) {
       actor.init()

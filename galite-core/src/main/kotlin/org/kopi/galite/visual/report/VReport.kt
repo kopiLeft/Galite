@@ -134,6 +134,8 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
    */
   protected fun build() {
     init()
+    // localize the report using the default locale
+    localize()
     model.build()
     model.createTree()
     (getDisplay() as UReport?)?.build()
