@@ -37,7 +37,6 @@ import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VException
@@ -401,21 +400,15 @@ open class FormField<T>(internal val block: Block,
     }
   }
 
-  fun setInfo(source: String, form: VForm) {
-    var source = source
-
-    if(domain::class.qualifiedName != null) {
-      source = domain.javaClass.`package`.name.replace(".", "/") + File.separatorChar + domain.javaClass.simpleName
-    }
-
+  fun setInfo(source: String) {
     val list = if (domain is ListDomain) {
-      (domain as ListDomain).list.buildListModel(source, ident)
+      (domain as ListDomain).list.buildListModel(domain.source.ifEmpty { source }, ident)
     } else {
       null
     }
 
     if (domain is CodeDomain) {
-      (vField as VCodeField).source = source
+      (vField as VCodeField).source = domain.source.ifEmpty { source }
     }
 
     vField.setInfo(

@@ -32,7 +32,7 @@ class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VB
 
   override fun setInfo(form: VForm) {
     block.fields.forEach {
-      it.setInfo(super.source, form)
+      it.setInfo(super.source)
     }
   }
 }
@@ -76,7 +76,7 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
 
   override fun setInfo(form: VForm) {
     block.fields.forEach {
-      it.setInfo(super.source, form)
+      it.setInfo(super.source)
     }
   }
 

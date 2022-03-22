@@ -17,6 +17,7 @@
 
 package org.kopi.galite.visual.domain
 
+import java.io.File
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
@@ -91,6 +92,12 @@ open class Domain<T>(val width: Int? = null,
   protected var fixed: Fixed = Fixed.UNDEFINED
   protected var convert: Convert = Convert.NONE
   val ident: String = if(this::class.qualifiedName == null) "" else this::class.java.simpleName
+  val source: String =
+    if(this::class.qualifiedName == null) {
+      ""
+    } else {
+      javaClass.`package`.name.replace(".", "/") + File.separatorChar + javaClass.simpleName
+    }
 
   /**
    * Sets the minimum value of a number domain.
