@@ -22,7 +22,7 @@ package org.kopi.galite.visual.dsl.common
  *
  * @param label                the menu label in default locale
  */
-open class Menu(val label: String, source: String? = null): WindowElement(source = source) {
+open class Menu(val label: String, source: String? = null): LocalizableElement(source = source) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

@@ -44,7 +44,7 @@ open class Actor(val menu: Menu,
                  val command: PredefinedCommand? = null,
                  ident: String? = command?.ident,
                  source: String? = null)
-  : WindowElement(ident, source) {
+  : LocalizableElement(ident, source) {
 
   // The shortcut key
   var key: Key? = null

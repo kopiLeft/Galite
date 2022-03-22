@@ -20,9 +20,10 @@ package org.kopi.galite.visual.dsl.common
 import java.io.File
 
 /**
- * An element that can be inserted into a window. it can be form element, report element or chart element.
+ * The Localizable element should be implemented by all classes that can be localized within the application.
+ * It's an element that can be inserted into a window. it can be form element, report element or chart element.
  */
-abstract class WindowElement(ident: String? = null, open val source: String? = null) {
+abstract class LocalizableElement(ident: String? = null, open val source: String? = null) {
 
   open var ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringAfterLast('$')

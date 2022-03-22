@@ -25,7 +25,7 @@ import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.dsl.common.WindowElement
+import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -279,7 +279,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   /**
    * Get block
    */
-  open fun getFormElement(ident: String?): WindowElement? {
+  open fun getFormElement(ident: String?): LocalizableElement? {
     blocks.forEach { formBlock ->
       if (formBlock.ident == ident || formBlock.shortcut == ident) {
         return formBlock

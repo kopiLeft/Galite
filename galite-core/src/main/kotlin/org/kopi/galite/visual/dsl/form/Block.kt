@@ -31,7 +31,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.dsl.common.WindowElement
+import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -55,7 +55,7 @@ import org.kopi.galite.visual.visual.VException
 open class Block(val title: String,
                  var buffer: Int,
                  var visible: Int)
-  : WindowElement(), VConstants {
+  : LocalizableElement(), VConstants {
 
   internal var options: Int = 0 // the block options
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
@@ -1001,7 +1001,7 @@ open class Block(val title: String,
   open val block: VBlock = object : VBlock() {
     override fun setInfo(form: VForm) {
       this@Block.fields.forEach {
-        it.setInfo(super.source, form)
+        it.setInfo(super.source)
       }
     }
   }
