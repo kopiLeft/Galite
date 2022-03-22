@@ -174,8 +174,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
 
           check(newStart, newEnd)
           model.openForEdit((it.entry as FullCalendarEntry).record,
-                            Instant.from(newStart),
-                            Instant.from(newEnd))
+                            newStart.toInstant(),
+                            newEnd.toInstant())
         }
       })
     }
@@ -188,8 +188,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
 
           check(newStart, newEnd)
           model.openForEdit((it.entry as FullCalendarEntry).record,
-                            Instant.from(newStart),
-                            Instant.from(newEnd))
+                            newStart.toInstant(),
+                            newEnd.toInstant())
         }
       })
     }
@@ -202,7 +202,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val end = it.endDateTime
 
           check(start, end)
-          model.openForEdit(Instant.from(start), Instant.from(end))
+          model.openForEdit(start.toInstant(), end.toInstant())
         }
       })
     }
@@ -229,7 +229,9 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   class FullCalendarEntry(val record: Int, val model: VFullCalendarEntry) : Entry() {
     val updatedModel: VFullCalendarEntry
       get() {
-        return model.copy(Instant.from(start), Instant.from(end))
+        return model.copy(start.toInstant(), end.toInstant())
       }
   }
 }
+
+fun LocalDateTime.toInstant(): Instant = Instant.from(this.atZone(ZoneId.systemDefault()))
