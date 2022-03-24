@@ -25,7 +25,7 @@ plugins {
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-val releasables = listOf(
+val releasableProjects = listOf(
   "galite-core",
   "galite-domain",
   "galite-testing",
@@ -51,7 +51,7 @@ subprojects {
 }
 
 allprojects {
-  if (this.name in releasables) {
+  if (this.name in releasableProjects) {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
