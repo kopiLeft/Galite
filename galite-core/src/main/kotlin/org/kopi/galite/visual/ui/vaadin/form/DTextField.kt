@@ -63,15 +63,17 @@ open class DTextField(
       DefaultTransformer(getModel().width,
                          getModel().height)
     } else if (!scanner) {
-      NewlineTransformer(getModel().width,
-                         getModel().height)
+      NewlineTransformer(
+        getModel().width,
+        getModel().height
+      )
     } else {
       ScannerTransformer(this)
     }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.inputField.addTextValueChangeListener {
-      if(it.isFromClient) {
+      if (it.isFromClient) {
         valueChanged()
       }
     }

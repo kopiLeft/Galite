@@ -92,7 +92,7 @@ class DGridTextEditorField(
   }
 
   fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<String>, String>) {
-    if(event.isFromClient) {
+    if (event.isFromClient) {
       checkText(event.value.toString(), true)
     }
   }
@@ -354,7 +354,7 @@ class DGridTextEditorField(
    */
   @Synchronized
   private fun enterMe() {
-   access(currentUI) {
+    access(currentUI) {
       if (scanner) {
         editor.value = transformer.toGui("")
       }

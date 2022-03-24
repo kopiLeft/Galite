@@ -68,7 +68,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
    */
   private fun buildTreeItems() {
     setItems(getRootItems(), ::getChildItemProvider)
-    val column  = addComponentHierarchyColumn {
+    val column = addComponentHierarchyColumn {
       val nodeComponent = addItemComponent(it)
 
       nodeComponent.setIcon(it.isLeaf, it.parent == null, nodeComponent.module!!.accessibility)
@@ -96,7 +96,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   }
 
   private fun MutableList<TreeNode>.addNode(node: TreeNode) {
-    if(node.parent == null) {
+    if (node.parent == null) {
       addItemComponent(node)
       add(node)
     }
@@ -121,7 +121,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
    * @return The corresponding tree item module.
    */
   fun getModule(itemId: TreeNode?): Module? =
-      if(itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as Module
+    if (itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as Module
 
   val selectedItem: TreeNode? get() = asSingleSelect().value
 
@@ -132,6 +132,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
+
   //----------------------------------------------------------
   // TREE IMPLEMENTATION
   //----------------------------------------------------------
@@ -157,7 +158,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
     return !isExpanded(path)
   }
 
-  inner class TreeNodeComponent(val item: TreeNode, val module: Module?): HorizontalLayout() {
+  inner class TreeNodeComponent(val item: TreeNode, val module: Module?) : HorizontalLayout() {
 
     private val nodeCaption = Div()
     private val text = Span(module?.description)
@@ -185,7 +186,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
         if (isLeaf) {
           if (!isSuperUser) {
             if (item == selectedItem) {
-              setItemIcon( Utils.getImage("form_selected.png").resource)
+              setItemIcon(Utils.getImage("form_selected.png").resource)
             } else {
               setItemIcon(Utils.getImage("forms.png").resource)
             }

@@ -44,7 +44,7 @@ object BackgroundThreadHandler {
 
     val currentUI = currentUI ?: locateUI()
 
-    if(currentUI == null) {
+    if (currentUI == null) {
       command()
     } else {
       currentUI.access(command)
@@ -64,7 +64,7 @@ object BackgroundThreadHandler {
 
     val currentUI = currentUI ?: locateUI()
 
-    if(currentUI == null) {
+    if (currentUI == null) {
       command()
     } else {
       currentUI.access {
@@ -97,7 +97,7 @@ object BackgroundThreadHandler {
 
     val currentUI = currentUI ?: locateUI()
 
-    if(currentUI == null) {
+    if (currentUI == null) {
       command()
     } else {
       try {

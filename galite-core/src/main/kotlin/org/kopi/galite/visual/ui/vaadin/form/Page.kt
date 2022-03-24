@@ -31,7 +31,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 /**
  * A form page, can be either or vertical or horizontal page.
  */
-class Page<T>(private var content: T) : Div()  where T: Component, T: FlexComponent {
+class Page<T>(private var content: T) : Div() where T : Component, T : FlexComponent {
 
   private var scrollPanel: VScrollablePanel = VScrollablePanel(content)
   private var last: Block? = null
@@ -99,7 +99,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
    * @param content The caption container.
    * @param block The block widget.
    */
-  protected fun <T> setCaption(content: T, block: Block) where T: Component, T: FlexComponent {
+  protected fun <T> setCaption(content: T, block: Block) where T : Component, T : FlexComponent {
     val caption = block.caption
 
     if (caption != null) {

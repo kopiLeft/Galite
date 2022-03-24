@@ -62,7 +62,7 @@ allprojects {
 
     _publishing {
       publications {
-        create<MavenPublication>("ExposedJars") {
+        create<MavenPublication>("Galite") {
           artifactId = project.name
           from(project.components["java"])
           pom {

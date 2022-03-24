@@ -67,31 +67,31 @@ fun Component.inputValueExpression(): String {
   }
 }
 
-fun Array<out KeyModifier>.modifiersCondition() : String {
+fun Array<out KeyModifier>.modifiersCondition(): String {
   val modifiers = this
 
   return buildString {
-    if(KeyModifier.of("Shift") in modifiers) {
+    if (KeyModifier.of("Shift") in modifiers) {
       append("event.shiftKey && ")
     } else {
       append("!event.shiftKey && ")
     }
-    if(KeyModifier.of("Control") in modifiers) {
+    if (KeyModifier.of("Control") in modifiers) {
       append("event.ctrlKey && ")
     } else {
       append("!event.ctrlKey && ")
     }
-    if(KeyModifier.of("Alt") in modifiers) {
+    if (KeyModifier.of("Alt") in modifiers) {
       append("event.altKey && ")
     } else {
       append("!event.altKey && ")
     }
-    if(KeyModifier.of("AltGraph") in modifiers) {
+    if (KeyModifier.of("AltGraph") in modifiers) {
       append("event.altKey && ")
     } else {
       append("!event.altKey && ")
     }
-    if(KeyModifier.of("Meta") in modifiers) {
+    if (KeyModifier.of("Meta") in modifiers) {
       append("event.metaKey")
     } else {
       append("!event.metaKey")

@@ -25,7 +25,7 @@ import java.util.Date
  * Server side implementation of an editor date field.
  * Date fields are fixed width fields with 10 characters inside.
  */
-class GridEditorDateField: GridEditorTextField(10) {
+class GridEditorDateField : GridEditorTextField(10) {
   override fun check(text: String): Boolean {
     for (element in text) {
       if (!(element in '0'..'9' || element == '.' || element == '/')) {
