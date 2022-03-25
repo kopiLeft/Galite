@@ -24,8 +24,6 @@ plugins {
 }
 
 dependencies {
-  api(project(":galite-domain"))
-
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
   api("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)

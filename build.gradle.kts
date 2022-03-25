@@ -27,7 +27,6 @@ plugins {
 
 val releasableProjects = listOf(
   "galite-core",
-  "galite-domain",
   "galite-testing",
 )
 

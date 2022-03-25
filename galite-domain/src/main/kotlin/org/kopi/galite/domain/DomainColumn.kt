@@ -21,12 +21,14 @@ import java.time.Instant
 import java.time.LocalDateTime
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
 import org.jetbrains.exposed.sql.javatime.time
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.joda.time.DateTime
 import org.kopi.galite.domain.type.Month
 import org.kopi.galite.domain.type.Week
@@ -87,11 +89,47 @@ inline fun <reified T> Table.column(name: String,
  *
  * @param name the column name
  */
-fun Table.month(name: String) = integer(name)
+fun Table.month(name: String) = registerColumn<Month>(name, MonthColumnType())
 
 /**
  * Week column type.
  *
  * @param name the column name
  */
-fun Table.week(name: String) = integer(name)
+fun Table.week(name: String) = registerColumn<Week>(name, WeekColumnType())
+
+/**
+ * Week column for storing weeks.
+ */
+class WeekColumnType : ColumnType() {
+    override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
+    override fun valueFromDB(value: Any): Week = when (value) {
+        is Int -> Week(value / 100, value % 100)
+        is Number -> valueFromDB(value.toInt())
+        is String -> valueFromDB(value.toInt())
+        else -> error("Unexpected value of type Week: $value of ${value::class.qualifiedName}")
+    }
+
+    override fun valueToDB(value: Any?): Any? = when (value) {
+        is Week -> value.toSql()
+        else -> value
+    }
+}
+
+/**
+ * Months column for storing months.
+ */
+class MonthColumnType : ColumnType() {
+    override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
+    override fun valueFromDB(value: Any): Month = when (value) {
+        is Int -> Month(value / 100, value % 100)
+        is Number -> valueFromDB(value.toInt())
+        is String -> valueFromDB(value.toInt())
+        else -> error("Unexpected value of type Month: $value of ${value::class.qualifiedName}")
+    }
+
+    override fun valueToDB(value: Any?): Any? = when (value) {
+        is Month -> value.toSql()
+        else -> value
+    }
+}
