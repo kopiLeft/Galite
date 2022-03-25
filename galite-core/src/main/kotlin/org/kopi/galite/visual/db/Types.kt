@@ -35,7 +35,7 @@ fun Table.month(name: String) = registerColumn<Month>(name, MonthColumnType())
  *
  * @param name the column name
  */
-fun Table.week(name: String) = registerColumn<Month>(name, WeekColumnType())
+fun Table.week(name: String) = registerColumn<Week>(name, WeekColumnType())
 
 /**
  * Week column for storing weeks.
@@ -46,7 +46,13 @@ class WeekColumnType : ColumnType() {
     is Int -> Week(value)
     is Number -> valueFromDB(value.toInt())
     is String -> valueFromDB(value.toInt())
-    else -> error("Unexpected value of type Int: $value of ${value::class.qualifiedName}")
+    else -> error("Unexpected value of type Week: $value of ${value::class.qualifiedName}")
+  }
+
+  override fun valueToDB(value: Any?): Any? = when (value) {
+    is Week -> value.toSql()
+    is Int -> value.toInt()
+    else -> value
   }
 }
 
@@ -59,6 +65,12 @@ class MonthColumnType : ColumnType() {
     is Int -> Month(value)
     is Number -> valueFromDB(value.toInt())
     is String -> valueFromDB(value.toInt())
-    else -> error("Unexpected value of type Int: $value of ${value::class.qualifiedName}")
+    else -> error("Unexpected value of type Month: $value of ${value::class.qualifiedName}")
+  }
+
+  override fun valueToDB(value: Any?): Any? = when (value) {
+    is Month -> value.toSql()
+    is Int -> value.toInt()
+    else -> value
   }
 }
