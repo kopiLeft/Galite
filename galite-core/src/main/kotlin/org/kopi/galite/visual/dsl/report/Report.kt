@@ -86,7 +86,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
       fieldTriggerArray[Constants.TRG_FORMAT] = formatTrigger!!
     }
     // TODO : Add field triggers here
-    model.VKT_Fields_Triggers.add(fieldTriggerArray)
+    this@Report.model.VKT_Fields_Triggers.add(fieldTriggerArray)
   }
 
   /**
