@@ -42,7 +42,7 @@ open class ReportModel(val report: Report): VReport() {
 
       if (it.group != null) {
         it.groupID = report.fields.indexOf(it.group)
-        it.columnModel.groups = it.groupID
+        it.model.groups = it.groupID
       }
     }
   }

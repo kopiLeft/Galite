@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.dsl.form
 
-import java.io.File
+import java.math.BigDecimal
 
 import kotlin.reflect.KProperty
 
@@ -36,7 +36,9 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.visual.VColor
 import org.kopi.galite.visual.visual.VException
@@ -320,6 +322,29 @@ open class FormField<T>(internal val block: Block,
   fun onAfterDrop() {
     vField.onAfterDrop()
   }
+
+  // ----------------------------------------------------------------------
+  //
+  // ----------------------------------------------------------------------
+
+  /**
+   * return the name of this field
+   */
+  fun getTypeInformation(): String = vField.getTypeInformation()
+
+  /**
+   * Clears the field.
+   *
+   * @param     r       the record number.
+   */
+  fun clear(r: Int) {
+    vField.clear(r)
+  }
+
+  /**
+   * Returns the string representation in human-readable format.
+   */
+  fun FormField<BigDecimal>.toText(v: BigDecimal): String = (vField as VDecimalField).toText(v)
 
   ///////////////////////////////////////////////////////////////////////////
   // FORM FIELD TRIGGERS
@@ -649,3 +674,197 @@ open class FormField<T>(internal val block: Block,
     return -1
   }
 }
+
+// ----------------------------------------------------------------------
+// DECIMAL FIELD FUNCTIONS
+// ----------------------------------------------------------------------
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @param     exclude         exclude the current record
+ * @return    the sum of the field values, null if none is filled.
+ */
+fun FormField<BigDecimal>.computeSum(exclude: Boolean): BigDecimal? = (vField as VDecimalField).computeSum(exclude)
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @param     exclude         exclude the current record
+ * @param     coalesceValue   the value to take if all fields are empty
+ * @return    the sum of the field values or coalesceValue if none is filled.
+ */
+fun FormField<BigDecimal>.computeSum(exclude: Boolean, coalesceValue: BigDecimal): BigDecimal =
+        (vField as VDecimalField).computeSum(exclude, coalesceValue)
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @return    the sum of the field values, null if none is filled.
+ */
+fun FormField<BigDecimal>.computeSum(): BigDecimal? = (vField as VDecimalField).computeSum()
+
+/**
+ * Returns the sum of every filled records in block
+ *
+ * @param     coalesceValue   the value to take if all fields are empty
+ * @return    the sum of the field values or coalesceValue if none is filled.
+ */
+fun FormField<BigDecimal>.computeSum(coalesceValue: BigDecimal): BigDecimal =
+        (vField as VDecimalField).computeSum(coalesceValue)
+
+/**
+ * Returns the current scale for the specified record.
+ *
+ * @param     record          the record value.
+ * @return    the scale value.
+ */
+fun FormField<BigDecimal>.getScale(record: Int): Int = (vField as VDecimalField).getScale(record)
+
+/**
+ * Returns the current scale for the current record.
+ *
+ * @return    the scale value.
+ */
+fun FormField<BigDecimal>.getScale(): Int = (vField as VDecimalField).getScale()
+
+/**
+ * Sets the scale value for the specified record.
+ *
+ * @param     scale           the scale value.
+ * @param     record          the record value.
+ */
+fun FormField<BigDecimal>.setScale(record: Int, scale: Int) {
+  (vField as VDecimalField).setScale(record, scale)
+}
+
+/**
+ * Sets the scale value for the current record.
+ *
+ * @param     scale           the scale value.
+ */
+fun FormField<BigDecimal>.setScale(scale: Int) {
+  (vField as VDecimalField).setScale(scale)
+}
+
+/**
+ * Returns a string representation of a big decimal value wrt the field type.
+ */
+fun FormField<BigDecimal>.formatDecimal(value: BigDecimal): String = (vField as VDecimalField).formatDecimal(value)
+
+
+/**
+ * The maxScale value for the current record.
+ */
+var FormField<BigDecimal>.maxScale: Int
+  get() = (vField as VDecimalField).maxScale
+  set(scale) {
+    (vField as VDecimalField).maxScale = scale
+  }
+
+// ----------------------------------------------------------------------
+// INTEGER FIELD FUNCTIONS
+// ----------------------------------------------------------------------
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @param     exclude         exclude the current record
+ * @return    the sum of the field values, null if none is filled.
+ */
+fun FormField<Int>.computeSum(exclude: Boolean): Int? = (vField as VIntegerField).computeSum(exclude)
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @param     exclude         exclude the current record
+ * @return    the sum of the field values, null if none is filled.
+ */
+@JvmName("computeSumLong")
+fun FormField<Long>.computeSum(exclude: Boolean): Int? = (vField as VIntegerField).computeSum(exclude)
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @param     exclude         exclude the current record
+ * @param     coalesceValue   the value to take if all fields are empty
+ * @return    the sum of the field values or coalesceValue if none is filled.
+ */
+fun FormField<Int>.computeSum(exclude: Boolean, coalesceValue: Int): Int = (vField as VIntegerField).computeSum(exclude, coalesceValue)
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @param     exclude         exclude the current record
+ * @param     coalesceValue   the value to take if all fields are empty
+ * @return    the sum of the field values or coalesceValue if none is filled.
+ */
+@JvmName("computeSumLong")
+fun FormField<Long>.computeSum(exclude: Boolean, coalesceValue: Int): Int = (vField as VIntegerField).computeSum(exclude, coalesceValue)
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @return    the sum of the field values, null if none is filled.
+ */
+fun FormField<Int>.computeSum(): Int? = (vField as VIntegerField).computeSum()
+
+/**
+ * Returns the sum of the field values of all records.
+ *
+ * @return    the sum of the field values, null if none is filled.
+ */
+@JvmName("computeSumLong")
+fun FormField<Long>.computeSum(): Int? = (vField as VIntegerField).computeSum()
+
+/**
+ * Returns the sum of every filled records in block
+ */
+fun FormField<Int>.getCoalesceSum(coalesceValue: Int): Int = (vField as VIntegerField).getCoalesceSum(coalesceValue)
+
+/**
+ * Returns the sum of every filled records in block
+ */
+@JvmName("getCoalesceSumLong")
+fun FormField<Long>.getCoalesceSum(coalesceValue: Int): Int = (vField as VIntegerField).getCoalesceSum(coalesceValue)
+
+/**
+ * Returns the sum of every filled records in block
+ *
+ * @param     coalesceValue   the value to take if all fields are empty
+ * @return    the sum of the field values or coalesceValue if none is filled.
+ */
+fun FormField<Int>.computeSum(coalesceValue: Int): Int = (vField as VIntegerField).computeSum(coalesceValue)
+
+/**
+ * Returns the sum of every filled records in block
+ *
+ * @param     coalesceValue   the value to take if all fields are empty
+ * @return    the sum of the field values or coalesceValue if none is filled.
+ */
+@JvmName("computeSumLong")
+fun FormField<Long>.computeSum(coalesceValue: Int): Int = (vField as VIntegerField).computeSum(coalesceValue)
+
+/**
+ * Returns the sum of every filled records in block
+ * @deprecated        use int getCoalesceSum(int) instead
+ * */
+fun FormField<Int>.getSum(): Int = (vField as VIntegerField).getSum()
+
+/**
+ * Returns the sum of every filled records in block
+ * @deprecated        use int getCoalesceSum(int) instead
+ * */
+@JvmName("getSumLong")
+fun FormField<Long>.getSum(): Int = (vField as VIntegerField).getSum()
+
+/**
+ * Returns a string representation of a int value wrt the field type.
+ */
+fun FormField<Int>.formatInt(value: Int): String = (vField as VIntegerField).formatInt(value)
+
+/**
+ * Returns a string representation of a int value wrt the field type.
+ */
+@JvmName("formatIntLong")
+fun FormField<Long>.formatInt(value: Int): String = (vField as VIntegerField).formatInt(value)

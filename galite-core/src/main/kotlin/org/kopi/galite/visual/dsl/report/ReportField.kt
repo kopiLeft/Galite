@@ -28,6 +28,7 @@ import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.visual.VCommand
 
@@ -132,7 +133,7 @@ class ReportField<T>(override val domain: Domain<T>,
     }
   }
 
-  lateinit var columnModel: VReportColumn
+  lateinit var model: VReportColumn
 
   fun buildReportColumn(): VReportColumn {
     val function: VCalculateColumn? = if (computeTrigger != null) {
@@ -147,12 +148,12 @@ class ReportField<T>(override val domain: Domain<T>,
       null
     }
 
-    columnModel = domain.buildReportFieldModel(this, function, format).also { column ->
+    model = domain.buildReportFieldModel(this, function, format).also { column ->
       column.label = label ?: ""
       column.help = help
     }
 
-    return columnModel
+    return model
   }
 
   // ----------------------------------------------------------------------
@@ -166,4 +167,25 @@ class ReportField<T>(override val domain: Domain<T>,
       (writer as ReportLocalizationWriter).genField(ident, label, help)
     }
   }
+}
+
+// ----------------------------------------------------------------------
+// DECIMAL FIELD FUNCTIONS
+// ----------------------------------------------------------------------
+
+/**
+ * Sets display scale to maxScale
+ * all values will be set to the same scale
+ */
+fun ReportField<BigDecimal>.setDisplayScale(scale: Int) {
+  (model as VDecimalColumn).setDisplayScale(scale)
+}
+
+/**
+ * Sets maxScale
+ * all values with scale superior to maxScale will have
+ * maxScale as scale, and the other values will keep their scale.
+ */
+fun ReportField<BigDecimal>.setMaxScale(scale: Int) {
+  (model as VDecimalColumn).setMaxScale(scale)
 }

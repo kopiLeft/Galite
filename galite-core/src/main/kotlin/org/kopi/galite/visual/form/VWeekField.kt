@@ -385,7 +385,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns a string representation of a week value wrt the field type.
    */
-  protected fun formatWeek(value: Week?): String = VWeekField.toText(value)
+  fun formatWeek(value: Week?): String = VWeekField.toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
