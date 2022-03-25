@@ -43,7 +43,7 @@ fun Table.week(name: String) = registerColumn<Week>(name, WeekColumnType())
 class WeekColumnType : ColumnType() {
   override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
   override fun valueFromDB(value: Any): Week = when (value) {
-    is Int -> Week(value)
+    is Int -> Week(value / 100, value % 100)
     is Number -> valueFromDB(value.toInt())
     is String -> valueFromDB(value.toInt())
     else -> error("Unexpected value of type Week: $value of ${value::class.qualifiedName}")
@@ -51,7 +51,6 @@ class WeekColumnType : ColumnType() {
 
   override fun valueToDB(value: Any?): Any? = when (value) {
     is Week -> value.toSql()
-    is Int -> value.toInt()
     else -> value
   }
 }
@@ -62,7 +61,7 @@ class WeekColumnType : ColumnType() {
 class MonthColumnType : ColumnType() {
   override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
   override fun valueFromDB(value: Any): Month = when (value) {
-    is Int -> Month(value)
+    is Int -> Month(value / 100, value % 100)
     is Number -> valueFromDB(value.toInt())
     is String -> valueFromDB(value.toInt())
     else -> error("Unexpected value of type Month: $value of ${value::class.qualifiedName}")
@@ -70,7 +69,6 @@ class MonthColumnType : ColumnType() {
 
   override fun valueToDB(value: Any?): Any? = when (value) {
     is Month -> value.toSql()
-    is Int -> value.toInt()
     else -> value
   }
 }
