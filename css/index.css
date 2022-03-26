@@ -181,7 +181,7 @@ a.btn:visited {
 }
 
 .feature {
-  max-width: 40%;
+  max-width: 30%;
   padding: 1em;
   margin-right: 20px;
   margin-bottom: 20px;
@@ -195,7 +195,7 @@ a.btn:visited {
 
 .icon {
   text-align: center;
-  font-size: 100px;
+  font-size: 85px;
 }
 
 .icon.generic, .icon.generic + .feature-title {
@@ -212,6 +212,18 @@ a.btn:visited {
 
 .icon.productive, .icon.productive + .feature-title {
    color: mediumseagreen;
+}
+
+.icon.uiux, .icon.uiux + .feature-title {
+   color: skyblue;
+}
+
+.uiux-ux {
+   color: turquoise;
+}
+
+.uiux-ui {
+   color: orange;
 }
 
 .feature:hover {
@@ -278,34 +290,15 @@ a.btn:visited {
 
 /* UI */
 
-#ui-section {
-  display: flex;
+#users-section {
   padding: 5rem;
 }
 
-.ui-screenshots {
-  display: flex;
-  justify-content: center;
-}
-
-.ui-details {
-  padding: 1rem;
-  padding-left: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.ui-title {
+.users-title {
   color: #29afce;
   margin-bottom: 1.5rem;
   white-space: nowrap;
-}
-
-.ui-paragraph {
-  text-justify: newspaper;
-  text-align: justify;
+  text-align: center;
 }
 
 /* Footer */
@@ -438,9 +431,9 @@ code.hljs {
 }
 
 #panels {
-  min-height:200px;
-  overflow:hidden;
-  padding:20px;
+  min-height: 200px;
+  overflow: hidden;
+  padding: 0 20px;
   box-sizing: border-box;
   max-width: 1460px;
 }
@@ -553,6 +546,7 @@ code.hljs {
   .features-box {
     flex-wrap: wrap;
     padding: 0;
+    font-size: 19px;
   }
   .feature {
     margin-bottom: 20px;
@@ -571,17 +565,7 @@ code.hljs {
   .dsl-title {
     text-align: center;
   }
-  .ui-screenshots {
-    margin-left: 20px;
-    margin-bottom: 20px;
-  }
-  .ui-title {
-    text-align: center;
-  }
-  .ui-paragraph {
-    text-align: center;
-  }
-  #ui-section {
+  #users-section {
     padding: 0;
     padding-top: 30px;
   }
@@ -597,14 +581,8 @@ code.hljs {
   .panel-content {
     flex-direction: column-reverse;
   }
-  #ui-section {
+  #users-section {
     flex-direction: column-reverse;
-  }
-  .ui-screenshots {
-    margin-left: 0;
-  }
-  .ui-screenshots img {
-    max-width: 95%;
   }
   .container-footer-logo {
       flex-direction: column;
@@ -674,17 +652,7 @@ code.hljs {
   .dsl-title {
     text-align: center;
   }
-  .ui-screenshots {
-    margin-left: 20px;
-    margin-bottom: 20px;
-  }
-  .ui-title {
-    text-align: center;
-  }
-  .ui-paragraph {
-    text-align: center;
-  }
-  #ui-section {
+  #users-section {
     padding: 0;
     padding-top: 30px;
   }
@@ -700,14 +668,8 @@ code.hljs {
   .panel-content {
     flex-direction: column-reverse;
   }
-  #ui-section {
+  #users-section {
     flex-direction: column-reverse;
-  }
-  .ui-screenshots {
-    margin-left: 0;
-  }
-  .ui-screenshots img {
-    max-width: 95%;
   }
   .container-footer-logo {
     flex-direction: column;
@@ -762,17 +724,7 @@ code.hljs {
   .dsl-title {
     text-align: center;
   }
-  .ui-screenshots {
-    margin-left: 20px;
-    margin-bottom: 20px;
-  }
-  .ui-title {
-    text-align: center;
-  }
-  .ui-paragraph {
-    text-align: center;
-  }
-  #ui-section {
+  #users-section {
     padding: 0;
     padding-top: 30px;
   }
@@ -789,14 +741,8 @@ code.hljs {
   .panel-content {
     flex-direction: column-reverse;
   }
-  #ui-section {
+  #users-section {
     flex-direction: column-reverse;
-  }
-  .ui-screenshots {
-    margin-left: 0;
-  }
-  .ui-screenshots img {
-    max-width: 95%;
   }
 }
 
@@ -829,12 +775,6 @@ code.hljs {
   .dsl-title {
     text-align: center;
   }
-  .ui-title {
-    text-align: center;
-  }
-  .ui-screenshots {
-    margin-right: 45px;
-  }
   .panel-content {
     flex-direction: column-reverse;
   }
@@ -850,11 +790,12 @@ code.hljs {
 }
 
 @media (min-width: 1025px) and (max-width: 1400px) {
-  #ui-section {
+  #users-section {
     flex-direction: column-reverse;
   }
-  .ui-paragraph {
-    text-align: center;
+  .features-box {
+    flex-wrap: wrap;
+    padding: 40px;
   }
 }
 
