@@ -115,7 +115,7 @@ open class VBooleanCodeField : VCodeField {
    * @param    result       the result row
    * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? = result[column] as? Boolean
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Boolean? = result[column] as? Boolean
 
   override fun getCodes(): Array<Any?> = codes as Array<Any?>
 

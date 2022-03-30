@@ -164,21 +164,6 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    result       the result row
-   * @param    column       the column in the tuple
-   */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val tmp = result[column] as? Int
-
-    if (tmp == null) {
-      return null
-    }
-
-    return Month(tmp / 100, tmp % 100)
-  }
-
-  /**
    * Is the field value of given record null ?
    */
   override fun isNullImpl(r: Int): Boolean = value[r] == null

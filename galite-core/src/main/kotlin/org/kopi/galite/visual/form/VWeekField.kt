@@ -220,16 +220,6 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    result       the result row
-   * @param    column       the column in the tuple
-   */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val tmp = result[column] as? Int ?: return null
-    return Week(tmp / 100, tmp % 100)
-  }
-
-  /**
    * Is the field value of given record null ?
    */
   override fun isNullImpl(r: Int): Boolean = value[r] == null
