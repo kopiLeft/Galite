@@ -33,14 +33,13 @@ class VMonthColumn(ident: String?,
                    align: Int,
                    groups: Int,
                    function: VCalculateColumn?,
-                   width: Int,
                    format: VCellFormat?)
    : VReportColumn(ident,
                    options,
                    align,
                    groups,
                    function,
-                   width,
+                   7,
                    1,
                    format) {
   /**

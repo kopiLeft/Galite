@@ -20,8 +20,6 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VWeekColumn
 import org.kopi.galite.visual.type.Week
