@@ -20,8 +20,6 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VWeekColumn
 import org.kopi.galite.visual.type.Week
@@ -217,16 +215,6 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    */
   override fun setObject(r: Int, v: Any?) {
     setWeek(r, v as? Week)
-  }
-
-  /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    result       the result row
-   * @param    column       the column in the tuple
-   */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val tmp = result[column] as? Int ?: return null
-    return Week(tmp / 100, tmp % 100)
   }
 
   /**

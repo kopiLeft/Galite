@@ -228,7 +228,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                       field.align,
                                       getColumnGroups(field),
                                       null,
-                                      field.width,
                                       null)
         is VTimeField ->
           columns[col] = VTimeColumn(null,

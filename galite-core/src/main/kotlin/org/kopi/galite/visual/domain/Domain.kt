@@ -246,7 +246,7 @@ open class Domain<T>(val width: Int? = null,
         org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
           VDateColumn(ident, options, align.value, groupID, function, width ?: 0, format)
         Month::class ->
-          VMonthColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+          VMonthColumn(ident, options, align.value, groupID, function, format)
         Week::class ->
           VWeekColumn(ident, options, align.value, groupID, function, format)
         org.joda.time.LocalTime::class, LocalTime::class ->
