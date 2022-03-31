@@ -253,6 +253,13 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
     model.export(file, type)
   }
 
+  /**
+   * Sets the title
+   */
+  fun setPageTitle(title: String) {
+    model.setPageTitle(title)
+  }
+
   fun setPageTitleParams(param: Any) {
     model.setPageTitleParams(param)
   }
