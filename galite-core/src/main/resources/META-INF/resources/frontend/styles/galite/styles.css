@@ -102,7 +102,7 @@ a, a:hover {
 	color: inherit;
 }
 
-.k-block .simple ::part(value) {
+.k-textinput input {
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
