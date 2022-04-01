@@ -390,19 +390,19 @@ class VDynamicReport(block: VBlock) : VReport() {
             break
           } catch (e: SQLException) {
             if (!alreadyProtected) {
-              block.form.handleAborted(e);
+              block.form.handleAborted(e)
             } else {
               throw e;
             }
           } catch (error: Error) {
             if (!alreadyProtected) {
-              block.form.handleAborted(error);
+              block.form.handleAborted(error)
             } else {
               throw error;
             }
           } catch (rte: RuntimeException) {
             if (!alreadyProtected) {
-              block.form.handleAborted(rte);
+              block.form.handleAborted(rte)
             } else {
               throw rte;
             }

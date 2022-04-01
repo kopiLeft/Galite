@@ -19,7 +19,6 @@ package org.kopi.galite.visual.dsl.form
 import java.util.Locale
 
 import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException

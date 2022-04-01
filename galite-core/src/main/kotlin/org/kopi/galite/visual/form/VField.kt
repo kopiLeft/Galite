@@ -1870,11 +1870,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           break
         } catch (e: SQLException) {
-          getForm().handleAborted(e);
+          getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
@@ -1937,9 +1937,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         } catch (e: SQLException) {
           getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
@@ -2236,11 +2236,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           break
         } catch (e: SQLException) {
-          getForm().handleAborted(e);
+          getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
