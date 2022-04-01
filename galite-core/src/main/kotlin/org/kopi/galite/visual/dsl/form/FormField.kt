@@ -67,7 +67,7 @@ open class FormField<T>(internal val block: Block,
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command> = mutableListOf() // the commands accessible in this field
   var triggers = mutableListOf<Trigger>() // the triggers executed by this field
-  var alias: String? = null // the alias of this field
+  var alias: FormField<T?>? = null // the alias of this field
   var initialValues = mutableMapOf<Int, T>()
   var value: T by this
 
@@ -449,7 +449,7 @@ open class FormField<T>(internal val block: Block,
       commands.map { it.model }.toTypedArray(),
       position?.getPositionModel(),
       align.value,
-      null // TODO
+      alias?.vField
     )
   }
 
