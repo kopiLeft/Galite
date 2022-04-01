@@ -50,7 +50,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @return a date mustfill field.
    */
   @Deprecated("use from() and to() fields instead")
-  fun date(position: FormPosition, init: MustFillFormField<LocalDate>.() -> Unit): MustFillFormField<LocalDate> =
+  fun date(position: FormPosition, init: MustFillFormField<LocalDate>.() -> Unit): MustFillFormField<LocalDate?> =
     date(Domain(), position, init)
 
   /**
@@ -63,7 +63,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
   @Deprecated("use from() and to() fields instead")
   inline fun <reified T: LocalDate> date(domain: Domain<T>,
                                     position: FormPosition,
-                                    init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                    init: MustFillFormField<T>.() -> Unit): MustFillFormField<T?> {
 
     return mustFill(domain, position, init).also { field ->
       dateField = field
@@ -77,7 +77,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @return a mustfill field.
    */
   @Deprecated("use from() and to() fields instead")
-  fun fromTime(position: FormPosition, init: MustFillFormField<LocalTime>.() -> Unit): MustFillFormField<LocalTime> =
+  fun fromTime(position: FormPosition, init: MustFillFormField<LocalTime>.() -> Unit): MustFillFormField<LocalTime?> =
     fromTime(Domain(), position, init)
 
   /**
@@ -90,7 +90,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
   @Deprecated("use from() and to() fields instead")
   inline fun <reified T: LocalTime> fromTime(domain: Domain<T>,
                                         position: FormPosition,
-                                        init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                        init: MustFillFormField<T>.() -> Unit): MustFillFormField<T?> {
 
     return mustFill(domain, position, init).also { field ->
       fromTimeField = field
@@ -104,7 +104,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @return a mustfill field.
    */
   @Deprecated("use from() and to() fields instead")
-  fun toTime(position: FormPosition, init: MustFillFormField<LocalTime>.() -> Unit): MustFillFormField<LocalTime> =
+  fun toTime(position: FormPosition, init: MustFillFormField<LocalTime>.() -> Unit): MustFillFormField<LocalTime?> =
     toTime(Domain(), position, init)
 
   /**
@@ -117,7 +117,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
   @Deprecated("use from() and to() fields instead")
   inline fun <reified T: LocalTime> toTime(domain: Domain<T>,
                                       position: FormPosition,
-                                      init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                      init: MustFillFormField<T>.() -> Unit): MustFillFormField<T?> {
 
     return mustFill(domain, position, init).also { field ->
       toTimeField = field
@@ -130,7 +130,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun from(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant> =
+  fun from(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant?> =
     from(Domain(), position, init)
 
   /**
@@ -144,7 +144,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    */
   inline fun <reified T: Instant> from(domain: Domain<T>,
                                          position: FormPosition,
-                                         init: MustFillFormField<T>.() -> Unit): FormField<T> {
+                                         init: MustFillFormField<T>.() -> Unit): FormField<T?> {
     return mustFill(domain, position, init).also { field ->
       fromField = field
     }
@@ -156,7 +156,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun to(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant> =
+  fun to(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant?> =
     to(Domain(), position, init)
 
   /**
@@ -170,7 +170,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    */
   inline fun <reified T: Instant> to(domain: Domain<T>,
                                        position: FormPosition,
-                                       init: MustFillFormField<T>.() -> Unit): FormField<T> {
+                                       init: MustFillFormField<T>.() -> Unit): FormField<T?> {
     return mustFill(domain, position, init).also { field ->
       toField = field
     }
