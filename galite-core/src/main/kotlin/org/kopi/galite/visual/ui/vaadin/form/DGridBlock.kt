@@ -52,6 +52,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
+import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
 
 /**
@@ -105,6 +106,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   private var filterRow: HeaderRow? = null
   private lateinit var sortableHeaders: MutableMap<Grid.Column<*>, DGridEditorLabel>
+  private lateinit var deletedRecordsFilter: SerializablePredicate<GridBlockItem>
   var lastSortOrder: List<GridSortOrder<GridBlockItem>>? = null
   lateinit var editor: Editor<GridBlockItem>
   val isEditorInitialized get() = ::editor.isInitialized
@@ -323,12 +325,13 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
         FilterField(field, filter)
       }
-      dataProvider.filter = DGridBlockFilter(filterFields, true, false)
+      dataProvider.addFilter(DGridBlockFilter(filterFields, true, false))
     }
   }
 
   override fun filterHidden() {
     access {
+      (grid.dataProvider as ListDataProvider).filter = deletedRecordsFilter
       if (filterRow != null) {
         grid.element.themeList.remove("shown-filter")
         grid.element.themeList.add("hidden-filter")
@@ -542,6 +545,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       items.add(GridBlockItem(it))
     }
     grid.setItems(items)
+    deletedRecordsFilter = SerializablePredicate<GridBlockItem> { item ->
+      !model.isRecordDeleted(item.record)
+    }
+    (grid.dataProvider as ListDataProvider).filter = deletedRecordsFilter
   }
 
   /**
