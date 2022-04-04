@@ -35,6 +35,7 @@ dependencies {
     excludeWebJars()
     exclude("org.slf4j", "slf4j-ext")
   }
+  implementation("org.jetbrains.kotlinx:dataframe:0.8.0-rc-7")
   // Vaadin addons
   // Wysiwyg-e Rich Text Editor component for Java
   implementation("org.vaadin.pekka", "wysiwyg_e-java", Versions.WYSIWYG_EJAVA)
