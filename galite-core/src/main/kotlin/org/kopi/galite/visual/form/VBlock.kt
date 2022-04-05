@@ -3607,7 +3607,7 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
     blockListener.remove(BlockRecordListener::class.java, bl)
   }
 
-  fun fireBlockChanged() {
+  internal fun fireBlockChanged() {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 

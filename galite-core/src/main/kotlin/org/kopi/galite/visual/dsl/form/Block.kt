@@ -854,6 +854,147 @@ open class Block(val title: String,
     return null
   }
 
+  fun fireBlockChanged() {
+    block.fireBlockChanged()
+  }
+
+  // ----------------------------------------------------------------------
+  // SETS/GETS INFORMATION ABOUT THE BLOCK
+  // ----------------------------------------------------------------------
+
+  /**
+   * Returns the record info value for the given record.
+   * @param rec The record number.
+   * @return The record info value.
+   */
+  fun getRecordInfoAt(rec: Int): Int = block.getRecordInfoAt(rec)
+
+  /**
+   * Returns true if at least one record is filled
+   */
+  fun isFilled(): Boolean = block.isFilled()
+
+  /**
+   * Returns true if the record is filled
+   */
+  fun isRecordFilled(rec: Int): Boolean = block.isRecordFilled(rec)
+
+  /**
+   * Returns true if the specified record has been fetched from the database
+   */
+  fun isRecordFetched(rec: Int): Boolean = block.isRecordFetched(rec)
+
+  /**
+   * Returns true if the specified record has been changed
+   */
+  fun isRecordChanged(rec: Int): Boolean = block.isRecordChanged(rec)
+
+  /**
+   * Returns true if the specified record has been deleted
+   */
+  fun isRecordDeleted(rec: Int): Boolean = block.isRecordDeleted(rec)
+
+  /**
+   * Returns true if the specified record has been deleted
+   */
+  fun isSortedRecordDeleted(sortedRec: Int): Boolean = block.isSortedRecordDeleted(sortedRec)
+
+  /**
+   * Returns true if the specified record is trailed
+   */
+  fun isRecordTrailed(rec: Int): Boolean = block.isRecordTrailed(rec)
+
+  /**
+   * Returns true if the current record is filled
+   */
+  fun isCurrentRecordFilled(): Boolean = block.isCurrentRecordFilled()
+
+  /**
+   * Returns true if the current record has been fetched from the database
+   */
+  fun isCurrentRecordFetched(): Boolean = block.isCurrentRecordFetched()
+
+  /**
+   * Returns true if the current record has been changed
+   */
+  fun isCurrentRecordChanged(): Boolean = block.isCurrentRecordChanged()
+
+  /**
+   * Returns true if the current record has been deleted
+   */
+  fun isCurrentRecordDeleted(): Boolean = block.isCurrentRecordDeleted()
+
+  /**
+   * Returns true if the current record is trailed
+   */
+  fun isCurrentRecordTrailed(): Boolean = block.isCurrentRecordTrailed()
+
+  /**
+   * Returns the current block access.
+   */
+  fun getAccess(): Int = block.getAccess()
+
+  /**
+   * Updates current access of block fields in the current Record.
+   */
+  fun updateAccess(record: Int = activeRecord) {
+    block.updateAccess(record)
+  }
+
+  fun setRecordFetched(rec: Int, value: Boolean) {
+    block.setRecordFetched(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordFetched(value: Boolean) {
+    block.setRecordFetched(value)
+  }
+
+  fun setRecordChanged(rec: Int, value: Boolean) {
+    block.setRecordChanged(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordChanged(value: Boolean) {
+    block.setRecordChanged(value)
+  }
+
+  fun setRecordDeleted(rec: Int, value: Boolean) {
+    block.setRecordDeleted(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordDeleted(value: Boolean) {
+    block.setRecordDeleted(value)
+  }
+
+  /**
+   *
+   */
+  fun setRecordTrailed(rec: Int, value: Boolean) {
+    block.setRecordTrailed(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordTrailed(value: Boolean) {
+    block.setRecordTrailed(value)
+  }
+
+  /**
+   * COPY RECORD IN BLOCK
+   */
+  fun copyRecord(from: Int, to: Int, trail: Boolean) {
+    block.copyRecord(from, to, trail)
+  }
+
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS EVENTS
   // ----------------------------------------------------------------------
