@@ -31,13 +31,10 @@ import org.kopi.galite.visual.db.DBNoRowException
 import org.kopi.galite.visual.db.DBTooManyRowsException
 import org.kopi.galite.visual.db.into
 
-/**
- * Contains tests of list-domain creation and manipulation
- */
 class DBExceptionTests : ApplicationTestBase() {
 
   /**
-   * Tests Select into throws DBNoRowException and DBTooManyRowsException
+   * Tests select-into throws DBNoRowException and DBTooManyRowsException
    */
   @Test
   fun selectIntoTest() {
