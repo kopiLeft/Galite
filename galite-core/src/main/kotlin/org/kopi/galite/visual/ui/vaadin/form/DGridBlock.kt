@@ -634,13 +634,15 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                         || (itemToBeEdited != null
                         && editor.item.record != itemToBeEdited))
         ) {
-          if (itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
+          val actualItems = getActualItems()
+
+          if (actualItems.none { it.record == itemToBeEdited }) {
             itemToBeEdited = 0
           }
 
           // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            editor.editItem(getActualItems().single { it.record == record })
+            editor.editItem(actualItems.single { it.record == record })
           }
         }
       }
