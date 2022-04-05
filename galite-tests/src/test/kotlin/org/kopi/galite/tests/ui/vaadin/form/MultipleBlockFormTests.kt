@@ -26,9 +26,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
-import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.findField
@@ -125,7 +125,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
   fun `test showHideFilter command`() {
     multipleForm.block.trainingID.edit(1)
     multipleForm.list.triggerCommand()
-    multipleForm.block2.enter()
+    multipleForm.block2._enter()
     multipleForm.showHideFilter.triggerCommand()
 
     val block = multipleForm.block2.findBlock() as DGridBlock
@@ -272,7 +272,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     try {
       multipleBlockSaveForm.open()
       multipleBlockSaveForm.list.triggerCommand()
-      multipleBlockSaveForm.multipleBlock.enter()
+      multipleBlockSaveForm.multipleBlock._enter()
       multipleBlockSaveForm.multipleBlock.address.edit("new address")
       multipleBlockSaveForm.saveBlock.triggerCommand()
       val block = multipleBlockSaveForm.multipleBlock.findBlock() as DGridBlock
@@ -290,8 +290,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
       assertEquals(1, block.editor.item.record)
 
-      multipleBlockSaveForm.block.enter()
-      multipleBlockSaveForm.multipleBlock.enter()
+      multipleBlockSaveForm.block._enter()
+      multipleBlockSaveForm.multipleBlock._enter()
       multipleBlockSaveForm.multipleBlock.block.activeRecord = 0
       multipleBlockSaveForm.multipleBlock.address.edit("10,Rue Lac")
       multipleBlockSaveForm.saveBlock.triggerCommand()
@@ -382,7 +382,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     assertEquals(-1, salesBlockModel.model.activeRecord)
 
-    formExample.salesBlock.enter()
+    formExample.salesBlock._enter()
     assertEquals(0, salesBlockModel.model.activeRecord)
 
     formExample.salesBlock.editRecord(5)

@@ -27,8 +27,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.enter
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
@@ -78,11 +78,11 @@ class FormTriggersTests : GaliteVUITestBase() {
 
     form.block.age.edit(1)
 
-    form.secondBlock.enter()
+    form.secondBlock._enter()
     form.secondBlock.field.findField()
     form.secondBlock.field.edit(1)
 
-    form.block.enter()
+    form.block._enter()
 
     form.resetForm.triggerCommand()
     expectConfirmNotification(true)
