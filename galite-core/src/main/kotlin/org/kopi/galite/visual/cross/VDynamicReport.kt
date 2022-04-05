@@ -420,8 +420,6 @@ class VDynamicReport(block: VBlock) : VReport() {
     // actors are localized with VlibProperties.
   }
 
-  override fun add() {}
-
   override fun init() {}
 
   override fun initReport() {
