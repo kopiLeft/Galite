@@ -642,7 +642,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
           // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            editor.editItem(actualItems.single { it.record == record })
+            editor.editItem(actualItems.single { it.record == itemToBeEdited })
           }
         }
       }

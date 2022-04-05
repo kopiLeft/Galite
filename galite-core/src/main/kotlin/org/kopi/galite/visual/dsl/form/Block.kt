@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.dsl.form
 
 import java.awt.Point
+import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
@@ -726,6 +727,27 @@ open class Block(val title: String,
   }
 
   /**
+   * enter a new block
+   */
+  fun enter() {
+    block.enter()
+  }
+
+  /**
+   * exit block
+   * @exception VException      an exception may be raised by record.leave
+   */
+  fun leave(check: Boolean): Boolean = block.leave(check)
+
+  /**
+   * Validate current block.
+   * @exception VException      an exception may be raised by triggers
+   */
+  fun validate() {
+    block.validate()
+  }
+
+  /**
    * Returns true if the block has changed wrt the database.
    */
   val isChanged: Boolean
@@ -776,6 +798,24 @@ open class Block(val title: String,
    */
   open fun insertMode() {
     block.insertMode()
+  }
+
+  /**
+   * Saves changes in block to database.
+   * @exception VException      an exception may be raised by triggers
+   * @exception SQLException            an exception may be raised DB access
+   */
+  fun save() {
+    block.save()
+  }
+
+  /**
+   * Deletes in database
+   * @exception VException      an exception may be raised by triggers
+   * @exception SQLException    an exception may be raised DB access
+   */
+  fun delete() {
+    block.delete()
   }
 
   /**
