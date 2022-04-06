@@ -36,6 +36,7 @@ import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.ColumnResizeEvent
+import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant
@@ -116,43 +117,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    */
   override fun createFields() {
     super.createFields()
-    grid = object : Grid<GridBlockItem>() {
-      override fun createEditor(): Editor<GridBlockItem> {
-        return object : EditorImpl<GridBlockItem>(this, propertySet) {
-          private var itemToEdit: GridBlockItem? = null
-          private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
-
-          override fun closeEditor() {
-            if(!doNotCancelEditor) {
-              super.closeEditor()
-            }
-          }
-
-          override fun editItem(item: GridBlockItem) {
-            if (!inDetailMode()) {
-              updateEditors()
-              doEditItem(item)
-            }
-          }
-
-          // Workaround for https://github.com/vaadin/flow-components/issues/1997
-          fun doEditItem(item: GridBlockItem) {
-            itemToEdit = item
-
-            if (editItemRequest == null) {
-              editItemRequest = SerializableConsumer {
-                super.editItem(itemToEdit)
-                editItemRequest = null
-              }
-              grid.element.node.runWhenAttached { ui: UI ->
-                ui.internals.stateTree
-                  .beforeClientResponse(grid.element.node, editItemRequest)
-              }
-            }
-          }
-        }
-      }
-    }
+    grid = BlockGrid()
     editor = grid.editor
     grid.addSortListener(::sort)
     grid.setSelectionMode(Grid.SelectionMode.NONE)
@@ -230,7 +195,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   }
 
   private fun setHeightByRows(buffer: Int, rows: Int) {
-    if(buffer == rows) {
+    if (buffer == rows) {
       grid.isAllRowsVisible = true
     } else {
       grid.height = "calc(var(--_lumo-grid-border-width) + ${(rows + 1) * 24}px)"
@@ -434,7 +399,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   ) {
     if (event!!.isFromClient) {
       // Sort records
-      if(event.sortOrder.isNotEmpty()) {
+      if (event.sortOrder.isNotEmpty()) {
         sort(event.sortOrder)
       } else {
         sort(lastSortOrder!!)
@@ -479,7 +444,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * Notifies the data source that the content of the block has changed.
    */
   protected fun contentChanged() {
-    if(::grid.isInitialized) {
+    if (::grid.isInitialized) {
       access(currentUI) {
         grid.dataProvider.refreshAll()
         // correct grid width to add scroll bar width
@@ -513,10 +478,18 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
     grid.addItemClickListener {
       val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
+      val record = it.item.record
 
-      itemToBeEdited = it.item.record
+      if (gridEditorFieldToBeEdited.dGridEditorField.getModel().block?.isRecordAccessible(record) == true) {
+        itemToBeEdited = record
+        gridEditorFieldToBeEdited.dGridEditorField.onClick()
+      } else {
+        val itemToEdit = editor.item
 
-      gridEditorFieldToBeEdited.dGridEditorField.onClick()
+        if (itemToEdit != null) {
+          editor.editItem(itemToEdit)
+        }
+      }
     }
 
     for (i in 0 until model.getFieldCount()) {
@@ -533,15 +506,17 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
 
+          setAlignment(column, columnView.model.align)
+
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
-          if(field.isSortable()) {
+          if (field.isSortable()) {
             val comparator = DGridBlockItemSorter.DefaultComparator(model, field)
 
             column.setComparator(comparator)
 
-            if(label != null) {
+            if (label != null) {
               sortableHeaders[column] = label
             }
           }
@@ -552,9 +527,9 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                     else -> 8 * field.width + 12  // add padding TODO
                   }
 
-          column.width = if(field.hasAutofill()) {
+          column.width = if (field.hasAutofill()) {
             "" + (width + 18) + "px" // Add more width for the autofill button
-          }  else {
+          } else {
             "" + width + "px"
           }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
@@ -620,7 +595,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       val column = grid.getColumnByKey(model.getFieldIndex(f).toString())
 
       if (::grid.isInitialized && column != null) {
-        column.isVisible  = f.getAccess(rec) != VConstants.ACS_HIDDEN
+        column.isVisible = f.getAccess(rec) != VConstants.ACS_HIDDEN
       }
     }
   }
@@ -630,7 +605,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * @param row The row index
    */
   fun refreshRow(row: Int) {
-    if(::grid.isInitialized) {
+    if (::grid.isInitialized) {
       access(currentUI) {
         val itemToRefresh = grid.dataCommunicator.getItem(row)
 
@@ -652,13 +627,78 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                         || (itemToBeEdited != null
                         && editor.item.record != itemToBeEdited))
         ) {
-          if(itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
+          if (itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
             itemToBeEdited = 0
           }
 
           // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
             editor.editItem(getActualItems().single { it.record == record })
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Sets the alignment of a column in multi block.
+   * @param column The column.
+   * @param align The column alignment.
+   */
+  fun setAlignment(column: Grid.Column<GridBlockItem>, align: Int) {
+    column.textAlign =
+      when (align) {
+        VConstants.ALG_RIGHT -> ColumnTextAlign.END
+        VConstants.ALG_CENTER -> ColumnTextAlign.CENTER
+        else -> ColumnTextAlign.START
+      }
+  }
+
+  inner class BlockGrid : Grid<GridBlockItem>() {
+    override fun createEditor(): Editor<GridBlockItem> = BlockEditor()
+
+    // --------------------------------------------------
+    // GRID EDITOR
+    // --------------------------------------------------
+    inner class BlockEditor : EditorImpl<GridBlockItem>(this, propertySet) {
+      private var itemToEdit: GridBlockItem? = null
+      private var editItemRequest: SerializableConsumer<ExecutionContext>? = null
+
+      override fun getItem(): GridBlockItem? {
+        return itemToEdit
+      }
+
+      override fun cancel() {
+        itemToEdit = null
+        super.cancel()
+      }
+
+      override fun closeEditor() {
+        if (!doNotCancelEditor) {
+          itemToEdit = null
+          super.closeEditor()
+        }
+      }
+
+      override fun editItem(item: GridBlockItem) {
+        if (!inDetailMode()) {
+          updateEditors()
+          doEditItem(item)
+        }
+      }
+
+      // Workaround for https://github.com/vaadin/flow-components/issues/1997
+      fun doEditItem(item: GridBlockItem) {
+        itemToEdit = item
+
+        if (editItemRequest == null) {
+          editItemRequest = SerializableConsumer {
+            super.editItem(itemToEdit)
+            editItemRequest = null
+          }
+          grid.element.node.runWhenAttached { ui: UI ->
+            ui.internals.stateTree
+              .beforeClientResponse(grid.element.node, editItemRequest)
           }
         }
       }

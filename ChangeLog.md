@@ -1,3 +1,36 @@
+# 1.1.0
+## What's Changed
+* DateField Rework: Replace vaadin-date-picker-light with TextField by @hfazai in [#565](https://github.com/kopiLeft/Galite/pull/565)
+* DSL: Form, chart and report models are not built lazily anymore. This allows calling DSL APIs in all scopes by @hfazai in [#548](https://github.com/kopiLeft/Galite/pull/548)
+* Feature: Add the feature of opening programmatically an URL from a window by @hfazai in [#563](https://github.com/kopiLeft/Galite/pull/563)
+* DSL: Adding more APIs to Actor and Command DSL by @hfazai in [#569](https://github.com/kopiLeft/Galite/pull/569)
+* Remove Timestamp in favor to java Instant by @hfazai in [#566](https://github.com/kopiLeft/Galite/pull/566)
+* VaadinUI/Multiblock: Do not close editor when trying to edit inaccessible records by @hfazai in [#574](https://github.com/kopiLeft/Galite/pull/574)
+* Adding test for form and report localization by @h-haddad in [#570](https://github.com/kopiLeft/Galite/pull/570)
+* UI/Firefox: Remove space between page menu and form block by @hfazaiby @hfazai in [#571](https://github.com/kopiLeft/Galite/pull/571)
+* Adding galite-domain module by @hfazai
+* DSL: Add more APIs to FormField, ReportField, Window and Report by @hfazai
+* Refactoring of the code publishing releases to maven by @hfazai
+* Stop passing DBConnection between forms as Exposed handles Connections by @hfazai
+* Cleanup deprecations and fix kdoc comments by @hfazai
+* Entering an invalid date should throw VFieldException by @hfazai
+* Implement Month and Week operators by @hfazai
+* DSL: Adding a method to get report row value at a specific column by @hfazai
+
+**Full Changelog**: [1.0.1 ... 1.1.0](https://github.com/kopiLeft/Galite/compare/1.0.1...1.1.0)
+
+# 1.0.1
+## What's Changed
+* Adding the feature of setting custom colors to the user interface by @hfazai
+* Gradle: Add exposed-jdbc dependency to galite-core by @hfazai
+* Code cleaning and removing unused code by @hfazai
+* Add ability to change CSS colors via variables from Vapplication by @h-haddad in [#560](https://github.com/kopiLeft/Galite/pull/560)
+* Set default align to right for numeric fields in multi block by @h-haddad in [#561](https://github.com/kopiLeft/Galite/pull/561)
+* VaadinUI: Use setTimeout to set date field value only after the element is attached by @hfazai in [#562](https://github.com/kopiLeft/Galite/pull/562)
+
+**Full Changelog**: [1.0.0 ... 1.0.1](https://github.com/kopiLeft/Galite/compare/1.0.0...1.0.1)
+
+# 1.0.0
 ## What's Changed
 * Domain: Move min, max properties from Field to Domain by @hfazai
 * Remove useless DBContextHandler as Connection is fully handled by Exposed by @hfazai

@@ -42,8 +42,8 @@ import com.vaadin.flow.component.grid.Grid
 
 class ReportTests: GaliteVUITestBase() {
 
-  private val formWithReport = FormWithReport().also { it.model } // initialize the model
-  private val simpleReport = SimpleReport().also { it.model }
+  private val formWithReport = FormWithReport()
+  private val simpleReport = SimpleReport()
   private val mainWindow get() = _get<MainWindow>()
   private val windowCaption get() =
     mainWindow

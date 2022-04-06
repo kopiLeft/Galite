@@ -27,6 +27,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.expectInformationNotification
+import org.kopi.galite.testing.findModel
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.DocumentationForm
@@ -38,7 +39,7 @@ import com.github.mvysny.kaributesting.v10._find
 import com.vaadin.flow.component.tabs.Tab
 
 class DocumentationFormTests : GaliteVUITestBase() {
-  val form = DocumentationForm().also { it.model }
+  val form = DocumentationForm()
 
   @Before
   fun `login to the App`() {
@@ -51,13 +52,13 @@ class DocumentationFormTests : GaliteVUITestBase() {
   @Test
   fun `test INIT form trigger`() {
     // check that INIT form trigger change the value of the field initTriggerForm
-    assertEquals("INIT Trigger", form.formTriggers.initTriggerForm.value)
+    assertEquals("INIT Trigger", form.formTriggers.initTriggerForm.findModel().getString())
   }
 
   @Test
   fun `test PREFORM form trigger`() {
     // check that PREFORM form trigger change the value of the field initTriggerForm
-    assertEquals("PREFORM Trigger", form.formTriggers.preFormTriggerForm.value)
+    assertEquals("PREFORM Trigger", form.formTriggers.preFormTriggerForm.findModel().getString())
   }
 
   @Test
@@ -81,8 +82,8 @@ class DocumentationFormTests : GaliteVUITestBase() {
     form.resetForm.triggerCommand()
     expectConfirmNotification(true)
     // check that RESETFORM prevent the resent of the form and don't clear the fields
-    assertEquals("INIT Trigger", form.formTriggers.initTriggerForm.value)
-    assertEquals("PREFORM Trigger", form.formTriggers.preFormTriggerForm.value)
+    assertEquals("INIT Trigger", form.formTriggers.initTriggerForm.findModel().getString())
+    assertEquals("PREFORM Trigger", form.formTriggers.preFormTriggerForm.findModel().getString())
   }
 
     @Test

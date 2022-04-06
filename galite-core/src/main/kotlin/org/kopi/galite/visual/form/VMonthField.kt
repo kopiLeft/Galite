@@ -18,14 +18,11 @@
 
 package org.kopi.galite.visual.form
 
-import java.time.LocalDate
 import java.util.Calendar
 import java.util.GregorianCalendar
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VMonthColumn
 import org.kopi.galite.visual.type.Month
@@ -164,21 +161,6 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    result       the result row
-   * @param    column       the column in the tuple
-   */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val tmp = result[column] as? Int
-
-    if (tmp == null) {
-      return null
-    }
-
-    return Month(tmp / 100, tmp % 100)
-  }
-
-  /**
    * Is the field value of given record null ?
    */
   override fun isNullImpl(r: Int): Boolean = value[r] == null
@@ -247,7 +229,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): LocalDate? = if(value[r] == null) null else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): Int? = value[r]?.toSql()
 
   /**
    * Copies the value of a record to another

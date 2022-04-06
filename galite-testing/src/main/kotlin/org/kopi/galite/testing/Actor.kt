@@ -17,7 +17,11 @@
 package org.kopi.galite.testing
 
 import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.ui.vaadin.actor.VActorNavigationItem
+import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
+import org.kopi.galite.visual.ui.vaadin.menu.VActorsRootNavigationItem
 import org.kopi.galite.visual.ui.vaadin.visual.DActor
 import org.kopi.galite.visual.ui.vaadin.window.VActorPanel
 
@@ -41,17 +45,43 @@ fun Actor.triggerCommand(duration: Long = 300) {
 }
 
 /**
- * Finds the actor's component command.
+ * Finds and returns the actor's component.
  *
  * @receiver the actor to find.
  */
 fun Actor.findActor(): DActor {
   val mainWindow = _get<MainWindow>()
   val actors = mainWindow
-    ._get<VActorPanel> {  }
-    ._find<DActor> {  }
+    ._get<VActorPanel>()
+    ._find<DActor>()
 
   return actors.single {
     it.getModel() == this.model
   }
+}
+
+/**
+ * Finds and returns the navigation item of this actor.
+ */
+fun Actor.getNavigationItem(duration: Long = 200): VActorNavigationItem {
+  val actorsNavigationPanel = _find<VActorsNavigationPanel>().singleOrNull() ?: openActorsNavigationPanel(duration)
+  val navigationItems = actorsNavigationPanel._find<VActorNavigationItem>()
+
+  return navigationItems.single {
+    it.getCaption() == this.label
+            && it.menu == this.menu.label
+            && it._icon == Utils.getVaadinIcon(this.icon?.iconName)
+  }
+}
+
+/**
+ * Finds, opens and returns the actors' navigation panel.
+ */
+fun openActorsNavigationPanel(duration: Long = 200): VActorsNavigationPanel {
+  val mainWindow = _get<MainWindow>()
+  val actorsRootNavigationItem = mainWindow._get<VActorsRootNavigationItem>()
+
+  actorsRootNavigationItem._clickAndWait(duration)
+
+  return _get<VActorsNavigationPanel>()
 }

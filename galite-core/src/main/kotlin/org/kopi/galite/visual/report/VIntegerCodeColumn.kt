@@ -18,86 +18,44 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.util.base.InconsistencyException
-
-class VIntegerCodeColumn : VCodeColumn {
+/**
+ * Represents a report column description
+ *
+ * @param     ident           The column identifier
+ * @param     options         The column options as bitmap
+ * @param     align           The column alignment
+ * @param     groups          The index of the column grouped by this one or -1
+ * @param     function        An (optional) summation function
+ * @param     width           The width of the cells
+ * @param     format          The format of the cells
+ * @param     names           The names of the cells
+ * @param     codes           The codes of the cells, represents an array of internal representations
+ */
+class VIntegerCodeColumn(ident: String?,
+                         type: String?,
+                         source: String?,
+                         options: Int,
+                         align: Int,
+                         groups: Int,
+                         function: VCalculateColumn?,
+                         width: Int,
+                         format: VCellFormat?,
+                         names: Array<String>,
+                         private var codes: IntArray)
+           : VCodeColumn(ident,
+                         type,
+                         source,
+                         options,
+                         align,
+                         groups,
+                         function,
+                         width,
+                         format,
+                         names) {
 
   private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
-  private lateinit var codes: IntArray // array of internal representations
 
-  /**
-   * Constructs a report column description (!!!! TO BE REMOVED)
-   *
-   * @param     ident           The column identifier
-   * @param     options         The column options as bitmap
-   * @param     align           The column alignment
-   * @param     groups          The index of the column grouped by this one or -1
-   * @param     function        An (optional) summation function
-   * @param     width           The width of the cells
-   * @param     format          The format of the cells
-   * @param     names           The names of the cells
-   * @param     codes           The codes of the cells
-   */
-  constructor(ident: String?,
-              type: String?,
-              source: String?,
-              options: Int,
-              align: Int,
-              groups: Int,
-              function: VCalculateColumn?,
-              width: Int,
-              format: VCellFormat?,
-              names: Array<String>,
-              codes: Array<Int?>)
-          : super(ident,
-                  type,
-                  source,
-                  options,
-                  align,
-                  groups,
-                  function,
-                  width,
-                  format,
-                  names) {
-    this.codes = IntArray(codes.size)
-    throw InconsistencyException()
-  }
-
-  /**
-   * Constructs a report column description
-   *
-   * @param     ident           The column identifier
-   * @param     options         The column options as bitmap
-   * @param     align           The column alignment
-   * @param     groups          The index of the column grouped by this one or -1
-   * @param     function        An (optional) summation function
-   * @param     width           The width of the cells
-   * @param     format          The format of the cells
-   * @param     names           The names of the cells
-   * @param     codes           The codes of the cells
-   */
-  constructor(ident: String?,
-              type: String?,
-              source: String?,
-              options: Int,
-              align: Int,
-              groups: Int,
-              function: VCalculateColumn?,
-              width: Int,
-              format: VCellFormat?,
-              names: Array<String>,
-              codes: IntArray)
-          : super(ident,
-                  type,
-                  source,
-                  options,
-                  align,
-                  groups,
-                  function,
-                  width,
-                  format,
-                  names) {
-    this.codes = codes
+  init {
     fastIndex = codes[0]
     for (i in 1 until codes.size) {
       if (codes[i] != fastIndex + i) {

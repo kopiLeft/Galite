@@ -40,10 +40,11 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 /**
  * Creates a window
  *
+ * @param source The localization source of this window.
  * @param dBConnection The database connection for this object.
- * if if is specified, it will create a window with a connection
+ * if is specified, it will create a window with a connection
  */
-abstract class VWindow(override var dBConnection: Connection? = ApplicationContext.getDBConnection())
+abstract class VWindow(var source: String? = null, val dBConnection: Connection? = ApplicationContext.getDBConnection())
   : DBContextHandler, Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -52,14 +53,17 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
   private var display: UWindow? = null
-  open var actors: Array<VActor?> = arrayOf()
+  val commands = mutableListOf<VCommand>() // commands
+  val actors = mutableListOf<VActor>() // Actors
   protected var windowTitle: String? = null
   var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
-  open val source: String? = null // The localization source of this window.
   open val locale: Locale? = null
+
+  // localize the form using the default locale
+  protected val manager = getLocalizationManger()
 
   init {
     f12 = VActor("File",
@@ -83,13 +87,6 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
    * @exception        VException        an exception may be raised by triggers
    */
   fun doModal(frame: Frame): Boolean = WindowController.windowController.doModal(this)
-
-  /**
-   * doModal
-   * modal call to this form
-   * @exception        VException        an exception may be raised by triggers
-   */
-  fun doModal(f: VWindow): Boolean = WindowController.windowController.doModal(this)
 
   /**
    * doModal
@@ -263,13 +260,23 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   }
 
   /**
+   * add actor in menu
+   */
+  fun addActor(actorDef: VActor) {
+    addActors(arrayOf(actorDef))
+  }
+
+  /**
    * add actors in menu
    */
   open fun addActors(actorDefs: Array<VActor>?) {
-    actors += actorDefs.orEmpty()
+    val actorDefs = actorDefs.orEmpty()
+
+    actors.addAll(actorDefs)
+    localizeActors(*actorDefs)
   }
 
-  open fun getActor(at: Int): VActor = actors[at + 1]!! // "+1" because of the f12-Actor
+  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
 
   /**
    * Enables/disables the actor.
@@ -282,15 +289,18 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+  protected open fun getLocalizationManger(): LocalizationManager =
+    LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
+
   /**
    * Localizes the actors of this window
    *
-   * @param     manager         the manger to use for localization
+   * @param     actors         the actors to localize
    */
-  fun localizeActors(manager: LocalizationManager) {
+  open fun localizeActors(vararg actors: VActor) {
     actors.forEach {
-      if(ApplicationContext.getDefaultLocale() != locale || !it!!.userActor) {
-        it!!.localize(manager)
+      if(ApplicationContext.getDefaultLocale() != locale || !it.userActor) {
+        it.localize(manager)
       }
     }
   }
@@ -338,6 +348,16 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
    */
   fun setInformationText(text: String?) {
     display?.setInformationText(text)
+  }
+
+  /**
+   * Open an URL in the navigator.
+   * @param url The URL to navigate to.
+   */
+  open fun openURL(url: String) {
+    if (display != null) {
+      display!!.openURL(url)
+    }
   }
 
   /**
@@ -478,11 +498,6 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   override fun retryProtected(): Boolean = ask(MessageCode.getMessage("VIS-00039"))
 
   /**
-   * return whether this object handle a transaction at this time
-   */
-  override fun inTransaction(): Boolean = TransactionManager.currentOrNull() != null
-
-  /**
    * Returns the current user name
    */
   open fun getUserName(): String? = dBConnection!!.userName
@@ -504,7 +519,7 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
    * @param     param2 the second message parameter
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, param1: Any?, param2: Any? = null): String? =
+  internal fun formatMessage(ident: String, param1: Any?, param2: Any? = null): String? =
           formatMessage(ident, arrayOf(param1, param2))
 
   /**
@@ -514,7 +529,7 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
    * @param     params the message parameters
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, params: Array<Any?>): String? {
+  internal fun formatMessage(ident: String, params: Array<Any?>): String? {
     return if (source != null) {
       Message.getMessage(source!!, ident, params)
     } else {
@@ -623,6 +638,12 @@ abstract class VWindow(override var dBConnection: Connection? = ApplicationConte
   }
 
   companion object {
+
+    /**
+     * return whether a transaction is handled at this time
+     */
+    fun inTransaction(): Boolean = TransactionManager.currentOrNull() != null
+
     // ----------------------------------------------------------------------
     // DEBUGGING
     // ----------------------------------------------------------------------

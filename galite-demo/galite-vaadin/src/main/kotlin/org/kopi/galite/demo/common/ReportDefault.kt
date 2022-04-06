@@ -17,95 +17,115 @@
  */
 package org.kopi.galite.demo.common
 
+import java.util.Locale
+
 import org.kopi.galite.visual.dsl.common.Actor
-import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
 
-interface IReportDefault {
-  // -------------------------------------------------------------------
-  // MENUS
-  // -------------------------------------------------------------------
-  val file: Menu
-  val edit: Menu
-  val action: Menu
+open class ReportDefault(title: String, help: String?, locale: Locale? = null) : Report(title, help, locale) {
 
-  // -------------------------------------------------------------------
-  // ACTORS
-  // -------------------------------------------------------------------
-  val csv: Actor
-  val xls: Actor
-  val xlsx: Actor
-  val pdf: Actor
-  val cmdCSV: Command
-  val cmdPDF: Command
-  val cmdXLS: Command
-  val cmdXLSX: Command
-}
+  constructor(title: String, locale: Locale? = null) : this(title, null, locale)
 
-open class ReportDefaultImpl : IReportDefault, Report("") {
+  fun reportCommands() {
+    quitCmd
+    cmdCSV
+    cmdPDF
+    cmdXLS
+    cmdXLSX
+  }
 
   // --------------------MENUS-----------------
-  final override val file = menu("File")
-  final override val edit = menu("Edit")
-  final override val action = menu("Action")
+  val file by lazy { FileMenu() }
+  val edit by lazy { EditMenu() }
+  val action by lazy { ActionMenu() }
 
   // --------------------Actors-----------------
-  override val csv = actor(
-    menu = action,
-    label = "CSV",
-    help = "CSV Format",
-  ) {
-    key = Key.F8
-    icon = Icon.EXPORT_CSV
+  val quit  by lazy {
+    actor(QuitActor())
   }
 
-  override val xls = actor(
-    menu = action,
-    label = "XLS",
-    help = "Excel (XLS) Format",
-  ) {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT_XLSX
+  val csv  by lazy {
+    actor(CSVActor())
   }
 
-  override val xlsx = actor(
-    menu = action,
-    label = "XLSX",
-    help = "Excel (XLSX) Format",
-  ) {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT
+  val xls  by lazy {
+    actor(XLSActor())
   }
 
-  override val pdf = actor(
-    menu = action,
-    label = "PDF",
-    help = "PDF Format",
-  ) {
-    key = Key.F9
-    icon = Icon.EXPORT_PDF
+  val xlsx  by lazy {
+    actor(XLSXActor())
+  }
+
+  val pdf  by lazy {
+    actor(PDFActor())
   }
 
   // -------------------------------------------------------------------
   // REPORT COMMANDS
   // -------------------------------------------------------------------
-  override val cmdCSV = command(item = csv) {
-    model.export(VReport.TYP_CSV)
+  val quitCmd  by lazy {
+    command(item = quit) {
+      model.close()
+    }
   }
 
-  override val cmdPDF = command(item = pdf) {
-    model.export(VReport.TYP_PDF)
+  val cmdCSV  by lazy {
+    command(item = csv) {
+      model.export(VReport.TYP_CSV)
+    }
   }
 
-  override val cmdXLS = command(item = xls) {
-    model.export(VReport.TYP_XLS)
+  val cmdPDF  by lazy {
+    command(item = pdf) {
+      model.export(VReport.TYP_PDF)
+    }
   }
 
-  override val cmdXLSX = command(item = xlsx) {
-    model.export(VReport.TYP_XLSX)
+  val cmdXLS  by lazy {
+    command(item = xls) {
+      model.export(VReport.TYP_XLS)
+    }
+  }
+
+  val cmdXLSX  by lazy {
+    command(item = xlsx) {
+      model.export(VReport.TYP_XLSX)
+    }
+  }
+}
+
+private class CSVActor: Actor(
+  menu = ActionMenu(),
+  label = "CSV",
+  help = "CSV Format",
+) {
+  init {
+    key = Key.F8
+    icon = Icon.EXPORT_CSV
+  }
+}
+
+class XLSActor: Actor(
+  menu = ActionMenu(),
+  label = "XLS",
+  help = "Excel (XLS) Format",
+) {
+  init {
+    key = Key.SHIFT_F8
+    icon = Icon.EXPORT_XLSX
+  }
+}
+
+class XLSXActor: Actor(
+  menu = ActionMenu(),
+  label = "XLSX",
+  help = "Excel (XLSX) Format",
+) {
+  init {
+    key = Key.SHIFT_F8
+    icon = Icon.EXPORT
   }
 }

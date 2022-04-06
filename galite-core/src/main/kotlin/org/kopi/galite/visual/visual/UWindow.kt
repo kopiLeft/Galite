@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual.visual
 
+import java.lang.Exception
+
 import org.kopi.galite.visual.base.UComponent
 
 /**
@@ -85,4 +87,11 @@ interface UWindow : UComponent, VActionListener, ModelCloseListener, WaitDialogL
    * @see VActionListener.performAsyncAction
    */
   fun performBasicAction(action: Action)
+
+  /**
+   * Open an URL in the navigator.
+   * @param url The URL to navigate to.
+   */
+  @Throws(Exception::class)
+  fun openURL(url: String)
 }

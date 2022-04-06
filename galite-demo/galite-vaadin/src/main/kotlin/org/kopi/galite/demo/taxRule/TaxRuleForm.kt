@@ -18,8 +18,7 @@ package org.kopi.galite.demo.taxRule
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.TaxRule
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.BOOL
@@ -31,10 +30,9 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.form.Commands
 
-class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class TaxRuleForm : FormDefault(title = "TaxRules", locale = Locale.UK) {
   val page = page("TaxRule")
 
   init {
@@ -44,7 +42,7 @@ class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK),
 
   val list = actor(
           menu = action,
-          label = "list",
+          label = "List",
           help = "Display List",
   ) {
     key = Key.F1
@@ -120,5 +118,5 @@ class TaxRuleForm : ReportSelectionForm(title = "TaxRules", locale = Locale.UK),
 }
 
 fun main() {
-  runForm(formName = TaxRuleForm())
+  runForm(form = TaxRuleForm::class)
 }

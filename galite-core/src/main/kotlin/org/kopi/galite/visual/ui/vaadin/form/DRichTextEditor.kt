@@ -26,8 +26,8 @@ import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
 
 /**
-* Rich text editor implementation based on CK editor for vaadin.
-*/
+ * Rich text editor implementation based on CK editor for vaadin.
+ */
 class DRichTextEditor(
         model: VFieldUI,
         label: DLabel?,
@@ -62,6 +62,7 @@ class DRichTextEditor(
     //editor.addNavigationListener(this) TODO
     //setContent(editor) TODO
   }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------

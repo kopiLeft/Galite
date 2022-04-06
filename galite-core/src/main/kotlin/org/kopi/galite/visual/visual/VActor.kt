@@ -36,11 +36,11 @@ import org.kopi.galite.visual.l10n.LocalizationManager
  */
 open class VActor(var menuIdent: String,
                   private val menuSource: String?,
-                  val actorIdent: String,
+                  var actorIdent: String,
                   private val actorSource: String?,
                   var iconName: String?,
-                  val acceleratorKey: Int,
-                  val acceleratorModifier: Int,
+                  var acceleratorKey: Int,
+                  var acceleratorModifier: Int,
                   val userActor: Boolean = false) : VModel {
 
   // --------------------------------------------------------------------
@@ -70,7 +70,7 @@ open class VActor(var menuIdent: String,
   // ACTIONS HANDLING
   // ----------------------------------------------------------------------
   fun performAction() {
-    handler!!.performAction(object : Action("$menuItem in $menuName") {
+    handler!!.performAsyncAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
         action?.let { it() }
@@ -88,7 +88,7 @@ open class VActor(var menuIdent: String,
        */
       override fun isCancellable(): Boolean =
               !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
-    }, false)
+    })
   }
 
   fun performBasicAction() {

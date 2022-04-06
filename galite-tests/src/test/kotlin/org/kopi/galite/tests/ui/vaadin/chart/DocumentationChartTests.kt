@@ -37,8 +37,8 @@ import org.kopi.galite.visual.ui.vaadin.chart.DAbstractChartType
 import com.github.mvysny.kaributesting.v10._expectOne
 
 class DocumentationChartTests : GaliteVUITestBase() {
-  val simpleChartForm = DocumentationChart().also { it.model }
-  val chart = DocumentationChartC().also { it.model }
+  val simpleChartForm = DocumentationChart()
+  val chart = DocumentationChartC()
 
   @Before
   fun `login to the App`() {

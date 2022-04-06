@@ -19,7 +19,7 @@ package org.kopi.galite.visual.dsl.field
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.WindowElement
+import org.kopi.galite.visual.dsl.common.LocalizableElement
 
 /**
  * A field represents a visual component that can hold values
@@ -28,7 +28,7 @@ import org.kopi.galite.visual.dsl.common.WindowElement
  *
  * @param domain the field's domain
  */
-abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): WindowElement(ident) {
+abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): LocalizableElement(ident) {
   /** Field's label (text on the left) */
   var label: String? = null
 
@@ -37,18 +37,6 @@ abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): Wind
 
   /** true if the field is hidden, false otherwise */
   open var hidden: Boolean? = false
-
-  /**
-   * Checks if the value passed to the field doesn't exceed the length of the field's domain
-   *
-   * @param value passed value
-   * @return true if the domain is not defined or the value's length doesn't exceed the domain size,
-   * and returns false otherwise.
-   */
-  fun checkLength(value: T): Boolean = when (domain.width) {
-    null -> true
-    else -> value.toString().length <= domain.width!!
-  }
 
   /**
    * Generates localization for this field

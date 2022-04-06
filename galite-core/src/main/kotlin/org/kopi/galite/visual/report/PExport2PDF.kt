@@ -95,19 +95,18 @@ class PExport2PDF(
   override fun export(out: OutputStream) {
     try {
       val paper: PPaperType = PPaperType.getPaperTypeFromCode(printConfig.papertype)
-      val paperSize: Rectangle
-
-      paperSize = if (printConfig.paperlayout == "Landscape") {
+      val paperSize = if (printConfig.paperlayout == "Landscape") {
         Rectangle(paper.height.toFloat(), paper.width.toFloat())
       } else {
         Rectangle(paper.width.toFloat(), paper.height.toFloat())
       }
+
       firstPage = true
       val head = createHeader()
       val firstPageHead = createFirstPageHeader()
       val foot = createFooter(0, 0)
 
-      if (firstPageHeader != null && firstPageHeader != "") {
+      if (firstPageHeader.isNotEmpty()) {
         firstPageHead.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin
       }
       head.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin

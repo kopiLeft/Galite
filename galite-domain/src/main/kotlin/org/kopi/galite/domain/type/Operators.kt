@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.type
+package org.kopi.galite.domain.type
 
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -30,51 +30,4 @@ infix fun BigDecimal.ushr(count: Int): BigDecimal {
 
 infix fun BigDecimal.shl(count: Int): BigDecimal {
   return setScale(count, RoundingMode.UP)
-}
-
-fun BigDecimal.format(): String {
-  val str = this.toString()
-  var pos = 0
-  var dot: Int
-
-  return buildString {
-    // has minus sign ?
-    if (str[0] == '-') {
-      append('-')
-      pos = 1
-    }
-
-    // get number of digits in front of the dot
-    if (str.indexOf('.').also { dot = it } == -1) {
-      if (str.indexOf(' ').also { dot = it } == -1) {        // FRACTION DOT IS SPACE
-        dot = str.length
-      }
-    }
-    if (dot - pos <= 3) {
-      append(str.substring(pos, dot))
-      pos = dot
-    } else {
-      when ((dot - pos) % 3) {
-        1 -> {
-          append(str.substring(pos, pos + 1))
-          pos += 1
-        }
-        2 -> {
-          append(str.substring(pos, pos + 2))
-          pos += 2
-        }
-        0 -> {
-          append(str.substring(pos, pos + 3))
-          pos += 3
-        }
-      }
-      do {
-        append(".").append(str.substring(pos, pos + 3))
-        pos += 3
-      } while (dot - pos > 0)
-    }
-    if (str.length > pos) {
-      append(",").append(str.substring(pos + 1))
-    }
-  }
 }

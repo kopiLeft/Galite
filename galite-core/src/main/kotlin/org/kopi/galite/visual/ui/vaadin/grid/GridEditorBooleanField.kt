@@ -73,7 +73,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     }
 
     content.element.addEventListener("mouseout") {
-      if(value == null) {
+      if (value == null) {
         isVisible = false
       }
     }
@@ -95,7 +95,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
    * @param focus The field focus
    */
   fun setFocus(focus: Boolean) {
-    if(focus) {
+    if (focus) {
       focus()
     } else {
       blur()

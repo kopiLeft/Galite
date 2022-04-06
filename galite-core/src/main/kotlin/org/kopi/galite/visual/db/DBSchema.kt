@@ -137,7 +137,9 @@ object Dummy : Table("DUMMY") {
 
 val FAVORITENId = Sequence("FAVORITENId")
 
-val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
-                            Favorites, Users, Groups, References, Dummy)
+val list_Of_Tables = listOf(
+  Modules, UserRights, GroupRights, GroupParties, Symbols,
+  Favorites, Users, Groups, References, Dummy
+)
 
 val sequencesList = listOf(FAVORITENId)

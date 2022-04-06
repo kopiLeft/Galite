@@ -24,7 +24,7 @@ import java.util.Date
  * Server side implementation of a month editor field.
  * Month field are fixed width field. Its width is 7
  */
-class GridEditorMonthField: GridEditorTextField(7) {
+class GridEditorMonthField : GridEditorTextField(7) {
 
   override fun check(text: String): Boolean {
     for (element in text) {

@@ -50,7 +50,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
     wrappedField.setWidthFull()
     wrappedField.maxLength = width
     wrappedField.addValueChangeListener {
-      if(!check(it.value.orEmpty())) {
+      if (!check(it.value.orEmpty())) {
         value = it.oldValue
       }
       setModelValue(value, it.isFromClient)
@@ -90,7 +90,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
    * Sets this field to be an auto fill field
    */
   fun setAutofill() {
-    val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
+    val autofillIcon = IronIcons.ARROW_DROP_DOWN.create()
     autofillIcon!!.style["cursor"] = "pointer" // TODO: move to css
     autofillIcon.addClickListener {
       dGridEditorField.onAutofill()
@@ -116,7 +116,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
    * @param blink The blink state.
    */
   override fun setBlink(blink: Boolean) {
-    if(className != null) {
+    if (className != null) {
       if (blink) {
         element.classList.add("$className-blink")
       } else {
@@ -216,7 +216,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
       }*/
 
       // first sends the text value to model if changed
-      if(oldValue != eagerValue) {
+      if (oldValue != eagerValue) {
         // Synchronize with server side
         wrappedField.value = eagerValue
         dGridEditorField.valueChanged(oldValue)

@@ -18,7 +18,11 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Timestamp
+import java.time.Instant
+import java.time.LocalDateTime
+
+import org.kopi.galite.visual.type.format
+import org.kopi.galite.visual.util.base.InconsistencyException
 
 /**
  * Represents a report column description
@@ -34,7 +38,6 @@ class VTimestampColumn(ident: String?,
                        align: Int,
                        groups: Int,
                        function: VCalculateColumn?,
-                       width: Int,
                        format: VCellFormat?)
        : VReportColumn(ident,
                        options,
@@ -43,7 +46,7 @@ class VTimestampColumn(ident: String?,
                        function,
                        10 + 1 + 8,  // width, default timestamp format (date + space + time)
                        1,
-                       format) {
+                       format ?: VTimestampFormat()) {
   /**
    * Compares two objects.
    *
@@ -54,7 +57,7 @@ class VTimestampColumn(ident: String?,
    * 0 if the two operands are equal
    */
   override fun compareTo(object1: Any, object2: Any): Int {
-    return (object1 as Timestamp).compareTo(object2 as Timestamp)
+    return (object1 as Instant).compareTo(object2 as Instant)
   }
 
   /**
@@ -64,5 +67,19 @@ class VTimestampColumn(ident: String?,
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatTimestampColumn(this, index)
+  }
+
+  /**
+   * Default timestamp formatter.
+   */
+  private class VTimestampFormat : VCellFormat() {
+
+    override fun format(value: Any?): String =
+      when(value) {
+        null -> ""
+        is Instant -> value.format()
+        is LocalDateTime -> value.format()
+        else -> throw InconsistencyException("bad type for $value")
+      }
   }
 }

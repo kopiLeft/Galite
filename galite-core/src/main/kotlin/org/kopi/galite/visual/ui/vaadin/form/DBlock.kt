@@ -64,6 +64,7 @@ open class DBlock(val parent: DForm,
   protected val displayToSortedRec: IntArray
   protected var sortedToprec = 0 // first record displayed
   protected var currentUI: UI? = null
+
   /**
    * Some browsers fires extra scroll event with wrong scroll position
    * when a chart block field is clicked. This flag is used to prevent
@@ -289,10 +290,12 @@ open class DBlock(val parent: DForm,
 
   fun addRecordPositionPanel(form: Form) {
     if (model.isMulti() && model.noChart()) {
-      Shortcuts.addShortcutListener(this,
-                                    { _ -> form.showBlockInfo() },
-                                    Key.KEY_I,
-                                    KeyModifier.of("Alt"))
+      Shortcuts.addShortcutListener(
+        this,
+        { _ -> form.showBlockInfo() },
+        Key.KEY_I,
+        KeyModifier.of("Alt")
+      )
     }
   }
 

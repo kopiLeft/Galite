@@ -17,6 +17,7 @@
 package org.kopi.galite.testing
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -24,7 +25,6 @@ import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
 import org.kopi.galite.visual.ui.vaadin.field.DatePickerLight
@@ -84,7 +84,7 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
 
   when (gridEditorField) {
     is GridEditorTimestampField -> {
-      gridEditorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
+      gridEditorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     is GridEditorTimeField -> {
       gridEditorField._value = (value as LocalTime).format()
@@ -119,7 +119,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
 
   when {
     (editorField as? TextField)?.getContent() is VTimeStampField -> {
-      editorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
+      editorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     editorField is BooleanField -> {
       val checkbox: Checkbox  = if (value == true) {

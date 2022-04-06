@@ -18,17 +18,15 @@ package org.kopi.galite.demo.provider
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefaultImpl
-import org.kopi.galite.demo.common.IFormDefault
+import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class ProviderForm : ReportSelectionForm(title = "Providers", locale = Locale.UK), IFormDefault by FormDefaultImpl() {
+class ProviderForm : FormDefault(title = "Providers", locale = Locale.UK) {
   val page = page("Provider")
 
   init {
@@ -86,5 +84,5 @@ class BlockProvider : Block("Providers", 1, 1) {
 }
 
 fun main() {
-  runForm(formName = ProviderForm())
+  runForm(form = ProviderForm::class)
 }

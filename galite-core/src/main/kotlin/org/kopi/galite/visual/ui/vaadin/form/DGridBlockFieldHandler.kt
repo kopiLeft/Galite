@@ -43,7 +43,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
   }
 
   override fun leave() {
-    if (blockView .model.isChart() && blockView.inDetailMode()) {
+    if (blockView.model.isChart() && blockView.inDetailMode()) {
       super.leave()
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?

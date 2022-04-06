@@ -20,7 +20,6 @@ package org.kopi.galite.visual.cross
 import java.awt.event.KeyEvent
 import java.math.BigDecimal
 import java.sql.SQLException
-import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
@@ -83,7 +82,6 @@ class VDynamicReport(block: VBlock) : VReport() {
 
   init {
     printOptions = PConfig()
-    dBConnection = block.dBConnection
     this.block = block
     fields = initFields(block.fields)
     columns = arrayOfNulls(fields.size)
@@ -127,7 +125,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * @param     fields  block fields.
    * @return fields that will represent columns in the dynamic report.
    */
-  private fun initFields(fields: Array<VField>): Array<VField> {
+  private fun initFields(fields: List<VField>): Array<VField> {
     val processedFields = mutableListOf<VField>()
 
     fields.forEach { field ->
@@ -180,7 +178,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                         field.align,
                                         getColumnGroups(field),
                                         null,
-                                        1,
                                         null)
         is VDateField ->
           columns[col] = VDateColumn(null,
@@ -197,7 +194,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                         getColumnGroups(field),
                                         null,
                                         field.width,
-                                        (field as VDecimalField).getScale(0),
+                                        field.getScale(0),
                                         null)
         is VIntegerField ->
           // hidden field ID of the block will represent the last column in the report.
@@ -231,7 +228,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                       field.align,
                                       getColumnGroups(field),
                                       null,
-                                      field.width,
                                       null)
         is VTimeField ->
           columns[col] = VTimeColumn(null,
@@ -239,7 +235,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                      field.align,
                                      getColumnGroups(field),
                                      null,
-                                     field.width,
                                      null)
         is VTimestampField ->
           columns[col] = VTimestampColumn(null,
@@ -247,7 +242,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                           field.align,
                                           getColumnGroups(field),
                                           null,
-                                          field.width,
                                           null)
         is VWeekField ->
           columns[col] = VWeekColumn(field.name,
@@ -255,7 +249,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                      field.align,
                                      getColumnGroups(field),
                                      null,
-                                     field.width,
                                      null)
         is VStringCodeField ->
           columns[col] = VStringCodeColumn(null,
@@ -318,7 +311,7 @@ class VDynamicReport(block: VBlock) : VReport() {
       }
       col++
     }
-    model.columns = columns
+    model.columns = columns.toMutableList()
     if (block.isMulti() && isFetched) {
       for (i in 0 until block.bufferSize) {
         if (block.isRecordFilled(i)) {
@@ -340,7 +333,7 @@ class VDynamicReport(block: VBlock) : VReport() {
         }
       }
     } else {
-      val alreadyProtected: Boolean = block.form.inTransaction()
+      val alreadyProtected: Boolean = inTransaction()
       try {
         while (true) {
           try {
@@ -397,19 +390,19 @@ class VDynamicReport(block: VBlock) : VReport() {
             break
           } catch (e: SQLException) {
             if (!alreadyProtected) {
-              block.form.handleAborted(e);
+              block.form.handleAborted(e)
             } else {
               throw e;
             }
           } catch (error: Error) {
             if (!alreadyProtected) {
-              block.form.handleAborted(error);
+              block.form.handleAborted(error)
             } else {
               throw error;
             }
           } catch (rte: RuntimeException) {
             if (!alreadyProtected) {
-              block.form.handleAborted(rte);
+              block.form.handleAborted(rte)
             } else {
               throw rte;
             }
@@ -422,12 +415,10 @@ class VDynamicReport(block: VBlock) : VReport() {
   }
 
   // methods overridden from VReport
-  override fun localize(locale: Locale?) {
+  override fun localize() {
     // report columns inherit their localization from the Block.
     // actors are localized with VlibProperties.
   }
-
-  override fun add() {}
 
   override fun init() {}
 
@@ -479,13 +470,18 @@ class VDynamicReport(block: VBlock) : VReport() {
     number++
   }
 
+  override fun addActors(actorDefs: Array<VActor>?) {
+    val actorDefs = actorDefs.orEmpty()
+
+    actors.addAll(actorDefs)
+  }
+
   // ----------------------------------------------------------------------
   // Default Commands
   // ----------------------------------------------------------------------
   private fun initDefaultCommands() {
-    commands = arrayOfNulls(actorsDef.size)
     for (i in 0..10) {
-      commands!![i] = VReportCommand(this, actorsDef[i]!!)
+      commands.add(VReportCommand(this, actorsDef[i]!!))
     }
   }
 

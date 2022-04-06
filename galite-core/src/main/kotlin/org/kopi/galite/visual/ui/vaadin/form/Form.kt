@@ -39,7 +39,7 @@ import com.vaadin.flow.component.tabs.Tabs
  * @param titles The pages title.
  */
 @CssImport("./styles/galite/form.css")
-class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
+class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelListener {
 
   /**
    * The current position
@@ -70,7 +70,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  private fun setContent(pageCount: Int, titles: Array<String>) {
+  private fun setContent(pageCount: Int, titles: List<String>) {
     if (pageCount == 0) {
       setContent(pages[0]!!)
     } else {
@@ -86,7 +86,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
       }
 
       tabPanel!!.addSelectedChangeListener {
-        if(it.isFromClient) {
+        if (it.isFromClient) {
           // This to prevent user from switch tabs. the method firePageSelected() is responsible for changing page.
           // This will keep the previous tab if firePageSelected fails to switch tabs because an error occurred
           // (For example: the used didn't fill a MUSTFILL field)
@@ -120,7 +120,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param page The page index.
    */
   private fun selectPage(page: Int) {
-    if(tabPanel != null) {
+    if (tabPanel != null) {
       tabs[page].isEnabled = true
       tabPanel!!.selectedIndex = page
       lastSelected = tabPanel!!.selectedTab
@@ -204,7 +204,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  fun init(pageCount: Int, titles: Array<String>) {
+  fun init(pageCount: Int, titles: List<String>) {
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {

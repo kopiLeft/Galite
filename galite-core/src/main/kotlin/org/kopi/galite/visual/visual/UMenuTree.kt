@@ -105,7 +105,7 @@ interface UMenuTree : UWindow {
      * Returns the first row of the currently selected rows.
      * @return an integer that identifies the first row of currently selected rows
      */
-    val selectionRow: Int
+    fun getSelectionRow(): Int
 
     /**
      * Returns true if the node identified by the path is currently expanded,

@@ -23,7 +23,6 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.field.VDateField
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VlibProperties
@@ -64,26 +63,18 @@ open class DTextField(
       DefaultTransformer(getModel().width,
                          getModel().height)
     } else if (!scanner) {
-      NewlineTransformer(getModel().width,
-                         getModel().height)
+      NewlineTransformer(
+        getModel().width,
+        getModel().height
+      )
     } else {
       ScannerTransformer(this)
     }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    // Issue: https://github.com/vaadin/flow-components/issues/1158
-    // TODO: Remove this workaround when the ticket is resolved.
-    if(field.inputField is VDateField) {
-      field.inputField.addDateValueChangeListener { fromClient ->
-        if(fromClient) {
-          valueChanged()
-        }
-      }
-    } else {
-      field.inputField.addTextValueChangeListener {
-        if(it.isFromClient) {
-          valueChanged()
-        }
+    field.inputField.addTextValueChangeListener {
+      if (it.isFromClient) {
+        valueChanged()
       }
     }
 
@@ -317,7 +308,7 @@ open class DTextField(
       return guiTxt
     }
 
-    override fun checkFormat(software: String?): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return true
     }
   }
@@ -332,17 +323,17 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(source: String?): String {
-      return convertFixedTextToSingleLine(source, col, row)
+    override fun toModel(guiTxt: String?): String {
+      return convertFixedTextToSingleLine(guiTxt, col, row)
     }
 
-    override fun toGui(source: String?): String {
+    override fun toGui(modelTxt: String?): String {
       val target = StringBuffer()
-      val length = source!!.length
+      val length = modelTxt!!.length
       var usedRows = 1
       var start = 0
       while (start < length) {
-        val line = source.substring(start, (start + col).coerceAtMost(length))
+        val line = modelTxt.substring(start, (start + col).coerceAtMost(length))
         var last = -1
         var i = line.length - 1
         while (last == -1 && i >= 0) {
@@ -365,7 +356,7 @@ open class DTextField(
       return target.toString()
     }
 
-    override fun checkFormat(source: String?): Boolean = source!!.length <= row * col
+    override fun checkFormat(guiTxt: String?): Boolean = guiTxt!!.length <= row * col
   }
 
   /**

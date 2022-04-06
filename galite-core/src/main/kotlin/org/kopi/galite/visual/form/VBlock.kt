@@ -24,7 +24,6 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.List
 import kotlin.collections.all
@@ -83,12 +82,17 @@ import org.kopi.galite.visual.visual.VCommand
 import org.kopi.galite.visual.visual.VDatabaseUtils
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.visual.VWindow
 
-abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
+abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
+  /**
+   * The form to which belongs the block
+   */
+  lateinit var form: VForm
 
   /**
    * The sorted records array.
@@ -119,12 +123,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   internal var help: String? = null // the help on this block
-  internal var tables: Array<Table>? = null // names of database tables
+  internal var tables = mutableListOf<Table>() // names of database tables
   internal var options = 0 // block options
   internal lateinit var access: IntArray // access flags for each mode
-  internal var indices: Array<String>? = null // error messages for violated indices
-  internal var indicesIdents: Array<String>? = null // error messages for violated indices
-  internal var commands: Array<VCommand>? = null // commands
+  internal var indices = mutableListOf<String>() // error messages for violated indices
+  internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
+  internal var commands = mutableListOf<VCommand>() // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp: Array<VActor>? = field
@@ -132,8 +136,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return temp
     }
 
-  lateinit var fields: Array<VField> // fields
-  internal var VKT_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
+  var fields = mutableListOf<VField>() // fields
+  internal var VKT_Block_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
+  internal var VKT_Field_Triggers = mutableListOf<Array<Trigger?>>()
+  internal var VKT_Command_Triggers = mutableListOf<Array<Trigger?>>()
+  internal var VKT_Field_Command_Triggers = mutableListOf<Array<Trigger?>>()
 
   // current mode
   private var mode = 0
@@ -212,6 +219,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         _currentRecord = rec
       }
     }
+
+  constructor(form: VForm): this() {
+    this.form = form
+  }
 
   companion object {
     // record info flags
@@ -318,10 +329,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // has to be set
   }
 
-  fun build() {
-    //  default does nothing
-  }
-
   /**
    * @return true if this block follows an other block
    */
@@ -331,11 +338,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   val isDroppable: Boolean
     get() = dropListMap.isNotEmpty()
 
-  fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.toLowerCase())
+  fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.lowercase())
 
   val acceptedFlavors: MutableSet<String> get() = dropListMap.keys
 
-  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()])
+  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.lowercase()])
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -352,12 +359,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       title = loc.getTitle()
       help = loc.getHelp()
 
-      if (indices != null) {
-        for (i in indices!!.indices) {
-          //!!! for now, overwrite ident with localized message
-          //!!! inhibits relocalization of a running form
-          indices!![i] = loc.getIndexMessage(indices!![i])
-        }
+      for (i in indices.indices) {
+        //!!! for now, overwrite ident with localized message
+        //!!! inhibits relocalization of a running form
+        indices[i] = loc.getIndexMessage(indices[i])
       }
     }
     fields.forEach {
@@ -411,14 +416,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   @Suppress("UNCHECKED_CAST")
   open fun executeIntegerTrigger(trigger: Trigger?): Int {
     return (trigger?.action?.method as () -> Int).invoke()
-  }
-
-  /**
-   * implemented for compatibility with old gui
-   */
-  @Deprecated("")
-  fun refresh(x: Boolean) {
-    fireBlockChanged()
   }
 
   /**
@@ -1915,7 +1912,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         for (i in 0 until bufferSize) {
           if (isRecordFetched(i)) {
             if (isRecordChanged(i)) {
-              tables!![0].deleteWhere { idColumn eq idField.getInt(i)!! }
+              tables[0].deleteWhere { idColumn eq idField.getInt(i)!! }
             } else if (isRecordDeleted(i)) {
               deleteRecord(i)
             }
@@ -2010,7 +2007,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   @Suppress("UNCHECKED_CAST")
   val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(tables!![0]) as? Column<Int> ?: throw InconsistencyException()
+      return idField.lookupColumn(tables[0]) as? Column<Int> ?: throw InconsistencyException()
     }
 
   /**
@@ -2774,7 +2771,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     for (i in fields.indices) {
       fields[i].block = this
     }
-    build()
     for (i in fields.indices) {
       fields[i].build()
     }
@@ -2940,19 +2936,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun setCommandsEnabled(enable: Boolean) {
     if (enable) {
-      if (commands != null) {
+      if (commands.isNotEmpty()) {
         if (activeCommands.size > 0) {
           // remove all commands currently in the list
           setCommandsEnabled(false)
         }
         // add active commands to the list
-        for (i in commands!!.indices) {
+        for (i in commands.indices) {
           // look command access only when the command
           // is active for the block mode.
-          if (commands!![i].isActive(mode)) {
-            val active: Boolean = if (hasTrigger(VConstants.TRG_CMDACCESS, fields.size + i + 1)) {
+          if (commands[i].isActive(mode)) {
+            val active: Boolean = if (hasCommandTrigger(VConstants.TRG_CMDACCESS, i)) {
               try {
-                (callTrigger(VConstants.TRG_CMDACCESS, fields.size + i + 1) as Boolean)
+                (callCommandTrigger(VConstants.TRG_CMDACCESS, i) as Boolean)
               } catch (e: VException) {
                 // consider that the command is active of any error occurs
                 true
@@ -2962,8 +2958,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
               // we consider it as active command
               true
             }
-            activeCommands.add(commands!![i])
-            commands!![i].setEnabled(active)
+            activeCommands.add(commands[i])
+            commands[i].setEnabled(active)
           }
         }
       }
@@ -3005,7 +3001,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun trailRecord(rec: Int) {
     // check if trailing needed
-    if (!form.inTransaction() || isRecordTrailed(rec)) {
+    if (!VWindow.inTransaction() || isRecordTrailed(rec)) {
       return
     }
 
@@ -3017,16 +3013,58 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  fun callProtectedTrigger(event: Int, index: Int = 0): Any? {
+  fun callProtectedTrigger(event: Int): Any? {
+    return callProtectedTrigger(event, 0, VKT_Block_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  fun callProtectedFieldTrigger(event: Int, index: Int): Any? {
+    return callProtectedTrigger(event, index, VKT_Field_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  private fun callProtectedTrigger(event: Int, index: Int, triggers: List<Array<Trigger?>>): Any? {
     currentRecord = activeRecord
-    executeProtectedVoidTrigger(VKT_Triggers[index][event])
+    executeProtectedVoidTrigger(triggers[index][event])
     return null
   }
 
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  fun callTrigger(event: Int, index: Int = 0): Any? {
+  fun callTrigger(event: Int): Any? {
+    return callTrigger(event, 0, VKT_Block_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  fun callFieldTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Field_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  fun callCommandTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Command_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  fun callFieldCommandTrigger(event: Int, index: Int): Any? {
+    return callTrigger(event, index, VKT_Field_Command_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  private fun callTrigger(event: Int, index: Int, triggers: List<Array<Trigger?>>): Any? {
     val returnValue: Any?
 
     // do not use getCurrentRecord because getCurrentRecord throws an
@@ -3036,13 +3074,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       currentRecord = activeRecord
       when (VConstants.TRG_TYPES[event]) {
         VConstants.TRG_VOID -> {
-          executeVoidTrigger(VKT_Triggers[index][event])
+          executeVoidTrigger(triggers[index][event])
           null
         }
-        VConstants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers[index][event])
-        VConstants.TRG_INT -> executeIntegerTrigger(VKT_Triggers[index][event])
-        VConstants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
-        else -> throw InconsistencyException("BAD TYPE" + VConstants.TRG_TYPES.get(event))
+        VConstants.TRG_BOOLEAN -> executeBooleanTrigger(triggers[index][event])
+        VConstants.TRG_INT -> executeIntegerTrigger(triggers[index][event])
+        VConstants.TRG_OBJECT -> executeObjectTrigger(triggers[index][event])
+        else -> throw InconsistencyException("BAD TYPE" + VConstants.TRG_TYPES[event])
       }
     } finally {
       // Triggers like ACCESS or VALUE trigger can be called anywhere
@@ -3055,25 +3093,35 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns true if there is trigger associated with given event.
    */
-  fun hasTrigger(event: Int): Boolean = hasTrigger(event, 0)
+  fun hasTrigger(event: Int): Boolean = VKT_Block_Triggers[0][event] != null
 
 
   /**
    * Returns true if there is trigger associated with given event.
    */
-  fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != null
+  fun hasFieldCommandTrigger(event: Int, index: Int): Boolean = VKT_Field_Command_Triggers[index][event] != null
+
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  fun hasFieldTrigger(event: Int, index: Int): Boolean = VKT_Field_Triggers[index][event] != null
+
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Command_Triggers[index][event] != null
 
   /*
    * Clears all hidden lookup fields.
    */
   protected fun clearLookups(recno: Int) {
-    if (tables != null) {
-      for (i in 1 until tables!!.size) {
-        val table = tables!![i]
-        fields.forEach { field ->
-          if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
-            field.setNull(recno)
-          }
+    for (i in 1 until tables.size) {
+      val table = tables[i]
+      fields.forEach { field ->
+        if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
+          field.setNull(recno)
         }
       }
     }
@@ -3086,10 +3134,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Checks that record exists and is unique
    */
   protected fun selectLookups(recno: Int) {
-    if (tables != null) {
-      for (i in 1 until tables!!.size) {
-        selectLookup(tables!![i], recno)
-      }
+    for (i in 1 until tables.size) {
+      selectLookup(tables[i], recno)
     }
   }
 
@@ -3194,10 +3240,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception VException      an exception may be raised by triggers
    */
   fun checkUniqueIndices(recno: Int) {
-    if (indices != null) {
+    if (indices.isNotEmpty()) {
       val id = if (isRecordFetched(recno)) idField.getInt(recno) else -1
 
-      for (i in indices!!.indices) {
+      for (i in indices.indices) {
         checkUniqueIndex(i, recno, id!!)
       }
     }
@@ -3222,7 +3268,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     if (condition.isNotEmpty()) {
-      val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }
+      val result = tables[0].slice(idColumn).select { condition.compoundAnd() }
       val resultCount = result.count()
 
       if (resultCount > 0) {
@@ -3230,7 +3276,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           form.setActiveBlock(this@VBlock)
           activeRecord = recno
           gotoFirstField()
-          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices[index])))
         }
         assert(resultCount == 1L) {
           error("too many rows")
@@ -3293,7 +3339,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           }
         }
       }
-      val table = tables!![0]
+      val table = tables[0]
 
       table.insert { table ->
         result.forEach {
@@ -3326,7 +3372,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected fun fillIdField(recno: Int, id: Int) {
     var id = id
     if (id == -1) {
-      id = Utils.getNextTableId(tables!![0])
+      id = Utils.getNextTableId(tables[0])
     }
 
     idField.setInt(recno, id)
@@ -3381,7 +3427,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           }
         }
       }
-      val table = tables!![0]
+      val table = tables[0]
 
       table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
         result.forEach {
@@ -3434,7 +3480,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
       try {
-        tables!![0].deleteWhere { idColumn eq id }
+        tables[0].deleteWhere { idColumn eq id }
       } catch (e: DBForeignKeyException) {
         activeRecord = recno // also valid for single blocks
         throw convertForeignKeyException(e)
@@ -3455,7 +3501,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected fun checkRecordUnchanged(recno: Int) {
     // Assertion enabled only for tables with ID
     if (!blockHasNoUcOrTsField()) {
-      val table = tables!![0]
+      val table = tables[0]
       val value = idField.getInt(recno)
 
       assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
@@ -3526,14 +3572,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // create a visual exception
   }
 
-  /**
-   * Checks if a foreign key is referenced in the view SYSTEMREFERENZEN
-   * TODO: Remove this cause it is depending on SYSTEMREFERENZEN table.
-   */
-  @Deprecated("")
-  protected fun convertForeignKeyException(name: String?): VExecFailedException {
-    TODO()
-  }
   // ----------------------------------------------------------------------
   // ACTOR HANDLING (TBC)
   // ----------------------------------------------------------------------
@@ -3546,15 +3584,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  override var dBConnection: Connection?
-    get() = form.dBConnection
-    set(value) = throw InconsistencyException("CALL IT ON FORM")
-
   override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
-
-  override fun inTransaction(): Boolean = form.inTransaction()
 
   // ----------------------------------------------------------------------
   // LISTENER
@@ -3769,10 +3801,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun prepareSnapshot(active: Boolean) {
     // set background ???
-    if (commands != null) {
-      for (i in commands!!.indices) {
-        commands!![i].setEnabled(true)
-      }
+    for (i in commands.indices) {
+      commands[i].setEnabled(true)
     }
     var count = 1
 

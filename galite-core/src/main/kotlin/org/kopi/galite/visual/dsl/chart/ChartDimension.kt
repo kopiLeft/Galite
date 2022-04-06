@@ -30,7 +30,9 @@ import org.kopi.galite.visual.dsl.common.Trigger
  *
  * @param domain dimension domain.
  */
-open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>, override val source: String? = null) : ChartField<T>(domain) {
+open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
+                                              private val chart: Chart,
+                                              override val source: String? = null) : ChartField<T>(domain) {
 
   /**
    * Dimension values
@@ -66,6 +68,14 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>, override val so
     val dimensionValue = DimensionData<T>(value)
     dimensionValue.init()
     values.add(dimensionValue)
+    dimensionValue.addChartLines()
+  }
+
+  /**
+   * Adds a data row to [chart].
+   */
+  private fun DimensionData<*>.addChartLines() {
+    chart.model.addRow(arrayOf(value), measureList.values.toTypedArray())
   }
 
   val model: VDimension

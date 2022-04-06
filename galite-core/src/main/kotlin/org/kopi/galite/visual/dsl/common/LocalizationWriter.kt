@@ -161,14 +161,14 @@ open class LocalizationWriter {
   protected fun popNode(expected: Element?) {
     val actual = currentHierarchy.pop() as Element
     if (expected != null && actual != expected) {
-      throw InconsistencyException()
+      throw InconsistencyException("Unexpected name of element to pop")
     }
   }
 
   protected fun peekNode(expected: String?): Element {
     val top = currentHierarchy.peek() as Element
     if (expected != null && top.name != expected) {
-      throw InconsistencyException()
+      throw InconsistencyException("Unexpected name of element to peek")
     }
     return top
   }

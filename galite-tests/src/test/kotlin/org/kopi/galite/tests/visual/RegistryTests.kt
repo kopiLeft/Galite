@@ -20,9 +20,10 @@ package org.kopi.galite.tests.visual
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.visual.Registry
 
-class RegistryTests {
+class RegistryTests : VApplicationTestBase() {
   val registry1 = Registry("firstDomaineName", null)
   val registry2 = Registry("secondDomaineName", null)
   val testRegistry = object : Registry("mainDomain", arrayOf(registry1, registry2)) {}

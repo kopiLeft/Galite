@@ -32,8 +32,9 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.triggers.avgDecimal
+import org.kopi.galite.visual.report.triggers.avgInteger
 
 class ReportTests: VApplicationTestBase() {
 
@@ -90,7 +91,6 @@ class ReportTests: VApplicationTestBase() {
 
     val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
-    SimpleReport.initFields()
     SimpleReport.genLocalization()
 
     val generatedFile = File("${sourceFilePath}/SimpleReport-${SimpleReport.locale}.xml")
@@ -105,7 +105,7 @@ class ReportTests: VApplicationTestBase() {
     val ageField      = rootElement.children[7]
     assertEquals("report", rootElement.name)
     assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
-    assertEquals("Action", actionMenu.getAttributeValue("ident"))
+    assertEquals("actor0", actionMenu.getAttributeValue("ident"))
     assertEquals("Action", actionMenu.getAttributeValue("label"))
     assertEquals("actor0", greetingActor.getAttributeValue("ident"))
     assertEquals("Greeting", greetingActor.getAttributeValue("label"))
@@ -204,7 +204,7 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     group = age
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -214,7 +214,7 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     compute {
       // Computes the average of ages
-      Triggers.avgInteger(this)
+      avgInteger()
     }
   }
 
@@ -229,7 +229,7 @@ class SimpleReport : Report(title = "SimpleReport", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     compute {
       // Computes the average of ages
-      Triggers.avgDecimal(this)
+      avgDecimal()
     }
   }
 

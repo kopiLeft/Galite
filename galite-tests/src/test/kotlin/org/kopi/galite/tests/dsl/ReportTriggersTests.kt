@@ -26,8 +26,16 @@ import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.report.Triggers
 import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.triggers.avgDecimal
+import org.kopi.galite.visual.report.triggers.avgInteger
+import org.kopi.galite.visual.report.triggers.countInteger
+import org.kopi.galite.visual.report.triggers.reportIdenticalValue
+import org.kopi.galite.visual.report.triggers.serialInteger
+import org.kopi.galite.visual.report.triggers.sumDecimal
+import org.kopi.galite.visual.report.triggers.sumInteger
+import org.kopi.galite.visual.report.triggers.sumNullDecimal
+import org.kopi.galite.visual.report.triggers.sumNullInteger
 
 class ReportTriggersTests: VApplicationTestBase() {
   fun init() : VReport {
@@ -106,63 +114,63 @@ class ReportWithTriggers : Report(title = "Report", locale = Locale.UK) {
   val age = field(INT(3)) {
     label = "Age"
     compute {
-      Triggers.avgInteger(this)
+      avgInteger()
     }
   }
 
   val intSum = field(INT(3)) {
     label = "int Sum"
     compute {
-      Triggers.sumInteger(this)
+      sumInteger()
     }
   }
 
   val count = field(INT(3)) {
     label = "count"
     compute {
-      Triggers.countInteger(this)
+      countInteger()
     }
   }
 
   val decimalSum = field(DECIMAL(20, 10)) {
     label = "decimal Sum"
     compute {
-      Triggers.sumDecimal(this)
+      sumDecimal()
     }
   }
 
   val intSumNull = field(INT(10)) {
     label = "int Sum Null"
     compute {
-      Triggers.sumNullInteger(this)
+      sumNullInteger()
     }
   }
 
   val decimalSumNull = field(DECIMAL(20, 10)) {
     label = "decimal Sum Null"
     compute {
-      Triggers.sumNullDecimal(this)
+      sumNullDecimal()
     }
   }
 
   val identicalValue = field(INT(10)) {
     label = "identical Value"
     compute {
-      Triggers.reportIdenticalValue(this)
+      reportIdenticalValue()
     }
   }
 
   val decimalAvg = field(DECIMAL(20, 10)) {
     label = "decimal avg"
     compute {
-      Triggers.avgDecimal(this)
+      avgDecimal()
     }
   }
 
   val serialInteger = field(INT(10)) {
     label = "serial Integer"
     compute {
-      Triggers.serialInteger(this)
+      serialInteger()
     }
   }
 

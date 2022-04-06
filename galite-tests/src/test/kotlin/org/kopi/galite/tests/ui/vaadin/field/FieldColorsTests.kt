@@ -45,7 +45,7 @@ import org.kopi.galite.visual.visual.VColor
 
 class FieldColorsTests: GaliteVUITestBase() {
 
-  val form = FormWithColoredFields().also { it.model }
+  val form = FormWithColoredFields()
 
   @Before
   fun `login to the App`() {

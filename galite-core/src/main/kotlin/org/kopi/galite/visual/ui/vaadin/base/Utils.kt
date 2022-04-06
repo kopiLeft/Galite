@@ -115,7 +115,7 @@ object Utils : Utils() {
    * @return An Image or null if not found
    */
   fun getImageFromResource(directory: String, name: String): Image? {
-    if(Utils::class.java.classLoader.getResource("META-INF/resources/$directory/$name") != null) { // FIXME
+    if (Utils::class.java.classLoader.getResource("META-INF/resources/$directory/$name") != null) { // FIXME
       return Image("$directory/$name")
     }
 
@@ -241,13 +241,13 @@ object Utils : Utils() {
   }
 
   fun Component.findMainWindow(): MainWindow? {
-    if(this is MainWindow) return this
+    if (this is MainWindow) return this
 
     var mainWindow: MainWindow? = null
     var parent: Component? = parent.orElse(null)
 
     while (parent != null && mainWindow == null) {
-      if(parent is MainWindow) {
+      if (parent is MainWindow) {
         mainWindow = parent
       }
       parent = parent.parent.orElse(null)
@@ -261,7 +261,7 @@ object Utils : Utils() {
     var parent: Component? = parent.orElse(null)
 
     while (parent != null && mainWindow == null) {
-      if(parent is PopupWindow) {
+      if (parent is PopupWindow) {
         mainWindow = parent
       }
       parent = parent.parent.orElse(null)

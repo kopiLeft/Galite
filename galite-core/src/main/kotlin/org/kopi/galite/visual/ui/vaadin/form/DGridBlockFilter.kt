@@ -34,7 +34,7 @@ class DGridBlockFilter(
 
   override fun test(item: GridBlockItem): Boolean {
     for (field in filterFields) {
-      val value = if (ignoreCase)  {
+      val value = if (ignoreCase) {
         formatObject(item, field.model).toString().lowercase()
       } else {
         formatObject(item, field.model).toString()

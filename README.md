@@ -6,6 +6,11 @@ Galite Framework
 ![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core)
 
+|Module|Maven repository|Latest|
+|---|---|---|
+|galite-core|[All versions](https://mvnrepository.com/artifact/org.kopi/galite-core)|[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core)|
+|galite-testing|[All versions](https://mvnrepository.com/artifact/org.kopi/galite-testing)|[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-testing.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-testing)|
+
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
 ## Purpose
@@ -28,7 +33,7 @@ repositories {
 }
 
 dependencies {
-  implementation("org.kopi", "galite-core", "1.0.0")
+  implementation("org.kopi", "galite-core", "1.1.0")
 }
 ````
 

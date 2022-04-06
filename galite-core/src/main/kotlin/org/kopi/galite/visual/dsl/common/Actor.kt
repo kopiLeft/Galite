@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.visual.VDefaultActor
+import org.kopi.galite.visual.visual.VHelpGenerator
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -41,8 +42,9 @@ open class Actor(val menu: Menu,
                  val label: String,
                  val help: String,
                  val command: PredefinedCommand? = null,
+                 ident: String? = command?.ident,
                  source: String? = null)
-  : WindowElement(source = source) {
+  : LocalizableElement(ident, source) {
 
   // The shortcut key
   var key: Key? = null
@@ -54,9 +56,27 @@ open class Actor(val menu: Menu,
 
   // The actor icon
   var icon: Icon? = null
+    set(value) {
+      model.iconName = value?.iconName
+      field = value
+    }
 
   private var keyCode = 0
+    set(value) {
+      model.acceleratorKey = value
+      field = value
+    }
   private var keyModifier = 0
+    set(value) {
+      model.acceleratorModifier = value
+      field = value
+    }
+
+  override var ident: String = super.ident
+    set(value) {
+      model.actorIdent = value
+      field = value
+    }
 
   private fun checkKey(key: Key?) {
     if (key == null) {
@@ -66,6 +86,31 @@ open class Actor(val menu: Menu,
       keyCode = key.value
       keyModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_MASK else 0
     }
+  }
+
+  // ----------------------------------------------------------------------
+  // ACTIONS HANDLING
+  // ----------------------------------------------------------------------
+  fun performAction() {
+    model.performAction()
+  }
+
+  fun performBasicAction() {
+    model.performBasicAction()
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  fun helpOnCommand(help: VHelpGenerator) {
+    model.helpOnCommand(help)
+  }
+
+  // --------------------------------------------------------------------
+  // DEBUG
+  // --------------------------------------------------------------------
+  override fun toString(): String {
+    return model.toString()
   }
 
   // ----------------------------------------------------------------------
@@ -79,12 +124,12 @@ open class Actor(val menu: Menu,
   // ACTOR MODEL
   // ----------------------------------------------------------------------
 
-  var model: VActor? = null
+  var model: VActor = buildModel()
 
   /**
    * Builds the actor model [VActor] from information provided by this actor.
    */
-  internal fun buildModel() : VActor =
+  private fun buildModel() : VActor =
           if (number == 0) {
             VActor(menu.label, menu.sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
           } else {

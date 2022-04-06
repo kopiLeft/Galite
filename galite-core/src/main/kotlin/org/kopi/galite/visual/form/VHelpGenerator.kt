@@ -39,8 +39,8 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
    * prints a compilation unit
    */
   open fun helpOnForm(name: String,
-                      commands: Array<VCommand>?,
-                      blocks: Array<VBlock>?,
+                      commands: MutableList<VCommand>?,
+                      blocks: List<VBlock>?,
                       title: String,
                       help: String?,
                       code: String): String? {
@@ -108,8 +108,8 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
   open fun helpOnBlock(formCode: String,
                        title: String,
                        help: String?,
-                       commands: Array<VCommand>?,
-                       fields: Array<VField>,
+                       commands: MutableList<VCommand>?,
+                       fields: List<VField>,
                        alone: Boolean) {
     if (!alone) {
       printer.println("<TD><H2>$title</H2>")

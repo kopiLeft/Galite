@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -719,6 +720,11 @@ public abstract class DWindow extends JPanel implements UWindow {
     }
   }
 
+  @Override
+  public void openURL(String url) throws Exception {
+    throw new Exception("Unsupported operation");
+  }
+
   public void reportError(VRuntimeException e) {
     if (e.getMessage() != null) {
       messageHandler.error(e.getMessage());
@@ -1003,12 +1009,12 @@ public abstract class DWindow extends JPanel implements UWindow {
   /**
    * add a command in the menu bar
    */
-  private void addActorsToGUI(VActor[] actorDefs) {
+  private void addActorsToGUI(List<VActor> actorDefs) {
     if (actorDefs != null) {
-      for (int i = 0; i < actorDefs.length; i++) {
+      for (int i = 0; i < actorDefs.size(); i++) {
 	DActor		actorView;
 
-	actorView = (DActor)UIFactory.uiFactory.createView(actorDefs[i]);
+	actorView = (DActor)UIFactory.uiFactory.createView(actorDefs.get(i));
         addButton(buttonPanel, actorView);
         menuBar.addItem(actorView);
       }
@@ -1143,7 +1149,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    * Reports if a message is shown while in a transaction.
    */
   protected void verifyNotInTransaction(String message) {
-    if (getModel().inTransaction() && debugMessageInTransaction()) {
+    if (VWindow.Companion.inTransaction() && debugMessageInTransaction()) {
       try {
 	ApplicationContext.Companion.reportTrouble("DWindow",
                                          message + " IN TRANSACTION",

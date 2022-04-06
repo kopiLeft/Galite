@@ -90,9 +90,9 @@ fun Block.findBlock(): DBlock {
 }
 
 /**
- * Finds the Vaadin block component of this multiple-block.
+ * Finds the Vaadin block component of this multiblock.
  */
-fun Block.findMultipleBlock(): DGridBlock =
+fun Block.findMultiBlock(): DGridBlock =
         (findBlock() as? DGridBlock) ?: throw Exception("$ident is not a multiple block")
 
 infix fun VBlock.eq(block: VBlock): Boolean {

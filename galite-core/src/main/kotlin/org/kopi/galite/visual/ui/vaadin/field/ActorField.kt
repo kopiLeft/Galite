@@ -77,7 +77,7 @@ class ActorField : ObjectField<Any?>() {
 
   override val isNull: Boolean = true
 
-  override fun setValue(o: Any?) {
+  override fun setValue(value: Any?) {
     // Do nothing as this is an actor field with no value
   }
 

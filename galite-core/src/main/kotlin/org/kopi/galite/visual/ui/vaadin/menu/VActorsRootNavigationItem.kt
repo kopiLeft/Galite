@@ -28,7 +28,7 @@ class VActorsRootNavigationItem : Button() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  var menu: VNavigationMenu = VNavigationMenu(this)
+  var menu = VNavigationMenu(this)
   val rootIcon = Icon(VaadinIcon.ALIGN_JUSTIFY)
 
   init {

@@ -20,8 +20,6 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VWeekColumn
 import org.kopi.galite.visual.type.Week
@@ -220,16 +218,6 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   }
 
   /**
-   * Returns the specified tuple column as object of correct type for the field.
-   * @param    result       the result row
-   * @param    column       the column in the tuple
-   */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val tmp = result[column] as? Int ?: return null
-    return Week(tmp / 100, tmp % 100)
-  }
-
-  /**
    * Is the field value of given record null ?
    */
   override fun isNullImpl(r: Int): Boolean = value[r] == null
@@ -354,7 +342,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = if(value[r] == null) null else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): Int? = value[r]?.toSql()
 
   /**
    * Copies the value of a record to another
@@ -385,7 +373,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns a string representation of a week value wrt the field type.
    */
-  protected fun formatWeek(value: Week?): String = VWeekField.toText(value)
+  fun formatWeek(value: Week?): String = VWeekField.toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS

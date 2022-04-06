@@ -39,7 +39,7 @@ class VHelpGenerator : VHelpGenerator() {
    * prints a compilation unit
    */
   fun helpOnChart(name: String,
-                  commands: Array<VCommand>?,
+                  commands: List<VCommand>?,
                   columns: Array<VColumn>,
                   help: String?): String? {
     return try {

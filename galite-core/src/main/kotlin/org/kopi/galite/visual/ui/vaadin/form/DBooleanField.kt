@@ -59,6 +59,7 @@ class DBooleanField(
     field.addObjectFieldListener(this)
     setFieldContent(field)
   }
+
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------

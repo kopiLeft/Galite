@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -50,7 +51,6 @@ import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.dom.DomEvent
-import com.vaadin.flow.shared.Registration
 
 /**
  * A text field component that can support many validation
@@ -105,8 +105,8 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     content.value = newPresentationValue
   }
 
-  fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>): Registration {
-    return internalField.addValueChangeListener(listener)
+  open fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
+    internalField.addValueChangeListener(listener)
   }
 
   override fun getValue(): String? {
@@ -115,18 +115,11 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   private fun format(s: Any?): String? =
     when (s) {
-      is LocalDate -> {
-        s.format()
-      }
-      is BigDecimal -> {
-        s.format()
-      }
-      is LocalTime -> {
-        s.format()
-      }
-      else -> {
-        s?.toString()
-      }
+      is LocalDate -> s.format()
+      is BigDecimal -> s.format()
+      is LocalTime -> s.format()
+      is Instant -> s.format()
+      else -> s?.toString()
     }
 
   override fun initContent(): C = internalField

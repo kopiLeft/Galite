@@ -95,7 +95,6 @@ class VItemTree(rootName: String?,
     createActor(CMD_LOCALISE, "Edit", "Localise", "bold", 0, 0)
     createActor(CMD_SAVE, "Edit", "Save", "save", 0, 0)
     addActors(treeActors.requireNoNulls())
-    localizeActors(ApplicationContext.getDefaultLocale())
     createTree()
     if (isInsertMode) {
       initMaxId()
@@ -132,17 +131,18 @@ class VItemTree(rootName: String?,
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
+  override fun getLocalizationManger(): LocalizationManager {
+    return LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
+  }
+
   /**
    * Localize an actor
    *
-   * @param     locale  the locale to use
+   * @param     actors  the actors to localize
    */
-  fun localizeActors(locale: Locale?) {
-    var manager: LocalizationManager?
-
-    manager = LocalizationManager(locale, Locale.getDefault())
+  override fun localizeActors(vararg actors: VActor) {
     try {
-      super.localizeActors(manager) // localizes the actors in VWindow
+      super.localizeActors(*actors) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble(
         "ItemTree Actor localization",
@@ -152,7 +152,6 @@ class VItemTree(rootName: String?,
       )
       exitProcess(1)
     }
-    manager = null
   }
 
   /**

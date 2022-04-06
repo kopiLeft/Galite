@@ -34,7 +34,6 @@ class VBooleanColumn(ident: String?,
                      align: Int,
                      groups: Int,
                      function: VCalculateColumn?,
-                     width: Int,
                      format: VCellFormat?)
   : VReportColumn(ident,
                   options,

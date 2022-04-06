@@ -62,6 +62,7 @@ abstract class DField(internal var model: VFieldUI,
   // ----------------------------------------------------------------------
   protected var state = 0 // Display state
   protected var pos = 0
+
   /** The alignment. */
   var align: Int = align
     protected set
@@ -204,6 +205,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
+
   /**
    * Updates a given field label.
    * @param label The label to be updated.

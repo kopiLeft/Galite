@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -419,7 +420,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
      * Returns the number of pages.
      */
     public int getPageCount() {
-        return getModel().pages.length;
+        return getModel().getPages().size();
     }
 
     /**
@@ -428,7 +429,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
      * @param    index        the index of the specified page
      */
     public String getPageTitle(int index) {
-        return getModel().pages[index];
+        return getModel().getPages().get(index);
     }
 
     /**
@@ -482,10 +483,10 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
     }
 
     public UBlock getBlockView(VBlock block) {
-        VBlock[] blocks = getModel().getBlocks();
+        List<VBlock> blocks = getModel().getBlocks();
 
-        for (int i = 0; i < blocks.length; i++) {
-            if (block == blocks[i]) {
+        for (int i = 0; i < blocks.size(); i++) {
+            if (block == blocks.get(i)) {
                 return blockViews[i];
             }
         }
@@ -547,7 +548,7 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
             }
             //enable/disable tab of tabbedPane (pages)
             final int pageNumber = block.getPageNumber();
-            final VBlock[] blocks = getModel().getBlocks();
+            final List<VBlock> blocks = getModel().getBlocks();
 
             if (newAccess) {
                 if (!tabbedBlockPanel.isEnabledAt(pageNumber)) {
@@ -557,9 +558,9 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
             } else {
                 if (tabbedBlockPanel.isEnabledAt(pageNumber)) {
                     // tab is visible (another visible block there?)
-                    for (int i = 0; i < blocks.length; i++) {
-                        if (pageNumber == blocks[i].getPageNumber()
-                                && blocks[i].isAccessible()) {
+                    for (int i = 0; i < blocks.size(); i++) {
+                        if (pageNumber == blocks.get(i).getPageNumber()
+                                && blocks.get(i).isAccessible()) {
                             return;
                         }
                     }
@@ -659,21 +660,21 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
             rm.setDoubleBufferingEnabled(false);
             setDoubleBuffered(false);
 
-            for (int i = 0; i < getModel().blocks.length; i++) { // Walk over blocks
+            for (int i = 0; i < getModel().getBlocks().size(); i++) { // Walk over blocks
                 try {
                     fos = new BufferedOutputStream(new FileOutputStream("images/" + getClass().getName().replace('.', '_') + "_" +
-                            getModel().blocks[i].getTitle().replace(' ', '_') + ".ps"));
+                            getModel().getBlocks().get(i).getTitle().replace(' ', '_') + ".ps"));
 
                     if (getModel().getActiveBlock() != null) {
                         getModel().getActiveBlock().leave(false);
                     }
-                    getModel().setActiveBlock(getModel().blocks[i]);
+                    getModel().setActiveBlock(getModel().getBlocks().get(i));
                     // !!! find alternative correct
 // 	  getDForm().setCurrentPage(blocks[i].getPageNumber());
 // 	  getDForm().gotoPage(blocks[i].getPageNumber());
 
-                    for (int j = 0; j < getModel().blocks.length; j++) {
-                        getModel().blocks[j].prepareSnapshot(getModel().blocks[j] == getModel().blocks[i]);
+                    for (int j = 0; getModel().getBlocks().size() > j; j++) {
+                        getModel().getBlocks().get(j).prepareSnapshot(getModel().getBlocks().get(j) == getModel().getBlocks().get(i));
                     }
 
                     // !!! find alternative correct

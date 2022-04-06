@@ -32,9 +32,7 @@ class VFullCalendarCommand(
   actor: VActor,
   mode: Int
 ) : VCommand(mode, null, actor, actor.number, actor.actorIdent), ActionHandler {
-  /**
-   * Returns the actor
-   */
+
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
       actor!!.isEnabled = enabled
@@ -52,7 +50,7 @@ class VFullCalendarCommand(
    */
   @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action, block)"))
   override fun performAction(action: Action, block: Boolean) {
-    form.performAction(action, block)
+    form.performAsyncAction(action)
   }
 
   /**

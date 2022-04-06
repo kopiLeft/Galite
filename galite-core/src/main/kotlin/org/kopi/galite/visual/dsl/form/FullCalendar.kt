@@ -16,14 +16,17 @@
  */
 package org.kopi.galite.visual.dsl.form
 
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.form.VTimeField
+import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.type.Timestamp
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -127,7 +130,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun from(position: FormPosition, init: MustFillFormField<Timestamp>.() -> Unit): FormField<Timestamp> =
+  fun from(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant> =
     from(Domain(), position, init)
 
   /**
@@ -139,7 +142,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T: Timestamp> from(domain: Domain<T>,
+  inline fun <reified T: Instant> from(domain: Domain<T>,
                                          position: FormPosition,
                                          init: MustFillFormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
@@ -153,7 +156,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun to(position: FormPosition, init: MustFillFormField<Timestamp>.() -> Unit): FormField<Timestamp> =
+  fun to(position: FormPosition, init: MustFillFormField<Instant>.() -> Unit): FormField<Instant> =
     to(Domain(), position, init)
 
   /**
@@ -165,7 +168,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T: Timestamp> to(domain: Domain<T>,
+  inline fun <reified T: Instant> to(domain: Domain<T>,
                                        position: FormPosition,
                                        init: MustFillFormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
@@ -198,14 +201,20 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
   // BLOCK MODEL
   // ----------------------------------------------------------------------
 
+  override val block: VBlock = FullCalendarBlockModel(this@FullCalendar)
+
   val model: VFullCalendarBlock get() = (block as VFullCalendarBlock)
 
   /** Returns block model */
-  override fun getBlockModel(vForm: VForm, source: String?): VBlock {
-    val fullCalendarModel = FullCalendarBlockModel(vForm, this, source)
-
-    block = fullCalendarModel
-
-    return fullCalendarModel
+  override fun getBlockModel(vForm: VForm): VBlock {
+    val block = (block as FullCalendarBlockModel)
+    block.form = vForm
+    block.dateField = dateField?.vField as? VDateField
+    block.fromTimeField = fromTimeField?.vField as? VTimeField
+    block.toTimeField = toTimeField?.vField as? VTimeField
+    block.fromField = fromField?.vField as? VTimestampField
+    block.toField = toField?.vField as? VTimestampField
+    block.fullCalendarForm = block.buildFullCalendarForm()
+    return super.getBlockModel(vForm)
   }
 }

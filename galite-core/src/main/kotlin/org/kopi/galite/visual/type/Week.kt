@@ -26,7 +26,7 @@ import java.util.Locale
 /**
  * This class represents the week types
  */
-open class Week(var scalar: Int) : Type<Week, Int>() {
+open class Week private constructor(var scalar: Int) : Type<Week, Int>() {
   /**
    * Constructs a Week with a year and a week in this year
    * @param    year        the year
@@ -57,6 +57,21 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
+  /**
+   * This add [w] weeks to this week
+   */
+  operator fun plus(w: Int): Week = add(w)
+
+  /**
+   * This subtract [w] weeks to this week
+   */
+  operator fun minus(w: Int): Week = add(-w)
+
+  /**
+   * This returns the difference in week between the two weeks
+   */
+  operator fun minus(w: Week): Int = subtract(w)
+
   /**
    * Returns a Week with the specified number of weeks added to this Week.
    */
@@ -156,11 +171,11 @@ open class Week(var scalar: Int) : Type<Week, Int>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): String {
+  override fun toSql(): Int {
     val year = scalar / 53
     val week = scalar % 53 + 1
-    //return "{fn WEEK($year, $week)}"
-    TODO("NOT SUPPORTED YET")
+
+    return year * 100 + week
   }
 
   override fun hashCode(): Int {

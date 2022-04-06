@@ -77,8 +77,10 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       total[parent.size + 2] = "  --username, -u<String>: The username for the database"
       total[parent.size + 3] = "  --password, -p<String>: The password for the database"
       total[parent.size + 4] = "  --lookupUserId, -U:   Lookup user ID in database? [true]"
-      total[parent.size + 5] = "  --trace, -t<int>:     Set the trace level to print database queries before execution (0: none, 1: all but FETCH, 2: all) [0]"
-      total[parent.size + 6] = "  --properties, -q<String>: These properties override or complete the properties stored in the database."
+      total[parent.size + 5] =
+        "  --trace, -t<int>:     Set the trace level to print database queries before execution (0: none, 1: all but FETCH, 2: all) [0]"
+      total[parent.size + 6] =
+        "  --properties, -q<String>: These properties override or complete the properties stored in the database."
       total[parent.size + 7] = "  --schema, -s<String>: The current database schema to be set."
       return total
     }
@@ -105,14 +107,14 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
 
   companion object {
     private val LONGOPTS = arrayOf(
-            LongOpt("database", LongOpt.REQUIRED_ARGUMENT, null, 'b'.toInt()),
-            LongOpt("driver", LongOpt.REQUIRED_ARGUMENT, null, 'd'.toInt()),
-            LongOpt("username", LongOpt.REQUIRED_ARGUMENT, null, 'u'.toInt()),
-            LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'p'.toInt()),
-            LongOpt("lookupUserId", LongOpt.NO_ARGUMENT, null, 'U'.toInt()),
-            LongOpt("trace", LongOpt.OPTIONAL_ARGUMENT, null, 't'.toInt()),
-            LongOpt("properties", LongOpt.REQUIRED_ARGUMENT, null, 'q'.toInt()),
-            LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.toInt())
+      LongOpt("database", LongOpt.REQUIRED_ARGUMENT, null, 'b'.code),
+      LongOpt("driver", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
+      LongOpt("username", LongOpt.REQUIRED_ARGUMENT, null, 'u'.code),
+      LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'p'.code),
+      LongOpt("lookupUserId", LongOpt.NO_ARGUMENT, null, 'U'.code),
+      LongOpt("trace", LongOpt.OPTIONAL_ARGUMENT, null, 't'.code),
+      LongOpt("properties", LongOpt.REQUIRED_ARGUMENT, null, 'q'.code),
+      LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.code)
     )
   }
 }

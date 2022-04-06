@@ -210,7 +210,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   override fun setFont(font: Font?) {
     if (font != null) {
       this.font = font
-      val javaName = font.name.toLowerCase()
+      val javaName = font.name.lowercase()
       val javaStyle = font.style
       var psName: String
       when {

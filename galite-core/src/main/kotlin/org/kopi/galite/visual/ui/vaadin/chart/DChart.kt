@@ -38,6 +38,7 @@ class DChart(model: VWindow) : DWindow(model), UChart {
   // DATA MEMBERS
   //---------------------------------------------------
   private val content = HorizontalLayout()
+  private var type: UChartType? = null
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -49,7 +50,7 @@ class DChart(model: VWindow) : DWindow(model), UChart {
   }
 
   override fun refresh() {
-   // TODO()
+    // TODO()
   }
 
   override fun build() {}
@@ -58,38 +59,26 @@ class DChart(model: VWindow) : DWindow(model), UChart {
 //    TODO()
   }
 
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
+  override fun getType(): UChartType? {
+    return type
   }
 
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun focus() {
-//    TODO()
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  override var type: UChartType? = null
-    set(newType) {
-      access {
-        if (field != null && newType != null) {
-          content.remove(field as Component)
-        }
-        if (newType != null) {
-          field = newType
-          newType.build()
-          content.add(newType as Component)
-        }
+  override fun setType(newType: UChartType?) {
+    access {
+      if (type != null && newType != null) {
+        content.remove(type as Component)
+      }
+      if (newType != null) {
+        type = newType
+        newType.build()
+        content.add(newType as Component)
       }
     }
+  }
 
   companion object {
     init {
-      ChartTypeFactory.chartTypeFactory = VChartTypeFactory()
+      ChartTypeFactory.setChartTypeFactory(VChartTypeFactory())
     }
   }
   //---------------------------------------------------

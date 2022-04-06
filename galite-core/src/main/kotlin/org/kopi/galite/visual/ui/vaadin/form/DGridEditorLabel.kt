@@ -129,8 +129,8 @@ class DGridEditorLabel(text: String?,
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
-          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(
-            actor.acceleratorModifier) + "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
+          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(actor.acceleratorModifier) +
+                  "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {
         actor.menuItem

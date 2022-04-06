@@ -39,7 +39,7 @@ class FormSampleTests: JApplicationTestBase() {
 
   @Test
   fun changeBlockAccessTest() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
 
     assertEquals(1, formSample.tb4ToTestChangeBlockAccess.block.getAccess())
 

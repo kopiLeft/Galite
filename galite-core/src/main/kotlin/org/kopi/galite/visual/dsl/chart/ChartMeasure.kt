@@ -32,7 +32,7 @@ import org.kopi.galite.visual.visual.VColor
  */
 open class ChartMeasure<T>(domain: Domain<T>, override val source: String = "") : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
 
-  /**Measure's color in chart */
+  /** Measure's color in chart */
   lateinit var color: Color
 
   /** Color trigger */

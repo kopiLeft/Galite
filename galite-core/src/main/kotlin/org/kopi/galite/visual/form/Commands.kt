@@ -190,7 +190,7 @@ object Commands : VConstants {
           break
         } catch (e: VException) {
         try {
-          form.handleAborted(e);
+          form.handleAborted(e)
         } catch(abortEx: VException) {
           throw abortEx
         }
@@ -206,15 +206,15 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.handleAborted(e);
+            form.handleAborted(e)
           } catch(abortEx: Error) {
-            throw InconsistencyException(abortEx);
+            throw InconsistencyException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.handleAborted(e);
+            form.handleAborted(e)
           } catch(abortEx: RuntimeException) {
-            throw InconsistencyException(abortEx);
+            throw InconsistencyException(abortEx)
           }
         }
       }

@@ -61,7 +61,7 @@ class DBlockDropHandler(private val block: VBlock) {
   }
 
   fun onFinish(buffer: Receiver) {
-    if(buffer is MultiFileBuffer) {
+    if (buffer is MultiFileBuffer) {
       filesCount = buffer.files.size
     }
     isUploadStarted = false

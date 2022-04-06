@@ -173,14 +173,14 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * Adds a command in the menu bar.
    * @param actorDefs The [VActor] definitions.
    */
-  private fun addActorsToGUI(actorDefs: Array<VActor?>) {
+  private fun addActorsToGUI(actorDefs: List<VActor>) {
     val panel = VActorsNavigationPanel()
 
     // Add actors panel
     add(actors)
     // Add each actor to the panel
     actorDefs.forEach { actorDef ->
-      val actor = DActor(actorDef!!)
+      val actor = DActor(actorDef)
 
       panel.addActor(actor, navigationMenu)
       if(actor.icon != null) {
@@ -251,6 +251,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
         currentUI = locateUI()
       }
       currentThread.start()
+    }
+  }
+
+  override fun openURL(url: String) {
+    access(currentUI) {
+      currentUI?.page?.open(url)
     }
   }
 
@@ -483,7 +489,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * @param message The message to be displayed.
    */
   protected fun verifyNotInTransaction(message: String) {
-    if (getModel()!!.inTransaction() && debugMessageInTransaction()) {
+    if (VWindow.inTransaction() && debugMessageInTransaction()) {
       try {
         ApplicationContext.reportTrouble("DWindow",
                                          "$message IN TRANSACTION",
