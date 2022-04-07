@@ -33,7 +33,7 @@ import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VWindow
 
-open class PivotTable: VWindow() {
+open class PivotTable : VWindow() {
   /** Report's fields. */
   val fields = mutableListOf<ReportField<*>>()
 
@@ -66,7 +66,7 @@ open class PivotTable: VWindow() {
    * @param     manager         the manger to use for localization.
    */
   private fun localize(manager: LocalizationManager) {
-    if(ApplicationContext.getDefaultLocale() != locale) {
+    if (ApplicationContext.getDefaultLocale() != locale) {
       val loc = manager.getReportLocalizer(source)
 
       setTitle(loc.getTitle())
@@ -139,64 +139,75 @@ open class PivotTable: VWindow() {
     buildHeaderGrouping(nullRows, secondGrouping)
   }
 
-  private fun ColumnGroup<*>.buildHeaderGrouping(nullRows: Int, groupings: MutableList<Any?> = mutableListOf(), pads: Boolean = true) {
+  private fun ColumnGroup<*>.buildHeaderGrouping(
+    nullRows: Int,
+    groupings: MutableList<Any?> = mutableListOf(),
+    pads: Boolean = true
+  ) {
     val nextGroupings: MutableList<Any?> = mutableListOf()
-    if(pads) repeat(nullRows) { groupings.add(null) }
+    if (pads) repeat(nullRows) { groupings.add(null) }
     columns().forEach { col ->
       groupings.add(col.name())
-      if(col is ColumnGroup<*>) {
+      if (col is ColumnGroup<*>) {
         repeat(col.columns().size - 1) { groupings.add(null) }
         col.buildHeaderGrouping(nullRows, nextGroupings, nextGroupings.isEmpty())
       } else {
         rowGroupings.add(col.values.toMutableList())
       }
     }
-    if(nextGroupings.isNotEmpty()) {
+    if (nextGroupings.isNotEmpty()) {
       data.add(nextGroupings)
     }
   }
 
-  private fun dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> Iterable<String>): AnyFrame = header.map { value ->
-    fill(value).asList().let {
-      DataColumn.create(
-        value.model.label,
-        it
-      )
-    }
-  }.toDataFrame()
+  private fun dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> Iterable<String>): AnyFrame =
+    header.map { value ->
+      fill(value).asList().let {
+        DataColumn.create(
+          value.model.label,
+          it
+        )
+      }
+    }.toDataFrame()
 
   private fun DataFrame<Any?>.pivot(l1: Int): Pivot<Any?> {
     return if (l1 == 1) {
       this.pivot(grouping.columns[0].label!!)
     } else {
       this.pivot {
-        grouping.columns.subList(2, grouping.columns.size).map { it.label!! }.fold(grouping.columns[0].label!! then grouping.columns[1].label!!) { a, b ->
-          a then b
-        }
+        grouping.columns
+          .subList(2, grouping.columns.size)
+          .fold(grouping.columns[0].label!! then grouping.columns[1].label!!) { a, b ->
+            a then b.label!!
+          }
       }
     }
   }
 
   fun DataFrame<Any?>.groupBy(l2: Int): GroupBy<Any?, Any?> {
     return if (l2 == 1) {
-      this.groupBy (grouping.rows[0].label!!)
+      this.groupBy(grouping.rows[0].label!!)
     } else {
       this.groupBy {
-        grouping.rows.subList(2, grouping.rows.size).map { it.label!! }.fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
-          a and b
-        }
+        grouping.rows
+          .subList(2, grouping.rows.size)
+          .fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
+            a and b.label!!
+          }
       }
     }
   }
 
   fun Pivot<*>.groupBy(l2: Int): PivotGroupBy<Any?> {
     return if (l2 == 1) {
-      this.groupBy (grouping.rows[0].label!!)
+      this.groupBy(grouping.rows[0].label!!)
     } else {
       this.groupBy {
-        grouping.rows.subList(2, grouping.rows.size).map { it.label!! }.fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
-          a and b
-        }
+        grouping.rows
+          .subList(2, grouping.rows.size)
+          .fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
+            a and b.label!!
+          }
       }
     }
   }
@@ -215,7 +226,7 @@ open class PivotTable: VWindow() {
   }
 
   private fun Aggregatable<Any?>.aggregate(): DataFrame<Any?> {
-   return when (funct) {
+    return when (funct) {
       Function.MAX -> _max()
       Function.MEAN -> _mean()
       Function.SUM -> _sum()
