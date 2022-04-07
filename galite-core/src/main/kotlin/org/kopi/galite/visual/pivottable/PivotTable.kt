@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.pivottable
 
-import javax.naming.OperationNotSupportedException
-
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.aggregation.Aggregatable
 import org.jetbrains.kotlinx.dataframe.api.*
@@ -241,7 +239,7 @@ open class PivotTable: VWindow() {
         this.max()
       }
       else -> {
-        throw OperationNotSupportedException()
+        throw UnsupportedOperationException()
       }
     }
   }
@@ -261,7 +259,7 @@ open class PivotTable: VWindow() {
         this.mean()
       }
       else -> {
-        throw OperationNotSupportedException()
+        throw UnsupportedOperationException()
       }
     }
   }
@@ -281,7 +279,7 @@ open class PivotTable: VWindow() {
         this.sum()
       }
       else -> {
-        throw OperationNotSupportedException()
+        throw UnsupportedOperationException()
       }
     }
   }
@@ -301,7 +299,7 @@ open class PivotTable: VWindow() {
         this.min()
       }
       else -> {
-        throw OperationNotSupportedException()
+        throw UnsupportedOperationException()
       }
     }
   }
