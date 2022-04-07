@@ -76,6 +76,9 @@ dependencies {
   implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
+
+  // Dataframe used in Pivot Table
+  implementation("org.jetbrains.kotlinx", "dataframe", Versions.KOTLINX_DATAFRAME)
 }
 
 dependencyManagement {

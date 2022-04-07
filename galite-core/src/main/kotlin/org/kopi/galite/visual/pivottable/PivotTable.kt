@@ -17,111 +17,302 @@
  */
 package org.kopi.galite.visual.pivottable
 
-import java.util.stream.Collectors
+import javax.naming.OperationNotSupportedException
 
+import org.jetbrains.kotlinx.dataframe.DataFrame
+import org.jetbrains.kotlinx.dataframe.aggregation.Aggregatable
+import org.jetbrains.kotlinx.dataframe.api.*
+import org.jetbrains.kotlinx.dataframe.AnyFrame
+import org.jetbrains.kotlinx.dataframe.DataColumn
+import org.jetbrains.kotlinx.dataframe.columns.ColumnGroup
+import org.jetbrains.kotlinx.dataframe.columns.ValueColumn
+import org.jetbrains.kotlinx.dataframe.impl.asList
+import org.jetbrains.kotlinx.dataframe.values
+import org.kopi.galite.visual.dsl.report.ReportField
+import org.kopi.galite.visual.dsl.report.ReportRow
+import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.report.VReportColumn
+import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.VWindow
 
+open class PivotTable: VWindow() {
+  /** Report's fields. */
+  val fields = mutableListOf<ReportField<*>>()
 
-/**
- * A pivot table is a table of grouped values that summarizes sums, averages, or other statistics.
- *
- * Do not use this in your code, it's still under construction.
- */
-class PivotTable() {
-  // Testing data
-  val rows = mutableListOf(
-    Row(arrayOf("Ablonczy Diane", "Female", 63)),
-    Row(arrayOf("Adams Eve", "Female", 38)),
-    Row(arrayOf("Adler Mark", "Male", 50)),
-    Row(arrayOf("Aglukkaq Leona", "Female", 45)),
-    Row(arrayOf("Albas Dan", "Male", 36))
-  )
+  /** A report data row */
+  val rows = mutableListOf<ReportRow>()
 
-  var groupingRows: List<Int> = listOf()
-  var groupingColumns: List<Int> = listOf()
-  var sum: Int? = null
-  var columns = mutableListOf<VReportColumn>()
-}
+  val columns = mutableListOf<VReportColumn>()
 
-fun main() {
-  val pivot = PivotTable()
-  pivot.groupingRows = listOf(0, 1)
-  pivot.groupingColumns = listOf(1)
-  pivot.sum = 2
-  pivot.print()
-}
+  lateinit var dataframe: AnyFrame
+  lateinit var grouping: Grouping
+  var funct = Function.NONE
+  var help: String? = null
 
-fun PivotTable.print() {
-  val grouped: MutableMap<Grouping, List<Row>> = rows.groupBy(groupingRows, groupingColumns)
-  val groupedColumns: Set<Any?> = grouped.uniqueValues(1)
-  print(',')
-  groupedColumns.stream().forEach { t: Any? -> print("$t,") }
-  println()
-  val groupedRows = grouped.uniqueValues(0)
+  private val data = mutableListOf<MutableList<Any?>>()
+  private val rowGroupings = mutableListOf<MutableList<Any?>>()
 
-  groupedRows.stream()
-    .forEach { y ->
-      print("$y,")
-      groupedColumns.stream().forEach { t: Any? ->
-        val grouping = Grouping(mapOf(0 to y, 1 to t))
-        val rows = grouped[grouping]
-        if (sum!= null && rows != null) {
-          val total = rows
-            .stream()
-            .collect(Collectors.summingLong {
-              (it.getValueAt(sum!!) as Number).toLong()
-            })
-          print(total)
-        }
-        print(',')
-      }
-      println()
+  fun getValueAt(row: Int, col: Int): Any? = data[row][col]
+
+  // ----------------------------------------------------------------------
+  // DISPLAY INTERFACE
+  // ----------------------------------------------------------------------
+  open fun initReport() {
+    build()
+    //callTrigger(Constants.TRG_PREPIVOT) TODO
+  }
+
+  /**
+   * Localizes this pivot table.
+   *
+   * @param     manager         the manger to use for localization.
+   */
+  private fun localize(manager: LocalizationManager) {
+    if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc = manager.getReportLocalizer(source)
+
+      setTitle(loc.getTitle())
+      help = loc.getHelp()
+      columns.forEach { it.localize(loc) }
     }
-}
+  }
 
-fun List<Row>.groupBy(groupingRows: List<Int>, groupingColumns: List<Int>): MutableMap<Grouping, List<Row>> {
-  val grouped: MutableMap<Grouping, List<Row>> = stream()
-    .collect(Collectors.groupingBy { x ->
-      Grouping(
-        (groupingRows + groupingColumns).map {
-          it to x.getValueAt(it)
-        }.toMap()
+  fun build() {
+    localize(manager)
+    buildDataFrame()
+    dataframe.buildGroupings()
+  }
+
+  private fun buildDataFrame() {
+    val df = dataFrameOf(fields) { field ->
+      rows.map { field.model.format(it.data[field]) }
+    }
+
+    dataframe = if (grouping.columns.isEmpty() && grouping.rows.isEmpty()) {
+      df.aggregate()
+    } else if (grouping.rows.isEmpty()) {
+      df.pivot(grouping.columns.size).aggregate()
+    } else if (grouping.columns.isEmpty()) {
+      df.groupBy(grouping.rows.size).aggregate()
+    } else {
+      df.pivot(grouping.columns.size).groupBy(grouping.rows.size).aggregate()
+    }
+  }
+
+  private fun AnyFrame.buildGroupings() {
+    val cols = columns()
+    val columnGroups = cols.filterIsInstance(ColumnGroup::class.java)
+    val valueColumns = cols.filterIsInstance(ValueColumn::class.java)
+    val rowGroupingValues = mutableListOf<Any?>()
+
+    columnGroups.forEach { col ->
+      col.buildHeaderGrouping(valueColumns.size)
+    }
+
+    data.add(rowGroupingValues)
+    valueColumns.forEach {
+      rowGroupingValues.add(it.name())
+    }
+    repeat(rowGroupings.size) { rowGroupingValues.add(null) }
+
+    repeat(rowsCount()) { r ->
+      val agregationValues = mutableListOf<Any?>()
+      data.add(agregationValues)
+      valueColumns.forEach { vc ->
+        agregationValues.add(vc.values.elementAt(r))
+      }
+
+      rowGroupings.forEach {
+        agregationValues.add(it[r])
+      }
+    }
+  }
+
+  private fun ColumnGroup<*>.buildHeaderGrouping(nullRows: Int) {
+    val firstGrouping = mutableListOf<Any?>()
+    val secondGrouping: MutableList<Any?> = mutableListOf()
+
+    data.add(firstGrouping)
+    repeat(nullRows) { firstGrouping.add(null) }
+    firstGrouping.add(name())
+    repeat(columns().size - 1) { firstGrouping.add(null) }
+
+    data.add(secondGrouping)
+    buildHeaderGrouping(nullRows, secondGrouping)
+  }
+
+  private fun ColumnGroup<*>.buildHeaderGrouping(nullRows: Int, groupings: MutableList<Any?> = mutableListOf(), pads: Boolean = true) {
+    val nextGroupings: MutableList<Any?> = mutableListOf()
+    if(pads) repeat(nullRows) { groupings.add(null) }
+    columns().forEach { col ->
+      groupings.add(col.name())
+      if(col is ColumnGroup<*>) {
+        repeat(col.columns().size - 1) { groupings.add(null) }
+        col.buildHeaderGrouping(nullRows, nextGroupings, nextGroupings.isEmpty())
+      } else {
+        rowGroupings.add(col.values.toMutableList())
+      }
+    }
+    if(nextGroupings.isNotEmpty()) {
+      data.add(nextGroupings)
+    }
+  }
+
+  private fun dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> Iterable<String>): AnyFrame = header.map { value ->
+    fill(value).asList().let {
+      DataColumn.create(
+        value.model.label,
+        it
       )
-    })
-
-  return grouped
-}
-
-fun MutableMap<Grouping, List<Row>>.uniqueValues(groupingColumn: Int) : Set<Any?> {
-  return keys
-    .stream()
-    .map { x: Grouping -> x.values[groupingColumn] }
-    .collect(Collectors.toSet())
-}
-
-class Grouping(val values: Map<Int, Any?>) {
-  override fun equals(other: Any?): Boolean {
-    if (other == null) return false
-    if (this === other) return true
-    if (other is Grouping) {
-      val yt = other
-      if (values == yt.values) return true
     }
-    return false
-  }
+  }.toDataFrame()
 
-  override fun hashCode(): Int {
-    return values.hashCode()
-  }
-
-  override fun toString(): String {
-    return buildString {
-      append('[')
-      values.values.forEach {
-        append(it)
-        append(", ")
+  private fun DataFrame<Any?>.pivot(l1: Int): Pivot<Any?> {
+    return if (l1 == 1) {
+      this.pivot(grouping.columns[0].label!!)
+    } else {
+      this.pivot {
+        grouping.columns.subList(2, grouping.columns.size).map { it.label!! }.fold(grouping.columns[0].label!! then grouping.columns[1].label!!) { a, b ->
+          a then b
+        }
       }
-      append(']')
+    }
+  }
+
+  fun DataFrame<Any?>.groupBy(l2: Int): GroupBy<Any?, Any?> {
+    return if (l2 == 1) {
+      this.groupBy (grouping.rows[0].label!!)
+    } else {
+      this.groupBy {
+        grouping.rows.subList(2, grouping.rows.size).map { it.label!! }.fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
+          a and b
+        }
+      }
+    }
+  }
+
+  fun Pivot<*>.groupBy(l2: Int): PivotGroupBy<Any?> {
+    return if (l2 == 1) {
+      this.groupBy (grouping.rows[0].label!!)
+    } else {
+      this.groupBy {
+        grouping.rows.subList(2, grouping.rows.size).map { it.label!! }.fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
+          a and b
+        }
+      }
+    }
+  }
+
+  /**
+   * Adds a row to the report.
+   *
+   * @param init initializes the row with values.
+   */
+  fun add(init: ReportRow.() -> Unit) {
+    val row = ReportRow(fields)
+    row.init()
+
+    // Last null value is added for the separator column
+    rows.add(row)
+  }
+
+  private fun Aggregatable<Any?>.aggregate(): DataFrame<Any?> {
+   return when (funct) {
+      Function.MAX -> _max()
+      Function.MEAN -> _mean()
+      Function.SUM -> _sum()
+      Function.MIN -> _min()
+      else -> TODO()
+    }
+  }
+
+  private fun Aggregatable<*>._max(): DataFrame<Any?> {
+    return when (this) {
+      is Pivot<*> -> {
+        this.max().toDataFrame()
+      }
+      is DataFrame<*> -> {
+        this.max().toDataFrame()
+      }
+      is GroupBy<*, *> -> {
+        this.max()
+      }
+      is PivotGroupBy<*> -> {
+        this.max()
+      }
+      else -> {
+        throw OperationNotSupportedException()
+      }
+    }
+  }
+
+  private fun Aggregatable<*>._mean(): DataFrame<Any?> {
+    return when (this) {
+      is Pivot<*> -> {
+        this.mean().toDataFrame()
+      }
+      is DataFrame<*> -> {
+        this.mean().toDataFrame()
+      }
+      is GroupBy<*, *> -> {
+        this.mean()
+      }
+      is PivotGroupBy<*> -> {
+        this.mean()
+      }
+      else -> {
+        throw OperationNotSupportedException()
+      }
+    }
+  }
+
+  private fun Aggregatable<*>._sum(): DataFrame<Any?> {
+    return when (this) {
+      is Pivot<*> -> {
+        this.sum().toDataFrame()
+      }
+      is DataFrame<*> -> {
+        this.sum().toDataFrame()
+      }
+      is GroupBy<*, *> -> {
+        this.sum()
+      }
+      is PivotGroupBy<*> -> {
+        this.sum()
+      }
+      else -> {
+        throw OperationNotSupportedException()
+      }
+    }
+  }
+
+  private fun Aggregatable<*>._min(): DataFrame<Any?> {
+    return when (this) {
+      is Pivot<*> -> {
+        this.min().toDataFrame()
+      }
+      is DataFrame<*> -> {
+        this.min().toDataFrame()
+      }
+      is GroupBy<*, *> -> {
+        this.min()
+      }
+      is PivotGroupBy<*> -> {
+        this.min()
+      }
+      else -> {
+        throw OperationNotSupportedException()
+      }
     }
   }
 }
+
+enum class Function {
+  NONE,
+  SUM,
+  MEAN,
+  MIN,
+  MAX
+}
+
+class Grouping(val columns: List<ReportField<*>>, val rows: List<ReportField<*>>)
