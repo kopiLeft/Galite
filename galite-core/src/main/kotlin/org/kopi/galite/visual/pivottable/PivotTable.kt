@@ -17,6 +17,11 @@
  */
 package org.kopi.galite.visual.pivottable
 
+import java.io.File
+import java.util.Locale
+
+import kotlin.reflect.full.starProjectedType
+
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.aggregation.Aggregatable
 import org.jetbrains.kotlinx.dataframe.api.*
@@ -24,16 +29,30 @@ import org.jetbrains.kotlinx.dataframe.AnyFrame
 import org.jetbrains.kotlinx.dataframe.DataColumn
 import org.jetbrains.kotlinx.dataframe.columns.ColumnGroup
 import org.jetbrains.kotlinx.dataframe.columns.ValueColumn
-import org.jetbrains.kotlinx.dataframe.impl.asList
 import org.jetbrains.kotlinx.dataframe.values
+import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.dsl.report.ReportRow
+import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.visual.UIFactory
+import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.visual.WindowBuilder
+import org.kopi.galite.visual.visual.WindowController
 
-open class PivotTable : VWindow() {
+open class PivotTable(title: String?, var help: String?, override val locale: Locale?) : VWindow(), Constants, VConstants {
+
+  constructor(title: String, locale: Locale? = null) : this(title, null, locale)
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var pageTitle = ""
+
   /** Report's fields. */
   val fields = mutableListOf<ReportField<*>>()
 
@@ -42,13 +61,96 @@ open class PivotTable : VWindow() {
 
   val columns = mutableListOf<VReportColumn>()
 
-  lateinit var dataframe: AnyFrame
   lateinit var grouping: Grouping
-  var funct = Function.NONE
-  var help: String? = null
 
+  var funct = Function.NONE
+
+  private lateinit var dataframe: AnyFrame
+  private var aggregateField = arrayOf<String>()
   private val data = mutableListOf<MutableList<Any?>>()
   private val rowGroupings = mutableListOf<MutableList<Any?>>()
+
+  init {
+    setTitle(title)
+  }
+
+  fun aggregate(function: Function, field: ReportField<*>) {
+    funct = function
+    aggregateField = arrayOf(field.label!!)
+  }
+
+  /**
+   * creates and returns a field. It uses [init] method to initialize the field.
+   *
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): ReportField<T> {
+    domain.kClass = T::class
+
+    val field = ReportField(domain, init, "ANM_${fields.size}", domain.source.ifEmpty { source })
+
+    field.initialize()
+
+    val pos = if(columns.size == 0) 0 else columns.size - 1 // TODO!!
+    columns.add(pos, field.buildReportColumn())
+    fields.add(field)
+
+    return field
+  }
+
+  /**
+   * creates and returns a field that accept nulls. It uses [init] method to initialize the field.
+   *
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
+                                                       noinline init: ReportField<T>.() -> Unit): ReportField<T?> {
+    return field(domain, init) as ReportField<T?>
+  }
+
+  override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_PIVOT_TABLE
+
+  /**
+   * Redisplay the report after change in formatting
+   */
+  @Deprecated("call method in display; model must not be refreshed")
+  fun redisplay() {
+    (getDisplay() as UPivotTable).redisplay()
+  }
+
+  /**
+   * Close window
+   */
+  @Deprecated("call method in display; model must not be closed")
+  fun close() {
+    getDisplay()!!.closeWindow()
+  }
+
+  override fun destroyModel() {
+    /*try { TODO
+      callTrigger(org.kopi.galite.visual.pivottable.Constants.TRG_POSTREPORT)
+    } catch (v: VException) {
+      // ignore
+    }*/
+    super.destroyModel()
+  }
+
+  fun columnMoved(pos: IntArray) {
+    (getDisplay() as UPivotTable).columnMoved(pos)
+  }
+
+  /**
+   * Sets the title
+   */
+  fun setPageTitle(title: String) {
+    pageTitle = title
+    setTitle(title)
+  }
 
   fun getValueAt(row: Int, col: Int): Any? = data[row][col]
 
@@ -79,23 +181,26 @@ open class PivotTable : VWindow() {
     localize(manager)
     buildDataFrame()
     dataframe.buildGroupings()
+    (getDisplay() as UPivotTable?)?.build()
   }
 
   private fun buildDataFrame() {
     val df = dataFrameOf(fields) { field ->
-      rows.map { field.model.format(it.data[field]) }
+      getAllValuesOf(field)
     }
 
     dataframe = if (grouping.columns.isEmpty() && grouping.rows.isEmpty()) {
       df.aggregate()
     } else if (grouping.rows.isEmpty()) {
-      df.pivot(grouping.columns.size).aggregate()
+      df.pivot().aggregate()
     } else if (grouping.columns.isEmpty()) {
-      df.groupBy(grouping.rows.size).aggregate()
+      df.groupBy().aggregate()
     } else {
-      df.pivot(grouping.columns.size).groupBy(grouping.rows.size).aggregate()
+      df.pivot().groupBy().aggregate()
     }
   }
+
+  private fun <T> getAllValuesOf(field: ReportField<T>): List<T> = rows.map { it[field] }
 
   private fun AnyFrame.buildGroupings() {
     val cols = columns()
@@ -160,18 +265,19 @@ open class PivotTable : VWindow() {
     }
   }
 
-  private fun dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> Iterable<String>): AnyFrame =
-    header.map { value ->
-      fill(value).asList().let {
-        DataColumn.create(
-          value.model.label,
-          it
-        )
-      }
+  private fun <T> dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> List<T>): AnyFrame =
+    header.map { field ->
+      val values = fill(field)
+
+      DataColumn.create(
+        field.model.label,
+        values,
+        field.domain.kClass!!.starProjectedType
+      )
     }.toDataFrame()
 
-  private fun DataFrame<Any?>.pivot(l1: Int): Pivot<Any?> {
-    return if (l1 == 1) {
+  private fun DataFrame<Any?>.pivot(): Pivot<Any?> {
+    return if (grouping.columns.size == 1) {
       this.pivot(grouping.columns[0].label!!)
     } else {
       this.pivot {
@@ -184,8 +290,8 @@ open class PivotTable : VWindow() {
     }
   }
 
-  fun DataFrame<Any?>.groupBy(l2: Int): GroupBy<Any?, Any?> {
-    return if (l2 == 1) {
+  private fun DataFrame<Any?>.groupBy(): GroupBy<Any?, Any?> {
+    return if (grouping.rows.size == 1) {
       this.groupBy(grouping.rows[0].label!!)
     } else {
       this.groupBy {
@@ -198,8 +304,8 @@ open class PivotTable : VWindow() {
     }
   }
 
-  fun Pivot<*>.groupBy(l2: Int): PivotGroupBy<Any?> {
-    return if (l2 == 1) {
+  fun Pivot<*>.groupBy(): PivotGroupBy<Any?> {
+    return if (grouping.rows.size == 1) {
       this.groupBy(grouping.rows[0].label!!)
     } else {
       this.groupBy {
@@ -238,16 +344,16 @@ open class PivotTable : VWindow() {
   private fun Aggregatable<*>._max(): DataFrame<Any?> {
     return when (this) {
       is Pivot<*> -> {
-        this.max().toDataFrame()
+        this.max(*aggregateField).toDataFrame()
       }
       is DataFrame<*> -> {
         this.max().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.max()
+        this.max(*aggregateField)
       }
       is PivotGroupBy<*> -> {
-        this.max()
+        this.max(*aggregateField)
       }
       else -> {
         throw UnsupportedOperationException()
@@ -264,10 +370,10 @@ open class PivotTable : VWindow() {
         this.mean().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.mean()
+        this.mean(*aggregateField)
       }
       is PivotGroupBy<*> -> {
-        this.mean()
+        this.mean(*aggregateField)
       }
       else -> {
         throw UnsupportedOperationException()
@@ -275,19 +381,33 @@ open class PivotTable : VWindow() {
     }
   }
 
+  /**
+   * Returns the number of columns managed by the data source object.
+   *
+   * @return    the number or columns to display
+   */
+  fun getColumnCount(): Int = data.last().size
+
+  /**
+   * Returns the number of records managed by the data source object.
+   *
+   * @return    the number or rows in the model
+   */
+  fun getRowCount(): Int = data.size
+
   private fun Aggregatable<*>._sum(): DataFrame<Any?> {
     return when (this) {
       is Pivot<*> -> {
-        this.sum().toDataFrame()
+        this.sum(*aggregateField).toDataFrame()
       }
       is DataFrame<*> -> {
         this.sum().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.sum()
+        this.sum(*aggregateField)
       }
       is PivotGroupBy<*> -> {
-        this.sum()
+        (this as PivotGroupBy<Int>).sum(*aggregateField)
       }
       else -> {
         throw UnsupportedOperationException()
@@ -304,16 +424,41 @@ open class PivotTable : VWindow() {
         this.min().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.min()
+        this.min(*aggregateField)
       }
       is PivotGroupBy<*> -> {
-        this.min()
+        this.min(*aggregateField)
       }
       else -> {
         throw UnsupportedOperationException()
       }
     }
   }
+
+  companion object {
+    const val TYP_CSV = 1
+    const val TYP_PDF = 2
+    const val TYP_XLS = 3
+    const val TYP_XLSX = 4
+
+    init {
+      WindowController.windowController.registerWindowBuilder(
+        org.kopi.galite.visual.visual.Constants.MDL_PIVOT_TABLE,
+        object : WindowBuilder {
+          override fun createWindow(model: VWindow): UWindow {
+            return UIFactory.uiFactory.createView(
+              model) as UPivotTable
+          }
+        }
+      )
+    }
+  }
+
+  @PublishedApi
+  internal val `access$sourceFile`: String get() =
+    this.javaClass.`package`.name.replace(".", "/") +
+            File.separatorChar +
+            this.javaClass.simpleName
 }
 
 enum class Function {
