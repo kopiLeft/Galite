@@ -57,7 +57,6 @@ open class Block(val title: String,
                  var visible: Int)
   : LocalizableElement(), VConstants {
 
-  internal var options: Int = 0 // the block options
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
   internal val dropListMap = HashMap<String, String>()
 
@@ -373,7 +372,7 @@ open class Block(val title: String,
    */
   fun options(vararg options: BlockOption) {
     options.forEach { blockOption ->
-      this.options = this.options or blockOption.value
+      block.options = block.options or blockOption.value
     }
   }
 
@@ -457,7 +456,7 @@ open class Block(val title: String,
     pos!!.setChartPosition(++block.displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = options and option == option
+  fun hasOption(option: Int): Boolean = block.options and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
@@ -1022,7 +1021,6 @@ open class Block(val title: String,
     pageNumber = block.pageNumber
     border = block.border.value
     name = block.ident
-    options = block.options
     access = block.access
     alignment = block.align?.getBlockAlignModel()
     dropListMap = block.dropListMap
