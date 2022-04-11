@@ -60,9 +60,6 @@ open class Block(val title: String,
   internal var options: Int = 0 // the block options
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
   internal val dropListMap = HashMap<String, String>()
-  internal var maxRowPos = 0
-  internal var maxColumnPos = 0
-  internal var displayedFields = 0
 
   val fields = mutableListOf<FormField<*>>() // the block's fields.
   val tables: MutableList<FormBlockTable> = mutableListOf() // the tables accessed on the database
@@ -444,8 +441,8 @@ open class Block(val title: String,
       }
     }
 
-    maxRowPos = bottomRight.y
-    maxColumnPos = bottomRight.x
+    block.maxRowPos = bottomRight.y
+    block.maxColumnPos = bottomRight.x
   }
 
   // ----------------------------------------------------------------------
@@ -453,11 +450,11 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   fun positionField(field: FormField<*>): FormPosition {
-    return FormCoordinatePosition(++displayedFields)
+    return FormCoordinatePosition(++block.displayedFields)
   }
 
   fun positionField(pos: FormPosition?) {
-    pos!!.setChartPosition(++displayedFields)
+    pos!!.setChartPosition(++block.displayedFields)
   }
 
   fun hasOption(option: Int): Boolean = options and option == option
@@ -1024,9 +1021,6 @@ open class Block(val title: String,
     displaySize = block.visible
     pageNumber = block.pageNumber
     border = block.border.value
-    maxRowPos = block.maxRowPos
-    maxColumnPos = block.maxColumnPos
-    displayedFields = block.displayedFields
     name = block.ident
     options = block.options
     access = block.access

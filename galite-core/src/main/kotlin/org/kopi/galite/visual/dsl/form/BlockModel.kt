@@ -41,20 +41,20 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   val model = block.block
 
   this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-  title = block.title
-  help = block.help
-  bufferSize = block.buffer
-  displaySize = block.visible
-  pageNumber = block.pageNumber
-  border = block.border.value
-  maxRowPos = block.maxRowPos
-  maxColumnPos = block.maxColumnPos
-  displayedFields = block.displayedFields
-  name = block.ident
-  options = block.options
-  access = block.access
+  title = model.title
+  help = model.help
+  bufferSize = model.bufferSize
+  displaySize = model.displaySize
+  pageNumber = model.pageNumber
+  border = model.border
+  maxRowPos = model.maxRowPos
+  maxColumnPos = model.maxColumnPos
+  displayedFields = model.displayedFields
+  name = model.name
+  options = model.options
+  access = model.access
   alignment = block.align?.getBlockAlignModel()
-  dropListMap = block.dropListMap
+  dropListMap = model.dropListMap
 
   fields = block.fields.map { formField ->
     formField.vField
