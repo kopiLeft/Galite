@@ -21,6 +21,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
+import org.kopi.galite.visual.dsl.common.DefaultActor
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
@@ -184,7 +185,7 @@ open class FormDefault(title: String, locale: Locale? = null): ReportSelectionFo
     }
 }
 
-class AutofillActor: Actor(
+class AutofillActor: DefaultActor(
   menu = EditMenu(),
   label = "Autofill",
   help = "Gives the possible values.",
@@ -239,7 +240,7 @@ class DeleteLineActor: Actor(
   }
 }
 
-class EditItemActor: Actor(
+class EditItemActor: DefaultActor(
   menu = EditMenu(),
   label = "Edit",
   help = "Edit this element.",
@@ -250,7 +251,7 @@ class EditItemActor: Actor(
   }
 }
 
-class EditItemSActor: Actor(
+class EditItemSActor: DefaultActor(
   menu = EditMenu(),
   label = "Edit",
   help = "Edit this element.",

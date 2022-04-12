@@ -24,20 +24,6 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.all
-import kotlin.collections.filter
-import kotlin.collections.find
-import kotlin.collections.first
-import kotlin.collections.forEach
-import kotlin.collections.forEachIndexed
-import kotlin.collections.indices
-import kotlin.collections.isNotEmpty
-import kotlin.collections.map
-import kotlin.collections.mutableListOf
-import kotlin.collections.single
-import kotlin.collections.toTypedArray
 import kotlin.math.abs
 
 import org.jetbrains.annotations.TestOnly
@@ -59,7 +45,6 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.db.DBContextHandler
 import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.DBForeignKeyException

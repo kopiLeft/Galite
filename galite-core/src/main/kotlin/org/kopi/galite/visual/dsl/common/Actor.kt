@@ -43,7 +43,6 @@ open class Actor(val menu: Menu,
   : VActor(menu.label, menu.sourceFile, ident, source, help = help, userActor = true) {
 
   init {
-    menuName = menu.label
     menuItem = label
   }
 

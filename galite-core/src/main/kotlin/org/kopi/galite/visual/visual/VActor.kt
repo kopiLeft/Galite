@@ -43,23 +43,26 @@ open class VActor(val menuIdent: String,
                   var acceleratorKey: Int = 0,
                   var acceleratorModifier: Int = 0,
                   var help: String? = null,
-                  val userActor: Boolean = false) : VModel, LocalizableElement(actorIdent, actorSource) {
+                  val userActor: Boolean = false)
+  : VModel, LocalizableElement(actorIdent, actorSource) {
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+  var menuName: String = menuIdent
+  var menuItem: String? = null
+  var number = 0 // The number for the actor
+  var iconName: String? = null
+  var action: (() -> Unit)? = null
+  internal var handler: ActionHandler? = null // the handler for the actor
+
+  private var display: UActor? = null
+
   var isEnabled: Boolean
     get() = display != null && display!!.isEnabled() // Checks whether the actor is enabled
     set(enabled) {
       display?.setEnabled(enabled) // Enables/disables the actor.
     }
-  var menuName: String = menuIdent
-  var menuItem: String? = null
-  private var display: UActor? = null
-  var number = 0 // The number for the actor
-  var action: (() -> Unit)? = null
-  internal var handler: ActionHandler? = null // the handler for the actor
-  var iconName: String? = null
 
   constructor(menuIdent: String,
               menuSource: String?,
