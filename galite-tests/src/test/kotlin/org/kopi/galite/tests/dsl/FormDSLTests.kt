@@ -319,7 +319,9 @@ class FormWithOneSimpleBlock : Form(title = "Clients", locale = Locale.UK) {
   val block = page.insertBlock(SimpleBlock())
 
   inner class SimpleBlock : Block("SimpleBlock", 1, 1) {
-    override val help = "Information about the block"
+    init {
+      help = "Information about the block"
+    }
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
@@ -357,8 +359,11 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val commandsBlock = secondPage.insertBlock(CommandsBlock())
 
   inner class ClientBlock : Block("ClientBlock", 1, 1) {
+    init {
+      help = "Information about the client"
+    }
+
     val u = table(User)
-    override val help = "Information about the client"
     val idClt = mustFill(domain = INT(30), position = at(1, 1)) {
       label = "ID"
       help = "The client id"
@@ -387,7 +392,9 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   }
 
   inner class CommandsBlock : Block("CommandsBlock", 10, 5) {
-    override val help = "Information about the commands"
+    init {
+      help = "Information about the commands"
+    }
     val idCmd = hidden(domain = INT(30)) {
       label = "ID"
       help = "The command id"

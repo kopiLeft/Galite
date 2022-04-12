@@ -110,7 +110,7 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
   internal var help: String? = null // the help on this block
   internal var tables = mutableListOf<Table>() // names of database tables
   internal var options = 0 // block options
-  internal lateinit var access: IntArray // access flags for each mode
+  internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // access flags for each mode
   internal var indices = mutableListOf<String>() // error messages for violated indices
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
   internal var commands = mutableListOf<VCommand>() // commands

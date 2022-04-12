@@ -52,7 +52,7 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   displayedFields = model.displayedFields
   name = model.name
   options = model.options
-  access = model.access
+  model.access.copyInto(access)
   alignment = block.align?.getBlockAlignModel()
   dropListMap = model.dropListMap
 

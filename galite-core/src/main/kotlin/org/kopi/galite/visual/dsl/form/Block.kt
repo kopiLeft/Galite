@@ -57,8 +57,7 @@ open class Block(val title: String,
                  var visible: Int)
   : LocalizableElement(), VConstants {
 
-  internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
-  internal val dropListMap = HashMap<String, String>()
+  val dropListMap = HashMap<String, FormField<*>>()
 
   val fields = mutableListOf<FormField<*>>() // the block's fields.
   val tables: MutableList<FormBlockTable> = mutableListOf() // the tables accessed on the database
@@ -70,7 +69,7 @@ open class Block(val title: String,
   var border: Border = Border.NONE // the border of the block
   var align: FormBlockAlign? = null // the type of alignment in form
   var pageNumber = 0 // Sets the page number
-  open val help: String? = null // the help
+  var help: String? = null // the help
 
   lateinit var shortcut: String // the shortcut of this block
   lateinit var form: Form // the form containing this block
@@ -387,13 +386,13 @@ open class Block(val title: String,
    */
   fun blockVisibility(access: Access, vararg modes: Mode) {
     if (modes.contains(Mode.QUERY)) {
-      this.access[VConstants.MOD_QUERY] = access.value
+      block.access[VConstants.MOD_QUERY] = access.value
     }
     if (modes.contains(Mode.INSERT)) {
-      this.access[VConstants.MOD_INSERT] = access.value
+      block.access[VConstants.MOD_INSERT] = access.value
     }
     if (modes.contains(Mode.UPDATE)) {
-      this.access[VConstants.MOD_UPDATE] = access.value
+      block.access[VConstants.MOD_UPDATE] = access.value
     }
   }
 
@@ -436,7 +435,7 @@ open class Block(val title: String,
       }
       // ACCESS
       for (i in 0..2) {
-        field.access[i] = field.access[i].coerceAtMost(access[i])
+        field.access[i] = field.access[i].coerceAtMost(block.access[i])
       }
     }
 
@@ -845,7 +844,8 @@ open class Block(val title: String,
       if (dropListMap[extension] != null) {
         return extension
       }
-      dropListMap[extension] = field.ident
+      dropListMap[extension] = field
+      block.dropListMap[extension] = field.ident
     }
     return null
   }
@@ -1021,8 +1021,6 @@ open class Block(val title: String,
     pageNumber = block.pageNumber
     border = block.border.value
     name = block.ident
-    access = block.access
     alignment = block.align?.getBlockAlignModel()
-    dropListMap = block.dropListMap
   }
 }
