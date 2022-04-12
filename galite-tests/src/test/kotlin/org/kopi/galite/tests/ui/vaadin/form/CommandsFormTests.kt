@@ -611,7 +611,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     _expectOne<DReport>()
     val actors = _find<DActor>()
 
-    actors.single { it.getModel().actorIdent == "Quit" }._clickAndWait()
+    actors.single { it.getModel().ident == "Quit" }._clickAndWait()
     _expectNone<DReport>()
   }
 
@@ -630,7 +630,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     val actors = _get<DHelpViewer>()._find<DActor>()
 
     // quit command
-    actors.single { it.getModel().actorIdent == "Close" }._clickAndWait()
+    actors.single { it.getModel().ident == "Close" }._clickAndWait()
 
     _expectNone<DHelpViewer>()
   }

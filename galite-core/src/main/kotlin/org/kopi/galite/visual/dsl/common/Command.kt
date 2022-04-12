@@ -30,7 +30,7 @@ import org.kopi.galite.visual.visual.VCommand
 class Command(val item: Actor, modes: Array<out Mode>, handler: ActionHandler, action: () -> Unit)
   : VCommand(VConstants.MOD_ANY,
              handler,
-             item.model,
+             item,
              -1,
              item.ident,
              action) {

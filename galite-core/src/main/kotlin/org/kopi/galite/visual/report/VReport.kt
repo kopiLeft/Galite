@@ -638,7 +638,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
   private fun initDefaultCommands() {
     actors.forEachIndexed { index, vActor ->
-      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent))
+      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
 

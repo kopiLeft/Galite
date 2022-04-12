@@ -80,6 +80,7 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
 
   (gridEditorField as ClickNotifier<*>)._clickAndWait(100)
   val oldValue = gridEditorField._value
+  @Suppress("UNCHECKED_CAST")
   gridEditorField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
 
   when (gridEditorField) {
@@ -153,6 +154,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
   }
 
   if (_inputField != null) {
+    @Suppress("UNCHECKED_CAST")
     _inputField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
     _inputField._fireEvent(ComponentValueChangeEvent<Component, Any?>(_inputField, _inputField, oldValue, true))
     waitAndRunUIQueue(50)
@@ -166,11 +168,13 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
  *
  * @param value the value to set to this field.
  */
+@Suppress("UNCHECKED_CAST")
 fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
 
 /**
  * Finds the Vaadin field component of this form field.
  */
+@Suppress("UNCHECKED_CAST")
 fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?> {
   val mainWindow = _get<MainWindow>()
 

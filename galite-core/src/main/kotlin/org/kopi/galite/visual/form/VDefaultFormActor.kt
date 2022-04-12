@@ -45,7 +45,7 @@ class VDefaultFormActor(menuIdent: String,
 
   private fun localize() {
     menuName = VlibProperties.getString(menuIdent)
-    menuItem = VlibProperties.getString(actorIdent)
-    help = VlibProperties.getString("$actorIdent-help")
+    menuItem = VlibProperties.getString(ident)
+    help = VlibProperties.getString("$ident-help")
   }
 }
