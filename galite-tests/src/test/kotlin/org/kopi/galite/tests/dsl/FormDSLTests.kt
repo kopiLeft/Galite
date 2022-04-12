@@ -237,7 +237,7 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(1, formModel.commands.size)
 
-    assertEquals(form.resetForm.ident, formModel.commands[0].item)
+    assertEquals(form.resetForm.ident, formModel.commands[0].actorIdent)
     assertEquals(form.resetForm.ident, formModel.commands[0].actor!!.actorIdent)
     assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!.menuIdent)
     assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!.iconName)
@@ -278,7 +278,7 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(1, fileModel.command!!.size)
 
-    assertEquals(form.autoFill.ident, fileModel.command!![0].item)
+    assertEquals(form.autoFill.ident, fileModel.command!![0].actorIdent)
     assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.actorIdent)
     assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
     assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!.iconName)

@@ -446,7 +446,7 @@ open class FormField<T>(internal val block: Block,
       columns?.getColumnsModels()?.toTypedArray(), // TODO
       columns?.index?.indexNumber ?: 0,
       columns?.priority ?: 0,
-      commands.map { it.model }.toTypedArray(),
+      commands.toTypedArray(),
       position?.getPositionModel(),
       align.value,
       alias?.vField

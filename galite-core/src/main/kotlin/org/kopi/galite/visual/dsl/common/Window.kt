@@ -132,7 +132,7 @@ abstract class Window(val title: String, val locale: Locale?) {
       actor(item)
     }
     commands.add(command)
-    model.commands.add(command.model)
+    model.commands.add(command)
     addCommandTrigger()
 
     return command

@@ -18,16 +18,20 @@
 
 package org.kopi.galite.visual.visual
 
-open class VCommand(private var mode: Int,
+open class VCommand(mode: Int,
                     protected var handler: ActionHandler?,
                     var actor: VActor?,
                     internal val trigger: Int,
-                    val item: String,
-                    internal val action: (() -> Unit)? = null) {
+                    val actorIdent: String,
+                    internal val action: () -> Unit = {}) {
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
+
+  var mode: Int = mode
+    protected set
+
   private var killed = false
 
   /**
@@ -63,7 +67,7 @@ open class VCommand(private var mode: Int,
   /**
    * Returns the name has defined in source
    */
-  fun getIdent(): String = item
+  fun getIdent(): String = actorIdent
 
   /**
    * Returns true if the command is active in given to mode.

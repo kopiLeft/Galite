@@ -345,7 +345,7 @@ open class Block(val title: String,
     // TODO : Add commands triggers here
     block.VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
 
-    block.commands.add(command.model)
+    block.commands.add(command)
 
     return command
   }
@@ -515,7 +515,7 @@ open class Block(val title: String,
   fun getActiveCommands(): List<Command?> {
     val activeCommands = block.activeCommands
 
-    return commands.filter { it.model in activeCommands }
+    return commands.filter { it in activeCommands }
   }
 
   fun getMode(): Int = block.getMode()

@@ -20,7 +20,6 @@ package org.kopi.galite.visual.dsl.common
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.visual.ActionHandler
 import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VHelpGenerator
 
 /**
  * This class represent a command, ie a link between an actor and
@@ -28,91 +27,27 @@ import org.kopi.galite.visual.visual.VHelpGenerator
  *
  * @param item                 the item
  */
-class Command(val item: Actor, modes: Array<out Mode>, val handler: ActionHandler, val action: () -> Unit = {}) {
-
-  var mode: Int = VConstants.MOD_ANY
-    private set
+class Command(val item: Actor, modes: Array<out Mode>, handler: ActionHandler, action: () -> Unit)
+  : VCommand(VConstants.MOD_ANY,
+             handler,
+             item.model,
+             -1,
+             item.ident,
+             action) {
 
   init {
     if (modes.isNotEmpty()) {
-      setMode(*modes)
+      setModes(*modes)
     }
   }
 
   /**
    * Changes the access mode of the command
    **/
-  fun setMode(vararg access: Mode) {
+  fun setModes(vararg access: Mode) {
     mode = 0
     for (item in access) {
       mode = mode or (1 shl item.value)
     }
-  }
-
-  /**
-   * Kill a command: this command will never been enabled again
-   */
-  fun kill() {
-    model.kill()
-  }
-
-  fun setEnabled(enabled: Boolean) {
-    model.setEnabled(enabled)
-  }
-
-  /**
-   * Returns true if the command is active in given to mode.
-   *
-   * @param    mode        the mode to test
-   */
-  fun isActive(mode: Int): Boolean = model.isActive(mode)
-
-  /**
-   * Returns the actor
-   */
-  fun isEnabled(): Boolean = model.isEnabled()
-
-  /**
-   * Returns true if the command is active in given to mode.
-   *
-   * @param    b            set to be active
-   */
-  fun setActive(b: Boolean) {
-    model.setActive(b)
-  }
-
-  fun performAction() {
-    model.performAction()
-  }
-
-  fun performBasicAction() {
-    model.performBasicAction()
-  }
-
-  // ----------------------------------------------------------------------
-  // HELP HANDLING
-  // ----------------------------------------------------------------------
-  fun helpOnCommand(help: VHelpGenerator) {
-    model.helpOnCommand(help)
-  }
-
-  // ----------------------------------------------------------------------
-  // MODEL
-  // ----------------------------------------------------------------------
-
-  val model: VCommand = buildModel()
-
-  /**
-   * Builds the command model [VCommand] from information provided by this command.
-   */
-  private fun buildModel() : VCommand {
-    return VCommand(
-      mode,
-      handler,
-      item.model,
-      -1,
-      item.ident,
-      action
-    )
   }
 }
