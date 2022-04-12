@@ -80,8 +80,8 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
     }
   }
 
-  fun buildFullCalendarForm(): VFullCalendarForm {
-    return object : VFullCalendarForm() {
+  fun buildFullCalendarForm() {
+    fullCalendarForm = object : VFullCalendarForm() {
 
       init {
         init()
@@ -95,8 +95,8 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
         get() = this@FullCalendarBlockModel
 
       fun init() {
-
         val vSimpleBlock = BlockModel(this, this@FullCalendarBlockModel.block, source)
+
         vSimpleBlock.setInfo(pageNumber, this)
         vSimpleBlock.initIntern()
 
