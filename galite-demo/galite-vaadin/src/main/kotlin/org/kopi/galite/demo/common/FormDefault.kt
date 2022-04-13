@@ -21,13 +21,13 @@ import java.util.Locale
 
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
-import org.kopi.galite.visual.dsl.common.DefaultActor
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.form.Commands
+import org.kopi.galite.visual.visual.DefaultActor
 
 open class FormDefault(title: String, locale: Locale? = null): ReportSelectionForm(title, locale) {
 

@@ -15,16 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.common
 
-import org.kopi.galite.visual.visual.VDefaultActor
+package org.kopi.galite.visual.visual
+
+import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.dsl.common.Menu
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 
 /**
- * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
- * and a help
- *
- * An Actor is an item to be linked to a command, if its [icon] is specified, it will appear
- * in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar
+ * Represents an default actor.
  *
  * @param menu                the containing menu
  * @param label               the label
@@ -38,4 +37,10 @@ open class DefaultActor(menu: Menu,
                         val command: PredefinedCommand,
                         ident: String? = command.ident,
                         source: String? = null)
-  : VDefaultActor(command.number, menu, label,help, ident, source)
+  : Actor(menu, label,help, ident, source) {
+
+  /**
+   * the code of this default command
+   */
+  val code get() = command.number
+}

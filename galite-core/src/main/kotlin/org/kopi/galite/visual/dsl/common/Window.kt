@@ -21,6 +21,7 @@ import java.awt.Frame
 import java.io.File
 import java.util.Locale
 import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.DefaultActor
 import org.kopi.galite.visual.visual.VException
 
 import org.kopi.galite.visual.visual.VWindow

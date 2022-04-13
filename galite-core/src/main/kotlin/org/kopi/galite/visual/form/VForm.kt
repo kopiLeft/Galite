@@ -31,12 +31,12 @@ import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.visual.DefaultActor
 import org.kopi.galite.visual.visual.MessageCode
 import org.kopi.galite.visual.visual.UIFactory
 import org.kopi.galite.visual.visual.UWindow
 import org.kopi.galite.visual.visual.VActor
 import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VDefaultActor
 import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VHelpViewer
@@ -205,7 +205,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
    */
   override fun addActors(actorDefs: Array<VActor>?) {
     actorDefs?.forEach { actor ->
-      if (actor is VDefaultActor) {
+      if (actor is DefaultActor) {
         when (actor.code) {
           CMD_AUTOFILL -> autofillActor = actor
           CMD_EDITITEM -> editItemActor = actor

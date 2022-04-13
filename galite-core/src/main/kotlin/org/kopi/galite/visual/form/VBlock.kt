@@ -69,9 +69,9 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VWindow
 
-abstract class VBlock(title: String,
-                      var buffer: Int,
-                      var visible: Int)
+abstract class VBlock(var title: String,
+                      buffer: Int,
+                      visible: Int)
   : VConstants, DBContextHandler, ActionHandler {
 
   // ----------------------------------------------------------------------
@@ -93,22 +93,13 @@ abstract class VBlock(title: String,
   // prevent that the access of a field is updated
   // (performance in big charts)
   protected var ignoreAccessChange = false
-
-  // max number of buffered records
-  var bufferSize = buffer
-
-  // max number of buffered IDs
-  protected var fetchSize = 0
-
-  // max number of displayed records
-  var displaySize = visible
-
-  /** The page number of this block */
-  var pageNumber = 0 // page number
+  var bufferSize = buffer // max number of buffered records
+  protected var fetchSize = 0 // max number of buffered IDs
+  var displaySize = visible // max number of displayed records
+  var pageNumber = 0 // page number of this block
   internal lateinit var source: String // qualified name of source file
   lateinit var name: String // block name
   protected lateinit var shortcut: String // block short name
-  var title: String = title // block title
   var alignment: BlockAlignment? = null
   internal var help: String? = null // the help on this block
   internal var tables = mutableListOf<Table>() // names of database tables
@@ -119,7 +110,7 @@ abstract class VBlock(title: String,
   internal var commands = mutableListOf<VCommand>() // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
-      val temp: Array<VActor>? = field
+      val temp = field
       field = null
       return temp
     }
@@ -130,12 +121,6 @@ abstract class VBlock(title: String,
   internal var VKT_Command_Triggers = mutableListOf<Array<Trigger?>>()
   internal var VKT_Field_Command_Triggers = mutableListOf<Array<Trigger?>>()
 
-  // current mode
-  private var mode = 0
-  protected lateinit var recordInfo: IntArray // status vector for records
-  protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
-  protected var fetchCount = 0 // # of fetched records
-  protected var fetchPosition = 0 // position of current record
   protected var blockListener = EventListenerList()
   internal var orderModel = OrderModel()
   var border = VConstants.BRD_NONE
@@ -146,6 +131,12 @@ abstract class VBlock(title: String,
   internal var dropListMap = HashMap<String, String>()
 
   // dynamic data
+  private var mode = 0 // current mode
+  protected lateinit var recordInfo: IntArray // status vector for records
+  protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
+  protected var fetchCount = 0 // # of fetched records
+  protected var fetchPosition = 0 // position of current record
+
   var activeRecord = 0 // current record
     get() {
       return if (field in 0 until bufferSize) field else -1
@@ -163,10 +154,9 @@ abstract class VBlock(title: String,
     set(mode) {
       if (mode != detailMode) {
         // remember field to enter it in the next view
-        val vField = activeField
-        fireViewModeLeaved(this, vField)
+        fireViewModeLeaved(this, activeField)
         detailMode = mode
-        fireViewModeEntered(this, vField)
+        fireViewModeEntered(this, activeField)
       }
     }
 
