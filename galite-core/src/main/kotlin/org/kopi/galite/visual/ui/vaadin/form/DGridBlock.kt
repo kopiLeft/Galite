@@ -617,11 +617,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   fun refreshRow(row: Int) {
     if (::grid.isInitialized) {
       access(currentUI) {
-        if (row < grid.dataCommunicator.itemCount) {
-          val itemToRefresh = grid.dataCommunicator.getItem(row)
-
-          grid.dataProvider.refreshItem(itemToRefresh)
-        }
+        grid.dataProvider.refreshItem(GridBlockItem(row))
       }
     }
   }
@@ -645,7 +641,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
           // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            editor.editItem(getActualItems().single { it.record == record })
+            editor.editItem(GridBlockItem(itemToBeEdited!!))
           }
         }
       }

@@ -22,7 +22,7 @@ import org.kopi.galite.visual.form.VField
 /**
  * Grid block data source item
  */
-class GridBlockItem(val record: Int) {
+data class GridBlockItem(val record: Int) {
 
   // --------------------------------------------------
   // IMPLEMENTATION
