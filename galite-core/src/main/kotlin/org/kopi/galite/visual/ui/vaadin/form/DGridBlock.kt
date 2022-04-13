@@ -35,6 +35,7 @@ import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
@@ -57,6 +58,7 @@ import com.vaadin.flow.internal.ExecutionContext
 /**
  * Grid based chart block implementation.
  */
+@CssImport("./styles/galite/grid.css", themeFor = "vaadin-grid")
 open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   // --------------------------------------------------
@@ -67,6 +69,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
     themeList.add("grid-block")
+    grid.themeNames.add("grid-block")
     grid.isAllRowsVisible = true
   }
 
@@ -505,6 +508,13 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                   .setHeader(label)
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
+                  .setClassNameGenerator { item ->
+                    if(editor.isOpen && editor.item == item) {
+                      "active-item"
+                    } else {
+                      ""
+                    }
+                  }
 
           setAlignment(column, columnView.model.align)
 

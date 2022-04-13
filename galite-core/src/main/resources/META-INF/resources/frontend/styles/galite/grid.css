@@ -246,3 +246,11 @@
 :host([navigating]) [part~="cell"]:focus::before {
     box-shadow: none;
 }
+
+:host([theme~="grid-block"]) [part~="cell"] {
+    padding-right: 4px;
+}
+
+:host([theme~="grid-block"]) .active-item {
+    padding: 0px !important;
+}
