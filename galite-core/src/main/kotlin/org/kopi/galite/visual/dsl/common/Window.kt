@@ -58,9 +58,8 @@ abstract class Window(val title: String, val locale: Locale?) {
    * the menu name in the actor definition.
    */
   fun menu(label: String): Menu {
-    val menu = Menu(label, sourceFile)
+    val menu = Menu(label, "actor${actors.size}", sourceFile)
 
-    menu.ident = "actor${actors.size}"
     menus.add(menu)
     return menu
   }

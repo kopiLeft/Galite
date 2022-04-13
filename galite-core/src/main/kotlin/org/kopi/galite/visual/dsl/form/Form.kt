@@ -97,13 +97,13 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
       block.init()
     }
     if (formPage != null) {
-      block.pageNumber = formPage.pageNumber
+      block.block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
     blocks.add(block)
 
     val vBlock = block.getBlockModel(model)
-    vBlock.setInfo(block.pageNumber, model)
+    vBlock.setInfo(block.block.pageNumber, model)
     if(vBlock !is VFullCalendarBlock) {
       vBlock.initIntern()
     }

@@ -413,7 +413,7 @@ open class FormField<T>(internal val block: Block,
   // FIELD MODEL
   ///////////////////////////////////////////////////////////////////////////
 
-  override var ident: String = if (_isInternal) "ANONYMOUS$fieldIndex!@#$%^&*()" else super.ident
+  override val ident: String = if (_isInternal) "ANONYMOUS$fieldIndex!@#$%^&*()" else super.ident
 
   /**
    * The field model based on the field type.

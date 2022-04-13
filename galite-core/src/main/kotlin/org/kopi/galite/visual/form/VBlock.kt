@@ -69,7 +69,10 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VWindow
 
-abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
+abstract class VBlock(title: String,
+                      var buffer: Int,
+                      var visible: Int)
+  : VConstants, DBContextHandler, ActionHandler {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -92,20 +95,20 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
   protected var ignoreAccessChange = false
 
   // max number of buffered records
-  var bufferSize = 0
+  var bufferSize = buffer
 
   // max number of buffered IDs
   protected var fetchSize = 0
 
   // max number of displayed records
-  var displaySize = 0
+  var displaySize = visible
 
   /** The page number of this block */
   var pageNumber = 0 // page number
   internal lateinit var source: String // qualified name of source file
   lateinit var name: String // block name
   protected lateinit var shortcut: String // block short name
-  var title: String = "" // block title
+  var title: String = title // block title
   var alignment: BlockAlignment? = null
   internal var help: String? = null // the help on this block
   internal var tables = mutableListOf<Table>() // names of database tables
@@ -135,7 +138,7 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
   protected var fetchPosition = 0 // position of current record
   protected var blockListener = EventListenerList()
   internal var orderModel = OrderModel()
-  var border = 0
+  var border = VConstants.BRD_NONE
   var maxRowPos = 0
   var maxColumnPos = 0
   var displayedFields = 0
@@ -205,8 +208,17 @@ abstract class VBlock() : VConstants, DBContextHandler, ActionHandler {
       }
     }
 
-  constructor(form: VForm): this() {
+  constructor(title: String, buffer: Int, visible: Int, form: VForm): this(title, buffer, visible) {
     this.form = form
+  }
+
+  constructor(form: VForm): this("", 0, 0) {
+    this.form = form
+  }
+
+  init {
+    bufferSize = buffer
+    displaySize = visible
   }
 
   companion object {

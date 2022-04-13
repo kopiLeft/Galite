@@ -25,7 +25,7 @@ import java.io.File
  */
 abstract class LocalizableElement(ident: String? = null, open val source: String? = null) { // TODO: remove source getter/setter
 
-  open var ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
+  open val ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringAfterLast('$')
 
   /**

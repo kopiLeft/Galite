@@ -67,9 +67,20 @@ open class Block(val title: String,
   val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
 
   var border: Border = Border.NONE // the border of the block
+    set(b) {
+      block.border = b.value
+      field = b
+    }
   var align: FormBlockAlign? = null // the type of alignment in form
-  var pageNumber = 0 // Sets the page number
+    private set(value) {
+      block.alignment = value?.getBlockAlignModel()
+      field = value
+    }
   var help: String? = null // the help
+    set(value) {
+      block.help = value
+      field = value
+    }
 
   lateinit var shortcut: String // the shortcut of this block
   lateinit var form: Form // the form containing this block
@@ -994,7 +1005,7 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   /** The block model */
-  open val block: VBlock = object : VBlock() {
+  open val block: VBlock = object : VBlock(title, buffer, visible) {
     override fun setInfo(form: VForm) {
       this@Block.fields.forEach {
         it.setInfo(super.source)
@@ -1007,20 +1018,9 @@ open class Block(val title: String,
   /** Returns block model */
   open fun getBlockModel(vForm: VForm): VBlock {
     block.form = vForm
-    block.initializeBlock(this, vForm.source)
+    block.source = if (this::class.isInner && vForm.source != null) vForm.source!! else sourceFile
+    block.name = ident
     isModelInitialized = true
     return block
-  }
-
-  private fun VBlock.initializeBlock(block: Block, formSource: String?) {
-    this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-    title = block.title
-    help = block.help
-    bufferSize = block.buffer
-    displaySize = block.visible
-    pageNumber = block.pageNumber
-    border = block.border.value
-    name = block.ident
-    alignment = block.align?.getBlockAlignModel()
   }
 }

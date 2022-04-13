@@ -24,7 +24,11 @@ import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.visual.VDefaultActor
 
-class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VBlock(vForm) {
+class BlockModel(vForm: VForm, val block: Block, formSource: String? = null)
+  : VBlock(block.block.title,
+           block.block.bufferSize,
+           block.block.displaySize,
+           vForm) {
 
   init {
     initializeBlock(block, formSource)
@@ -41,10 +45,7 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   val model = block.block
 
   this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-  title = model.title
   help = model.help
-  bufferSize = model.bufferSize
-  displaySize = model.displaySize
   pageNumber = model.pageNumber
   border = model.border
   maxRowPos = model.maxRowPos
@@ -72,7 +73,7 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   indicesIdents = model.indicesIdents
 }
 
-class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
+class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock(block.title, block.buffer, block.visible) {
 
   override fun setInfo(form: VForm) {
     block.fields.forEach {

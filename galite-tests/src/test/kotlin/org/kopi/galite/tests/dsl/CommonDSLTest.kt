@@ -42,8 +42,7 @@ class CommonDSLTests : VApplicationTestBase() {
   @Test
   fun `test Command mode function`() {
     val menu = Menu("Test")
-    val actor = Actor(menu, "Test Actor", "Test Actor")
-    actor.ident = "TActor"
+    val actor = Actor(menu, "Test Actor", "Test Actor", "TActor")
     val command = Command(actor, arrayOf(),
                           object : ActionHandler {
                             override fun executeVoidTrigger(VKT_Type: Int) {}
