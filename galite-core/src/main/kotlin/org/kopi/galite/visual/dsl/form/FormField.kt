@@ -195,7 +195,7 @@ open class FormField<T>(internal val block: Block,
                       keyColumns.contains(column),
                       nullableColumns.contains(column))
     }
-    columns = FormFieldColumns(cols.toTypedArray())
+    columns = FormFieldColumns(cols)
     if (init != null) {
       columns!!.init()
     }
