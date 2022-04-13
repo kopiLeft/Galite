@@ -617,9 +617,11 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   fun refreshRow(row: Int) {
     if (::grid.isInitialized) {
       access(currentUI) {
-        val itemToRefresh = grid.dataCommunicator.getItem(row)
+        if (row < grid.dataCommunicator.itemCount) {
+          val itemToRefresh = grid.dataCommunicator.getItem(row)
 
-        grid.dataProvider.refreshItem(itemToRefresh)
+          grid.dataProvider.refreshItem(itemToRefresh)
+        }
       }
     }
   }
