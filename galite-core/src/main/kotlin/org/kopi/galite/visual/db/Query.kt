@@ -15,39 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.visual.db
 
-package org.kopi.galite.visual.dsl.report
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.ResultRow
 
-import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.report.VSeparatorColumn
-
-open class ReportModel(val report: Report): VReport() {
-
-  init {
-    setTitle(report.title)
-    setPageTitle(report.title)
-    help = report.help
-    source = report.sourceFile
-
-    if (report.reportCommands) {
-      addDefaultReportCommands()
-    }
-
-    model.columns.add(VSeparatorColumn()) // TODO!!!
+/**
+ * Performs the given action on the single row returned by this query, or throws a DBNoRowException if the result
+ * is empty or DBTooManyRowsException if the query returns more than one element.
+ *
+ * @param actionOnSingleRow the action to perform on the returned result row.
+ */
+fun Query.into(actionOnSingleRow: (ResultRow) -> Unit) {
+  val resultRow = try {
+    single()
+  } catch (e: NoSuchElementException) {
+    throw DBNoRowException()
+  } catch (e: IllegalArgumentException) {
+    throw DBTooManyRowsException()
   }
 
-  override fun init() {
-    report.fields.forEach {
-      it.initField()
-
-      if (it.group != null) {
-        it.groupID = report.fields.indexOf(it.group)
-        it.model.groups = it.groupID
-      }
-    }
-  }
-
-  override fun add() {
-    // TODO
-  }
+  actionOnSingleRow(resultRow)
 }

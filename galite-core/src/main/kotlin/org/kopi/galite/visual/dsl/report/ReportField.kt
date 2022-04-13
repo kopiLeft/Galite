@@ -177,7 +177,7 @@ class ReportField<T>(override val domain: Domain<T>,
  * Sets display scale to maxScale
  * all values will be set to the same scale
  */
-fun ReportField<BigDecimal>.setDisplayScale(scale: Int) {
+fun <T: BigDecimal?> ReportField<T>.setDisplayScale(scale: Int) {
   (model as VDecimalColumn).setDisplayScale(scale)
 }
 
@@ -186,6 +186,6 @@ fun ReportField<BigDecimal>.setDisplayScale(scale: Int) {
  * all values with scale superior to maxScale will have
  * maxScale as scale, and the other values will keep their scale.
  */
-fun ReportField<BigDecimal>.setMaxScale(scale: Int) {
+fun <T: BigDecimal?> ReportField<T>.setMaxScale(scale: Int) {
   (model as VDecimalColumn).setMaxScale(scale)
 }

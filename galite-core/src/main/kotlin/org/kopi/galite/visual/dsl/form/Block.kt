@@ -181,7 +181,7 @@ open class Block(val title: String,
    */
   inline fun <reified T> visit(domain: Domain<T>,
                                position: FormPosition,
-                               init: NullableFormField<T>.() -> Unit): FormField<T?> {
+                               init: NullableFormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
@@ -196,7 +196,7 @@ open class Block(val title: String,
    */
   inline fun <reified T> skipped(domain: Domain<T>,
                                  position: FormPosition,
-                                 init: NullableFormField<T>.() -> Unit): FormField<T?> {
+                                 init: NullableFormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
@@ -209,7 +209,7 @@ open class Block(val title: String,
    * @param init    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T?> {
+  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_HIDDEN)
   }
 
@@ -219,7 +219,7 @@ open class Block(val title: String,
   inline fun <reified T> initField(domain: Domain<T>,
                                    init: NullableFormField<T>.() -> Unit,
                                    access: Int,
-                                   position: FormPosition? = null): FormField<T?> {
+                                   position: FormPosition? = null): FormField<T> {
     initDomain(domain)
     val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
     field.init()
@@ -227,7 +227,7 @@ open class Block(val title: String,
     field.addFieldTrigger()
     block.fields.add(field.vField)
     fields.add(field)
-    return field as FormField<T?>
+    return field
   }
 
   fun FormField<*>.addFieldTrigger() {

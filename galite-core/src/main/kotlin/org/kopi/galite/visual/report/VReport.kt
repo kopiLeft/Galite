@@ -427,14 +427,6 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
     }
   }
 
-  // ----------------------------------------------------------------------
-  // INTERFACE (COMMANDS)
-  // ----------------------------------------------------------------------
-  /**
-   * Adds a line.
-   */
-  abstract fun add()
-
   /**
    * Returns the ID
    */

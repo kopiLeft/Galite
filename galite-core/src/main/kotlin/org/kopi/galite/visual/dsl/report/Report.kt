@@ -33,6 +33,7 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.visual.ApplicationContext
 
@@ -347,7 +348,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
-  override val model: VReport = object : ReportModel(this@Report) {
+  override val model: VReport = object : VReport() {
     init {
       // TODO: for separator column
       if(VKT_Fields_Triggers.size == 0) {
@@ -357,8 +358,31 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
       }
     }
 
+    override fun init() {
+      fields.forEach {
+        it.initField()
+
+        if (it.group != null) {
+          it.groupID = fields.indexOf(it.group)
+          it.model.groups = it.groupID
+        }
+      }
+    }
 
     override val locale: Locale get() = this@Report.locale ?: ApplicationContext.getDefaultLocale()
+  }
+
+  init {
+    model.setTitle(title)
+    model.setPageTitle(title)
+    model.help = help
+    model.source = sourceFile
+
+    if (reportCommands) {
+      addDefaultReportCommands()
+    }
+
+    model.model.columns.add(VSeparatorColumn()) // TODO!!!
   }
 
   @PublishedApi

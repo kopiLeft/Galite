@@ -15,19 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.form
+package org.kopi.galite.visual.db
 
-import org.kopi.galite.visual.form.VField
+class DBNoRowException : DBRuntimeException {
+  // ----------------------------------------------------------------------
+  // CONSTRUCTORS
+  // ----------------------------------------------------------------------
+  /**
+   * Constructs an exception with a message.
+   */
+  constructor() : super("No row")
 
-/**
- * Grid block data source item
- */
-data class GridBlockItem(val record: Int) {
-
-  // --------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------
-  fun getValue(field: VField): Any? {
-    return field.getObject(record)
-  }
+  /**
+   * Constructs an exception with a message.
+   *
+   * @param     query           the sql query which generated the exception
+   */
+  constructor(query: String) : super("No row : $query")
 }
