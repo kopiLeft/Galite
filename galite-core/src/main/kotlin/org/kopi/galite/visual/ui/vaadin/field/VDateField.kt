@@ -22,7 +22,6 @@ import java.util.Optional
 import org.kopi.galite.visual.type.format
 
 import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.DomEvent
@@ -49,6 +48,10 @@ import com.vaadin.flow.shared.Registration
 @CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-text-field")
 class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
 
+  init {
+    className = "galite-date"
+  }
+
   override fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
     internalField.picker.addValueChangeListener(listener)
     internalField.addValueChangeListener(listener)
@@ -64,7 +67,10 @@ class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
 
 // Issue: https://github.com/vaadin/flow-components/issues/1158
 // TODO: Remove this workaround when the ticket is resolved.
-@CssImport(value = "./styles/galite/datepicker.css", themeFor = "vaadin-date-picker-text-field")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/datepicker.css"),
+  CssImport(value = "./styles/galite/datepicker.css", themeFor = "vaadin-date-picker")
+])
 class DateField: TextField() {
   val picker = DatePicker()
 
@@ -90,7 +96,6 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
   init {
     element.setProperty("attrForValue", "value")
     element.setProperty("autoOpenDisabled", true)
-    textField.element.themeList.add("galite-date")
     textField.className = "input"
     textField.suffixComponent = icon
     textField.isClearButtonVisible = true
@@ -98,10 +103,6 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
     textField.pattern = "[0-9/\\.]*"
     textField.maxLength = 10
 
-    add(textField)
-  }
-
-  override fun onAttach(attachEvent: AttachEvent?) {
     icon.element.executeJs(
       """
               this.addEventListener("click", event => {
@@ -111,7 +112,7 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
       element
     )
 
-    element.executeJs("setTimeout(function(){$0._inputValue = $1},0)", element, value)
+    add(textField)
   }
 
   override fun setValue(value: String?) {
