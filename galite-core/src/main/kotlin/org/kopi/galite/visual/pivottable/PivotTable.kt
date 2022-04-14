@@ -27,9 +27,6 @@ import org.jetbrains.kotlinx.dataframe.aggregation.Aggregatable
 import org.jetbrains.kotlinx.dataframe.api.*
 import org.jetbrains.kotlinx.dataframe.AnyFrame
 import org.jetbrains.kotlinx.dataframe.DataColumn
-import org.jetbrains.kotlinx.dataframe.columns.ColumnGroup
-import org.jetbrains.kotlinx.dataframe.columns.ValueColumn
-import org.jetbrains.kotlinx.dataframe.values
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.dsl.report.ReportRow
@@ -65,10 +62,9 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
 
   var funct = Function.NONE
 
-  private lateinit var dataframe: AnyFrame
+  internal lateinit var dataframe: AnyFrame
   private var aggregateField = arrayOf<String>()
-  private val data = mutableListOf<MutableList<Any?>>()
-  private val rowGroupings = mutableListOf<MutableList<Any?>>()
+  lateinit var model: MPivotTable
 
   init {
     setTitle(title)
@@ -152,7 +148,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
     setTitle(title)
   }
 
-  fun getValueAt(row: Int, col: Int): Any? = data[row][col]
+  fun getValueAt(row: Int, col: Int): Any? = model.getValueAt(row, col)
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
@@ -180,7 +176,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   fun build() {
     localize(manager)
     buildDataFrame()
-    dataframe.buildGroupings()
+    model = MPivotTable(this)
     (getDisplay() as UPivotTable?)?.build()
   }
 
@@ -201,69 +197,6 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   }
 
   private fun <T> getAllValuesOf(field: ReportField<T>): List<T> = rows.map { it[field] }
-
-  private fun AnyFrame.buildGroupings() {
-    val cols = columns()
-    val columnGroups = cols.filterIsInstance(ColumnGroup::class.java)
-    val valueColumns = cols.filterIsInstance(ValueColumn::class.java)
-    val rowGroupingValues = mutableListOf<Any?>()
-
-    columnGroups.forEach { col ->
-      col.buildHeaderGrouping(valueColumns.size)
-    }
-
-    data.add(rowGroupingValues)
-    valueColumns.forEach {
-      rowGroupingValues.add(it.name())
-    }
-    repeat(rowGroupings.size) { rowGroupingValues.add(null) }
-
-    repeat(rowsCount()) { r ->
-      val agregationValues = mutableListOf<Any?>()
-      data.add(agregationValues)
-      valueColumns.forEach { vc ->
-        agregationValues.add(vc.values.elementAt(r))
-      }
-
-      rowGroupings.forEach {
-        agregationValues.add(it[r])
-      }
-    }
-  }
-
-  private fun ColumnGroup<*>.buildHeaderGrouping(nullRows: Int) {
-    val firstGrouping = mutableListOf<Any?>()
-    val secondGrouping: MutableList<Any?> = mutableListOf()
-
-    data.add(firstGrouping)
-    repeat(nullRows) { firstGrouping.add(null) }
-    firstGrouping.add(name())
-    repeat(columns().size - 1) { firstGrouping.add(null) }
-
-    data.add(secondGrouping)
-    buildHeaderGrouping(nullRows, secondGrouping)
-  }
-
-  private fun ColumnGroup<*>.buildHeaderGrouping(
-    nullRows: Int,
-    groupings: MutableList<Any?> = mutableListOf(),
-    pads: Boolean = true
-  ) {
-    val nextGroupings: MutableList<Any?> = mutableListOf()
-    if (pads) repeat(nullRows) { groupings.add(null) }
-    columns().forEach { col ->
-      groupings.add(col.name())
-      if (col is ColumnGroup<*>) {
-        repeat(col.columns().size - 1) { groupings.add(null) }
-        col.buildHeaderGrouping(nullRows, nextGroupings, nextGroupings.isEmpty())
-      } else {
-        rowGroupings.add(col.values.toMutableList())
-      }
-    }
-    if (nextGroupings.isNotEmpty()) {
-      data.add(nextGroupings)
-    }
-  }
 
   private fun <T> dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> List<T>): AnyFrame =
     header.map { field ->
@@ -386,14 +319,14 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
    *
    * @return    the number or columns to display
    */
-  fun getColumnCount(): Int = data.last().size
+  fun getColumnCount(): Int = model.getColumnCount()
 
   /**
    * Returns the number of records managed by the data source object.
    *
    * @return    the number or rows in the model
    */
-  fun getRowCount(): Int = data.size
+  fun getRowCount(): Int = model.getRowCount()
 
   private fun Aggregatable<*>._sum(): DataFrame<Any?> {
     return when (this) {
