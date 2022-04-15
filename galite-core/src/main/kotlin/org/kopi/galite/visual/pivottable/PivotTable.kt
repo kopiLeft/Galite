@@ -112,7 +112,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_PIVOT_TABLE
 
   /**
-   * Redisplay the report after change in formatting
+   * Redisplay the pivot table after change in formatting
    */
   @Deprecated("call method in display; model must not be refreshed")
   fun redisplay() {
@@ -153,7 +153,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  open fun initReport() {
+  open fun initPivotTable() {
     build()
     //callTrigger(Constants.TRG_PREPIVOT) TODO
   }
@@ -252,7 +252,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   }
 
   /**
-   * Adds a row to the report.
+   * Adds a row to the pivot table.
    *
    * @param init initializes the row with values.
    */

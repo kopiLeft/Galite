@@ -36,8 +36,8 @@ class MPivotTable(private val pivotTable: PivotTable) {
   private lateinit var data: List<MutableList<Any?>>
 
   fun build() {
-    columnGroups.forEach { c ->
-      c.buildHeaderGrouping()
+    columnGroups.forEach { column ->
+      column.buildHeaderGrouping()
     }
 
     val rowGroupingValues = mutableListOf<Any?>()
@@ -48,15 +48,15 @@ class MPivotTable(private val pivotTable: PivotTable) {
     }
     repeat(values.size) { rowGroupingValues.add(null) }
 
-    repeat(pivotTable.dataframe.rowsCount()) { r ->
+    repeat(pivotTable.dataframe.rowsCount()) { rowIndex ->
       val aggregationValues = mutableListOf<Any?>()
       rows.add(aggregationValues)
-      valueColumns.forEach { vc ->
-        aggregationValues.add(vc.values.elementAt(r))
+      valueColumns.forEach { valueColumn ->
+        aggregationValues.add(valueColumn.values.elementAt(rowIndex))
       }
 
       values.forEach {
-        aggregationValues.add(it[r])
+        aggregationValues.add(it[rowIndex])
       }
     }
 
@@ -73,14 +73,14 @@ class MPivotTable(private val pivotTable: PivotTable) {
     groupsSpans.add(spans)
     groupsSpanTypes.add(spansTypes)
 
-    columns.forEach { c ->
-      group.add(c.name())
-      if(c is ColumnGroup<*>) {
-        val ccolumns = c.columns()
+    columns.forEach { column ->
+      group.add(column.name())
+      if(column is ColumnGroup<*>) {
+        val columnGroup = column.columns()
 
-        spans.add(c.columnsCount())
-        groupingColumns.addAll(ccolumns)
-        repeat(c.columnsCount()) {
+        spans.add(column.columnsCount())
+        groupingColumns.addAll(columnGroup)
+        repeat(column.columnsCount()) {
           if(it == 0) {
             spansTypes.add(Span.NONE)
           } else {
@@ -91,7 +91,7 @@ class MPivotTable(private val pivotTable: PivotTable) {
       } else {
         spans.add(1)
         spansTypes.add(Span.NONE)
-        values.add(c.values.toList())
+        values.add(column.values.toList())
       }
     }
 

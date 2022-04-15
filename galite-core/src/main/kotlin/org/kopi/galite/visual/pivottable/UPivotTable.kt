@@ -21,7 +21,7 @@ package org.kopi.galite.visual.pivottable
 import org.kopi.galite.visual.report.UReport
 
 /**
- * `UReport` is the top-level interface that must be implemented
- * by all dynamic reports. It is the visual component of the [VReport] model.
+ * `UPivotTable` is the top-level interface that must be implemented
+ * by all pivot tables. It is the visual component of the [PivotTable] model.
  */
 interface UPivotTable : UReport
