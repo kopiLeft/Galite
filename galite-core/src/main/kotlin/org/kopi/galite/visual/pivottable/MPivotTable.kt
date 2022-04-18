@@ -111,51 +111,45 @@ class MPivotTable(private val pivotTable: PivotTable) {
     }
   }
 
-  private fun ColumnGroup<*>.buildHeaderGrouping(columns: List<AnyCol> = columns(), i: Int = 0) {
+  private fun ColumnGroup<*>.buildHeaderGrouping(columns: List<AnyCol> = columns(), columnIndex: Int = 0) {
     val group = mutableListOf<String>()
-    val spans = mutableListOf(1)
-    val spansTypes = mutableListOf(Span.NONE)
+    val spans = mutableListOf<Int>()
+    val spansTypes = mutableListOf<Span>()
     val groupingColumns = mutableListOf<AnyCol>()
 
-    repeat(valuesSize) {
-      group.add("")
-      spans.add(1)
-      if (i == valuesSize - 1) {
-        spansTypes.add(Span.NONE)
-      } else {
-        spansTypes.add(Span.COL)
-      }
-    }
-    group.add(pivotTable.grouping.columns[i].model.label)
+    add("", valuesSize, group, spans, spansTypes)
+    add(pivotTable.grouping.columns[columnIndex].model.label, 1, group, spans, spansTypes)
 
     groups.add(group)
     groupsSpans.add(spans)
     groupsSpanTypes.add(spansTypes)
 
     columns.forEach { column ->
-      group.add(column.name())
       if(column is ColumnGroup<*>) {
-        val columnGroup = column.columns()
-
-        spans.add(column.columnsCount())
-        groupingColumns.addAll(columnGroup)
-        repeat(column.columnsCount()) {
-          if(it == 0) {
-            spansTypes.add(Span.NONE)
-          } else {
-            spansTypes.add(Span.COL)
-            group.add("")
-          }
-        }
+        add(column.name(), column.columnsCount(), group, spans, spansTypes)
+        groupingColumns.addAll(column.columns())
       } else {
-        spans.add(1)
-        spansTypes.add(Span.NONE)
+        add(column.name(), valuesSize, group, spans, spansTypes)
         values.add(column.values.map { pivotTable.aggregateField!!.model.format(it) })
       }
     }
 
     if(groupingColumns.isNotEmpty()) {
-      buildHeaderGrouping(groupingColumns, i + 1)
+      buildHeaderGrouping(groupingColumns, columnIndex + 1)
+    }
+  }
+
+  private fun add(header: String,
+                  spanSize: Int,
+                  group: MutableList<String>,
+                  spans: MutableList<Int>,
+                  spansTypes: MutableList<Span>, ) {
+    group.add(header)
+    spans.add(spanSize)
+    spansTypes.add(Span.NONE)
+    repeat(spanSize - 1) {
+      group.add("")
+      spansTypes.add(Span.COL)
     }
   }
 
