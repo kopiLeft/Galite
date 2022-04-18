@@ -158,7 +158,7 @@ open class Block(val title: String,
    */
   inline fun <reified T> mustFill(domain: Domain<T>,
                                   position: FormPosition,
-                                  init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                  init: MustFillFormField<T>.() -> Unit): MustFillFormField<T?> {
     initDomain(domain)
     val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
     field.init()
@@ -166,7 +166,7 @@ open class Block(val title: String,
     field.addFieldTrigger()
     block.fields.add(field.vField)
     fields.add(field)
-    return field
+    return field as MustFillFormField<T?>
   }
 
   /**
