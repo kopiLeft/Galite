@@ -28,9 +28,18 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dnd.DragSource
+import com.vaadin.flow.component.dnd.DropEffect
+import com.vaadin.flow.component.dnd.DropTarget
+import com.vaadin.flow.component.dnd.EffectAllowed
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.select.Select
 
 /**
  * The `DPivotTable` is the visual part of the [PivotTable] model.
@@ -48,6 +57,7 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
   private val model = pivottable.model // report model
   private lateinit var table: DTable
   private var parameters: Parameters? = null
+  private val mainLayout = org.kopi.galite.visual.ui.vaadin.common.VTable(3, 2)
 
   init {
     getModel()!!.setDisplay(this)
@@ -74,9 +84,76 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
         table.setHeight(it.windowInnerHeight.toFloat() - 200, Unit.PIXELS)
       }
     }
-    setContent(table)
+    initLayout()
+    setContent(mainLayout)
     resetWidth()
     addTableListeners()
+  }
+
+  private fun initLayout() {
+    addAggregations()
+    addAllGroupingFields()
+    addRowGroupingFields()
+    addColumnGroupingFields()
+    mainLayout.add(2, 1, table)
+  }
+
+  private fun addAggregations() {
+    val aggregationLayout = VerticalLayout()
+    val aggregations = Select("Sum", "Mean", "Min", "Max") // TODO
+    val fields = Select<String>()
+
+    fields.setItems(pivottable.columns.map { it.label })
+
+    aggregationLayout.add(aggregations)
+    aggregationLayout.add(fields)
+    mainLayout.add(1, 0, aggregationLayout)
+  }
+
+  private fun addAllGroupingFields() {
+    val fieldsContainer = HorizontalLayout()
+
+    setDropTargetOf(fieldsContainer)
+
+    pivottable.columns.forEach {
+      val button = Button(it.label)
+      val draggableButton = DragSource.create(button)
+
+      draggableButton.effectAllowed = EffectAllowed.MOVE
+      fieldsContainer.add(button)
+    }
+
+    mainLayout.add(0, 1, fieldsContainer)
+  }
+
+  private fun addRowGroupingFields() {
+    val groupingFields = buildGroupingFieldsLayout()
+
+    mainLayout.add(2, 0, groupingFields)
+  }
+
+  private fun addColumnGroupingFields() {
+    val groupingFields = buildGroupingFieldsLayout()
+
+    mainLayout.add(1, 1, groupingFields)
+  }
+
+  private fun buildGroupingFieldsLayout(): VerticalLayout {
+    val groupingFields = VerticalLayout()
+
+    setDropTargetOf(groupingFields)
+
+    return groupingFields
+  }
+
+  private fun <T> setDropTargetOf(groupingFieldsLayout: T) where T: HasComponents, T: Component {
+    val dndLayout = DropTarget.create(groupingFieldsLayout)
+
+    dndLayout.dropEffect = DropEffect.MOVE
+
+    dndLayout.addDropListener {
+      groupingFieldsLayout.add(it.component)
+    }
   }
 
   override fun redisplay() {
