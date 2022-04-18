@@ -37,6 +37,10 @@ class ColumnStyleGenerator(private val model: MReport, val column: VReportColumn
   //---------------------------------------------------
   override fun apply(item: DReport.ReportModelItem): String =
     buildString {
+      if (item.rowIndex == model.getRowCount() - 1) {
+        append("last-row")
+      }
+
       if (column is VSeparatorColumn) {
         append(" separator")
       } else {

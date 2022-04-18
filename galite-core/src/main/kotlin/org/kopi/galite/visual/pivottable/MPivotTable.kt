@@ -23,51 +23,110 @@ import org.jetbrains.kotlinx.dataframe.columns.ValueColumn
 import org.jetbrains.kotlinx.dataframe.values
 
 class MPivotTable(private val pivotTable: PivotTable) {
-  private val cols = pivotTable.dataframe.columns()
-  private val columnGroups = cols.filterIsInstance(ColumnGroup::class.java)
-  private val valueColumns = cols.filterIsInstance(ValueColumn::class.java)
-  private val values = mutableListOf<List<Any?>>()
+  private lateinit var values: MutableList<List<String>>
+  private var valuesSize: Int = 0
 
   // Data to show
-  private val rows = mutableListOf<MutableList<Any?>>()
-  private val groups = mutableListOf<MutableList<Any?>>()
-  private val groupsSpans = mutableListOf<MutableList<Int>>()
-  private val groupsSpanTypes = mutableListOf<MutableList<Span>>()
-  private lateinit var data: List<MutableList<Any?>>
+  private lateinit var rows: MutableList<MutableList<String>>
+  private lateinit var groups: MutableList<MutableList<String>>
+  private lateinit var groupsSpans: MutableList<MutableList<Int>>
+  private lateinit var groupsSpanTypes: MutableList<MutableList<Span>>
+  private lateinit var rowsSpanTypes: MutableList<MutableList<Span>>
+  private lateinit var spanTypes: List<MutableList<Span>>
+  private lateinit var data: List<MutableList<String>>
 
   fun build() {
+    val cols = pivotTable.dataframe.columns()
+    val columnGroups = cols.filterIsInstance(ColumnGroup::class.java)
+    val valueColumns = cols.filterIsInstance(ValueColumn::class.java)
+
+    values = mutableListOf()
+    rows = mutableListOf()
+    groups = mutableListOf()
+    groupsSpans = mutableListOf()
+    groupsSpanTypes = mutableListOf()
+    rowsSpanTypes = mutableListOf()
+
+    valuesSize = valueColumns.size
+
     columnGroups.forEach { column ->
       column.buildHeaderGrouping()
     }
 
-    val rowGroupingValues = mutableListOf<Any?>()
+    val rowGroupingValues = mutableListOf<String>()
 
     rows.add(rowGroupingValues)
     valueColumns.forEach {
       rowGroupingValues.add(it.name())
     }
-    repeat(values.size) { rowGroupingValues.add(null) }
+    repeat(values.size + 1) { rowGroupingValues.add("") }
 
     repeat(pivotTable.dataframe.rowsCount()) { rowIndex ->
-      val aggregationValues = mutableListOf<Any?>()
+      val aggregationValues = mutableListOf<String>()
       rows.add(aggregationValues)
-      valueColumns.forEach { valueColumn ->
-        aggregationValues.add(valueColumn.values.elementAt(rowIndex))
+      valueColumns.forEach { vc ->
+        val value = vc.values.elementAt(rowIndex)
+        aggregationValues.add(pivotTable.aggregateField!!.model.format(value))
       }
+
+      aggregationValues.add("")
 
       values.forEach {
         aggregationValues.add(it[rowIndex])
       }
     }
 
+    buildRowsSpanTypes()
+
+    for(j in 0 until valuesSize) {
+      var i = 0
+
+      while(i < rows.size) {
+        var k = i + 1
+        while(k < rows.size && rows[i][j] == rows[k][j] && (j == 0 || rowsSpanTypes[k][j - 1] == Span.ROW)) {
+          rows[k][j] = ""
+          rowsSpanTypes[k][j] = Span.ROW
+          k++
+        }
+        i = k
+      }
+    }
+
+    spanTypes = groupsSpanTypes + rowsSpanTypes
     data = groups + rows
   }
 
+  private fun buildRowsSpanTypes() {
+    rows.forEachIndexed { index, row ->
+      val spans = row.mapIndexed { rowIndex, _ ->
+        if(index == 0 && rowIndex > valuesSize) {
+          Span.ROW
+        } else if (rowIndex == valuesSize) {
+          Span.COL
+        } else {
+          Span.NONE
+        }
+      }.toMutableList()
+      rowsSpanTypes.add(spans)
+    }
+  }
+
   private fun ColumnGroup<*>.buildHeaderGrouping(columns: List<AnyCol> = columns(), i: Int = 0) {
-    val group = mutableListOf<Any?>(pivotTable.fields[i].label)
+    val group = mutableListOf<String>()
     val spans = mutableListOf(1)
     val spansTypes = mutableListOf(Span.NONE)
     val groupingColumns = mutableListOf<AnyCol>()
+
+    repeat(valuesSize) {
+      group.add("")
+      spans.add(1)
+      if (i == valuesSize - 1) {
+        spansTypes.add(Span.NONE)
+      } else {
+        spansTypes.add(Span.COL)
+      }
+    }
+    group.add(pivotTable.grouping.columns[i].model.label)
 
     groups.add(group)
     groupsSpans.add(spans)
@@ -84,19 +143,19 @@ class MPivotTable(private val pivotTable: PivotTable) {
           if(it == 0) {
             spansTypes.add(Span.NONE)
           } else {
-            spansTypes.add(Span.LEFT)
-            group.add(null)
+            spansTypes.add(Span.COL)
+            group.add("")
           }
         }
       } else {
         spans.add(1)
         spansTypes.add(Span.NONE)
-        values.add(column.values.toList())
+        values.add(column.values.map { pivotTable.aggregateField!!.model.format(it) })
       }
     }
 
     if(groupingColumns.isNotEmpty()) {
-      buildHeaderGrouping(groupingColumns)
+      buildHeaderGrouping(groupingColumns, i + 1)
     }
   }
 
@@ -114,5 +173,9 @@ class MPivotTable(private val pivotTable: PivotTable) {
    */
   fun getRowCount(): Int = data.size
 
-  fun getValueAt(row: Int, col: Int): Any? = data[row][col]
+  fun getValueAt(row: Int, col: Int): String = data[row][col]
+
+  fun isTitle(row: Int, col: Int): Boolean = (row in 0 .. groups.size) || (col in 0 .. valuesSize)
+
+  fun getSpan(row: Int, col: Int): Span = spanTypes[row][col]
 }

@@ -211,7 +211,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   /**
    * Returns the number of columns displayed in the table
-   * @return tThe number or columns displayed
+   * @return tThe number of columns displayed
    */
   val columnCount: Int
     get() = table.getColumnCount()
