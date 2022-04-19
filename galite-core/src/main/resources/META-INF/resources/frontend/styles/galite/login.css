@@ -120,8 +120,6 @@ vaadin-password-field {
     border: #dadada 1px solid;
 }
 
-
-
 /**
  * Main Style
  */
@@ -183,8 +181,7 @@ vaadin-password-field {
  */
 #user_password .input, #user_name {
     padding: 6px 3px 3px 3px !important;
-    max-height: 40px;
-
+    min-height: var(--lumo-text-field-size, var(--lumo-size-xxs));
 }
 
 /**

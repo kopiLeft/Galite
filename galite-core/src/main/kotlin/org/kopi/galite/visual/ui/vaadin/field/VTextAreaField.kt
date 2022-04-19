@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.textfield.TextArea
 
 /**
@@ -30,8 +31,16 @@ class VTextAreaField : InputTextField<TextArea>(TextArea()) {
 
   var cols: Int = 0
 
-  fun setRows(rows: Int, visibleRows: Int) {
-    internalField.element.executeJs("this.shadowRoot.querySelector('textarea').rows = $0;", rows)
+  var visibleRows = 0
+
+  fun setRows(visibleRows: Int) {
+    internalField.element.executeJs("this.querySelector('textarea').rows = $0;", visibleRows)
+    this.visibleRows = visibleRows
+  }
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    setRows(visibleRows)
+    element.executeJs("setTimeout(function(){$0._inputValue = $1},0)", element, value)
   }
 
   /**

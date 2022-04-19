@@ -17,13 +17,11 @@
  */
 
 .k-notification-title, .k-popup-window-caption {
-	position: relative;
-	color: var(--background-color);
-	font-family: Arial, sans-serif !important;
-	font-weight: 700 !important;
-	font-style: normal !important;
-	padding: 22px;
-	font-size: 1.1em !important;
+    color: var(--background-color);
+    font-family: Arial, sans-serif !important;
+    font-weight: 700 !important;
+    padding: 22px;
+    font-size: 1.1em !important;
 }
 
 .k-notification-title {
@@ -31,42 +29,34 @@
 }
 
 .k-notification-content {
-	padding: 14px 47px 25px 47px;
-	font-size: 16px;
-	color: #676767;
+    padding: 14px 47px 25px 47px;
+    color: #676767;
 }
 
 .k-notification-icon {
-	float: left;
-	color: #e37e6a;
+    float: left;
+    color: #e37e6a;
 }
 
 .k-notification-message {
-	position: relative;
-	padding: 12px 0 16px 16px;
-	text-align: center;
-	font-size: 1.2em !important;
-	float: left;
-	width: calc(100% - 100px);
-	white-space: nowrap;
+    padding: 12px 0 16px 16px;
+    text-align: center;
+    font-size: 1.2em !important;
+    width: calc(100% - 100px);
+    white-space: nowrap;
 }
 
 .k-notification-buttons {
-	clear: both;
-	display: block;
-	text-align: center;
+    text-align: center;
 }
 
 .k-notification-buttons vaadin-button {
-	display: inline-block;
-	margin: 18px 8px 0 auto;
-	background: var(--background-color);
-	color: #ffffff;
-	font-family: Arial, sans-serif !important;
-	font-weight: 500 !important;
-	font-style: normal !important;
-	font-size: 1.2em !important;
-	min-width: 128px;
+    margin: 18px 8px 0 auto;
+    background: var(--background-color);
+    color: #ffffff;
+    font-family: Arial, sans-serif !important;
+    font-size: 1.2em !important;
+    min-width: 128px;
 }
 
 :host([theme~="notification"]) [part="header"] {
@@ -80,15 +70,6 @@
 
 :host([theme~="notification"]) [part="dialog-content"] {
     overflow-x: auto;
-}
-
-#k-notification-footer {
-    padding-bottom: 25px;
-}
-
-#k-notification-header {
-    background: #f2f2f2;
-    padding: 0 !important;
 }
 
 .error-details {

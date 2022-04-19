@@ -17,18 +17,49 @@
  */
 
 :host([theme~="date-picker-suffix"]) {
-    --lumo-text-field-size: unset;
-}
-
-:host([theme~="date-picker-suffix"]) [part~='value'] {
-    display: none;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    --lumo-text-field-size: var(--lumo-space-l);
+    color: inherit !important;
 }
 
 :host([theme~="date-picker-suffix"]) [part~='input-field'] {
-    border: none;
-    padding: 0;
+    margin-right: 20px;
+    background: unset;
 }
 
-:host([theme~="date-picker-suffix"]) .vaadin-text-field-container {
-    width: unset;
+:host([theme~="date-picker-suffix"]) [part~='input-field']::after {
+    background-color: unset;
+}
+
+:host([theme~="date-picker-suffix"]) [part~="toggle-button"] {
+    cursor: pointer;
+}
+
+.galite-date::part(input-field)::after {
+    background-color: unset;
+}
+
+.galite-date {
+    padding: 0 !important;
+    --lumo-text-field-size: var(--lumo-space-l);
+    color: #000000;
+}
+
+.galite-date::part(input-field) {
+    background: unset;
+    padding: 0 !important;
+    border-bottom: none !important;
+}
+
+.galite-date input {
+    padding: 0 !important;
+}
+
+/**
+ * Disabled input styles
+ */
+:host([disabled]) [part="input-field"] {
+    border-bottom: none !important;
+    color: #676767;
 }

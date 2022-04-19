@@ -26,7 +26,10 @@ import com.vaadin.flow.component.timepicker.TimePicker
 /**
  * A time field.
  */
-@CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-time-picker-text-field")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/datetime.css", themeFor = "vaadin-time-picker-item"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-time-picker")
+])
 class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
 
   init {

@@ -39,10 +39,12 @@
 }
 
 .window-items-container .item {
+    border: 0;
     border-bottom: 1px solid #dadada;
     text-align: left;
     padding: 20px 24px;
     color: #8f8f8f;
+    background: unset;
 }
 
 .window-items-container .item:hover {
@@ -67,4 +69,17 @@
 
 #k-windowsMenu-content {
     padding: var(--lumo-space-l);
+}
+
+.window-items-container {
+    gap: 0 !important;
+    padding: 0 !important;
+}
+
+.window-items-title .close-icon:hover {
+    color: red;
+}
+
+:host([theme~="k-windowsMenu"]) [part="footer"] {
+    padding: 0 !important;
 }

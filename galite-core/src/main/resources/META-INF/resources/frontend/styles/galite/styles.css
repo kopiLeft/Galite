@@ -17,97 +17,41 @@
  */
 
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-.k-form .k-form-page-content .caption-container {
-	background: #ffffff;
-	padding-top: 22px;
-	padding-left: 50px;
-}
-
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
-big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,
-dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article,
-aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section,
-summary, time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	vertical-align: baseline;
-}
-
-.k-block .simple .k-textinput, .textarea {
-  color: #000000;
-	font-weight: 500 !important;
-	font-style: normal !important;
-	line-height: 1.2em;
-	transition: 0.4s;
-	position: relative;
-}
-
-.k-block .simple ::part(input-field) {
-    border-bottom: #dadada 1px solid;
-    border-radius: unset;
-}
-
-.textarea::part(input-field) {
-	padding: 0;
-}
-
-::part(input-field):hover {
-	background: var(--background-hover-color) !important;
-}
-
-/**
- * remove a gray background when hover on TextField
- */
-.k-textinput::part(input-field)::after {
-    background: none;
-}
-
-.k-block .simple ::part(input-field):focus-within, .kopi .k-textareainput:focus {
-	background: none;
-	border-bottom: var(--background-color) 1px solid;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .galite *, .k-popup-window > *, .k-window-container > *, .k-form * {
-	font-family: Arial, sans-serif !important;
-	font-weight: 400 !important;
-	font-style: normal !important;
-	font-size: 12px;
-}
-
-#session {
-	display: table;
-	height: 44px;
-	width: 100%;
-	background: #f2f2f2;
-}
-
-#session > * {
-	display: table-cell;
-	vertical-align: middle;
-	padding: 0 20px;
-}
-
-#session span a span {
-	font-size: 14px !important;
-	font-weight: bold !important;
-}
-
-a, a:hover {
-	text-decoration: none;
-	color: inherit;
-}
-
-.k-block .simple ::part(value) {
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
-    font-size: 12px !important;
-    padding: 0;
+    font-size: 12px;
+}
+
+/**
+ * Window caption Style
+ */
+#session {
+    display: table;
+    height: 44px;
+    width: 100%;
+    background: #f2f2f2;
+}
+
+#session > * {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 20px;
+}
+
+#session span a span {
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
+a, a:hover {
+    text-decoration: none;
+    color: inherit;
 }
 
 /**
@@ -126,6 +70,7 @@ pre {
 
 .help-container {
     overflow: hidden;
+    padding-top: 0;
 }
 
 .help-content {
@@ -133,50 +78,43 @@ pre {
     overflow-y: auto;
 }
 
-.multiple ::part(header-cell) {
-	position: relative;
-	background-color: #fff;
-	text-align: left;
-	color: #a3a3a3;
+/**
+ * Style of image field
+ */
+.k-imagefield img {
+    margin-top: 10px;
 }
 
-.multiple ::part(value) {
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
-}
-
-.multiple ::part(input-field):focus-within {
-    outline : none;
-    background: none;
-    border-bottom: var(--background-color) 1px solid;
-}
-
+/**
+ * Style of DownloaderDialog : unused
+ */
 .download-file-buttons, .k-upload-buttons {
     width: 100%;
     text-align: center;
 }
 
 .download-file-buttons vaadin-button, .k-upload-buttons .k-input-button {
-	display: inline-block;
-	margin: 18px 8px 0 auto;
-	background: var(--background-color);
-	color: #ffffff;
-	font-family: Arial, sans-serif !important;
-	font-weight: 500 !important;
-	font-style: normal !important;
-	font-size: 1.2em !important;
-	min-width: 128px;
+    display: inline-block;
+    margin: 18px 8px 0 auto;
+    background: var(--background-color);
+    color: #ffffff;
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: 1.2em !important;
+    min-width: 128px;
 }
 
 .download-file-title {
-  font-family: Arial, sans-serif !important;
-  font-weight: 700 !important;
-  font-style: normal !important;
-  font-size: 18px !important;
+    font-family: Arial, sans-serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    font-size: 18px !important;
 }
 
-.k-imagefield img {
-  margin-top: 10px;
+/**
+ * Remove gap from popup form
+ */
+.enhanced-dialog-content .k-window {
+    gap: 0 !important;
 }
