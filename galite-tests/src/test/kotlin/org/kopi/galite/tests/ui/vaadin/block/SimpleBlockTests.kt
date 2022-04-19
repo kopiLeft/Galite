@@ -27,10 +27,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
-import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.findModel
 import org.kopi.galite.testing.open
@@ -60,7 +60,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     formExample.open()
 
     // Enter sales block
-    formExample.salesSimpleBlock.enter()
+    formExample.salesSimpleBlock._enter()
 
     // Enters values to fields
     val currentTimestamp   = Instant.now()
@@ -112,7 +112,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     val skippedToMustFillField = block.skippedToMustFillField.findModel(blockModel)
 
     // enter the block to enable the commands
-    block.enter()
+    block._enter()
 
     // verify initial access
     assertEquals(Mode.QUERY.value, blockModel.getMode())

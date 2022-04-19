@@ -25,10 +25,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
-import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.testing.findField
@@ -116,7 +116,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test NOMOVE block`() {
-    form.noMoveBlock.enter()
+    form.noMoveBlock._enter()
     form.noMoveBlock.editRecord(0)
     // Go to the next record
     form.noMoveBlock.editRecord(1)
@@ -131,7 +131,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test ACCESS ON SKIPPED block`() {
-    form.accessOnSkippedBlock.enter()
+    form.accessOnSkippedBlock._enter()
     form.accessOnSkippedBlock.editRecord(0)
     // Go to the next record
     form.accessOnSkippedBlock.editRecord(1)
@@ -147,7 +147,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     // PREQRY trigger : click on list and check preQueryTrigger field
     form.list.triggerCommand()
 
@@ -162,7 +162,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     // POSTQRY trigger : click on list and check postQueryTrigger field
     form.list.triggerCommand()
 
@@ -177,7 +177,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
 
     // PREDEL trigger : click on list command then delete command and check that information notification is displayed
     form.list.triggerCommand()
@@ -190,7 +190,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test POSTDEL block trigger`() {
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     form.deleteBlock.triggerCommand()
 
     expectConfirmNotification(true)
@@ -208,7 +208,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     }
 
     // PREINS : click on insertMode command then save command and assert that PREINS trigger change the field value
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     form.triggersBlock.preInsTrigger.edit("pre Ins")
     form.insertMode.triggerCommand()
     form.saveBlock.triggerCommand()
@@ -234,7 +234,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     }
 
     // PREUPD : click on list command then save command and assert that PREUPD trigger change the field value
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     form.list.triggerCommand()
     form.triggersBlock.preUpdTrigger.click()
     form.triggersBlock.preUpdTrigger.edit("a")
@@ -256,7 +256,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     form.list.triggerCommand()
     form.triggersBlock.preUpdTrigger.click()
     form.triggersBlock.preUpdTrigger.edit("a")
@@ -270,7 +270,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test PREREC block trigger`() {
-    form.triggersMultiBlock.enter()
+    form.triggersMultiBlock._enter()
 
     val block = form.triggersMultiBlock.findMultiBlock()
     // PREREC : assert that PREREC trigger change the value of the first field when enter block
@@ -279,7 +279,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test POSTREC and VALREC block trigger`() {
-    form.triggersMultiBlock.enter()
+    form.triggersMultiBlock._enter()
     // Go to the next record
     form.triggersMultiBlock.editRecord(1)
 
@@ -291,9 +291,9 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test VALREC block trigger`() {
-    form.triggersMultiBlock.enter()
+    form.triggersMultiBlock._enter()
     //leave the block
-    form.lastBlock.enter()
+    form.lastBlock._enter()
 
     val block = form.triggersMultiBlock.findMultiBlock()
     // VALREC : enter block, then leave it and check valRecTrigger field
@@ -302,7 +302,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test PREBLK block trigger`() {
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
 
     val field = form.triggersBlock.preBlkTrigger.findField()
 
@@ -311,8 +311,8 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test POSTBLK block trigger`() {
-    form.triggersBlock.enter()
-    form.lastBlock.enter()
+    form.triggersBlock._enter()
+    form.lastBlock._enter()
 
     val field = form.triggersBlock.postBlkTrigger.findField()
 
@@ -321,8 +321,8 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test VALBLK block trigger`() {
-    form.triggersBlock.enter()
-    form.lastBlock.enter()
+    form.triggersBlock._enter()
+    form.lastBlock._enter()
 
     val field = form.triggersBlock.validateBlkTrigger.findField()
 
@@ -331,7 +331,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test DEFAULT block trigger`() {
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
     form.insertMode.triggerCommand()
 
     val field = form.triggersBlock.defaultBlkTrigger.findField()
@@ -341,7 +341,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test INIT block trigger`() {
-    form.triggersBlock.enter()
+    form.triggersBlock._enter()
 
     val field = form.triggersBlock.initBlkTrigger.findField()
 
@@ -350,7 +350,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test command access in block`() {
-    form.commandAccessBlock.enter()
+    form.commandAccessBlock._enter()
 
     // the block is in mode insert, the actor list is disable in this mode
     assertFalse(form.list.findActor().isEnabled)

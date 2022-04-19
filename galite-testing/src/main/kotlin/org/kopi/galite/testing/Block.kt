@@ -34,7 +34,7 @@ import com.github.mvysny.kaributesting.v10._get
  *
  * @receiver the block to go to.
  */
-fun Block.enter(duration: Long = 50) {
+fun Block._enter(duration: Long = 50) {
   val block = findBlock()
 
   // Click on the first field in the block

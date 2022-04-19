@@ -73,7 +73,7 @@ class DGridMultiBlock(parent: DForm,
     return if (inDetailMode() && itemHasDetailVisible != null) {
       itemHasDetailVisible!!.record
     } else if (itemToBeEdited != null) {
-      itemToBeEdited!!
+      itemToBeEdited!!.record
     } else if (isEditorInitialized && editor.item != null) {
       editor.item.record
     } else {
