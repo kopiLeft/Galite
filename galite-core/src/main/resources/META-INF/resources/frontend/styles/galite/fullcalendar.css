@@ -20,3 +20,17 @@
     margin: 0 auto;
     margin-top: 5px;
 }
+
+#fullCalendar-date-picker {
+  margin-bottom: 10px;
+  background: unset;
+  --lumo-text-field-size: var(--lumo-space-l);
+}
+
+#fullCalendar-date-picker::part(input-field), #fullCalendar-date-picker::part(input-field)::after {
+    background: unset;
+}
+
+#fullCalendar-date-picker::part(toggle-button) {
+    cursor: pointer;
+}
