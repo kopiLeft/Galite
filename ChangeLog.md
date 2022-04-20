@@ -1,3 +1,21 @@
+# 1.2.0
+## What's Changed
+* DSL/DB: Adding WeekColumnType and MonthColumnType by @hfazai in [#575](https://github.com/kopiLeft/Galite/pull/575)
+* Fix: VField.retrieveQuery shouldn't convert value to Week and Month by @hfazai in [#576](https://github.com/kopiLeft/Galite/pull/576)
+* DB: Adding Query extension function allowing to get single row or throw custom DB Exception by @hfazai in [#579](https://github.com/kopiLeft/Galite/pull/579)
+* Style: Add padding between fields in multi block by @h-haddad in [#582](https://github.com/kopiLeft/Galite/pull/582)
+* UI: Avoid refreshing filtered rows in grid block by @hfazai
+* DSL: Adding the feature of defining an alias of a form field by @hfazai
+* DSL: Adding setPageTitle method to Report by @hfazai
+* Implement Pivot Table model using Kotlin Dataframe by @hfazai in [#580](https://github.com/kopiLeft/Galite/pull/580)
+* DSL: MustFill field value should be nullable by @hfazai in [#577](https://github.com/kopiLeft/Galite/pull/577)
+* VaadinUI: Filter deleted records from multiblock by @hfazai in [#578](https://github.com/kopiLeft/Galite/pull/578)
+* VBump: Vaadin 22.0.6 by @h-haddad in [#564](https://github.com/kopiLeft/Galite/pull/564) and [#584](https://github.com/kopiLeft/Galite/pull/584)
+* VaadinUI: Auto select is done via autoselect property instead of focus listener by @hfazai
+* VBump: Vaadin 22.0.13 by @hfazai
+
+**Full Changelog**: [1.1.0 ... 1.2.0](https://github.com/kopiLeft/Galite/compare/1.1.0...1.2.0)
+
 # 1.1.0
 ## What's Changed
 * DateField Rework: Replace vaadin-date-picker-light with TextField by @hfazai in [#565](https://github.com/kopiLeft/Galite/pull/565)
