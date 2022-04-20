@@ -161,7 +161,7 @@ class Clients : Block("Clients", 1, 1) {
   }
 }
 ````
-![client_form.png](docs/client_form.png)
+![form.png](docs/form.png)
 
 ## Reports
 The report consists of an instance that gets dynamically injected with the data that is inserted by the user. The required data is iteratively fetched from the table to then be formatted within a customizable report.
@@ -259,7 +259,7 @@ object Category : CodeDomain<Int>() {
   }
 }
 ````
-![docs/products_report.png](docs/products_report.png)
+![docs/report.png](docs/report.png)
 
 ## Charts
 If further analysis is needed, the user can generate charts to visualize data and draw conclusions from the observed patterns.
@@ -318,7 +318,7 @@ class ChartSample: Chart(
   }
 }
 ````
-![docs/galite_chart.png](docs/galite_chart.png)
+![docs/chart.png](docs/chart.png)
 
 ## Contributing
 All contributions are welcome.
