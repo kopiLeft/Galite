@@ -36,6 +36,7 @@ import com.vaadin.flow.component.timepicker.TimePicker
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
   init {
+    element.themeList.add("galite-timestamp")
     internalField.isAutoOpen = false
 
     // Workaround for autoselection on focus
@@ -43,22 +44,8 @@ class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNot
     val datePicker = (children.single { it is DatePicker } as DatePicker)
     val timePicker = (children.single { it is TimePicker } as TimePicker)
 
-    element.themeList.add("galite-timestamp")
-
-    datePicker.element.executeJs(
-      """
-              this.addEventListener("focus", event => {
-                    this.focusElement.inputElement.select()
-              })
-      """
-    )
-    timePicker.element.executeJs(
-      """
-              this.addEventListener("focus", event => {
-                    this.focusElement.inputElement.select()
-              })
-      """
-    )
+    datePicker.element.setProperty("autoselect", true)
+    timePicker.element.setProperty("autoselect", true)
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

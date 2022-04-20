@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import org.kopi.galite.visual.ui.vaadin.field.VDateField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
 
@@ -61,8 +60,8 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
 
 fun Component.inputValueExpression(): String {
   return when (this) {
-    is VTimeField -> "this.focusElement.inputElement.value"
-    is VTimeStampField -> "this.__datePicker.$.input.inputElement.value + ' ' + this.__timePicker.focusElement.inputElement.value"
+    is VTimeField -> "this.inputElement.value"
+    is VTimeStampField -> "this.__datePicker.inputElement.value + ' ' + this.__timePicker.inputElement.value"
     else -> "this.value"
   }
 }
