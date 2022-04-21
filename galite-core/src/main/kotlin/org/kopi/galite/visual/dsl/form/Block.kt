@@ -154,20 +154,16 @@ open class Block(val title: String,
    * MUSTFILL fields are accessible fields that the user must fill with a value.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
   inline fun <reified T> mustFill(domain: Domain<T>,
                                   position: FormPosition,
-                                  init: MustFillFormField<T>.() -> Unit): MustFillFormField<T?> {
+                                  initializer: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
     initDomain(domain)
     val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
-    field.init()
-    field.initialize(this)
-    field.addFieldTrigger()
-    block.fields.add(field.vField)
-    fields.add(field)
-    return field as MustFillFormField<T?>
+
+    return init(field, initializer)
   }
 
   /**
@@ -176,13 +172,13 @@ open class Block(val title: String,
    * VISIT fields are accessible, can be modified but not necessary.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a VISIT field.
    */
   inline fun <reified T> visit(domain: Domain<T>,
                                position: FormPosition,
-                               init: NullableFormField<T>.() -> Unit): FormField<T> {
-    return initField(domain, init, VConstants.ACS_VISIT, position)
+                               initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_VISIT, position)
   }
 
   /**
@@ -191,13 +187,13 @@ open class Block(val title: String,
    * SKIPPED fields are read only fields, you can read the value but you can't modify it.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
   inline fun <reified T> skipped(domain: Domain<T>,
                                  position: FormPosition,
-                                 init: NullableFormField<T>.() -> Unit): FormField<T> {
-    return initField(domain, init, VConstants.ACS_SKIPPED, position)
+                                 initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_SKIPPED, position)
   }
 
   /**
@@ -205,24 +201,33 @@ open class Block(val title: String,
    *
    * HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
    *
-   * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param domain         the domain of the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T> {
-    return initField(domain, init, VConstants.ACS_HIDDEN)
+  inline fun <reified T> hidden(domain: Domain<T>, initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
   inline fun <reified T> initField(domain: Domain<T>,
-                                   init: NullableFormField<T>.() -> Unit,
+                                   initializer: NullableFormField<T>.() -> Unit,
                                    access: Int,
                                    position: FormPosition? = null): FormField<T> {
     initDomain(domain)
     val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
-    field.init()
+
+    return init(field, initializer)
+  }
+
+  /**
+   * Initializes a field.
+   */
+  inline fun <reified T, U: FormField<T>> init(field: U,
+                                               initializer: U.() -> Unit): U {
+    field.initializer()
     field.initialize(this)
     field.addFieldTrigger()
     block.fields.add(field.vField)
