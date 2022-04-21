@@ -776,6 +776,13 @@ open class Block(val title: String,
   }
 
   /**
+   * Clears the entire block.
+   */
+  open fun clear() {
+    block.clear()
+  }
+
+  /**
    * Saves current block (insert or update)
    */
   fun saveBlock() {
@@ -854,14 +861,14 @@ open class Block(val title: String,
   /**
    * * Loads block from database
    */
-  fun load() {
+  open fun load() {
     block.load()
   }
 
   /**
    * * Loads block from database
    */
-  fun deleteBlock() {
+  open fun deleteBlock() {
     Commands.deleteBlock(block)
   }
 
