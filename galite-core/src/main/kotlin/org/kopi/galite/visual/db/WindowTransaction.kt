@@ -22,9 +22,24 @@ import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.transactions.transactionManager
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.visual.VWindow
+
+/**
+ * Starts a protected transaction.
+ *
+ * @param       connection      the database connection.
+ * @param       statement       the transaction statement.
+ */
+fun <T> protected(connection: Connection, statement: Transaction.() -> T): T {
+  val db = Database.connect({ connection })
+  val outerManager = db.transactionManager
+  val transaction = outerManager.newTransaction()
+
+  return transaction.statement()
+}
 
 /**
  * Starts a protected transaction.
