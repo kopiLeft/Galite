@@ -16,27 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
+/**
  * Boolean field style
  */
-#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-primary-color : var(--background-color);
-}
-
 .true::part(checkbox), .false::part(checkbox) {
     width: 1em;
     height: 1em;
     border-radius: 50%;
     vertical-align: middle;
     font-size: 14px !important;
-}
-
-.k-boolean-field-content vaadin-checkbox.false {
-    margin-left: 0;
-}
-
-:host([checked]) [part='checkbox'] {
-    background-color: var(--background-color);
 }
 
 .true::part(checkbox)::after, .false::part(checkbox)::after {
@@ -62,10 +50,6 @@
     color: white;
 }
 
-.k-boolean-field {
-    vertical-align: middle;
-}
-
 .multiple .k-boolean-field-content {
     display: flex;
     background-color: #ffffff;
@@ -73,7 +57,7 @@
     justify-content: center;
 }
 
-.editor-booleanfield {
+.editor-booleanfield, .k-boolean-field {
     --lumo-primary-color: var(--background-color);
 }
 
@@ -84,12 +68,4 @@
 
 .k-boolean-field-content:focus-within {
     border-bottom: 1px solid var(--background-color);
-}
-
-vaadin-checkbox label {
-    display: inline;
-}
-
-.editor-booleanfield {
-    --lumo-primary-color: var(--background-color);
 }

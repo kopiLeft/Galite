@@ -15,25 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.visual.ui.vaadin.common
 
-:host {
-    pointer-events: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.dependency.NpmPackage
 
-[part="toggle"] {
-    pointer-events: auto;
-}
-
-.tree-node-caption {
-    margin-left: 1em;
-}
-
-.tree-node-caption img.icon {
-    width: 14px;
-    height: 14px;
-    margin-right: 4px;
-}
+@NpmPackage(value = "@vaadin-component-factory/vcf-enhanced-dialog", version = "22.0.6")
+open class Dialog : EnhancedDialog()

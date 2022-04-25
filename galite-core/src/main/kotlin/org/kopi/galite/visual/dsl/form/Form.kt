@@ -218,8 +218,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * GOTO BLOCK
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
-  fun gotoBlock(target: VBlock) {
-    model.gotoBlock(target)
+  fun gotoBlock(target: Block) {
+    model.gotoBlock(target.block)
   }
 
   fun showChart(chart: Chart) {

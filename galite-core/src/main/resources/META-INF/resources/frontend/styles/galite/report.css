@@ -38,13 +38,6 @@ vaadin-grid > vaadin-grid-cell-content {
     padding: var(--lumo-size-xxs);
 }
 
-#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
-}
-
 ::part(resize-handle)::before {
     width: 1px !important;
 }

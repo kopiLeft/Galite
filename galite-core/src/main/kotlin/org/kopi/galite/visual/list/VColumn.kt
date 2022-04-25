@@ -30,6 +30,7 @@ import org.jetbrains.exposed.sql.Table
  * @param name      column name
  * @param isKey     whether the column is a key
  * @param nullable  true if column is nullable
+ * @param column    exposed column
  */
 open class VColumn(val pos: Int,
                    val name: String,

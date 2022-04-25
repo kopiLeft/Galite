@@ -16,24 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-:host {
-    pointer-events: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+package org.kopi.galite.visual.pivottable
 
-[part="toggle"] {
-    pointer-events: auto;
-}
+import org.kopi.galite.visual.report.UReport
 
-.tree-node-caption {
-    margin-left: 1em;
-}
-
-.tree-node-caption img.icon {
-    width: 14px;
-    height: 14px;
-    margin-right: 4px;
-}
+/**
+ * `UPivotTable` is the top-level interface that must be implemented
+ * by all pivot tables. It is the visual component of the [PivotTable] model.
+ */
+interface UPivotTable : UReport

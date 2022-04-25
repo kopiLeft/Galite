@@ -60,7 +60,7 @@ The function `Block.findBlock()` returns the Vaadin component created for a form
 
 #### Entering a block
 
-To enter a block you can use `Block.enter()`. This function will focus on the first field if it's a simple block, and it will open the first item of the grid's editor if it's a multiple block.
+To enter a block you can use `Block._enter()`. This function will focus on the first field if it's a simple block, and it will open the first item of the grid's editor if it's a multiple block.
 
 #### Block records
 

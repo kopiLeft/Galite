@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import kotlin.streams.toList
+import java.util.stream.Stream
 
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.form.Alignment
@@ -35,6 +35,7 @@ import org.kopi.galite.visual.visual.Action
 import org.kopi.galite.visual.visual.VException
 
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
@@ -52,11 +53,13 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
+import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
 
 /**
  * Grid based chart block implementation.
  */
+@CssImport("./styles/galite/grid.css", themeFor = "vaadin-grid")
 open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   // --------------------------------------------------
@@ -67,6 +70,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
     themeList.add("grid-block")
+    grid.themeNames.add("grid-block")
     grid.isAllRowsVisible = true
   }
 
@@ -81,17 +85,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   // or when the scroll bar is removed.
   private var widthAlreadyAdapted = false
 
-  /*
-   * A workaround for a Grid behavior: If two bind request are sent
-   * to the grid editor, the confirm bind callback will be done only
-   * for the first bind request. This is not the expected result since
-   * we expect that the last bind request will be confirmed.
-   * Since the session task execution is done synchronously, this item
-   * will only take the last requested item to be binded and thus we force
-   * the editor to bind the last record. Typically, this is used when multiple
-   * gotoRecord are called via the window action queue.
-   */
-  protected var itemToBeEdited: Int? = null
+  protected var itemToBeEdited: GridBlockItem? = null
 
   /*
    * A flag used to force disabling the editor cancel when scroll is fired
@@ -105,6 +99,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   private var filterRow: HeaderRow? = null
   private lateinit var sortableHeaders: MutableMap<Grid.Column<*>, DGridEditorLabel>
+  private lateinit var deletedRecordsFilter: SerializablePredicate<GridBlockItem>
   var lastSortOrder: List<GridSortOrder<GridBlockItem>>? = null
   lateinit var editor: Editor<GridBlockItem>
   val isEditorInitialized get() = ::editor.isInitialized
@@ -274,7 +269,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
   override fun getRecordFromDisplayLine(line: Int): Int {
     return if (itemToBeEdited != null) {
-      itemToBeEdited!!
+      itemToBeEdited!!.record
     } else if (isEditorInitialized && editor.item != null) {
       editor.item.record
     } else {
@@ -323,12 +318,13 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
         FilterField(field, filter)
       }
-      dataProvider.filter = DGridBlockFilter(filterFields, true, false)
+      dataProvider.addFilter(DGridBlockFilter(filterFields, true, false))
     }
   }
 
   override fun filterHidden() {
     access {
+      (grid.dataProvider as ListDataProvider).filter = deletedRecordsFilter
       if (filterRow != null) {
         grid.element.themeList.remove("shown-filter")
         grid.element.themeList.add("hidden-filter")
@@ -417,14 +413,14 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     }
   }
 
-  private fun getActualItems(): List<GridBlockItem> {
+  private fun getActualItems(): Stream<GridBlockItem> {
     val dataProvider = grid.dataProvider as ListDataProvider
     val totalSize = dataProvider.items.size
     val dataCommunicator = grid.dataCommunicator
-    val stream = dataProvider.fetch(
+
+    return dataProvider.fetch(
       Query(0, totalSize, dataCommunicator.backEndSorting, dataCommunicator.inMemorySorting, dataProvider.filter)
     )
-    return stream.toList()
   }
 
   fun columnResize(event: ColumnResizeEvent<GridBlockItem>?) {
@@ -478,10 +474,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
     grid.addItemClickListener {
       val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
-      val record = it.item.record
+      val item = it.item
 
-      if (gridEditorFieldToBeEdited.dGridEditorField.getModel().block?.isRecordAccessible(record) == true) {
-        itemToBeEdited = record
+      if (gridEditorFieldToBeEdited.dGridEditorField.getModel().block?.isRecordAccessible(item.record) == true) {
+        itemToBeEdited = item
         gridEditorFieldToBeEdited.dGridEditorField.onClick()
       } else {
         val itemToEdit = editor.item
@@ -505,6 +501,13 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                   .setHeader(label)
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
+                  .setClassNameGenerator { item ->
+                    if(editor.isOpen && editor.item == item) {
+                      "active-item"
+                    } else {
+                      ""
+                    }
+                  }
 
           setAlignment(column, columnView.model.align)
 
@@ -542,6 +545,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       items.add(GridBlockItem(it))
     }
     grid.setItems(items)
+    deletedRecordsFilter = SerializablePredicate<GridBlockItem> { item ->
+      !model.isRecordDeleted(item.record)
+    }
+    (grid.dataProvider as ListDataProvider).filter = deletedRecordsFilter
   }
 
   /**
@@ -607,9 +614,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   fun refreshRow(row: Int) {
     if (::grid.isInitialized) {
       access(currentUI) {
-        val itemToRefresh = grid.dataCommunicator.getItem(row)
-
-        grid.dataProvider.refreshItem(itemToRefresh)
+        grid.dataProvider.refreshItem(GridBlockItem(row))
       }
     }
   }
@@ -620,20 +625,20 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    */
   fun editRecord(record: Int) {
     if (::grid.isInitialized) {
-      itemToBeEdited = record
+      itemToBeEdited = GridBlockItem(record)
       access(currentUI) {
         if (grid.isEnabled
                 && (editor.item == null
                         || (itemToBeEdited != null
-                        && editor.item.record != itemToBeEdited))
+                        && editor.item != itemToBeEdited))
         ) {
-          if (itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
-            itemToBeEdited = 0
+          if (getActualItems().noneMatch { it == itemToBeEdited }) {
+            itemToBeEdited = GridBlockItem(0)
           }
 
           // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            editor.editItem(getActualItems().single { it.record == record })
+            editor.editItem(itemToBeEdited)
           }
         }
       }
@@ -687,7 +692,18 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }
 
-      // Workaround for https://github.com/vaadin/flow-components/issues/1997
+      /**
+       * A workaround for a Grid behavior: If two bind request are sent
+       * to the grid editor, the confirm bind callback will be done only
+       * for the first bind request. This is not the expected result since
+       * we expect that the last bind request will be confirmed.
+       * Since the session task execution is done synchronously, this item
+       * will only take the last requested item to be binded and thus we force
+       * the editor to bind the last record. Typically, this is used when multiple
+       * gotoRecord are called via the window action queue.
+       *
+       * issue : https://github.com/vaadin/flow-components/issues/1997
+       */
       fun doEditItem(item: GridBlockItem) {
         itemToEdit = item
 

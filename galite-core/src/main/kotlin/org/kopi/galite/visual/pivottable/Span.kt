@@ -16,24 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-:host {
-    pointer-events: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+package org.kopi.galite.visual.pivottable
 
-[part="toggle"] {
-    pointer-events: auto;
-}
-
-.tree-node-caption {
-    margin-left: 1em;
-}
-
-.tree-node-caption img.icon {
-    width: 14px;
-    height: 14px;
-    margin-right: 4px;
+enum class Span {
+  NONE,
+  RIGHT,
+  LEFT
 }

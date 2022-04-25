@@ -165,7 +165,6 @@ class TextField(val model: VField,
     add(inputField)
     if (hasAutofill && type != Type.DATE) {
       autofill = IronIcons.ARROW_DROP_DOWN.create()
-      autofill!!.style["cursor"] = "pointer" // TODO: move to css
       autofill!!.addClickListener {
         fireAutofill()
       }
@@ -320,7 +319,7 @@ class TextField(val model: VField,
         col = 40
       }
       VTextAreaField().also {
-        it.setRows(rows, visibleRows)
+        it.setRows(visibleRows)
         it.width = (col * 10).toString() + "px"
         it.setWordwrap(true)
         // if fixed new line mode is used, we remove scroll bar from text area
@@ -368,6 +367,9 @@ class TextField(val model: VField,
       }
       Type.DATE -> {
         7
+      }
+      Type.CODE -> {
+        4
       }
       else -> {
         3

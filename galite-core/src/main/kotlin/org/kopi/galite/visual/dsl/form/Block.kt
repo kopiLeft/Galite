@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.dsl.form
 
 import java.awt.Point
+import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
@@ -159,20 +160,16 @@ open class Block(val title: String,
    * MUSTFILL fields are accessible fields that the user must fill with a value.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
   inline fun <reified T> mustFill(domain: Domain<T>,
                                   position: FormPosition,
-                                  init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                  initializer: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
     initDomain(domain)
     val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
-    field.init()
-    field.initialize(this)
-    field.addFieldTrigger()
-    block.fields.add(field.vField)
-    fields.add(field)
-    return field
+
+    return init(field, initializer)
   }
 
   /**
@@ -181,13 +178,13 @@ open class Block(val title: String,
    * VISIT fields are accessible, can be modified but not necessary.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a VISIT field.
    */
   inline fun <reified T> visit(domain: Domain<T>,
                                position: FormPosition,
-                               init: NullableFormField<T>.() -> Unit): FormField<T?> {
-    return initField(domain, init, VConstants.ACS_VISIT, position)
+                               initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_VISIT, position)
   }
 
   /**
@@ -196,13 +193,13 @@ open class Block(val title: String,
    * SKIPPED fields are read only fields, you can read the value but you can't modify it.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
   inline fun <reified T> skipped(domain: Domain<T>,
                                  position: FormPosition,
-                                 init: NullableFormField<T>.() -> Unit): FormField<T?> {
-    return initField(domain, init, VConstants.ACS_SKIPPED, position)
+                                 initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_SKIPPED, position)
   }
 
   /**
@@ -210,29 +207,38 @@ open class Block(val title: String,
    *
    * HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
    *
-   * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param domain         the domain of the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T?> {
-    return initField(domain, init, VConstants.ACS_HIDDEN)
+  inline fun <reified T> hidden(domain: Domain<T>, initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
   inline fun <reified T> initField(domain: Domain<T>,
-                                   init: NullableFormField<T>.() -> Unit,
+                                   initializer: NullableFormField<T>.() -> Unit,
                                    access: Int,
-                                   position: FormPosition? = null): FormField<T?> {
+                                   position: FormPosition? = null): FormField<T> {
     initDomain(domain)
     val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
-    field.init()
+
+    return init(field, initializer)
+  }
+
+  /**
+   * Initializes a field.
+   */
+  inline fun <reified T, U: FormField<T>> init(field: U,
+                                               initializer: U.() -> Unit): U {
+    field.initializer()
     field.initialize(this)
     field.addFieldTrigger()
     block.fields.add(field.vField)
     fields.add(field)
-    return field as FormField<T?>
+    return field
   }
 
   fun FormField<*>.addFieldTrigger() {
@@ -732,6 +738,27 @@ open class Block(val title: String,
   }
 
   /**
+   * enter a new block
+   */
+  fun enter() {
+    block.enter()
+  }
+
+  /**
+   * exit block
+   * @exception VException      an exception may be raised by record.leave
+   */
+  fun leave(check: Boolean): Boolean = block.leave(check)
+
+  /**
+   * Validate current block.
+   * @exception VException      an exception may be raised by triggers
+   */
+  fun validate() {
+    block.validate()
+  }
+
+  /**
    * Returns true if the block has changed wrt the database.
    */
   val isChanged: Boolean
@@ -752,6 +779,13 @@ open class Block(val title: String,
    */
   protected fun checkMustfillFields() {
     block.checkMustfillFields()
+  }
+
+  /**
+   * Clears the entire block.
+   */
+  open fun clear() {
+    block.clear()
   }
 
   /**
@@ -785,6 +819,24 @@ open class Block(val title: String,
   }
 
   /**
+   * Saves changes in block to database.
+   * @exception VException      an exception may be raised by triggers
+   * @exception SQLException            an exception may be raised DB access
+   */
+  fun save() {
+    block.save()
+  }
+
+  /**
+   * Deletes in database
+   * @exception VException      an exception may be raised by triggers
+   * @exception SQLException    an exception may be raised DB access
+   */
+  fun delete() {
+    block.delete()
+  }
+
+  /**
    * Inserts an empty line in multi-block.
    * @exception        VException        an exception may occur during DB access
    */
@@ -815,14 +867,14 @@ open class Block(val title: String,
   /**
    * * Loads block from database
    */
-  fun load() {
+  open fun load() {
     block.load()
   }
 
   /**
    * * Loads block from database
    */
-  fun deleteBlock() {
+  open fun deleteBlock() {
     Commands.deleteBlock(block)
   }
 
@@ -859,6 +911,147 @@ open class Block(val title: String,
       block.dropListMap[extension] = field.ident
     }
     return null
+  }
+
+  fun fireBlockChanged() {
+    block.fireBlockChanged()
+  }
+
+  // ----------------------------------------------------------------------
+  // SETS/GETS INFORMATION ABOUT THE BLOCK
+  // ----------------------------------------------------------------------
+
+  /**
+   * Returns the record info value for the given record.
+   * @param rec The record number.
+   * @return The record info value.
+   */
+  fun getRecordInfoAt(rec: Int): Int = block.getRecordInfoAt(rec)
+
+  /**
+   * Returns true if at least one record is filled
+   */
+  fun isFilled(): Boolean = block.isFilled()
+
+  /**
+   * Returns true if the record is filled
+   */
+  fun isRecordFilled(rec: Int): Boolean = block.isRecordFilled(rec)
+
+  /**
+   * Returns true if the specified record has been fetched from the database
+   */
+  fun isRecordFetched(rec: Int): Boolean = block.isRecordFetched(rec)
+
+  /**
+   * Returns true if the specified record has been changed
+   */
+  fun isRecordChanged(rec: Int): Boolean = block.isRecordChanged(rec)
+
+  /**
+   * Returns true if the specified record has been deleted
+   */
+  fun isRecordDeleted(rec: Int): Boolean = block.isRecordDeleted(rec)
+
+  /**
+   * Returns true if the specified record has been deleted
+   */
+  fun isSortedRecordDeleted(sortedRec: Int): Boolean = block.isSortedRecordDeleted(sortedRec)
+
+  /**
+   * Returns true if the specified record is trailed
+   */
+  fun isRecordTrailed(rec: Int): Boolean = block.isRecordTrailed(rec)
+
+  /**
+   * Returns true if the current record is filled
+   */
+  fun isCurrentRecordFilled(): Boolean = block.isCurrentRecordFilled()
+
+  /**
+   * Returns true if the current record has been fetched from the database
+   */
+  fun isCurrentRecordFetched(): Boolean = block.isCurrentRecordFetched()
+
+  /**
+   * Returns true if the current record has been changed
+   */
+  fun isCurrentRecordChanged(): Boolean = block.isCurrentRecordChanged()
+
+  /**
+   * Returns true if the current record has been deleted
+   */
+  fun isCurrentRecordDeleted(): Boolean = block.isCurrentRecordDeleted()
+
+  /**
+   * Returns true if the current record is trailed
+   */
+  fun isCurrentRecordTrailed(): Boolean = block.isCurrentRecordTrailed()
+
+  /**
+   * Returns the current block access.
+   */
+  fun getAccess(): Int = block.getAccess()
+
+  /**
+   * Updates current access of block fields in the current Record.
+   */
+  fun updateAccess(record: Int = activeRecord) {
+    block.updateAccess(record)
+  }
+
+  fun setRecordFetched(rec: Int, value: Boolean) {
+    block.setRecordFetched(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordFetched(value: Boolean) {
+    block.setRecordFetched(value)
+  }
+
+  fun setRecordChanged(rec: Int, value: Boolean) {
+    block.setRecordChanged(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordChanged(value: Boolean) {
+    block.setRecordChanged(value)
+  }
+
+  fun setRecordDeleted(rec: Int, value: Boolean) {
+    block.setRecordDeleted(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordDeleted(value: Boolean) {
+    block.setRecordDeleted(value)
+  }
+
+  /**
+   *
+   */
+  fun setRecordTrailed(rec: Int, value: Boolean) {
+    block.setRecordTrailed(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordTrailed(value: Boolean) {
+    block.setRecordTrailed(value)
+  }
+
+  /**
+   * COPY RECORD IN BLOCK
+   */
+  fun copyRecord(from: Int, to: Int, trail: Boolean) {
+    block.copyRecord(from, to, trail)
   }
 
   // ----------------------------------------------------------------------

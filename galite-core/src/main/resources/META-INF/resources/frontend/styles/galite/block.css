@@ -17,7 +17,9 @@
  */
 
 /**
- * Form blocks style.
+ *---------------------------------------------------
+ * Styles for form blocks
+ *---------------------------------------------------
  */
 .k-block {
     padding: 22px 50px 22px 50px;
@@ -25,7 +27,28 @@
     margin-bottom: 16px;
     background: #ffffff;
     display: inline-block;
-    margin-top: unset;
+}
+
+.k-form-page-content .k-block:last-child {
+    margin-bottom: 0 !important;
+}
+
+/**
+ * Border bottom for fields in simple block
+ */
+.k-block .simple ::part(input-field) {
+    border-bottom: #dadada 1px solid;
+    border-radius: unset;
+}
+
+/**
+ * Border bottom for fields in simple block on focus
+ */
+.k-block .simple ::part(input-field):focus-within {
+    background: none;
+    border-bottom: var(--background-color) 1px solid;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 /**
@@ -40,9 +63,9 @@
 }
 
 .info-content > * {
-     padding-bottom: 2px;
-     padding-right: 8px;
-     vertical-align: top;
+    padding-bottom: 2px;
+    padding-right: 8px;
+    vertical-align: top;
  }
 
 /**
@@ -57,13 +80,16 @@
  */
 .block-title {
     font-size: 16px !important;
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
 }
 
 /**
- * Styles for grid, remove border
+ *---------------------------------------------------
+ * Styles for multiple block
+ *---------------------------------------------------
+ */
+
+/**
+ * Styles for grid, remove border of multi block
  */
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
     border: none;
@@ -99,52 +125,89 @@
     margin-top: -56px;
 }
 
-/*
- * make label & follow field in same line
+/**
+ * Filter Style
  */
-.info-content {
-    display: -webkit-box;
-}
-
-.info-content .k-textinput {
-    line-height: normal;
-}
-
-/*
- * multiple block Style
- */
-.editor-field > vaadin-text-field {
-    border-left: 1px solid #ddd;
-    padding: 0;
-}
-
-.block-filter-text {
-    padding: 0;
-    --lumo-text-field-size: var(--lumo-size-xxs);
+.block-filter-text, .block-filter-text::part(input-field)  {
     height: 100%;
+    background: unset;
 }
 
-.block-filter-text::part(input-field) {
-    height: 100%;
-    background: white;
-    border-radius: 0;
+.block-filter-text::part(input-field)::after {
+    background-color: unset;
 }
 
 .block-filter-text > iron-icon {
-        font-size: 10px
+    font-size: 10px
 }
 
+.block-filter-text::part(input-field):focus-within {
+    border-bottom: var(--background-color) 1px solid;
+    border-radius: 0;
+}
+
+.block-filter-text {
+    padding: 0 !important;
+    border-right: 1px solid #ddd;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    background: white;
+    --lumo-text-field-size: none;
+}
+
+/**
+ * multi block header style
+ */
+.multiple ::part(header-cell) {
+    position: relative;
+    background-color: #fff;
+    text-align: left;
+    color: #a3a3a3;
+}
+
+/**
+ * field in multi block Style
+ */
 .editor-field {
     border-left: 2px solid #dadada;
-    padding: 0;
     height: 100%;
-    --lumo-text-field-size: var(--lumo-size-xxs);
+    padding: 0;
+    --lumo-text-field-size: var(--lumo-space-l);
     background: white;
+}
+
+.editor-field input {
+    background: inherit;
+    --_lumo-text-field-overflow-mask-image: none;
+    min-height: 0;
 }
 
 .editor-field::part(input-field) {
     height: 100%;
     padding: 0;
-    border-radius: 0;
-    background: none;
+    background: inherit;
+    border-radius: unset;
+}
+
+/**
+ * Remove blue border hover on TextField in multi block
+ */
+.editor-field::part(input-field):focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.editor-field input:focus-within {
+    border-bottom: var(--background-color) 1px solid;
+    border-radius: unset;
+}
+
+.editor-field input:hover {
+    background: var(--background-hover-color) !important;
+}
+
+.editor-field::part(input-field)::after {
+    background-color: unset;
 }

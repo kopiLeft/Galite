@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
+/**
  * List Dialog style
  */
 :host([theme="k-listdialog-container"]) [part="header-cell"] {
@@ -28,7 +28,7 @@
     color: var(--background-color);
 }
 
-/*
+/**
  * List Table header styles
  */
 :host([theme="k-listdialog-table"]) [part~="cell"]:not(tr:nth-child(2) th) {
@@ -65,7 +65,13 @@ vaadin-grid-cell-content, .k-listdialog {
 
 .filter-text::part(input-field) {
     border-radius: 0;
+    background: unset;
 }
+
+.filter-text::part(input-field)::after {
+    background-color: unset;
+}
+
 
 .filter-text::part(input-field):focus-within {
     border-bottom: var(--background-color) 1px solid;

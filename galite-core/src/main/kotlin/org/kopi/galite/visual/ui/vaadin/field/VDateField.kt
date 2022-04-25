@@ -48,6 +48,10 @@ import com.vaadin.flow.shared.Registration
 @CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-text-field")
 class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
 
+  init {
+    className = "galite-date"
+  }
+
   override fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
     internalField.picker.addValueChangeListener(listener)
     internalField.addValueChangeListener(listener)
@@ -63,7 +67,10 @@ class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
 
 // Issue: https://github.com/vaadin/flow-components/issues/1158
 // TODO: Remove this workaround when the ticket is resolved.
-@CssImport(value = "./styles/galite/datepicker.css", themeFor = "vaadin-date-picker-text-field")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/datepicker.css"),
+  CssImport(value = "./styles/galite/datepicker.css", themeFor = "vaadin-date-picker")
+])
 class DateField: TextField() {
   val picker = DatePicker()
 
@@ -89,7 +96,6 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
   init {
     element.setProperty("attrForValue", "value")
     element.setProperty("autoOpenDisabled", true)
-    textField.element.themeList.add("galite-date")
     textField.className = "input"
     textField.suffixComponent = icon
     textField.isClearButtonVisible = true
@@ -97,7 +103,6 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
     textField.pattern = "[0-9/\\.]*"
     textField.maxLength = 10
 
-    icon.style["cursor"] = "pointer"
     icon.element.executeJs(
       """
               this.addEventListener("click", event => {

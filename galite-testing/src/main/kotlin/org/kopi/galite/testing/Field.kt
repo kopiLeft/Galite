@@ -58,7 +58,7 @@ import com.vaadin.flow.component.grid.Grid
  *
  * @param value the value to set to this field.
  */
-fun <T> FormField<T>.edit(value: T): UField {
+fun <T> FormField<T>.edit(value: T?): UField {
   val mainWindow = _get<MainWindow>()
 
   return if (this.parentBlock.isMulti) {
@@ -68,7 +68,7 @@ fun <T> FormField<T>.edit(value: T): UField {
   }
 }
 
-private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindow): UField {
+private fun <T> FormField<T>.editInMultipleBlock(value: T?, mainWindow: MainWindow): UField {
   val column = mainWindow
     ._find<Grid.Column<*>>()
     .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }
@@ -106,7 +106,7 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
   return gridEditorField.dGridEditorField
 }
 
-private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow): UField {
+private fun <T> FormField<T>.editInSimpleBlock(value: T?, mainWindow: MainWindow): UField {
   val fields = mainWindow._find<DField>()
   val field =  fields.single { it.getModel() eq this.vField }
   val editorField = field.wrappedField
@@ -169,7 +169,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
  * @param value the value to set to this field.
  */
 @Suppress("UNCHECKED_CAST")
-fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
+fun <T> FormField<T>.editText(value: String?): UField = edit(value as T?)
 
 /**
  * Finds the Vaadin field component of this form field.

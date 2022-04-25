@@ -27,11 +27,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.editText
-import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.findMultiBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
@@ -58,7 +58,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     formExample.open()
 
     // Enters the sales block
-    formExample.salesBlock.enter()
+    formExample.salesBlock._enter()
 
     // Enters values to fields
     val currentTimestamp   = Instant.now()
@@ -99,7 +99,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     formExample.open()
 
     // Enters the sales block
-    formExample.salesBlock.enter()
+    formExample.salesBlock._enter()
 
     // Enters the id field editor
     val field = formExample.salesBlock.idClient.edit(100)
@@ -117,7 +117,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     formExample.open()
 
     // Enters the sales block
-    formExample.salesBlock.enter()
+    formExample.salesBlock._enter()
 
     // Set the value of the code-domain field
     formExample.salesBlock.codeDomain.editText("Kotlin")

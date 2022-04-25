@@ -131,7 +131,7 @@ abstract class VBlock(var title: String,
   internal var dropListMap = HashMap<String, String>()
 
   // dynamic data
-  private var mode = 0 // current mode
+  private var mode = VConstants.MOD_QUERY // current mode
   protected lateinit var recordInfo: IntArray // status vector for records
   protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
   protected var fetchCount = 0 // # of fetched records
@@ -3594,7 +3594,7 @@ abstract class VBlock(var title: String,
     blockListener.remove(BlockRecordListener::class.java, bl)
   }
 
-  protected fun fireBlockChanged() {
+  internal fun fireBlockChanged() {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 

@@ -67,11 +67,11 @@ open class FormField<T>(internal val block: Block,
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command> = mutableListOf() // the commands accessible in this field
   var triggers = mutableListOf<Trigger>() // the triggers executed by this field
-  var alias: FormField<T?>? = null // the alias of this field
-  var initialValues = mutableMapOf<Int, T>()
-  var value: T by this
+  var alias: FormField<T>? = null // the alias of this field
+  var initialValues = mutableMapOf<Int, T?>()
+  var value: T? by this
 
-  private operator fun setValue(any: Any, property: KProperty<*>, value : T) {
+  private operator fun setValue(any: Any, property: KProperty<*>, value : T?) {
     if (!block.isModelInitialized) {
       initialValues[0] = value
     } else {
@@ -80,11 +80,11 @@ open class FormField<T>(internal val block: Block,
   }
 
   @Suppress("UNCHECKED_CAST")
-  private operator fun getValue(any: Any, property: KProperty<*>): T {
+  private operator fun getValue(any: Any, property: KProperty<*>): T? {
     return if (vField.block == null) {
-      initialValues[0] as T
+      initialValues[0]
     } else {
-      vField.getObject() as T
+      vField.getObject() as? T
     }
   }
 
@@ -110,6 +110,7 @@ open class FormField<T>(internal val block: Block,
    *
    * @param record the record number
    */
+  @Suppress("UNCHECKED_CAST")
   operator fun get(record: Int): T? {
     return if (vField.block == null) {
       initialValues[record]
@@ -124,7 +125,7 @@ open class FormField<T>(internal val block: Block,
    * @param record the record number
    * @param value  the value
    */
-  operator fun set(record: Int = 0, value: T) {
+  operator fun set(record: Int = 0, value: T?) {
     initialValues[record] = value
 
     if (block.isModelInitialized) {
