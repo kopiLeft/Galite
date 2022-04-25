@@ -21,7 +21,12 @@ import java.sql.Connection
 import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.statements.api.ExposedConnection
+import org.jetbrains.exposed.sql.transactions.ThreadLocalTransactionManager
+import org.jetbrains.exposed.sql.transactions.TransactionInterface
 import org.jetbrains.exposed.sql.transactions.transactionManager
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VForm
@@ -36,9 +41,50 @@ import org.kopi.galite.visual.visual.VWindow
 fun <T> protected(connection: Connection, statement: Transaction.() -> T): T {
   val db = Database.connect({ connection })
   val outerManager = db.transactionManager
-  val transaction = outerManager.newTransaction()
+  val transaction = (outerManager as ThreadLocalTransactionManager).createTransaction(db)
+
+  transaction.addLogger(StdOutSqlLogger)
 
   return transaction.statement()
+}
+
+fun ThreadLocalTransactionManager.createTransaction(db: Database): Transaction {
+  return Transaction(
+    ThreadLocalTransaction(
+      db = db,
+      transactionIsolation = defaultIsolationLevel,
+    )
+  ).apply {
+    bindTransactionToThread(this)
+  }
+}
+
+class ThreadLocalTransaction(
+  override val db: Database,
+  override val transactionIsolation: Int,
+  override val outerTransaction: Transaction? = null
+) : TransactionInterface {
+
+  private val connectionLazy = lazy(LazyThreadSafetyMode.NONE) {
+    db.connector().apply {
+      autoCommit = false
+      transactionIsolation = this@ThreadLocalTransaction.transactionIsolation
+    }
+  }
+  override val connection: ExposedConnection<*>
+    get() = connectionLazy.value
+
+  override fun commit() {
+    // Do nothing in nested. commit is done by Kopi
+  }
+
+  override fun rollback() {
+    // Do nothing in nested. rollback is done by Kopi
+  }
+
+  override fun close() {
+    // Do nothing in nested. close is done by Kopi
+  }
 }
 
 /**
