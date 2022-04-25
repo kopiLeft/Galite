@@ -86,7 +86,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
       }
 
       tabPanel!!.addSelectedChangeListener {
-        if(it.isFromClient) {
+        if (it.isFromClient) {
           // This to prevent user from switch tabs. the method firePageSelected() is responsible for changing page.
           // This will keep the previous tab if firePageSelected fails to switch tabs because an error occurred
           // (For example: the used didn't fill a MUSTFILL field)
@@ -120,7 +120,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
    * @param page The page index.
    */
   private fun selectPage(page: Int) {
-    if(tabPanel != null) {
+    if (tabPanel != null) {
       tabs[page].isEnabled = true
       tabPanel!!.selectedIndex = page
       lastSelected = tabPanel!!.selectedTab

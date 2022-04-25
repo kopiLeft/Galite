@@ -33,7 +33,7 @@ import com.vaadin.flow.component.KeyModifier
  * @param modifiers The action modifiers key.
  * @param navigationAction lambda representing the action to perform
  */
-abstract class ShortcutAction<T: Component>(
+abstract class ShortcutAction<T : Component>(
   protected val field: T,
   internal val key: Key,
   internal val modifiers: Array<out KeyModifier>,
@@ -64,7 +64,7 @@ abstract class ShortcutAction<T: Component>(
      * @return The unique key.
      */
     fun createKey(keys: List<String>, modifierMask: Int): String {
-      val stringKeys  = keys.joinToString(separator = "-")
+      val stringKeys = keys.joinToString(separator = "-")
       return "$stringKeys-$modifierMask"
     }
 
@@ -90,7 +90,7 @@ abstract class ShortcutAction<T: Component>(
   }
 }
 
-fun <V> V.runAfterGetValue(function: () -> Unit) where V: Component, V: HasValue<*, *> {
+fun <V> V.runAfterGetValue(function: () -> Unit) where V : Component, V : HasValue<*, *> {
   // Workaround for issue: https://github.com/vaadin/flow/issues/5959
   // Execute shortcut action when receiving the field's value using javascript call
   // The field's value is used later to check if value has been changed

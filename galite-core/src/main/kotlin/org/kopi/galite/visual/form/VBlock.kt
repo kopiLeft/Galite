@@ -24,20 +24,6 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.all
-import kotlin.collections.filter
-import kotlin.collections.find
-import kotlin.collections.first
-import kotlin.collections.forEach
-import kotlin.collections.forEachIndexed
-import kotlin.collections.indices
-import kotlin.collections.isNotEmpty
-import kotlin.collections.map
-import kotlin.collections.mutableListOf
-import kotlin.collections.single
-import kotlin.collections.toTypedArray
 import kotlin.math.abs
 
 import org.jetbrains.annotations.TestOnly
@@ -83,7 +69,10 @@ import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VExecFailedException
 import org.kopi.galite.visual.visual.VWindow
 
-open class VBlock() : VConstants, DBContextHandler, ActionHandler {
+open class VBlock(var title: String,
+                  buffer: Int,
+                  visible: Int)
+  : VConstants, DBContextHandler, ActionHandler {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -104,33 +93,24 @@ open class VBlock() : VConstants, DBContextHandler, ActionHandler {
   // prevent that the access of a field is updated
   // (performance in big charts)
   protected var ignoreAccessChange = false
-
-  // max number of buffered records
-  var bufferSize = 0
-
-  // max number of buffered IDs
-  protected var fetchSize = 0
-
-  // max number of displayed records
-  var displaySize = 0
-
-  /** The page number of this block */
-  var pageNumber = 0 // page number
+  var bufferSize = buffer // max number of buffered records
+  protected var fetchSize = 0 // max number of buffered IDs
+  var displaySize = visible // max number of displayed records
+  var pageNumber = 0 // page number of this block
   internal lateinit var source: String // qualified name of source file
   lateinit var name: String // block name
   protected lateinit var shortcut: String // block short name
-  var title: String = "" // block title
   var alignment: BlockAlignment? = null
   internal var help: String? = null // the help on this block
   internal var tables = mutableListOf<Table>() // names of database tables
   internal var options = 0 // block options
-  internal lateinit var access: IntArray // access flags for each mode
+  internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // access flags for each mode
   internal var indices = mutableListOf<String>() // error messages for violated indices
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
   internal var commands = mutableListOf<VCommand>() // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
-      val temp: Array<VActor>? = field
+      val temp = field
       field = null
       return temp
     }
@@ -141,15 +121,9 @@ open class VBlock() : VConstants, DBContextHandler, ActionHandler {
   internal var VKT_Command_Triggers = mutableListOf<Array<Trigger?>>()
   internal var VKT_Field_Command_Triggers = mutableListOf<Array<Trigger?>>()
 
-  // current mode
-  private var mode = 0
-  protected lateinit var recordInfo: IntArray // status vector for records
-  protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
-  protected var fetchCount = 0 // # of fetched records
-  protected var fetchPosition = 0 // position of current record
   protected var blockListener = EventListenerList()
   internal var orderModel = OrderModel()
-  var border = 0
+  var border = VConstants.BRD_NONE
   var maxRowPos = 0
   var maxColumnPos = 0
   var displayedFields = 0
@@ -157,6 +131,12 @@ open class VBlock() : VConstants, DBContextHandler, ActionHandler {
   internal var dropListMap = HashMap<String, String>()
 
   // dynamic data
+  private var mode = VConstants.MOD_QUERY // current mode
+  protected lateinit var recordInfo: IntArray // status vector for records
+  protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
+  protected var fetchCount = 0 // # of fetched records
+  protected var fetchPosition = 0 // position of current record
+
   var activeRecord = 0 // current record
     get() {
       return if (field in 0 until bufferSize) field else -1
@@ -174,10 +154,9 @@ open class VBlock() : VConstants, DBContextHandler, ActionHandler {
     set(mode) {
       if (mode != detailMode) {
         // remember field to enter it in the next view
-        val vField = activeField
-        fireViewModeLeaved(this, vField)
+        fireViewModeLeaved(this, activeField)
         detailMode = mode
-        fireViewModeEntered(this, vField)
+        fireViewModeEntered(this, activeField)
       }
     }
 
@@ -219,8 +198,17 @@ open class VBlock() : VConstants, DBContextHandler, ActionHandler {
       }
     }
 
-  constructor(form: VForm): this() {
+  constructor(title: String, buffer: Int, visible: Int, form: VForm): this(title, buffer, visible) {
     this.form = form
+  }
+
+  constructor(form: VForm): this("", 0, 0) {
+    this.form = form
+  }
+
+  init {
+    bufferSize = buffer
+    displaySize = visible
   }
 
   companion object {
@@ -3601,7 +3589,7 @@ open class VBlock() : VConstants, DBContextHandler, ActionHandler {
     blockListener.remove(BlockRecordListener::class.java, bl)
   }
 
-  protected fun fireBlockChanged() {
+  internal fun fireBlockChanged() {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 

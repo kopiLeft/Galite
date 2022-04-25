@@ -316,7 +316,7 @@ class VIntegerField(val bufferSize: Int,
   /**
    * Returns a string representation of a int value wrt the field type.
    */
-  protected fun formatInt(value: Int): String = value.toString()
+  fun formatInt(value: Int): String = value.toString()
 
   fun setCriticalMinValue(criticalMinValue: Int) {
     this.criticalMinValue = criticalMinValue

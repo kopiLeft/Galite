@@ -17,18 +17,53 @@
  */
 
 :host([theme~="date-picker-suffix"]) {
-    --lumo-text-field-size: unset;
+    --lumo-text-field-size: var(--lumo-space-xs);
+    padding: 0;
 }
 
-:host([theme~="date-picker-suffix"]) [part~='value'] {
-    display: none;
+:host([theme~="date-picker-suffix"]) .vaadin-date-picker-container {
+    width: min-content;
+}
+
+:host([theme~="date-picker-suffix"]) [part~='input-field']::after {
+    background: unset;
 }
 
 :host([theme~="date-picker-suffix"]) [part~='input-field'] {
     border: none;
     padding: 0;
+    background: unset;
+    border-bottom: none !important;
 }
 
-:host([theme~="date-picker-suffix"]) .vaadin-text-field-container {
-    width: unset;
+:host([theme~="date-picker-suffix"]) [part~="toggle-button"] {
+    cursor: pointer;
+}
+
+.galite-date, #fullCalendar-date-picker::part(input-field) {
+    border-bottom: #dadada 1px solid;
+    border-radius: unset;
+}
+
+.galite-date:focus-within , #fullCalendar-date-picker::part(input-field):focus-within {
+    background: none;
+    border-bottom: var(--background-color) 1px solid;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.galite-date::part(input-field)::after {
+    background-color: unset;
+}
+
+.galite-date {
+    padding: 0 !important;
+    --lumo-text-field-size: var(--lumo-space-l);
+    color: #000000;
+}
+
+.galite-date::part(input-field) {
+    background: unset;
+    padding: 0 !important;
+    border-bottom: none !important;
 }

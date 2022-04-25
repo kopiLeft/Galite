@@ -3,10 +3,27 @@
 <form title="Form for Test">
     <menu ident="Menu Interne" label="Intern Menu" />
     <actor ident="actor0" label="Intern Actor" help="" />
-    <actor ident="Autofill" label="Autofill" help="" />
+    <actor ident="actor1" label="Autofill" help="" />
+    <actor ident="actor2" label="Create report" help="" />
     <block name="InternBlock" title="Intern Block">
         <field ident="FLD_0" label="field in intern block" help="" />
-        <field ident="FLD_1" label="code field in intern block" help="" />
-        <field ident="FLD_2" label="list field in intern block" help="" />
+        <field ident="FLD_1" label="Extern code" help="" />
+        <field ident="FLD_2" label="Extern list" help="" />
+        <field ident="FLD_3" label="Intern code" help="" />
+        <field ident="FLD_4" label="Intern list" help="" />
     </block>
+
+    <type ident="FLD_3">
+        <code>
+            <codedesc ident="id$0" label="Approved" />
+            <codedesc ident="id$1" label="Not Approved" />
+        </code>
+    </type>
+
+    <type ident="FLD_4">
+        <list>
+            <listdesc column="ID" title="identifier" />
+            <listdesc column="type" title="Category" />
+        </list>
+    </type>
 </form>

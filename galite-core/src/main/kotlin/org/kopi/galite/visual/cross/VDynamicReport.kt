@@ -228,7 +228,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                       field.align,
                                       getColumnGroups(field),
                                       null,
-                                      field.width,
                                       null)
         is VTimeField ->
           columns[col] = VTimeColumn(null,
@@ -391,19 +390,19 @@ class VDynamicReport(block: VBlock) : VReport() {
             break
           } catch (e: SQLException) {
             if (!alreadyProtected) {
-              block.form.handleAborted(e);
+              block.form.handleAborted(e)
             } else {
               throw e;
             }
           } catch (error: Error) {
             if (!alreadyProtected) {
-              block.form.handleAborted(error);
+              block.form.handleAborted(error)
             } else {
               throw error;
             }
           } catch (rte: RuntimeException) {
             if (!alreadyProtected) {
-              block.form.handleAborted(rte);
+              block.form.handleAborted(rte)
             } else {
               throw rte;
             }
@@ -420,8 +419,6 @@ class VDynamicReport(block: VBlock) : VReport() {
     // report columns inherit their localization from the Block.
     // actors are localized with VlibProperties.
   }
-
-  override fun add() {}
 
   override fun init() {}
 

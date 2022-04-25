@@ -23,37 +23,18 @@ import org.kopi.galite.visual.list.VColumn
 /**
  * A binding to database
  *
- * @param corr                the name of the table in database
+ * @param corr                 the name of the table in database
  * @param ident                the name of the column
  * @param isKey                true if this column is a key in the database
- * @param nullable                true if this column is nullable.
+ * @param nullable             true if this column is nullable.
  */
-class FormFieldColumn<T>(val column: Column<*>,
+class FormFieldColumn<T>(column: Column<*>,
                          val corr: String,
                          private val ident: String,
                          private val field: FormField<T>,
-                         private val isKey: Boolean,
-                         val nullable: Boolean) {
-  init {
-    initialize()
-  }
-
-  private var num = 0
-
-  /**
-   * Returns the the field column model.
-   */
-  fun getFormFieldColumnModel(): VColumn {
-    return VColumn(num, ident, isKey, nullable, column)
-  }
-
-  /**
-   * Initializes this form field column.
-   */
-  fun initialize() {
-    val table = field.getTable(column.table)
-    num = field.getTableNum(table)
-  }
+                         isKey: Boolean,
+                         nullable: Boolean)
+  : VColumn(field.getTableNum(field.getTable(column.table)), ident, isKey, nullable, column) {
 
   /**
    * Sets the position in an array of fields

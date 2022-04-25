@@ -52,6 +52,7 @@ class DGridEditorBooleanField(
   init {
     editor.addValueChangeListener(this)
   }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -138,7 +139,7 @@ class DGridEditorBooleanField(
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
   override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<Boolean?>, Boolean?>) {
-    if(!event.isFromClient) {
+    if (!event.isFromClient) {
       return
     }
 

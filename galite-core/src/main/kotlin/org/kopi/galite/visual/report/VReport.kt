@@ -24,16 +24,13 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 import kotlin.jvm.Throws
 
-import org.apache.poi.ss.formula.functions.T
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
@@ -56,8 +53,6 @@ import org.kopi.galite.visual.visual.WindowController
 
 /**
  * Represents a report model.
- *
- * @param ctxt Database context handler
  */
 abstract class VReport internal constructor() : VWindow(), Constants, VConstants, Printable {
   companion object {
@@ -139,6 +134,8 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
    */
   protected fun build() {
     init()
+    // localize the report using the default locale
+    localize()
     model.build()
     model.createTree()
     (getDisplay() as UReport?)?.build()
@@ -146,9 +143,9 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
     // all commands are by default enabled
     activeCommands.clear()
-    commands?.forEachIndexed { i, vCommand ->
+    commands.forEachIndexed { i, vCommand ->
       when {
-        vCommand!!.getIdent() == "Fold" -> cmdFold = vCommand
+        vCommand.getIdent() == "Fold" -> cmdFold = vCommand
         vCommand.getIdent() == "Unfold" -> cmdUnfold = vCommand
         vCommand.getIdent() == "Sort" -> cmdSort = vCommand
         vCommand.getIdent() == "FoldColumn" -> cmdFoldColumn = vCommand
@@ -412,31 +409,23 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   @Throws(VException::class)
   fun editLine() {
     if (cmdOpenLine != null) {
-      cmdOpenLine!!.action?.invoke()
+      cmdOpenLine!!.action.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnData() {
     if (cmdEditColumn != null) {
-      cmdEditColumn!!.action?.invoke()
+      cmdEditColumn!!.action.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnInfo() {
     if (cmdColumnInfo != null) {
-      cmdColumnInfo!!.action?.invoke()
+      cmdColumnInfo!!.action.invoke()
     }
   }
-
-  // ----------------------------------------------------------------------
-  // INTERFACE (COMMANDS)
-  // ----------------------------------------------------------------------
-  /**
-   * Adds a line.
-   */
-  abstract fun add()
 
   /**
    * Returns the ID
@@ -479,22 +468,6 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
     return if (col != -1 && getSelectedCell().y != -1) {
       model.getRow(getSelectedCell().y)?.getValueAt(col)
     } else null
-  }
-  // ----------------------------------------------------------------------
-  // METHODS FOR SQL
-  // ----------------------------------------------------------------------
-  /**
-   * creates an SQL condition, so that the column have to fit the
-   * requirements (value and search operator) of the field.
-   */
-  protected fun buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): String {
-    val condition = field.getSearchCondition(column)
-
-    return if (condition == null) {
-      " TRUE = TRUE "
-    } else {
-      "$column $condition"
-    }
   }
 
   // ----------------------------------------------------------------------
@@ -560,12 +533,12 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   /**
    * Returns true if there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int): Boolean = VKT_Report_Triggers[0][event] != null
+  internal fun hasTrigger(event: Int): Boolean = VKT_Report_Triggers[0][event] != null
 
   /**
    * Returns true if there is trigger associated with given event.
    */
-  protected fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Commands_Triggers[index][event] != null
+  internal fun hasCommandTrigger(event: Int, index: Int): Boolean = VKT_Commands_Triggers[index][event] != null
 
   fun setMenu() {
     if (!built) {
@@ -665,7 +638,10 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
   private fun initDefaultCommands() {
     actors.forEachIndexed { index, vActor ->
-      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent))
+      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
+
+  @TestOnly
+  fun _hasTrigger(event: Int): Boolean = hasTrigger(event)
 }

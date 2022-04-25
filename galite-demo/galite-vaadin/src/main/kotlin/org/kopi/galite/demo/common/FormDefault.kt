@@ -27,6 +27,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.form.Commands
+import org.kopi.galite.visual.visual.DefaultActor
 
 open class FormDefault(title: String, locale: Locale? = null): ReportSelectionForm(title, locale) {
 
@@ -184,7 +185,7 @@ open class FormDefault(title: String, locale: Locale? = null): ReportSelectionFo
     }
 }
 
-class AutofillActor: Actor(
+class AutofillActor: DefaultActor(
   menu = EditMenu(),
   label = "Autofill",
   help = "Gives the possible values.",
@@ -239,7 +240,7 @@ class DeleteLineActor: Actor(
   }
 }
 
-class EditItemActor: Actor(
+class EditItemActor: DefaultActor(
   menu = EditMenu(),
   label = "Edit",
   help = "Edit this element.",
@@ -250,7 +251,7 @@ class EditItemActor: Actor(
   }
 }
 
-class EditItemSActor: Actor(
+class EditItemSActor: DefaultActor(
   menu = EditMenu(),
   label = "Edit",
   help = "Edit this element.",

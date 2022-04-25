@@ -17,6 +17,7 @@
 package org.kopi.galite.testing
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -24,7 +25,6 @@ import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
 import org.kopi.galite.visual.ui.vaadin.field.DatePickerLight
@@ -58,7 +58,7 @@ import com.vaadin.flow.component.grid.Grid
  *
  * @param value the value to set to this field.
  */
-fun <T> FormField<T>.edit(value: T): UField {
+fun <T> FormField<T>.edit(value: T?): UField {
   val mainWindow = _get<MainWindow>()
 
   return if (this.parentBlock.isMulti) {
@@ -68,7 +68,7 @@ fun <T> FormField<T>.edit(value: T): UField {
   }
 }
 
-private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindow): UField {
+private fun <T> FormField<T>.editInMultipleBlock(value: T?, mainWindow: MainWindow): UField {
   val column = mainWindow
     ._find<Grid.Column<*>>()
     .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }
@@ -80,11 +80,12 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
 
   (gridEditorField as ClickNotifier<*>)._clickAndWait(100)
   val oldValue = gridEditorField._value
+  @Suppress("UNCHECKED_CAST")
   gridEditorField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
 
   when (gridEditorField) {
     is GridEditorTimestampField -> {
-      gridEditorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
+      gridEditorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     is GridEditorTimeField -> {
       gridEditorField._value = (value as LocalTime).format()
@@ -105,7 +106,7 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T, mainWindow: MainWindo
   return gridEditorField.dGridEditorField
 }
 
-private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow): UField {
+private fun <T> FormField<T>.editInSimpleBlock(value: T?, mainWindow: MainWindow): UField {
   val fields = mainWindow._find<DField>()
   val field =  fields.single { it.getModel() eq this.vField }
   val editorField = field.wrappedField
@@ -119,7 +120,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
 
   when {
     (editorField as? TextField)?.getContent() is VTimeStampField -> {
-      editorField._value = (value as Timestamp).format("yyyy-MM-dd HH:mm:ss")
+      editorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     editorField is BooleanField -> {
       val checkbox: Checkbox  = if (value == true) {
@@ -153,6 +154,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
   }
 
   if (_inputField != null) {
+    @Suppress("UNCHECKED_CAST")
     _inputField as HasValue<ComponentValueChangeEvent<*, Any?>, Any?>
     _inputField._fireEvent(ComponentValueChangeEvent<Component, Any?>(_inputField, _inputField, oldValue, true))
     waitAndRunUIQueue(50)
@@ -166,11 +168,13 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T, mainWindow: MainWindow)
  *
  * @param value the value to set to this field.
  */
-fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
+@Suppress("UNCHECKED_CAST")
+fun <T> FormField<T>.editText(value: String?): UField = edit(value as T?)
 
 /**
  * Finds the Vaadin field component of this form field.
  */
+@Suppress("UNCHECKED_CAST")
 fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?> {
   val mainWindow = _get<MainWindow>()
 

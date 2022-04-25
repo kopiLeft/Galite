@@ -25,7 +25,7 @@ import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.dsl.common.WindowElement
+import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -97,13 +97,13 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
       block.init()
     }
     if (formPage != null) {
-      block.pageNumber = formPage.pageNumber
+      block.block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
     blocks.add(block)
 
     val vBlock = block.getBlockModel(model)
-    vBlock.setInfo(block.pageNumber)
+    vBlock.setInfo(block.block.pageNumber)
     block.fields.forEach { formField ->
       formField.initialValues.forEach {
         formField.vField.setObject(it.key, it.value)
@@ -215,8 +215,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * GOTO BLOCK
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
    */
-  fun gotoBlock(target: VBlock) {
-    model.gotoBlock(target)
+  fun gotoBlock(target: Block) {
+    model.gotoBlock(target.block)
   }
 
   fun showChart(chart: Chart) {
@@ -276,7 +276,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   /**
    * Get block
    */
-  open fun getFormElement(ident: String?): WindowElement? {
+  open fun getFormElement(ident: String?): LocalizableElement? {
     blocks.forEach { formBlock ->
       if (formBlock.ident == ident || formBlock.shortcut == ident) {
         return formBlock

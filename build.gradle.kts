@@ -15,10 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import org.kopi.galite.gradle._java
+import org.kopi.galite.gradle._publishing
+import org.kopi.galite.gradle.configureMavenCentralPom
+import org.kopi.galite.gradle.signPublication
+
 plugins {
   id("org.jetbrains.kotlin.jvm") version "1.6.10" apply false
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
+
+val releasableProjects = listOf(
+  "galite-core",
+  "galite-testing",
+)
 
 subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -36,6 +46,31 @@ subprojects {
   dependencies {
     "implementation"(kotlin("stdlib"))
     "implementation"(kotlin("reflect"))
+  }
+}
+
+allprojects {
+  if (this.name in releasableProjects) {
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+    apply(plugin = "signing")
+    _java {
+      withJavadocJar()
+      withSourcesJar()
+    }
+
+    _publishing {
+      publications {
+        create<MavenPublication>("Galite") {
+          artifactId = project.name
+          from(project.components["java"])
+          pom {
+            configureMavenCentralPom(project)
+          }
+          signPublication(project)
+        }
+      }
+    }
   }
 }
 

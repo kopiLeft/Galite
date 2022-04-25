@@ -31,6 +31,7 @@ interface Constants {
     const val MDL_MENU_TREE = 40
     const val MDL_CHART = 50
     const val MDL_ITEM_TREE = 60
+    const val MDL_PIVOT_TABLE = 70
 
     // --------------------------------------------------------------------
     // STANDARD FONT FAMILIES

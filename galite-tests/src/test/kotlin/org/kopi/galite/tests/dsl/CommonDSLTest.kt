@@ -42,25 +42,24 @@ class CommonDSLTests : VApplicationTestBase() {
   @Test
   fun `test Command mode function`() {
     val menu = Menu("Test")
-    val actor = Actor(menu, "Test Actor", "Test Actor")
-    actor.ident = "TActor"
+    val actor = Actor(menu, "Test Actor", "Test Actor", "TActor")
     val command = Command(actor, arrayOf(),
                           object : ActionHandler {
                             override fun executeVoidTrigger(VKT_Type: Int) {}
                             override fun executeVoidTrigger(trigger: Trigger?) {}
                             override fun performAsyncAction(action: Action) {}
                             override fun performAction(action: Action, block: Boolean) {}
-                          })
+                          }) {}
 
     assertEquals(MOD_ANY, command.mode) // default mode is MOD_ANY
 
-    command.setMode(Mode.INSERT)
+    command.setModes(Mode.INSERT)
     assertEquals(2, command.mode) // mode = 0 | 1 << 1
 
-    command.setMode(Mode.INSERT, Mode.UPDATE)
+    command.setModes(Mode.INSERT, Mode.UPDATE)
     assertEquals(6, command.mode) // mode = 0 | 1 << 1 | 1 << 2
 
-    command.setMode(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
+    command.setModes(Mode.INSERT, Mode.UPDATE, Mode.QUERY)
     assertEquals(7, command.mode) // mode = 0 | 1 << 1 | 1 << 2 || 1 << 0
   }
 

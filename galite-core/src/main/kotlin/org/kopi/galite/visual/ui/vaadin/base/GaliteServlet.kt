@@ -94,8 +94,8 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
       || chars[1] < 'a' || chars[1] > 'z'
       || chars[2] != '_'
       || chars[3] < 'A' || chars[3] > 'Z'
-      || chars[4] < 'A' || chars[4] > 'Z')
-    {
+      || chars[4] < 'A' || chars[4] > 'Z'
+    ) {
       return false
     }
 
@@ -127,7 +127,6 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
       session.lock()
       println(
         request!!.remoteAddr.toString() + " - - "
-                + session.csrfToken + " - "
                 + Date(session.lastRequestTimestamp) + " - "
                 + session.browser.browserApplication + " - "
                 + request.method + " / "

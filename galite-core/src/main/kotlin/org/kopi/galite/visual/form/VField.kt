@@ -22,6 +22,7 @@ import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -63,7 +64,6 @@ import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
 import org.kopi.galite.visual.visual.Action
@@ -168,7 +168,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   internal val columns = mutableListOf<VColumn>() // columns in block's tables
 
   //  private   VFieldUI        ui;             // The UI manager
-  private var alias: VField? = null // The alias field
+  internal var alias: VField? = null // The alias field
 
   // changed?
   var isChanged = false // changed by user / changes are done in the model
@@ -826,7 +826,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
+  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.isKey ?: false
 
   /**
    * Is the field part of given index ?
@@ -1098,7 +1098,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(v: Timestamp?) {
+  fun setTimestamp(v: Instant?) {
     setTimestamp(block!!.currentRecord, v)
   }
 
@@ -1209,7 +1209,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setTimestamp(r: Int, v: Timestamp?) {
+  open fun setTimestamp(r: Int, v: Instant?) {
     throw InconsistencyException()
   }
 
@@ -1328,7 +1328,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTimestamp(): Timestamp = getTimestamp(block!!.currentRecord)
+  fun getTimestamp(): Instant? = getTimestamp(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a time value.
@@ -1475,7 +1475,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getTimestamp(r: Int): Timestamp {
+  open fun getTimestamp(r: Int): Instant? {
     throw InconsistencyException()
   }
 
@@ -1888,11 +1888,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           break
         } catch (e: SQLException) {
-          getForm().handleAborted(e);
+          getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
@@ -1955,9 +1955,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         } catch (e: SQLException) {
           getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
@@ -2254,11 +2254,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           break
         } catch (e: SQLException) {
-          getForm().handleAborted(e);
+          getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {

@@ -31,7 +31,7 @@ class VFullCalendarCommand(
   val form: VFullCalendarForm,
   actor: VActor,
   mode: Int
-) : VCommand(mode, null, actor, actor.number, actor.actorIdent), ActionHandler {
+) : VCommand(mode, null, actor, actor.number, actor.ident), ActionHandler {
 
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {

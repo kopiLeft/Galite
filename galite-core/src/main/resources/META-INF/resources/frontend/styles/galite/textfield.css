@@ -29,6 +29,20 @@
     position: relative;
 }
 
+/**
+ * Hover style for fields
+ */
+::part(input-field):hover {
+    background: var(--background-hover-color) !important;
+}
+
+/**
+ * remove a gray background when hover on TextField
+ */
+.k-textinput::part(input-field)::after {
+    background: none;
+}
+
 .k-textinput::part(input-field) {
     max-height: 40px;
 }
@@ -51,47 +65,39 @@
 }
 
 /**
+ * input and textarea Style
+ */
+.k-textinput input, .textarea textarea {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    padding: 0;
+}
+
+/**
  * Autofill icon styles
  */
-.k-textinput iron-icon {
+.k-textinput iron-icon, .editor-field iron-icon {
     color: var(--background-color);
-    margin-top: -5px;
+    position: absolute;
+    right: 0;
+    font-size: var(--lumo-icon-size-s);
 }
 
 /**
  * Hover styles for autofill icon
  */
-.k-textfield .fa:hover {
+.k-textinput iron-icon:hover, .editor-field iron-icon:hover {
     cursor: pointer !important;
 }
 
 /**
  * Disabled input styles
  */
-.k-textfield.v-disabled input, .k-textfield.v-disabled textarea {
-    border-bottom: #dadada 1px dotted;
+:host([disabled]) [part="input-field"] {
+    border-bottom: #dadada 1px dotted !important;
     color: #676767;
-}
-
-/**
- * Disabled inputs autofill icon styles.
- */
-.k-textfield.v-disabled .fa {
-    color: #a3a3a3;
-}
-
-/**
- * Styles for hovered autofill icons when field is disabled.
- */
-.k-textfield.v-disabled .fa:hover {
-    cursor: default !important;
-}
-
-/**
- * Right aligned text fields styles
- */
-.k-textfield .k-textinput-right-aligned {
-    padding-right: 16px !important;
 }
 
 .k-field {
@@ -99,105 +105,15 @@
 }
 
 /**
- * Increment and decrement button hover styles
- */
-.k-field button:hover {
-    cursor: pointer;
-}
-
-/**
- * Increment and decrement button icon styles
- */
-.k-field button i {
-    font-size: 1.6em !important;
-}
-
-/**
- * Increment and decrement button disabled styles
- */
-.k-field.v-disabled button {
-    background: #dadada;
-    color: #ffffff-grey;
-}
-
-/**
- * Increment and decrement button disabled hover styles
- */
-.k-field.v-disabled button:hover {
-    cursor: default;
-}
-
-/**
- * Grid editor main styles
- */
-.v-grid-editor-cells > div .editor-field {
-    cursor: pointer;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100%;
-    max-height: 100%;
-    line-height: 1.2em;
-    transition: .4s;
-    color: #000000;
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
-    padding: 4px !important;
-}
-
-/**
- * Hover styles for grid editors.
- */
-.v-grid-editor-cells > div .editor-field:hover {
-    background: var(--background-hover-color) !important;
-}
-
-/**
- * Focus styles for grid editors
- */
-.v-grid-editor-cells > div .editor-field:focus {
-    background: none;
-    border-bottom: var(--background-color) 1px solid;
-}
-
-/**
- * Focus styles for grid editors
- */
-.v-grid-editor-cells > div .editor-field-blink {
-    border-bottom: #fd2020 1px solid;
-}
-
-/**
- * Autofill icon styles for grid editors.
- */
-.v-grid-editor-cells > div .fa {
-    color: var(--background-color);
-    font-size: 1.2em !important;
-    margin-left: -10px;
-    position: relative;
-    z-index: 8;
-    height: 20px;
-    width: 10px;
-}
-
-/**
- * Hovered autofill icon styles for grid editors.
- */
-.v-grid-editor-cells > div .fa:hover {
-    cursor: pointer !important;
-}
-
-/**
  * Button fields styles.
  */
-.k-textinput-action::part(input-field) {
+.k-textinput-action input {
     cursor: pointer;
 }
 
 .k-textinput-action::part(input-field):hover {
-    background-color: var(--background-color);
-    color: #ffffff;
+    background-color: var(--background-color) !important;
+    color: #ffffff !important;
 }
 
 .k-textinput-action::part(input-field):active {
@@ -205,60 +121,15 @@
     transform: translateY(2px);
 }
 
-/**
- * Rich text styles
- */
-
-.v-ckeditortextfield {
-    margin-top: 8px;
-}
-
-.v-ckeditortextfield-focus .cke_contents {
-    border-left : var(--background-color) 1px solid;
-    border-right : var(--background-color) 1px solid;
-    border-bottom : var(--background-color) 1px solid;
-}
-
-.cke_contents {
-    border-left : #dadada 1px solid;
-    border-right : #dadada 1px solid;
-    border-bottom : #dadada 1px solid;
-}
-
-.cke_top {
-    padding: 6px 0px;
-}
-
-.cke_combo {
-    margin-left: 8px;
-}
-
-.transform-uppercase::part(value) {
-    text-transform: uppercase;
-}
-
-.transform-lowercase::part(value) {
-    text-transform: lowercase;
-}
-
-.transform-capitalize::part(value) {
-    text-transform: capitalize;
-}
-
-.transform-none::part(value) {
-    text-transform: none;
-}
-
-.textarea::part(value) {
-  height: unset !important;
-  overflow: auto !important;
-}
-
 input:disabled:not(input[type="button"]), textarea:disabled {
     color: #676767 !important;
     -webkit-text-fill-color: #676767 !important;
 }
 
-:host([disabled]) [part="input-field"] {
-  border-bottom: #dadada 1px dotted !important;
+/**
+ * Textarea style
+ */
+.textarea textarea {
+  height: unset !important;
+  overflow: auto !important;
 }

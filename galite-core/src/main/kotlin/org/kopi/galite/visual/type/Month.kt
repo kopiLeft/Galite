@@ -28,7 +28,7 @@ import java.util.Locale
 /**
  * This class represents month types
  */
-open class Month(private var scalar: Int) : Type<Month, Int>() {
+open class Month private constructor(private var scalar: Int) : Type<Month, Int>() {
 
   constructor(year: Int, month: Int): this(year * 12 + month - 1)
 

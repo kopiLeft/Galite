@@ -56,7 +56,7 @@ fun Actor.findActor(): DActor {
     ._find<DActor>()
 
   return actors.single {
-    it.getModel() == this.model
+    it.getModel() == this
   }
 }
 

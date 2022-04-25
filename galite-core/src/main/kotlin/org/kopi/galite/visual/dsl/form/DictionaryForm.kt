@@ -19,7 +19,6 @@ package org.kopi.galite.visual.dsl.form
 import java.util.Locale
 
 import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.visual.ApplicationContext
 import org.kopi.galite.visual.visual.VException
@@ -42,7 +41,7 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * @return The selected ID of the searched record.
    * @throws VException Any visual errors that occurs during search operation.
    */
-  fun search(): Int = model.search()
+  open fun search(): Int = model.search()
 
   /**
    * Edits an existing record.
@@ -55,7 +54,7 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * @return The edited record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun edit(id: Int): Int = model.edit(id)
+  open fun edit(id: Int): Int = model.edit(id)
 
   /**
    * Adds a new record.
@@ -67,42 +66,42 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * @return The created record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun add(): Int = model.add()
+  open fun add(): Int = model.add()
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun editWithID(id: Int): Int = model.editWithID(id)
+  open fun editWithID(id: Int): Int = model.editWithID(id)
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun openForQuery(): Int = model.openForQuery()
+  open fun openForQuery(): Int = model.openForQuery()
 
   /**
    * create a new record and returns id
    * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
    */
-  fun newRecord(): Int = model.newRecord()
+  open fun newRecord(): Int = model.newRecord()
 
-  fun saveFilledField() {
+  open fun saveFilledField() {
     model.saveFilledField()
   }
 
   /**
    *
    */
-  fun interruptRecursiveQuery() {
+  open fun interruptRecursiveQuery() {
     model.interruptRecursiveQuery()
   }
 
-  fun isNewRecord(): Boolean = model.isNewRecord()
+  open fun isNewRecord(): Boolean = model.isNewRecord()
 
-  fun setCloseOnSave() {
+  open fun setCloseOnSave() {
     model.setCloseOnSave()
   }
 

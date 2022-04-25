@@ -30,11 +30,11 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.editText
-import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.testing.expectInformationNotification
@@ -212,7 +212,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
   fun `test SORTABLE`() {
     val block = form.sortableMultiBlock.findBlock() as DGridBlock
 
-    form.sortableMultiBlock.enter()
+    form.sortableMultiBlock._enter()
 
     form.sortableMultiBlock.sortable.edit("2")
     form.sortableMultiBlock.editRecord(1)
@@ -300,7 +300,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.priorityAndIndexBlock.enter()
+    form.priorityAndIndexBlock._enter()
     // Trigger the list command
     form.list.triggerCommand()
 
@@ -335,7 +335,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.priorityAndIndexBlock.id.columns!!.priority = 9
     form.priorityAndIndexBlock.name.columns!!.priority = 1
 
-    form.priorityAndIndexBlock.enter()
+    form.priorityAndIndexBlock._enter()
 
     // Trigger the list command
     form.list.triggerCommand()
@@ -370,7 +370,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
     val index = form.priorityAndIndexBlock.i.message
 
-    form.priorityAndIndexBlock.enter()
+    form.priorityAndIndexBlock._enter()
     form.priorityAndIndexBlock.name.edit("NAME")
 
     // Trigger the save command
@@ -390,7 +390,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.innerJoinBlock.enter()
+    form.innerJoinBlock._enter()
     val field = form.innerJoinBlock.innerJoinColumns.findField()
 
     // Trigger the list command
@@ -406,7 +406,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test PREFLD trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.preFldTriggerField.findField()
 
@@ -417,7 +417,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test POSTFLD trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.postFldTriggerField.findField()
 
@@ -430,7 +430,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test POSTCHG trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.postChgTriggerField.findField()
 
@@ -444,7 +444,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test PREVAL trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.preValTriggerField.findField()
 
@@ -458,7 +458,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test VALFLD trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.valFldTriggerField.findField()
 
@@ -472,7 +472,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test VALIDATE trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.validateTriggerField.findField()
 
@@ -486,7 +486,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test DEFAULT trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
     form.insertMode.triggerCommand()
 
     val field = form.triggersFieldsBlock.defaultTriggerField.findField()
@@ -504,7 +504,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
 
   @Test
   fun `test VALUE trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     val field = form.triggersFieldsBlock.valueTriggerField.findField()
 
@@ -514,7 +514,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
   @Ignore
   @Test
   fun `test AUTOLEAVE trigger`() {
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
 
     form.triggersFieldsBlock.autoleaveTriggerField.click()
     // enter letter in this field then assert that th AUTOLEAVE trigger is called and the activate field is set to nextField
@@ -530,7 +530,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     }
 
     // PREINS : click on insertMode command then save command and assert that PREINS trigger change the field value
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
     form.insertMode.triggerCommand()
     form.saveBlock.triggerCommand()
 
@@ -553,7 +553,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     }
 
     // PREUPD : click on list command then save command and assert that PREUPD trigger change the field value
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
     form.list.triggerCommand()
     form.triggersFieldsBlock.preUpdTriggerField.click()
     form.triggersFieldsBlock.preUpdTriggerField.edit("a")
@@ -573,7 +573,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
       initDocumentationData()
     }
 
-    form.triggersFieldsBlock.enter()
+    form.triggersFieldsBlock._enter()
     form.list.triggerCommand()
     form.deleteBlock.triggerCommand()
 

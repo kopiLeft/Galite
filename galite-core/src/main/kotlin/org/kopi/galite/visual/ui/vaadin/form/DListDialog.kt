@@ -71,6 +71,7 @@ class DListDialog(
       doSelectFromDialog(-1, true, false)
     }
   }
+
   //---------------------------------------------------
   // LISTDIALOG IMPLEMENTATION
   //---------------------------------------------------
@@ -209,7 +210,7 @@ class DListDialog(
     get() {
       var index = tableItems.indexOf(table!!.selectedItem) + 1
 
-      if(index >= table!!.dataCommunicator.itemCount) {
+      if (index >= table!!.dataCommunicator.itemCount) {
         index = 0
       }
 
@@ -220,7 +221,7 @@ class DListDialog(
     get() {
       var index = tableItems.indexOf(table!!.selectedItem) - 1
 
-      if(index < 0) {
+      if (index < 0) {
         index = table!!.dataCommunicator.itemCount - 1
       }
 
@@ -233,13 +234,13 @@ class DListDialog(
    */
 
   private val nextItemId: ListTable.ListDialogItem
-   get() {
-    return if (table!!.selectedItems.first() == tableItems.last()) {
-      tableItems.last()
-    } else {
-      tableItems.elementAt(tableItems.indexOf(table!!.selectedItems.first()) + 1)
+    get() {
+      return if (table!!.selectedItems.first() == tableItems.last()) {
+        tableItems.last()
+      } else {
+        tableItems.elementAt(tableItems.indexOf(table!!.selectedItems.first()) + 1)
+      }
     }
-  }
 
   /**
    * Returns the previous item ID according to the currently selected one.
@@ -327,7 +328,7 @@ class DListDialog(
     super.table = table
     table.select(tableItems.first())
     (table.selectionModel as GridSingleSelectionModel).addSingleSelectionListener {
-      if(it.isFromClient) {
+      if (it.isFromClient) {
         doSelectFromDialog(tableItems.indexOf(it.value ?: it.oldValue), false, false)
       }
     }
@@ -352,7 +353,7 @@ class DListDialog(
     table.addColumnReorderListener {
       sort(it.columns)
     }
-   // TODO
+    // TODO
   }
 
   /**
@@ -382,7 +383,8 @@ class DListDialog(
       VlibProperties.getString("Notice"),
       MessageCode.getMessage("VIS-00028"),
       application.defaultLocale.toString(),
-      application.mainWindow)
+      application.mainWindow
+    )
 
     notice.addNotificationListener(object : NotificationListener {
       override fun onClose(action: Boolean?) {

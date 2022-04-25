@@ -25,19 +25,19 @@
 }
 
 .k-popup-window #overlay {
---_enhanced-dialog-content-padding: 0;
+    --_enhanced-dialog-content-padding: 0;
 }
 
 .enhanced-dialog-content .k-window {
-	padding: 0;
+    padding: 0;
 }
 
-.enhanced-dialog-content .k-window > div, .enhanced-dialog-content .k-window div table {
+.enhanced-dialog-content .k-window > div {
     width: 100%;
 }
 
 .k-popup-window~::part(dialog-content) {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 :host([theme~="v-dialog"]) [part="content"] {
@@ -58,4 +58,12 @@
 
 #v-dialog-footer {
     background-color: #d9f0f8;
+}
+
+/**
+ * Form Style in Popup
+ */
+.enhanced-dialog-content .k-window .k-form-page {
+    max-width: calc(100vw - 70px);
+    padding: 0;
 }

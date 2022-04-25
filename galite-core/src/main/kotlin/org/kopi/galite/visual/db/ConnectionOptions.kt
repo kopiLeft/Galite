@@ -77,8 +77,10 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       total[parent.size + 2] = "  --username, -u<String>: The username for the database"
       total[parent.size + 3] = "  --password, -p<String>: The password for the database"
       total[parent.size + 4] = "  --lookupUserId, -U:   Lookup user ID in database? [true]"
-      total[parent.size + 5] = "  --trace, -t<int>:     Set the trace level to print database queries before execution (0: none, 1: all but FETCH, 2: all) [0]"
-      total[parent.size + 6] = "  --properties, -q<String>: These properties override or complete the properties stored in the database."
+      total[parent.size + 5] =
+        "  --trace, -t<int>:     Set the trace level to print database queries before execution (0: none, 1: all but FETCH, 2: all) [0]"
+      total[parent.size + 6] =
+        "  --properties, -q<String>: These properties override or complete the properties stored in the database."
       total[parent.size + 7] = "  --schema, -s<String>: The current database schema to be set."
       return total
     }

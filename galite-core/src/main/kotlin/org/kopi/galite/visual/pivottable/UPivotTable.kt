@@ -16,41 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.dsl.report
+package org.kopi.galite.visual.pivottable
 
-import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.report.VSeparatorColumn
+import org.kopi.galite.visual.report.UReport
 
-open class ReportModel(val report: Report): VReport() {
-
-  init {
-    setTitle(report.title)
-    setPageTitle(report.title)
-    help = report.help
-    source = report.sourceFile
-
-    if (report.reportCommands) {
-      addDefaultReportCommands()
-    }
-
-    model.columns.add(VSeparatorColumn()) // TODO!!!
-
-    // localize the report using the default locale
-    localize()
-  }
-
-  override fun init() {
-    report.fields.forEach {
-      it.initField()
-
-      if (it.group != null) {
-        it.groupID = report.fields.indexOf(it.group)
-        it.columnModel.groups = it.groupID
-      }
-    }
-  }
-
-  override fun add() {
-    // TODO
-  }
-}
+/**
+ * `UPivotTable` is the top-level interface that must be implemented
+ * by all pivot tables. It is the visual component of the [PivotTable] model.
+ */
+interface UPivotTable : UReport

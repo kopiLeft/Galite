@@ -18,31 +18,22 @@
 
 #header {
     background-color: white;
-    width: 100%;
-    margin: 0 auto;
-    height: 63px;
-}
-
-#module_list {
-    margin-left: 0;
     height: 63px;
 }
 
 #module_list_empty {
     width: 1px;
+     margin-left: none;
 }
 
 #welcome_container {
-    box-sizing: border-box;
-    vertical-align: middle;
-    min-width: 250px;
+    min-width: 270px;
     max-width: 300px;
     --lumo-font-size-m: 0.700rem;
 }
 
 #welcome_container > * {
     display: inline;
-    padding-top: 15px;
 }
 
 /*
@@ -51,12 +42,6 @@
 #companyLogo {
     width: 179px;
     border-right: 1px solid #dadada;
-    vertical-align: middle;
-    margin-left: 0;
-}
-
-#module_list_empty {
-    margin-left: none;
 }
 
 .logo-image {
@@ -64,7 +49,7 @@
     max-width: 172px;
 }
 
-/*
+/**
  * Change the dots' style
  */
 #module_list::part(overflow-button) {
@@ -89,7 +74,6 @@
 /**
  * Modules style
  */
-
 :host([theme~="module_list"]) [part~="menu-bar-button"] {
     --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
@@ -112,7 +96,7 @@
 #welcome ::part(menu-bar-button) {
     height : 60px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
-    background:var(--lumo-tint);
+    background: var(--lumo-tint);
 }
 
 #welcome ::part(menu-bar-button):hover {
@@ -122,7 +106,7 @@
 /**
  * modules submenu style
  */
-.vaadin-menu-item {
+.vaadin-menu-item, .column-item-selector > .checkbox-selector {
     color: #8f8f8f;
     width: 100%;
     font-family: Arial, sans-serif;
@@ -134,13 +118,6 @@
 /**
  * Right Menus style
  */
-#user_menu , #wrkcontext_menu , #bookmarks_menu , #admin_menu {
-    background-color: var(--lumo-tint);
-    margin: 0;
-    box-sizing: border-box;
-    padding: var(--lumo-space-xxs);
-}
-
 #welcome #windows {
     padding-top: 20px;
     padding-right: 15px;
@@ -157,5 +134,4 @@
 #header #welcome ::part(menu-bar-button) {
     min-width: 0;
     padding: 18px 10px;
-    text-transform: none;
 }

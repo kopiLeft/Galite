@@ -50,10 +50,10 @@ class WindowElementSources: VApplicationTestBase() {
     val actorName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "Graph"
     val menuName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "Action"
 
-    assertEquals(formName, graph.model!!._actorSource)
-    assertEquals(formName, graph.model!!._menuSource)
-    assertEquals(actorName, graphInnerBlock.model!!._actorSource)
-    assertEquals(menuName, graphInnerBlock.model!!._menuSource)
+    assertEquals(formName, graph._actorSource)
+    assertEquals(formName, graph._menuSource)
+    assertEquals(actorName, graphInnerBlock._actorSource)
+    assertEquals(menuName, graphInnerBlock._menuSource)
   }
 }
 

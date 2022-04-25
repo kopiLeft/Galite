@@ -54,11 +54,9 @@ class FieldList<T>(val type: String,
     return hasAction() && access
   }
 
-  lateinit var model: VList
-
-  fun buildListModel(): VList {
+  fun buildListModel(ident: String): VList {
     return VList(
-            type,
+            type.ifEmpty { ident },
             columns.map { it.buildModel() }.toTypedArray(),
             table,
             action,
@@ -66,9 +64,7 @@ class FieldList<T>(val type: String,
             autocompleteLength,
             null, // TODO : remove this
             hasShortcut()
-    ).also {
-      model = it
-    }
+    )
   }
 
   // ----------------------------------------------------------------------

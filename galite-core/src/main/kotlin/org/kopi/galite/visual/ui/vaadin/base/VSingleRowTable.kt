@@ -60,8 +60,10 @@ class VSingleRowTable : Component(), HasComponents {
   fun add(vararg elements: Element?) {
     Objects.requireNonNull(elements, "Elements should not be null")
     for (element in elements) {
-      Objects.requireNonNull(element,
-                             "element to add cannot be null")
+      Objects.requireNonNull(
+        element,
+        "element to add cannot be null"
+      )
       td.appendChild(element)
     }
   }
@@ -73,8 +75,10 @@ class VSingleRowTable : Component(), HasComponents {
   override fun add(vararg components: Component) {
     Objects.requireNonNull(components, "Components should not be null")
     for (component in components) {
-      Objects.requireNonNull(component,
-                             "Component to add cannot be null")
+      Objects.requireNonNull(
+        component,
+        "Component to add cannot be null"
+      )
       td.appendChild(component.element)
     }
   }

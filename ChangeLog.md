@@ -1,3 +1,42 @@
+# 1.2.0
+## What's Changed
+* DSL/DB: Adding WeekColumnType and MonthColumnType by @hfazai in [#575](https://github.com/kopiLeft/Galite/pull/575)
+* Fix: VField.retrieveQuery shouldn't convert value to Week and Month by @hfazai in [#576](https://github.com/kopiLeft/Galite/pull/576)
+* DB: Adding Query extension function allowing to get single row or throw custom DB Exception by @hfazai in [#579](https://github.com/kopiLeft/Galite/pull/579)
+* Style: Add padding between fields in multi block by @h-haddad in [#582](https://github.com/kopiLeft/Galite/pull/582)
+* UI: Avoid refreshing filtered rows in grid block by @hfazai
+* DSL: Adding the feature of defining an alias of a form field by @hfazai
+* DSL: Adding setPageTitle method to Report by @hfazai
+* Implement Pivot Table model using Kotlin Dataframe by @hfazai in [#580](https://github.com/kopiLeft/Galite/pull/580)
+* DSL: MustFill field value should be nullable by @hfazai in [#577](https://github.com/kopiLeft/Galite/pull/577)
+* VaadinUI: Filter deleted records from multiblock by @hfazai in [#578](https://github.com/kopiLeft/Galite/pull/578)
+* VBump: Vaadin 22.0.6 by @h-haddad in [#564](https://github.com/kopiLeft/Galite/pull/564) and [#584](https://github.com/kopiLeft/Galite/pull/584)
+* VaadinUI: Auto select is done via autoselect property instead of focus listener by @hfazai
+* VBump: Vaadin 22.0.13 by @hfazai
+
+**Full Changelog**: [1.1.0 ... 1.2.0](https://github.com/kopiLeft/Galite/compare/1.1.0...1.2.0)
+
+# 1.1.0
+## What's Changed
+* DateField Rework: Replace vaadin-date-picker-light with TextField by @hfazai in [#565](https://github.com/kopiLeft/Galite/pull/565)
+* DSL: Form, chart and report models are not built lazily anymore. This allows calling DSL APIs in all scopes by @hfazai in [#548](https://github.com/kopiLeft/Galite/pull/548)
+* Feature: Add the feature of opening programmatically an URL from a window by @hfazai in [#563](https://github.com/kopiLeft/Galite/pull/563)
+* DSL: Adding more APIs to Actor and Command DSL by @hfazai in [#569](https://github.com/kopiLeft/Galite/pull/569)
+* Remove Timestamp in favor to java Instant by @hfazai in [#566](https://github.com/kopiLeft/Galite/pull/566)
+* VaadinUI/Multiblock: Do not close editor when trying to edit inaccessible records by @hfazai in [#574](https://github.com/kopiLeft/Galite/pull/574)
+* Adding test for form and report localization by @h-haddad in [#570](https://github.com/kopiLeft/Galite/pull/570)
+* UI/Firefox: Remove space between page menu and form block by @hfazaiby @hfazai in [#571](https://github.com/kopiLeft/Galite/pull/571)
+* Adding galite-domain module by @hfazai
+* DSL: Add more APIs to FormField, ReportField, Window and Report by @hfazai
+* Refactoring of the code publishing releases to maven by @hfazai
+* Stop passing DBConnection between forms as Exposed handles Connections by @hfazai
+* Cleanup deprecations and fix kdoc comments by @hfazai
+* Entering an invalid date should throw VFieldException by @hfazai
+* Implement Month and Week operators by @hfazai
+* DSL: Adding a method to get report row value at a specific column by @hfazai
+
+**Full Changelog**: [1.0.1 ... 1.1.0](https://github.com/kopiLeft/Galite/compare/1.0.1...1.1.0)
+
 # 1.0.1
 ## What's Changed
 * Adding the feature of setting custom colors to the user interface by @hfazai

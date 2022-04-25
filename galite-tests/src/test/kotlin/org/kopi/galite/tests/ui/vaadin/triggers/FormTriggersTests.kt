@@ -27,8 +27,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.enter
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
@@ -43,57 +43,53 @@ import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class FormTriggersTests : GaliteVUITestBase() {
 
-  val form = TestTriggersForm.also { it.model }
-  val report = ReportTriggersTest.also { it.model }
-  val chart = ChartTriggersTest.also { it.model }
-
   @Before
   fun `login to the App`() {
     login()
 
     // Open the form
-    form.model.doNotModal()
+    TestTriggersForm.model.doNotModal()
   }
 
   @Test
   fun `test form triggers`() {
-    form.listActor.triggerCommand()
+    TestTriggersForm.listActor.triggerCommand()
 
-    form.deleteBlock.triggerCommand()
+    TestTriggersForm.deleteBlock.triggerCommand()
     expectConfirmNotification(true)
 
-    form.block.fstnameClt.edit("Name")
-    form.block.lastnameClt.edit("last Name")
-    form.block.idClt.edit(2)
-    form.insertMode.triggerCommand()
-    form.saveBlock.triggerCommand()
+    TestTriggersForm.block.fstnameClt.edit("Name")
+    TestTriggersForm.block.lastnameClt.edit("last Name")
+    TestTriggersForm.block.idClt.edit(2)
+    TestTriggersForm.insertMode.triggerCommand()
+    TestTriggersForm.saveBlock.triggerCommand()
 
-    form.listActor.triggerCommand()
-    form.block.fstnameClt.edit("First Name")
-    form.saveBlock.triggerCommand()
+    TestTriggersForm.listActor.triggerCommand()
+    TestTriggersForm.block.fstnameClt.edit("First Name")
+    TestTriggersForm.saveBlock.triggerCommand()
 
-    form.block.idClt.edit(2)
-    form.resetBlock.triggerCommand()
+    TestTriggersForm.block.idClt.edit(2)
+    TestTriggersForm.resetBlock.triggerCommand()
     expectConfirmNotification(true)
 
-    form.block.age.edit(1)
+    TestTriggersForm.block.age.edit(1)
 
-    form.secondBlock.enter()
-    form.secondBlock.field.findField()
-    form.secondBlock.field.edit(1)
+    TestTriggersForm.secondBlock._enter()
+    TestTriggersForm.secondBlock.field.findField()
+    TestTriggersForm.secondBlock.field.edit(1)
 
-    form.block.enter()
+    TestTriggersForm.block._enter()
 
-    form.resetForm.triggerCommand()
+    TestTriggersForm.resetForm.triggerCommand()
     expectConfirmNotification(true)
 
-    report.model.doNotModal()
-    report.quit.triggerCommand()
+    ReportTriggersTest.model.doNotModal()
+    ReportTriggersTest.quit.triggerCommand()
 
-    chart.model.doNotModal()
-    chart.quit.triggerCommand()
+    ChartTriggersTest.model.doNotModal()
+    ChartTriggersTest.quit.triggerCommand()
 
-    form.quit.triggerCommand()
+    TestTriggersForm.quit.triggerCommand()
     expectConfirmNotification(true)
 
     val expectedTriggersList = listOf("ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",

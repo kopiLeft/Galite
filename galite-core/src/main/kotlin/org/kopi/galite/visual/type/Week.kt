@@ -26,7 +26,7 @@ import java.util.Locale
 /**
  * This class represents the week types
  */
-open class Week(var scalar: Int) : Type<Week, Int>() {
+open class Week private constructor(var scalar: Int) : Type<Week, Int>() {
   /**
    * Constructs a Week with a year and a week in this year
    * @param    year        the year

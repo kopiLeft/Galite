@@ -19,9 +19,9 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
-
-import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.visual.type.format
 
 /**
  * Time stamp validator
@@ -35,7 +35,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     if ("" == text) {
       field.value = null
     } else {
-      field.value = parseTimestamp(text).toString()
+      field.value = parseTimestamp(text)?.format()
     }
   }
 
@@ -72,12 +72,12 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
      * Parses the given timestamp input.
      * @param text The timestamp text.
      */
-    fun parseTimestamp(text: String): Timestamp? {
+    fun parseTimestamp(text: String): LocalDateTime? {
       val timestamp = text.split("[ T]".toRegex(), 2)
       val date = parseDate(timestamp[0]) ?: return null
       val time = parseTime(timestamp[1]) ?: return null
 
-      return Timestamp.from(date, time)
+      return LocalDateTime.of(date, time)
     }
 
     fun parseDate(date: String): LocalDate? {
