@@ -58,12 +58,7 @@ open class Block(val title: String,
                  var visible: Int)
   : LocalizableElement(), VConstants {
 
-  internal var options: Int = 0 // the block options
-  internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
-  internal val dropListMap = HashMap<String, String>()
-  internal var maxRowPos = 0
-  internal var maxColumnPos = 0
-  internal var displayedFields = 0
+  val dropListMap = HashMap<String, FormField<*>>()
 
   val fields = mutableListOf<FormField<*>>() // the block's fields.
   val tables: MutableList<FormBlockTable> = mutableListOf() // the tables accessed on the database
@@ -73,9 +68,20 @@ open class Block(val title: String,
   val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
 
   var border: Border = Border.NONE // the border of the block
+    set(b) {
+      block.border = b.value
+      field = b
+    }
   var align: FormBlockAlign? = null // the type of alignment in form
-  var pageNumber = 0 // Sets the page number
-  open val help: String? = null // the help
+    private set(value) {
+      block.alignment = value?.getBlockAlignModel()
+      field = value
+    }
+  var help: String? = null // the help
+    set(value) {
+      block.help = value
+      field = value
+    }
 
   lateinit var shortcut: String // the shortcut of this block
   lateinit var form: Form // the form containing this block
@@ -355,7 +361,7 @@ open class Block(val title: String,
     // TODO : Add commands triggers here
     block.VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
 
-    block.commands.add(command.model)
+    block.commands.add(command)
 
     return command
   }
@@ -382,7 +388,7 @@ open class Block(val title: String,
    */
   fun options(vararg options: BlockOption) {
     options.forEach { blockOption ->
-      this.options = this.options or blockOption.value
+      block.options = block.options or blockOption.value
     }
   }
 
@@ -397,13 +403,13 @@ open class Block(val title: String,
    */
   fun blockVisibility(access: Access, vararg modes: Mode) {
     if (modes.contains(Mode.QUERY)) {
-      this.access[VConstants.MOD_QUERY] = access.value
+      block.access[VConstants.MOD_QUERY] = access.value
     }
     if (modes.contains(Mode.INSERT)) {
-      this.access[VConstants.MOD_INSERT] = access.value
+      block.access[VConstants.MOD_INSERT] = access.value
     }
     if (modes.contains(Mode.UPDATE)) {
-      this.access[VConstants.MOD_UPDATE] = access.value
+      block.access[VConstants.MOD_UPDATE] = access.value
     }
   }
 
@@ -446,12 +452,12 @@ open class Block(val title: String,
       }
       // ACCESS
       for (i in 0..2) {
-        field.access[i] = field.access[i].coerceAtMost(access[i])
+        field.access[i] = field.access[i].coerceAtMost(block.access[i])
       }
     }
 
-    maxRowPos = bottomRight.y
-    maxColumnPos = bottomRight.x
+    block.maxRowPos = bottomRight.y
+    block.maxColumnPos = bottomRight.x
   }
 
   // ----------------------------------------------------------------------
@@ -459,14 +465,14 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   fun positionField(field: FormField<*>): FormPosition {
-    return FormCoordinatePosition(++displayedFields)
+    return FormCoordinatePosition(++block.displayedFields)
   }
 
   fun positionField(pos: FormPosition?) {
-    pos!!.setChartPosition(++displayedFields)
+    pos!!.setChartPosition(++block.displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = options and option == option
+  fun hasOption(option: Int): Boolean = block.options and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
@@ -525,7 +531,7 @@ open class Block(val title: String,
   fun getActiveCommands(): List<Command?> {
     val activeCommands = block.activeCommands
 
-    return commands.filter { it.model in activeCommands }
+    return commands.filter { it in activeCommands }
   }
 
   fun getMode(): Int = block.getMode()
@@ -901,7 +907,8 @@ open class Block(val title: String,
       if (dropListMap[extension] != null) {
         return extension
       }
-      dropListMap[extension] = field.ident
+      dropListMap[extension] = field
+      block.dropListMap[extension] = field.ident
     }
     return null
   }
@@ -1191,7 +1198,7 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   /** The block model */
-  open val block: VBlock = object : VBlock() {
+  open val block: VBlock = object : VBlock(title, buffer, visible) {
     override fun setInfo(form: VForm) {
       this@Block.fields.forEach {
         it.setInfo(super.source)
@@ -1204,26 +1211,9 @@ open class Block(val title: String,
   /** Returns block model */
   open fun getBlockModel(vForm: VForm): VBlock {
     block.form = vForm
-    block.initializeBlock(this, vForm.source)
+    block.source = if (this::class.isInner && vForm.source != null) vForm.source!! else sourceFile
+    block.name = ident
     isModelInitialized = true
     return block
-  }
-
-  private fun VBlock.initializeBlock(block: Block, formSource: String?) {
-    this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-    title = block.title
-    help = block.help
-    bufferSize = block.buffer
-    displaySize = block.visible
-    pageNumber = block.pageNumber
-    border = block.border.value
-    maxRowPos = block.maxRowPos
-    maxColumnPos = block.maxColumnPos
-    displayedFields = block.displayedFields
-    name = block.ident
-    options = block.options
-    access = block.access
-    alignment = block.align?.getBlockAlignModel()
-    dropListMap = block.dropListMap
   }
 }

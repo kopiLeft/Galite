@@ -962,7 +962,7 @@ class VBlockTests : VApplicationTestBase() {
 
     model.setCommandsEnabled(true)
     assertEquals(1, model.activeCommands.size)
-    assertEquals(formMultiple.saveBlock.model, model.activeCommands[0].actor)
+    assertEquals(formMultiple.saveBlock, model.activeCommands[0].actor)
   }
 
   @Test

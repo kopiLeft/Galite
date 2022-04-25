@@ -20,9 +20,10 @@ package org.kopi.galite.visual.dsl.common
 import java.awt.Frame
 import java.io.File
 import java.util.Locale
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VException
 
+import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.visual.DefaultActor
+import org.kopi.galite.visual.visual.VException
 import org.kopi.galite.visual.visual.VWindow
 
 /**
@@ -36,19 +37,19 @@ abstract class Window(val title: String, val locale: Locale?) {
   /** Actors added to this window */
   internal val actors = mutableListOf<Actor>()
 
-  /** Number of internal actors added to this window */
-  internal var internalActorCount = 0
-
   /** Commands added to this window */
   internal var commands = mutableListOf<Command>()
 
   /** Triggers added to this window */
   internal var triggers = mutableListOf<Trigger>()
 
-  internal var isModelInitialized: Boolean = false
-
   /** Menus added to this window */
   val menus = mutableListOf<Menu>()
+
+  internal var isModelInitialized: Boolean = false
+
+  /** Number of internal actors added to this window */
+  private var internalActorCount = 0
 
   /**
    * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
@@ -58,9 +59,8 @@ abstract class Window(val title: String, val locale: Locale?) {
    * the menu name in the actor definition.
    */
   fun menu(label: String): Menu {
-    val menu = Menu(label, sourceFile)
+    val menu = Menu(label, "actor${actors.size}", sourceFile)
 
-    menu.ident = "actor${actors.size}"
     menus.add(menu)
     return menu
   }
@@ -89,7 +89,7 @@ abstract class Window(val title: String, val locale: Locale?) {
       menus.add(actor.menu)
     }
     actors.add(actor)
-    model.addActor(actor.model)
+    model.addActor(actor)
     return actor
   }
 
@@ -105,9 +105,34 @@ abstract class Window(val title: String, val locale: Locale?) {
   fun actor(menu: Menu,
             label: String,
             help: String,
-            command: PredefinedCommand? = null,
             init: (Actor.() -> Unit)? = null): Actor {
-    val actor = Actor(menu, label, help, command, "actor${internalActorCount}", sourceFile)
+    val actor = Actor(menu, label, help, "actor${internalActorCount}", sourceFile)
+    internalActorCount++
+
+    if (init != null) {
+      actor.init()
+    }
+    actor(actor)
+
+    return actor
+  }
+
+  /**
+   * Adds a new actor to this form.
+   *
+   * An Actor is an item to be linked to a command.
+   *
+   * @param menu                 the containing menu
+   * @param label                the label
+   * @param help                 the help
+   * @param command              the predefined command
+   */
+  fun actor(menu: Menu,
+            label: String,
+            help: String,
+            command: PredefinedCommand,
+            init: (DefaultActor.() -> Unit)? = null): DefaultActor {
+    val actor = DefaultActor(menu, label, help, command, "actor${internalActorCount}", sourceFile)
     internalActorCount++
 
     if (init != null) {
@@ -132,7 +157,7 @@ abstract class Window(val title: String, val locale: Locale?) {
       actor(item)
     }
     commands.add(command)
-    model.commands.add(command.model)
+    model.commands.add(command)
     addCommandTrigger()
 
     return command

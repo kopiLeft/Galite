@@ -409,21 +409,21 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   @Throws(VException::class)
   fun editLine() {
     if (cmdOpenLine != null) {
-      cmdOpenLine!!.action?.invoke()
+      cmdOpenLine!!.action.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnData() {
     if (cmdEditColumn != null) {
-      cmdEditColumn!!.action?.invoke()
+      cmdEditColumn!!.action.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnInfo() {
     if (cmdColumnInfo != null) {
-      cmdColumnInfo!!.action?.invoke()
+      cmdColumnInfo!!.action.invoke()
     }
   }
 
@@ -638,7 +638,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
   private fun initDefaultCommands() {
     actors.forEachIndexed { index, vActor ->
-      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent))
+      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
 

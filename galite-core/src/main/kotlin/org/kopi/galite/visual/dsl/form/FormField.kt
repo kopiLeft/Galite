@@ -196,7 +196,7 @@ open class FormField<T>(internal val block: Block,
                       keyColumns.contains(column),
                       nullableColumns.contains(column))
     }
-    columns = FormFieldColumns(cols.toTypedArray())
+    columns = FormFieldColumns(cols)
     if (init != null) {
       columns!!.init()
     }
@@ -414,7 +414,7 @@ open class FormField<T>(internal val block: Block,
   // FIELD MODEL
   ///////////////////////////////////////////////////////////////////////////
 
-  override var ident: String = if (_isInternal) "ANONYMOUS$fieldIndex!@#$%^&*()" else super.ident
+  override val ident: String = if (_isInternal) "ANONYMOUS$fieldIndex!@#$%^&*()" else super.ident
 
   /**
    * The field model based on the field type.
@@ -447,7 +447,7 @@ open class FormField<T>(internal val block: Block,
       columns?.getColumnsModels()?.toTypedArray(), // TODO
       columns?.index?.indexNumber ?: 0,
       columns?.priority ?: 0,
-      commands.map { it.model }.toTypedArray(),
+      commands.toTypedArray(),
       position?.getPositionModel(),
       align.value,
       alias?.vField

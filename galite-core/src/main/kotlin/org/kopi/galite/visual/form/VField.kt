@@ -808,7 +808,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
+  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.isKey ?: false
 
   /**
    * Is the field part of given index ?
