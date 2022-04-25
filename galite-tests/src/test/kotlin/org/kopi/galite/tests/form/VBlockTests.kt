@@ -142,7 +142,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun checkUniqueIndexTest() {
-    FormWithList.model
     FormWithList.blockWithManyTables.uid[0] = 1
     FormWithList.blockWithManyTables.name[0] = "administrator"
 
@@ -169,7 +168,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun checkCombinedUniqueIndexTest() {
     var i = 0
-    formMultiple.model
 
     try {
       transaction {
@@ -236,7 +234,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `test refreshLookup with no matching value in the table`() {
-    FormWithList.model
     FormWithList.blockWithManyTables.shortName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
@@ -250,7 +247,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun refreshLookupTest() {
-    FormWithList.model
     FormWithList.blockWithManyTables.shortName[0] = "1000"
 
     transaction {
@@ -376,7 +372,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchOrderTest() {
-    FormWithList.model
     val orderBys = FormWithList.block3.block.getSearchOrder()
 
     assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
@@ -449,7 +444,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord multi block scenario test`() {
-    FormWithMultipleBlock.model
     val error = assertThrows(AssertionError::class.java) {
       FormWithMultipleBlock.multipleBlock.block.fetchNextRecord(0)
     }
@@ -523,7 +517,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save insert multiple block scenario test`() {
-    formMultiple.model
     transaction {
       SchemaUtils.create(Training)
       SchemaUtils.create(Center)
@@ -583,7 +576,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save update multiple block scenario test`() {
-    formMultiple.model
     transaction {
       initMultipleBlockFormTables()
       formMultiple.multipleBlock.centerId[0] = 1
@@ -675,7 +667,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `delete multiple block scenario test`() {
-    formMultiple.model
     transaction {
       initMultipleBlockFormTables()
       var count = Center.selectAll().count()
@@ -798,7 +789,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load multiple block scenario test`() {
-    formMultiple.model
     transaction {
       initMultipleBlockFormTables()
       formMultiple.multipleBlock.block.clear()
@@ -957,7 +947,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getActiveCommands test`() {
-    formMultiple.model
     val model = formMultiple.multipleBlock.block
 
     model.setCommandsEnabled(true)
@@ -967,7 +956,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `setMode test`() {
-    formMultiple.model
     val model = formMultiple.multipleBlock.block
 
     model.setMode(VConstants.MOD_INSERT)
@@ -984,7 +972,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `test active field after setting mode`() {
-    formMultiple.model
     val model = formMultiple.block.block
 
     model.enter()
@@ -1000,7 +987,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `set and reset Color test`() {
-    formMultiple.model
     val model = formMultiple.multipleBlock.block
     val recordId = 0
 
@@ -1027,7 +1013,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `sort test`() {
-    formMultiple.model
     val blockModel = formMultiple.multipleBlock.block
 
     transaction {
@@ -1049,7 +1034,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getNumberOfValidRecord test`() {
-    formMultiple.model
     val blockModel = formMultiple.multipleBlock.block
 
     transaction {
@@ -1093,7 +1077,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `trailRecord test`() {
-    FormWithList.model
     val singleBlockModel = FormWithList.block3.block
 
     transaction {
@@ -1106,7 +1089,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `abortTrail test`() {
-    FormWithList.model
     val singleBlockModel = FormWithList.block3.block
 
     transaction {

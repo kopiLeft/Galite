@@ -23,8 +23,6 @@ import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 class FormToCheckFieldVisibilityTests: JApplicationTestBase() {
   @Test
   fun changeBlockAccessTest() {
-    FormToCheckFieldVisibility.model
-
     assertArrayEquals(intArrayOf(1, 0, 1), FormToCheckFieldVisibility.testBlock.name.access)
     assertArrayEquals(intArrayOf(4, 4, 2), FormToCheckFieldVisibility.testBlock.age.access)
     assertArrayEquals(intArrayOf(0, 1, 4), FormToCheckFieldVisibility.testBlock.gender.access)

@@ -28,11 +28,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun innerJoinTwoTablesTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithTwoTablesInnerJoin
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -48,11 +45,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftJoinTwoTablesTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithTwoTablesLeftJoin
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -68,11 +62,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun innerJoinThreeTablesTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithThreeTablesInnerJoin
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -90,11 +81,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftJoinThreeTablesTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithThreeTablesLeftJoin
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -112,11 +100,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun innerJoinThreeTablesInOneFieldTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithThreeTablesInnerJoinInOneField
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -134,11 +119,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftJoiThreeTablesInOneFieldTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithThreeTablesLeftJoinInOneField
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -155,11 +137,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftJoiInMiddleThreeTablesInOneFieldTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockThreeTablesMiddleLeftJoinInOneField
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -178,11 +157,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftJoiInEndThreeTablesInOneFieldTest() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockThreeTablesEndLeftJoinInOneField
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -201,11 +177,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftInnerLeftJoinFourTables() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockFourTablesLeftInnerLeftJoin
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -223,11 +196,8 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun innerLeftInnerJoinFourTables() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockFourTablesInnerLeftInnerJoin
 
-    block.form
-    block.form.model
     block.name.value = "client1"
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
@@ -245,11 +215,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun innerJoinNoJoinTwoTables() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesInnerJoinNoJoin
-
-    block.form
-    block.form.model
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
@@ -264,11 +230,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun noJoinInnerJoinTwoTables() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesNoJoinInnerJoin
-
-    block.form
-    block.form.model
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
@@ -283,11 +245,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun leftJoinNoJoinTwoTables() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesLeftJoinNoJoin
-
-    block.form
-    block.form.model
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
@@ -302,11 +260,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
   @Test
   fun noJoinLeftJoinTwoTables() {
-    FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockTwoTablesNoJoinLeftJoin
-
-    block.form
-    block.form.model
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()

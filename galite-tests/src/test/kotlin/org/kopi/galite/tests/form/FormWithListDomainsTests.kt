@@ -32,7 +32,6 @@ class FormWithListDomainsTests : JApplicationTestBase() {
 
   @Test
   fun formWithListDomainsTests() {
-    FormWithListDomains.model
     val model = FormWithListDomains.userListBlock.user.vField
     val query = Users.select { Users.id greater 0 }.alias("syn__0__")
 
@@ -43,7 +42,6 @@ class FormWithListDomainsTests : JApplicationTestBase() {
 
   @Test
   fun setValueIDTest() {
-    FormWithListDomains.model
     val model = FormWithListDomains.userListBlock.user.vField
 
     model.setValueID(1)

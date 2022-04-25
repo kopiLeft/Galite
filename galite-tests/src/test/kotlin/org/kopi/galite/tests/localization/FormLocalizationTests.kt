@@ -69,7 +69,7 @@ import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FormLocalTests : GaliteVUITestBase() {
-  val form = LocalizedForm().also { it.model }
+  val form = LocalizedForm()
   val localizationManager = LocalizationManager(Locale.UK, Locale.UK)
 
   @Before
