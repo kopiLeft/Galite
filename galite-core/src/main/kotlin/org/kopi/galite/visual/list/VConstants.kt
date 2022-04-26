@@ -20,7 +20,7 @@ package org.kopi.galite.visual.list
 
 import javax.swing.SwingConstants
 
-import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.Constants
 
 interface VConstants : Constants {
   companion object {

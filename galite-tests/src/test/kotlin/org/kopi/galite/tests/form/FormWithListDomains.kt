@@ -36,7 +36,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.FileHandler
 
 class FormWithListDomains: Form(title = "form to test list domains", locale = Locale.UK) {
   val edit = menu("Edit")

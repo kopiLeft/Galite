@@ -35,7 +35,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
 
-import org.kopi.galite.visual.visual.VHelpViewer;
+import org.kopi.galite.visual.VHelpViewer;
 
 /**
  * A window with an html pane

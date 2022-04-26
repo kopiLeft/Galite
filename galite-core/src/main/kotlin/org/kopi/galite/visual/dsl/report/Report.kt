@@ -35,7 +35,7 @@ import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].

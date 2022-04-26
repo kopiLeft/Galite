@@ -30,7 +30,7 @@ import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
 import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.VCommand
 
 /**
  * This class represents the definition of a report field.

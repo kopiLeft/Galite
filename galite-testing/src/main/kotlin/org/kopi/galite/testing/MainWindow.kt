@@ -24,7 +24,7 @@ import org.kopi.galite.visual.db.Modules
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get

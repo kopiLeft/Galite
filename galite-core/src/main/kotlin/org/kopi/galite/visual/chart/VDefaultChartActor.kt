@@ -18,8 +18,8 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VlibProperties
 
 class VDefaultChartActor(menuIdent: String,
                          actorIdent: String,

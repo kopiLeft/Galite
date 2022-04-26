@@ -27,7 +27,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.form.Commands
-import org.kopi.galite.visual.visual.DefaultActor
+import org.kopi.galite.visual.DefaultActor
 
 open class FormDefault(title: String, locale: Locale? = null): ReportSelectionForm(title, locale) {
 

@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * An actor field is a special field that does not handle

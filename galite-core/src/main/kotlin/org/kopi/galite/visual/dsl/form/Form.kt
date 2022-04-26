@@ -31,9 +31,9 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.WindowController
 
 /**
  * Represents a form.
@@ -216,7 +216,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   /**
    * GOTO BLOCK
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   fun gotoBlock(target: Block) {
     model.gotoBlock(target.block)

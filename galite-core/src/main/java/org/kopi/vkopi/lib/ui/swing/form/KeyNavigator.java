@@ -27,9 +27,9 @@ import javax.swing.text.JTextComponent;
 
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.util.PrintJob;
-import org.kopi.galite.visual.visual.Action;
-import org.kopi.galite.visual.visual.PrinterManager;
-import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.Action;
+import org.kopi.galite.visual.PrinterManager;
+import org.kopi.galite.visual.VException;
 import org.kopi.vkopi.lib.ui.swing.base.Stateful;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 

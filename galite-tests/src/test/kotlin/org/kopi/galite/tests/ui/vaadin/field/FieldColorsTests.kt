@@ -41,7 +41,7 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 class FieldColorsTests: GaliteVUITestBase() {
 

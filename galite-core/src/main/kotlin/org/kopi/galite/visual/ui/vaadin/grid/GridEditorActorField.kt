@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * The grid editor actor field server side implementation

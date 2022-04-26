@@ -45,7 +45,7 @@ import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
 import org.kopi.galite.visual.report.triggers.avgDecimal
-import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.VActor
 
 /**
  *

@@ -40,8 +40,8 @@ import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.visual.type.Image
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VException
 
 /**
  * This class represents a form field. It represents an editable element of a block

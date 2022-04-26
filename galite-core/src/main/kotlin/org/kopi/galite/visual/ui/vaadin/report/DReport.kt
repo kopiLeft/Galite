@@ -29,9 +29,9 @@ import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.contextmenu.ContextMenu

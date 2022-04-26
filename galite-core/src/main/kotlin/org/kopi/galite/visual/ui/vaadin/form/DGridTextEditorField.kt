@@ -48,8 +48,8 @@ import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimeField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimestampField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorWeekField
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.data.binder.Result

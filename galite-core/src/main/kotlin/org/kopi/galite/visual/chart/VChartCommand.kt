@@ -19,11 +19,11 @@
 package org.kopi.galite.visual.chart
 
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ActionHandler
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VHelpGenerator
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
 
 class VChartCommand(private val chart: VChart, actor: VActor)
   : VCommand(0xFFFF, null, actor, actor.number, actor.ident), ActionHandler {

@@ -39,10 +39,10 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VBlock(title, buffer, visible) {
 

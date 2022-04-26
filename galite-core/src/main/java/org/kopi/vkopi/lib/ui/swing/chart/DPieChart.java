@@ -31,7 +31,7 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.util.TableOrder;
 import org.kopi.galite.visual.chart.VDataSeries;
 import org.kopi.galite.visual.chart.VMeasureData;
-import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.ApplicationContext;
 
 @SuppressWarnings("serial")
 public class DPieChart extends DAbstractChartType {

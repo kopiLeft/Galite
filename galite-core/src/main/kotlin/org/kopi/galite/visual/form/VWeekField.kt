@@ -23,9 +23,9 @@ import kotlin.reflect.KClass
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VWeekColumn
 import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
@@ -74,7 +74,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     val s = s as? String
@@ -382,7 +382,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   /**
    * autofill
-   * @exception    org.kopi.galite.visual.visual.VException    an exception may occur in gotoNextField
+   * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list != null) {

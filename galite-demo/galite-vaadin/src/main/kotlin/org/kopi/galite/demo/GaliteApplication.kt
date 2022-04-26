@@ -21,9 +21,9 @@ import java.util.Locale
 import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
-import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.visual.PropertyException
-import org.kopi.galite.visual.visual.Registry
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.PropertyException
+import org.kopi.galite.visual.Registry
 
 import com.vaadin.flow.router.Route
 

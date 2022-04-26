@@ -34,7 +34,7 @@ import org.kopi.galite.visual.report.UReport.UTable
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 import com.lowagie.text.Chunk
 import com.lowagie.text.Document

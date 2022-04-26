@@ -31,13 +31,13 @@ import javax.swing.FocusManager;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.kopi.galite.visual.visual.ApplicationContext;
-import org.kopi.galite.visual.visual.UWindow;
-import org.kopi.galite.visual.visual.VException;
-import org.kopi.galite.visual.visual.VRuntimeException;
-import org.kopi.galite.visual.visual.VWindow;
-import org.kopi.galite.visual.visual.WindowBuilder;
-import org.kopi.galite.visual.visual.WindowController;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.UWindow;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.WindowBuilder;
+import org.kopi.galite.visual.WindowController;
 
 /**
  * {@code JWindowController} is a swing implementation of the {@link WindowController}.

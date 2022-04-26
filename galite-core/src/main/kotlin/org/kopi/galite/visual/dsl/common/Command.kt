@@ -18,8 +18,8 @@
 package org.kopi.galite.visual.dsl.common
 
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.visual.ActionHandler
-import org.kopi.galite.visual.visual.VCommand
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.VCommand
 
 /**
  * This class represent a command, ie a link between an actor and

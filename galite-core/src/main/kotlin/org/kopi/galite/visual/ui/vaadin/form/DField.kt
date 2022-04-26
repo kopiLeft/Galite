@@ -33,9 +33,9 @@ import org.kopi.galite.visual.ui.vaadin.field.AbstractField
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI

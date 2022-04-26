@@ -36,20 +36,20 @@ import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.FileHandler
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VHelpViewer
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
-import org.kopi.galite.visual.visual.WindowBuilder
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
 /**
  * Represents a report model.
@@ -63,7 +63,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
     init {
       WindowController.windowController.registerWindowBuilder(
-        org.kopi.galite.visual.visual.Constants.MDL_REPORT,
+        org.kopi.galite.visual.Constants.MDL_REPORT,
         object : WindowBuilder {
           override fun createWindow(model: VWindow): UWindow {
             return UIFactory.uiFactory.createView(
@@ -97,7 +97,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   var media: String? = null             // The media for this document
   var help: String? = null
 
-  override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_REPORT
+  override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
   /**
    * Redisplay the report after change in formatting

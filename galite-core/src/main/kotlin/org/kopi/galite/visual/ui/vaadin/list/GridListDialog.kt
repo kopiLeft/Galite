@@ -21,7 +21,7 @@ import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
 import org.kopi.galite.visual.ui.vaadin.common.Dialog
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasStyle

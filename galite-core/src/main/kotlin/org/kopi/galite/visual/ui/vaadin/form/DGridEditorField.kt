@@ -25,8 +25,8 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.data.converter.Converter

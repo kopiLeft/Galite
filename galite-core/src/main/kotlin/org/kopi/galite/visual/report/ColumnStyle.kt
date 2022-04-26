@@ -80,7 +80,7 @@ class ColumnStyle : Serializable {
    */
   fun getFont(): Font {
     val font = when (fontName) {
-      0 -> org.kopi.galite.visual.visual.Constants.FNT_FIXED_WIDTH
+      0 -> org.kopi.galite.visual.Constants.FNT_FIXED_WIDTH
       1 -> "Helvetica"
       2 -> "Geneva"
       3 -> "Courier"

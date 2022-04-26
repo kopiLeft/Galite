@@ -21,8 +21,8 @@ import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.chart.VNoChartRowException
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VDictionaryForm
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
 
 abstract class VChartSelectionForm(source: String? = null) : VDictionaryForm(source) {
 

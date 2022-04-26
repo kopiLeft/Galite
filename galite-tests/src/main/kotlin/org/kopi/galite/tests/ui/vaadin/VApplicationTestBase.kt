@@ -33,13 +33,13 @@ import org.kopi.galite.visual.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VUIFactory
 import org.kopi.galite.visual.util.Rexec
-import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.FileHandler
-import org.kopi.galite.visual.visual.ImageHandler
-import org.kopi.galite.visual.visual.PropertyException
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.PropertyException
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.router.Route
 

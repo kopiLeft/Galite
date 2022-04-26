@@ -19,7 +19,7 @@ package org.kopi.galite.testing
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.VWindow
 
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get

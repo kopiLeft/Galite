@@ -29,12 +29,12 @@ import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.visual.ui.vaadin.notif.NotificationListener
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key

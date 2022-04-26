@@ -25,12 +25,12 @@ import org.kopi.galite.visual.db.DBDeadLockException
 import org.kopi.galite.visual.db.DBInterruptionException
 import org.kopi.galite.visual.db.transaction
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * This class implements predefined commands

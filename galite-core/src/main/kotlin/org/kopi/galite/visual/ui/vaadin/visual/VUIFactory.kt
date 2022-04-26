@@ -28,11 +28,11 @@ import org.kopi.galite.visual.ui.vaadin.form.DForm
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.preview.DPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.report.DReport
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.VHelpViewer
-import org.kopi.galite.visual.visual.VItemTree
-import org.kopi.galite.visual.visual.VMenuTree
-import org.kopi.galite.visual.visual.VModel
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VItemTree
+import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.VModel
 
 /**
  * The `VUIFactory` is a vaadin implementation of the [UIFactory].

@@ -30,8 +30,8 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component

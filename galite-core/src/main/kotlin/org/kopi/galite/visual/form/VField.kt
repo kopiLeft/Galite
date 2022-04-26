@@ -66,17 +66,17 @@ import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VModel
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * A field is a column in the the database (a list of rows)

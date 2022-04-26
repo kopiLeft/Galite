@@ -21,9 +21,9 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.UItemTree.UTreeComponent
-import org.kopi.galite.visual.visual.UMenuTree.UTree
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.UItemTree.UTreeComponent
+import org.kopi.galite.visual.UMenuTree.UTree
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI

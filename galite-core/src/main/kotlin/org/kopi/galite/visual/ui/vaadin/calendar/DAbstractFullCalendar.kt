@@ -26,9 +26,9 @@ import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
 import org.vaadin.stefan.fullcalendar.CalendarViewImpl
 import org.vaadin.stefan.fullcalendar.Entry
 import org.vaadin.stefan.fullcalendar.FullCalendar

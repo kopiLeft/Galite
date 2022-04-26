@@ -28,21 +28,21 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.Constants
-import org.kopi.galite.visual.visual.DefaultActor
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VHelpViewer
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.WindowBuilder
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.DefaultActor
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
 abstract class VForm protected constructor(source: String? = null) : VWindow(source), VConstants {
 
@@ -310,7 +310,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
   // ----------------------------------------------------------------------
   /**
    * GOTO PAGE X
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   fun gotoPage(target: Int) {
     var block: VBlock? = null
@@ -329,7 +329,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
 
   /**
    * GOTO BLOCK
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   fun gotoBlock(target: VBlock) {
     activeBlock?.leave(true)
@@ -339,7 +339,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
 
   /**
    * Go to the next block
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   fun gotoNextBlock() {
     assert(activeBlock != null) { threadInfo() + "Active block is null" }
@@ -405,7 +405,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
    * Resets form to initial state
    *
    * NOTE: TRG_RESET returns true if reset handled by trigger
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by field.leave
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   override fun reset() {
     if (hasTrigger(VConstants.TRG_RESET)) {
@@ -438,7 +438,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
   /**
    * create a list of items and return id of selected one or -1
    * @param        showUniqueItem        open a list if there is only one item also
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by string formatters
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formatters
    */
   fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
     return getBlock(0).singleMenuQuery(showUniqueItem)

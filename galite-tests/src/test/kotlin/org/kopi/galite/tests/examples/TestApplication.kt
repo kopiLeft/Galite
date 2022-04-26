@@ -23,7 +23,7 @@ import org.kopi.galite.tests.db.connectToDatabase
 import org.kopi.galite.tests.ui.vaadin.ConfigurationManager
 import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer

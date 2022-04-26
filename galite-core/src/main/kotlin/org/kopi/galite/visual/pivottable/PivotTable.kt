@@ -34,12 +34,12 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.WindowBuilder
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
 open class PivotTable(title: String?, var help: String?, override val locale: Locale?) : VWindow(), Constants, VConstants {
 
@@ -109,7 +109,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
     return field(domain, init) as ReportField<T?>
   }
 
-  override fun getType() = org.kopi.galite.visual.visual.Constants.MDL_PIVOT_TABLE
+  override fun getType() = org.kopi.galite.visual.Constants.MDL_PIVOT_TABLE
 
   /**
    * Redisplay the pivot table after change in formatting
@@ -376,7 +376,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
 
     init {
       WindowController.windowController.registerWindowBuilder(
-        org.kopi.galite.visual.visual.Constants.MDL_PIVOT_TABLE,
+        org.kopi.galite.visual.Constants.MDL_PIVOT_TABLE,
         object : WindowBuilder {
           override fun createWindow(model: VWindow): UWindow {
             return UIFactory.uiFactory.createView(

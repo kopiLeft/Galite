@@ -20,7 +20,7 @@ package org.kopi.galite.visual.form
 import java.io.Serializable
 import java.util.EventListener
 
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.VException
 
 interface FieldListener : EventListener, Serializable {
 

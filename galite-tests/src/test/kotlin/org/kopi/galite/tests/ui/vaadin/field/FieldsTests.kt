@@ -44,7 +44,7 @@ import org.kopi.galite.tests.examples.Trainer
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initModules

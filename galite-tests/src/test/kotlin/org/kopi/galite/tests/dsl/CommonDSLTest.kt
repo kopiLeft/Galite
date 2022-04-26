@@ -34,8 +34,8 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_ANY
 import org.kopi.galite.visual.list.VList
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ActionHandler
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
 
 class CommonDSLTests : VApplicationTestBase() {
 

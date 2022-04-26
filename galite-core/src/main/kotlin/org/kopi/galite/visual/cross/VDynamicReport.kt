@@ -63,10 +63,10 @@ import org.kopi.galite.visual.report.VTimeColumn
 import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VExecFailedException
 
 class VDynamicReport(block: VBlock) : VReport() {
 

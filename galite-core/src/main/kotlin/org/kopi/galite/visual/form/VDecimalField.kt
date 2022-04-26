@@ -29,8 +29,8 @@ import org.kopi.galite.visual.list.VDecimalColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.type.format
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VlibProperties
 
 /**
  *
@@ -150,7 +150,7 @@ class VDecimalField(val bufferSize: Int,
 
   /**
    * verify that value is valid (on exit)
-   * @exception         org.kopi.galite.visual.visual.VException       an exception may be raised if text is bad
+   * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, o: Any?) {
     val s = o as? String

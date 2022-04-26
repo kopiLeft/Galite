@@ -30,7 +30,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].

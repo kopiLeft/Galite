@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.form
 
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.UWindow
 
 /**
  * `UListDialog` is the top level interface for all list dialogs ui components.

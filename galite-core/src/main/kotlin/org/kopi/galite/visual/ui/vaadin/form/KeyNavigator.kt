@@ -23,10 +23,10 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.visual.ui.vaadin.field.InputTextField
 import org.kopi.galite.visual.util.PrintException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.PrinterManager
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.PrinterManager
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VWindow
 
 /**
  * Text field key navigation.

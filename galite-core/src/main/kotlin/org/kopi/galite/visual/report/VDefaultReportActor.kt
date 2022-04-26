@@ -18,8 +18,8 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VlibProperties
 
 class VDefaultReportActor(menuIdent: String,
                           actorIdent: String,

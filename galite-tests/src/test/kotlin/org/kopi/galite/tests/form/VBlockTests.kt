@@ -45,9 +45,9 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
 

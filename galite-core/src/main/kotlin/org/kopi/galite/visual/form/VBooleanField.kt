@@ -20,7 +20,7 @@ package org.kopi.galite.visual.form
 
 import org.kopi.galite.visual.list.VBooleanColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
                                                          "boolean",

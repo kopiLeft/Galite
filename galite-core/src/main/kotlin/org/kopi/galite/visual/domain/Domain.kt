@@ -74,7 +74,7 @@ import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.visual.type.Image
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * A domain is a data type with predefined list of allowed values.

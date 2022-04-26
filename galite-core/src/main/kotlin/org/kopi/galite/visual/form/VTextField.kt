@@ -31,8 +31,8 @@ import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTextColumn
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * This class implements multi-line text fields.
@@ -64,7 +64,7 @@ class VTextField(bufferSize: Int,
 
   /**
    * verify that value is valid (on exit)
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised if text is bad
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised if text is bad
    */
   override fun checkType(o: Any?) {
     setString(block!!.activeRecord, o as? String)

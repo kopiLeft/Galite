@@ -20,8 +20,8 @@ import java.util.Locale
 
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.form.VDictionaryForm
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VException
 
 /**
  * Represents a dictionary form.
@@ -71,20 +71,20 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   open fun editWithID(id: Int): Int = model.editWithID(id)
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   open fun openForQuery(): Int = model.openForQuery()
 
   /**
    * create a new record and returns id
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   open fun newRecord(): Int = model.newRecord()
 

@@ -31,7 +31,7 @@ import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.visual.Color
+import org.kopi.galite.visual.Color
 
 class DimensionTests: VApplicationTestBase() {
   val chart = object : Chart("") {}

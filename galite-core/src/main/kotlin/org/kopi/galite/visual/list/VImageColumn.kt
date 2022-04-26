@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.visual.ImageHandler
+import org.kopi.galite.visual.ImageHandler
 
 class VImageColumn(title: String, column: Column<*>?, table: ColumnSet?, sortAscending: Boolean)
   : VListColumn(title, column, table, VConstants.ALG_LEFT, 7, sortAscending) {

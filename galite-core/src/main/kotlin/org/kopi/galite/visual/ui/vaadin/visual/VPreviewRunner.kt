@@ -21,8 +21,8 @@ import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.print.PSPrintException
 import org.kopi.galite.visual.util.AbstractPrinter
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.visual.PreviewRunner
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.PreviewRunner
+import org.kopi.galite.visual.VException
 
 /**
  * The `VPreviewRunner` is the vaadin implementation of the

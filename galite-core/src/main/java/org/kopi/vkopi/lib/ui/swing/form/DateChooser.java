@@ -56,7 +56,7 @@ import javax.swing.event.PopupMenuListener;
 
 import org.kopi.galite.visual.type.Month;
 import org.kopi.galite.visual.type.Week;
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 /**

@@ -38,7 +38,7 @@ import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VStringColumn
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.MessageCode
 
 class VFieldTests : JApplicationTestBase() {
 

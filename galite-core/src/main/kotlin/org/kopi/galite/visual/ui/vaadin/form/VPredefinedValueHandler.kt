@@ -25,7 +25,7 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.VException
 
 /**
  * The `VPredefinedValueHandler` is the VAADIN implementation of

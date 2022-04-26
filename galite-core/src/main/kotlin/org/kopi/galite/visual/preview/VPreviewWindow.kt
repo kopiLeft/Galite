@@ -27,15 +27,15 @@ import javax.swing.event.EventListenerList
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.Constants
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
-import org.kopi.galite.visual.visual.WindowBuilder
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
 /**
  * A special window that display an html help

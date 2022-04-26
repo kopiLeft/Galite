@@ -24,7 +24,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.BlockListener
 import org.kopi.galite.visual.ui.vaadin.block.ChartBlockLayout
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.VException
 
 import com.vaadin.flow.component.Component
 

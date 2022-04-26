@@ -21,7 +21,7 @@ package org.kopi.galite.visual.preview
 import java.io.Serializable
 import java.util.EventListener
 
-import org.kopi.galite.visual.visual.UserConfiguration
+import org.kopi.galite.visual.UserConfiguration
 
 interface PreviewListener : EventListener, Serializable {
   fun pageChanged(current: Int)

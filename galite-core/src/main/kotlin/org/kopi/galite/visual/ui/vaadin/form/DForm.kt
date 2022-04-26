@@ -33,8 +33,8 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * The `DForm` is the vaadin implementation of the [UForm] specifications.

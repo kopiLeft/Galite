@@ -28,7 +28,7 @@ import javax.swing.UIManager
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeCellRenderer
 
-import org.kopi.galite.visual.visual.Module
+import org.kopi.galite.visual.Module
 import org.kopi.vkopi.lib.ui.swing.base.Utils
 
 internal class MenuItemRenderer(private val superUser: Boolean) : JLabel(), TreeCellRenderer {

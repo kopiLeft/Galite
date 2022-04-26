@@ -39,7 +39,7 @@ import org.kopi.galite.tests.examples.initDocumentationData
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.testing.findActor
 import org.kopi.galite.testing.findMultiBlock

@@ -27,13 +27,13 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWai
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VHelpViewer
-import org.kopi.galite.visual.visual.VMenuTree
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.WindowController
 
 /**
  * The `VWindowController` is the vaadin implementation

@@ -42,7 +42,7 @@ import org.kopi.galite.visual.report.UReport.UTable
 import org.kopi.galite.visual.type.Month
 import org.kopi.galite.visual.type.Week
 import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig, title: String)
   : PExport(table, model, printConfig, title), Constants {

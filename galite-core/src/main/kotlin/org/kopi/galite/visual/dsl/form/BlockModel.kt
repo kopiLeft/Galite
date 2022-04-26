@@ -22,7 +22,7 @@ import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.visual.DefaultActor
+import org.kopi.galite.visual.DefaultActor
 
 class BlockModel(vForm: VForm, val block: Block, formSource: String? = null)
   : VBlock(block.block.title,
