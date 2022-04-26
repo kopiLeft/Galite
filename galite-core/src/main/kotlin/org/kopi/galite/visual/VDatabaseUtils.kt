@@ -27,8 +27,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.kopi.galite.visual.db.References
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.database.References
+import org.kopi.galite.util.base.InconsistencyException
 
 object VDatabaseUtils {
 

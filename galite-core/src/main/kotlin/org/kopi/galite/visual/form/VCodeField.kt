@@ -23,7 +23,7 @@ import java.math.BigDecimal
 import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.list.VList
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties

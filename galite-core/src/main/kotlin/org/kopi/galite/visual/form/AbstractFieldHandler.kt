@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.db.Utils
+import org.kopi.galite.database.Utils
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException

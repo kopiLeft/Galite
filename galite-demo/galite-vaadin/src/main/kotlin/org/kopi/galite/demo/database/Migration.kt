@@ -41,13 +41,13 @@ import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
-import org.kopi.galite.visual.db.Modules
-import org.kopi.galite.visual.db.UserRights
-import org.kopi.galite.visual.db.Users
-import org.kopi.galite.visual.db.databaseConfig
-import org.kopi.galite.visual.db.list_Of_Tables
-import org.kopi.galite.visual.db.sequencesList
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.UserRights
+import org.kopi.galite.database.Users
+import org.kopi.galite.database.databaseConfig
+import org.kopi.galite.database.list_Of_Tables
+import org.kopi.galite.database.sequencesList
+import org.kopi.galite.type.Week
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"

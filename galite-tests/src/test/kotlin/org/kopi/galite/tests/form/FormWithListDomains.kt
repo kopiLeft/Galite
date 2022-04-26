@@ -22,8 +22,8 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
 import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.db.Modules
-import org.kopi.galite.visual.db.Users
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.Users
 import org.kopi.galite.visual.domain.AutoComplete
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT

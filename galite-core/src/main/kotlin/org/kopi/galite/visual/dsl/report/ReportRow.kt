@@ -18,9 +18,9 @@
 package org.kopi.galite.visual.dsl.report
 
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Type0
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Type0
+import org.kopi.galite.type.Week
 
 /**
  * Represents a data row of a [Report].

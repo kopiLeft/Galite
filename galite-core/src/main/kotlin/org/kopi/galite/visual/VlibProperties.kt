@@ -22,7 +22,7 @@ import java.text.MessageFormat
 import java.util.Locale
 
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * This class handles localized properties

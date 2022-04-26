@@ -28,7 +28,7 @@ import java.time.LocalTime
 import javax.swing.event.EventListenerList
 
 import kotlin.math.max
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException

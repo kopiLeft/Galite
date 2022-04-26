@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.util.LineBreaker
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
 

@@ -25,7 +25,7 @@ import kotlin.math.max
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VModel

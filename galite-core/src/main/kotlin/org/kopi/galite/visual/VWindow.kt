@@ -30,10 +30,10 @@ import kotlin.jvm.Throws
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.kopi.galite.visual.base.Image
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.Connection
-import org.kopi.galite.visual.db.DBContextHandler
-import org.kopi.galite.visual.db.DBDeadLockException
-import org.kopi.galite.visual.db.XInterruptProtectedException
+import org.kopi.galite.database.Connection
+import org.kopi.galite.database.DBContextHandler
+import org.kopi.galite.database.DBDeadLockException
+import org.kopi.galite.database.XInterruptProtectedException
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 

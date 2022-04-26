@@ -30,7 +30,7 @@ import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTextColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.VRuntimeException
 

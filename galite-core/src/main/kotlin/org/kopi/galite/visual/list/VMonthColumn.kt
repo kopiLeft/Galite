@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.type.Month
+import org.kopi.galite.type.Month
 
 /**
  * Represents a list column.

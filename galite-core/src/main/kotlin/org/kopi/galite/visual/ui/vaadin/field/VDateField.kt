@@ -19,7 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import java.util.Optional
 
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.ComponentEvent

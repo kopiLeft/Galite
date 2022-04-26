@@ -22,7 +22,7 @@ import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration

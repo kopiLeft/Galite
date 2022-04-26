@@ -20,8 +20,8 @@ package org.kopi.galite.visual.report
 
 import java.time.LocalDate
 
-import org.kopi.galite.visual.type.format
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.type.format
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents a report column description

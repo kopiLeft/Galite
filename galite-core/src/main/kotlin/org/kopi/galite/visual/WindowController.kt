@@ -21,7 +21,7 @@ package org.kopi.galite.visual
 import java.io.Serializable
 
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Creates the GUI, opens the window, form, ...

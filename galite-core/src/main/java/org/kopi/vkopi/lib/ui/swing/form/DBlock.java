@@ -39,7 +39,7 @@ import org.kopi.galite.visual.form.VConstants;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.ViewBlockAlignment;
-import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.galite.visual.VException;
 import org.kopi.galite.visual.VExecFailedException;
 import org.kopi.vkopi.lib.ui.swing.base.KopiTitledBorder;

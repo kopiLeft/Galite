@@ -29,11 +29,11 @@ import java.net.SocketException
 import java.util.Date
 import java.util.Locale
 
+import org.kopi.galite.database.Connection
+import org.kopi.galite.util.mailer.Mailer
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.util.mailer.Mailer
 
 /**
  * `ApplicationContext` is an application context that contains the

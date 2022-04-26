@@ -32,7 +32,7 @@ import org.kopi.galite.visual.chart.VStringDimension
 import org.kopi.galite.visual.chart.VTimeDimension
 import org.kopi.galite.visual.chart.VTimestampDimension
 import org.kopi.galite.visual.chart.VWeekDimension
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Week
 
 class VDimensionTests : VApplicationTestBase() {
 

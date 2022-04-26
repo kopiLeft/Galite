@@ -22,9 +22,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-import org.kopi.galite.visual.type.Image
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Image
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
 
 /**
  * Integer field type is LONG is used to insert integers.

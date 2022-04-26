@@ -20,9 +20,9 @@ import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.visual.db.Modules
-import org.kopi.galite.visual.db.UserRights
-import org.kopi.galite.visual.db.Users
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.UserRights
+import org.kopi.galite.database.Users
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING

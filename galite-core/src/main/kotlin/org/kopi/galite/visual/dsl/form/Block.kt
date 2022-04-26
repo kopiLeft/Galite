@@ -38,7 +38,7 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Color
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException

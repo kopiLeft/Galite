@@ -71,9 +71,9 @@ import org.kopi.galite.visual.report.VStringColumn
 import org.kopi.galite.visual.report.VTimeColumn
 import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
-import org.kopi.galite.visual.type.Image
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Image
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
 import org.kopi.galite.visual.VColor
 
 /**

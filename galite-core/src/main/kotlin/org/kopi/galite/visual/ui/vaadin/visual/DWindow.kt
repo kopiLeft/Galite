@@ -21,6 +21,7 @@ import java.io.File
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
+import org.kopi.galite.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
@@ -42,7 +43,6 @@ import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode

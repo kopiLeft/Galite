@@ -62,7 +62,7 @@ import org.kopi.galite.visual.form.VFieldException;
 import org.kopi.galite.visual.form.VForm;
 import org.kopi.galite.visual.util.AWTToPS;
 import org.kopi.galite.visual.util.PrintJob;
-import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.galite.visual.Action;
 import org.kopi.galite.visual.ApplicationConfiguration;
 import org.kopi.galite.visual.DPositionPanelListener;

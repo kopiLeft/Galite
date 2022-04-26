@@ -59,7 +59,7 @@ import org.kopi.galite.visual.form.UListDialog;
 import org.kopi.galite.visual.form.VDictionary;
 import org.kopi.galite.visual.form.VForm;
 import org.kopi.galite.visual.form.VListDialog;
-import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.galite.visual.MessageCode;
 import org.kopi.galite.visual.UWindow;
 import org.kopi.galite.visual.VException;

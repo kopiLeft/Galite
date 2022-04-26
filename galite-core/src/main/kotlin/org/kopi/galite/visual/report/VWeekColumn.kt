@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Week
 
 /**
  * Represents a report column description

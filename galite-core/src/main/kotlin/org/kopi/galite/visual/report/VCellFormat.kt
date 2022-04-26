@@ -24,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
 open class VCellFormat {
   /**

@@ -20,7 +20,7 @@ package org.kopi.galite.visual.chart
 import java.time.Instant
 import java.time.LocalDateTime
 
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
 /**
  * Represents a time stamp chart column.

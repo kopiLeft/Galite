@@ -35,7 +35,7 @@ import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField

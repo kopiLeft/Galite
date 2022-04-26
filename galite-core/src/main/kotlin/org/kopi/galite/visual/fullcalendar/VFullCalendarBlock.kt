@@ -28,9 +28,9 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.kopi.galite.visual.cross.VFullCalendarForm
-import org.kopi.galite.visual.db.DBDeadLockException
-import org.kopi.galite.visual.db.DBInterruptionException
-import org.kopi.galite.visual.db.transaction
+import org.kopi.galite.database.DBDeadLockException
+import org.kopi.galite.database.DBInterruptionException
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.BlockListener
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
@@ -38,7 +38,7 @@ import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Week
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException

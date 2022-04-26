@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.list.VIntegerCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 class VIntegerCodeField : VCodeField {
 

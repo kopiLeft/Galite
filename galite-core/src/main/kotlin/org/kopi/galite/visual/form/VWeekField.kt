@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VWeekColumn
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties

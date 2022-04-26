@@ -25,7 +25,7 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VMonthColumn
-import org.kopi.galite.visual.type.Month
+import org.kopi.galite.type.Month
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties

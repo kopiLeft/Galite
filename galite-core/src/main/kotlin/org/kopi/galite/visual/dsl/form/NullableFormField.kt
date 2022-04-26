@@ -19,7 +19,7 @@ package org.kopi.galite.visual.dsl.form
 
 import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.type.Type0
+import org.kopi.galite.type.Type0
 
 /**
  * This class represents a nullable form field(visit, skipped and hidden).

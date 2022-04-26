@@ -27,7 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
 import org.kopi.galite.visual.base.UComponent;
-import org.kopi.galite.visual.db.Connection;
+import org.kopi.galite.database.Connection;
 import org.kopi.galite.visual.l10n.LocalizationManager;
 import org.kopi.galite.visual.print.PrintManager;
 import org.kopi.galite.visual.Application;

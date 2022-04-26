@@ -22,7 +22,7 @@ import java.awt.Color
 import java.awt.Font
 import java.io.Serializable
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 class ColumnStyle : Serializable {
 

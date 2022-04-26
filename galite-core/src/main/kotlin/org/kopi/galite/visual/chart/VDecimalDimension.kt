@@ -21,7 +21,7 @@ package org.kopi.galite.visual.chart
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalTime
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
 /**
  * Represents a decimal chart column.

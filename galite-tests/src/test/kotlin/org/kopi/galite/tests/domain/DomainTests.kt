@@ -36,8 +36,8 @@ import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
 
 class DomainTests : VApplicationTestBase() {
 

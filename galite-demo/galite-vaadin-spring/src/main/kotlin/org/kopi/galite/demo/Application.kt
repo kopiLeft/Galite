@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.demo.database.connectToDatabase
 import org.kopi.galite.demo.database.initDatabase
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration

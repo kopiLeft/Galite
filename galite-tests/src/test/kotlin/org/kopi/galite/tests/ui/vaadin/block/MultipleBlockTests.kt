@@ -37,9 +37,9 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.type.format
 
 import com.github.mvysny.kaributesting.v10.expectRow
 

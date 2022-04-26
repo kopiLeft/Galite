@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.db.Modules
+import org.kopi.galite.database.Modules
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList

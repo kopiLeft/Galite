@@ -67,7 +67,7 @@ import org.kopi.galite.visual.VHelpViewer;
     try {
       html = new JEditorPane(model.getUrl());
     } catch (java.io.IOException e) {
-      throw new org.kopi.galite.visual.util.base.InconsistencyException(e);
+      throw new org.kopi.galite.util.base.InconsistencyException(e);
     }
     html.setEditable(false);
     html.addHyperlinkListener(this);

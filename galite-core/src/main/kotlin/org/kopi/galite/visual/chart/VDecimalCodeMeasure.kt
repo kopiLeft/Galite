@@ -20,7 +20,7 @@ package org.kopi.galite.visual.chart
 
 import java.math.BigDecimal
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VColor
 
 /**

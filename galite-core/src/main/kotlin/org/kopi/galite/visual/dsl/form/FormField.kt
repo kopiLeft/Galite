@@ -39,7 +39,7 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VIntegerField
-import org.kopi.galite.visual.type.Image
+import org.kopi.galite.type.Image
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
 

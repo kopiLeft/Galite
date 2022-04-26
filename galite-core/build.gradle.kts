@@ -24,6 +24,9 @@ plugins {
 }
 
 dependencies {
+  api(project(":galite-data"))
+  api(project(":galite-util"))
+
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
   api("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
@@ -71,9 +74,6 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
-  // Javax dependencies
-  implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
-  implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
 

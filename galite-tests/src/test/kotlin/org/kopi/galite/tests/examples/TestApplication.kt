@@ -19,9 +19,9 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.tests.db.connectToDatabase
+import org.kopi.galite.tests.database.connectToDatabase
 import org.kopi.galite.tests.ui.vaadin.ConfigurationManager
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication

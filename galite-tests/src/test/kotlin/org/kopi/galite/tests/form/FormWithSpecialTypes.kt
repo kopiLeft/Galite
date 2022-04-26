@@ -26,7 +26,7 @@ import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.db.month
+import org.kopi.galite.database.month
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
@@ -39,7 +39,7 @@ import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.type.Month
+import org.kopi.galite.type.Month
 
 object Product : Table() {
   val id = integer("ID").autoIncrement().nullable()

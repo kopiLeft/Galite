@@ -21,7 +21,7 @@ package org.kopi.galite.visual.util
 import java.io.IOException
 import java.io.InputStream
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 import gnu.hylafax.HylaFAXClient
 import gnu.hylafax.HylaFAXClientProtocol

@@ -23,7 +23,7 @@ import java.io.StringWriter
 import java.net.InetAddress
 import java.net.UnknownHostException
 
-import org.kopi.galite.visual.util.mailer.Mailer
+import org.kopi.galite.util.mailer.Mailer
 
 class VerifyConfiguration private constructor() {
 

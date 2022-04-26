@@ -41,7 +41,7 @@ import javax.swing.tree.TreePath
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.db.Favorites
+import org.kopi.galite.database.Favorites
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message.getMessage
 import org.kopi.galite.visual.Module

@@ -38,19 +38,19 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.db.Connection
-import org.kopi.galite.visual.db.FAVORITENId
-import org.kopi.galite.visual.db.Favorites
-import org.kopi.galite.visual.db.GroupParties
-import org.kopi.galite.visual.db.GroupRights
-import org.kopi.galite.visual.db.Groups
-import org.kopi.galite.visual.db.Modules
-import org.kopi.galite.visual.db.Symbols
-import org.kopi.galite.visual.db.UserRights
-import org.kopi.galite.visual.db.Users
+import org.kopi.galite.database.Connection
+import org.kopi.galite.database.FAVORITENId
+import org.kopi.galite.database.Favorites
+import org.kopi.galite.database.GroupParties
+import org.kopi.galite.database.GroupRights
+import org.kopi.galite.database.Groups
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.Symbols
+import org.kopi.galite.database.UserRights
+import org.kopi.galite.database.Users
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents a menu tree model.

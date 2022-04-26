@@ -21,8 +21,8 @@ package org.kopi.galite.visual
 import java.util.Date
 import java.util.Locale
 
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.Connection
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.PrintManager
 

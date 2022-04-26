@@ -40,7 +40,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.kopi.galite.visual.util.base.Utils;
+import org.kopi.galite.util.base.Utils;
 import org.kopi.galite.visual.Action;
 import org.kopi.galite.visual.Item;
 import org.kopi.galite.visual.MessageCode;
