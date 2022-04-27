@@ -118,7 +118,7 @@ public abstract class JApplication implements Application {
       try {
         Executable  module;
 
-        module = Module.Companion.startForm(context, form, "initial form");
+        module = Module.Companion.startForm(connection, form, "initial form");
         if (module instanceof VWindow) {
           ((VWindow) module).addModelCloseListener(new ModelCloseListener() {
             @Override
@@ -139,7 +139,7 @@ public abstract class JApplication implements Application {
       try {
         String url = getURL();
 
-        menuTree = new VMenuTree(context);
+        menuTree = new VMenuTree(connection);
         menuTree.setTitle(getUserName() + "@" + url.substring(url.indexOf("//") + 2));
         menuTree.doNotModal();
       } catch (VException e) {
@@ -187,7 +187,7 @@ public abstract class JApplication implements Application {
    * @return The database URL.
    */
   public String getURL() {
-    return context.getUrl();
+    return connection.getUrl();
   }
 
   /**
@@ -342,7 +342,7 @@ public abstract class JApplication implements Application {
   private boolean connectToDatabase() {
     if (options.username != null) {
       try {
-        context = Connection.Companion
+        connection = Connection.Companion
                 .createConnection(options.database,
                                   options.driver,
                                   options.username,
@@ -352,15 +352,15 @@ public abstract class JApplication implements Application {
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();
-        context = null;
+        connection = null;
       }
     }
 
-    if (context == null) {
+    if (connection == null) {
       //      installLF(defaults.getKopiLFProperties());
 
       removeSplashScreen();
-      context = login(options.database,
+      connection = login(options.database,
               options.driver,
               options.username,
               options.password,
@@ -368,7 +368,7 @@ public abstract class JApplication implements Application {
       displaySplashScreen();
     }
 
-    return context != null;
+    return connection != null;
   }
 
   // ---------------------------------------------------------------------
@@ -402,7 +402,7 @@ public abstract class JApplication implements Application {
 
 
   public String getUserName() {
-    return context.getUserName();
+    return connection.getUserName();
   }
 
 
@@ -459,7 +459,7 @@ public abstract class JApplication implements Application {
 
   private ApplicationOptions       		options;
   private VMenuTree                      	menuTree;
-  private Connection                   context;
+  private Connection connection;
   private boolean                       	isGeneratingHelp;
   private SplashScreen                  	splash;
   private Registry                      	registry;

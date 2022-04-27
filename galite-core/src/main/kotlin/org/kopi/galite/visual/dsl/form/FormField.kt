@@ -40,6 +40,7 @@ import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.type.Image
+import org.kopi.galite.type.Type0
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
 
@@ -185,6 +186,26 @@ open class FormField<T>(internal val block: Block,
   fun <T: Column<*>> key(column: T): T {
     keyColumns.add(column)
     return column
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  fun <V: T?> columns(vararg joinColumns: Column<V>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  fun <U: Type0<V>, V: Any, K: V?> FormField<U>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
   }
 
   fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {

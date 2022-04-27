@@ -165,9 +165,9 @@ open class Block(val title: String,
    */
   inline fun <reified T> mustFill(domain: Domain<T>,
                                   position: FormPosition,
-                                  initializer: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                  initializer: FormField<T>.() -> Unit): FormField<T> {
     initDomain(domain)
-    val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
+    val field = FormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
 
     return init(field, initializer)
   }
@@ -183,7 +183,7 @@ open class Block(val title: String,
    */
   inline fun <reified T> visit(domain: Domain<T>,
                                position: FormPosition,
-                               initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+                               initializer: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, initializer, VConstants.ACS_VISIT, position)
   }
 
@@ -198,7 +198,7 @@ open class Block(val title: String,
    */
   inline fun <reified T> skipped(domain: Domain<T>,
                                  position: FormPosition,
-                                 initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+                                 initializer: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, initializer, VConstants.ACS_SKIPPED, position)
   }
 
@@ -211,7 +211,7 @@ open class Block(val title: String,
    * @param initializer    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T> hidden(domain: Domain<T>, initializer: NullableFormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T> hidden(domain: Domain<T>, initializer: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, initializer, VConstants.ACS_HIDDEN)
   }
 
@@ -219,11 +219,11 @@ open class Block(val title: String,
    * Initializes a field.
    */
   inline fun <reified T> initField(domain: Domain<T>,
-                                   initializer: NullableFormField<T>.() -> Unit,
+                                   initializer: FormField<T>.() -> Unit,
                                    access: Int,
                                    position: FormPosition? = null): FormField<T> {
     initDomain(domain)
-    val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
+    val field = FormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
 
     return init(field, initializer)
   }
