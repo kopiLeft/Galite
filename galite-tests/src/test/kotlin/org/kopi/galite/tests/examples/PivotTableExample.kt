@@ -20,6 +20,8 @@ import java.util.Locale
 
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.pivottable.Function
+import org.kopi.galite.visual.pivottable.Grouping
 import org.kopi.galite.visual.pivottable.PivotTable
 
 class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Locale.UK) {
@@ -44,38 +46,11 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
   }
 
   init {
+    aggregate(Function.SUM, age)
+    grouping = Grouping(listOf(city), listOf(delegation, gender))
+
     add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
-      this[gender]  = "Female"
-      this[age] = 22
-    }
-    add {
-      this[city] = "Ben arous"
-      this[delegation] = "Rades"
-      this[gender]  = "Female"
-      this[age] = 22
-    }
-    add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
-      this[gender]  = "Female"
-      this[age] = 22
-    }
-    add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
-      this[gender]  = "Female"
-      this[age] = 22
-    }
-    add {
-      this[city] = "Tunis"
-      this[delegation] = "Notre damme"
-      this[gender]  = "Female"
-      this[age] = 22
-    }
-    add {
-      this[city] = "Ben arous"
+      this[city] = "Ben Arous"
       this[delegation] = "Mourouj"
       this[gender]  = "Female"
       this[age] = 22
@@ -87,7 +62,37 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
       this[age] = 22
     }
     add {
-      this[city] = "Ben arous"
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Female"
+      this[age] = 22
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Female"
+      this[age] = 22
+    }
+    add {
+      this[city] = "Tunis"
+      this[delegation] = "Notre damme"
+      this[gender]  = "Female"
+      this[age] = 22
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Female"
+      this[age] = 22
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Rades"
+      this[gender]  = "Female"
+      this[age] = 22
+    }
+    add {
+      this[city] = "Ben Arous"
       this[delegation] = "Mourouj"
       this[gender]  = "Female"
       this[age] = 22
@@ -177,7 +182,7 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
       this[age] = 22
     }
     add {
-      this[city] = "Ben arous"
+      this[city] = "Ben Arous"
       this[delegation] = "Mourouj"
       this[gender]  = "Female"
       this[age] = 22
@@ -207,46 +212,16 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
       this[age] = 22
     }
     add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
-      this[gender]  = "Female"
-      this[age] = 22
-    }
-    add {
-      this[city] = "Ben arous"
+      this[city] = "Ben Arous"
       this[delegation] = "Mourouj"
       this[gender]  = "Female"
       this[age] = 22
     }
     add {
       this[city] = "Ben Arous"
-      this[delegation] = "Yassminet"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben Arous"
       this[delegation] = "Mourouj"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben Arous"
-      this[delegation] = "Yassminet"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben Arous"
-      this[delegation] = "Yassminet"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
-      this[gender]  = "Male"
-      this[age] = 26
+      this[gender]  = "Female"
+      this[age] = 22
     }
     add {
       this[city] = "Ben Arous"
@@ -274,18 +249,6 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
     }
     add {
       this[city] = "Ben Arous"
-      this[delegation] = "Yassminet"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben Arous"
-      this[delegation] = "Yassminet"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben arous"
       this[delegation] = "Mourouj"
       this[gender]  = "Male"
       this[age] = 26
@@ -293,18 +256,6 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
     add {
       this[city] = "Ben Arous"
       this[delegation] = "Yassminet"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
-      this[gender]  = "Male"
-      this[age] = 26
-    }
-    add {
-      this[city] = "Ben arous"
-      this[delegation] = "Mourouj"
       this[gender]  = "Male"
       this[age] = 26
     }
@@ -321,7 +272,61 @@ class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Loc
       this[age] = 26
     }
     add {
-      this[city] = "Ben arous"
+      this[city] = "Ben Arous"
+      this[delegation] = "Yassminet"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Yassminet"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Yassminet"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Yassminet"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Mourouj"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
+      this[delegation] = "Yassminet"
+      this[gender]  = "Male"
+      this[age] = 26
+    }
+    add {
+      this[city] = "Ben Arous"
       this[delegation] = "Mourouj"
       this[gender]  = "Male"
       this[age] = 26

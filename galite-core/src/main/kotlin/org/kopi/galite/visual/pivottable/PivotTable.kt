@@ -63,16 +63,19 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   var funct = Function.NONE
 
   internal lateinit var dataframe: AnyFrame
-  private var aggregateField = arrayOf<String>()
-  lateinit var model: MPivotTable
+  private var aggregateFields = arrayOf<String>()
+  var aggregateField: ReportField<*>? = null
+    private set
+  val model: MPivotTable = MPivotTable(this)
 
   init {
     setTitle(title)
   }
 
-  fun aggregate(function: Function, field: ReportField<*>) {
+  fun <T: Number> aggregate(function: Function, field: ReportField<T>) {
     funct = function
-    aggregateField = arrayOf(field.label!!)
+    aggregateFields = arrayOf(field.label!!)
+    aggregateField = field
   }
 
   /**
@@ -148,7 +151,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
     setTitle(title)
   }
 
-  fun getValueAt(row: Int, col: Int): Any? = model.getValueAt(row, col)
+  fun getValueAt(row: Int, col: Int): String = model.getValueAt(row, col)
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
@@ -176,14 +179,12 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   fun build() {
     localize(manager)
     buildDataFrame()
-    model = MPivotTable(this)
+    model.build()
     (getDisplay() as UPivotTable?)?.build()
   }
 
   private fun buildDataFrame() {
-    val df = dataFrameOf(fields) { field ->
-      getAllValuesOf(field)
-    }
+    val df = dataFrameOf(fields)
 
     dataframe = if (grouping.columns.isEmpty() && grouping.rows.isEmpty()) {
       df.aggregate()
@@ -192,20 +193,26 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
     } else if (grouping.columns.isEmpty()) {
       df.groupBy().aggregate()
     } else {
-      df.pivot().groupBy().aggregate()
+      df.pivot().groupBy().aggregate().sortBy()
     }
   }
 
   private fun <T> getAllValuesOf(field: ReportField<T>): List<T> = rows.map { it[field] }
 
-  private fun <T> dataFrameOf(header: Iterable<ReportField<*>>, fill: (ReportField<*>) -> List<T>): AnyFrame =
+  private fun getAllFormattedValuesOf(field: ReportField<*>): List<String> = rows.map { field.model.format(it[field]) }
+
+  private fun dataFrameOf(header: Iterable<ReportField<*>>): AnyFrame =
     header.map { field ->
-      val values = fill(field)
+      val (values, type) = if (field == aggregateField) {
+        getAllValuesOf(field) to field.domain.kClass!!.starProjectedType
+      } else {
+        getAllFormattedValuesOf(field) to String::class.starProjectedType
+      }
 
       DataColumn.create(
         field.model.label,
         values,
-        field.domain.kClass!!.starProjectedType
+        type
       )
     }.toDataFrame()
 
@@ -251,6 +258,20 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
     }
   }
 
+  private fun DataFrame<*>.sortBy(): DataFrame<Any?> {
+    return if (grouping.rows.size == 1) {
+      this.sortBy(grouping.rows[0].label!!)
+    } else {
+      this.sortBy {
+        grouping.rows
+          .subList(2, grouping.rows.size)
+          .fold(grouping.rows[0].label!! and grouping.rows[1].label!!) { a, b ->
+            a and b.label!!
+          }
+      }
+    }
+  }
+
   /**
    * Adds a row to the pivot table.
    *
@@ -277,16 +298,16 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   private fun Aggregatable<*>._max(): DataFrame<Any?> {
     return when (this) {
       is Pivot<*> -> {
-        this.max(*aggregateField).toDataFrame()
+        this.max(*aggregateFields).toDataFrame()
       }
       is DataFrame<*> -> {
         this.max().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.max(*aggregateField)
+        this.max(*aggregateFields)
       }
       is PivotGroupBy<*> -> {
-        this.max(*aggregateField)
+        this.max(*aggregateFields)
       }
       else -> {
         throw UnsupportedOperationException()
@@ -303,10 +324,10 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
         this.mean().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.mean(*aggregateField)
+        this.mean(*aggregateFields)
       }
       is PivotGroupBy<*> -> {
-        this.mean(*aggregateField)
+        this.mean(*aggregateFields)
       }
       else -> {
         throw UnsupportedOperationException()
@@ -331,16 +352,16 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
   private fun Aggregatable<*>._sum(): DataFrame<Any?> {
     return when (this) {
       is Pivot<*> -> {
-        this.sum(*aggregateField).toDataFrame()
+        this.sum(*aggregateFields).toDataFrame()
       }
       is DataFrame<*> -> {
         this.sum().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.sum(*aggregateField)
+        this.sum(*aggregateFields)
       }
       is PivotGroupBy<*> -> {
-        (this as PivotGroupBy<Int>).sum(*aggregateField)
+        (this as PivotGroupBy<Int>).sum(*aggregateFields)
       }
       else -> {
         throw UnsupportedOperationException()
@@ -357,10 +378,10 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
         this.min().toDataFrame()
       }
       is GroupBy<*, *> -> {
-        this.min(*aggregateField)
+        this.min(*aggregateFields)
       }
       is PivotGroupBy<*> -> {
-        this.min(*aggregateField)
+        this.min(*aggregateFields)
       }
       else -> {
         throw UnsupportedOperationException()

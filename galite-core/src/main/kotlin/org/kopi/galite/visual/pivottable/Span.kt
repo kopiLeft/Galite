@@ -20,6 +20,6 @@ package org.kopi.galite.visual.pivottable
 
 enum class Span {
   NONE,
-  RIGHT,
-  LEFT
+  ROW,
+  COL
 }
