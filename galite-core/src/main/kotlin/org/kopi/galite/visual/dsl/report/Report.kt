@@ -115,8 +115,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
                                                 noinline init: ReportField<T>.() -> Unit): List<ReportField<T?>> {
     return (0 until fieldsNumber).map {
       nullableField(domain, init).also { field ->
-        field.label = "Montant_${it + 1}"
-        field.model.label = "Montant_${it + 1}"
+        field.model.label = "${field.label}_${it + 1}"
       }
     }
   }
@@ -134,8 +133,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
                                                        noinline init: ReportField<T>.() -> Unit): List<ReportField<T>> {
     return (0 until fieldsNumber).map {
       field(domain, init).also { field ->
-        field.label = "Montant_${it + 1}"
-        field.model.label = "Montant_${it + 1}"
+        field.model.label = "${field.label}_${it + 1}"
       }
     }
   }
