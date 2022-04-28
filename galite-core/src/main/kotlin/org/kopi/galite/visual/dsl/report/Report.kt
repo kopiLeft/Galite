@@ -103,6 +103,44 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   }
 
   /**
+   * creates and returns fields. It uses [init] method to initialize the fields.
+   *
+   * @param fieldsNumber the number of fields to create.
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T : Comparable<T>?> field(fieldsNumber: Int,
+                                                domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): List<ReportField<T?>> {
+    return (0 until fieldsNumber).map {
+      nullableField(domain, init).also { field ->
+        field.label = "Montant_${it + 1}"
+        field.model.label = "Montant_${it + 1}"
+      }
+    }
+  }
+
+  /**
+   * creates and returns fields that accept nulls. It uses [init] method to initialize the fields.
+   *
+   * @param fieldsNumber the number of fields to create.
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T: Comparable<T>?> nullableField(fieldsNumber: Int,
+                                                       domain: Domain<T>,
+                                                       noinline init: ReportField<T>.() -> Unit): List<ReportField<T>> {
+    return (0 until fieldsNumber).map {
+      field(domain, init).also { field ->
+        field.label = "Montant_${it + 1}"
+        field.model.label = "Montant_${it + 1}"
+      }
+    }
+  }
+
+  /**
    * Adds a row to the report.
    *
    * @param init initializes the row with values.
