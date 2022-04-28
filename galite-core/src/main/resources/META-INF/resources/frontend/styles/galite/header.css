@@ -122,9 +122,12 @@
     padding-top: 20px;
     padding-right: 15px;
     padding-left: 15px;
-    color: var(--lumo-shade-70pct);
     margin: 0;
     cursor: pointer;
+}
+
+#welcome #windows iron-icon {
+    fill: var(--lumo-shade-70pct);
 }
 
 #header ::part(menu-bar-button) {

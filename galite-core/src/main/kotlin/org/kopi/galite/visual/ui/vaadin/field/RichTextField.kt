@@ -57,6 +57,8 @@ class RichTextField(
 
   init {
     editor.className ="richtext"
+    editor.element.executeJs("this.shadowRoot.querySelector('#editable').setAttribute('part', $0);", "richtext-editable")
+    editor.element.executeJs("this.shadowRoot.querySelector('#editable > p').setAttribute('part', $0);", "richtext-editable-p")
     editor.placeholder = ""
     add(editor)
     editor.setHeight((TOOLBAR_HEIGHT + LINE_HEIGHT * visibleRows).toFloat(), Unit.PIXELS)

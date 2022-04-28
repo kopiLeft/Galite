@@ -32,21 +32,25 @@
     transform-origin: -1px -0.5px
 }
 
+.true::part(checkbox)::after {
+    font-size: 14px;
+    font-weight: bold;
+    top: 1px;
+}
+
 .false::part(checkbox)::after {
     opacity: none;
     transform: none;
     font-size: 13px;
     font-weight: bold;
     position: absolute;
-    top: 0em;
+    top: 1px;
     left: 0.09em;
     box-sizing: border-box;
     transform-origin: 0 0;
     border-width: 0;
     content: "\2715";
     display: inline-block;
-    width: 0;
-    height: 0;
     color: white;
 }
 
