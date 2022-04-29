@@ -77,6 +77,9 @@ dependencies {
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
 
+  // Javax activation dependency
+  implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
+
   // Dataframe used in Pivot Table
   implementation("org.jetbrains.kotlinx", "dataframe", Versions.KOTLINX_DATAFRAME)
 }
