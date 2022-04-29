@@ -16,11 +16,61 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#third-row:first-child {
+#grouping-rows-panel td:first-child {
     vertical-align: top;
+    background: #e7eaf6;
+}
+
+#grouping-columns-panel td, #aggregations-panel td {
+    background: #e7eaf6;
+}
+
+#grouping-rows {
+    height: calc(100vh - 300px) !important;
+}
+
+#grouping-columns {
+     display: block !important;
 }
 
 #pivot-table {
-    max-height: calc(100vh - 210px);
-    max-width: calc(100vw - 50px);
+    height: calc(100vh - 300px) !important;
+    width: calc(100vw - 250px) !important;
+    border-top: 5px solid white !important;
+    border-left: 5px solid white !important;
+}
+
+#grouping-button {
+    border-radius: 8px;
+    background-color: #38598b;
+    color: white;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 14px !important;
+    padding: 14px 40px;
+    margin-left: 5px;
+}
+
+#grouping-button:hover {
+    border-right: 5px solid red;
+}
+
+#grouping-rows #grouping-button {
+    margin-left: 0px !important;
+    margin-right: 5px;
+}
+
+#grouping-button:first-of-type {
+    margin-left: 50px;
+}
+
+:host([theme~="aggregations-selector"]) [part~='input-field'],
+  :host([theme~="fields-selector"]) [part~='input-field'] {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px;
+    background: white;
+    max-height: 25px;
 }
