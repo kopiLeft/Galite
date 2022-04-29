@@ -27,6 +27,8 @@ import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.vaadin.stefan.table.Table
+import org.vaadin.stefan.table.TableRow
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
@@ -57,7 +59,7 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
   private val model = pivottable.model // report model
   private lateinit var table: DTable
   private var parameters: Parameters? = null
-  private val mainLayout = org.kopi.galite.visual.ui.vaadin.common.VTable(3, 2)
+  private val mainLayout = Table()
 
   init {
     getModel()!!.setDisplay(this)
@@ -91,14 +93,22 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
   }
 
   private fun initLayout() {
-    addAggregations()
-    addAllGroupingFields()
-    addRowGroupingFields()
-    addColumnGroupingFields()
-    mainLayout.add(2, 1, table)
+    val firstRow = mainLayout.addRow()
+    val secondRow = mainLayout.addRow()
+    val thirdRow = mainLayout.addRow()
+
+    // First row
+    firstRow.addDataCell()
+    addAllGroupingFields(firstRow)
+    // Second row
+    addAggregations(secondRow)
+    addColumnGroupingFields(secondRow)
+    // Third row
+    addRowGroupingFields(thirdRow)
+    thirdRow.addDataCell().add(table)
   }
 
-  private fun addAggregations() {
+  private fun addAggregations(tableRow: TableRow) {
     val aggregationLayout = VerticalLayout()
     val aggregations = Select("Sum", "Mean", "Min", "Max") // TODO
     val fields = Select<String>()
@@ -107,13 +117,14 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
 
     aggregationLayout.add(aggregations)
     aggregationLayout.add(fields)
-    mainLayout.add(1, 0, aggregationLayout)
+    tableRow.addDataCell().add(aggregationLayout)
   }
 
-  private fun addAllGroupingFields() {
+  private fun addAllGroupingFields(tableRow: TableRow) {
     val fieldsContainer = HorizontalLayout()
+    val cell = tableRow.addDataCell().also { it.add(fieldsContainer) }
 
-    setDropTargetOf(fieldsContainer)
+    setDropTargetOf(fieldsContainer, cell)
 
     pivottable.columns.forEach {
       val button = Button(it.label)
@@ -122,37 +133,37 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
       draggableButton.effectAllowed = EffectAllowed.MOVE
       fieldsContainer.add(button)
     }
-
-    mainLayout.add(0, 1, fieldsContainer)
   }
 
-  private fun addRowGroupingFields() {
-    val groupingFields = buildGroupingFieldsLayout()
-
-    mainLayout.add(2, 0, groupingFields)
+  private fun addRowGroupingFields(tableRow: TableRow) {
+    buildGroupingFieldsLayout(tableRow)
   }
 
-  private fun addColumnGroupingFields() {
-    val groupingFields = buildGroupingFieldsLayout()
-
-    mainLayout.add(1, 1, groupingFields)
+  private fun addColumnGroupingFields(tableRow: TableRow) {
+    buildGroupingFieldsLayout(tableRow)
   }
 
-  private fun buildGroupingFieldsLayout(): VerticalLayout {
+  private fun buildGroupingFieldsLayout(tableRow: TableRow): VerticalLayout {
     val groupingFields = VerticalLayout()
+    val cell = tableRow.addDataCell().also { it.add(groupingFields) }
 
-    setDropTargetOf(groupingFields)
+    setDropTargetOf(groupingFields, cell)
 
     return groupingFields
   }
 
-  private fun <T> setDropTargetOf(groupingFieldsLayout: T) where T: HasComponents, T: Component {
-    val dndLayout = DropTarget.create(groupingFieldsLayout)
+  private fun setDropTargetOf(groupingFieldsLayout: HasComponents, container: Component) {
+    val dndLayout = DropTarget.create(container)
 
     dndLayout.dropEffect = DropEffect.MOVE
 
-    dndLayout.addDropListener {
-      groupingFieldsLayout.add(it.component)
+    dndLayout.addDropListener { event ->
+      event.dragSourceComponent.ifPresent { component ->
+        component.parent.ifPresent {
+          (it as HasComponents).remove(component)
+        }
+        groupingFieldsLayout.add(component)
+      }
     }
   }
 
