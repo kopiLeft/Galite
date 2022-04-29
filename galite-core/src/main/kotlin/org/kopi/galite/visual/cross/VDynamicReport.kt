@@ -24,7 +24,7 @@ import java.sql.SQLException
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.kopi.galite.visual.db.transaction
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VBooleanField
@@ -62,11 +62,11 @@ import org.kopi.galite.visual.report.VStringColumn
 import org.kopi.galite.visual.report.VTimeColumn
 import org.kopi.galite.visual.report.VTimestampColumn
 import org.kopi.galite.visual.report.VWeekColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VExecFailedException
 
 class VDynamicReport(block: VBlock) : VReport() {
 

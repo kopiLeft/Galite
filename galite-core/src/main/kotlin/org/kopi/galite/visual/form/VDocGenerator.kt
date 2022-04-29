@@ -19,8 +19,8 @@ package org.kopi.galite.visual.form
 
 import java.awt.Event
 
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * This class implements a pretty printer

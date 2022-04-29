@@ -26,8 +26,8 @@ import org.kopi.galite.visual.print.PSPrintException;
 import org.kopi.galite.visual.util.AbstractPrinter;
 import org.kopi.galite.visual.util.PrintException;
 import org.kopi.galite.visual.util.PrintJob;
-import org.kopi.galite.visual.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.visual.PreviewRunner;
+import org.kopi.galite.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.PreviewRunner;
 
 public class JPreviewRunner implements PreviewRunner {
 

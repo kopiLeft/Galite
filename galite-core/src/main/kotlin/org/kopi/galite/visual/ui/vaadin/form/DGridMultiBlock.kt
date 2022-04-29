@@ -23,8 +23,8 @@ import org.kopi.galite.visual.form.UMultiBlock
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VRuntimeException
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.data.provider.ListDataProvider

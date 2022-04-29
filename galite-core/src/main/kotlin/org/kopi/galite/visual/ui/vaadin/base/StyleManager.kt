@@ -19,7 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.base
 
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.UI

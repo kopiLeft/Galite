@@ -41,7 +41,7 @@ import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.FileHandler
+import org.kopi.galite.visual.FileHandler
 
 /*** Field Access modifiers using Modes ***/
 // See [FormToCheckFieldVisibility]

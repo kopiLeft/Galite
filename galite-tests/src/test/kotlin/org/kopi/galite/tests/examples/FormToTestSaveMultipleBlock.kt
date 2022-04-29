@@ -28,7 +28,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val action = menu("Action")

@@ -22,7 +22,7 @@ import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.form.VConstants
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons

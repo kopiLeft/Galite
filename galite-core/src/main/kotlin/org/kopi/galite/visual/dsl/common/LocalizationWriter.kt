@@ -28,7 +28,7 @@ import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
 import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Constructs a localization writer unit

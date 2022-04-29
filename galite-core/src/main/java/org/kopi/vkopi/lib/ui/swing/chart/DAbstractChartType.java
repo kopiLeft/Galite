@@ -38,7 +38,7 @@ import org.kopi.galite.visual.chart.VDimensionData;
 import org.kopi.galite.visual.chart.VMeasureData;
 import org.kopi.galite.visual.chart.VPrintOptions;
 import org.kopi.galite.visual.util.PPaperType;
-import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.visual.ApplicationContext;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;

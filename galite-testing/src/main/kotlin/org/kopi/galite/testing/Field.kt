@@ -25,7 +25,7 @@ import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
 import org.kopi.galite.visual.ui.vaadin.field.DatePickerLight
 import org.kopi.galite.visual.ui.vaadin.field.InputTextField

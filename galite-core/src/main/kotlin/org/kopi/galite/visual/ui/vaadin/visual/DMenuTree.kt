@@ -20,12 +20,12 @@ package org.kopi.galite.visual.ui.vaadin.visual
 import javax.swing.tree.TreeNode
 
 import org.kopi.galite.visual.ui.vaadin.base.Tree
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.UMenuTree
-import org.kopi.galite.visual.visual.VMenuTree
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.UMenuTree
+import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Unit

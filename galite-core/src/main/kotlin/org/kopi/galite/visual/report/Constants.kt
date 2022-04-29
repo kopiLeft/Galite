@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.report
 
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.Constants
 
 interface Constants : Constants {
   companion object {

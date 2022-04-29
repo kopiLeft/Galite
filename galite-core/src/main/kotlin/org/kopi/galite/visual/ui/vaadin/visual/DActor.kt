@@ -32,8 +32,8 @@ import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.visual.UActor
-import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.UActor
+import org.kopi.galite.visual.VActor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent

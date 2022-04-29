@@ -46,7 +46,7 @@ import org.kopi.galite.visual.report.VDecimalCodeColumn
 import org.kopi.galite.visual.report.VIntegerCodeColumn
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.report.VStringCodeColumn
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a code domain.

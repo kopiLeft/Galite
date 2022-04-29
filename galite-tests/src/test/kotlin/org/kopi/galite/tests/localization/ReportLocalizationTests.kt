@@ -45,7 +45,7 @@ import com.github.mvysny.kaributesting.v10._get
  * ReportLocalizationTests Report
  */
 class ReportLocalizationTests : GaliteVUITestBase() {
-  val form = LocalizedForm().also { it.model }
+  val form = LocalizedForm()
   val localizationManager = LocalizationManager(Locale.UK, Locale.UK)
 
   @Before

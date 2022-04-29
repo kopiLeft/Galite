@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.VActor
 
 abstract class VImportedBlock(form: VForm) : VBlock(form) {
 

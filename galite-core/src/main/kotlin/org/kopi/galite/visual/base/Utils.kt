@@ -35,7 +35,7 @@ import java.util.Date
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * loading of image
@@ -48,7 +48,7 @@ import org.kopi.galite.visual.util.base.InconsistencyException
  * Utils.getApplicationImage("name")
  *
  */
-open class Utils : org.kopi.galite.visual.util.base.Utils() {
+open class Utils : org.kopi.galite.util.base.Utils() {
   companion object {
     /**
      * Compress a file in a byte[]

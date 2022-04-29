@@ -38,7 +38,7 @@ import org.kopi.galite.visual.form.UMultiBlock;
 import org.kopi.galite.visual.form.VBlock;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.ViewBlockAlignment;
-import org.kopi.galite.visual.visual.VRuntimeException;
+import org.kopi.galite.visual.VRuntimeException;
 
 public class DMultiBlock extends DChartBlock implements UMultiBlock {
 

@@ -25,14 +25,14 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPu
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.visual.Item
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.UItemTree
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VItemTree
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.Item
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UItemTree
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VItemTree
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button

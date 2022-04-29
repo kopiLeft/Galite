@@ -23,7 +23,7 @@ import java.util.Locale
 
 import org.jdom2.Document
 import org.jdom2.input.SAXBuilder
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a localization manager.

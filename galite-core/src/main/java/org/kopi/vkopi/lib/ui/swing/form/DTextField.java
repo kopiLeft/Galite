@@ -57,9 +57,9 @@ import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VStringField;
 import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
-import org.kopi.galite.visual.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.visual.ApplicationContext;
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.base.JHtmlTextArea;
 import org.kopi.vkopi.lib.ui.swing.base.TextSelecter;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellChecker;
@@ -441,7 +441,7 @@ public class DTextField extends DField implements UTextField, VConstants {
         }
 
         public void actionPerformed(ActionEvent e) {
-            getModel().getForm().performAsyncAction(new org.kopi.galite.visual.visual.Action() {
+            getModel().getForm().performAsyncAction(new org.kopi.galite.visual.Action() {
                 public void execute() {
                     model.transferFocus(DTextField.this);
                     model.autofillButton();

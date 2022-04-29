@@ -29,8 +29,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.KeyStroke;
 
-import org.kopi.galite.visual.visual.UActor;
-import org.kopi.galite.visual.visual.VActor;
+import org.kopi.galite.visual.UActor;
+import org.kopi.galite.visual.VActor;
 import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
 
 @SuppressWarnings("serial")

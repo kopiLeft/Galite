@@ -23,7 +23,7 @@ import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
-import org.kopi.galite.visual.visual.Color
+import org.kopi.galite.visual.Color
 
 class MeasureTests : VApplicationTestBase() {
 

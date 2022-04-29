@@ -32,7 +32,7 @@ import javax.swing.UIManager;
 
 import org.kopi.galite.visual.form.Alignment;
 import org.kopi.galite.visual.form.LayoutManager;
-import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.util.base.InconsistencyException;
 
 /**
  *

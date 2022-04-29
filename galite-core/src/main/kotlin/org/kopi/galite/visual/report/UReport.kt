@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.UWindow
 
 /**
  * `UReport` is the top-level interface that must be implemented

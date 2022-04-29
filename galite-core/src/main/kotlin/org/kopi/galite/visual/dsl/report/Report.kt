@@ -35,7 +35,7 @@ import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -100,6 +100,42 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
                                                        noinline init: ReportField<T>.() -> Unit): ReportField<T?> {
     return field(domain, init) as ReportField<T?>
+  }
+
+  /**
+   * creates and returns fields. It uses [init] method to initialize the fields.
+   *
+   * @param fieldsNumber the number of fields to create.
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T : Comparable<T>?> field(fieldsNumber: Int,
+                                                domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): List<ReportField<T?>> {
+    return (0 until fieldsNumber).map {
+      nullableField(domain, init).also { field ->
+        field.model.label = "${field.label}_${it + 1}"
+      }
+    }
+  }
+
+  /**
+   * creates and returns fields that accept nulls. It uses [init] method to initialize the fields.
+   *
+   * @param fieldsNumber the number of fields to create.
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T: Comparable<T>?> nullableField(fieldsNumber: Int,
+                                                       domain: Domain<T>,
+                                                       noinline init: ReportField<T>.() -> Unit): List<ReportField<T>> {
+    return (0 until fieldsNumber).map {
+      field(domain, init).also { field ->
+        field.model.label = "${field.label}_${it + 1}"
+      }
+    }
   }
 
   /**

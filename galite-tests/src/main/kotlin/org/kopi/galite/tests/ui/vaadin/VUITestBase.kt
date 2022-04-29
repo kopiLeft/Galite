@@ -22,7 +22,7 @@ import java.time.Instant
 import org.junit.Before
 import org.junit.BeforeClass
 import org.kopi.galite.testing.waitAndRunUIQueue
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes

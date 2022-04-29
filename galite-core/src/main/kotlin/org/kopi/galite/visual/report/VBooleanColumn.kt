@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * Represents a report column description

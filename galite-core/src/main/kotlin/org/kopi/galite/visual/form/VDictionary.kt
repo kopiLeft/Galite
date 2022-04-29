@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.visual.Executable
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.Executable
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VWindow
 
 /**
  * The `VDictionary` is a meaning to handle three basic operations.

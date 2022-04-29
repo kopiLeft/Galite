@@ -25,10 +25,10 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VMonthColumn
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.type.Month
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
@@ -78,7 +78,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     val s = (s as? String).orEmpty()

@@ -30,8 +30,8 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
@@ -57,9 +57,9 @@ open class DBlock(val parent: DForm,
 
   protected val formView = parent
   protected lateinit var columnViews: Array<VFieldUI?>
-  protected var maxRowPos: Int = model.maxRowPos
-  protected var maxColumnPos: Int = model.maxColumnPos
-  protected var displayedFields: Int = model.displayedFields
+  protected val maxRowPos: Int = model.maxRowPos
+  protected val maxColumnPos: Int = model.maxColumnPos
+  protected val displayedFields: Int = model.displayedFields
   protected val sortedRecToDisplay: IntArray
   protected val displayToSortedRec: IntArray
   protected var sortedToprec = 0 // first record displayed
@@ -74,9 +74,6 @@ open class DBlock(val parent: DForm,
   private var activeRecordSetFromDisplay = false
 
   init {
-    maxRowPos = model.maxRowPos
-    maxColumnPos = model.maxColumnPos
-    displayedFields = model.displayedFields
     model.addBlockListener(this)
     addRecordPositionPanel(parent.content)
 

@@ -31,8 +31,8 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport

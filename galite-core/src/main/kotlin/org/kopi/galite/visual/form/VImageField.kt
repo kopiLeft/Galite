@@ -35,9 +35,9 @@ import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.kopi.galite.visual.list.VImageColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VlibProperties
 
 class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
 
@@ -73,7 +73,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {}
 
@@ -257,7 +257,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
 
   /**
    * autofill
-   * @exception    org.kopi.galite.visual.visual.VException    an exception may occur in gotoNextField
+   * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     if (handler != null) {

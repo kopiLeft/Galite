@@ -24,7 +24,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.WindowController
 
 class DocumentationReportTriggers : Form(title = "Test Report Form", locale = Locale.UK) {
 

@@ -22,7 +22,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Styles

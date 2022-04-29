@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.grid
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue

@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.util
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Paper Type

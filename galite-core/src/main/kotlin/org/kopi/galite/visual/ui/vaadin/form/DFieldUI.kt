@@ -30,7 +30,7 @@ import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTextField
 import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * The `DFieldUI` is the vaadin UI components implementation of

@@ -23,7 +23,7 @@ import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.VWindow
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout

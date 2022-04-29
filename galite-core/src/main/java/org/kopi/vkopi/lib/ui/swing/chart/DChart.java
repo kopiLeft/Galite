@@ -25,8 +25,8 @@ import org.kopi.galite.visual.chart.ChartTypeFactory;
 import org.kopi.galite.visual.chart.UChart;
 import org.kopi.galite.visual.chart.UChartType;
 import org.kopi.galite.visual.chart.VChart;
-import org.kopi.galite.visual.visual.VException;
-import org.kopi.galite.visual.visual.VWindow;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 

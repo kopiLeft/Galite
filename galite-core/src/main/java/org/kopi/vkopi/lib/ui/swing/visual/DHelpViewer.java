@@ -35,7 +35,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
 
-import org.kopi.galite.visual.visual.VHelpViewer;
+import org.kopi.galite.visual.VHelpViewer;
 
 /**
  * A window with an html pane
@@ -67,7 +67,7 @@ import org.kopi.galite.visual.visual.VHelpViewer;
     try {
       html = new JEditorPane(model.getUrl());
     } catch (java.io.IOException e) {
-      throw new org.kopi.galite.visual.util.base.InconsistencyException(e);
+      throw new org.kopi.galite.util.base.InconsistencyException(e);
     }
     html.setEditable(false);
     html.addHyperlinkListener(this);

@@ -22,7 +22,7 @@ package org.kopi.vkopi.lib.ui.swing.visual;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.VlibProperties;
 
 public class DMenuBar extends JMenuBar {
 

@@ -24,7 +24,7 @@ import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 import com.flowingcode.vaadin.addons.ironicons.AvIcons
 import com.flowingcode.vaadin.addons.ironicons.DeviceIcons

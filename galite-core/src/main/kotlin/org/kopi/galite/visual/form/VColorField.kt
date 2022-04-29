@@ -29,8 +29,8 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.visual.list.VColorColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VlibProperties
 
 class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 
@@ -221,7 +221,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 
   /**
    * autofill
-   * @exception   org.kopi.galite.visual.visual.VException    an exception may occur in gotoNextField
+   * @exception   org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return handler?.let {

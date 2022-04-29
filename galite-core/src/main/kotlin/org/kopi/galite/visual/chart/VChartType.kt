@@ -21,7 +21,7 @@ package org.kopi.galite.visual.chart
 import java.io.Serializable
 
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.visual.VModel
+import org.kopi.galite.visual.VModel
 
 /**
  * Supported chart types.

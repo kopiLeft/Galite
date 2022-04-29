@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 
-import org.kopi.galite.visual.visual.DPositionPanelListener;
+import org.kopi.galite.visual.DPositionPanelListener;
 
 /**
  * The position panel is the used to go trough the rows when fetching

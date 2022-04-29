@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.visual.Registry
+import org.kopi.galite.visual.Registry
 
 class RegistryTests : VApplicationTestBase() {
   val registry1 = Registry("firstDomaineName", null)

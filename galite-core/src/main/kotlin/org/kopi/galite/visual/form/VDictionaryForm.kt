@@ -20,8 +20,8 @@ package org.kopi.galite.visual.form
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VRuntimeException
 
 abstract class VDictionaryForm protected constructor(source: String? = null) : VForm(source), VDictionary {
 
@@ -51,7 +51,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   fun editWithID(id: Int): Int {
     editID = id
@@ -64,7 +64,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   fun openForQuery(): Int {
     lookup = true
@@ -75,7 +75,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
 
   /**
    * create a new record and returns id
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   fun newRecord(): Int {
     newRecord = true
@@ -159,7 +159,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
 
   /**
    *
-   * @exception        org.kopi.galite.visual.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   override fun reset() {
     if (isRecursiveQuery) {

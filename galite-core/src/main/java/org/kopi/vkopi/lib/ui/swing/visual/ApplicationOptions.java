@@ -4,7 +4,7 @@ package org.kopi.vkopi.lib.ui.swing.visual;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
-public class ApplicationOptions extends org.kopi.galite.visual.db.ConnectionOptions {
+public class ApplicationOptions extends org.kopi.galite.database.ConnectionOptions {
 
   public ApplicationOptions(String name) {
     super(name);

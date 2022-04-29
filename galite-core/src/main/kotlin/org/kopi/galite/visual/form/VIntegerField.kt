@@ -24,8 +24,8 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * @param     width
@@ -98,7 +98,7 @@ class VIntegerField(val bufferSize: Int,
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception may be raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     val s = s as? String

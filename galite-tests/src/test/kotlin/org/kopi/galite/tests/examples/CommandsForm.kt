@@ -166,7 +166,7 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
       insertMode()
     }
     command(item = pivottable) {
-      PivotTableExample()
+      PivotTableExample().doNotModal()
     }
   }
 }

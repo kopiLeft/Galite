@@ -23,9 +23,9 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.FileHandler
-import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.UWindow
 
 class VFileHandler : FileHandler() {
 

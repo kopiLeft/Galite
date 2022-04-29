@@ -40,15 +40,15 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.kopi.galite.visual.util.base.Utils;
-import org.kopi.galite.visual.visual.Action;
-import org.kopi.galite.visual.visual.Item;
-import org.kopi.galite.visual.visual.MessageCode;
-import org.kopi.galite.visual.visual.UItemTree;
-import org.kopi.galite.visual.visual.VException;
-import org.kopi.galite.visual.visual.VExecFailedException;
-import org.kopi.galite.visual.visual.VItemTree;
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.util.base.Utils;
+import org.kopi.galite.visual.Action;
+import org.kopi.galite.visual.Item;
+import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.UItemTree;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VExecFailedException;
+import org.kopi.galite.visual.VItemTree;
+import org.kopi.galite.visual.VlibProperties;
 
 public class DItemTree extends DWindow implements UItemTree {
 

@@ -19,9 +19,9 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.visual.visual.Application
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.PreviewRunner
+import org.kopi.galite.visual.Application
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.PreviewRunner
 
 class VApplicationContext : ApplicationContext() {
 

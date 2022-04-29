@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Month
+import org.kopi.galite.type.Month
 
 /**
  * Represents a report column description

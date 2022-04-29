@@ -20,9 +20,9 @@ package org.kopi.galite.visual.print
 
 import org.kopi.galite.visual.util.PrintException
 import org.kopi.galite.visual.util.Printer
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VWindow
 
 class DefaultPrintManager : PrintManager {
 

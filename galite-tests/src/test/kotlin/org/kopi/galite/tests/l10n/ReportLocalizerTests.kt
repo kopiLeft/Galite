@@ -28,7 +28,7 @@ import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.l10n.ReportLocalizer
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 class ReportLocalizerTests : VApplicationTestBase() {
 

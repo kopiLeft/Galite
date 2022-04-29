@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents a report column description

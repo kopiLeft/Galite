@@ -29,7 +29,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
 

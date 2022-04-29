@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * Visual exception thrown when a chart did not contain any values

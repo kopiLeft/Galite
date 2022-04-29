@@ -21,8 +21,8 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.report.VNoRowException
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
 
 abstract class VReportSelectionForm protected constructor(source: String? = null) : VDictionaryForm(source) {
 

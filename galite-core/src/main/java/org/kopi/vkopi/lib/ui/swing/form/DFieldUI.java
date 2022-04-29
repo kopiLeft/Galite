@@ -29,7 +29,7 @@ import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VImageField;
 import org.kopi.galite.visual.form.VTextField;
-import org.kopi.galite.visual.util.base.InconsistencyException;
+import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 
 /**

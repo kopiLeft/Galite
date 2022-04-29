@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
-import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.VMenuTree
 
 /**
  * A module menu implementation that uses the menu tree

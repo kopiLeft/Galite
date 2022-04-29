@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a report selection form.

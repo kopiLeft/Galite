@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VExecFailedException
 
 class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
 

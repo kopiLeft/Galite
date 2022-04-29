@@ -20,7 +20,7 @@ package org.kopi.galite.visual.util
 
 import java.text.BreakIterator
 
-import org.kopi.galite.visual.util.base.Utils
+import org.kopi.galite.util.base.Utils
 
 class LineBreaker : Utils() {
   companion object {

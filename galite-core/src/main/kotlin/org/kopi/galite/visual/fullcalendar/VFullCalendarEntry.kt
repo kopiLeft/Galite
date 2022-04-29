@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a full calendar record.

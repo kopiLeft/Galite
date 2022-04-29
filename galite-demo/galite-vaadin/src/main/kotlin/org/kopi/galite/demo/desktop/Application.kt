@@ -29,9 +29,9 @@ import org.kopi.galite.demo.database.testDriver
 import org.kopi.galite.demo.database.testPassword
 import org.kopi.galite.demo.database.testURL
 import org.kopi.galite.demo.database.testUser
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
 
 val testLocale: Locale = Locale.FRANCE

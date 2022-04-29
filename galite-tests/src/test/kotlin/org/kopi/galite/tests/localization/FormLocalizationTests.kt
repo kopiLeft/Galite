@@ -43,7 +43,7 @@ import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.localization.list.ExternList
-import org.kopi.galite.visual.db.Users
+import org.kopi.galite.database.Users
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.GridListDialog
@@ -69,7 +69,7 @@ import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FormLocalTests : GaliteVUITestBase() {
-  val form = LocalizedForm().also { it.model }
+  val form = LocalizedForm()
   val localizationManager = LocalizationManager(Locale.UK, Locale.UK)
 
   @Before

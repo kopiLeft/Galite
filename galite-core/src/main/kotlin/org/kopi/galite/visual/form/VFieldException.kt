@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VExecFailedException
 
 /**
  * Represents an exception with a message.

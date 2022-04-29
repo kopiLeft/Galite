@@ -18,8 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
-import org.kopi.galite.visual.visual.RootMenu
-import org.kopi.galite.visual.visual.VMenuTree
+import org.kopi.galite.visual.RootMenu
+import org.kopi.galite.visual.VMenuTree
 
 /**
  * The book mark menu

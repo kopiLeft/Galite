@@ -60,7 +60,7 @@ import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.MessageCode
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne

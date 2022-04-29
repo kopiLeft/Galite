@@ -22,9 +22,13 @@ import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.visual.VDefaultActor
+import org.kopi.galite.visual.DefaultActor
 
-class BlockModel(vForm: VForm, val block: Block, formSource: String? = null): VBlock(vForm) {
+class BlockModel(vForm: VForm, val block: Block, formSource: String? = null)
+  : VBlock(block.block.title,
+           block.block.bufferSize,
+           block.block.displaySize,
+           vForm) {
 
   init {
     initializeBlock(block, formSource)
@@ -41,20 +45,17 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   val model = block.block
 
   this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-  title = block.title
-  help = block.help
-  bufferSize = block.buffer
-  displaySize = block.visible
-  pageNumber = block.pageNumber
-  border = block.border.value
-  maxRowPos = block.maxRowPos
-  maxColumnPos = block.maxColumnPos
-  displayedFields = block.displayedFields
-  name = block.ident
-  options = block.options
-  access = block.access
+  help = model.help
+  pageNumber = model.pageNumber
+  border = model.border
+  maxRowPos = model.maxRowPos
+  maxColumnPos = model.maxColumnPos
+  displayedFields = model.displayedFields
+  name = model.name
+  options = model.options
+  model.access.copyInto(access)
   alignment = block.align?.getBlockAlignModel()
-  dropListMap = block.dropListMap
+  dropListMap = model.dropListMap
 
   fields = block.fields.map { formField ->
     formField.vField
@@ -72,7 +73,7 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   indicesIdents = model.indicesIdents
 }
 
-class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
+class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock(block.title, block.buffer, block.visible) {
 
   override fun setInfo(form: VForm) {
     block.fields.forEach {
@@ -80,8 +81,8 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
     }
   }
 
-  fun buildFullCalendarForm(): VFullCalendarForm {
-    return object : VFullCalendarForm() {
+  fun buildFullCalendarForm() {
+    fullCalendarForm = object : VFullCalendarForm() {
 
       init {
         init()
@@ -95,13 +96,13 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock() {
         get() = this@FullCalendarBlockModel
 
       fun init() {
-
         val vSimpleBlock = BlockModel(this, this@FullCalendarBlockModel.block, source)
+
         vSimpleBlock.setInfo(pageNumber, this)
         vSimpleBlock.initIntern()
 
         val defaultActors = form.actors.filter { actor ->
-          actor is VDefaultActor &&
+          actor is DefaultActor &&
                   (actor.code == CMD_AUTOFILL
                           || actor.code == CMD_EDITITEM
                           || actor.code == CMD_EDITITEM_S

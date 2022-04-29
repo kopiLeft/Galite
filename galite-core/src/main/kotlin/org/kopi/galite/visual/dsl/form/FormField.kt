@@ -39,9 +39,10 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VIntegerField
-import org.kopi.galite.visual.type.Image
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.type.Image
+import org.kopi.galite.type.Type0
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VException
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -187,6 +188,26 @@ open class FormField<T>(internal val block: Block,
     return column
   }
 
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  fun <V: T?> columns(vararg joinColumns: Column<V>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  fun <U: Type0<V>, V: Any, K: V?> FormField<U>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
   fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
       FormFieldColumn(column,
@@ -196,7 +217,7 @@ open class FormField<T>(internal val block: Block,
                       keyColumns.contains(column),
                       nullableColumns.contains(column))
     }
-    columns = FormFieldColumns(cols.toTypedArray())
+    columns = FormFieldColumns(cols)
     if (init != null) {
       columns!!.init()
     }
@@ -414,7 +435,7 @@ open class FormField<T>(internal val block: Block,
   // FIELD MODEL
   ///////////////////////////////////////////////////////////////////////////
 
-  override var ident: String = if (_isInternal) "ANONYMOUS$fieldIndex!@#$%^&*()" else super.ident
+  override val ident: String = if (_isInternal) "ANONYMOUS$fieldIndex!@#$%^&*()" else super.ident
 
   /**
    * The field model based on the field type.
@@ -447,7 +468,7 @@ open class FormField<T>(internal val block: Block,
       columns?.getColumnsModels()?.toTypedArray(), // TODO
       columns?.index?.indexNumber ?: 0,
       columns?.priority ?: 0,
-      commands.map { it.model }.toTypedArray(),
+      commands.toTypedArray(),
       position?.getPositionModel(),
       align.value,
       alias?.vField

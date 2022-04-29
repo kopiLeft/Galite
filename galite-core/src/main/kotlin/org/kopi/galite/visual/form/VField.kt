@@ -56,27 +56,27 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.Utils
+import org.kopi.galite.database.Utils
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.l10n.BlockLocalizer
 import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VModel
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -808,7 +808,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
+  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.isKey ?: false
 
   /**
    * Is the field part of given index ?

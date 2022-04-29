@@ -25,14 +25,13 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.targetTables
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
-import org.kopi.galite.visual.db.Users
+import org.kopi.galite.database.Users
 
 class FormWithListDomainsTests : JApplicationTestBase() {
   val FormWithListDomains = FormWithListDomains()
 
   @Test
   fun formWithListDomainsTests() {
-    FormWithListDomains.model
     val model = FormWithListDomains.userListBlock.user.vField
     val query = Users.select { Users.id greater 0 }.alias("syn__0__")
 
@@ -43,7 +42,6 @@ class FormWithListDomainsTests : JApplicationTestBase() {
 
   @Test
   fun setValueIDTest() {
-    FormWithListDomains.model
     val model = FormWithListDomains.userListBlock.user.vField
 
     model.setValueID(1)

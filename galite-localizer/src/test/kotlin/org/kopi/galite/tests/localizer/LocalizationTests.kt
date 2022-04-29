@@ -24,9 +24,9 @@ import kotlin.test.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.localizer.localizeWindows
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.visual.Registry
+import org.kopi.galite.visual.Registry
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
 
 class LocalizationTests {

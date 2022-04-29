@@ -22,7 +22,7 @@ import java.awt.Color
 import java.awt.Font
 import java.io.Serializable
 
-import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.Constants
 
 /**
  * Parameters class .
