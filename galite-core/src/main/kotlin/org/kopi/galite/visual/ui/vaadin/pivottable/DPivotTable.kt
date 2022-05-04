@@ -34,6 +34,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dnd.DragSource
 import com.vaadin.flow.component.dnd.DropEffect
 import com.vaadin.flow.component.dnd.DropTarget
@@ -51,6 +52,11 @@ import com.vaadin.flow.component.select.Select
  *
  * @param pivottable The report model.
  */
+@CssImport.Container(value = [
+  CssImport(value = "./styles/galite/pivottable.css"),
+  CssImport(value = "./styles/galite/pivottable.css", themeFor = "vaadin-select"),
+  CssImport(value = "./styles/galite/pivottable.css", themeFor = "vaadin-select-overlay")
+])
 class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPivotTable {
 
   //---------------------------------------------------
@@ -79,6 +85,7 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
     // load personal configuration
     parameters = Parameters(Color(71, 184, 221))
     table = DTable(VTable(model, buildRows()))
+    table.setId("pivot-table")
     table.isColumnReorderingAllowed = true
     // 200 px is approximately the header window size + the actor pane size
     ui.ifPresent { ui ->
@@ -99,19 +106,25 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
 
     // First row
     firstRow.addDataCell()
+    firstRow.setId("grouping-columns-panel")
     addAllGroupingFields(firstRow)
     // Second row
     addAggregations(secondRow)
     addColumnGroupingFields(secondRow)
+    secondRow.setId("aggregations-panel")
     // Third row
     addRowGroupingFields(thirdRow)
     thirdRow.addDataCell().add(table)
+    thirdRow.setId("grouping-rows-panel")
   }
 
   private fun addAggregations(tableRow: TableRow) {
     val aggregationLayout = VerticalLayout()
     val aggregations = Select("Sum", "Mean", "Min", "Max") // TODO
     val fields = Select<String>()
+
+    aggregations.element.themeList.add("aggregations-selector")
+    fields.element.themeList.add("fields-selector")
 
     fields.setItems(pivottable.columns.map { it.label })
 
@@ -129,6 +142,7 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
     pivottable.columns.forEach {
       val button = Button(it.label)
       val draggableButton = DragSource.create(button)
+      button.setId("grouping-button")
 
       draggableButton.effectAllowed = EffectAllowed.MOVE
       fieldsContainer.add(button)
@@ -137,10 +151,12 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
 
   private fun addRowGroupingFields(tableRow: TableRow) {
     buildGroupingFieldsLayout(tableRow)
+      .setId("grouping-rows")
   }
 
   private fun addColumnGroupingFields(tableRow: TableRow) {
     buildGroupingFieldsLayout(tableRow)
+      .setId("grouping-columns")
   }
 
   private fun buildGroupingFieldsLayout(tableRow: TableRow): VerticalLayout {
