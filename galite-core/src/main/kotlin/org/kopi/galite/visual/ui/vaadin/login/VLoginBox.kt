@@ -423,6 +423,16 @@ class VLoginBox : Div() {
       password = VInputPassword()
       password.setId("user_password")
       password.element.setAttribute("name", "user_password")
+
+      // WORKAROUND! PasswordField.tabIndex not working in Vaadin 22 // Fixme in Vaadin > 22
+      username.element.executeJs("this.addEventListener('keydown', function(event) {" +
+                                         "  if (event.keyCode == 9) {" +
+                                         "    event.preventDefault();" +
+                                         "    $0.focus();" +
+                                         "  }" +
+                                         "});",
+                                 password.element
+      )
       password.tabIndex = 2
       password.maxLength = 20
       password.addKeyPressListener { removeError() }
