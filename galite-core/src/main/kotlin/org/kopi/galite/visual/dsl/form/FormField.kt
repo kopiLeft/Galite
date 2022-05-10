@@ -442,13 +442,15 @@ open class FormField<T>(internal val block: Block,
    * The field model based on the field type.
    */
   val vField: VField by lazy {
-    if (isID) {
-      block.block.fieldID = vfield
-    }
-    domain.buildFormFieldModel(this).also {
+    val model = domain.buildFormFieldModel(this).also {
       it.label = label
       it.toolTip = help
     }
+    if (isID) {
+      block.block.fieldID = model
+    }
+
+    model
   }
 
   fun setInfo(source: String) {
