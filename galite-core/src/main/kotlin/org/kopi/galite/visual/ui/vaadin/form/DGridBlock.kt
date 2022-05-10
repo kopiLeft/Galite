@@ -669,8 +669,10 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       }
 
       override fun closeEditor() {
-        itemToEdit = null
-        super.closeEditor()
+        if (!doNotCancelEditor) {
+          itemToEdit = null
+          super.closeEditor()
+        }
       }
 
       override fun editItem(item: GridBlockItem) {

@@ -108,6 +108,7 @@ abstract class VBlock(var title: String,
   internal var indices = mutableListOf<String>() // error messages for violated indices
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
   internal var commands = mutableListOf<VCommand>() // commands
+  internal var fieldID: VField? = null // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp = field
@@ -2798,7 +2799,7 @@ abstract class VBlock(var title: String,
   }
 
   fun getFieldID(): VField? {
-    return getField("ID")
+    return fieldID ?: getField("ID")
   }
 
   /**
