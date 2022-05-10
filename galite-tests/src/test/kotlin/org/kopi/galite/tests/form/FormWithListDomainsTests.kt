@@ -36,8 +36,8 @@ class FormWithListDomainsTests : JApplicationTestBase() {
     val query = Users.select { Users.id greater 0 }.alias("syn__0__")
 
     assertEquals(query.alias, (model.list!!.table as QueryAlias).alias)
-    assertEquals(query.columns, model.list!!.table.columns)
-    assertEquals(query.targetTables(), model.list!!.table.targetTables())
+    assertEquals(query.columns, model.list!!.table().columns)
+    assertEquals(query.targetTables(), model.list!!.table().targetTables())
   }
 
   @Test

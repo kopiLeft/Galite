@@ -33,7 +33,7 @@ import org.kopi.galite.visual.list.VList
  * @param access              true if this field is only an access to a form
  */
 class FieldList<T>(val type: String,
-                   val table: ColumnSet,
+                   val table: () -> ColumnSet,
                    val action: (() -> DictionaryForm)?,
                    val columns: MutableList<ListDescription>,
                    val autocompleteType: Int,

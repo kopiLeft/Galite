@@ -106,7 +106,7 @@ abstract class ListDomain<T>(width: Int? = null,
    */
   val list: FieldList<T>
     get() = FieldList(ident,
-                      table,
+                      { table },
                       access,
                       columns,
                       autocompleteType,

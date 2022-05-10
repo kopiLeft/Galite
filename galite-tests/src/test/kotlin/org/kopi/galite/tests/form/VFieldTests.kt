@@ -49,7 +49,7 @@ class VFieldTests : JApplicationTestBase() {
     val vListColumn = VList("test",
                             "apps/common/Global",
                             arrayOf(VStringColumn("test", User.name, User, 2, 50, true)),
-                            User,
+                            { User },
                             null,
                             0,
                             0,
@@ -97,7 +97,7 @@ class VFieldTests : JApplicationTestBase() {
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
             VStringColumn("test", User.name, User, 2, 50, true)),
-                            User,
+                            { User },
                             null,
                             0,
                             0,
@@ -137,7 +137,7 @@ class VFieldTests : JApplicationTestBase() {
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
             VIntegerColumn("test", User.age, User, 2, 50, true)),
-                            User,
+                            { User },
                             null,
                             0,
                             0,

@@ -2186,7 +2186,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   private fun evalListTable(): ColumnSet {
     return try {
-      list!!.table
+      list!!.table()
     } catch (e: VException) {
       throw InconsistencyException()
     }
