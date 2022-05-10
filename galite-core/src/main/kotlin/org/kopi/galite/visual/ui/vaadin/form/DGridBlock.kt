@@ -177,16 +177,6 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }.extend(grid)*/
     addComponent(grid, 0, 0, 1, 1, false, false)
-    // ensures that the drop handler is set because
-    // the create fields method is called in a session
-    // lock context so call done in DBlock may find the
-    // drag and drop wrapper null cause it is not created
-    // yet.
-    if (model.isDroppable) {
-      // setDropHandler(DBlockDropHandler(model, this)) TODO
-      // setDragStartMode(DragStartMode.HTML5) TODO
-    }
-    //})
   }
 
   private fun setHeightByRows(buffer: Int, rows: Int) {
@@ -581,8 +571,8 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * Returns the edited record in this block
    * @return the edited record in this block
    */
-  val editedRecord: Int
-    get() = editor.item.record
+  val editedRecord: Int?
+    get() = editor.item?.record
 
   /**
    * Returns the field model for a given property ID.
@@ -679,10 +669,8 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       }
 
       override fun closeEditor() {
-        if (!doNotCancelEditor) {
-          itemToEdit = null
-          super.closeEditor()
-        }
+        itemToEdit = null
+        super.closeEditor()
       }
 
       override fun editItem(item: GridBlockItem) {
