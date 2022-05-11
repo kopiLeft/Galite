@@ -25,12 +25,13 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.visual.domain.TableInitializer
 import org.kopi.galite.visual.l10n.ListLocalizer
 
 abstract class VListColumn(
   var title: String,
   private val internalColumn: Column<*>?,
-  private val table: ColumnSet?,
+  private val table: TableInitializer?,
   private val align: Int,
   val width: Int,
   val isSortAscending: Boolean,
@@ -56,7 +57,7 @@ abstract class VListColumn(
    */
   abstract fun getDataType(): KClass<*>
 
-  val column: Column<*>? get() = internalColumn?.let { table?.resolveColumn(it) } ?: internalColumn
+  val column: Column<*>? get() = internalColumn?.let { table?.let { tableInit -> tableInit().resolveColumn(it) } } ?: internalColumn
 
   // ----------------------------------------------------------------------
   // LOCALIZATION

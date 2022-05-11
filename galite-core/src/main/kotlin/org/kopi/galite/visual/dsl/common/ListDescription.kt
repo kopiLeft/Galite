@@ -64,11 +64,11 @@ class ListDescription(val title: String,
 
   fun buildModel(): VListColumn {
     return when(type) {
-      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.table, domain.defaultAlignment, width, true)
-      is StringColumnType -> VStringColumn(title, column, domain.table, domain.defaultAlignment, width, true)
-      is BooleanColumnType -> VBooleanColumn(title, column, domain.table, true)
+      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.tableInitializer, domain.defaultAlignment, width, true)
+      is StringColumnType -> VStringColumn(title, column, domain.tableInitializer, domain.defaultAlignment, width, true)
+      is BooleanColumnType -> VBooleanColumn(title, column, domain.tableInitializer, true)
       is IDateColumnType, ->
-        VDateColumn(title, column, domain.table, true)
+        VDateColumn(title, column, domain.tableInitializer, true)
       else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
     }
   }

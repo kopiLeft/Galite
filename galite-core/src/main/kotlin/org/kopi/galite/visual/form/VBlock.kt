@@ -2795,7 +2795,7 @@ abstract class VBlock(var title: String,
    * @return the field or null if no field with that name has been found
    */
   fun getField(name: String?): VField? {
-    return fields.find { name == it.name }
+    return fields.find { name == it.name || name == it.label }
   }
 
   fun getFieldID(): VField? {
