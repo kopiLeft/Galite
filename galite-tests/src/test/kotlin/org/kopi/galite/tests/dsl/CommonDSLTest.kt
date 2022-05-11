@@ -25,7 +25,7 @@ import org.junit.Test
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FieldList
 import org.kopi.galite.visual.dsl.common.ListDescription

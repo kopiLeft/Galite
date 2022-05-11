@@ -22,7 +22,7 @@ import org.kopi.galite.visual.base.UComponent
 
 /**
  * `UActor` is the top level interface that all visual actor components
- * should implement. It is the visual component of [VActor]
+ * should implement. It is the visual component of [Actor]
  */
 interface UActor : UComponent {
 
@@ -30,11 +30,11 @@ interface UActor : UComponent {
    * Sets the actor model.
    * @param model The actor model.
    */
-  fun setModel(model: VActor)
+  fun setModel(model: Actor)
 
   /**
    * Returns the actor model.
    * @return The actor model.
    */
-  fun getModel(): VActor
+  fun getModel(): Actor
 }

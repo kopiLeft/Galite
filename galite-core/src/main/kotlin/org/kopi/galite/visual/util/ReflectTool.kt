@@ -22,7 +22,7 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block

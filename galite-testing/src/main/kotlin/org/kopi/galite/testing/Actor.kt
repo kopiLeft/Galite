@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.ui.vaadin.actor.VActorNavigationItem
 import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.Utils

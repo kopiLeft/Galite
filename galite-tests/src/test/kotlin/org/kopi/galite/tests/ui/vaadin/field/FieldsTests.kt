@@ -48,7 +48,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 
 import com.github.mvysny.kaributesting.v10._expectNone

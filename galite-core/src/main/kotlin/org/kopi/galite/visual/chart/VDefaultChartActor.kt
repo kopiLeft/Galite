@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VlibProperties
 
 class VDefaultChartActor(menuIdent: String,
@@ -26,7 +26,7 @@ class VDefaultChartActor(menuIdent: String,
                          iconName: String,
                          acceleratorKey: Int,
                          acceleratorModifier: Int)
-                : VActor(menuIdent,
+                 : Actor(menuIdent,
                          null,
                          actorIdent,
                          null,

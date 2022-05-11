@@ -74,7 +74,7 @@ import org.kopi.galite.visual.MessageCode;
 import org.kopi.galite.visual.MessageListener;
 import org.kopi.galite.visual.UIFactory;
 import org.kopi.galite.visual.UWindow;
-import org.kopi.galite.visual.VActor;
+import org.kopi.galite.visual.Actor;
 import org.kopi.galite.visual.VException;
 import org.kopi.galite.visual.VRuntimeException;
 import org.kopi.galite.visual.VWindow;
@@ -1009,7 +1009,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   /**
    * add a command in the menu bar
    */
-  private void addActorsToGUI(List<VActor> actorDefs) {
+  private void addActorsToGUI(List<Actor> actorDefs) {
     if (actorDefs != null) {
       for (int i = 0; i < actorDefs.size(); i++) {
 	DActor		actorView;
@@ -1024,7 +1024,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   }
 
   private void addButton(JPanel panel, DActor actorView) {
-    if (actorView.getModel().getIconName() != null) {
+    if (actorView.getModel().getIconName$galite_core() != null) {
       panel.add(actorView.getButton());
     }
   }

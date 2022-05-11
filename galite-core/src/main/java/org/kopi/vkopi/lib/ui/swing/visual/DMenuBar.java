@@ -43,21 +43,21 @@ public class DMenuBar extends JMenuBar {
     DMenuItem		item;
 
     //!!! NOT YET IMPLEMENTED IN SWING
-    if (actor.getModel().getMenuIdent().equals("Help")) {
+    if (actor.getModel().getMenuIdent$galite_core().equals("Help")) {
       if ((menu = getHelpMenu()) == null) {
-	menu = new JMenu(actor.getModel().getMenuName());
+	menu = new JMenu(actor.getModel().getMenuName$galite_core());
 	setHelpMenu(menu);
       }
     } else {
       /* lookup menu with name menuName, add it if necessary */
       for (int i = 0; menu == null && i < getMenuCount(); i++) {
-	if (getMenu(i).getText().equals(actor.getModel().getMenuName())) {
+	if (getMenu(i).getText().equals(actor.getModel().getMenuName$galite_core())) {
 	  menu = getMenu(i);
 	}
       }
 
       if (menu == null) {
-	menu = this.add(new JMenu(actor.getModel().getMenuName()));
+	menu = this.add(new JMenu(actor.getModel().getMenuName$galite_core()));
       }
     }
 

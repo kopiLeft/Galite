@@ -18,17 +18,17 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 
 abstract class VImportedBlock(form: VForm) : VBlock(form) {
 
-  override var actors: Array<VActor>? = null
+  override var actors: Array<Actor>? = null
 
   // ----------------------------------------------------------------------
   // ACTOR HANDLING
   // ----------------------------------------------------------------------
 
-  override fun getActor(i: Int): VActor {
+  override fun getActor(i: Int): Actor {
     return actors!![i]
   }
 }

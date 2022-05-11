@@ -28,13 +28,13 @@ import org.kopi.galite.visual.form.VDefaultFormActor
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VFullCalendarCommand
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
 
 abstract class VFullCalendarForm : VForm() {
-  private var actorsDef = mutableListOf<VActor>()
+  private var actorsDef = mutableListOf<Actor>()
   private var commandsDef = mutableListOf<VCommand>()
 
   companion object {

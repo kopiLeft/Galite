@@ -27,7 +27,7 @@ import org.kopi.galite.visual.preview.VPreviewWindow;
 import org.kopi.galite.visual.report.VReport;
 import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
 import org.kopi.galite.visual.UIFactory;
-import org.kopi.galite.visual.VActor;
+import org.kopi.galite.visual.Actor;
 import org.kopi.galite.visual.VHelpViewer;
 import org.kopi.galite.visual.VItemTree;
 import org.kopi.galite.visual.VMenuTree;
@@ -67,8 +67,8 @@ public class JUIFactory extends UIFactory {
       view = createHelpViewer((VHelpViewer) model);
     } else if (model instanceof VListDialog) {
       view = createListDialog((VListDialog) model);
-    } else if (model instanceof VActor) {
-      view = createActor((VActor) model);
+    } else if (model instanceof Actor) {
+      view = createActor((Actor) model);
     } else {
       throw new IllegalArgumentException("NO UI IMPLEMENTATION FOR " + model.getClass());
     }
@@ -158,7 +158,7 @@ public class JUIFactory extends UIFactory {
    * @param model The actor model
    * @return The  {@link DActor} view.
    */
-  protected DActor createActor(VActor model) {
+  protected DActor createActor(Actor model) {
     return new DActor(model);
   }
 }

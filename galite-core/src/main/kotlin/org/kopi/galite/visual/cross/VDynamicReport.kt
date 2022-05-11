@@ -65,7 +65,7 @@ import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VExecFailedException
 
 class VDynamicReport(block: VBlock) : VReport() {
@@ -76,7 +76,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   private val columns: Array<VReportColumn?>
   private val fields: Array<VField>
   private val block: VBlock
-  private lateinit var actorsDef: Array<VActor?>
+  private lateinit var actorsDef: Array<Actor?>
   private var number = 0
   private var idColumn = 0
 
@@ -470,7 +470,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     number++
   }
 
-  override fun addActors(actorDefs: Array<VActor>?) {
+  override fun addActors(actorDefs: Array<Actor>?) {
     val actorDefs = actorDefs.orEmpty()
 
     actors.addAll(actorDefs)

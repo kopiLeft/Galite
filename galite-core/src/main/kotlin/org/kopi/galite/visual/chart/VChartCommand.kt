@@ -21,11 +21,11 @@ package org.kopi.galite.visual.chart
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VHelpGenerator
 
-class VChartCommand(private val chart: VChart, actor: VActor)
+class VChartCommand(private val chart: VChart, actor: Actor)
   : VCommand(0xFFFF, null, actor, actor.number, actor.ident), ActionHandler {
 
   override fun setEnabled(enabled: Boolean) {

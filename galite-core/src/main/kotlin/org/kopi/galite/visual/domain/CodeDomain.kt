@@ -96,7 +96,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
    */
   override fun buildDimensionModel(dimension: ChartDimension<*>, format: VColumnFormat?): VDimension {
     return with(dimension) {
-      val source = dimension.source!!
+      val source = dimension.sourceFile
 
       when (kClass) {
         Boolean::class -> VBooleanCodeDimension(ident,
@@ -125,7 +125,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                               codes.map { it.value as? String }.toTypedArray())
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }.also {
-        it.initLabels(codes.map { it.label }.toTypedArray())
+        it.initLabels(codes.map { code -> code.label }.toTypedArray())
       }
     }
   }
@@ -139,18 +139,18 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         BigDecimal::class -> VDecimalCodeMeasure(ident,
                                                  color,
                                                  this@CodeDomain.ident.ifEmpty { ident },
-                                                 measure.source,
+                                                 measure.sourceFile,
                                                  codes.map { it.ident }.toTypedArray(),
                                                  codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeMeasure(ident,
                                                        color,
                                                        this@CodeDomain.ident.ifEmpty { ident },
-                                                       measure.source,
+                                                       measure.sourceFile,
                                                        codes.map { it.ident }.toTypedArray(),
                                                        codes.map { it.value as? Int }.toTypedArray())
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }.also {
-        it.initLabels(codes.map { it.label }.toTypedArray())
+        it.initLabels(codes.map { code -> code.label }.toTypedArray())
       }
     }
   }
@@ -168,7 +168,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         Boolean::class -> VBooleanCodeColumn(
           ident,
           this@CodeDomain.ident.ifEmpty { ident },
-          field.source,
+          field.sourceFile,
           options,
           align.value,
           groupID,
@@ -181,7 +181,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         BigDecimal::class -> VDecimalCodeColumn(
           ident,
           this@CodeDomain.ident.ifEmpty { ident },
-          field.source,
+          field.sourceFile,
           options,
           align.value,
           groupID,
@@ -194,7 +194,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         Int::class, Long::class -> VIntegerCodeColumn(
           ident,
           this@CodeDomain.ident.ifEmpty { ident },
-          field.source!!,
+          field.sourceFile,
           options,
           align.value,
           groupID,
@@ -207,7 +207,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         String::class -> VStringCodeColumn(
           ident,
           this@CodeDomain.ident.ifEmpty { ident },
-          field.source,
+          field.sourceFile,
           options,
           align.value,
           groupID,
@@ -219,7 +219,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }.also {
-        it.initLabels(codes.map { it.label }.toTypedArray())
+        it.initLabels(codes.map { code -> code.label }.toTypedArray())
       }
     }
   }

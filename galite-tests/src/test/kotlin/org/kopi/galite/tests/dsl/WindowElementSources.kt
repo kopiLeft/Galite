@@ -22,8 +22,8 @@ import kotlin.test.assertEquals
 
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.dsl.common.Actor
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Actor
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form

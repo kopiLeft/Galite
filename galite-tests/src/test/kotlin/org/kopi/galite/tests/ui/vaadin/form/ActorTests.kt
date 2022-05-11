@@ -26,8 +26,8 @@ import org.kopi.galite.testing.getNavigationItem
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Actor
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Actor
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form

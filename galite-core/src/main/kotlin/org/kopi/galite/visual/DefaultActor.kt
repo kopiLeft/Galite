@@ -18,7 +18,6 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 

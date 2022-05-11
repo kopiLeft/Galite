@@ -22,14 +22,14 @@ import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VHelpGenerator
 import org.kopi.galite.visual.VWindow
 
 class VFullCalendarCommand(
   val form: VFullCalendarForm,
-  actor: VActor,
+  actor: Actor,
   mode: Int
 ) : VCommand(mode, null, actor, actor.number, actor.ident), ActionHandler {
 

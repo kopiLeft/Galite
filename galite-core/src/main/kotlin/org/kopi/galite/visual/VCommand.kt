@@ -20,7 +20,7 @@ package org.kopi.galite.visual
 
 open class VCommand(mode: Int,
                     protected var handler: ActionHandler?,
-                    var actor: VActor?,
+                    var actor: Actor?,
                     internal val trigger: Int,
                     val actorIdent: String,
                     internal val action: () -> Unit = {}) {

@@ -19,9 +19,9 @@ package org.kopi.galite.demo.common
 
 import java.util.Locale
 
-import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.Actor
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.Command
-import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key

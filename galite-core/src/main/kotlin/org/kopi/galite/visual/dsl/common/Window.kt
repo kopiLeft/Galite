@@ -22,6 +22,7 @@ import java.io.File
 import java.util.Locale
 
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.DefaultActor
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VWindow

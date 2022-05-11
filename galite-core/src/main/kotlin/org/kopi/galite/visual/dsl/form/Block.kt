@@ -21,11 +21,11 @@ import java.awt.Point
 import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.common.Action
-import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter

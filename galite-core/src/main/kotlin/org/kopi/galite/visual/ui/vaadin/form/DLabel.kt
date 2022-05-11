@@ -25,7 +25,7 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.label.SortableLabel
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
@@ -205,7 +205,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
      * @param actor The actor model.
      * @return The actor description.
      */
-    private fun getDescription(actor: VActor?): String? {
+    private fun getDescription(actor: Actor?): String? {
       return if (actor!!.acceleratorKey > 0) {
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"

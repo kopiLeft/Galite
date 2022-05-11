@@ -24,7 +24,7 @@ import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block

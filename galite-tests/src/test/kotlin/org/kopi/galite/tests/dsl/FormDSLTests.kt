@@ -30,7 +30,7 @@ import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
@@ -239,8 +239,8 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(form.resetForm.ident, formModel.commands[0].actorIdent)
     assertEquals(form.resetForm.ident, formModel.commands[0].actor!!.ident)
-    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!.menuIdent)
-    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!.iconName)
+    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!._menuIdent)
+    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!._iconName)
     assertEquals(form.resetForm.help, formModel.commands[0].actor!!.help)
   }
 
@@ -251,22 +251,22 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(3, formModel.actors.size)
 
-    assertEquals("File", formModel.actors[0].menuName)
+    assertEquals("File", formModel.actors[0]._menuName)
     assertEquals("GotoShortcuts", formModel.actors[0].ident)
-    assertEquals(null, formModel.actors[0].iconName)
+    assertEquals(null, formModel.actors[0]._iconName)
     assertEquals("Go to shortcut list", formModel.actors[0].help)
-    assertEquals(KeyEvent.VK_F12, formModel.actors[0].acceleratorKey)
+    assertEquals(KeyEvent.VK_F12, formModel.actors[0]._acceleratorKey)
 
-    assertEquals(form.edit.label, formModel.actors[1].menuName)
+    assertEquals(form.edit.label, formModel.actors[1]._menuName)
     assertEquals(form.autoFill.ident, formModel.actors[1].ident)
-    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1].iconName)
+    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1]._iconName)
     assertEquals(form.autoFill.help, formModel.actors[1].help)
 
-    assertEquals(form.reset.label, formModel.actors[2].menuName)
+    assertEquals(form.reset.label, formModel.actors[2]._menuName)
     assertEquals(form.resetForm.ident, formModel.actors[2].ident)
-    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2].iconName)
+    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2]._iconName)
     assertEquals(form.resetForm.help, formModel.actors[2].help)
-    assertEquals(form.resetForm.key!!.value, formModel.actors[2].acceleratorKey)
+    assertEquals(form.resetForm.key!!.value, formModel.actors[2]._acceleratorKey)
   }
 
   @Test
@@ -280,8 +280,8 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(form.autoFill.ident, fileModel.command!![0].actorIdent)
     assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.ident)
-    assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
-    assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!.iconName)
+    assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!._menuIdent)
+    assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!._iconName)
     assertEquals(form.autoFill.help, fileModel.command!![0].actor!!.help)
   }
 

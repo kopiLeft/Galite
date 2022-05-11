@@ -31,7 +31,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
@@ -216,7 +216,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
         FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
           override fun accept(pathname: File?): Boolean {
             return (pathname!!.isDirectory
-                    || pathname.name.toLowerCase().endsWith(".pdf"))
+                    || pathname.name.lowercase().endsWith(".pdf"))
           }
 
           override val description: String

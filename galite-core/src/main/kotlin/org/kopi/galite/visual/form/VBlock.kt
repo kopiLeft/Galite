@@ -61,7 +61,7 @@ import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VDatabaseUtils
@@ -109,8 +109,8 @@ abstract class VBlock(var title: String,
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
   internal var commands = mutableListOf<VCommand>() // commands
   internal var fieldID: VField? = null // commands
-  open var actors: Array<VActor>? = null // actors to send to form (move to block import)
-    get(): Array<VActor>? {
+  open var actors: Array<Actor>? = null // actors to send to form (move to block import)
+    get(): Array<Actor>? {
       val temp = field
       field = null
       return temp
@@ -2770,7 +2770,7 @@ abstract class VBlock(var title: String,
   /**
    *
    */
-  open fun getActor(i: Int): VActor = form.getActor(i)
+  open fun getActor(i: Int): Actor = form.getActor(i)
 
   /**
    * Returns true if this block can display more than one record.

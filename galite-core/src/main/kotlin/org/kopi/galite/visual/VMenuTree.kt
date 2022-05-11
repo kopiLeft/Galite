@@ -131,7 +131,7 @@ class VMenuTree constructor(ctxt: Connection?,
   // --------------------------------------------------------------------
   var root: TreeNode? = null
     private set
-  private val treeActors: Array<VActor?> = arrayOfNulls(9)
+  private val treeActors: Array<Actor?> = arrayOfNulls(9)
   lateinit var moduleArray: Array<Module> // Sets the accessibility of the module
     private set
   private val items = mutableListOf<Module>()
@@ -165,7 +165,7 @@ class VMenuTree constructor(ctxt: Connection?,
    *
    * @param     actors  the actors to localize
    */
-  override fun localizeActors(vararg actors: VActor) {
+  override fun localizeActors(vararg actors: Actor) {
     try {
       super.localizeActors(*actors) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
@@ -190,7 +190,7 @@ class VMenuTree constructor(ctxt: Connection?,
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(at: Int): VActor = treeActors[at]!!
+  override fun getActor(at: Int): Actor = treeActors[at]!!
 
   /**
    * Returns the ID of the current user
@@ -206,13 +206,13 @@ class VMenuTree constructor(ctxt: Connection?,
                           icon: String?,
                           key: Int,
                           modifier: Int) {
-    treeActors[number] = VActor(menu,
-                                MENU_LOCALIZATION_RESOURCE,
-                                item,
-                                MENU_LOCALIZATION_RESOURCE,
-                                icon,
-                                key,
-                                modifier)
+    treeActors[number] = Actor(menu,
+                               MENU_LOCALIZATION_RESOURCE,
+                               item,
+                               MENU_LOCALIZATION_RESOURCE,
+                               icon,
+                               key,
+                               modifier)
     treeActors[number]!!.number = number
   }
 

@@ -68,7 +68,7 @@ class VItemTree(rootName: String?,
   var root: TreeNode? = null
     private set
   private var rootItem: RootItem? = null
-  private val treeActors: Array<VActor?> = arrayOfNulls(10)
+  private val treeActors: Array<Actor?> = arrayOfNulls(10)
   private var maxId = 0
   private val rootName: String = rootName ?: "Items"
 
@@ -140,7 +140,7 @@ class VItemTree(rootName: String?,
    *
    * @param     actors  the actors to localize
    */
-  override fun localizeActors(vararg actors: VActor) {
+  override fun localizeActors(vararg actors: Actor) {
     try {
       super.localizeActors(*actors) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
@@ -165,7 +165,7 @@ class VItemTree(rootName: String?,
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(at: Int): VActor = treeActors[at]!!
+  override fun getActor(at: Int): Actor = treeActors[at]!!
 
   /**
    * Creates a new actor
@@ -176,13 +176,13 @@ class VItemTree(rootName: String?,
                           icon: String,
                           key: Int,
                           modifier: Int) {
-    treeActors[number] = VActor(menu,
-                                MENU_LOCALIZATION_RESOURCE,
-                                item,
-                                MENU_LOCALIZATION_RESOURCE,
-                                icon,
-                                key,
-                                modifier)
+    treeActors[number] = Actor(menu,
+                               MENU_LOCALIZATION_RESOURCE,
+                               item,
+                               MENU_LOCALIZATION_RESOURCE,
+                               icon,
+                               key,
+                               modifier)
     treeActors[number]!!.number = number
   }
 

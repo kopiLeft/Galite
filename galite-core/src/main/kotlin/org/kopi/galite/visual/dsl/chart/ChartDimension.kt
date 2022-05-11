@@ -32,7 +32,7 @@ import org.kopi.galite.visual.dsl.common.Trigger
  */
 open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
                                               private val chart: Chart,
-                                              override val source: String? = null) : ChartField<T>(domain) {
+                                              source: String? = null) : ChartField<T>(domain, source = source) {
 
   /**
    * Dimension values

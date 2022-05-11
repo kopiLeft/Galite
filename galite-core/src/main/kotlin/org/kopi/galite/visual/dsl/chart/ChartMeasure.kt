@@ -30,7 +30,7 @@ import org.kopi.galite.visual.VColor
  *
  * @param domain dimension domain.
  */
-open class ChartMeasure<T>(domain: Domain<T>, override val source: String = "") : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
+open class ChartMeasure<T>(domain: Domain<T>, source: String? = null) : ChartField<T>(domain, source = source) where T : Comparable<T>?, T : Number? {
 
   /** Measure's color in chart */
   lateinit var color: Color

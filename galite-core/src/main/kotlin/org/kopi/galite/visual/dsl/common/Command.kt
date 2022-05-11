@@ -19,6 +19,7 @@ package org.kopi.galite.visual.dsl.common
 
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VCommand
 
 /**
