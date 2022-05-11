@@ -23,7 +23,7 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Actor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VHelpGenerator
 import org.kopi.galite.visual.VWindow
 
@@ -31,7 +31,7 @@ class VFullCalendarCommand(
   val form: VFullCalendarForm,
   actor: Actor,
   mode: Int
-) : VCommand(mode, null, actor, actor.number, actor.ident), ActionHandler {
+) : Command(mode, null, actor, actor.number, actor.ident), ActionHandler {
 
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {

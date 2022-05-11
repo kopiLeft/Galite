@@ -39,7 +39,7 @@ import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.TestFieldsVisibilityForm
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week

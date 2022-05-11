@@ -36,7 +36,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.Actor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VHelpViewer
@@ -71,10 +71,10 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
   // ---------------------------------------------------------------------
   // PREDEFINED COMMANDS
   // ---------------------------------------------------------------------
-  val cmdAutofill:    VCommand = VFieldCommand(this, CMD_AUTOFILL)
-  val cmdEditItem_S:  VCommand = VFieldCommand(this, CMD_EDITITEM_S)
-  val cmdEditItem:    VCommand = VFieldCommand(this, CMD_EDITITEM)
-  val cmdNewItem:     VCommand = VFieldCommand(this, CMD_NEWITEM)
+  val cmdAutofill:    Command = VFieldCommand(this, CMD_AUTOFILL)
+  val cmdEditItem_S:  Command = VFieldCommand(this, CMD_EDITITEM_S)
+  val cmdEditItem:    Command = VFieldCommand(this, CMD_EDITITEM)
+  val cmdNewItem:     Command = VFieldCommand(this, CMD_NEWITEM)
 
   companion object {
     const val CMD_NEWITEM = -2

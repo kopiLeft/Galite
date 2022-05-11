@@ -19,7 +19,7 @@ package org.kopi.galite.visual.form
 
 import java.awt.Event
 
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VlibProperties
 
 /**
@@ -35,7 +35,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
    * prints a compilation unit
    */
   override fun helpOnForm(name: String,
-                          commands: MutableList<VCommand>?,
+                          commands: MutableList<Command>?,
                           blocks: List<VBlock>?,
                           title: String,
                           help: String?,
@@ -69,7 +69,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   override fun helpOnBlock(formCode: String,
                            title: String,
                            help: String?,
-                           commands: MutableList<VCommand>?,
+                           commands: MutableList<Command>?,
                            fields: List<VField>,
                            alone: Boolean) {
     latexPrinter.println("\\subsection{$title}")
@@ -98,7 +98,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
       var all = 0
       sortCommands(commands)
       for (i in commands.indices) {
-        val command: VCommand = commands[i]
+        val command = commands[i]
         if (command.isActive(VConstants.MOD_QUERY) &&
                 command.isActive(VConstants.MOD_UPDATE) &&
                 command.isActive(VConstants.MOD_INSERT)) {
@@ -113,7 +113,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\item{Funktionen}")
         latexPrinter.uncheckedPrintln("\\begin{description}")
         for (i in commands.indices) {
-          val command: VCommand = commands[i]
+          val command = commands[i]
           if (command.isActive(VConstants.MOD_QUERY) &&
                   command.isActive(VConstants.MOD_UPDATE) &&
                   command.isActive(VConstants.MOD_INSERT)) {
@@ -126,7 +126,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\item{Funktionen - Suchmodus}")
         latexPrinter.uncheckedPrintln("\\begin{description}")
         for (i in commands.indices) {
-          val command: VCommand = commands[i]
+          val command = commands[i]
           if (command.isActive(VConstants.MOD_QUERY) &&
                   !(command.isActive(VConstants.MOD_QUERY) &&
                           command.isActive(VConstants.MOD_UPDATE) &&
@@ -140,7 +140,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\item{Funktionen - \u00C4nderungsmodus}")
         latexPrinter.uncheckedPrintln("\\begin{description}")
         for (i in commands.indices) {
-          val command: VCommand = commands[i]
+          val command = commands[i]
           if (command.isActive(VConstants.MOD_UPDATE) &&
                   !(command.isActive(VConstants.MOD_QUERY) &&
                           command.isActive(VConstants.MOD_UPDATE) &&
@@ -154,7 +154,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\item{Funktionen - Einf\u00FCgemodus}")
         latexPrinter.uncheckedPrintln("\\begin{description}")
         for (i in commands.indices) {
-          val command: VCommand = commands[i]
+          val command = commands[i]
           if (command.isActive(VConstants.MOD_INSERT) &&
                   !(command.isActive(VConstants.MOD_QUERY) &&
                           command.isActive(VConstants.MOD_UPDATE) &&
@@ -232,7 +232,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * printlns a compilation unit
    */
-  override fun helpOnFieldCommand(commands: Array<VCommand>?) {
+  override fun helpOnFieldCommand(commands: Array<Command>?) {
     if (commands != null && commands.isNotEmpty()) {
       sortCommands(commands)
       latexPrinter.println()
@@ -269,10 +269,10 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   // ----------------------------------------------------------------------
   // PRIVATE UTILITIES
   // ----------------------------------------------------------------------
-  private fun sortCommands(cmds: Array<VCommand>) { // TODO!!!: remove this
+  private fun sortCommands(cmds: Array<Command>) { // TODO!!!: remove this
     sortCommands(cmds.toMutableList())
   }
-  private fun sortCommands(cmds: MutableList<VCommand>) {
+  private fun sortCommands(cmds: MutableList<Command>) {
     var i = cmds.size
     while (--i >= 0) {
       for (j in 0 until i) {
@@ -283,7 +283,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
           swap = true
         }
         if (swap) {
-          val tmp: VCommand = cmds[j]
+          val tmp = cmds[j]
           cmds[j] = cmds[j + 1]
           cmds[j + 1] = tmp
         }

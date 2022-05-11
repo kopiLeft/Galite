@@ -26,7 +26,7 @@ import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.Icon
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key

@@ -15,40 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.common
+package org.kopi.galite.visual
 
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.Actor
-import org.kopi.galite.visual.VCommand
 
 /**
- * This class represent a command, ie a link between an actor and
- * an action
- *
- * @param item                 the item
+ * The command access mode.
  */
-class Command(val item: Actor, modes: Array<out Mode>, handler: ActionHandler, action: () -> Unit)
-  : VCommand(VConstants.MOD_ANY,
-             handler,
-             item,
-             -1,
-             item.ident,
-             action) {
-
-  init {
-    if (modes.isNotEmpty()) {
-      setModes(*modes)
-    }
-  }
+enum class Mode(val value: Int) {
+  /**
+   * Mode query
+   */
+  QUERY(VConstants.MOD_QUERY),
 
   /**
-   * Changes the access mode of the command
-   **/
-  fun setModes(vararg access: Mode) {
-    mode = 0
-    for (item in access) {
-      mode = mode or (1 shl item.value)
-    }
-  }
+   * Mode insert
+   */
+  INSERT(VConstants.MOD_INSERT),
+
+  /**
+   * Mode update
+   */
+  UPDATE(VConstants.MOD_UPDATE),
+  
+  ANY(VConstants.MOD_ANY)
 }

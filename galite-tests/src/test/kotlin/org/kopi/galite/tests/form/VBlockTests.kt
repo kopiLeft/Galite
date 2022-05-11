@@ -41,7 +41,7 @@ import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.database.Users
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException

@@ -32,7 +32,7 @@ import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
 import org.kopi.galite.visual.Icon
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Border

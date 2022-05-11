@@ -26,7 +26,7 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
@@ -53,7 +53,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   private var hasEditItem = false // VE
 
   //private	boolean			hasEditItem_S;	// IT !!!!
-  private val commands: Array<VCommand>? // commands
+  private val commands: Array<Command>? // commands
   lateinit var displays: Array<UField?> // the object displayed on screen
     private set
   val isDisplayInitialized get() = ::displays.isInitialized
@@ -68,10 +68,10 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   private var chartPos = 0
 
   // dynamic data
-  private val activeCommands = arrayListOf<VCommand>() // commands currently actives
-  private var incrementCommand: VCommand? = null
-  private var decrementCommand: VCommand? = null
-  private var autofillCommand: VCommand? = null
+  private val activeCommands = arrayListOf<Command>() // commands currently actives
+  private var incrementCommand: Command? = null
+  private var decrementCommand: Command? = null
+  private var autofillCommand: Command? = null
 
   init {
     model.addFieldListener(fieldHandler)
@@ -226,18 +226,18 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
         // for boolean fields, the auto fill command is not included for boolean field
         // when row controller does not allow it.
         if (model !is VBooleanField || includeBooleanAutofillCommand()) {
-          val command: VCommand = model.getForm().cmdAutofill
+          val command: Command = model.getForm().cmdAutofill
           activeCommands.add(command)
           command.setEnabled(true)
         }
       }
       if (hasNewItem) {
-        val command: VCommand = model.getForm().cmdNewItem
+        val command: Command = model.getForm().cmdNewItem
         activeCommands.add(command)
         command.setEnabled(true)
       }
       if (hasEditItem) {
-        val command: VCommand = model.getForm().cmdEditItem
+        val command: Command = model.getForm().cmdEditItem
         activeCommands.add(command)
         command.setEnabled(true)
       }
@@ -271,8 +271,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     }
   }
 
-  fun getAllCommands(): Array<VCommand> {
-    val cmds = mutableListOf<VCommand>()
+  fun getAllCommands(): Array<Command> {
+    val cmds = mutableListOf<Command>()
     var i = 0
     while (commands != null && i < commands.size) {
       cmds.add(commands[i])
@@ -399,12 +399,12 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   /**
    * @return the associated incrementCommand
    */
-  fun getIncrementCommand(): VCommand? = incrementCommand
+  fun getIncrementCommand(): Command? = incrementCommand
 
   /**
    * @return the associated decrementCommand
    */
-  fun getDecrementCommand(): VCommand? = decrementCommand
+  fun getDecrementCommand(): Command? = decrementCommand
 
   /**
    * Returns true if the UI controller should include the auto fill

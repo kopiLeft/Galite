@@ -24,7 +24,7 @@ import kotlin.test.assertTrue
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 

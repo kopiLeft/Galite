@@ -170,13 +170,13 @@ class VReportTests: JApplicationTestBase() {
   @Test
   fun reportVActorTest() {
     withReport(SimpleReport()) {
-      val f12 = Actor("File",
-                      "org/kopi/galite/visual/Window",
-                      "Shortcuts",
-                      "org/kopi/galite/visual/Window",
-                      null,
-                      KeyEvent.VK_F12,
-                      0)
+      val f12 = Actor._Actor("File",
+                             "org/kopi/galite/visual/Window",
+                             "Shortcuts",
+                             "org/kopi/galite/visual/Window",
+                             null,
+                             KeyEvent.VK_F12,
+                             0)
 
       // Actor checks
       assertEquals(f12, model.actors[0])

@@ -26,16 +26,16 @@ import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.Actor
-import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FieldList
 import org.kopi.galite.visual.dsl.common.ListDescription
 import org.kopi.galite.visual.dsl.common.Menu
-import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_ANY
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.Command
+import org.kopi.galite.visual.Mode
 
 class CommonDSLTests : VApplicationTestBase() {
 

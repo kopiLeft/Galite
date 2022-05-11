@@ -26,7 +26,7 @@ import java.io.PrintWriter
 import java.io.Serializable
 
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VHelpGenerator
 import org.kopi.galite.visual.VlibProperties
 
@@ -39,7 +39,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
    * prints a compilation unit
    */
   open fun helpOnForm(name: String,
-                      commands: MutableList<VCommand>?,
+                      commands: MutableList<Command>?,
                       blocks: List<VBlock>?,
                       title: String,
                       help: String?,
@@ -108,7 +108,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
   open fun helpOnBlock(formCode: String,
                        title: String,
                        help: String?,
-                       commands: MutableList<VCommand>?,
+                       commands: MutableList<Command>?,
                        fields: List<VField>,
                        alone: Boolean) {
     if (!alone) {
@@ -197,7 +197,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
     printer.println("</OL>")
   }
 
-  open fun helpOnFieldCommand(commands: Array<VCommand>?) {
+  open fun helpOnFieldCommand(commands: Array<Command>?) {
     commands?.let { helpOnCommands(it) }
   }
 }

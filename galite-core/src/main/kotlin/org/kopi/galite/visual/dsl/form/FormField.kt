@@ -28,10 +28,8 @@ import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.Actor
-import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.form.VCodeField
@@ -41,6 +39,8 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VIntegerField
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Type0
+import org.kopi.galite.visual.Command
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
 

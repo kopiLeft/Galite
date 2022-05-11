@@ -23,12 +23,12 @@ import java.io.Serializable
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VHelpGenerator
 
 class VFieldCommand(private val form: VForm,
                     type: Int)
-  : VCommand(0xFFFF,
+  : Command(0xFFFF,
              null,
              null,
              type,

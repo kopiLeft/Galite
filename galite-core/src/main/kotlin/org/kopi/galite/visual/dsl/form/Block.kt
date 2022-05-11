@@ -26,10 +26,8 @@ import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.common.Action
-import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.dsl.common.LocalizableElement
@@ -40,6 +38,8 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.Command
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
 
@@ -375,7 +375,7 @@ open class Block(val title: String,
    * @param command   the command.
    */
   fun command(window: Window, command: Command)  {
-    window.actors.add(command.item)
+    window.actors.add(command.item!!)
     command(item = command.item, action = command.action)
   }
 

@@ -30,7 +30,7 @@ import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
 import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 
 /**
  * This class represents the definition of a report field.
@@ -65,7 +65,7 @@ class ReportField<T>(override val domain: Domain<T>,
   var align: FieldAlignment = FieldAlignment.DEFAULT
 
   /** the commands accessible in this field */
-  lateinit var commands: Array<VCommand>
+  lateinit var commands: Array<Command>
 
   /** the triggers executed by this field */
   internal val triggers = mutableListOf<Trigger>()

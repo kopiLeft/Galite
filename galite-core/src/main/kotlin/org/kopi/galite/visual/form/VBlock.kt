@@ -63,7 +63,7 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VDatabaseUtils
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
@@ -107,7 +107,7 @@ abstract class VBlock(var title: String,
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // access flags for each mode
   internal var indices = mutableListOf<String>() // error messages for violated indices
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
-  internal var commands = mutableListOf<VCommand>() // commands
+  internal var commands = mutableListOf<Command>() // commands
   internal var fieldID: VField? = null // commands
   open var actors: Array<Actor>? = null // actors to send to form (move to block import)
     get(): Array<Actor>? {
@@ -181,7 +181,7 @@ abstract class VBlock(var title: String,
       return count
     }
 
-  val activeCommands = mutableListOf<VCommand>() // commands currently active
+  val activeCommands = mutableListOf<Command>() // commands currently active
 
   private var _currentRecord = 0
   var currentRecord

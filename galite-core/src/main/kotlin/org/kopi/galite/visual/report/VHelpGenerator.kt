@@ -26,7 +26,7 @@ import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VHelpGenerator
 
 /**
@@ -40,7 +40,7 @@ class VHelpGenerator : VHelpGenerator() {
    * prints a compilation unit
    */
   fun helpOnReport(name: String,
-                   commands: List<VCommand>,
+                   commands: List<Command>,
                    model: MReport,
                    help: String?): String? {
     return try {
