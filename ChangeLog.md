@@ -1,3 +1,4 @@
+# 1.3.0
 ## What's Changed
 * DSL/Model: code clean and refactoring by @hfazai in [#581](https://github.com/kopiLeft/Galite/pull/581)
 * Adding PivotTable UI implementation by @hfazai in [#583](https://github.com/kopiLeft/Galite/pull/583)

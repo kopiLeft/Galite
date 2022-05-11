@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-  implementation("org.kopi", "galite-core", "1.2.0")
+  implementation("org.kopi", "galite-core", "1.3.0")
 }
 ````
 
