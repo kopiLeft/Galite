@@ -1,3 +1,21 @@
+## What's Changed
+* DSL/Model: code clean and refactoring by @hfazai in [#581](https://github.com/kopiLeft/Galite/pull/581)
+* Adding PivotTable UI implementation by @hfazai in [#583](https://github.com/kopiLeft/Galite/pull/583)
+* Block: remove duplicated maxRowPos, maxColumnPos, displayedFields by @hfazai
+* Remove VDefaultActor in favor to DefaultActor by @hfazai
+* Change mustfill form field generic type, it shouldn't be nullable by @hfazai
+* Adding Block.clear() API by @hfazai
+* Externalize galite-data and galite-util modules by @hfazai
+* Nullable columns could be assigned to mustfill form fields by @hfazai
+* Report: Create a number of fields with one API by @hfazai
+* Implement DGridEditorImageField.createConverter() by @hfazai
+* Vaadin22 workaround: allow navigation to password field when clicking on TAB by @hfazai
+* VaadinUI: Droppable blocks should allow to upload files by @hfazai
+* DSL: Adding FormField.isID API by @hfazai
+* Field list table should be lazily evaluated by @hfazai
+
+**Full Changelog**: [1.2.0 ... 1.3.0](https://github.com/kopiLeft/Galite/compare/1.2.0...1.3.0)
+
 # 1.2.0
 ## What's Changed
 * DSL/DB: Adding WeekColumnType and MonthColumnType by @hfazai in [#575](https://github.com/kopiLeft/Galite/pull/575)
