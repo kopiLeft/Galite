@@ -95,10 +95,6 @@ class DBooleanField(
 
 
   override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<org.kopi.galite.visual.ui.vaadin.field.AbstractField<Boolean?>, Boolean?>) {
-    // ensures to get model focus to validate the field
-    if (!getModel().hasFocus()) {
-      getModel().block!!.activeField = getModel()
-    }
     val text = getModel().toText(event.value)
 
     if (getModel().checkText(text!!)) {
