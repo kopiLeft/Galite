@@ -21,7 +21,7 @@ import org.kopi.galite.gradle.excludeWebJars
 plugins {
   kotlin("jvm") apply true
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "22.0.13"
+  id("com.vaadin") version "22.0.14"
   id("org.gretty") version "3.0.6"
   war
 }
