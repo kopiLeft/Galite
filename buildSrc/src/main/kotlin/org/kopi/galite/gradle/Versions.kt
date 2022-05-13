@@ -29,7 +29,7 @@ object Versions {
   const val JDOM = "2.0.5"
   const val APACHE_POI = "4.1.2"
 
-  const val VAADIN = "23.0.7"
+  const val VAADIN = "23.0.9"
 
   const val SLF4J = "1.7.30"
 
