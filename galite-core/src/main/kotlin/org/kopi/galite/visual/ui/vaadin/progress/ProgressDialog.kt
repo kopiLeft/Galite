@@ -18,8 +18,8 @@
 package org.kopi.galite.visual.ui.vaadin.progress
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 
+import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
@@ -31,7 +31,7 @@ import com.vaadin.flow.component.html.Paragraph
  * @param title       The progress dialog title.
  * @param message     The progress dialog message.
  */
-open class ProgressDialog(title: String = "", message: String = "") : Dialog(), HasStyle {
+open class ProgressDialog(title: String = "", message: String = "") : EnhancedDialog(), HasStyle {
 
   /**
    * The polling interval to fetch current job value.

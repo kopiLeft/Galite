@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.main
 
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
+import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
@@ -36,7 +36,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
   CssImport("./styles/galite/windows.css", themeFor = "vcf-enhanced-dialog-overlay"),
   CssImport("./styles/galite/windows.css")
 ])
-class VWindowsMenu : Dialog(), HasStyle {
+class VWindowsMenu : EnhancedDialog(), HasStyle {
 
   private val items = VerticalLayout()
   private val windowsItemsMap = mutableMapOf<Component, VWindowsMenuItem>()

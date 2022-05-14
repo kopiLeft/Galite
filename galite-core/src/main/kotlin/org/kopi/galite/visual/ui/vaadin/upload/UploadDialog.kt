@@ -20,9 +20,9 @@ package org.kopi.galite.visual.ui.vaadin.upload
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 import org.kopi.galite.visual.ui.vaadin.common.VSpan
 
+import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.NativeButton
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -33,7 +33,7 @@ import com.vaadin.flow.component.upload.Upload
 /**
  * A dialog showing an upload component.
  */
-class UploadDialog(val receiver: Receiver) : Dialog(), HasStyle {
+class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
 
   private val title = VSpan()
   private val ok = VInputButton()

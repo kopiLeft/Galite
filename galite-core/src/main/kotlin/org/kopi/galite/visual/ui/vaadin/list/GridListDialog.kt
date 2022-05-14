@@ -20,9 +20,9 @@ package org.kopi.galite.visual.ui.vaadin.list
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 import org.kopi.galite.visual.ApplicationContext
 
+import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.KeyNotifier
@@ -38,7 +38,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
   CssImport("./styles/galite/list.css" , themeFor = "vaadin-grid"),
   CssImport("./styles/galite/list.css" , themeFor = "vcf-enhanced-dialog-overlay")
 ])
-open class GridListDialog : Dialog(), HasEnabled, KeyNotifier, HasStyle {
+open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
 
   protected var newForm: VInputButton? = null
   protected val close = Button(LocalizedProperties.getString(locale, "CLOSE"))

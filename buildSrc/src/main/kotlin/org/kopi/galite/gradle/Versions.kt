@@ -34,7 +34,7 @@ object Versions {
   const val SLF4J = "1.7.30"
 
   const val KARIBU_TESTING = "1.3.3"
-  const val ENHANCED_DIALOG = "21.0.0"
+  const val ENHANCED_DIALOG = "23.0.0"
   const val APEX_CHARTS = "2.0.0.beta10"
   const val IRON_ICONS = "2.0.1"
   const val JAVAX_SERVLET_API = "4.0.1"
