@@ -52,6 +52,33 @@ class WarningNotification(title: String?,
     buttons.add(close)
   }
 
+  override fun getDefaultButton(): Button = close
+
+  override fun setNavigationListeners() {
+    // SHORTCUTS:
+    // For locale = EN : C -> Close
+    // For locale = FR : F -> Fermer
+    element.executeJs(
+      """
+        window.___keyPress = function(event) {
+          if (event.key == '${close.text[0].lowercase()}') {
+            $0.${"$"}server.onNavigation($CLICK_CLOSE);
+          }
+        }
+
+        window.addEventListener('keypress', ___keyPress);""",
+      element
+    )
+
+    // Cleanup listeners on detach
+    addDetachListener {
+      element.executeJs(
+        """
+          window.removeEventListener('keypress', ___keyPress);
+          """)
+    }
+  }
+
   override val iconName: VaadinIcon
     get() = VaadinIcon.EXCLAMATION_CIRCLE
 }

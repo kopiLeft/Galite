@@ -21,10 +21,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 
+import com.vaadin.flow.component.ClientCallable
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 
@@ -46,14 +44,6 @@ class ErrorNotification(title: String?,
   //--------------------------------------------------
   private var details: ErrorMessageDetails? = null
   private lateinit var close: Button
-
-  //-------------------------------------------------
-  // CONSTRUCTOR
-  //-------------------------------------------------
-  init {
-    Shortcuts.addShortcutListener(this, this::onArrowUpEvent, Key.ARROW_UP)
-    Shortcuts.addShortcutListener(this, this::onArrowDownEvent, Key.ARROW_DOWN)
-  }
 
   //-------------------------------------------------
   // IMPLEMENTATION
@@ -78,14 +68,41 @@ class ErrorNotification(title: String?,
     }
   }
 
+  override fun getDefaultButton(): Button = close
+
+  override fun setNavigationListeners() {
+    // SHORTCUTS:
+    // For locale = EN : C -> Close
+    // For locale = FR : F -> Fermer
+    element.executeJs(
+      """
+        window.___keyPress = function(event) {
+          if (event.key == '${close.text[0].lowercase()}') {
+            $0.${"$"}server.onNavigation($CLICK_CLOSE);
+          }
+        }
+
+        window.addEventListener('keypress', ___keyPress);""",
+      element
+    )
+
+    // Cleanup listeners on detach
+    addDetachListener {
+      element.executeJs(
+        """
+          window.removeEventListener('keypress', ___keyPress);
+          """)
+    }
+  }
+
+
+  @ClientCallable
+  fun onNavigation(action: Int) {
+    when (action) {
+      CLICK_CLOSE -> close.click()
+    }
+  }
+
   override val iconName: VaadinIcon
     get() = VaadinIcon.EXCLAMATION_CIRCLE
-
-  fun onArrowUpEvent(keyDownEvent: ShortcutEvent?) {
-    close.focus()
-  }
-
-  fun onArrowDownEvent(keyDownEvent: ShortcutEvent?) {
-    details?.focus()
-  }
 }

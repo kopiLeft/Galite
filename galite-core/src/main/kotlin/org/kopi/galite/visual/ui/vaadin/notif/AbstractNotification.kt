@@ -23,8 +23,10 @@ import org.kopi.galite.visual.ui.vaadin.common.Dialog
 import org.kopi.galite.visual.ui.vaadin.common.VSpan
 import org.kopi.galite.visual.ui.vaadin.window.Window
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H3
@@ -144,6 +146,20 @@ abstract class AbstractNotification(title: String?,
     }
   }
 
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    super.onAttach(attachEvent)
+
+    val focused = getDefaultButton()
+
+    focused.focus()
+    // Delay setting focus-ring attribute because initially the focus ring doesn't appear on the button.
+    // This happens when the button is inside a dialog.
+    focused.element.executeJs("setTimeout(function(){$0.setAttribute('focus-ring', '');},60)", focused.element)
+
+    setNavigationListeners()
+  }
+
   //-------------------------------------------------
   // ABSTRACT METHODS / PROPERTIES
   //-------------------------------------------------
@@ -156,4 +172,14 @@ abstract class AbstractNotification(title: String?,
    * The icon name to be used with this notification.
    */
   protected abstract val iconName: VaadinIcon
+
+  internal abstract fun setNavigationListeners()
+
+  internal abstract fun getDefaultButton(): Button
+
+  companion object {
+    const val CLICK_OK = 0
+    const val CLICK_CANCEL = 1
+    const val CLICK_CLOSE = 2
+  }
 }
