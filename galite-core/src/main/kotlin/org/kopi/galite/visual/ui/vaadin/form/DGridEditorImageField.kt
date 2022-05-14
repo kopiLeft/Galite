@@ -21,6 +21,8 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorImageField
 
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 
@@ -66,7 +68,12 @@ class DGridEditorImageField(
   override fun createEditor(): GridEditorImageField = GridEditorImageField()
 
   override fun createConverter(): Converter<Any?, Any?> {
-    TODO()
+    return object : Converter<Any?, Any?> {
+
+      override fun convertToModel(value: Any?, context: ValueContext?): Result<Any?>? = Result.ok(value)
+
+      override fun convertToPresentation(value: Any?, context: ValueContext?): Any? = value
+    }
   }
 
   override fun createRenderer(): Renderer<Any?> {

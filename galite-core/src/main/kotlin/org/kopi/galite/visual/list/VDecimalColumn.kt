@@ -22,15 +22,15 @@ import java.math.BigDecimal
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnSet
 import org.kopi.galite.type.format
+import org.kopi.galite.visual.domain.TableInitializer
 
 /**
  * Represents a list column.
  */
 class VDecimalColumn(title: String,
                      column: Column<*>?,
-                     table: ColumnSet?,
+                     table: TableInitializer?,
                      align: Int,
                      width: Int,
                      scale: Int,

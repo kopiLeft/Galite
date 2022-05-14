@@ -48,8 +48,8 @@ class VFieldTests : JApplicationTestBase() {
   fun getListIDTest() {
     val vListColumn = VList("test",
                             "apps/common/Global",
-                            arrayOf(VStringColumn("test", User.name, User, 2, 50, true)),
-                            User,
+                            arrayOf(VStringColumn("test", User.name, { User }, 2, 50, true)),
+                            { User },
                             null,
                             0,
                             0,
@@ -96,8 +96,8 @@ class VFieldTests : JApplicationTestBase() {
   fun checkListVStringFieldTest() {
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
-            VStringColumn("test", User.name, User, 2, 50, true)),
-                            User,
+            VStringColumn("test", User.name, { User }, 2, 50, true)),
+                            { User },
                             null,
                             0,
                             0,
@@ -136,8 +136,8 @@ class VFieldTests : JApplicationTestBase() {
   fun checkListVIntegerFieldTest() {
     val vListColumn = VList("test",
                             "apps/common/Global", arrayOf(
-            VIntegerColumn("test", User.age, User, 2, 50, true)),
-                            User,
+            VIntegerColumn("test", User.age, { User }, 2, 50, true)),
+                            { User },
                             null,
                             0,
                             0,

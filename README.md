@@ -6,10 +6,12 @@ Galite Framework
 ![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core)
 
-|Module|Maven repository|Latest|
-|---|---|---|
-|galite-core|[All versions](https://mvnrepository.com/artifact/org.kopi/galite-core)|[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core)|
-|galite-testing|[All versions](https://mvnrepository.com/artifact/org.kopi/galite-testing)|[![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-testing.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-testing)|
+| Module         | Maven repository                                                           | Latest                                                                                                                                                                                 |
+|----------------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| galite-core    | [All versions](https://mvnrepository.com/artifact/org.kopi/galite-core)    | [![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-core.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-core)       |
+| galite-data    | [All versions](https://mvnrepository.com/artifact/org.kopi/galite-data)    | [![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-data.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-data)       |
+| galite-util    | [All versions](https://mvnrepository.com/artifact/org.kopi/galite-util)    | [![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-util.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-util)       |
+| galite-testing | [All versions](https://mvnrepository.com/artifact/org.kopi/galite-testing) | [![Maven Central](https://img.shields.io/maven-central/v/org.kopi/galite-testing.svg?label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/org.kopi/galite-testing) |
 
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
@@ -33,7 +35,7 @@ repositories {
 }
 
 dependencies {
-  implementation("org.kopi", "galite-core", "1.2.0")
+  implementation("org.kopi", "galite-core", "1.3.0")
 }
 ````
 

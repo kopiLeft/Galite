@@ -69,6 +69,7 @@ open class FormField<T>(internal val block: Block,
   var commands: MutableList<Command> = mutableListOf() // the commands accessible in this field
   var triggers = mutableListOf<Trigger>() // the triggers executed by this field
   var alias: FormField<T>? = null // the alias of this field
+  var isID: Boolean = false // the alias of this field
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? by this
 
@@ -441,10 +442,15 @@ open class FormField<T>(internal val block: Block,
    * The field model based on the field type.
    */
   val vField: VField by lazy {
-    domain.buildFormFieldModel(this).also {
+    val model = domain.buildFormFieldModel(this).also {
       it.label = label
       it.toolTip = help
     }
+    if (isID) {
+      block.block.fieldID = model
+    }
+
+    model
   }
 
   fun setInfo(source: String) {

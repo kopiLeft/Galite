@@ -65,7 +65,7 @@ class CommonDSLTests : VApplicationTestBase() {
 
   @Test
   fun `test FieldList`() {
-    val fieldList = FieldList<String>("String", Training, null, mutableListOf(), 0, 0, false)
+    val fieldList = FieldList<String>("String", { Training }, null, mutableListOf(), 0, 0, false)
 
     assertFalse(fieldList.hasAction())
     assertFalse(fieldList.hasShortcut())
@@ -76,7 +76,7 @@ class CommonDSLTests : VApplicationTestBase() {
     assertEquals(null, vFieldList.action)
     assertEquals(0, vFieldList.autocompleteLength)
     assertEquals(0, vFieldList.autocompleteType)
-    assertEquals(Training, vFieldList.table)
+    assertEquals(Training, vFieldList.table())
   }
 
   @Test

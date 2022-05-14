@@ -79,6 +79,8 @@ abstract class ListDomain<T>(width: Int? = null,
    */
   private var autocompleteLength = 0
 
+  val tableInitializer: TableInitializer = { table }
+
   /**
    * Sets a mapping between the values that the domain can take
    * and a corresponding text to be displayed in a field.
@@ -106,7 +108,7 @@ abstract class ListDomain<T>(width: Int? = null,
    */
   val list: FieldList<T>
     get() = FieldList(ident,
-                      table,
+                      tableInitializer,
                       access,
                       columns,
                       autocompleteType,
@@ -164,3 +166,5 @@ abstract class ListDomain<T>(width: Int? = null,
     writer.genType(list)
   }
 }
+
+typealias TableInitializer = () -> ColumnSet
