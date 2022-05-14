@@ -20,12 +20,12 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.list.VStringColumn
-import org.kopi.galite.visual.util.LineBreaker
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VStringColumn
+import org.kopi.galite.visual.util.LineBreaker
 
 open class VStringField(val bufferSize: Int,
                         width: Int,
@@ -69,6 +69,11 @@ open class VStringField(val bufferSize: Int,
    * return the name of this field
    */
   override fun getTypeName(): String = VlibProperties.getString(if (height == 1) "String" else "StringArea")
+
+  /**
+   * return the name of this field
+   */
+  override fun getTypeOptions(): Int = convert
 
   /**
    * Return the visible height

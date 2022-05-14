@@ -947,7 +947,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * return the name of this field
    */
-  fun getTypeOptions(): Int = 0
+  open fun getTypeOptions(): Int = 0
 
   /**
    * Sets the search operator for the field
