@@ -121,6 +121,22 @@
     transform: translateY(2px);
 }
 
+.transform-uppercase input {
+    text-transform: uppercase;
+}
+
+.transform-lowercase input {
+    text-transform: lowercase;
+}
+
+.transform-capitalize input {
+    text-transform: capitalize;
+}
+
+.transform-none input {
+    text-transform: none;
+}
+
 input:disabled:not(input[type="button"]), textarea:disabled {
     color: #676767 !important;
     -webkit-text-fill-color: #676767 !important;
