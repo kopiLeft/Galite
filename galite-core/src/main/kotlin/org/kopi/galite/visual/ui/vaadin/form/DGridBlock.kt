@@ -613,14 +613,14 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * Opens the editor interface for the provided record.
    * @param record The record number
    */
-  fun editRecord(record: Int) {
+  fun editRecord(record: Int, force: Boolean = false) {
     if (::grid.isInitialized) {
       itemToBeEdited = GridBlockItem(record)
       access(currentUI) {
         if (grid.isEnabled
                 && (editor.item == null
-                        || (itemToBeEdited != null
-                        && editor.item != itemToBeEdited))
+                        || (itemToBeEdited != null && editor.item != itemToBeEdited)
+                        || force)
         ) {
           if (getActualItems().noneMatch { it == itemToBeEdited }) {
             itemToBeEdited = GridBlockItem(0)

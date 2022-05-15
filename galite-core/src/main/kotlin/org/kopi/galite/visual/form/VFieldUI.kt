@@ -165,7 +165,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
       try {
         // navigates to the active record if needed
         // this is typically needed in grid based blocks
-        gotoActiveRecord()
+        gotoActiveRecord(true)
         // switch to detail view when needed
         if (getBlock().isMulti() && display == detailDisplay && !getBlock().isDetailMode) {
           (blockView as UMultiBlock).switchView(-1)
@@ -208,7 +208,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     }
   }
 
-  protected open fun gotoActiveRecord() {
+  protected open fun gotoActiveRecord(force: Boolean = false) {
     // to be redefined by subclasses
   }
 

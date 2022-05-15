@@ -92,8 +92,8 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
     }
   }
 
-  override fun gotoActiveRecord() {
-    blockView.editRecord(getBlock().activeRecord)
+  override fun gotoActiveRecord(force: Boolean) {
+    blockView.editRecord(getBlock().activeRecord, force)
   }
 
   /**
