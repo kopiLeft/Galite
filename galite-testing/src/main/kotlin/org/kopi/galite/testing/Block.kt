@@ -45,9 +45,7 @@ fun Block._enter(duration: Long = 50) {
   }
 
   // Wait for async updates in transferFocus
-  MockVaadin.runUIQueue()
-  Thread.sleep(duration)
-  MockVaadin.runUIQueue()
+  waitAndRunUIQueue(duration)
 }
 
 /**
@@ -65,9 +63,7 @@ fun Block.editRecord(record: Int, duration: Long = 50) {
   }
 
   // Wait for async updates in transferFocus
-  MockVaadin.runUIQueue()
-  Thread.sleep(duration)
-  MockVaadin.runUIQueue()
+  waitAndRunUIQueue(duration)
 }
 
 /**

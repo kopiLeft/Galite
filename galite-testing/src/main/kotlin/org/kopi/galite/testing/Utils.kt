@@ -42,9 +42,9 @@ fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
 }
 
 fun waitAndRunUIQueue(duration: Long) {
-  MockVaadin.runUIQueue()
+  MockVaadin.clientRoundtrip()
   Thread.sleep(duration)
-  MockVaadin.runUIQueue()
+  MockVaadin.clientRoundtrip()
 }
 
 inline fun <reified T: Component> findInMainWindow(): List<T> {
