@@ -20,8 +20,8 @@ package org.kopi.galite.demo.common
 import java.util.Locale
 
 import org.kopi.galite.visual.Actor
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.Icon
-import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
@@ -142,22 +142,22 @@ open class FormDefault(title: String, locale: Locale? = null): ReportSelectionFo
 
   val Block.recursiveQueryCmd: Command
     get() = command(item = menuQuery) {
-      Commands.recursiveQuery(block)
+      Commands.recursiveQuery(this)
     }
 
   val Block.menuQueryCmd: Command
     get() = command(item = menuQuery) {
-      Commands.menuQuery(block)
+      Commands.menuQuery(this)
     }
 
   val Block.queryMoveCmd: Command
     get() = command(item = menuQuery) {
-      Commands.queryMove(block)
+      Commands.queryMove(this)
     }
 
   val Block.serialQueryCmd: Command
     get() = command(item = serialQuery) {
-      Commands.serialQuery(block)
+      Commands.serialQuery(this)
     }
 
   val Block.insertModeCmd: Command
