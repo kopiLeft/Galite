@@ -30,8 +30,8 @@ import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.joda.time.DateTime
-import org.kopi.galite.domain.type.Month
-import org.kopi.galite.domain.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
 
 class DomainColumn<T>(val column: Column<T>,
                       val columnProperties: ColumnProperties,

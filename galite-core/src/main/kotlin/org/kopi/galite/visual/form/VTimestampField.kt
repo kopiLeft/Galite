@@ -100,7 +100,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     val date = parseDate(timestamp[0])
     val time = parseTime(timestamp[1])
 
-    return Timestamp.valueOf("$date $time").toInstant())
+    return Timestamp.valueOf("$date $time").toInstant()
   }
 
   private fun parseDate(s: String): String {
