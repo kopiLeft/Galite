@@ -82,11 +82,14 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     if (s == "") {
       setNull(rec)
     } else {
-      parseWeek(rec, s)
+      val week = parseWeek(s)
+
+      checkConstraint(week)
+      setWeek(rec, week)
     }
   }
 
-  private fun parseWeek(rec: Int, s: String?) {
+  private fun parseWeek(s: String?): Week {
     var week = 0
     var year = -1
     var bp = 0
@@ -179,7 +182,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
         year += 1900
       }
     }
-    setWeek(rec, Week(year, week))
+    return Week(year, week)
   }
 
   // ----------------------------------------------------------------------

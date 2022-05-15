@@ -91,6 +91,7 @@ open class Domain<T>(val width: Int? = null,
   protected var styled: Boolean = false
   protected var fixed: Fixed = Fixed.UNDEFINED
   protected var convert: Convert = Convert.NONE
+  private var constraint: Constraint<T>? = null
   val ident: String = if(this::class.qualifiedName == null) "" else this::class.java.simpleName
   val source: String =
     if(this::class.qualifiedName == null) {
@@ -127,6 +128,16 @@ open class Domain<T>(val width: Int? = null,
    * Determines the field data type
    */
   var kClass: KClass<*>? = null
+
+  /**
+   * Defines a [constraint] that the field value should verify. Otherwise an error [message] is displayed to the user.
+   *
+   * @param message the error message to display.
+   * @param constraint the constraint that the field value should verify.
+   */
+  fun check(message: String? = null, constraint: (value: T) -> Boolean) {
+    this.constraint = Constraint(message, constraint)
+  }
 
   /**
    * Builds the form field model
@@ -184,6 +195,11 @@ open class Domain<T>(val width: Int? = null,
           throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
         }
       }
+    }
+
+    if (constraint != null) {
+      model.constraint = constraint!!.constraint as (value: Any) -> Boolean
+      model.constraintMessage = constraint!!.message
     }
 
     return model

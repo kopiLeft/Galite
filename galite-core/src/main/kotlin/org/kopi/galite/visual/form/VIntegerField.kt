@@ -117,6 +117,7 @@ class VIntegerField(val bufferSize: Int,
       if (v > maxValue) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxValue) as? Array<Any>))
       }
+      checkConstraint(v)
       setInt(rec, v)
     }
   }

@@ -166,7 +166,10 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        setTime(rec, LocalTime.of(hours, minutes))
+        val time = LocalTime.of(hours, minutes)
+
+        checkConstraint(time)
+        setTime(rec, time)
       }
     }
   }

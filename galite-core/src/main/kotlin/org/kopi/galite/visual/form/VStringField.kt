@@ -119,6 +119,7 @@ open class VStringField(val bufferSize: Int,
       if (!checkText(s)) {
         throw VExecFailedException()
       }
+      checkConstraint(s)
       setString(rec, s)
     }
   }
