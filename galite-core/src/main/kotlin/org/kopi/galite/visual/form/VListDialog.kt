@@ -25,11 +25,11 @@ import kotlin.math.max
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.VModel
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.VWindow
 
 class VListDialog(list: Array<VListColumn?>,
                   val data: Array<Array<Any?>>,
@@ -183,7 +183,7 @@ class VListDialog(list: Array<VListColumn?>,
 
   /**
    * Displays a dialog box returning position of selected element.
-   * @exception org.kopi.galite.visual.visual.VException        an exception may be raised by string formatter
+   * @exception org.kopi.galite.visual.VException        an exception may be raised by string formatter
    */
   fun selectFromDialog(showSingleEntry: Boolean): Int = selectFromDialog(null, showSingleEntry)
 
@@ -197,7 +197,7 @@ class VListDialog(list: Array<VListColumn?>,
 
   /**
    * Displays a dialog box returning position of selected element.
-   * @exception org.kopi.galite.visual.visual.VException       an exception may be raised by string formatter
+   * @exception org.kopi.galite.visual.VException       an exception may be raised by string formatter
    */
   fun selectFromDialog(window: VWindow?, showSingleEntry: Boolean): Int =
           display.selectFromDialog((window?.getDisplay())!!, showSingleEntry)

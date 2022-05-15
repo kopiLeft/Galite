@@ -25,8 +25,8 @@ import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VHelpGenerator
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
 
 /**
  * This class implements a pretty printer
@@ -39,7 +39,7 @@ class VHelpGenerator : VHelpGenerator() {
    * prints a compilation unit
    */
   fun helpOnChart(name: String,
-                  commands: Array<VCommand>?,
+                  commands: List<VCommand>?,
                   columns: Array<VColumn>,
                   help: String?): String? {
     return try {

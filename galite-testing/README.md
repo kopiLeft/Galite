@@ -48,13 +48,19 @@ openForm("Client form", 200)
 
 To simulate a click on an actor, which triggers a command action, you can use `Actor.triggerCommand(duration)`. The `duration` parameter represents how much time it takes for the command to finish its action.
 
+### Actors
+
+* `Actor.findActor()`: Finds and returns the actor's component.
+* `Actor.getNavigationItem()`: Finds and returns the navigation item of the actor.
+* `Actor.openActorsNavigationPanel()`: Opens the popup containing the actors' navigation panel and returns that component.
+
 ### Blocks
 
 The function `Block.findBlock()` returns the Vaadin component created for a form block.
 
 #### Entering a block
 
-To enter a block you can use `Block.enter()`. This function will focus on the first field if it's a simple block, and it will open the first item of the grid's editor if it's a multiple block.
+To enter a block you can use `Block._enter()`. This function will focus on the first field if it's a simple block, and it will open the first item of the grid's editor if it's a multiple block.
 
 #### Block records
 

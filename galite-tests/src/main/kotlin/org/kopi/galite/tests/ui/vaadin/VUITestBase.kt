@@ -17,9 +17,12 @@
 
 package org.kopi.galite.tests.ui.vaadin
 
+import java.time.Instant
+
 import org.junit.Before
 import org.junit.BeforeClass
 import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.type.format
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
@@ -74,6 +77,8 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     _click()
     waitAndRunUIQueue(duration)
   }
+
+  fun Instant?.defaultFormat(): String? = this?.let { format("yyyy-MM-dd HH:mm:ss") }
 
   companion object {
     @BeforeClass

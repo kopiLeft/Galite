@@ -26,9 +26,9 @@ import java.io.PrintWriter
 import java.io.Serializable
 
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VHelpGenerator
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * This class implements a pretty printer
@@ -39,8 +39,8 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
    * prints a compilation unit
    */
   open fun helpOnForm(name: String,
-                      commands: Array<VCommand>?,
-                      blocks: Array<VBlock>?,
+                      commands: MutableList<VCommand>?,
+                      blocks: List<VBlock>?,
                       title: String,
                       help: String?,
                       code: String): String? {
@@ -108,8 +108,8 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
   open fun helpOnBlock(formCode: String,
                        title: String,
                        help: String?,
-                       commands: Array<VCommand>?,
-                       fields: Array<VField>,
+                       commands: MutableList<VCommand>?,
+                       fields: List<VField>,
                        alone: Boolean) {
     if (!alone) {
       printer.println("<TD><H2>$title</H2>")

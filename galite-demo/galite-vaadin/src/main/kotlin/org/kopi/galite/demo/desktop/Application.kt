@@ -19,6 +19,8 @@ package org.kopi.galite.demo.desktop
 
 import java.util.Locale
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.demo.ConfigurationManager
 import org.kopi.galite.demo.GaliteRegistry
 import org.kopi.galite.demo.database.connectToDatabase
@@ -27,9 +29,9 @@ import org.kopi.galite.demo.database.testDriver
 import org.kopi.galite.demo.database.testPassword
 import org.kopi.galite.demo.database.testURL
 import org.kopi.galite.demo.database.testUser
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
 
 val testLocale: Locale = Locale.FRANCE
@@ -69,7 +71,7 @@ fun run(args: Array<String>) {
 /**
  * Runs the application with a specific form.
  */
-fun run(formName: Form) {
+fun run(form: KClass<*>) {
   run(arrayOf(
     "-d",
     testDriver,
@@ -83,18 +85,18 @@ fun run(formName: Form) {
     testLocale.toString(),
     "-r",
     "-f",
-    formName::class.qualifiedName!!
+    form.qualifiedName!!
   ))
 }
 
 /**
  * Used to run the application and show a specific form.
  */
-fun runForm(formName: Form, init: (() -> Unit)? = null) {
+fun <T: Form> runForm(form: KClass<T>, init: (() -> Unit)? = null) {
   connectToDatabase()
   initDatabase()
   init?.invoke()
-  run(formName)
+  run(form)
 }
 
 class GaliteApplication : JApplication(GaliteRegistry()) {

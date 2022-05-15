@@ -30,10 +30,12 @@ import org.kopi.galite.visual.ui.vaadin.label.SortableLabelListener
  * @param fieldIndex The field index.
  * @param sortModel The sort model.
  */
-class DChartHeaderLabel internal constructor(text: String?,
-                                             help: String?,
-                                             var fieldIndex: Int,
-                                             val sortModel: VBlock.OrderModel) : DLabel(text, help), UChartLabel {
+class DChartHeaderLabel internal constructor(
+        text: String?,
+        help: String?,
+        var fieldIndex: Int,
+        val sortModel: VBlock.OrderModel
+) : DLabel(text, help), UChartLabel {
 
   init {
     sortModel.addSortingListener(this)
@@ -44,6 +46,7 @@ class DChartHeaderLabel internal constructor(text: String?,
       }
     })
   }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

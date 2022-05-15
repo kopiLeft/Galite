@@ -18,10 +18,10 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.db.Utils
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.database.Utils
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 abstract class AbstractFieldHandler protected constructor(private val rowController: VFieldUI) : FieldHandler {
 
@@ -102,14 +102,14 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     }) ?: return false
 
     if (mode == VForm.CMD_NEWITEM) {
-      id = dictionary.add(model.getForm())
+      id = dictionary.add()
     } else if (mode == VForm.CMD_EDITITEM) {
       try {
         updateModel()
         if (!model.isNull(rowController.getBlock().activeRecord)) {
           val value: Int = model.getListID()
           if (value != -1) {
-            id = dictionary.edit(model.getForm(), value)
+            id = dictionary.edit(value)
           } else {
             mode = VForm.CMD_EDITITEM_S
           }
@@ -121,7 +121,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       }
     }
     if (mode == VForm.CMD_EDITITEM_S) {
-      id = dictionary.search(model.getForm())
+      id = dictionary.search()
     }
     if (id == -1) {
       if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {

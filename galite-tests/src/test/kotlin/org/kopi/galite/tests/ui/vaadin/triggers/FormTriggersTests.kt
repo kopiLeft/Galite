@@ -27,8 +27,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.enter
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
@@ -43,60 +43,124 @@ import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class FormTriggersTests : GaliteVUITestBase() {
 
-  val form = TestTriggersForm.also { it.model }
-  val report = ReportTriggersTest.also { it.model }
-  val chart = ChartTriggersTest.also { it.model }
-
   @Before
   fun `login to the App`() {
     login()
 
     // Open the form
-    form.model.doNotModal()
+    TestTriggersForm.model.doNotModal()
   }
 
   @Test
   fun `test form triggers`() {
-    form.listActor.triggerCommand()
+    TestTriggersForm.listActor.triggerCommand()
 
-    form.deleteBlock.triggerCommand()
+    TestTriggersForm.deleteBlock.triggerCommand()
     expectConfirmNotification(true)
 
-    form.block.fstnameClt.edit("Name")
-    form.block.lastnameClt.edit("last Name")
-    form.block.idClt.edit(2)
-    form.insertMode.triggerCommand()
-    form.saveBlock.triggerCommand()
+    TestTriggersForm.block.fstnameClt.edit("Name")
+    TestTriggersForm.block.lastnameClt.edit("last Name")
+    TestTriggersForm.block.idClt.edit(2)
+    TestTriggersForm.insertMode.triggerCommand()
+    TestTriggersForm.saveBlock.triggerCommand()
 
-    form.listActor.triggerCommand()
-    form.block.fstnameClt.edit("First Name")
-    form.saveBlock.triggerCommand()
+    TestTriggersForm.listActor.triggerCommand()
+    TestTriggersForm.block.fstnameClt.edit("First Name")
+    TestTriggersForm.saveBlock.triggerCommand()
 
-    form.block.idClt.edit(2)
-    form.resetBlock.triggerCommand()
+    TestTriggersForm.block.idClt.edit(2)
+    TestTriggersForm.resetBlock.triggerCommand()
     expectConfirmNotification(true)
 
-    form.block.age.edit(1)
+    TestTriggersForm.block.age.edit(1)
 
-    form.secondBlock.enter()
-    form.secondBlock.field.findField()
-    form.secondBlock.field.edit(1)
+    TestTriggersForm.secondBlock._enter()
+    TestTriggersForm.secondBlock.field.findField()
+    TestTriggersForm.secondBlock.field.edit(1)
 
-    form.block.enter()
+    TestTriggersForm.block._enter()
 
-    form.resetForm.triggerCommand()
+    TestTriggersForm.resetForm.triggerCommand()
     expectConfirmNotification(true)
 
-    report.model.doNotModal()
-    report.quit.triggerCommand()
+    ReportTriggersTest.model.doNotModal()
+    ReportTriggersTest.quit.triggerCommand()
 
-    chart.model.doNotModal()
-    chart.quit.triggerCommand()
+    ChartTriggersTest.model.doNotModal()
+    ChartTriggersTest.quit.triggerCommand()
 
-    form.quit.triggerCommand()
+    TestTriggersForm.quit.triggerCommand()
     expectConfirmNotification(true)
 
-    val expectedTriggersList = listOf("ACCESS FIELD Trigger", "INIT FORM Trigger", "INIT BLOCK Trigger",
+    val expectedTriggersList = listOf("ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "INIT FORM Trigger",
+                                      "INIT BLOCK Trigger", "PREFORM FORM Trigger", "ACCESS BLOCK Trigger",
+                                      "PREBLK BLOCK Trigger", "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "VALBLK BLOCK Trigger", "PREQRY BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "POSTQRY BLOCK Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "PREDEL BLOCK Trigger",
+                                      "PREDEL FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "POSTDEL BLOCK Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "PREFLD FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS BLOCK Trigger", "PREVAL FIELD Trigger",
+                                      "VALUE FIELD Trigger", "FORMAT FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALIDATE FIELD Trigger",
+                                      "POSTCHG FIELD Trigger", "POSTFLD FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "DEFAULT BLOCK Trigger", "VALUE FIELD Trigger", "DEFAULT FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS BLOCK Trigger", "VALBLK BLOCK Trigger",
+                                      "CHANGED BLOCK Trigger", "PRESAVE BLOCK Trigger", "PREINS BLOCK Trigger",
+                                      "PREINS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "POSTINS BLOCK Trigger", "POSTINS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "DEFAULT BLOCK Trigger", "VALUE FIELD Trigger", "DEFAULT FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "VALBLK BLOCK Trigger",
+                                      "PREQRY BLOCK Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "POSTQRY BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "VALBLK BLOCK Trigger", "CHANGED BLOCK Trigger",
+                                      "PRESAVE BLOCK Trigger", "PREUPD BLOCK Trigger", "PREUPD FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "POSTUPD BLOCK Trigger", "POSTUPD FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS BLOCK Trigger", "CHANGED BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS FIELD Trigger", "VALUE FIELD Trigger",
+                                      "ACCESS FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
+                                      "VALUE FIELD Trigger", "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger",
+                                      "ACCESS BLOCK Trigger", "AUTOLEAVE FIELD Trigger", "ACCESS FIELD Trigger",
+                                      "VALFLD FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger",
+                                      "VALBLK BLOCK Trigger", "POSTBLK BLOCK Trigger", "ACCESS FIELD Trigger",
+                                      "PREREC FIELD Trigger", "ACCESS BLOCK Trigger", "ACCESS BLOCK Trigger",
+                                      "POSTREC FIELD Trigger", "VALREC FIELD Trigger", "PREBLK BLOCK Trigger",
+                                      "ACCESS FIELD Trigger", "ACCESS BLOCK Trigger", "CHANGED FORM Trigger",
+                                      "RESET FORM Trigger", "ACCESS BLOCK Trigger","PREREPORT REPORT Trigger",
+                                      "POSTREPORT REPORT Trigger", "CHARTTYPE CHART Trigger",
+                                      "INITCHART CHART Trigger", "CHARTTYPE CHART Trigger", "CHARTTYPE CHART Trigger",
+                                      "PRECHART CHART Trigger", "POSTCHART CHART Trigger", "CHANGED FORM Trigger",
+                                      "POSTFORM FORM Trigger")
+
+    /*val expectedTriggersList = listOf("ACCESS FIELD Trigger", "INIT FORM Trigger", "INIT BLOCK Trigger",
                                       "PREFORM FORM Trigger", "VALUE FIELD Trigger", "ACCESS FIELD Trigger",
                                       "VALUE FIELD Trigger", "VALUE FIELD Trigger", "VALUE FIELD Trigger",
                                       "VALUE FIELD Trigger", "VALUE FIELD Trigger", "ACCESS BLOCK Trigger",
@@ -162,7 +226,7 @@ class FormTriggersTests : GaliteVUITestBase() {
                                       "POSTREPORT REPORT Trigger", "CHARTTYPE CHART Trigger",
                                       "INITCHART CHART Trigger", "CHARTTYPE CHART Trigger", "CHARTTYPE CHART Trigger",
                                       "PRECHART CHART Trigger", "POSTCHART CHART Trigger", "CHANGED FORM Trigger",
-                                      "POSTFORM FORM Trigger")
+                                      "POSTFORM FORM Trigger")*/
 
     assertEquals(expectedTriggersList, list)
   }

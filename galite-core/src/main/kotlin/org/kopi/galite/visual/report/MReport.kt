@@ -20,16 +20,18 @@ package org.kopi.galite.visual.report
 
 import java.io.Serializable
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import javax.swing.event.EventListenerList
 
 import kotlin.math.max
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
 
 import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
@@ -43,7 +45,7 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
-  var columns: Array<VReportColumn?> = arrayOf()    // array of column definitions
+  var columns = mutableListOf<VReportColumn?>()    // array of column definitions
   var accessibleColumns: Array<VReportColumn?> = arrayOf() // array of visible or hide columns
     private set
 
@@ -53,7 +55,7 @@ class MReport : Constants, Serializable {
   // Baserows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
-  private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
+  internal var userRows: ArrayList<VBaseRow>? = ArrayList(500)
   private lateinit var baseRows: Array<VReportRow?>    // array of base data rows
   private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
@@ -75,22 +77,16 @@ class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
     var max = 0
 
-    baseRows.forEach {
-      if (it!!.getValueAt(column) != null) {
-        val value = it.getValueAt(column).let {
-          when (it) {
-            is BigDecimal -> {
-              it.format()
-            }
-            is LocalDate -> {
-              it.format()
-            }
-            is LocalTime -> {
-              it.format()
-            }
-            else -> {
-              it.toString()
-            }
+    baseRows.forEach { row ->
+      if (row!!.getValueAt(column) != null) {
+        val value = row.getValueAt(column).let { value ->
+          when (value) {
+            is BigDecimal -> value.format()
+            is LocalDate -> value.format()
+            is LocalTime -> value.format()
+            is Instant -> value.format()
+            is LocalDateTime -> value.format()
+            else -> value.toString()
           }
         }
 
@@ -120,7 +116,7 @@ class MReport : Constants, Serializable {
       cols[i] = columns[i + 1]
     }
     position -= hiddenColumns
-    columns = cols.clone()
+    columns = cols.clone().toMutableList()
     createAccessibleTab()
     val rows = arrayOfNulls<VBaseRow>(baseRows.size)
 
@@ -172,7 +168,7 @@ class MReport : Constants, Serializable {
     columns.forEachIndexed { index, element ->
       cols[index] = element
     }
-    columns = cols.clone()
+    columns = cols.clone().toMutableList()
     initializeAfterAddingColumn()
     val rows = arrayOfNulls<VBaseRow>(baseRows.size)
 

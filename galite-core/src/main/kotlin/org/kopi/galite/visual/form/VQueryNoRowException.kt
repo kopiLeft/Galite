@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.VException
 
 /**
  * This class represents exceptions occurring during execution process.

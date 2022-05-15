@@ -19,12 +19,10 @@ package org.kopi.galite.visual.ui.vaadin.field
 
 import org.kopi.galite.visual.form.VCodeField
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VDecimalField
 import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
 import org.kopi.galite.visual.ui.vaadin.base.Styles
@@ -165,9 +163,8 @@ class TextField(val model: VField,
     inputField = createTextField()
     inputField.isEnabled = enabled
     add(inputField)
-    if (hasAutofill) {
+    if (hasAutofill && type != Type.DATE) {
       autofill = IronIcons.ARROW_DROP_DOWN.create()
-      autofill!!.style["cursor"] = "pointer" // TODO: move to css
       autofill!!.addClickListener {
         fireAutofill()
       }
@@ -201,7 +198,7 @@ class TextField(val model: VField,
         // month field
         type = Type.MONTH
       }
-      is VDateField -> {
+      is org.kopi.galite.visual.form.VDateField -> {
         // date field
         type = Type.DATE
       }
@@ -209,7 +206,7 @@ class TextField(val model: VField,
         // week field
         type = Type.WEEK
       }
-      is VTimeField -> {
+      is org.kopi.galite.visual.form.VTimeField -> {
         // time field
         type = Type.TIME
       }
@@ -322,7 +319,7 @@ class TextField(val model: VField,
         col = 40
       }
       VTextAreaField().also {
-        it.setRows(rows, visibleRows)
+        it.setRows(visibleRows)
         it.width = (col * 10).toString() + "px"
         it.setWordwrap(true)
         // if fixed new line mode is used, we remove scroll bar from text area
@@ -370,6 +367,9 @@ class TextField(val model: VField,
       }
       Type.DATE -> {
         7
+      }
+      Type.CODE -> {
+        4
       }
       else -> {
         3

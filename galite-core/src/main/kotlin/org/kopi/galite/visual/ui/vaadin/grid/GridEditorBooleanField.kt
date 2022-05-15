@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.grid
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
@@ -73,7 +73,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     }
 
     content.element.addEventListener("mouseout") {
-      if(value == null) {
+      if (value == null) {
         isVisible = false
       }
     }
@@ -95,7 +95,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
    * @param focus The field focus
    */
   fun setFocus(focus: Boolean) {
-    if(focus) {
+    if (focus) {
       focus()
     } else {
       blur()

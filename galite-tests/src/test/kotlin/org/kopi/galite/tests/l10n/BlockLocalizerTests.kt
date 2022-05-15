@@ -28,7 +28,7 @@ import org.junit.Test
 import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.visual.l10n.BlockLocalizer
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 class BlockLocalizerTests : TestBase() {
 

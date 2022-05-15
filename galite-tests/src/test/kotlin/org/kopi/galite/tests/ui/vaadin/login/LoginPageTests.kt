@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.tests.db.insertIntoModule
+import org.kopi.galite.tests.database.insertIntoModule
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
 import org.kopi.galite.visual.ui.vaadin.base.VInputText

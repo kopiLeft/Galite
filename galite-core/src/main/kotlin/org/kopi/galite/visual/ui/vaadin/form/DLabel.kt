@@ -25,7 +25,7 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.label.SortableLabel
-import org.kopi.galite.visual.visual.VActor
+import org.kopi.galite.visual.VActor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
@@ -210,8 +210,8 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
-          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(
-                  actor.acceleratorModifier) + "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
+          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(actor.acceleratorModifier) +
+                  "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {
         actor.menuItem

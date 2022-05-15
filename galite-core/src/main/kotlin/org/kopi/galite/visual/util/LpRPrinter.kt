@@ -20,8 +20,8 @@ package org.kopi.galite.visual.util
 
 import java.io.InputStream
 
-import org.kopi.galite.visual.util.lpr.LpR
-import org.kopi.galite.visual.util.lpr.LpdException
+import org.kopi.galite.util.lpr.LpR
+import org.kopi.galite.util.lpr.LpdException
 
 /**
  * Remote execution client

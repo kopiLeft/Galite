@@ -31,7 +31,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 /**
  * A form page, can be either or vertical or horizontal page.
  */
-class Page<T>(private var content: T) : Div()  where T: Component, T: FlexComponent {
+class Page<T>(private var content: T) : Div() where T : Component, T : FlexComponent {
 
   private var scrollPanel: VScrollablePanel = VScrollablePanel(content)
   private var last: Block? = null
@@ -40,20 +40,12 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
   init {
     className = Styles.FORM_PAGE
     content.className = Styles.FORM_PAGE_CONTENT
+    add(scrollPanel)
   }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun setVisible(visible: Boolean) {
-    // Content is added lazily to the page for better performance.
-    if (visible && !scrollPanel.isAttached) {
-      add(scrollPanel)
-    }
-
-    super.setVisible(visible)
-  }
-
   /**
    * Adds a child to this page.
    * @param child The child component.
@@ -99,7 +91,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
    * @param content The caption container.
    * @param block The block widget.
    */
-  protected fun <T> setCaption(content: T, block: Block) where T: Component, T: FlexComponent {
+  protected fun <T> setCaption(content: T, block: Block) where T : Component, T : FlexComponent {
     val caption = block.caption
 
     if (caption != null) {

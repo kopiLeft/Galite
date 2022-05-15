@@ -17,14 +17,14 @@
 package org.kopi.galite.visual.domain
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
-import org.joda.time.DateTime
-import org.kopi.galite.visual.type.Image
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Image
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
 
 /**
  * Integer field type is LONG is used to insert integers.
@@ -137,9 +137,9 @@ object MONTH : Domain<Month>()
 
 object WEEK : Domain<Week>()
 
-object TIMESTAMP : Domain<Timestamp>()
+object TIMESTAMP : Domain<Instant>()
 
-object DATETIME : Domain<DateTime>()
+object DATETIME : Domain<LocalDateTime>()
 
 object TIME : Domain<LocalTime>()
 

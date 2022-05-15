@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * This class represents exceptions occurring during execution process.

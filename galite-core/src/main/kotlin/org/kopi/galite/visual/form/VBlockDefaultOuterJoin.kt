@@ -153,7 +153,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
       return VBlockDefaultOuterJoin(block!!).getSearchTablesCondition()
     }
 
-    fun getFetchRecordCondition(fields: Array<VField>): Op<Boolean>? {
+    fun getFetchRecordCondition(fields: List<VField>): Op<Boolean>? {
       val fetchRecordCondition = mutableListOf<Op<Boolean>>()
 
       for (field in fields) {
@@ -234,8 +234,8 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
   private fun isProcessedField(field: Int): Boolean = processedFields!!.contains(field.toString())
 
-  private var fields: Array<VField> = block.fields
+  private var fields: List<VField> = block.fields
   private var joinedTables: ArrayList<Table>? = ArrayList()
   private var processedFields: ArrayList<String>? = ArrayList()
-  private var tables: Array<Table>? = block.tables
+  private var tables: List<Table>? = block.tables
 }

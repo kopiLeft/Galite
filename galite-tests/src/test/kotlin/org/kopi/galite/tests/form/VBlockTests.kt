@@ -40,14 +40,14 @@ import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.db.Users
+import org.kopi.galite.database.Users
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
 
@@ -142,7 +142,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun checkUniqueIndexTest() {
-    FormWithList.model
     FormWithList.blockWithManyTables.uid[0] = 1
     FormWithList.blockWithManyTables.name[0] = "administrator"
 
@@ -169,7 +168,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun checkCombinedUniqueIndexTest() {
     var i = 0
-    formMultiple.model
 
     try {
       transaction {
@@ -236,7 +234,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `test refreshLookup with no matching value in the table`() {
-    FormWithList.model
     FormWithList.blockWithManyTables.shortName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
@@ -250,7 +247,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun refreshLookupTest() {
-    FormWithList.model
     FormWithList.blockWithManyTables.shortName[0] = "1000"
 
     transaction {
@@ -261,7 +257,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest1() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
 
     FormSample.tb1.id.value = null
     FormSample.tb1.uc.value = 0
@@ -281,7 +277,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest2() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_LT)
       fields[6].setSearchOperator(VConstants.SOP_NE)
@@ -305,7 +301,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest3() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_GT)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
@@ -329,7 +325,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest4() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_LE)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
@@ -353,7 +349,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchConditionsTest5() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     with(FormSample.tb1.block) {
       fields[5].setSearchOperator(VConstants.SOP_GE)
       fields[6].setSearchOperator(VConstants.SOP_EQ)
@@ -376,7 +372,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun getSearchOrderTest() {
-    FormWithList.model
     val orderBys = FormWithList.block3.block.getSearchOrder()
 
     assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
@@ -384,7 +379,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchRecord with existing ID scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       //fetch record search with id 1 and there is no exception
@@ -396,7 +391,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchRecord no such element test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
 
@@ -409,7 +404,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchRecord too many rows scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       initSampleFormTables()
@@ -427,7 +422,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord valid scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       FormSample.tb1.name.value = "AUDREY"
@@ -449,7 +444,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord multi block scenario test`() {
-    FormWithMultipleBlock.model
     val error = assertThrows(AssertionError::class.java) {
       FormWithMultipleBlock.multipleBlock.block.fetchNextRecord(0)
     }
@@ -459,7 +453,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchNextRecord exec failed scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     assertThrows(VExecFailedException::class.java) {
       FormSample.tb1.block.fetchNextRecord(3)
     }
@@ -467,7 +461,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save insert simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       SchemaUtils.createSequence(userSequence)
@@ -495,7 +489,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save update simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       initSampleFormTables()
@@ -523,7 +517,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save insert multiple block scenario test`() {
-    formMultiple.model
     transaction {
       SchemaUtils.create(Training)
       SchemaUtils.create(Center)
@@ -583,7 +576,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save update multiple block scenario test`() {
-    formMultiple.model
     transaction {
       initMultipleBlockFormTables()
       formMultiple.multipleBlock.centerId[0] = 1
@@ -650,7 +642,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `delete simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       var count = User.select { User.id eq 1 }.count()
@@ -675,7 +667,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `delete multiple block scenario test`() {
-    formMultiple.model
     transaction {
       initMultipleBlockFormTables()
       var count = Center.selectAll().count()
@@ -712,7 +703,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getSearchColumns test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     assertEquals(listOf(FormSample.tb1.id.columns?.getColumnsModels()?.get(0)?.column,
                         FormSample.tb1.ts.columns?.getColumnsModels()?.get(0)?.column,
                         FormSample.tb1.uc.columns?.getColumnsModels()?.get(0)?.column,
@@ -726,7 +717,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       SchemaUtils.create(User)
       User.insert {
@@ -757,7 +748,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load with set id value simple block scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
 
@@ -783,7 +774,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load no row exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       FormSample.tb1.id.value = 2
@@ -798,7 +789,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load multiple block scenario test`() {
-    formMultiple.model
     transaction {
       initMultipleBlockFormTables()
       formMultiple.multipleBlock.block.clear()
@@ -841,7 +831,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup valid scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
 
@@ -865,7 +855,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup no matching value exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
 
@@ -882,7 +872,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup no table found exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 1
@@ -902,7 +892,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `fetchLookup not unique value exception scenario test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       User.insert {
@@ -926,7 +916,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `buildQueryDialog test`() {
-    val FormSample = FormSample().also { it.model }
+    val FormSample = FormSample()
     transaction {
       initSampleFormTables()
       FormSample.tb1.block.clear()
@@ -957,17 +947,15 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getActiveCommands test`() {
-    formMultiple.model
     val model = formMultiple.multipleBlock.block
 
     model.setCommandsEnabled(true)
     assertEquals(1, model.activeCommands.size)
-    assertEquals(formMultiple.saveBlock.model, model.activeCommands[0].actor)
+    assertEquals(formMultiple.saveBlock, model.activeCommands[0].actor)
   }
 
   @Test
   fun `setMode test`() {
-    formMultiple.model
     val model = formMultiple.multipleBlock.block
 
     model.setMode(VConstants.MOD_INSERT)
@@ -984,7 +972,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `test active field after setting mode`() {
-    formMultiple.model
     val model = formMultiple.block.block
 
     model.enter()
@@ -1000,7 +987,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `set and reset Color test`() {
-    formMultiple.model
     val model = formMultiple.multipleBlock.block
     val recordId = 0
 
@@ -1017,7 +1003,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `leave block test`() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
     val blockModel = formSample.tb1.block
 
     formSample.model.getActiveBlock()?.leave(false)
@@ -1027,7 +1013,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `sort test`() {
-    formMultiple.model
     val blockModel = formMultiple.multipleBlock.block
 
     transaction {
@@ -1049,7 +1034,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getNumberOfValidRecord test`() {
-    formMultiple.model
     val blockModel = formMultiple.multipleBlock.block
 
     transaction {
@@ -1067,7 +1051,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `enter test`() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
     val blockModel = formSample.tb1.block
 
     blockModel.enter()
@@ -1077,7 +1061,7 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `getReportSearchColumns test`() {
-    val formSample = FormSample().also { it.model }
+    val formSample = FormSample()
 
     assertEquals(
       listOf(
@@ -1093,7 +1077,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `trailRecord test`() {
-    FormWithList.model
     val singleBlockModel = FormWithList.block3.block
 
     transaction {
@@ -1106,7 +1089,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `abortTrail test`() {
-    FormWithList.model
     val singleBlockModel = FormWithList.block3.block
 
     transaction {

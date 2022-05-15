@@ -32,7 +32,8 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.upload.Receiver
 import com.vaadin.flow.component.upload.receivers.MultiFileBuffer
@@ -61,7 +62,7 @@ class DBlockDropHandler(private val block: VBlock) {
   }
 
   fun onFinish(buffer: Receiver) {
-    if(buffer is MultiFileBuffer) {
+    if (buffer is MultiFileBuffer) {
       filesCount = buffer.files.size
     }
     isUploadStarted = false
@@ -78,13 +79,15 @@ class DBlockDropHandler(private val block: VBlock) {
   private fun acceptDrop(file: File?) {
     if (file != null) {
       try {
-        if (isChartBlockContext) {
+        val success = if (isChartBlockContext) {
           fileList!!.add(file)
-          if (fileList!!.size == filesCount) {
-            handleDrop(fileList!!)
-          }
+          handleDrop(fileList!!)
         } else {
           handleDrop(file, getExtension(file))
+        }
+
+        if (!success) {
+          VExecFailedException("Unable to upload file.") // TODO: replace with localized message.
         }
       } catch (e: VException) {
         // nothing to do

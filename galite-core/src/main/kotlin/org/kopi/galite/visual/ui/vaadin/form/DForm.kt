@@ -32,9 +32,9 @@ import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VRuntimeException
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * The `DForm` is the vaadin implementation of the [UForm] specifications.
@@ -275,7 +275,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   }
 
   override fun getBlockView(block: VBlock?): UBlock? {
-    val blocks: Array<VBlock> = vForm!!.blocks
+    val blocks = vForm!!.blocks
     for (i in blocks.indices) {
       if (block == blocks[i]) {
         return blockViews[i]

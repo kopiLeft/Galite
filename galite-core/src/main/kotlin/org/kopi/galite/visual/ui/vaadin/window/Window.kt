@@ -37,7 +37,7 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  protected val actors : VActorPanel = VActorPanel()
+  protected val actors = VActorPanel()
   private var content: Component? = null
 
   /**

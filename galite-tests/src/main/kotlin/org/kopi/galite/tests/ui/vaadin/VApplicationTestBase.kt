@@ -23,7 +23,7 @@ import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
-import org.kopi.galite.visual.db.Connection
+import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
 import org.kopi.galite.visual.ui.vaadin.report.DReport
@@ -33,13 +33,13 @@ import org.kopi.galite.visual.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.visual.ui.vaadin.visual.VUIFactory
 import org.kopi.galite.visual.util.Rexec
-import org.kopi.galite.visual.visual.ApplicationConfiguration
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.FileHandler
-import org.kopi.galite.visual.visual.ImageHandler
-import org.kopi.galite.visual.visual.PropertyException
-import org.kopi.galite.visual.visual.UIFactory
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.PropertyException
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.router.Route
 

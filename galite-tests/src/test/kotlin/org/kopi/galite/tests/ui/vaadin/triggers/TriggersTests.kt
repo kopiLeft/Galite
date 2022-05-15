@@ -23,14 +23,13 @@ import kotlin.test.assertEquals
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.click
-import org.kopi.galite.testing.enter
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
@@ -39,7 +38,7 @@ import org.kopi.galite.visual.dsl.form.Block
 
 class TriggersTests : GaliteVUITestBase() {
 
-  val form = FormToTestTriggers().also { it.model }
+  val form = FormToTestTriggers()
 
   @Before
   fun `login to the App`() {
@@ -104,7 +103,7 @@ class TriggersTests : GaliteVUITestBase() {
 
   @Test
   fun `test DEFAULT trigger`() {
-    form.salesSimpleBlock.enter()
+    form.salesSimpleBlock._enter()
     val fieldEditedByBlock = form.salesSimpleBlock.defaultValueFromBlock.findField()
     val field = form.salesSimpleBlock.defaultValueFromField.findField()
 

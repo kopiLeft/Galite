@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 public class SpellChecker {

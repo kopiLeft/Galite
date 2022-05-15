@@ -17,13 +17,10 @@
 
 package org.kopi.galite.visual.dsl.report
 
-import java.time.Instant
-
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Type0
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Type0
+import org.kopi.galite.type.Week
 
 /**
  * Represents a data row of a [Report].
@@ -35,16 +32,24 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
   val data = mutableMapOf<ReportField<*>, Any?>()
 
   /**
-   * Returns data value for a specific [ReportField].
+   * Returns data value of a specific [ReportField] in this report row.
    *
    * @param field the field.
    * @return  data value for a specific [ReportField].
    */
-  fun getValueOf(field: ReportField<*>) = data[field]
+  @Suppress("UNCHECKED_CAST")
+  fun <T> getValueOf(field: ReportField<T>): T = data[field] as T
 
   /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [ReportField].
+   * Gets the value of the field in this report row.
+   *
+   * @param field the field.
+   * @return  data value for a specific [ReportField].
+   */
+  operator fun <T> get(field: ReportField<T>): T = getValueOf(field)
+
+  /**
+   * Sets the value of the field in this report row.
    *
    * @param field the field.
    * @param value the field's value.
@@ -56,8 +61,7 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
   }
 
   /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [ReportField].
+   * Sets the value of the field in this report row.
    *
    * @param field the field.
    * @param value the field's value.
@@ -83,7 +87,6 @@ fun <T> ReportField<*>.toType0(value: T): Any? {
         else -> null
       }
     }
-    is Instant -> Timestamp(value)
     else -> null
   }
 }

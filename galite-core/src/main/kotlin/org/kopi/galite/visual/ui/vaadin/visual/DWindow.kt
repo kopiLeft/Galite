@@ -21,6 +21,7 @@ import java.io.File
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
+import org.kopi.galite.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
@@ -42,18 +43,17 @@ import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.util.base.Utils.Companion.doAfter
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.MessageListener
-import org.kopi.galite.visual.visual.PropertyException
-import org.kopi.galite.visual.visual.UWindow
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
-import org.kopi.galite.visual.visual.WaitInfoListener
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.MessageListener
+import org.kopi.galite.visual.PropertyException
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WaitInfoListener
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key
@@ -173,14 +173,14 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * Adds a command in the menu bar.
    * @param actorDefs The [VActor] definitions.
    */
-  private fun addActorsToGUI(actorDefs: Array<VActor?>) {
+  private fun addActorsToGUI(actorDefs: List<VActor>) {
     val panel = VActorsNavigationPanel()
 
     // Add actors panel
     add(actors)
     // Add each actor to the panel
     actorDefs.forEach { actorDef ->
-      val actor = DActor(actorDef!!)
+      val actor = DActor(actorDef)
 
       panel.addActor(actor, navigationMenu)
       if(actor.icon != null) {
@@ -251,6 +251,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
         currentUI = locateUI()
       }
       currentThread.start()
+    }
+  }
+
+  override fun openURL(url: String) {
+    access(currentUI) {
+      currentUI?.page?.open(url)
     }
   }
 
@@ -483,7 +489,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * @param message The message to be displayed.
    */
   protected fun verifyNotInTransaction(message: String) {
-    if (getModel()!!.inTransaction() && debugMessageInTransaction()) {
+    if (VWindow.inTransaction() && debugMessageInTransaction()) {
       try {
         ApplicationContext.reportTrouble("DWindow",
                                          "$message IN TRANSACTION",

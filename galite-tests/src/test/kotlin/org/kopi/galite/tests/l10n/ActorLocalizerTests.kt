@@ -25,7 +25,7 @@ import org.jdom2.Element
 import org.junit.Test
 import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.visual.l10n.ActorLocalizer
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 class ActorLocalizerTests : TestBase() {
 

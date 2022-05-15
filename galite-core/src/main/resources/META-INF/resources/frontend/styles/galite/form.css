@@ -27,28 +27,6 @@
  */
 .k-form-tab {
     border-bottom: #676767 1px solid;
-    font-weight: 500 !important;
-    font-style: normal !important;
-    font-family: Arial, sans-serif !important;
-}
-
-.k-form-tab .selected-tab::after {
-    width: 90%;
-}
-
-/**
- * Tab sheet anchor styles
- */
-.k-form-tab .tab::after {
-    content: "";
-    transition: .4s;
-    position: absolute;
-    height: 4px;
-    width: 0;
-    left: 5%;
-    bottom: 0;
-    background-color: var(--background-color);
-    margin-bottom: -4px;
 }
 
 /**
@@ -56,8 +34,6 @@
  */
 
 .k-form-tab .selected-tab {
-    font-weight: 500 !important;
-    font-style: normal !important;
     color: #000000;
     border-bottom: 3px solid var(--background-color);
 }
@@ -72,30 +48,8 @@
 /**
  * remove the small border under the tab styles
  */
- .k-form-tab .selected-tab::before {
-      transform: translateX(0%) scale(0);
-  }
-
-/**
- * Tab sheet (not active tab) hover styles
- */
-.k-form-tab .tab:hover:not(.selected-tab)::before {
-    width: 90%;
-}
-
-/**
- * Tab sheet (not active tab) hover styles
- */
-.k-form-tab .tab:not(.selected-tab)::before {
-    content: "";
-    transition: .4s;
-    position: absolute;
-    height: 4px;
-    width: 0;
-    left: 5%;
-    bottom: 0;
-    background-color: #dadada;
-    margin-bottom: -4px;
+.k-form-tab .selected-tab::before {
+    transform: translateX(0%) scale(0);
 }
 
 /**
@@ -123,11 +77,7 @@
     padding: 10px 20px;
 }
 
-/**
- * Form content styles
- */
-.k-form .k-form-page-content {
-    width: 100%;
+.k-form-page-content {
     padding: 0;
 }
 

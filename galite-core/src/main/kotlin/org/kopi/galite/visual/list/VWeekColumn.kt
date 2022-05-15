@@ -21,15 +21,15 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Week
+import org.kopi.galite.visual.domain.TableInitializer
 
 /**
  * Represents a list column.
  */
 class VWeekColumn(title: String,
                   column: Column<*>?,
-                  table: ColumnSet?,
+                  table: TableInitializer?,
                   sortAscending: Boolean)
     : VListColumn(title,
                   column,

@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -68,17 +69,17 @@ import javax.swing.undo.UndoManager;
 
 import org.kopi.galite.visual.ui.swing.visual.DMenuTree;
 import org.kopi.galite.visual.util.LineBreaker;
-import org.kopi.galite.visual.visual.ApplicationContext;
-import org.kopi.galite.visual.visual.MessageCode;
-import org.kopi.galite.visual.visual.MessageListener;
-import org.kopi.galite.visual.visual.UIFactory;
-import org.kopi.galite.visual.visual.UWindow;
-import org.kopi.galite.visual.visual.VActor;
-import org.kopi.galite.visual.visual.VException;
-import org.kopi.galite.visual.visual.VRuntimeException;
-import org.kopi.galite.visual.visual.VWindow;
-import org.kopi.galite.visual.visual.VlibProperties;
-import org.kopi.galite.visual.visual.WaitInfoListener;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.MessageListener;
+import org.kopi.galite.visual.UIFactory;
+import org.kopi.galite.visual.UWindow;
+import org.kopi.galite.visual.VActor;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.VlibProperties;
+import org.kopi.galite.visual.WaitInfoListener;
 import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
 import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
@@ -636,7 +637,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    * @deprecated   Use method #performAsyncAction(KopiAction action) without
    *               boolean parameter because this parameter  was ignored.
    */
-  public void performAction(final org.kopi.galite.visual.visual.Action action, boolean block) {
+  public void performAction(final org.kopi.galite.visual.Action action, boolean block) {
     performAsyncAction(action);
   }
   /**
@@ -645,7 +646,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performAsyncAction(final org.kopi.galite.visual.visual.Action action) {
+  public void performAsyncAction(final org.kopi.galite.visual.Action action) {
     performActionImpl(action, true);
   }
 
@@ -654,7 +655,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performBasicAction(final org.kopi.galite.visual.visual.Action action) {
+  public void performBasicAction(final org.kopi.galite.visual.Action action) {
     performActionImpl(action, false);
   }
 
@@ -664,7 +665,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  private void performActionImpl(final org.kopi.galite.visual.visual.Action action, boolean asynch) {
+  private void performActionImpl(final org.kopi.galite.visual.Action action, boolean asynch) {
     SwingThreadHandler.verifyRunsInEventThread("DForm:performActionImpl");
 
     if (inAction == true) {
@@ -717,6 +718,11 @@ public abstract class DWindow extends JPanel implements UWindow {
       currentThread = new Thread(actionRunner);
       currentThread.start();
     }
+  }
+
+  @Override
+  public void openURL(String url) throws Exception {
+    throw new Exception("Unsupported operation");
   }
 
   public void reportError(VRuntimeException e) {
@@ -1003,12 +1009,12 @@ public abstract class DWindow extends JPanel implements UWindow {
   /**
    * add a command in the menu bar
    */
-  private void addActorsToGUI(VActor[] actorDefs) {
+  private void addActorsToGUI(List<VActor> actorDefs) {
     if (actorDefs != null) {
-      for (int i = 0; i < actorDefs.length; i++) {
+      for (int i = 0; i < actorDefs.size(); i++) {
 	DActor		actorView;
 
-	actorView = (DActor)UIFactory.uiFactory.createView(actorDefs[i]);
+	actorView = (DActor)UIFactory.uiFactory.createView(actorDefs.get(i));
         addButton(buttonPanel, actorView);
         menuBar.addItem(actorView);
       }
@@ -1143,7 +1149,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    * Reports if a message is shown while in a transaction.
    */
   protected void verifyNotInTransaction(String message) {
-    if (getModel().inTransaction() && debugMessageInTransaction()) {
+    if (VWindow.Companion.inTransaction() && debugMessageInTransaction()) {
       try {
 	ApplicationContext.Companion.reportTrouble("DWindow",
                                          message + " IN TRANSACTION",
@@ -1397,7 +1403,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   // set/access inAction ONLY in the event-disp.-Thread
   private boolean				inAction;
   // set/access these fields ONLY in the event-disp.-Thread
-  private org.kopi.galite.visual.visual.Action currentAction;
+  private org.kopi.galite.visual.Action currentAction;
   private LinkedList<AWTEvent>            	currentEventQueue;
 
   private int                   		returnCode = -1;

@@ -19,8 +19,8 @@ package org.kopi.galite.visual.form
 
 import java.awt.Event
 
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * This class implements a pretty printer
@@ -35,8 +35,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
    * prints a compilation unit
    */
   override fun helpOnForm(name: String,
-                          commands: Array<VCommand>?,
-                          blocks: Array<VBlock>?,
+                          commands: MutableList<VCommand>?,
+                          blocks: List<VBlock>?,
                           title: String,
                           help: String?,
                           code: String): String? {
@@ -69,8 +69,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   override fun helpOnBlock(formCode: String,
                            title: String,
                            help: String?,
-                           commands: Array<VCommand>?,
-                           fields: Array<VField>,
+                           commands: MutableList<VCommand>?,
+                           fields: List<VField>,
                            alone: Boolean) {
     latexPrinter.println("\\subsection{$title}")
     latexPrinter.uncheckedPrintln("\\begin{center}\\includegraphics{images/" +
@@ -269,7 +269,10 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   // ----------------------------------------------------------------------
   // PRIVATE UTILITIES
   // ----------------------------------------------------------------------
-  private fun sortCommands(cmds: Array<VCommand>) {
+  private fun sortCommands(cmds: Array<VCommand>) { // TODO!!!: remove this
+    sortCommands(cmds.toMutableList())
+  }
+  private fun sortCommands(cmds: MutableList<VCommand>) {
     var i = cmds.size
     while (--i >= 0) {
       for (j in 0 until i) {

@@ -21,9 +21,10 @@ import kotlin.test.assertEquals
 import org.junit.Test
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.TestBlock
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.util.ReflectTool
 
-class ReflectToolTests {
+class ReflectToolTests: VApplicationTestBase() {
 
   /**
    * This test checks the elements' values of positions index in the form blocks

@@ -44,7 +44,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.visual.VlibProperties;
 
 public class SpellcheckerDialog extends JDialog {
 

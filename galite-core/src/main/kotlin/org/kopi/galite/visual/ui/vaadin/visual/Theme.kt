@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * The theme is the colors used in the user interface

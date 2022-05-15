@@ -23,8 +23,8 @@ import org.kopi.galite.visual.ui.vaadin.base.VInputButton
 import org.kopi.galite.visual.ui.vaadin.base.VInputText
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.RootMenu.Companion.ROOT_MENU_LOCALIZATION_RESOURCE
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.RootMenu.Companion.ROOT_MENU_LOCALIZATION_RESOURCE
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._get

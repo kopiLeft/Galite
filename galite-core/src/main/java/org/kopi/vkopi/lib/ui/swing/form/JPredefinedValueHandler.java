@@ -32,8 +32,8 @@ import org.kopi.galite.visual.form.AbstractPredefinedValueHandler;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VFieldUI;
 import org.kopi.galite.visual.form.VForm;
-import org.kopi.galite.visual.visual.Message;
-import org.kopi.galite.visual.visual.VExecFailedException;
+import org.kopi.galite.visual.Message;
+import org.kopi.galite.visual.VExecFailedException;
 
 @SuppressWarnings("serial")
 public class JPredefinedValueHandler extends AbstractPredefinedValueHandler {

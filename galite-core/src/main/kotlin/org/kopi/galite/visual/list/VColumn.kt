@@ -28,14 +28,15 @@ import org.jetbrains.exposed.sql.Table
  *
  * @param pos       position of associated table
  * @param name      column name
- * @param key       whether the column is a key
+ * @param isKey     whether the column is a key
  * @param nullable  true if column is nullable
+ * @param column    exposed column
  */
-class VColumn(val pos: Int,
-              val name: String,
-              val key: Boolean,
-              val nullable: Boolean,
-              val column: Column<*>) : Serializable {
+open class VColumn(val pos: Int,
+                   val name: String,
+                   val isKey: Boolean,
+                   val nullable: Boolean,
+                   val column: Column<*>) : Serializable {
 
   /**
    * Returns the position of the table in the array of tables

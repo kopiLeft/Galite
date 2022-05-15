@@ -30,8 +30,8 @@ import javax.swing.text.PlainDocument;
 import org.kopi.galite.visual.form.ModelTransformer;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VDecimalField;
-import org.kopi.galite.visual.util.base.InconsistencyException;
-import org.kopi.galite.visual.visual.ApplicationContext;
+import org.kopi.galite.util.base.InconsistencyException;
+import org.kopi.galite.visual.ApplicationContext;
 
 /**
  * !!! NEED COMMENTS

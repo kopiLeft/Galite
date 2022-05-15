@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.dsl.common
 
-import org.jetbrains.exposed.sql.ColumnSet
+import org.kopi.galite.visual.domain.TableInitializer
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.list.VList
 
@@ -33,7 +33,7 @@ import org.kopi.galite.visual.list.VList
  * @param access              true if this field is only an access to a form
  */
 class FieldList<T>(val type: String,
-                   val table: ColumnSet,
+                   val table: TableInitializer,
                    val action: (() -> DictionaryForm)?,
                    val columns: MutableList<ListDescription>,
                    val autocompleteType: Int,
@@ -54,9 +54,9 @@ class FieldList<T>(val type: String,
     return hasAction() && access
   }
 
-  fun buildListModel(source: String): VList {
+  fun buildListModel(source: String, ident: String): VList {
     return VList(
-            type,
+            type.ifEmpty { ident },
             source,
             columns.map { it.buildModel() }.toTypedArray(),
             table,

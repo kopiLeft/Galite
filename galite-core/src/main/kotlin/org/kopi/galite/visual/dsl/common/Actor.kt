@@ -21,8 +21,7 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VDefaultActor
+import org.kopi.galite.visual.VActor
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -34,15 +33,18 @@ import org.kopi.galite.visual.visual.VDefaultActor
  * @param menu                the containing menu
  * @param label               the label
  * @param help                the help
- * @param command             a predefined command that can be linked to this actor
  * @param source              path localization file
  */
 open class Actor(val menu: Menu,
                  val label: String,
-                 val help: String,
-                 val command: PredefinedCommand? = null,
+                 help: String,
+                 ident: String? = null,
                  source: String? = null)
-  : WindowElement(source = source) {
+  : VActor(menu.label, menu.sourceFile, ident, source, help = help, userActor = true) {
+
+  init {
+    menuItem = label
+  }
 
   // The shortcut key
   var key: Key? = null
@@ -50,21 +52,21 @@ open class Actor(val menu: Menu,
       checkKey(key)
       field = key
     }
-  val number: Int = command?.number ?: 0
 
   // The actor icon
   var icon: Icon? = null
+    set(value) {
+      iconName = value?.iconName
+      field = value
+    }
 
-  private var keyCode = 0
-  private var keyModifier = 0
-
-  private fun checkKey(key: Key?) {
+  fun checkKey(key: Key?) {
     if (key == null) {
-      keyModifier = 0
-      keyCode = KeyEvent.VK_UNDEFINED
+      acceleratorModifier = 0
+      acceleratorKey = KeyEvent.VK_UNDEFINED
     } else {
-      keyCode = key.value
-      keyModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_MASK else 0
+      acceleratorKey = key.value
+      acceleratorModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_MASK else 0
     }
   }
 
@@ -74,27 +76,6 @@ open class Actor(val menu: Menu,
   fun genLocalization(writer: LocalizationWriter) {
     writer.genActorDefinition(ident, label, help)
   }
-
-  // ----------------------------------------------------------------------
-  // ACTOR MODEL
-  // ----------------------------------------------------------------------
-
-  var model: VActor? = null
-
-  /**
-   * Builds the actor model [VActor] from information provided by this actor.
-   */
-  internal fun buildModel() : VActor =
-          if (number == 0) {
-            VActor(menu.label, menu.sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
-          } else {
-            VDefaultActor(number, menu.label, menu.sourceFile, ident, sourceFile, icon?.iconName, keyCode, keyModifier, true)
-          }.also {
-            it.menuName = menu.label
-            it.menuItem = label
-            it.help = help
-            model = it
-          }
 }
 
 enum class Icon(val iconName: String) {

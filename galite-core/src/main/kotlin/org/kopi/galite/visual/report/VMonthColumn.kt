@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.report
 
-import org.kopi.galite.visual.type.Month
+import org.kopi.galite.type.Month
 
 /**
  * Represents a report column description
@@ -33,14 +33,13 @@ class VMonthColumn(ident: String?,
                    align: Int,
                    groups: Int,
                    function: VCalculateColumn?,
-                   width: Int,
                    format: VCellFormat?)
    : VReportColumn(ident,
                    options,
                    align,
                    groups,
                    function,
-                   width,
+                   7,
                    1,
                    format) {
   /**

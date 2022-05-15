@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.form
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -25,7 +26,7 @@ import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.db.month
+import org.kopi.galite.database.month
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
@@ -38,8 +39,7 @@ import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
+import org.kopi.galite.type.Month
 
 object Product : Table() {
   val id = integer("ID").autoIncrement().nullable()
@@ -148,7 +148,7 @@ class BlockWithSpecialTypes : Block("Test block", 1, 1) {
     uc.value = 0
     ts.value = 0
     expiration.value = null
-    date.value = Timestamp.now()
+    date.value = Instant.now()
     expiration.value = Month.now()
   }
 }

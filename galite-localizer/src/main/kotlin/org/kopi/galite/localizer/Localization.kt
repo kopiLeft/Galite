@@ -24,11 +24,11 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.db.Connection
-import org.kopi.galite.visual.db.Modules
-import org.kopi.galite.visual.db.Symbols
+import org.kopi.galite.database.Connection
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.Symbols
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.visual.Module
+import org.kopi.galite.visual.Module
 
 fun localizeWindows(url: String,
                     driver: String,

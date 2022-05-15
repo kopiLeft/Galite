@@ -34,7 +34,7 @@ import com.github.mvysny.kaributesting.v10._get
  *
  * @receiver the block to go to.
  */
-fun Block.enter(duration: Long = 50) {
+fun Block._enter(duration: Long = 50) {
   val block = findBlock()
 
   // Click on the first field in the block
@@ -90,9 +90,9 @@ fun Block.findBlock(): DBlock {
 }
 
 /**
- * Finds the Vaadin block component of this multiple-block.
+ * Finds the Vaadin block component of this multiblock.
  */
-fun Block.findMultipleBlock(): DGridBlock =
+fun Block.findMultiBlock(): DGridBlock =
         (findBlock() as? DGridBlock) ?: throw Exception("$ident is not a multiple block")
 
 infix fun VBlock.eq(block: VBlock): Boolean {

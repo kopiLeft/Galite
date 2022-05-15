@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Month
+import org.kopi.galite.type.Month
 
 /**
  * Represents a month chart column.

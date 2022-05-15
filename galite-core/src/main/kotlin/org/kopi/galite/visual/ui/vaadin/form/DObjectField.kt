@@ -19,7 +19,7 @@ package org.kopi.galite.visual.ui.vaadin.form
 
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.field.ObjectFieldListener
-import org.kopi.galite.visual.visual.Action
+import org.kopi.galite.visual.Action
 
 /**
  * The `DObjectField` is the vaadin implementation

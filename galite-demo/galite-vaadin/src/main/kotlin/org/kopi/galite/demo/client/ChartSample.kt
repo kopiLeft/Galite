@@ -25,7 +25,7 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 class ChartSample : Chart(
   locale = Locale.UK,

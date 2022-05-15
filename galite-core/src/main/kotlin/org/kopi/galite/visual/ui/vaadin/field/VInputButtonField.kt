@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.FocusNotifier
@@ -29,7 +30,6 @@ class VInputButtonField(size: Int) : InputTextField<TextField>(TextField()),
   ComponentEventListener<FocusNotifier.FocusEvent<TextField>> {
 
   init {
-    setInputType("button")
     internalField.addFocusListener(this)
     addStyleDependentName("action")
     setWidth(size * CHAR_WIDTH, com.vaadin.flow.component.Unit.PIXELS)
@@ -38,6 +38,10 @@ class VInputButtonField(size: Int) : InputTextField<TextField>(TextField()),
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    setInputType("button")
+  }
   override fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<TextField>>) {}
 
   override fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<TextField>>) {}

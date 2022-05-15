@@ -104,6 +104,14 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     key = Key.F7
     icon = Icon.INSERT
   }
+  val pivottable = actor(
+    menu = action,
+    label = "Pivot table",
+    help = " Pivot table",
+  ) {
+    key = Key.F8
+    icon = Icon.REPORT
+  }
   val quit = actor(
     menu = action,
     label = "quit",
@@ -156,6 +164,9 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     }
     command(item = InsertMode) {
       insertMode()
+    }
+    command(item = pivottable) {
+      PivotTableExample().doNotModal()
     }
   }
 }

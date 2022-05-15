@@ -23,7 +23,7 @@ import java.io.Serializable
 import java.time.LocalDate
 
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VExecFailedException
 
 interface PredefinedValueHandler : Serializable {
 

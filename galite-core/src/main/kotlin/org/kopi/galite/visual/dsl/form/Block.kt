@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.dsl.form
 
 import java.awt.Point
+import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
@@ -31,39 +32,33 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.dsl.common.WindowElement
+import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Color
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VException
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VException
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
  * A block is created in order to either view the content of a database, to insert
  * new data in the database or to update existing data in the database.
  *
- * @param        title                 the title of the block
- * @param        buffer                the buffer size of this block
- * @param        visible               the number of visible elements
- * @param        ident                 the simple identifier of this block
- * @param        shortcut              the shortcut of this block
+ * @param        title                 the title of the block.
+ * @param        buffer                the buffer size of this block.
+ * @param        visible               the number of visible elements.
+ * @param        form                  the form to which belongs the block.
  */
 open class Block(val title: String,
                  var buffer: Int,
                  var visible: Int)
-  : WindowElement(), VConstants {
+  : LocalizableElement(), VConstants {
 
-  internal var options: Int = 0 // the block options
-  internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // the access mode
-  internal val dropListMap = HashMap<String, String>()
-  internal var maxRowPos = 0
-  internal var maxColumnPos = 0
-  internal var displayedFields = 0
+  val dropListMap = HashMap<String, FormField<*>>()
 
   val fields = mutableListOf<FormField<*>>() // the block's fields.
   val tables: MutableList<FormBlockTable> = mutableListOf() // the tables accessed on the database
@@ -73,9 +68,20 @@ open class Block(val title: String,
   val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
 
   var border: Border = Border.NONE // the border of the block
+    set(b) {
+      block.border = b.value
+      field = b
+    }
   var align: FormBlockAlign? = null // the type of alignment in form
-  var pageNumber = 0 // Sets the page number
-  open val help: String? = null // the help
+    private set(value) {
+      block.alignment = value?.getBlockAlignModel()
+      field = value
+    }
+  var help: String? = null // the help
+    set(value) {
+      block.help = value
+      field = value
+    }
 
   lateinit var shortcut: String // the shortcut of this block
   lateinit var form: Form // the form containing this block
@@ -109,7 +115,16 @@ open class Block(val title: String,
     val event = blockEventList(blockTriggers)
     val blockAction = Action(null, method)
     val trigger = FormTrigger(event, blockAction)
+
     triggers.add(trigger)
+
+    // BLOCK TRIGGERS
+    for (i in VConstants.TRG_TYPES.indices) {
+      if (trigger.events shr i and 1 > 0) {
+        block.VKT_Block_Triggers[0][i] = trigger
+      }
+    }
+
     return trigger
   }
 
@@ -134,6 +149,7 @@ open class Block(val title: String,
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     tables.add(formBlockTable)
+    block.tables.add(formBlockTable.table)
 
     return table
   }
@@ -144,18 +160,16 @@ open class Block(val title: String,
    * MUSTFILL fields are accessible fields that the user must fill with a value.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
   inline fun <reified T> mustFill(domain: Domain<T>,
                                   position: FormPosition,
-                                  init: MustFillFormField<T>.() -> Unit): MustFillFormField<T> {
+                                  initializer: FormField<T>.() -> Unit): FormField<T> {
     initDomain(domain)
-    val field = MustFillFormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
-    field.init()
-    field.initialize(this)
-    fields.add(field)
-    return field
+    val field = FormField(this, domain, fields.size, VConstants.ACS_MUSTFILL, position, "FLD_${fields.size}")
+
+    return init(field, initializer)
   }
 
   /**
@@ -164,13 +178,13 @@ open class Block(val title: String,
    * VISIT fields are accessible, can be modified but not necessary.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a VISIT field.
    */
   inline fun <reified T> visit(domain: Domain<T>,
                                position: FormPosition,
-                               init: NullableFormField<T>.() -> Unit): FormField<T?> {
-    return initField(domain, init, VConstants.ACS_VISIT, position)
+                               initializer: FormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_VISIT, position)
   }
 
   /**
@@ -179,13 +193,13 @@ open class Block(val title: String,
    * SKIPPED fields are read only fields, you can read the value but you can't modify it.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
   inline fun <reified T> skipped(domain: Domain<T>,
                                  position: FormPosition,
-                                 init: NullableFormField<T>.() -> Unit): FormField<T?> {
-    return initField(domain, init, VConstants.ACS_SKIPPED, position)
+                                 initializer: FormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_SKIPPED, position)
   }
 
   /**
@@ -193,27 +207,52 @@ open class Block(val title: String,
    *
    * HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
    *
-   * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
+   * @param domain         the domain of the field.
+   * @param initializer    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T?> {
-    return initField(domain, init, VConstants.ACS_HIDDEN)
+  inline fun <reified T> hidden(domain: Domain<T>, initializer: FormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, initializer, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
   inline fun <reified T> initField(domain: Domain<T>,
-                                   init: NullableFormField<T>.() -> Unit,
+                                   initializer: FormField<T>.() -> Unit,
                                    access: Int,
-                                   position: FormPosition? = null): FormField<T?> {
+                                   position: FormPosition? = null): FormField<T> {
     initDomain(domain)
-    val field = NullableFormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
-    field.init()
+    val field = FormField(this, domain, fields.size, access, position, "FLD_${fields.size}")
+
+    return init(field, initializer)
+  }
+
+  /**
+   * Initializes a field.
+   */
+  inline fun <reified T, U: FormField<T>> init(field: U,
+                                               initializer: U.() -> Unit): U {
+    field.initializer()
     field.initialize(this)
+    field.addFieldTrigger()
+    block.fields.add(field.vField)
     fields.add(field)
-    return field as FormField<T?>
+    return field
+  }
+
+  fun FormField<*>.addFieldTrigger() {
+    // FIELD TRIGGERS
+    val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
+
+    triggers.forEach { trigger ->
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          fieldTriggerArray[i] = trigger
+        }
+      }
+    }
+    this@Block.block.VKT_Field_Triggers.add(fieldTriggerArray)
   }
 
   inline fun <reified T> initDomain(domain: Domain<T>) {
@@ -296,7 +335,11 @@ open class Block(val title: String,
    */
   fun index(message: String): FormBlockIndex {
     val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message, indices.size)
+
     indices.add(formBlockIndex)
+    block.indices.add(formBlockIndex.message)
+    block.indicesIdents.add(formBlockIndex.ident)
+
     return formBlockIndex
   }
 
@@ -310,13 +353,16 @@ open class Block(val title: String,
    * @param action  the action function.
    */
   fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
-    val command = Command(item)
+    val command = Command(item, modes, block, action = action)
 
-    if (modes.isNotEmpty()) {
-      command.setMode(*modes)
-    }
-    command.action = action
     commands.add(command)
+
+    // COMMANDS TRIGGERS
+    // TODO : Add commands triggers here
+    block.VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
+
+    block.commands.add(command)
+
     return command
   }
 
@@ -342,7 +388,7 @@ open class Block(val title: String,
    */
   fun options(vararg options: BlockOption) {
     options.forEach { blockOption ->
-      this.options = this.options or blockOption.value
+      block.options = block.options or blockOption.value
     }
   }
 
@@ -357,13 +403,13 @@ open class Block(val title: String,
    */
   fun blockVisibility(access: Access, vararg modes: Mode) {
     if (modes.contains(Mode.QUERY)) {
-      this.access[VConstants.MOD_QUERY] = access.value
+      block.access[VConstants.MOD_QUERY] = access.value
     }
     if (modes.contains(Mode.INSERT)) {
-      this.access[VConstants.MOD_INSERT] = access.value
+      block.access[VConstants.MOD_INSERT] = access.value
     }
     if (modes.contains(Mode.UPDATE)) {
-      this.access[VConstants.MOD_UPDATE] = access.value
+      block.access[VConstants.MOD_UPDATE] = access.value
     }
   }
 
@@ -406,12 +452,12 @@ open class Block(val title: String,
       }
       // ACCESS
       for (i in 0..2) {
-        field.access[i] = field.access[i].coerceAtMost(access[i])
+        field.access[i] = field.access[i].coerceAtMost(block.access[i])
       }
     }
 
-    maxRowPos = bottomRight.y
-    maxColumnPos = bottomRight.x
+    block.maxRowPos = bottomRight.y
+    block.maxColumnPos = bottomRight.x
   }
 
   // ----------------------------------------------------------------------
@@ -419,14 +465,14 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   fun positionField(field: FormField<*>): FormPosition {
-    return FormCoordinatePosition(++displayedFields)
+    return FormCoordinatePosition(++block.displayedFields)
   }
 
   fun positionField(pos: FormPosition?) {
-    pos!!.setChartPosition(++displayedFields)
+    pos!!.setChartPosition(++block.displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = options and option == option
+  fun hasOption(option: Int): Boolean = block.options and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
@@ -485,7 +531,7 @@ open class Block(val title: String,
   fun getActiveCommands(): List<Command?> {
     val activeCommands = block.activeCommands
 
-    return commands.filter { it.model in activeCommands }
+    return commands.filter { it in activeCommands }
   }
 
   fun getMode(): Int = block.getMode()
@@ -692,6 +738,27 @@ open class Block(val title: String,
   }
 
   /**
+   * enter a new block
+   */
+  fun enter() {
+    block.enter()
+  }
+
+  /**
+   * exit block
+   * @exception VException      an exception may be raised by record.leave
+   */
+  fun leave(check: Boolean): Boolean = block.leave(check)
+
+  /**
+   * Validate current block.
+   * @exception VException      an exception may be raised by triggers
+   */
+  fun validate() {
+    block.validate()
+  }
+
+  /**
    * Returns true if the block has changed wrt the database.
    */
   val isChanged: Boolean
@@ -712,6 +779,13 @@ open class Block(val title: String,
    */
   protected fun checkMustfillFields() {
     block.checkMustfillFields()
+  }
+
+  /**
+   * Clears the entire block.
+   */
+  open fun clear() {
+    block.clear()
   }
 
   /**
@@ -745,6 +819,24 @@ open class Block(val title: String,
   }
 
   /**
+   * Saves changes in block to database.
+   * @exception VException      an exception may be raised by triggers
+   * @exception SQLException            an exception may be raised DB access
+   */
+  fun save() {
+    block.save()
+  }
+
+  /**
+   * Deletes in database
+   * @exception VException      an exception may be raised by triggers
+   * @exception SQLException    an exception may be raised DB access
+   */
+  fun delete() {
+    block.delete()
+  }
+
+  /**
    * Inserts an empty line in multi-block.
    * @exception        VException        an exception may occur during DB access
    */
@@ -775,14 +867,14 @@ open class Block(val title: String,
   /**
    * * Loads block from database
    */
-  fun load() {
+  open fun load() {
     block.load()
   }
 
   /**
    * * Loads block from database
    */
-  fun deleteBlock() {
+  open fun deleteBlock() {
     Commands.deleteBlock(block)
   }
 
@@ -815,9 +907,151 @@ open class Block(val title: String,
       if (dropListMap[extension] != null) {
         return extension
       }
-      dropListMap[extension] = field.ident
+      dropListMap[extension] = field
+      block.dropListMap[extension] = field.ident
     }
     return null
+  }
+
+  fun fireBlockChanged() {
+    block.fireBlockChanged()
+  }
+
+  // ----------------------------------------------------------------------
+  // SETS/GETS INFORMATION ABOUT THE BLOCK
+  // ----------------------------------------------------------------------
+
+  /**
+   * Returns the record info value for the given record.
+   * @param rec The record number.
+   * @return The record info value.
+   */
+  fun getRecordInfoAt(rec: Int): Int = block.getRecordInfoAt(rec)
+
+  /**
+   * Returns true if at least one record is filled
+   */
+  fun isFilled(): Boolean = block.isFilled()
+
+  /**
+   * Returns true if the record is filled
+   */
+  fun isRecordFilled(rec: Int): Boolean = block.isRecordFilled(rec)
+
+  /**
+   * Returns true if the specified record has been fetched from the database
+   */
+  fun isRecordFetched(rec: Int): Boolean = block.isRecordFetched(rec)
+
+  /**
+   * Returns true if the specified record has been changed
+   */
+  fun isRecordChanged(rec: Int): Boolean = block.isRecordChanged(rec)
+
+  /**
+   * Returns true if the specified record has been deleted
+   */
+  fun isRecordDeleted(rec: Int): Boolean = block.isRecordDeleted(rec)
+
+  /**
+   * Returns true if the specified record has been deleted
+   */
+  fun isSortedRecordDeleted(sortedRec: Int): Boolean = block.isSortedRecordDeleted(sortedRec)
+
+  /**
+   * Returns true if the specified record is trailed
+   */
+  fun isRecordTrailed(rec: Int): Boolean = block.isRecordTrailed(rec)
+
+  /**
+   * Returns true if the current record is filled
+   */
+  fun isCurrentRecordFilled(): Boolean = block.isCurrentRecordFilled()
+
+  /**
+   * Returns true if the current record has been fetched from the database
+   */
+  fun isCurrentRecordFetched(): Boolean = block.isCurrentRecordFetched()
+
+  /**
+   * Returns true if the current record has been changed
+   */
+  fun isCurrentRecordChanged(): Boolean = block.isCurrentRecordChanged()
+
+  /**
+   * Returns true if the current record has been deleted
+   */
+  fun isCurrentRecordDeleted(): Boolean = block.isCurrentRecordDeleted()
+
+  /**
+   * Returns true if the current record is trailed
+   */
+  fun isCurrentRecordTrailed(): Boolean = block.isCurrentRecordTrailed()
+
+  /**
+   * Returns the current block access.
+   */
+  fun getAccess(): Int = block.getAccess()
+
+  /**
+   * Updates current access of block fields in the current Record.
+   */
+  fun updateAccess(record: Int = activeRecord) {
+    block.updateAccess(record)
+  }
+
+  fun setRecordFetched(rec: Int, value: Boolean) {
+    block.setRecordFetched(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordFetched(value: Boolean) {
+    block.setRecordFetched(value)
+  }
+
+  fun setRecordChanged(rec: Int, value: Boolean) {
+    block.setRecordChanged(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordChanged(value: Boolean) {
+    block.setRecordChanged(value)
+  }
+
+  fun setRecordDeleted(rec: Int, value: Boolean) {
+    block.setRecordDeleted(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordDeleted(value: Boolean) {
+    block.setRecordDeleted(value)
+  }
+
+  /**
+   *
+   */
+  fun setRecordTrailed(rec: Int, value: Boolean) {
+    block.setRecordTrailed(rec, value)
+  }
+
+  /**
+   * Use the default record
+   */
+  fun setRecordTrailed(value: Boolean) {
+    block.setRecordTrailed(value)
+  }
+
+  /**
+   * COPY RECORD IN BLOCK
+   */
+  fun copyRecord(from: Int, to: Int, trail: Boolean) {
+    block.copyRecord(from, to, trail)
   }
 
   // ----------------------------------------------------------------------
@@ -964,16 +1198,22 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   /** The block model */
-  lateinit var block: VBlock
+  open val block: VBlock = object : VBlock(title, buffer, visible) {
+    override fun setInfo(form: VForm) {
+      this@Block.fields.forEach {
+        it.setInfo(super.source)
+      }
+    }
+  }
 
-  val isModelInitialized: Boolean get() = ::block.isInitialized
+  var isModelInitialized = false
 
   /** Returns block model */
-  open fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
-    val blockModel = BlockModel(vForm, this, source)
-
-    block = blockModel
-
-    return blockModel
+  open fun getBlockModel(vForm: VForm): VBlock {
+    block.form = vForm
+    block.source = if (this::class.isInner && vForm.source != null) vForm.source!! else sourceFile
+    block.name = ident
+    isModelInitialized = true
+    return block
   }
 }

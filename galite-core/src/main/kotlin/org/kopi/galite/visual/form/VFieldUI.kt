@@ -22,13 +22,13 @@ import java.io.Serializable
 
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock.OrderModel
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ActionHandler
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 /**
  * This class implements all UI actions on fields
@@ -165,7 +165,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
       try {
         // navigates to the active record if needed
         // this is typically needed in grid based blocks
-        gotoActiveRecord()
+        gotoActiveRecord(true)
         // switch to detail view when needed
         if (getBlock().isMulti() && display == detailDisplay && !getBlock().isDetailMode) {
           (blockView as UMultiBlock).switchView(-1)
@@ -208,7 +208,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     }
   }
 
-  protected open fun gotoActiveRecord() {
+  protected open fun gotoActiveRecord(force: Boolean = false) {
     // to be redefined by subclasses
   }
 
@@ -244,11 +244,9 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
       val localCommands = model.command
       localCommands?.forEachIndexed { index, localCommand ->
         if (localCommand.isActive(getBlock().getMode())) {
-          val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
-                                                 getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
+          val active = if (getBlock().hasFieldCommandTrigger(VConstants.TRG_CMDACCESS, index)) {
             try {
-              (getBlock().callTrigger(VConstants.TRG_CMDACCESS,
-                                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
+              (getBlock().callFieldCommandTrigger(VConstants.TRG_CMDACCESS, index) as Boolean)
             } catch (e: VException) {
               // consider that the command is active of any error occurs
               true

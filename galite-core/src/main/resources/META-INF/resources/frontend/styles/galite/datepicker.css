@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+:host([theme~="date-picker-suffix"]) {
+    --lumo-text-field-size: var(--lumo-space-xs);
+    padding: 0;
+}
+
+:host([theme~="date-picker-suffix"]) .vaadin-date-picker-container {
+    width: min-content;
+}
+
+:host([theme~="date-picker-suffix"]) [part~='input-field']::after {
+    background: unset;
+}
+
+:host([theme~="date-picker-suffix"]) [part~='input-field'] {
+    border: none;
+    padding: 0;
+    background: unset;
+    border-bottom: none !important;
+}
+
+:host([theme~="date-picker-suffix"]) [part~="toggle-button"] {
+    cursor: pointer;
+}
+
+.galite-date, #fullCalendar-date-picker::part(input-field) {
+    border-bottom: #dadada 1px solid;
+    border-radius: unset;
+}
+
+.galite-date:focus-within , #fullCalendar-date-picker::part(input-field):focus-within {
+    background: none;
+    border-bottom: var(--background-color) 1px solid;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.galite-date::part(input-field)::after {
+    background-color: unset;
+}
+
+.galite-date {
+    padding: 0 !important;
+    --lumo-text-field-size: var(--lumo-space-l);
+    color: #000000;
+}
+
+.galite-date::part(input-field) {
+    background: unset;
+    padding: 0 !important;
+    border-bottom: none !important;
+}

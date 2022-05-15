@@ -33,9 +33,9 @@ import org.kopi.galite.visual.ui.vaadin.field.AbstractField
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
@@ -62,6 +62,7 @@ abstract class DField(internal var model: VFieldUI,
   // ----------------------------------------------------------------------
   protected var state = 0 // Display state
   protected var pos = 0
+
   /** The alignment. */
   var align: Int = align
     protected set
@@ -204,6 +205,7 @@ abstract class DField(internal var model: VFieldUI,
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
+
   /**
    * Updates a given field label.
    * @param label The label to be updated.

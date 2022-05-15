@@ -71,7 +71,7 @@ class VScrollablePanel : Div {
   }
 
   override fun add(vararg components: Component) {
-    if(components[0] is Grid<*>) {
+    if (components[0] is Grid<*>) {
       setSizeFull()
     }
     content.add(*components)

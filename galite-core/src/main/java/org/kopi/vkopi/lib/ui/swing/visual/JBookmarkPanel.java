@@ -31,7 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import org.kopi.galite.visual.visual.UMenuTree.UBookmarkPanel;
+import org.kopi.galite.visual.UMenuTree.UBookmarkPanel;
 
 public class JBookmarkPanel extends JFrame implements UBookmarkPanel {
 

@@ -28,10 +28,10 @@ import org.kopi.galite.visual.form.VDefaultFormActor
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VFullCalendarCommand
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.WindowController
 
 abstract class VFullCalendarForm : VForm() {
   private var actorsDef = mutableListOf<VActor>()
@@ -52,7 +52,7 @@ abstract class VFullCalendarForm : VForm() {
     createActor("File", "Quit", QUIT_ICON, KeyEvent.VK_ESCAPE, 0, VConstants.CMD_QUIT)
     createActor("File", "Save", SAVE_ICON, 0, 0, VConstants.CMD_SAVE, mode(VConstants.MOD_INSERT, VConstants.MOD_UPDATE))
     createActor("File", "Delete", DELETE_ICON, 0, 0, VConstants.CMD_DELETE, mode(VConstants.MOD_UPDATE))
-    addActors(actorsDef.toTypedArray())
+    actors.addAll(actorsDef)
   }
 
   fun mode(vararg access: Int): Int {
@@ -102,12 +102,11 @@ abstract class VFullCalendarForm : VForm() {
   // Default Commands
   // ----------------------------------------------------------------------
   protected fun initDefaultCommands() {
-    super.commands = arrayOf()
-    block.commands = block.commands?.plus(commandsDef.toTypedArray()) ?: commandsDef.toTypedArray()
+    block.commands.addAll(commandsDef)
 
     commandsDef.forEach {
       val fieldTriggerArray = arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size)
-      block.VKT_Triggers.add(fieldTriggerArray)
+      block.VKT_Command_Triggers.add(fieldTriggerArray)
     }
   }
 

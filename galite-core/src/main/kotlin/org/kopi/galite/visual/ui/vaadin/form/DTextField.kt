@@ -23,10 +23,9 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.field.VDateField
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.contextmenu.ContextMenu
 
@@ -64,26 +63,18 @@ open class DTextField(
       DefaultTransformer(getModel().width,
                          getModel().height)
     } else if (!scanner) {
-      NewlineTransformer(getModel().width,
-                         getModel().height)
+      NewlineTransformer(
+        getModel().width,
+        getModel().height
+      )
     } else {
       ScannerTransformer(this)
     }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    // Issue: https://github.com/vaadin/flow-components/issues/1158
-    // TODO: Remove this workaround when the ticket is resolved.
-    if(field.inputField is VDateField) {
-      field.inputField.addDateValueChangeListener { fromClient ->
-        if(fromClient) {
-          valueChanged()
-        }
-      }
-    } else {
-      field.inputField.addTextValueChangeListener {
-        if(it.isFromClient) {
-          valueChanged()
-        }
+    field.inputField.addTextValueChangeListener {
+      if (it.isFromClient) {
+        valueChanged()
       }
     }
 

@@ -26,7 +26,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VDecimalCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Constructor

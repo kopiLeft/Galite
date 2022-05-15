@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.chart
 
 import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a code measure column.

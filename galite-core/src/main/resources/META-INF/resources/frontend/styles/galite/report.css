@@ -16,10 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Report style
- */
-::part(cell header-cell) {
+::part(cell header-cell), :host([theme~="report"]) tbody [part~="cell"].title {
     background: #f2f2f2;
     color: #505050;
     user-select: none;
@@ -36,13 +33,6 @@ vaadin-grid.report > vaadin-grid-cell-content vaadin-vertical-layout:hover {
 vaadin-grid > vaadin-grid-cell-content {
     height: 100%;
     padding: var(--lumo-size-xxs);
-}
-
-#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
 }
 
 ::part(resize-handle)::before {
@@ -73,9 +63,21 @@ vaadin-grid.report > vaadin-grid-cell-content vaadin-vertical-layout {
 }
 
 /**
- * report border : adding border bottom for the end row of the report
+ * report border : adding border bottom for the last row of the report
  */
-:host([theme~="report"]) tbody [part~="cell"] {
-    border-top: none !important;
+:host([theme~="report"]) tbody [part~="cell"].last-row {
     border-bottom: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
+}
+
+:host([theme~="report"]) tbody [part~="cell"].colspan {
+    border-left: none !important;
+}
+
+:host([theme~="report"]) tbody [part~="cell"].rowspan {
+    border-top: none !important;
+}
+
+:host([theme~='report']) [part~='cell']:not([part~='details-cell']) {
+    border-right: none !important;
+    border-left: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
 }

@@ -24,7 +24,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VBooleanCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 open class VBooleanCodeField : VCodeField {
 
@@ -115,7 +115,7 @@ open class VBooleanCodeField : VCodeField {
    * @param    result       the result row
    * @param    column       the column in the tuple
    */
-  override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? = result[column] as? Boolean
+  override fun retrieveQuery(result: ResultRow, column: Column<*>): Boolean? = result[column] as? Boolean
 
   override fun getCodes(): Array<Any?> = codes as Array<Any?>
 

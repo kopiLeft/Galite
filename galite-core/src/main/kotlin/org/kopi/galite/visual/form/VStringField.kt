@@ -20,12 +20,12 @@ package org.kopi.galite.visual.form
 
 import kotlin.reflect.KClass
 
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.util.LineBreaker
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VlibProperties
 
 open class VStringField(val bufferSize: Int,
                         width: Int,
@@ -71,6 +71,11 @@ open class VStringField(val bufferSize: Int,
   override fun getTypeName(): String = VlibProperties.getString(if (height == 1) "String" else "StringArea")
 
   /**
+   * return the name of this field
+   */
+  override fun getTypeOptions(): Int = convert
+
+  /**
    * Return the visible height
    */
   fun getVisibleHeight(): Int = if (visibleHeight == 0) height else visibleHeight
@@ -95,7 +100,7 @@ open class VStringField(val bufferSize: Int,
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception may be raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     var s = s as? String

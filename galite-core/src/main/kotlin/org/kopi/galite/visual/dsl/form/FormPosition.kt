@@ -20,7 +20,7 @@ package org.kopi.galite.visual.dsl.form
 import java.awt.Point
 
 import org.kopi.galite.visual.form.VPosition
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * A position within a block. This is a position given by x and y location

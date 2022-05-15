@@ -21,6 +21,7 @@ package org.kopi.galite.visual.report
 import java.awt.Color
 import java.io.OutputStream
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -38,11 +39,10 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VlibProperties
 
 abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig, title: String)
   : PExport(table, model, printConfig, title), Constants {
@@ -188,7 +188,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
           cell.setCellValue(orig)
         } else if (orig is LocalDate) {
           setCellValue(cell, orig)
-        } else if (orig is Timestamp || orig is java.sql.Timestamp) {
+        } else if (orig is Instant || orig is java.sql.Timestamp) {
           // date columns can be returned as a timestamp by the jdbc driver.
           cell.setCellValue(data)
           datatype[cellPos] = CellType.STRING

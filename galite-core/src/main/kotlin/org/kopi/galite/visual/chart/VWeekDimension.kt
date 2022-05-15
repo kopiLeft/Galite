@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Week
 
 /**
  * Represents a week chart column.

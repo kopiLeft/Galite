@@ -41,7 +41,7 @@ import org.kopi.galite.visual.form.VBlock;
 import org.kopi.galite.visual.form.VField;
 import org.kopi.galite.visual.form.VImageField;
 import org.kopi.galite.visual.form.VStringField;
-import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.VException;
 
 public class DBlockDropTargetHandler implements DropTargetListener {
 

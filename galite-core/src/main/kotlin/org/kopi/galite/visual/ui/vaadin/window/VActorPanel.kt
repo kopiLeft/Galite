@@ -38,7 +38,7 @@ class VActorPanel : MenuBar() {
   //---------------------------------------------------
   init {
     className = Styles.WINDOW_VIEW_ACTORS
-    menu.element.setAttribute("id", "menu")
+    menu.setId("menu")
     this.setId("actors")
     menu.add(actorsNavigationItem)
     this.addItem(menu)

@@ -21,16 +21,16 @@ import java.sql.SQLException
 
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.cross.VFullCalendarForm
-import org.kopi.galite.visual.db.DBDeadLockException
-import org.kopi.galite.visual.db.DBInterruptionException
-import org.kopi.galite.visual.db.transaction
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VWindow
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.database.DBDeadLockException
+import org.kopi.galite.database.DBInterruptionException
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * This class implements predefined commands
@@ -190,7 +190,7 @@ object Commands : VConstants {
           break
         } catch (e: VException) {
         try {
-          form.handleAborted(e);
+          form.handleAborted(e)
         } catch(abortEx: VException) {
           throw abortEx
         }
@@ -206,15 +206,15 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.handleAborted(e);
+            form.handleAborted(e)
           } catch(abortEx: Error) {
-            throw InconsistencyException(abortEx);
+            throw InconsistencyException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.handleAborted(e);
+            form.handleAborted(e)
           } catch(abortEx: RuntimeException) {
-            throw InconsistencyException(abortEx);
+            throw InconsistencyException(abortEx)
           }
         }
       }

@@ -21,10 +21,10 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.visual.ImageHandler
+import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.domain.TableInitializer
 
-class VImageColumn(title: String, column: Column<*>?, table: ColumnSet?, sortAscending: Boolean)
+class VImageColumn(title: String, column: Column<*>?, table: TableInitializer?, sortAscending: Boolean)
   : VListColumn(title, column, table, VConstants.ALG_LEFT, 7, sortAscending) {
   /**
    * Returns a string representation of value

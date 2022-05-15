@@ -22,7 +22,7 @@ plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.4.0"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "21.0.9"
+  id("com.vaadin") version "22.0.14"
 }
 
 vaadin {
@@ -62,8 +62,9 @@ dependencies {
   testImplementation("org.apache.poi", "poi", Versions.APACHE_POI)
   testImplementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 
-  // EnhancedDialog dependency
+  // Vaadin addons dependency
   testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
+  testImplementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 }
 
 tasks {

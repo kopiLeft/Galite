@@ -26,7 +26,7 @@ import org.kopi.galite.visual.list.VColumn
  * @param index                   the indices of this column
  * @param priority                the priority in sorting
  */
-class FormFieldColumns<T>(internal val columns: Array<FormFieldColumn<T>>,
+class FormFieldColumns<T>(internal val columns: List<FormFieldColumn<T>>,
                           var index: FormBlockIndex? = null,
                           var priority: Int = 0) {
 
@@ -34,19 +34,13 @@ class FormFieldColumns<T>(internal val columns: Array<FormFieldColumn<T>>,
    * Creates and returns the columns' models related to this field
    */
   fun getColumnsModels(): List<VColumn> {
-    return columns.map { formFieldColumn ->
-      formFieldColumn.getFormFieldColumnModel()
-    }
+    return columns
   }
 
   /**
    * Sets the position in an array of fields
    */
   fun cloneToPos(pos: Int): FormFieldColumns<T> {
-    val clone = arrayOfNulls<FormFieldColumn<T>>(columns.size)
-    for (i in columns.indices) {
-      clone[i] = columns[i].cloneToPos(pos)
-    }
-    return FormFieldColumns(clone.requireNoNulls(), index, priority)
+    return FormFieldColumns(columns.map { it.cloneToPos(pos) }, index, priority)
   }
 }

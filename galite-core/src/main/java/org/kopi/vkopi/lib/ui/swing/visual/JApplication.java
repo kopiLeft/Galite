@@ -27,26 +27,26 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
 import org.kopi.galite.visual.base.UComponent;
-import org.kopi.galite.visual.db.Connection;
+import org.kopi.galite.database.Connection;
 import org.kopi.galite.visual.l10n.LocalizationManager;
 import org.kopi.galite.visual.print.PrintManager;
-import org.kopi.galite.visual.visual.Application;
-import org.kopi.galite.visual.visual.ApplicationConfiguration;
-import org.kopi.galite.visual.visual.ApplicationContext;
-import org.kopi.galite.visual.visual.Executable;
-import org.kopi.galite.visual.visual.FileHandler;
-import org.kopi.galite.visual.visual.ImageHandler;
-import org.kopi.galite.visual.visual.ModelCloseListener;
-import org.kopi.galite.visual.visual.Module;
-import org.kopi.galite.visual.visual.PrinterManager;
-import org.kopi.galite.visual.visual.PropertyException;
-import org.kopi.galite.visual.visual.Registry;
-import org.kopi.galite.visual.visual.UIFactory;
-import org.kopi.galite.visual.visual.VException;
-import org.kopi.galite.visual.visual.VMenuTree;
-import org.kopi.galite.visual.visual.VWindow;
-import org.kopi.galite.visual.visual.VerifyConfiguration;
-import org.kopi.galite.visual.visual.WindowController;
+import org.kopi.galite.visual.Application;
+import org.kopi.galite.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.Executable;
+import org.kopi.galite.visual.FileHandler;
+import org.kopi.galite.visual.ImageHandler;
+import org.kopi.galite.visual.ModelCloseListener;
+import org.kopi.galite.visual.Module;
+import org.kopi.galite.visual.PrinterManager;
+import org.kopi.galite.visual.PropertyException;
+import org.kopi.galite.visual.Registry;
+import org.kopi.galite.visual.UIFactory;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VMenuTree;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.VerifyConfiguration;
+import org.kopi.galite.visual.WindowController;
 
 /**
  * {@code JApplication} is a swing implementation of a kopi application.
@@ -118,7 +118,7 @@ public abstract class JApplication implements Application {
       try {
         Executable  module;
 
-        module = Module.Companion.startForm(context, form, "initial form");
+        module = Module.Companion.startForm(connection, form, "initial form");
         if (module instanceof VWindow) {
           ((VWindow) module).addModelCloseListener(new ModelCloseListener() {
             @Override
@@ -139,7 +139,7 @@ public abstract class JApplication implements Application {
       try {
         String url = getURL();
 
-        menuTree = new VMenuTree(context);
+        menuTree = new VMenuTree(connection);
         menuTree.setTitle(getUserName() + "@" + url.substring(url.indexOf("//") + 2));
         menuTree.doNotModal();
       } catch (VException e) {
@@ -187,7 +187,7 @@ public abstract class JApplication implements Application {
    * @return The database URL.
    */
   public String getURL() {
-    return context.getUrl();
+    return connection.getUrl();
   }
 
   /**
@@ -342,7 +342,7 @@ public abstract class JApplication implements Application {
   private boolean connectToDatabase() {
     if (options.username != null) {
       try {
-        context = Connection.Companion
+        connection = Connection.Companion
                 .createConnection(options.database,
                                   options.driver,
                                   options.username,
@@ -352,15 +352,15 @@ public abstract class JApplication implements Application {
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();
-        context = null;
+        connection = null;
       }
     }
 
-    if (context == null) {
+    if (connection == null) {
       //      installLF(defaults.getKopiLFProperties());
 
       removeSplashScreen();
-      context = login(options.database,
+      connection = login(options.database,
               options.driver,
               options.username,
               options.password,
@@ -368,7 +368,7 @@ public abstract class JApplication implements Application {
       displaySplashScreen();
     }
 
-    return context != null;
+    return connection != null;
   }
 
   // ---------------------------------------------------------------------
@@ -402,7 +402,7 @@ public abstract class JApplication implements Application {
 
 
   public String getUserName() {
-    return context.getUserName();
+    return connection.getUserName();
   }
 
 
@@ -459,7 +459,7 @@ public abstract class JApplication implements Application {
 
   private ApplicationOptions       		options;
   private VMenuTree                      	menuTree;
-  private Connection                   context;
+  private Connection connection;
   private boolean                       	isGeneratingHelp;
   private SplashScreen                  	splash;
   private Registry                      	registry;

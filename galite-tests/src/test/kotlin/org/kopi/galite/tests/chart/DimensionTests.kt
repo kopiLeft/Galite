@@ -22,15 +22,19 @@ import java.math.BigDecimal
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
+import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.visual.Color
+import org.kopi.galite.type.Month
+import org.kopi.galite.visual.Color
 
-class DimensionTests {
+class DimensionTests: VApplicationTestBase() {
+  val chart = object : Chart("") {}
 
   /**
    * Tests that dimension's values have been added and measures have been registered with their
@@ -38,7 +42,7 @@ class DimensionTests {
    */
   @Test
   fun monthDimensionTest() {
-    val monthDimension = ChartDimension(MONTH)
+    val monthDimension = ChartDimension(MONTH, chart)
     val measure1 = ChartMeasure(DECIMAL(20, 10))
     measure1.label = "measure 1"
     measure1.color = Color.RED
@@ -63,7 +67,7 @@ class DimensionTests {
    */
   @Test
   fun intDimensionTest() {
-    val intDimension = ChartDimension(INT(10))
+    val intDimension = ChartDimension(INT(10), chart)
     val measure1 = ChartMeasure(INT(10))
     val measure2 = ChartMeasure(INT(10))
 

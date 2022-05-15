@@ -24,6 +24,7 @@ import java.time.LocalTime
 import kotlin.test.assertIs
 
 import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.FormField
@@ -35,10 +36,10 @@ import org.kopi.galite.visual.form.VMonthField
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
 
-class DomainTests {
+class DomainTests : VApplicationTestBase() {
 
     @Test
     fun buildFormFieldTest() {

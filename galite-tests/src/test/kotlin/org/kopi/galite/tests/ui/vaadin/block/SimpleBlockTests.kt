@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.ui.vaadin.block
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -26,10 +27,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editText
-import org.kopi.galite.testing.enter
 import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.findModel
 import org.kopi.galite.testing.open
@@ -40,14 +41,13 @@ import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.type.format
 
 class SimpleBlockTests: GaliteVUITestBase() {
-  val testFieldsVisibilityForm = TestFieldsVisibilityForm().also { it.model }
-  val formExample = FormExample().also { it.model }
+  val testFieldsVisibilityForm = TestFieldsVisibilityForm()
+  val formExample = FormExample()
 
   @Before
   fun `login to the App`() {
@@ -60,10 +60,10 @@ class SimpleBlockTests: GaliteVUITestBase() {
     formExample.open()
 
     // Enter sales block
-    formExample.salesSimpleBlock.enter()
+    formExample.salesSimpleBlock._enter()
 
     // Enters values to fields
-    val currentTimestamp   = Timestamp.now()
+    val currentTimestamp   = Instant.now()
     val currentDate        = LocalDate.now()
     val currentWeek        = Week.now()
     val currentMonth       = Month.now()
@@ -89,7 +89,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     assertEquals(true, active.getModel().getBoolean(0))
     assertEquals(currentDate, date.getModel().getDate(0))
     assertEquals(currentMonth, month.getModel().getMonth(0))
-    assertEquals(Timestamp.parse(currentTimestamp.format("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss"), timestamp.getModel().getTimestamp(0))
+    assertEquals(currentTimestamp.defaultFormat(), timestamp.getModel().getTimestamp(0).defaultFormat())
     assertEquals(currentTime.format(), time.getModel().getTime(0).toString())
     assertEquals(currentWeek, week.getModel().getWeek(0))
     assertEquals(1, codeDomain.getModel().getObject(0))
@@ -112,7 +112,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     val skippedToMustFillField = block.skippedToMustFillField.findModel(blockModel)
 
     // enter the block to enable the commands
-    block.enter()
+    block._enter()
 
     // verify initial access
     assertEquals(Mode.QUERY.value, blockModel.getMode())

@@ -17,7 +17,10 @@
  */
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.type.Timestamp
+import java.time.Instant
+import java.time.LocalDateTime
+
+import org.kopi.galite.type.format
 
 /**
  * Represents a time stamp chart column.
@@ -29,7 +32,8 @@ class VTimestampDimension(ident: String, format: VColumnFormat?) : VDimension(id
   override fun toString(value: Any?): String {
     return when (value) {
       null -> CConstants.EMPTY_TEXT
-      is Timestamp -> value.toString()
+      is Instant -> value.format()
+      is LocalDateTime -> value.format()
       else -> value.toString()
     }
   }

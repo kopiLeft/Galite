@@ -21,7 +21,6 @@ import java.sql.SQLException
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.Calendar
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SortOrder
@@ -29,25 +28,23 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.kopi.galite.visual.cross.VFullCalendarForm
-import org.kopi.galite.visual.db.DBDeadLockException
-import org.kopi.galite.visual.db.DBInterruptionException
-import org.kopi.galite.visual.db.transaction
+import org.kopi.galite.database.DBDeadLockException
+import org.kopi.galite.database.DBInterruptionException
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.BlockListener
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.type.Week
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
-abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
+abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VBlock(title, buffer, visible) {
 
   lateinit var fullCalendarForm: VFullCalendarForm
   var dateField: VDateField? = null
@@ -60,8 +57,6 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
    * Returns true if this block can display more than one record.
    */
   override fun isMulti(): Boolean = true
-
-  override fun initIntern() { }
 
   /**
    * Fetch full calendar entries from database. This will select all entries between
@@ -237,8 +232,8 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
         VFullCalendarEntry(date, start, end, values)
       } else {
         val values = mutableMapOf<VField, Any?>()
-        lateinit var start: Timestamp
-        lateinit var end: Timestamp
+        lateinit var start: Instant
+        lateinit var end: Instant
 
         for (i in 0 until query_cnt) {
           val vField = query_tab[i]!!
@@ -246,10 +241,10 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
 
           when (vField) {
             fromField -> {
-              start = value as Timestamp
+              start = value as Instant
             }
             toField -> {
-              end = value as Timestamp
+              end = value as Instant
             }
             else -> values[vField] = value
           }
@@ -264,12 +259,12 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
     return entries
   }
 
-  fun openForEdit(startDateTime: Timestamp, endDateTime: Timestamp) {
+  fun openForEdit(startDateTime: Instant, endDateTime: Instant) {
     set(startDateTime, endDateTime)
     insertMode()
   }
 
-  internal fun openForEdit(record: Int, newStart: Timestamp, newEnd: Timestamp) {
+  internal fun openForEdit(record: Int, newStart: Instant, newEnd: Instant) {
     fetchRecordInBlock(record)
     set(newStart, newEnd)
     fullCalendarForm.doNotModal()
@@ -286,11 +281,11 @@ abstract class VFullCalendarBlock(form: VForm) : VBlock(form) {
     }
   }
 
-  fun set(startDateTime: Timestamp, endDateTime: Timestamp) {
+  fun set(startDateTime: Instant, endDateTime: Instant) {
     if (dateField != null) {
-      dateField!!.setDate(LocalDate.from(startDateTime.toSql()))
-      fromTimeField!!.setTime(LocalTime.from(startDateTime.toSql()))
-      toTimeField!!.setTime(LocalTime.from(endDateTime.toSql()))
+      dateField!!.setDate(LocalDate.from(startDateTime))
+      fromTimeField!!.setTime(LocalTime.from(startDateTime))
+      toTimeField!!.setTime(LocalTime.from(endDateTime))
     } else {
       fromField!!.setTimestamp(startDateTime)
       toField!!.setTimestamp(endDateTime)

@@ -25,10 +25,10 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTimeColumn
-import org.kopi.galite.visual.type.format
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.type.format
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
@@ -79,7 +79,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {

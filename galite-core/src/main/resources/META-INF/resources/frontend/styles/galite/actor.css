@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*
+/**
  * Actors' container style
  */
 #actors {
@@ -37,28 +37,29 @@
     color: #ffffff;
 }
 
+::part(k-actor), ::part(k-actor-disabled) {
+    height: 60px;
+    font-size: 12px;
+}
+
 ::part(k-actor) {
-    border: 0;
     background: var(--background-color);
     color: #ffffff;
-    height: 60px;
-    font-size: 13px;
 }
 
 ::part(k-actor-disabled) {
-    border: 0;
     background: var(--background-color);
     color: var(--disabled-actor-color);
-    height: 60px;
-    font-size: 13px;
 }
 
 #actors::part(overflow-button):hover {
-     background: var(--actor-hover-color);
+    background: var(--actor-hover-color);
+    cursor: pointer;
 }
 
 ::part(k-actor):hover {
     background: var(--actor-hover-color);
+    cursor: pointer;
 }
 
 .k-window ::part(menu-bar-button) {
@@ -73,9 +74,7 @@
 .actors-navigationPanel {
     display: inline-block;
     width: 970px;
-    height:auto;
     padding: 14px 14px 18px 14px;
-    background: #ffffff;
     color: #8f8f8f;
     border-bottom : 1px solid #dadada;
 }
@@ -85,9 +84,6 @@
     border-bottom : 1px solid #dadada;
     font-size: 1.2em !important;
     padding: 12px 48px;
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
 }
 
 .actor-navigationColumn {
@@ -111,15 +107,8 @@
     cursor: pointer;
 }
 
-.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover * {
-    color: var(--background-color);
-}
 .actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover {
     color: var(--background-color);
-}
-
-.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem-disabled:hover {
-    color: none;
 }
 
 .actor-navigationItem-disabled {
@@ -137,7 +126,8 @@
     cursor: default;
 }
 
-.actor-navigationColumn > .actor-navigationItem > iron-icon,  .actor-navigationColumn > .actor-navigationItem-disabled > iron-icon {
+.actor-navigationColumn > .actor-navigationItem > iron-icon,
+  .actor-navigationColumn > .actor-navigationItem-disabled > iron-icon {
     width: 30px;
     font-size: 1.5em !important;
 }
@@ -146,23 +136,13 @@
     width: calc(100% - 110px);
     padding: 10px 16px;
     margin: 4px;
-    height: auto;
-    background: #ffffff;
 }
 
 .actor-navigationColumn > .actor-navigationItem > div {
     cursor: pointer;
 }
 
-.actor-navigationColumn {
-    width: calc(25% - 3px);
-    line-height: 1.5em;
-}
-
 .actors-navigationPanel > * {
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
     font-size: 12px !important;
 }
 
@@ -180,12 +160,7 @@
     color: #676767;
 }
 
-.k-actor-disabled {
-    color: var(--disabled-actor-color);
-}
-
 .k-actor:hover {
-    background: var(--actor-hover-color);
     cursor: pointer;
 }
 
@@ -194,8 +169,8 @@ vaadin-button.k-actor::after, vaadin-button.k-actor::before {
 }
 
 .vaadin-menu-item:hover {
-      background: var(--background-hover-color);
-      cursor: pointer;
+    background: var(--background-hover-color);
+    cursor: pointer;
 }
 
 .vaadin-menu-item:not(:last-child) {

@@ -24,8 +24,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.kopi.galite.visual.visual.FileHandler;
-import org.kopi.galite.visual.visual.UWindow;
+import org.kopi.galite.visual.FileHandler;
+import org.kopi.galite.visual.UWindow;
 
 public class JFileHandler extends FileHandler {
 

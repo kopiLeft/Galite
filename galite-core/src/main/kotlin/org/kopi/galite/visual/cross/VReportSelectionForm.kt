@@ -21,10 +21,10 @@ import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.report.VNoRowException
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
 
-abstract class VReportSelectionForm protected constructor() : VDictionaryForm() {
+abstract class VReportSelectionForm protected constructor(source: String? = null) : VDictionaryForm(source) {
 
   /**
    * Implements interface for COMMAND CreateReport
@@ -34,7 +34,6 @@ abstract class VReportSelectionForm protected constructor() : VDictionaryForm() 
     try {
       setWaitInfo(Message.getMessage("report_generation"))
       val report = reportBuilder()
-      report.dBConnection = dBConnection
       report.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoRowException) {
@@ -52,7 +51,6 @@ abstract class VReportSelectionForm protected constructor() : VDictionaryForm() 
       b.validate()
       try {
         report.setWaitInfo(Message.getMessage("report_generation"))
-        report.dBConnection = report.dBConnection
         report.doNotModal()
         report.unsetWaitInfo()
       } catch (e: VNoRowException) {

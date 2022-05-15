@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.visual.Executable
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VWindow
+import org.kopi.galite.visual.Executable
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VWindow
 
 /**
  * The `VDictionary` is a meaning to handle three basic operations.
@@ -43,11 +43,10 @@ interface VDictionary : Executable {
    * database query. The returned integer represents the identifier
    * of the selected record after the search operation.
    *
-   * @param parent The parent window. This can be used also as database context handler.
    * @return The selected ID of the searched record.
    * @throws VException Any visual errors that occurs during search operation.
    */
-  fun search(parent: VWindow): Int
+  fun search(): Int
 
   /**
    * Edits an existing record.
@@ -57,12 +56,11 @@ interface VDictionary : Executable {
    * database query. The returned integer represents the identifier
    * of the edited record after the edit operation.
    *
-   * @param parent The parent window. This can be used also as database context handler.
    * @param id The record ID to be edited.
    * @return The edited record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun edit(parent: VWindow, id: Int): Int
+  fun edit(id: Int): Int
 
   /**
    * Adds a new record.
@@ -72,9 +70,8 @@ interface VDictionary : Executable {
    * database query. The returned integer represents the identifier
    * of the created record.
    *
-   * @param parent The parent window. This can be used also as database context handler.
    * @return The created record ID.
    * @throws VException Any visual errors that occurs during edit operation.
    */
-  fun add(parent: VWindow): Int
+  fun add(): Int
 }

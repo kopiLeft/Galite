@@ -35,7 +35,7 @@ import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.findForms
-import org.kopi.galite.testing.findMultipleBlock
+import org.kopi.galite.testing.findMultiBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
@@ -54,7 +54,7 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DActor
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -65,8 +65,8 @@ import com.github.mvysny.kaributesting.v10.expectRow
 
 class CommandsFormTests : GaliteVUITestBase() {
 
-  val form = CommandsForm().also { it.model }
-  val multipleForm = MultipleBlockForm().also { it.model }
+  val form = CommandsForm()
+  val multipleForm = MultipleBlockForm()
 
   @Before
   fun `login to the App`() {
@@ -611,7 +611,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     _expectOne<DReport>()
     val actors = _find<DActor>()
 
-    actors.single { it.getModel().actorIdent == "Quit" }._clickAndWait()
+    actors.single { it.getModel().ident == "Quit" }._clickAndWait()
     _expectNone<DReport>()
   }
 
@@ -630,7 +630,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     val actors = _get<DHelpViewer>()._find<DActor>()
 
     // quit command
-    actors.single { it.getModel().actorIdent == "Close" }._clickAndWait()
+    actors.single { it.getModel().ident == "Close" }._clickAndWait()
 
     _expectNone<DHelpViewer>()
   }
@@ -654,7 +654,7 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     val simpleField = multipleForm.block.trainingID.findField()
     val multipleField = multipleForm.block2.centerName.findField()
-    val multipleBlock = multipleForm.block2.findMultipleBlock()
+    val multipleBlock = multipleForm.block2.findMultiBlock()
 
     multipleForm.block.trainingID.edit(10)
     multipleForm.block2.centerName.edit("center name")

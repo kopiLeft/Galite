@@ -23,7 +23,7 @@ import java.io.OutputStream
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.visual.ApplicationContext
+import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.flow.component.upload.FailedEvent
 import com.vaadin.flow.component.upload.Receiver

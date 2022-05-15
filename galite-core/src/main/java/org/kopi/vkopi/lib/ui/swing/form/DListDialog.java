@@ -59,12 +59,12 @@ import org.kopi.galite.visual.form.UListDialog;
 import org.kopi.galite.visual.form.VDictionary;
 import org.kopi.galite.visual.form.VForm;
 import org.kopi.galite.visual.form.VListDialog;
-import org.kopi.galite.visual.util.base.InconsistencyException;
-import org.kopi.galite.visual.visual.MessageCode;
-import org.kopi.galite.visual.visual.UWindow;
-import org.kopi.galite.visual.visual.VException;
-import org.kopi.galite.visual.visual.VRuntimeException;
-import org.kopi.galite.visual.visual.VlibProperties;
+import org.kopi.galite.util.base.InconsistencyException;
+import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.UWindow;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.VlibProperties;
 import org.kopi.vkopi.lib.ui.swing.base.ListDialogCellRenderer;
 import org.kopi.vkopi.lib.ui.swing.visual.DObject;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
@@ -330,7 +330,7 @@ public class DListDialog extends JPanel implements UListDialog {
      */
     private int doNewForm(final VForm form, final VDictionary cstr) throws VException {
         if (form != null && cstr != null) {
-            return cstr.add(form);
+            return cstr.add();
         } else {
             return VListDialog.Companion.getNEW_CLICKED();
         }

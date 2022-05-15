@@ -29,6 +29,8 @@ import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
@@ -36,7 +38,7 @@ import org.kopi.galite.visual.dsl.common.Window
  * In fact, all you have to do to create a chart is to define the dimensions you need and their measures,
  * then you will have to write a constructor that will load data into these fields.
  *
- * With this Charts, you will also be able to print or export the created chart to different file formats.
+ * With these charts, you will also be able to print or export the created chart to different file formats.
  *
  *
  * @param title The title of this form.
@@ -62,10 +64,29 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
                                                     init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
-    val chartDimension = ChartDimension(domain, `access$sourceFile`)
+    val chartDimension = ChartDimension(domain, this, `access$sourceFile`)
     chartDimension.init()
     dimension = chartDimension
+
+    chartDimension.addDimensionTriggers()
+
+    setDimension()
     return chartDimension
+  }
+
+  fun ChartDimension<*>.addDimensionTriggers() {
+    // DIMENSION TRIGGERS
+    val fieldTriggerArray = arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)
+
+    if(formatTrigger != null) {
+      fieldTriggerArray[CConstants.TRG_FORMAT] = formatTrigger!!
+    }
+    // TODO : Add field triggers here
+    this@Chart.model.VKT_Dimension_Triggers.add(fieldTriggerArray)
+  }
+
+  fun setDimension() {
+    model.dimensions = listOf(dimension.model) // TODO
   }
 
   /**
@@ -78,7 +99,19 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     val event = formEventList(chartTriggerEvents)
     val chartAction = Action(null, method)
     val trigger = FormTrigger(event, chartAction)
+
     triggers.add(trigger)
+
+    // CHART TRIGGERS
+    triggers.forEach { trigger ->
+
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          model.VKT_Chart_Triggers[0][i] = trigger
+        }
+      }
+    }
+
     return trigger
   }
 
@@ -125,12 +158,35 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     domain.kClass = T::class
     val chartMeasure = ChartMeasure(domain, `access$sourceFile`)
     chartMeasure.init()
-    this.measures.add(chartMeasure)
+    addMeasure(chartMeasure)
+
+    chartMeasure.addMeasureTriggers()
+
     return chartMeasure
   }
 
+  fun ChartMeasure<*>.addMeasureTriggers() {
+    // MEASURE TRIGGERS
+    val fieldTriggerArray = arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)
+
+    if(colorTrigger != null) {
+      fieldTriggerArray[CConstants.TRG_COLOR] = colorTrigger
+    }
+    // TODO : Add field triggers here
+    this@Chart.model.VKT_Measure_Triggers.add(fieldTriggerArray)
+  }
+
+  fun addMeasure(chartMeasure: ChartMeasure<*>) {
+    this.measures.add(chartMeasure)
+    model.measures.add(chartMeasure.model)
+  }
 
   open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+
+
+  override fun addCommandTrigger() {
+    model.VKT_Commands_Triggers.add(arrayOfNulls(CConstants.TRG_TYPES.size))
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   // CHART TRIGGERS EVENTS
@@ -174,8 +230,8 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path +
-              this.javaClass.`package`.name.replace(".", "/")
+        ?: (this.javaClass.classLoader.getResource("")?.path +
+                this.javaClass.`package`.name.replace(".", "/"))
       try {
         val writer = ChartLocalizationWriter()
         genLocalization(writer)
@@ -205,9 +261,20 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   // ----------------------------------------------------------------------
   // CHART MODEL
   // ----------------------------------------------------------------------
-  override val model: VChart by lazy {
-    ChartModel(this).also {
-      isModelInitialized = true
+  override val model: VChart = object: VChart() {
+
+    init {
+      init()
+      // localize the chart using the default locale
+      localize(ApplicationContext.getDefaultLocale())
+    }
+
+    override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
+
+    override fun init() {
+      setTitle(title)
+      help = this@Chart.help
+      source = sourceFile
     }
   }
 

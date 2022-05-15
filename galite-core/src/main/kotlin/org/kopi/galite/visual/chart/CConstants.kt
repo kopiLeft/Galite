@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.chart
 
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.visual.Constants
+import org.kopi.galite.visual.Constants
 
 /**
  * Collects some constants for the chart implementation

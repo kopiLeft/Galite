@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * Represents a boolean chart column.

@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import org.kopi.galite.visual.ui.vaadin.field.VDateField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
 
@@ -61,38 +60,37 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
 
 fun Component.inputValueExpression(): String {
   return when (this) {
-    is VTimeField -> "this.focusElement.inputElement.value"
-    is VDateField -> "this._inputValue"
-    is VTimeStampField -> "this.__datePicker.$.input.inputElement.value + ' ' + this.__timePicker.focusElement.inputElement.value"
+    is VTimeField -> "this.inputElement.value"
+    is VTimeStampField -> "this.__datePicker.inputElement.value + ' ' + this.__timePicker.inputElement.value"
     else -> "this.value"
   }
 }
 
-fun Array<out KeyModifier>.modifiersCondition() : String {
+fun Array<out KeyModifier>.modifiersCondition(): String {
   val modifiers = this
 
   return buildString {
-    if(KeyModifier.of("Shift") in modifiers) {
+    if (KeyModifier.of("Shift") in modifiers) {
       append("event.shiftKey && ")
     } else {
       append("!event.shiftKey && ")
     }
-    if(KeyModifier.of("Control") in modifiers) {
+    if (KeyModifier.of("Control") in modifiers) {
       append("event.ctrlKey && ")
     } else {
       append("!event.ctrlKey && ")
     }
-    if(KeyModifier.of("Alt") in modifiers) {
+    if (KeyModifier.of("Alt") in modifiers) {
       append("event.altKey && ")
     } else {
       append("!event.altKey && ")
     }
-    if(KeyModifier.of("AltGraph") in modifiers) {
+    if (KeyModifier.of("AltGraph") in modifiers) {
       append("event.altKey && ")
     } else {
       append("!event.altKey && ")
     }
-    if(KeyModifier.of("Meta") in modifiers) {
+    if (KeyModifier.of("Meta") in modifiers) {
       append("event.metaKey")
     } else {
       append("!event.metaKey")

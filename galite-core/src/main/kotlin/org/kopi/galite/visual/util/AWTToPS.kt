@@ -35,8 +35,8 @@ import java.text.AttributedCharacterIterator
 
 import kotlin.experimental.or
 
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.util.base.NotImplementedException
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.util.base.NotImplementedException
 
 /**
  * A class to paint in a postscript file instead of screen

@@ -24,10 +24,10 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.tests.db.createDBSchemaTables
-import org.kopi.galite.tests.db.dropDBSchemaTables
-import org.kopi.galite.tests.db.insertIntoUsers
-import org.kopi.galite.tests.db.TEST_DB_USER
+import org.kopi.galite.tests.database.createDBSchemaTables
+import org.kopi.galite.tests.database.dropDBSchemaTables
+import org.kopi.galite.tests.database.insertIntoUsers
+import org.kopi.galite.tests.database.TEST_DB_USER
 
 object Training : Table("TRAINING") {
   val id = integer("ID")

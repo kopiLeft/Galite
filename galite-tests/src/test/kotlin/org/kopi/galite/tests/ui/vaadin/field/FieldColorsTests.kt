@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.testing.enter
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
@@ -41,11 +41,11 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 class FieldColorsTests: GaliteVUITestBase() {
 
-  val form = FormWithColoredFields().also { it.model }
+  val form = FormWithColoredFields()
 
   @Before
   fun `login to the App`() {
@@ -72,7 +72,7 @@ class FieldColorsTests: GaliteVUITestBase() {
   fun `test color change in multiblock fields`() {
     val field = form.multiBlock.stringField.findField() as GridEditorField
 
-    form.multiBlock.enter()
+    form.multiBlock._enter()
 
     assertEquals(null, field.style["background-color"])
     assertEquals(null, field.style["color"])

@@ -22,6 +22,7 @@ import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -55,27 +56,27 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.db.Utils
+import org.kopi.galite.database.Utils
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.l10n.BlockLocalizer
 import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.type.Month
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.type.Week
-import org.kopi.galite.visual.util.base.InconsistencyException
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.Module
-import org.kopi.galite.visual.visual.VColor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VExecFailedException
-import org.kopi.galite.visual.visual.VModel
-import org.kopi.galite.visual.visual.VRuntimeException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -826,7 +827,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
+  fun isLookupKey(corr: Table): Boolean = columns!!.find { corr == it!!.getTable() }?.isKey ?: false
 
   /**
    * Is the field part of given index ?
@@ -965,7 +966,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * return the name of this field
    */
-  fun getTypeOptions(): Int = 0
+  open fun getTypeOptions(): Int = 0
 
   /**
    * Sets the search operator for the field
@@ -1098,7 +1099,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(v: Timestamp?) {
+  fun setTimestamp(v: Instant?) {
     setTimestamp(block!!.currentRecord, v)
   }
 
@@ -1209,7 +1210,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setTimestamp(r: Int, v: Timestamp?) {
+  open fun setTimestamp(r: Int, v: Instant?) {
     throw InconsistencyException()
   }
 
@@ -1328,7 +1329,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTimestamp(): Timestamp = getTimestamp(block!!.currentRecord)
+  fun getTimestamp(): Instant? = getTimestamp(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a time value.
@@ -1475,7 +1476,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getTimestamp(r: Int): Timestamp {
+  open fun getTimestamp(r: Int): Instant? {
     throw InconsistencyException()
   }
 
@@ -1720,7 +1721,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (isNull(block!!.activeRecord) || list == null) {
       return
     }
-    val alreadyProtected: Boolean = getForm().inTransaction()
+    val alreadyProtected: Boolean = VWindow.inTransaction()
 
     if (this !is VStringField) {
       var exists = false
@@ -1888,11 +1889,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           break
         } catch (e: SQLException) {
-          getForm().handleAborted(e);
+          getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
@@ -1955,9 +1956,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         } catch (e: SQLException) {
           getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {
@@ -1967,7 +1968,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     } else {
       val selected = if (lineCount == 0 && newForm != null && isNull(block!!.activeRecord)) {
-        newForm.add(getForm())
+        newForm.add()
       } else {
         if (lineCount == MAX_LINE_COUNT - 1) {
           getForm().notice(MessageCode.getMessage("VIS-00028"))
@@ -2204,7 +2205,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   private fun evalListTable(): ColumnSet {
     return try {
-      list!!.table
+      list!!.table()
     } catch (e: VException) {
       throw InconsistencyException()
     }
@@ -2213,17 +2214,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Calls trigger for given event.
    */
-  fun callTrigger(event: Int): Any? = block!!.callTrigger(event, index + 1)
+  fun callTrigger(event: Int): Any? = block!!.callFieldTrigger(event, index)
 
   /**
    * Calls trigger for given event.
    */
-  fun callProtectedTrigger(event: Int): Any? = block!!.callProtectedTrigger(event, index + 1)
+  fun callProtectedTrigger(event: Int): Any? = block!!.callProtectedFieldTrigger(event, index)
 
   /**
    * return if there is trigger associated with event
    */
-  fun hasTrigger(event: Int): Boolean = block!!.hasTrigger(event, index + 1)
+  fun hasTrigger(event: Int): Boolean = block!!.hasFieldTrigger(event, index)
 
   /**
    * Calls trigger for given event.
@@ -2254,11 +2255,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           break
         } catch (e: SQLException) {
-          getForm().handleAborted(e);
+          getForm().handleAborted(e)
         } catch (error: Error) {
-          getForm().handleAborted(error);
+          getForm().handleAborted(error)
         } catch (rte: RuntimeException) {
-          getForm().handleAborted(rte);
+          getForm().handleAborted(rte)
         }
       }
     } catch (e: Throwable) {

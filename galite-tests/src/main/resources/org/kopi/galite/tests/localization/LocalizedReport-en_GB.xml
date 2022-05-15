@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Report">
+    <field ident="ANM_0"    label="intern field"   help="" />
+    <field ident="ANM_1"    label="extern code Field"    help="" />
+    <field ident="ANM_2"    label="extern list field" help="" />
+    <field ident="ANM_3"    label="intern code Field"    help="" />
+    <field ident="ANM_4"    label="intern list field" help="" />
+
+    <type ident="ANM_3">
+        <code>
+            <codedesc ident="id$0" label="Approved" />
+            <codedesc ident="id$1" label="Not Approved" />
+        </code>
+    </type>
+
+    <type ident="ANM_4">
+        <list>
+            <listdesc column="ID" title="identifier" />
+            <listdesc column="type" title="Category" />
+        </list>
+    </type>
+</report>

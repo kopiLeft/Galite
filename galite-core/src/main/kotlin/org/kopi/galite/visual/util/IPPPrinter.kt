@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.util
 
-import org.kopi.galite.visual.util.ipp.IPPClient
+import org.kopi.galite.util.ipp.IPPClient
 
 /**
  * Represents an IPP Printer

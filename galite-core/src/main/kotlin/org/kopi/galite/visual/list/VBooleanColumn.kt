@@ -22,10 +22,10 @@ import kotlin.math.max
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.domain.TableInitializer
 
-class VBooleanColumn(title: String, column: Column<*>?, table: ColumnSet?, sortAscending: Boolean) :
+class VBooleanColumn(title: String, column: Column<*>?, table: TableInitializer?, sortAscending: Boolean) :
         VListColumn(title, column, table, VConstants.ALG_LEFT, max(trueRep.length, falseRep.length), sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION

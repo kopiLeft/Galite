@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.visual.VExecFailedException
+import org.kopi.galite.visual.VExecFailedException
 
 class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
 
@@ -207,27 +207,26 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
         recursiveQuery()
       }
       command(item = interSave) {
-        val b = salesBlock.block
-        val rec: Int = b.activeRecord
+        val rec: Int = salesBlock.activeRecord
 
-        b.validate()
+        salesBlock.validate()
 
-        if (!b.isFilled()) {
-          b.currentRecord = 0
+        if (!salesBlock.isFilled()) {
+          salesBlock.currentRecord = 0
           throw VExecFailedException()
         }
 
         transaction {
-          b.save()
+          salesBlock.save()
         }
 
-        gotoBlock(b)
-        b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
+        gotoBlock(salesBlock)
+        salesBlock.gotoRecord(if (salesBlock.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
   }
 }
 
 fun main() {
-  runForm(formName = ClientForm())
+  runForm(form = ClientForm::class)
 }

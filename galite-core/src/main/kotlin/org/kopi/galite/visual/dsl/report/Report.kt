@@ -20,6 +20,8 @@ package org.kopi.galite.visual.dsl.report
 import java.io.File
 import java.io.IOException
 import java.util.Locale
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
@@ -27,9 +29,13 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -58,9 +64,30 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
                                                 noinline init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = ReportField(domain, init, "ANM_${fields.size}", `access$sourceFile`)
+
+    val field = ReportField(domain, init, "ANM_${fields.size}", domain.source.ifEmpty { `access$sourceFile` })
+
+    field.initialize()
+
+    val pos = if(model.model.columns.size == 0) 0 else model.model.columns.size - 1 // TODO!!
+    model.model.columns.add(pos, field.buildReportColumn())
     fields.add(field)
+    field.addFieldTriggers()
+
     return field
+  }
+
+  fun ReportField<*>.addFieldTriggers() {
+    // FIELD TRIGGERS
+    val fieldTriggerArray = arrayOfNulls<Trigger>(Constants.TRG_TYPES.size)
+    if (computeTrigger != null) {
+      fieldTriggerArray[Constants.TRG_COMPUTE] = computeTrigger!!
+    }
+    if (formatTrigger != null) {
+      fieldTriggerArray[Constants.TRG_FORMAT] = formatTrigger!!
+    }
+    // TODO : Add field triggers here
+    this@Report.model.VKT_Fields_Triggers.add(fieldTriggerArray)
   }
 
   /**
@@ -76,6 +103,42 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   }
 
   /**
+   * creates and returns fields. It uses [init] method to initialize the fields.
+   *
+   * @param fieldsNumber the number of fields to create.
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T : Comparable<T>?> field(fieldsNumber: Int,
+                                                domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): List<ReportField<T?>> {
+    return (0 until fieldsNumber).map {
+      nullableField(domain, init).also { field ->
+        field.model.label = "${field.label}_${it + 1}"
+      }
+    }
+  }
+
+  /**
+   * creates and returns fields that accept nulls. It uses [init] method to initialize the fields.
+   *
+   * @param fieldsNumber the number of fields to create.
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  inline fun <reified T: Comparable<T>?> nullableField(fieldsNumber: Int,
+                                                       domain: Domain<T>,
+                                                       noinline init: ReportField<T>.() -> Unit): List<ReportField<T>> {
+    return (0 until fieldsNumber).map {
+      field(domain, init).also { field ->
+        field.model.label = "${field.label}_${it + 1}"
+      }
+    }
+  }
+
+  /**
    * Adds a row to the report.
    *
    * @param init initializes the row with values.
@@ -83,7 +146,18 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   fun add(init: ReportRow.() -> Unit) {
     val row = ReportRow(fields)
     row.init()
+
+    val list = row.addReportLine()
+    // Last null value is added for the separator column
+    model.model.addLine((list + listOf(null)).toTypedArray())
+
     reportRows.add(row)
+  }
+
+  private fun ReportRow.addReportLine(): List<Any?> {
+    return fields.map { field ->
+      data[field]
+    }
   }
 
   /**
@@ -96,7 +170,15 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
     val event = reportEventList(reportTriggerEvents)
     val reportAction = Action(null, method)
     val trigger = ReportTrigger(event, reportAction)
+
     triggers.add(trigger)
+    // REPORT TRIGGERS
+    for (i in VConstants.TRG_TYPES.indices) {
+      if (trigger.events shr i and 1 > 0) {
+        model.VKT_Report_Triggers[0][i] = trigger
+      }
+    }
+
     return trigger
   }
 
@@ -149,6 +231,45 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
    */
   val POSTREPORT = ReportTriggerEvent<Unit>(Constants.TRG_POSTREPORT)
 
+  // ----------------------------------------------------------------------
+  // METHODS FOR SQL
+  // ----------------------------------------------------------------------
+  /**
+   * creates an SQL condition, so that the column have to fit the
+   * requirements (value and search operator) of the field.
+   */
+  protected fun <T> buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): Op<Boolean> {
+    return field.getSearchCondition(column) ?: Op.TRUE
+  }
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  protected fun hasTrigger(event: Int): Boolean = model.hasTrigger(event)
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  protected fun hasCommandTrigger(event: Int, index: Int): Boolean = model.hasCommandTrigger(event, index)
+
+  fun setMenu() {
+    model.setMenu()
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP
+  // ----------------------------------------------------------------------
+
+  fun genHelp(): String? = model.genHelp()
+
+  fun showHelp() {
+    model.showHelp()
+  }
+
+  fun addDefaultReportCommands() {
+    model.addDefaultReportCommands()
+  }
+
   /**
    * Creates a printable object
    * @return        job to print
@@ -169,7 +290,12 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
     model.export(file, type)
   }
 
-  var pageTitle: String? = null
+  /**
+   * Sets the title
+   */
+  fun setPageTitle(title: String) {
+    model.setPageTitle(title)
+  }
 
   fun setPageTitleParams(param: Any) {
     model.setPageTitleParams(param)
@@ -225,6 +351,10 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
     model.setColumnInfo()
   }
 
+  override fun addCommandTrigger() {
+    model.VKT_Commands_Triggers.add(arrayOfNulls(Constants.TRG_TYPES.size))
+  }
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
@@ -234,11 +364,12 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.`package`.name.replace(".", "/")
+        ?: (this.javaClass.classLoader.getResource("")?.path +
+                this.javaClass.`package`.name.replace(".", "/"))
       try {
         val writer = ReportLocalizationWriter()
         genLocalization(writer)
-        writer.write(localizationDestination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")
@@ -253,18 +384,41 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
   // ----------------------------------------------------------------------
   // REPORT MODEL
   // ----------------------------------------------------------------------
-  override val model: VReport by lazy {
-    initFields()
-    ReportModel(this).also { r ->
-      pageTitle?.let { r.setPageTitle(it) }
-      isModelInitialized = true
+  override val model: VReport = object : VReport() {
+    init {
+      // TODO: for separator column
+      if(VKT_Fields_Triggers.size == 0) {
+        VKT_Fields_Triggers.add(arrayOfNulls(Constants.TRG_TYPES.size))
+      } else {
+        VKT_Fields_Triggers.add(VKT_Fields_Triggers.size - 1, arrayOfNulls(Constants.TRG_TYPES.size))
+      }
     }
+
+    override fun init() {
+      fields.forEach {
+        it.initField()
+
+        if (it.group != null) {
+          it.groupID = fields.indexOf(it.group)
+          it.model.groups = it.groupID
+        }
+      }
+    }
+
+    override val locale: Locale get() = this@Report.locale ?: ApplicationContext.getDefaultLocale()
   }
 
-  fun initFields() {
-    fields.forEach {
-      it.initialize()
+  init {
+    model.setTitle(title)
+    model.setPageTitle(title)
+    model.help = help
+    model.source = sourceFile
+
+    if (reportCommands) {
+      addDefaultReportCommands()
     }
+
+    model.model.columns.add(VSeparatorColumn()) // TODO!!!
   }
 
   @PublishedApi

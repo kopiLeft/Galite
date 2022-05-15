@@ -21,7 +21,7 @@ import java.util.Date
 import java.util.Locale
 
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
 
 import com.vaadin.flow.function.DeploymentConfiguration
 import com.vaadin.flow.server.CustomizedSystemMessages
@@ -94,8 +94,8 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
       || chars[1] < 'a' || chars[1] > 'z'
       || chars[2] != '_'
       || chars[3] < 'A' || chars[3] > 'Z'
-      || chars[4] < 'A' || chars[4] > 'Z')
-    {
+      || chars[4] < 'A' || chars[4] > 'Z'
+    ) {
       return false
     }
 
@@ -127,7 +127,6 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
       session.lock()
       println(
         request!!.remoteAddr.toString() + " - - "
-                + session.csrfToken + " - "
                 + Date(session.lastRequestTimestamp) + " - "
                 + session.browser.browserApplication + " - "
                 + request.method + " / "

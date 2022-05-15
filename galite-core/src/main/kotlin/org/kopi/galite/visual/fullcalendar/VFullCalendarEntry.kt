@@ -17,12 +17,13 @@
 
 package org.kopi.galite.visual.fullcalendar
 
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a full calendar record.
@@ -31,21 +32,21 @@ import org.kopi.galite.visual.visual.VColor
  * @param end       the timestamp as end of the entry
  * @param values    the values of the form fields except the [start] and [end].
  */
-data class VFullCalendarEntry(val start: Timestamp,
-                              val end: Timestamp,
+data class VFullCalendarEntry(val start: Instant,
+                              val end: Instant,
                               val values: MutableMap<VField, Any?>) {
 
   constructor(date: LocalDate,
               start: LocalTime,
               end: LocalTime,
               values: MutableMap<VField, Any?>)
-       : this(Timestamp.from(date, start),
-              Timestamp.from(date, end),
+       : this(Instant.from(LocalDateTime.of(date, start)),
+              Instant.from(LocalDateTime.of(date, end)),
               values)
 
-  val startDate: LocalDate get() = LocalDate.from(start.toSql())
+  val startDate: LocalDate get() = LocalDate.from(start)
 
-  val endDate: LocalDate get() = LocalDate.from(end.toSql())
+  val endDate: LocalDate get() = LocalDate.from(end)
 
   val description: String?
     get() {
@@ -87,7 +88,7 @@ data class VFullCalendarEntry(val start: Timestamp,
     return result
   }
 
-  fun copy(start: Timestamp, end: Timestamp): VFullCalendarEntry = VFullCalendarEntry(start, end, values)
+  fun copy(start: Instant, end: Instant): VFullCalendarEntry = VFullCalendarEntry(start, end, values)
 
   companion object {
     val colors = listOf(

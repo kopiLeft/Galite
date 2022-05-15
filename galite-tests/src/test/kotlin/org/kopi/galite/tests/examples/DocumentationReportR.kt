@@ -28,7 +28,7 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.visual.WindowController
+import org.kopi.galite.visual.WindowController
 
 /**
  *  Report Tests :

@@ -21,10 +21,10 @@ import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.chart.VNoChartRowException
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VDictionaryForm
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
 
-abstract class VChartSelectionForm : VDictionaryForm() {
+abstract class VChartSelectionForm(source: String? = null) : VDictionaryForm(source) {
 
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS
@@ -36,7 +36,6 @@ abstract class VChartSelectionForm : VDictionaryForm() {
     b.validate()
     try {
       chart.setWaitInfo(Message.getMessage("chart_generation"))
-      chart.dBConnection = chart.dBConnection
       chart.doNotModal()
       chart.unsetWaitInfo()
     } catch (e: VNoChartRowException) {
@@ -54,7 +53,6 @@ abstract class VChartSelectionForm : VDictionaryForm() {
     try {
       setWaitInfo(Message.getMessage("chart_generation"))
       val chart = createChart()
-      chart.dBConnection = dBConnection
       chart.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoChartRowException) {

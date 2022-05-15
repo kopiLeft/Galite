@@ -19,10 +19,8 @@ package org.kopi.galite.visual.ui.vaadin.notif
 
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 
+import com.vaadin.flow.component.ClientCallable
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 
@@ -45,11 +43,6 @@ class ConfirmNotification(title: String?,
   private lateinit var ok: Button
   private lateinit var cancel: Button
 
-  init {
-    Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)
-    Shortcuts.addShortcutListener(this, this::onArrowLeftEvent, Key.ARROW_LEFT)
-  }
-
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
@@ -61,22 +54,68 @@ class ConfirmNotification(title: String?,
     cancel.addClickListener { fireOnClose(false) }
     buttons.add(ok)
     buttons.add(cancel)
-
-    if (yesIsDefault) {
-      ok.isAutofocus = true
-    } else {
-      cancel.isAutofocus = true
-    }
   }
 
   override val iconName: VaadinIcon
     get() = VaadinIcon.QUESTION_CIRCLE
 
-  fun onArrowRightEvent(keyDownEvent: ShortcutEvent?) {
-    cancel.focus()
+  override fun getDefaultButton(): Button {
+    return if (yesIsDefault) {
+      ok
+    } else {
+      cancel
+    }
   }
 
-  fun onArrowLeftEvent(keyDownEvent: ShortcutEvent?) {
-    ok.focus()
+  override fun setNavigationListeners() {
+    // SHORTCUTS:
+    // For locale = EN : Y -> yes, N -> no
+    // For locale = FR : O -> oui, N -> non
+    element.executeJs(
+      """
+        window.___keyPress = function(event) {
+          if (event.key == '${cancel.text[0].lowercase()}') {
+            $0.${"$"}server.onNavigation($CLICK_CANCEL);
+          } else if (event.key == '${ok.text[0].lowercase()}') {
+            $0.${"$"}server.onNavigation($CLICK_OK);
+          }
+        }
+
+        window.addEventListener('keypress', ___keyPress);""",
+      element
+    )
+
+    // NAVIGATION OK <- -> CANCEL
+    element.executeJs(
+      """
+        window.___keyDown = function(event) {
+          if (event.keyCode == 37) { // 37: Arrow left
+            $0.focus();
+          } else if (event.keyCode == 39) { // 39: Arrow right
+            $1.focus();
+          }
+        }
+
+        window.addEventListener('keydown', ___keyDown);""",
+      ok.element,
+      cancel.element
+    )
+
+    // Cleanup listeners on detach
+    addDetachListener {
+      element.executeJs(
+        """
+          window.removeEventListener('keypress', ___keyPress);
+          window.removeEventListener('keydown', ___keyDown);
+          """)
+    }
+  }
+
+  @ClientCallable
+  fun onNavigation(action: Int) {
+    when (action) {
+      CLICK_OK -> ok.click()
+      CLICK_CANCEL -> cancel.click()
+    }
   }
 }

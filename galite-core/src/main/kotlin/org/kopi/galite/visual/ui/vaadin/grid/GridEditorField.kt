@@ -23,8 +23,8 @@ import org.kopi.galite.visual.ui.vaadin.form.DBlock
 import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.visual.ApplicationContext
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AttachEvent

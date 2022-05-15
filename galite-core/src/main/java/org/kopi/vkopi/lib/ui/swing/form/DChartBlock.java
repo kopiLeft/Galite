@@ -30,8 +30,8 @@ import javax.swing.JScrollBar;
 
 import org.kopi.galite.visual.form.LayoutManager;
 import org.kopi.galite.visual.form.VBlock;
-import org.kopi.galite.visual.visual.Action;
-import org.kopi.galite.visual.visual.VException;
+import org.kopi.galite.visual.Action;
+import org.kopi.galite.visual.VException;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 
 public class DChartBlock extends DBlock {

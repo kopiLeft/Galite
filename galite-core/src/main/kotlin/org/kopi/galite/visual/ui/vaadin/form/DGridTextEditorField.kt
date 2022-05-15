@@ -17,7 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import org.kopi.galite.visual.form.ModelTransformer
@@ -33,7 +35,7 @@ import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.type.format
+import org.kopi.galite.type.format
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
@@ -46,8 +48,8 @@ import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimeField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimestampField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorWeekField
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.data.binder.Result
@@ -90,7 +92,7 @@ class DGridTextEditorField(
   }
 
   fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<String>, String>) {
-    if(event.isFromClient) {
+    if (event.isFromClient) {
       checkText(event.value.toString(), true)
     }
   }
@@ -137,15 +139,11 @@ class DGridTextEditorField(
 
   override fun getText(): String? {
     return when (val value: Any? = editor.value) {
-      is LocalDate -> {
-        value.format()
-      }
-      is LocalTime -> {
-        value.format()
-      }
-      else -> {
-        value?.toString()
-      }
+      is LocalDate -> value.format()
+      is LocalTime -> value.format()
+      is Instant -> value.format()
+      is LocalDateTime -> value.format()
+      else -> value?.toString()
     }
   }
 
@@ -356,7 +354,7 @@ class DGridTextEditorField(
    */
   @Synchronized
   private fun enterMe() {
-   access(currentUI) {
+    access(currentUI) {
       if (scanner) {
         editor.value = transformer.toGui("")
       }

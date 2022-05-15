@@ -21,20 +21,18 @@ package org.kopi.galite.visual.report
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.print.DefaultPrintManager
 import org.kopi.galite.visual.print.PrintManager
-import org.kopi.galite.visual.visual.Action
-import org.kopi.galite.visual.visual.ActionHandler
-import org.kopi.galite.visual.visual.PrinterManager
-import org.kopi.galite.visual.visual.VActor
-import org.kopi.galite.visual.visual.VCommand
-import org.kopi.galite.visual.visual.VHelpGenerator
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.PrinterManager
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
 
 class VReportCommand(
   val report: VReport,
   actor: VActor
-) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
-  /**
-   * Returns the actor
-   */
+) : VCommand(0xFFFF, null, actor, actor.number, actor.ident), ActionHandler {
+
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
       actor!!.isEnabled = enabled

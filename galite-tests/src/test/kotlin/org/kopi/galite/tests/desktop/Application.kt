@@ -19,11 +19,11 @@ package org.kopi.galite.tests.desktop
 
 import java.util.Locale
 
-import org.kopi.galite.tests.db.connectToDatabase
-import org.kopi.galite.tests.db.TEST_DB_DRIVER
-import org.kopi.galite.tests.db.TEST_DB_USER_PASSWORD
-import org.kopi.galite.tests.db.TEST_DB_URL
-import org.kopi.galite.tests.db.TEST_DB_USER
+import org.kopi.galite.tests.database.connectToDatabase
+import org.kopi.galite.tests.database.TEST_DB_DRIVER
+import org.kopi.galite.tests.database.TEST_DB_USER_PASSWORD
+import org.kopi.galite.tests.database.TEST_DB_URL
+import org.kopi.galite.tests.database.TEST_DB_USER
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.dsl.form.Form

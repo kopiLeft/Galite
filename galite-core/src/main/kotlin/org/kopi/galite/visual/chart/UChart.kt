@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.visual.UWindow
+import org.kopi.galite.visual.UWindow
 
 /**
  * The `UChart` is the view part of a chart component.
@@ -42,7 +42,14 @@ interface UChart : UWindow {
   fun typeChanged()
 
   /**
-   * The chart type.
+   * Sets the chart type representation.
+   * @param type The chart type view
    */
-  var type: UChartType?
+  fun setType(type: UChartType?)
+
+  /**
+   * Returns the chart type.
+   * @return The chart type.
+   */
+  fun getType(): UChartType?
 }

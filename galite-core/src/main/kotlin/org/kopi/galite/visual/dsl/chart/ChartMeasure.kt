@@ -22,8 +22,8 @@ import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.ChartTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.visual.Color
-import org.kopi.galite.visual.visual.VColor
+import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a measure used to store numeric values in chart.
@@ -32,7 +32,7 @@ import org.kopi.galite.visual.visual.VColor
  */
 open class ChartMeasure<T>(domain: Domain<T>, override val source: String = "") : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
 
-  /**Measure's color in chart */
+  /** Measure's color in chart */
   lateinit var color: Color
 
   /** Color trigger */

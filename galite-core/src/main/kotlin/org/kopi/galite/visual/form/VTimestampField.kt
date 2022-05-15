@@ -18,8 +18,13 @@
 
 package org.kopi.galite.visual.form
 
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Locale
 import java.util.StringTokenizer
 
 import kotlin.math.min
@@ -29,18 +34,18 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VTimestampColumn
-import org.kopi.galite.visual.type.Timestamp
-import org.kopi.galite.visual.visual.Message
-import org.kopi.galite.visual.visual.MessageCode
-import org.kopi.galite.visual.visual.VException
-import org.kopi.galite.visual.visual.VlibProperties
+import org.kopi.galite.type.format
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var value: Array<Timestamp?> = arrayOfNulls(2 * bufferSize)
+  private var value: Array<Instant?> = arrayOfNulls(2 * bufferSize)
 
   override fun hasAutofill(): Boolean = true
 
@@ -77,7 +82,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
 
   /**
    * verify that value is valid (on exit)
-   * @exception    org.kopi.galite.visual.visual.VException    an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
     if (s as? String == "") {
@@ -90,12 +95,12 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     }
   }
 
-  internal fun parseTimestamp(s: String): Timestamp {
+  internal fun parseTimestamp(s: String): Instant {
     val timestamp = s.split("[ T]".toRegex(), 2)
     val date = parseDate(timestamp[0])
     val time = parseTime(timestamp[1])
 
-    return Timestamp("$date $time")
+    return Timestamp.valueOf("$date $time").toInstant())
   }
 
   private fun parseDate(s: String): String {
@@ -275,7 +280,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Sets the field value of given record to a timestamp value.
    */
-  override fun setTimestamp(r: Int, v: Timestamp?) {
+  override fun setTimestamp(r: Int, v: Instant?) {
     if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r] != v) {
@@ -293,7 +298,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    * Warning:	This method will become inaccessible to kopi users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setTimestamp(r, v as? Timestamp)
+    setTimestamp(r, v as? Instant)
   }
 
   /**
@@ -303,8 +308,9 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val tmp = result[column]) {
-      is java.sql.Timestamp -> Timestamp(tmp)
-      is Instant -> Timestamp(tmp)
+      is Timestamp -> tmp.toInstant()
+      is LocalDateTime -> Instant.from(tmp.atZone(ZoneId.systemDefault()))
+      is Instant -> tmp
       else -> null
     }
   }
@@ -317,7 +323,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the field value of given record as a timestamp value.
    */
-  override fun getTimestamp(r: Int): Timestamp = getObject(r) as Timestamp
+  override fun getTimestamp(r: Int): Instant? = getObject(r) as? Instant
 
   /**
    * Returns the field value of the current record as an object
@@ -328,10 +334,8 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     return if (o == null) {
       VConstants.EMPTY_TEXT
     } else {
-      val text = o.toString()
-      // this is work around to display the timestamp in yyyy-MM-dd hh:mm:ss format
-      // The proper way is to change the method Timestamp#toString(Locale) but this
-      // will affect the SQL representation of the timestamp value.
+      val text = if (o is Instant) o.format() else o.toString()
+      // this is workaround to display the timestamp in yyyy-MM-dd hh:mm:ss format
       text.substring(0, min(width, text.length))
     }
   }
@@ -340,7 +344,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     return if (s == "") {
       null
     } else {
-      Timestamp.parse(s, "yyyy-MM-dd HH:mm:ss")
+      SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(s).toInstant()
     }
   }
 
@@ -351,7 +355,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     return if (value[r] == null) {
       VConstants.EMPTY_TEXT
     } else {
-      val text = value[r]!!.toString()
+      val text = value[r]!!.format()
       // this is work around to display the timestamp in yyyy-MM-dd hh:mm:ss format
       // The proper way is to change the method Timestamp#toString(Locale) but this
       // will affect the SQL representation of the timestamp value.
@@ -362,7 +366,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): Instant? = if(value[r] == null) null else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): Instant? = value[r]
 
   /**
    * Copies the value of a record to another
@@ -384,11 +388,11 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Timestamp::class
+  override fun getDataType(): KClass<*> = Instant::class
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list == null) {
-      setTimestamp(block!!.activeRecord, Timestamp.now())
+      setTimestamp(block!!.activeRecord, Instant.now())
       true
     } else {
       super.fillField(handler)
@@ -406,7 +410,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
         super.enumerateValue(desc)
       }
       isNull(record) -> {
-        setTimestamp(record, Timestamp.now())
+        setTimestamp(record, Instant.now())
       }
       else -> {
         // try to read timestamp
@@ -414,9 +418,9 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
           checkType(getText(record))
         } catch (e: VException) {
           // not valid, get now
-          setTimestamp(record, Timestamp.now())
+          setTimestamp(record, Instant.now())
         }
-        setTimestamp(record, getTimestamp(record).add(if (desc) -1 else 1))
+        setTimestamp(record, getTimestamp(record)?.plusMillis(if (desc) -1 else 1))
       }
     }
   }

@@ -21,13 +21,13 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnSet
-import org.kopi.galite.visual.util.base.InconsistencyException
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.domain.TableInitializer
 
 class VBooleanCodeColumn(
         title: String,
         column: Column<*>?,
-        table: ColumnSet?,
+        table: TableInitializer?,
         names: Array<String>,
         private val codes: Array<Boolean?>,
         sortAscending: Boolean

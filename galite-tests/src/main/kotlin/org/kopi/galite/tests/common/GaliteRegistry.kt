@@ -16,6 +16,6 @@
  */
 package org.kopi.galite.tests.common
 
-import org.kopi.galite.visual.visual.Registry
+import org.kopi.galite.visual.Registry
 
 class GaliteRegistry : Registry("Galite", null)

@@ -235,13 +235,13 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
 
-    assertEquals(1, formModel._getCommands().size)
+    assertEquals(1, formModel.commands.size)
 
-    assertEquals(form.resetForm.ident, formModel._getCommands()[0].item)
-    assertEquals(form.resetForm.ident, formModel._getCommands()[0].actor!!.actorIdent)
-    assertEquals(form.resetForm.menu.label, formModel._getCommands()[0].actor!!.menuIdent)
-    assertEquals(form.resetForm.icon?.iconName, formModel._getCommands()[0].actor!!.iconName)
-    assertEquals(form.resetForm.help, formModel._getCommands()[0].actor!!.help)
+    assertEquals(form.resetForm.ident, formModel.commands[0].actorIdent)
+    assertEquals(form.resetForm.ident, formModel.commands[0].actor!!.ident)
+    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!.menuIdent)
+    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!.iconName)
+    assertEquals(form.resetForm.help, formModel.commands[0].actor!!.help)
   }
 
   @Test
@@ -251,22 +251,22 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(3, formModel.actors.size)
 
-    assertEquals("File", formModel.actors[0]!!.menuName)
-    assertEquals("GotoShortcuts", formModel.actors[0]!!.actorIdent)
-    assertEquals(null, formModel.actors[0]!!.iconName)
-    assertEquals("Go to shortcut list", formModel.actors[0]!!.help)
-    assertEquals(KeyEvent.VK_F12, formModel.actors[0]!!.acceleratorKey)
+    assertEquals("File", formModel.actors[0].menuName)
+    assertEquals("GotoShortcuts", formModel.actors[0].ident)
+    assertEquals(null, formModel.actors[0].iconName)
+    assertEquals("Go to shortcut list", formModel.actors[0].help)
+    assertEquals(KeyEvent.VK_F12, formModel.actors[0].acceleratorKey)
 
-    assertEquals(form.edit.label, formModel.actors[1]!!.menuName)
-    assertEquals(form.autoFill.ident, formModel.actors[1]!!.actorIdent)
-    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1]!!.iconName)
-    assertEquals(form.autoFill.help, formModel.actors[1]!!.help)
+    assertEquals(form.edit.label, formModel.actors[1].menuName)
+    assertEquals(form.autoFill.ident, formModel.actors[1].ident)
+    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1].iconName)
+    assertEquals(form.autoFill.help, formModel.actors[1].help)
 
-    assertEquals(form.reset.label, formModel.actors[2]!!.menuName)
-    assertEquals(form.resetForm.ident, formModel.actors[2]!!.actorIdent)
-    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2]!!.iconName)
-    assertEquals(form.resetForm.help, formModel.actors[2]!!.help)
-    assertEquals(form.resetForm.key!!.value, formModel.actors[2]!!.acceleratorKey)
+    assertEquals(form.reset.label, formModel.actors[2].menuName)
+    assertEquals(form.resetForm.ident, formModel.actors[2].ident)
+    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2].iconName)
+    assertEquals(form.resetForm.help, formModel.actors[2].help)
+    assertEquals(form.resetForm.key!!.value, formModel.actors[2].acceleratorKey)
   }
 
   @Test
@@ -278,8 +278,8 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(1, fileModel.command!!.size)
 
-    assertEquals(form.autoFill.ident, fileModel.command!![0].item)
-    assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.actorIdent)
+    assertEquals(form.autoFill.ident, fileModel.command!![0].actorIdent)
+    assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.ident)
     assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
     assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!.iconName)
     assertEquals(form.autoFill.help, fileModel.command!![0].actor!!.help)
@@ -319,7 +319,9 @@ class FormWithOneSimpleBlock : Form(title = "Clients", locale = Locale.UK) {
   val block = page.insertBlock(SimpleBlock())
 
   inner class SimpleBlock : Block("SimpleBlock", 1, 1) {
-    override val help = "Information about the block"
+    init {
+      help = "Information about the block"
+    }
     val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
@@ -357,8 +359,11 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val commandsBlock = secondPage.insertBlock(CommandsBlock())
 
   inner class ClientBlock : Block("ClientBlock", 1, 1) {
+    init {
+      help = "Information about the client"
+    }
+
     val u = table(User)
-    override val help = "Information about the client"
     val idClt = mustFill(domain = INT(30), position = at(1, 1)) {
       label = "ID"
       help = "The client id"
@@ -387,7 +392,9 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   }
 
   inner class CommandsBlock : Block("CommandsBlock", 10, 5) {
-    override val help = "Information about the commands"
+    init {
+      help = "Information about the commands"
+    }
     val idCmd = hidden(domain = INT(30)) {
       label = "ID"
       help = "The command id"

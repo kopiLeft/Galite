@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import org.kopi.galite.visual.base.Image
-import org.kopi.galite.visual.visual.ImageHandler
+import org.kopi.galite.visual.ImageHandler
 
 class VImageHandler : ImageHandler() {
   override fun getImage(image: String): Image? =  null

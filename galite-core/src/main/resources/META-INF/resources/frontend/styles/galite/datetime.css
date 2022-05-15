@@ -16,67 +16,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-[part~='input-field'] {
-    background-color: transparent !important;
-    border-bottom: #dadada 1px solid;
-    border-radius: unset;
+:host([theme~="galite-time"]) [part~='input-field'],
+:host([theme~="galite-timestamp"]) [part~='input-field'] {
+    background-color: unset;
 }
 
-:host([focus-ring]) [part~='input-field'] {
-    box-shadow: none;
+:host([theme~="galite-time"]) [part~='input-field']::after,
+:host([theme~="galite-timestamp"]) [part~='input-field']::after {
+    background-color: unset;
 }
 
-:host {
-    vertical-align: top;
-    max-height: 40px;
+:host([theme~="galite-time"]),
+:host([theme~="galite-timestamp"]) {
+    color: inherit;
     --lumo-text-field-size: var(--lumo-space-l);
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
-    line-height: normal;
     padding: 0;
 }
 
-:host:hover {
-	background: var(--background-hover-color);
+:host([theme~="galite-time"]) [part~="toggle-button"],
+  :host([theme~="galite-timestamp"]) [part~="toggle-button"] {
+    cursor: pointer;
 }
 
-[part~='input-field']::after {
-    background: none;
+:host([theme~="galite-time"]) [part~="input-field"] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    --lumo-text-field-size: var(--lumo-space-l);
 }
 
-[part~='input-field']:focus-within {
-	background: none;
-	border-bottom: var(--background-color) 1px solid;
-}
-
-[part~='value'] {
-	padding: 0;
-}
-
-vaadin-date-time-picker-date-picker {
-    --lumo-text-field-size: var(--lumo-size-xs);
-}
-
-vaadin-date-time-picker {
-    max-height: 40px;
-}
-
-.vaadin-text-field-container  [part~='input-field'] [name~="suffix"] {
-    font-size: 13px;
-}
-
+/**
+ * Disabled input styles
+ */
 :host([disabled]) [part="input-field"] {
-    background: white;
-}
-
-vaadin-date-time-picker-time-text-field, vaadin-date-time-picker-date-text-field {
-    color: inherit;
-}
-
-:host([theme~="galite-date"]),
-  :host([theme~="galite-time"]),
-  :host([theme~="galite-timestamp"]) #customField {
-    color: inherit;
+    border-bottom: #dadada 1px dotted !important;
+    color: #676767;
 }
