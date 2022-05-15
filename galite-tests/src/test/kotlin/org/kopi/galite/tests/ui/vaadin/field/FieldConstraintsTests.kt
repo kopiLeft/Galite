@@ -25,7 +25,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.enter
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -49,7 +49,7 @@ class FieldConstraintsTests: GaliteVUITestBase() {
   @Test
   fun `test field with domain having constraints in simple block`() {
     // Int field
-    form.simpleBlock.enter()
+    form.simpleBlock._enter()
     form.simpleBlock.odd.edit(100)
     // Shows error because 100 is not odd
     expectErrorNotification("You should enter an odd number")
@@ -74,7 +74,7 @@ class FieldConstraintsTests: GaliteVUITestBase() {
   @Test
   fun `test field with domain having constraints in multi block`() {
     // Int field
-    form.multiBlock.enter()
+    form.multiBlock._enter()
     form.multiBlock.odd.edit(100)
     form.multiBlock.upper.click()
     // Shows error because 100 is not odd
