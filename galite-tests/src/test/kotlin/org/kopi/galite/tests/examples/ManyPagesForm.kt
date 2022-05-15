@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 class ManyPagesForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val clientsPage= page("Clients")

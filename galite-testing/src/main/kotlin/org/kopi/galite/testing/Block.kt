@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.testing
 
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
@@ -79,7 +79,7 @@ fun Block.findBlock(): DBlock {
     ._find<DBlock>()
 
   val block = blocks.singleOrNull {
-    it.model eq this.block
+    it.model eq this
   }
 
   if (block != null) {
@@ -98,7 +98,7 @@ fun Block.findMultiBlock(): DGridBlock =
 infix fun VBlock.eq(block: VBlock): Boolean {
   return this.title == block.title
           && this.form eq block.form
-          && this.name == block.name
+          && this.getName() == block.getName()
           && this.bufferSize == block.bufferSize
           && this.displaySize == block.displaySize
 }

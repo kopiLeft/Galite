@@ -17,7 +17,7 @@
 package org.kopi.galite.tests.localization.block
 
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Border
 
 class ExternBlock: Block("Block Externe", 1, 1) {

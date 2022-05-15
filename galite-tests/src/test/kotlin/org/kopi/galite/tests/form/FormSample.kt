@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.FileHandler
 
@@ -219,7 +219,7 @@ class TestBlock : Block("Test block", 1, 5) {
     columns(u.cv)
     droppable("pdf")
     trigger(ACTION) {
-      FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
+      FileHandler.fileHandler!!.openFile(form.getDisplay()!!, object : FileHandler.FileFilter {
         override fun accept(pathname: File?): Boolean {
           return (pathname!!.isDirectory
                   || pathname.name.toLowerCase().endsWith(".pdf"))

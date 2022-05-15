@@ -26,7 +26,7 @@ import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.VExecFailedException
 
@@ -67,6 +67,9 @@ class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", loca
         priority = 1
       }
     }
+
+    val uc = hidden(domain = INT(20)) { columns(t.uc) }
+    val ts = hidden(domain = INT(20)) { columns(t.ts) }
 
     val name = skipped(domain = STRING(25), position = at(2, 1)) {
       label = "Name"
@@ -140,7 +143,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", loca
       border = Border.LINE
 
       command(item = saveBlock) {
-        val b = block
+        val b = this
         val rec: Int = b.activeRecord
 
         b.validate()

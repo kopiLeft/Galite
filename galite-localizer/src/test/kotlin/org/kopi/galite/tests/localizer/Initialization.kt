@@ -36,7 +36,7 @@ import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"

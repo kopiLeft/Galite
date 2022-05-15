@@ -27,7 +27,7 @@ import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class TestFieldsForm : DictionaryForm(title = "Fields Form", locale = Locale.UK) {

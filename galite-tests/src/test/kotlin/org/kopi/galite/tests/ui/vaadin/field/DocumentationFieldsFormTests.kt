@@ -520,7 +520,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     // enter letter in this field then assert that th AUTOLEAVE trigger is called and the activate field is set to nextField
     form.triggersFieldsBlock.autoleaveTriggerField.edit("a")
 
-    assertEquals(form.triggersFieldsBlock.preInsTriggerField.vField, form.triggersFieldsBlock.block.activeField)
+    assertEquals(form.triggersFieldsBlock.preInsTriggerField.vField, form.triggersFieldsBlock.activeField)
   }
 
   @Test

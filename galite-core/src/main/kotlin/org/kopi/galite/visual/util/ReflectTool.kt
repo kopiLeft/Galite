@@ -25,7 +25,7 @@ import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.FormBlockIndex
 import org.kopi.galite.visual.dsl.form.FormField
 

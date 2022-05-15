@@ -292,7 +292,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
       multipleBlockSaveForm.block._enter()
       multipleBlockSaveForm.multipleBlock._enter()
-      multipleBlockSaveForm.multipleBlock.block.activeRecord = 0
+      multipleBlockSaveForm.multipleBlock.activeRecord = 0
       multipleBlockSaveForm.multipleBlock.address.edit("10,Rue Lac")
       multipleBlockSaveForm.saveBlock.triggerCommand()
       val newdata = arrayOf(

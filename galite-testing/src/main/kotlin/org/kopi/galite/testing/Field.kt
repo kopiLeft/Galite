@@ -61,7 +61,7 @@ import com.vaadin.flow.component.grid.Grid
 fun <T> FormField<T>.edit(value: T?): UField {
   val mainWindow = _get<MainWindow>()
 
-  return if (this.parentBlock.isMulti) {
+  return if (this.parentBlock.isMulti()) {
     editInMultipleBlock(value, mainWindow)
   } else {
     editInSimpleBlock(value, mainWindow)
@@ -178,7 +178,7 @@ fun <T> FormField<T>.editText(value: String?): UField = edit(value as T?)
 fun <T> FormField<T>.findField(): HasValue<HasValue.ValueChangeEvent<Any?>, Any?> {
   val mainWindow = _get<MainWindow>()
 
-  return if (parentBlock.isMulti) {
+  return if (parentBlock.isMulti()) {
     mainWindow
       ._find<Grid.Column<*>>()
       .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq vField }
@@ -196,7 +196,7 @@ fun FormField<*>.findModel(): VField = findModel(parentBlock.findBlock().model)
 /**
  * Finds the the field model.
  */
-fun FormField<*>.findModel(block: VBlock): VField = block.fields.single { it eq vField }
+fun FormField<*>.findModel(block: VBlock): VField = block.blockFields.single { it eq vField }
 
 /**
  * Click on a field.
@@ -206,7 +206,7 @@ fun <T> FormField<T>.click(): UField {
   val mainWindow = _get<MainWindow>()
   lateinit var field: UField
 
-  val editorField = if (this.parentBlock.isMulti) {
+  val editorField = if (this.parentBlock.isMulti()) {
     val column = mainWindow
       ._find<Grid.Column<*>>()
       .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }

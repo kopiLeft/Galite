@@ -15,10 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.form
+package org.kopi.galite.visual.form
 
 import java.awt.Point
-import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.Actor
@@ -30,18 +29,24 @@ import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.dsl.common.LocalizableElement
-import org.kopi.galite.visual.form.Commands
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Color
 import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.FormBlockIndex
+import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
+import org.kopi.galite.visual.dsl.form.FormDescriptionPosition
+import org.kopi.galite.visual.dsl.form.FormField
+import org.kopi.galite.visual.dsl.form.FormLocalizationWriter
+import org.kopi.galite.visual.dsl.form.FormMultiFieldPosition
+import org.kopi.galite.visual.dsl.form.FormPage
+import org.kopi.galite.visual.dsl.form.FormPosition
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -51,40 +56,11 @@ import org.kopi.galite.visual.VException
  * @param        title                 the title of the block.
  * @param        buffer                the buffer size of this block.
  * @param        visible               the number of visible elements.
- * @param        form                  the form to which belongs the block.
  */
-open class Block(val title: String,
+open class Block(title: String,
                  var buffer: Int,
                  var visible: Int)
-  : LocalizableElement(), VConstants {
-
-  val dropListMap = HashMap<String, FormField<*>>()
-
-  val fields = mutableListOf<FormField<*>>() // the block's fields.
-  val tables: MutableList<FormBlockTable> = mutableListOf() // the tables accessed on the database
-  val indices: MutableList<FormBlockIndex> = mutableListOf() // the indices for database
-  val triggers = mutableListOf<Trigger>() // the triggers executed by this form
-  val commands = mutableListOf<Command>() // the commands associated with this block
-  val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
-
-  var border: Border = Border.NONE // the border of the block
-    set(b) {
-      block.border = b.value
-      field = b
-    }
-  var align: FormBlockAlign? = null // the type of alignment in form
-    private set(value) {
-      block.alignment = value?.getBlockAlignModel()
-      field = value
-    }
-  var help: String? = null // the help
-    set(value) {
-      block.help = value
-      field = value
-    }
-
-  lateinit var shortcut: String // the shortcut of this block
-  lateinit var form: Form // the form containing this block
+  : VBlock(title, buffer, visible), VConstants {
 
 
   // ----------------------------------------------------------------------
@@ -121,7 +97,7 @@ open class Block(val title: String,
     // BLOCK TRIGGERS
     for (i in VConstants.TRG_TYPES.indices) {
       if (trigger.events shr i and 1 > 0) {
-        block.VKT_Block_Triggers[0][i] = trigger
+        VKT_Block_Triggers[0][i] = trigger
       }
     }
 
@@ -146,10 +122,7 @@ open class Block(val title: String,
    * @param table     the database table
    */
   fun <T : Table> table(table: T): T {
-    val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
-
-    tables.add(formBlockTable)
-    block.tables.add(formBlockTable.table)
+    tables.add(table)
 
     return table
   }
@@ -236,7 +209,7 @@ open class Block(val title: String,
     field.initializer()
     field.initialize(this)
     field.addFieldTrigger()
-    block.fields.add(field.vField)
+    blockFields.add(field.vField)
     fields.add(field)
     return field
   }
@@ -252,7 +225,7 @@ open class Block(val title: String,
         }
       }
     }
-    this@Block.block.VKT_Field_Triggers.add(fieldTriggerArray)
+    this@Block.VKT_Field_Triggers.add(fieldTriggerArray)
   }
 
   inline fun <reified T> initDomain(domain: Domain<T>) {
@@ -337,8 +310,7 @@ open class Block(val title: String,
     val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message, indices.size)
 
     indices.add(formBlockIndex)
-    block.indices.add(formBlockIndex.message)
-    block.indicesIdents.add(formBlockIndex.ident)
+    indicesIdents.add(formBlockIndex.ident)
 
     return formBlockIndex
   }
@@ -353,15 +325,13 @@ open class Block(val title: String,
    * @param action  the action function.
    */
   fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
-    val command = Command(item, modes, block, action = action)
+    val command = Command(item, modes, this, action = action)
 
     commands.add(command)
 
     // COMMANDS TRIGGERS
     // TODO : Add commands triggers here
-    block.VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
-
-    block.commands.add(command)
+    VKT_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
 
     return command
   }
@@ -388,7 +358,7 @@ open class Block(val title: String,
    */
   fun options(vararg options: BlockOption) {
     options.forEach { blockOption ->
-      block.options = block.options or blockOption.value
+      this.options = this.options or blockOption.value
     }
   }
 
@@ -403,13 +373,13 @@ open class Block(val title: String,
    */
   fun blockVisibility(access: Access, vararg modes: Mode) {
     if (modes.contains(Mode.QUERY)) {
-      block.access[VConstants.MOD_QUERY] = access.value
+      this.access[VConstants.MOD_QUERY] = access.value
     }
     if (modes.contains(Mode.INSERT)) {
-      block.access[VConstants.MOD_INSERT] = access.value
+      this.access[VConstants.MOD_INSERT] = access.value
     }
     if (modes.contains(Mode.UPDATE)) {
-      block.access[VConstants.MOD_UPDATE] = access.value
+      this.access[VConstants.MOD_UPDATE] = access.value
     }
   }
 
@@ -422,7 +392,7 @@ open class Block(val title: String,
    *    the other one is for the target block form field
    */
   fun align(targetBlock: Block, vararg positions: Pair<FormField<*>, FormField<*>>) {
-    val targets = ArrayList<Int>()
+    val targets = mutableListOf<Int>()
 
     fields.forEach { field ->
       if(positions.toMap().contains(field)) {
@@ -432,8 +402,7 @@ open class Block(val title: String,
       }
     }
 
-    align = FormBlockAlign(targetBlock,
-                           targets)
+    alignment = BlockAlignment(targetBlock, targets.toIntArray())
   }
 
   /**
@@ -443,7 +412,7 @@ open class Block(val title: String,
    * @param window        the actual context of analyse
    */
   fun initialize(window: Window) {
-    this.form = window as Form
+    this.form = window.model as VForm
     val bottomRight = Point(0, 0)
 
     fields.forEach { field ->
@@ -452,12 +421,12 @@ open class Block(val title: String,
       }
       // ACCESS
       for (i in 0..2) {
-        field.access[i] = field.access[i].coerceAtMost(block.access[i])
+        field.access[i] = field.access[i].coerceAtMost(access[i])
       }
     }
 
-    block.maxRowPos = bottomRight.y
-    block.maxColumnPos = bottomRight.x
+    maxRowPos = bottomRight.y
+    maxColumnPos = bottomRight.x
   }
 
   // ----------------------------------------------------------------------
@@ -465,14 +434,14 @@ open class Block(val title: String,
   // ----------------------------------------------------------------------
 
   fun positionField(field: FormField<*>): FormPosition {
-    return FormCoordinatePosition(++block.displayedFields)
+    return FormCoordinatePosition(++displayedFields)
   }
 
   fun positionField(pos: FormPosition?) {
-    pos!!.setChartPosition(++block.displayedFields)
+    pos!!.setChartPosition(++displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = block.options and option == option
+  fun hasOption(option: Int): Boolean = options and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
@@ -482,105 +451,31 @@ open class Block(val title: String,
   /**
    * Returns the form block table
    */
-  fun getTable(table: Table): FormBlockTable {
-    return tables.find { it.table == table }
-            ?: throw Exception("The table ${table.tableName} is not defined in this block")
+  fun getTable(table: Table): Table {
+    return if (tables.contains(table)) {
+      table
+    } else {
+      throw Exception("The table ${table.tableName} is not defined in this block")
+    }
   }
 
   /**
    * Returns the table number
    *
    */
-  fun getTableNum(table: FormBlockTable): Int {
+  fun getTableNum(table: Table): Int {
     val indexOfTable = tables.indexOf(table)
-    return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException("Table ${table.name} not found.")
-  }
-
-  // ----------------------------------------------------------------------
-  // BLOCK APIs
-  // ----------------------------------------------------------------------
-
-  var activeRecord
-    get() = block.activeRecord
-    set(rec) {
-      block.activeRecord = rec
-    }
-
-  var activeField: FormField<*>?
-    get() = resolve(block.activeField)
-    set(value) {
-      block.activeField = value?.vField
-    }
-
-  var isDetailMode
-    get() = block.isDetailMode
-    set(mode: Boolean) {
-      block.isDetailMode = mode
-    }
-
-  // number of active records
-  val recordCount
-    get(): Int = block.recordCount
-
-  var currentRecord
-    get(): Int = block.currentRecord
-    set(rec) {
-      block.currentRecord = rec
-    }
-
-  fun getActiveCommands(): List<Command?> {
-    val activeCommands = block.activeCommands
-
-    return commands.filter { it in activeCommands }
-  }
-
-  fun getMode(): Int = block.getMode()
-
-  fun setMode(mode: Int) {
-    block.setMode(mode)
+    return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException("Table ${table.tableName} not found.")
   }
 
   /**
    * @param page the page number of this block
    */
   fun setInfo(page: FormPage, form: Form) {
-    block.setInfo(page.pageNumber, form.model)
+    setInfo(page.pageNumber, form.model)
   }
-
-  /**
-   * Returns true if this block can display more than one record.
-   */
-  val isMulti: Boolean get() = block.isMulti()
-
-  /**
-   * @return true if this block follows an other block
-   */
-  val isFollow: Boolean get() = block.isFollow
-
-  val isDroppable: Boolean get() = block.isDroppable
-
-  fun isAccepted(flavor: String): Boolean = block.isAccepted(flavor)
-
-  val acceptedFlavors: MutableSet<String> get() = block.acceptedFlavors
-
-  fun getDropTarget(flavor: String): FormField<*>? = resolve(block.getDropTarget(flavor))
 
   fun resolve(field: VField?): FormField<*>? = fields.singleOrNull { it.vField == field }
-
-  /**
-   * Sets the access of the block
-   * (if [isAccessible] does not evaluate the
-   * access of the block, this method can be made
-   * public)
-   */
-  protected fun setAccess(access: Boolean) {
-    block.setAccess(access)
-  }
-
-  /**
-   * Returns true if the block is accessible
-   */
-  val isAccessible: Boolean get() = block.isAccessible
 
   /**
    * Sets the color properties of the given record.
@@ -600,206 +495,21 @@ open class Block(val title: String,
       VColor(background.red, background.green, background.blue)
     }
 
-    block.setColor(r, foreground, background)
-  }
-
-  /**
-   * nb record read (and not deleted)
-   */
-  val numberOfValidRecord: Int
-    get() = block.numberOfValidRecord
-
-  /**
-   * nb record read (and not deleted)
-   */
-  fun getNumberOfValidRecordBefore(recno: Int): Int = block.getNumberOfValidRecordBefore(recno)
-
-  val numberOfFilledRecords: Int
-    get() = block.numberOfFilledRecords
-
-  /**
-   * enter record
-   */
-  protected fun enterRecord(recno: Int) {
-    block.enterRecord(recno)
-  }
-
-  /**
-   * leave record
-   * @exception VException      an exception may occur in field.leave()
-   */
-  fun leaveRecord(check: Boolean) {
-    block.leaveRecord(check)
-  }
-
-  /**
-   * GOTO FIRST RECORD
-   * @exception VException      an exception may occur in record.leave()
-   */
-  fun gotoFirstRecord() {
-    block.gotoFirstRecord()
-  }
-
-  /**
-   * GOTO LAST RECORD
-   * @exception VException      an exception may occur in record.leave()
-   */
-  fun gotoLastRecord() {
-    block.gotoLastRecord()
-  }
-
-  fun isRecordInsertAllowed(rec: Int): Boolean = block.isRecordInsertAllowed(rec)
-
-  fun isRecordAccessible(rec: Int): Boolean = block.isRecordAccessible(rec)
-
-  fun changeActiveRecord(record: Int) {
-    block.changeActiveRecord(record)
-  }
-
-  /**
-   * GOTO NEXT RECORD OF CURRENT BLOCK
-   * @exception VException      an exception may be raised bu record.leave
-   */
-  fun gotoNextRecord() {
-    block.gotoNextRecord()
-  }
-
-  /**
-   * GOTO PREVIOUS RECORD
-   * @exception VException      an exception may occur in record.leave()
-   */
-  fun gotoPrevRecord() {
-    block.gotoPrevRecord()
-  }
-
-  /**
-   * GOTO SPECIFIED RECORD
-   * @param recno               the record number
-   * @exception VException      an exception may occur in record.leave()
-   */
-  fun gotoRecord(recno: Int) {
-    block.gotoRecord(recno)
-  }
-
-  /**
-   * Goto field in current block and in current record.
-   * @exception VException      an exception may occur in record.leave()
-   */
-  fun gotoField(fld: VField) {
-    block.gotoField(fld)
-  }
-
-  /**
-   * Goto next field in current record
-   * @exception VException      an exception may occur in record.leave()
-   */
-  fun gotoNextField() {
-    block.gotoNextField()
-  }
-
-  /**
-   * Goto previous field in current record
-   * @exception VException      an exception may occur in field.leave()
-   */
-  fun gotoPrevField() {
-    block.gotoPrevField()
-  }
-
-  /**
-   * Goto first accessible field in current record
-   * @exception VException      an exception may occur in field.leave()
-   */
-  open fun gotoFirstField() {
-    block.gotoFirstField()
-  }
-
-  /**
-   * Goto first accessible field in current record that is not fill
-   * @exception VException      an exception may occur in field.leave()
-   */
-  fun gotoFirstUnfilledField() {
-    block.gotoFirstUnfilledField()
-  }
-
-  /**
-   * Goto next accessible field in current record that is not fill
-   * @exception VException      an exception may occur in field.leave()
-   */
-  fun gotoNextEmptyMustfill() {
-    block.gotoNextEmptyMustfill()
-  }
-
-  /**
-   * Goto last accessible field in current record.
-   * @exception VException      an exception may occur in field.leave()
-   */
-  fun gotoLastField() {
-    block.gotoLastField()
-  }
-
-  /**
-   * enter a new block
-   */
-  fun enter() {
-    block.enter()
-  }
-
-  /**
-   * exit block
-   * @exception VException      an exception may be raised by record.leave
-   */
-  fun leave(check: Boolean): Boolean = block.leave(check)
-
-  /**
-   * Validate current block.
-   * @exception VException      an exception may be raised by triggers
-   */
-  fun validate() {
-    block.validate()
-  }
-
-  /**
-   * Returns true if the block has changed wrt the database.
-   */
-  val isChanged: Boolean
-    get() = block.isChanged
-
-  val record: Int
-    get() = block.record
-
-  /**
-   * check that user has proper UI with focus on a field on the good page
-   */
-  fun checkBlock() {
-    block.checkBlock()
-  }
-
-  /**
-   * Checks that all mustfill fields are filled.
-   */
-  protected fun checkMustfillFields() {
-    block.checkMustfillFields()
-  }
-
-  /**
-   * Clears the entire block.
-   */
-  open fun clear() {
-    block.clear()
+    setColor(r, foreground, background)
   }
 
   /**
    * Saves current block (insert or update)
    */
   fun saveBlock() {
-    Commands.saveBlock(block)
+    Commands.saveBlock(this)
   }
 
   /**
    * Resets current block
    */
   fun resetBlock() {
-    Commands.resetBlock(block)
+    Commands.resetBlock(this)
   }
 
   /**
@@ -807,33 +517,7 @@ open class Block(val title: String,
    * @exception        VException        an exception may occur during DB access
    */
   fun serialQuery() {
-    Commands.serialQuery(block)
-  }
-
-  /**
-   * Sets the block into insert mode.
-   * @exception        VException        an exception may occur during DB access
-   */
-  open fun insertMode() {
-    block.insertMode()
-  }
-
-  /**
-   * Saves changes in block to database.
-   * @exception VException      an exception may be raised by triggers
-   * @exception SQLException            an exception may be raised DB access
-   */
-  fun save() {
-    block.save()
-  }
-
-  /**
-   * Deletes in database
-   * @exception VException      an exception may be raised by triggers
-   * @exception SQLException    an exception may be raised DB access
-   */
-  fun delete() {
-    block.delete()
+    Commands.serialQuery(this)
   }
 
   /**
@@ -841,7 +525,7 @@ open class Block(val title: String,
    * @exception        VException        an exception may occur during DB access
    */
   fun insertLine() {
-    Commands.insertLine(block)
+    Commands.insertLine(this)
   }
 
   /**
@@ -849,7 +533,7 @@ open class Block(val title: String,
    * @exception        VException        an exception may occur during DB access
    */
   fun changeBlock() {
-    Commands.changeBlock(block)
+    Commands.changeBlock(this)
   }
 
   /**
@@ -857,43 +541,32 @@ open class Block(val title: String,
    * @exception        VException        an exception may occur during DB access
    */
   fun searchOperator() {
-    Commands.setSearchOperator(block)
-  }
-
-  fun showHideFilter() {
-    Commands.showHideFilter(block)
-  }
-
-  /**
-   * * Loads block from database
-   */
-  open fun load() {
-    block.load()
+    Commands.setSearchOperator(this)
   }
 
   /**
    * * Loads block from database
    */
   open fun deleteBlock() {
-    Commands.deleteBlock(block)
+    Commands.deleteBlock(this)
   }
 
   /**
    * Menu query block, fetches selected record.
    */
   fun DictionaryForm.recursiveQuery() {
-    Commands.recursiveQuery(block)
+    Commands.recursiveQuery(this@Block)
   }
 
   /**
    * Menu query block, fetches selected record, then moves to next block
    */
   fun queryMove() {
-    Commands.queryMove(block)
+    Commands.queryMove(this)
   }
 
   fun setMode(mode: Mode) {
-    block.setMode(mode.value)
+    setMode(mode.value)
   }
 
   /**
@@ -908,150 +581,8 @@ open class Block(val title: String,
         return extension
       }
       dropListMap[extension] = field
-      block.dropListMap[extension] = field.ident
     }
     return null
-  }
-
-  fun fireBlockChanged() {
-    block.fireBlockChanged()
-  }
-
-  // ----------------------------------------------------------------------
-  // SETS/GETS INFORMATION ABOUT THE BLOCK
-  // ----------------------------------------------------------------------
-
-  /**
-   * Returns the record info value for the given record.
-   * @param rec The record number.
-   * @return The record info value.
-   */
-  fun getRecordInfoAt(rec: Int): Int = block.getRecordInfoAt(rec)
-
-  /**
-   * Returns true if at least one record is filled
-   */
-  fun isFilled(): Boolean = block.isFilled()
-
-  /**
-   * Returns true if the record is filled
-   */
-  fun isRecordFilled(rec: Int): Boolean = block.isRecordFilled(rec)
-
-  /**
-   * Returns true if the specified record has been fetched from the database
-   */
-  fun isRecordFetched(rec: Int): Boolean = block.isRecordFetched(rec)
-
-  /**
-   * Returns true if the specified record has been changed
-   */
-  fun isRecordChanged(rec: Int): Boolean = block.isRecordChanged(rec)
-
-  /**
-   * Returns true if the specified record has been deleted
-   */
-  fun isRecordDeleted(rec: Int): Boolean = block.isRecordDeleted(rec)
-
-  /**
-   * Returns true if the specified record has been deleted
-   */
-  fun isSortedRecordDeleted(sortedRec: Int): Boolean = block.isSortedRecordDeleted(sortedRec)
-
-  /**
-   * Returns true if the specified record is trailed
-   */
-  fun isRecordTrailed(rec: Int): Boolean = block.isRecordTrailed(rec)
-
-  /**
-   * Returns true if the current record is filled
-   */
-  fun isCurrentRecordFilled(): Boolean = block.isCurrentRecordFilled()
-
-  /**
-   * Returns true if the current record has been fetched from the database
-   */
-  fun isCurrentRecordFetched(): Boolean = block.isCurrentRecordFetched()
-
-  /**
-   * Returns true if the current record has been changed
-   */
-  fun isCurrentRecordChanged(): Boolean = block.isCurrentRecordChanged()
-
-  /**
-   * Returns true if the current record has been deleted
-   */
-  fun isCurrentRecordDeleted(): Boolean = block.isCurrentRecordDeleted()
-
-  /**
-   * Returns true if the current record is trailed
-   */
-  fun isCurrentRecordTrailed(): Boolean = block.isCurrentRecordTrailed()
-
-  /**
-   * Returns the current block access.
-   */
-  fun getAccess(): Int = block.getAccess()
-
-  /**
-   * Updates current access of block fields in the current Record.
-   */
-  fun updateAccess(record: Int = activeRecord) {
-    block.updateAccess(record)
-  }
-
-  fun setRecordFetched(rec: Int, value: Boolean) {
-    block.setRecordFetched(rec, value)
-  }
-
-  /**
-   * Use the default record
-   */
-  fun setRecordFetched(value: Boolean) {
-    block.setRecordFetched(value)
-  }
-
-  fun setRecordChanged(rec: Int, value: Boolean) {
-    block.setRecordChanged(rec, value)
-  }
-
-  /**
-   * Use the default record
-   */
-  fun setRecordChanged(value: Boolean) {
-    block.setRecordChanged(value)
-  }
-
-  fun setRecordDeleted(rec: Int, value: Boolean) {
-    block.setRecordDeleted(rec, value)
-  }
-
-  /**
-   * Use the default record
-   */
-  fun setRecordDeleted(value: Boolean) {
-    block.setRecordDeleted(value)
-  }
-
-  /**
-   *
-   */
-  fun setRecordTrailed(rec: Int, value: Boolean) {
-    block.setRecordTrailed(rec, value)
-  }
-
-  /**
-   * Use the default record
-   */
-  fun setRecordTrailed(value: Boolean) {
-    block.setRecordTrailed(value)
-  }
-
-  /**
-   * COPY RECORD IN BLOCK
-   */
-  fun copyRecord(from: Int, to: Int, trail: Boolean) {
-    block.copyRecord(from, to, trail)
   }
 
   // ----------------------------------------------------------------------
@@ -1197,12 +728,9 @@ open class Block(val title: String,
   // BLOCK MODEL
   // ----------------------------------------------------------------------
 
-  /** The block model */
-  open val block: VBlock = object : VBlock(title, buffer, visible) {
-    override fun setInfo(form: VForm) {
-      this@Block.fields.forEach {
-        it.setInfo(super.source)
-      }
+  override fun setInfo(form: VForm) {
+    this@Block.fields.forEach {
+      it.setInfo(super.source)
     }
   }
 
@@ -1210,10 +738,10 @@ open class Block(val title: String,
 
   /** Returns block model */
   open fun getBlockModel(vForm: VForm): VBlock {
-    block.form = vForm
-    block.source = if (this::class.isInner && vForm.source != null) vForm.source!! else sourceFile
-    block.name = ident
+    form = vForm
+    source = if (this::class.isInner && vForm.source != null) vForm.source!! else sourceFile
+    name = ident
     isModelInitialized = true
-    return block
+    return this
   }
 }

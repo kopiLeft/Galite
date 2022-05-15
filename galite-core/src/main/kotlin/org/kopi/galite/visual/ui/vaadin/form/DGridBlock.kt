@@ -479,7 +479,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     }
 
     for (i in 0 until model.getFieldCount()) {
-      val field = model.fields[i]
+      val field = model.blockFields[i]
 
       if (!field.isInternal() && !field.noChart()) {
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
@@ -580,7 +580,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * @return The field model.
    */
   protected fun getField(propertyId: Any): VField {
-    return model.fields[propertyId as Int]
+    return model.blockFields[propertyId as Int]
   }
 
   /**

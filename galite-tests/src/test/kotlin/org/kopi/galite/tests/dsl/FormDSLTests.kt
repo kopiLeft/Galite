@@ -36,7 +36,7 @@ import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
@@ -64,7 +64,7 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.block.title, blockModel.title)
     assertEquals(form.block.buffer, blockModel.bufferSize)
     assertEquals(form.block.visible, blockModel.displaySize)
-    assertEquals(form.block.border.value, blockModel.border)
+    assertEquals(form.block.border, blockModel.border)
     assertEquals(2, blockModel.maxColumnPos)
     assertEquals(1, blockModel.maxRowPos)
     assertEquals(0, blockModel.pageNumber)
@@ -76,7 +76,7 @@ class FormDSLTests : VApplicationTestBase() {
   fun `test a form field`() {
     val form = FormWithOneSimpleBlock()
     val block = form.model.blocks.single()
-    val model = block.fields.single()
+    val model = block.blockFields.single()
 
     assertEquals(form.block.idClt.label, model.label)
     assertEquals(form.block.idClt.help, model.toolTip)
@@ -93,8 +93,8 @@ class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test form with aligned block`() {
     val form = FormWithAlignedBlock()
-    val targetBlockModel = form.model.blocks.single { it == form.targetBlock.block }
-    val totalBlockModel = form.model.blocks.single { it == form.totalBlock.block }
+    val targetBlockModel = form.model.blocks.single { it == form.targetBlock }
+    val totalBlockModel = form.model.blocks.single { it == form.totalBlock }
 
     assertEquals(targetBlockModel, totalBlockModel.alignment!!.block)
     assertArraysEquals(arrayOf(2, 3), totalBlockModel.alignment!!.targets.toTypedArray())
@@ -114,10 +114,10 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.title, formModel.getTitle())
     assertEquals(form.locale, formModel.locale)
     //clientBlock
-    assertEquals(3, clientBlock.fields.size)
+    assertEquals(3, clientBlock.blockFields.size)
     assertEquals(form.clientBlock.buffer, clientBlock.bufferSize)
     assertEquals(form.clientBlock.visible, clientBlock.displaySize)
-    assertEquals(form.clientBlock.border.value, clientBlock.border)
+    assertEquals(form.clientBlock.border, clientBlock.border)
     assertEquals(form.clientBlock.title, clientBlock.title)
     assertEquals(1, clientBlock.maxColumnPos)
     assertEquals(3, clientBlock.maxRowPos)
@@ -125,9 +125,9 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(0, clientBlock.displayedFields)
     assertEquals(null, clientBlock.alignment)
     //commandsBlock
-    assertEquals(2, commandsBlock.fields.size)
+    assertEquals(2, commandsBlock.blockFields.size)
     assertEquals(form.commandsBlock.visible, commandsBlock.displaySize)
-    assertEquals(form.commandsBlock.border.value, commandsBlock.border)
+    assertEquals(form.commandsBlock.border, commandsBlock.border)
     assertEquals(form.commandsBlock.title, commandsBlock.title)
     assertEquals(1, commandsBlock.maxColumnPos)
     assertEquals(1, commandsBlock.maxRowPos)
@@ -204,8 +204,8 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val idClientModel = clientBlock.fields[0]
-    val nameClientModel = clientBlock.fields[1]
+    val idClientModel = clientBlock.blockFields[0]
+    val nameClientModel = clientBlock.blockFields[1]
 
     assertTrue(nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
 
@@ -222,7 +222,7 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel = clientBlock.fields[1]
+    val nameClientModel = clientBlock.blockFields[1]
 
     assertEquals(User.name.name, nameClientModel.getColumn(0)!!.name)
     assertEquals(User, nameClientModel.getColumn(0)!!.getTable())
@@ -274,7 +274,7 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val fileModel = clientBlock.fields[2]
+    val fileModel = clientBlock.blockFields[2]
 
     assertEquals(1, fileModel.command!!.size)
 
@@ -290,8 +290,8 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel = clientBlock.fields[1]
-    val fileModel = clientBlock.fields[2]
+    val nameClientModel = clientBlock.blockFields[1]
+    val fileModel = clientBlock.blockFields[2]
 
     assertEquals(FieldOption.QUERY_LOWER.value, nameClientModel.options)
     assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)

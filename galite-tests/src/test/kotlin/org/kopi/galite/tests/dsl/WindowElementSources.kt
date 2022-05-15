@@ -25,7 +25,7 @@ import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.Menu
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
 
@@ -38,8 +38,8 @@ class WindowElementSources: VApplicationTestBase() {
     val blockName = Product::class.java.`package`.name.replace(".", File.separator) + File.separator + "ProductBlock"
     val formName = ProductInnerBlock::class.java.`package`.name.replace(".", File.separator) + File.separator + "ProductInnerBlock"
 
-    assertEquals(blockName, product.block._source)
-    assertEquals(formName, productInnerBlock.block._source)
+    assertEquals(blockName, product._source)
+    assertEquals(formName, productInnerBlock._source)
   }
 
   @Test

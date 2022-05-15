@@ -43,6 +43,7 @@ import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.form.Block
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -155,13 +156,13 @@ open class FormField<T>(internal val block: Block,
    * @param action  the action function.
    */
   fun command(item: Actor, vararg modes: Mode, action: () -> Unit): Command {
-    val command = Command(item, modes, block.block, action = action)
+    val command = Command(item, modes, block, action = action)
 
     commands.add(command)
 
     // FIELDS COMMANDS TRIGGERS
     // TODO : Add field commands triggers here
-    block.block.VKT_Field_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
+    block.VKT_Field_Command_Triggers.add(arrayOfNulls(VConstants.TRG_TYPES.size))
 
     return command
   }
@@ -447,7 +448,7 @@ open class FormField<T>(internal val block: Block,
       it.toolTip = help
     }
     if (isID) {
-      block.block.fieldID = model
+      block.fieldID = model
     }
 
     model
@@ -518,14 +519,14 @@ open class FormField<T>(internal val block: Block,
   /**
    * return table num
    */
-  fun getTable(name: Table): FormBlockTable {
+  fun getTable(name: Table): Table {
     return block.getTable(name)
   }
 
   /**
    * return table num
    */
-  fun getTableNum(table: FormBlockTable): Int {
+  fun getTableNum(table: Table): Int {
     return block.getTableNum(table)
   }
 
@@ -690,11 +691,11 @@ open class FormField<T>(internal val block: Block,
     return options and option == option
   }
 
-  fun fetchColumn(table: FormBlockTable): Int {
+  fun fetchColumn(table: Table): Int {
     if (columns != null) {
       val cols = columns!!.columns
       for (i in cols.indices) {
-        if (cols[i].corr == table.corr) {
+        if (cols[i].corr == table.tableName) {
           return i
         }
       }

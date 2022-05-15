@@ -28,7 +28,7 @@ import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 /*** Block Tables & Block Indexes  ***/
@@ -394,7 +394,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
 
       // test PREDEL : click on list then delete
       trigger(PREDEL) {
-        block.form.notice("PREDEL Trigger")
+        form.notice("PREDEL Trigger")
       }
 
       // test POSTDEL : click on deleteBlock command and assert that that POSTDEL trigger change the field value of lastBlock
@@ -419,12 +419,12 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
 
       // test POSTUPD : click on list changes values then save
       trigger(POSTUPD) {
-        block.form.notice("POSTUPD Trigger")
+        form.notice("POSTUPD Trigger")
       }
 
       // test PRESAVE : enter values then click on insert command then save
       trigger(PRESAVE) {
-        block.form.notice("PRESAVE Trigger")
+        form.notice("PRESAVE Trigger")
       }
 
       // test PREBLK : enter block, check preBlkTrigger field

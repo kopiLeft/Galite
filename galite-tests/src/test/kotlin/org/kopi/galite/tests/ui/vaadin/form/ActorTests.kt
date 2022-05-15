@@ -29,7 +29,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
 

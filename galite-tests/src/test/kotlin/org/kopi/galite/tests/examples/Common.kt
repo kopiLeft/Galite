@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.Fixed
 import org.kopi.galite.visual.domain.IMAGE
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 class Traineeship : Block("Training", 1, 10) {
   val t = table(Training)

@@ -135,7 +135,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
     isRecursiveQuery = true
     savedData = arrayListOf()
     savedState = arrayListOf()
-    val fields = block!!.fields
+    val fields = block!!.blockFields
     fields.forEach { field ->
       savedData!!.add(field.getObject(0))
     }
@@ -147,7 +147,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
   private fun retrieveFilledField() {
     isRecursiveQuery = false
     super.reset()
-    val fields = block!!.fields
+    val fields = block!!.blockFields
     for (i in fields.indices) {
       fields[i].setObject(0, savedData!!.elementAt(i))
     }

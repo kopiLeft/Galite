@@ -34,7 +34,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 class TriggersTests : GaliteVUITestBase() {
 
@@ -138,7 +138,7 @@ class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", local
   }
   val salesSimpleBlock = insertBlock(SalesSimpleBlock()) {
     trigger(PREBLK) {
-      block.setDefault()
+      setDefault()
     }
     trigger(DEFAULT) {
       defaultValueFromBlock.value = "Setting by block"

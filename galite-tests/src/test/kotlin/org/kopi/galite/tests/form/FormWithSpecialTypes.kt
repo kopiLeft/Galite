@@ -37,7 +37,7 @@ import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.type.Month
 

@@ -163,7 +163,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
    * @param block The block.
    */
   internal fun setBorder(block: DBlock, page: Int) {
-    block.setBorder(block.model.border, block.model.title, pages[page])
+    block.setBorder(block.model.border.value, block.model.title, pages[page])
   }
 
   /**

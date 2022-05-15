@@ -23,7 +23,7 @@ import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.Command
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 import org.kopi.galite.visual.form.Commands

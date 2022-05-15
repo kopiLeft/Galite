@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 class TestFieldsVisibilityForm : DictionaryForm(title = "Fields Visibility Form", locale = Locale.UK) {
   val action = menu("Action")

@@ -83,7 +83,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   init {
     printOptions = PConfig()
     this.block = block
-    fields = initFields(block.fields)
+    fields = initFields(block.blockFields)
     columns = arrayOfNulls(fields.size)
     idColumn = -1
     setPageTitle(block.title)
@@ -489,7 +489,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given table.
    */
   private fun getColumnGroups(table: Table): Int {
-    val fields = block.fields
+    val fields = block.blockFields
     for (i in fields.indices) {
       if (fields[i].isInternal() && fields[i].getColumnCount() > 1) {
         val col: Int = fields[i].fetchColumn(table)

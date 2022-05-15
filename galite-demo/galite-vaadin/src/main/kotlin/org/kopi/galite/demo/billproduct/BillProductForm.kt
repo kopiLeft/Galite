@@ -25,7 +25,7 @@ import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 class BillProductForm : FormDefault("Bill products", Locale.UK) {
   val page = page("Bill product")

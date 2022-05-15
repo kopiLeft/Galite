@@ -27,7 +27,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class CommandForm : FormDefault(title = "Commands", locale = Locale.UK) {

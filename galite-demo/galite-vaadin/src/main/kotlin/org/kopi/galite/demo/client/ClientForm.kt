@@ -31,7 +31,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.VExecFailedException
 

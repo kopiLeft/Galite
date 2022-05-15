@@ -29,7 +29,7 @@ import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK) {
