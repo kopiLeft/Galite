@@ -205,7 +205,15 @@ abstract class DGridEditorField<T>(
 
       columnView.performAsyncAction(object : Action("mouse1") {
         override fun execute() {
-          columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus
+          try {
+            columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus
+          } catch (exception: Exception) {
+            // Workaround to avoid closing editor on application errors.
+            access(currentUI) {
+              getBlockView().editor.editItem(getBlockView().editor.item)
+            }
+            throw exception
+          }
         }
       })
     }
