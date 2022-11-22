@@ -82,7 +82,7 @@ class VDecimalColumn(ident: String?,
             when(value) {
               null -> ""
               is Int -> value.toString()
-              is BigDecimal -> if ((value).scale() > maxScale || exactScale) (value).setScale(maxScale).format() else value.format()
+              is BigDecimal -> if ((value).scale() > maxScale || exactScale) (value).setScale(maxScale, java.math.RoundingMode.HALF_UP).format() else value.format()
               else -> throw InconsistencyException("bad type for $value")
             }
   }
