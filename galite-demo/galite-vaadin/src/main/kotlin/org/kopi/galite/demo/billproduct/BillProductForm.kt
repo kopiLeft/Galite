@@ -18,7 +18,6 @@ package org.kopi.galite.demo.billproduct
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Bill
 import org.kopi.galite.demo.database.BillProduct
 import org.kopi.galite.demo.database.Product
@@ -26,8 +25,9 @@ import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 
-class BillProductForm : FormDefault("Bill products", Locale.UK) {
+class BillProductForm : DictionaryForm("Bill products", Locale.UK) {
   val page = page("Bill product")
 
   init {

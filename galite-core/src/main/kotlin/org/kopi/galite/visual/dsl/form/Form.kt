@@ -23,17 +23,22 @@ import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
-import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.DefaultActor
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.dsl.common.Command
+import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 
 /**
  * Represents a form.
@@ -42,6 +47,158 @@ import org.kopi.galite.visual.WindowController
  * @param locale the window locale.
  */
 abstract class Form(title: String, locale: Locale? = null) : Window(title, locale) {
+  fun insertMenus() {
+    file; edit; action
+  }
+
+  fun insertActors() {
+    quit
+    _break
+    autofill
+    editItem
+    editItemS
+    searchOperator
+    insertLine
+    deleteLine
+    menuQuery
+    serialQuery
+    insertMode
+    save
+    delete
+    dynamicReport
+    help
+    showHideFilter
+    report
+  }
+
+  fun insertCommands() {
+    autofill
+    editItem
+    editItemS
+
+    quitForm; resetForm; helpForm
+  }
+
+  fun insertDefaultActors() {
+    autofill
+    editItem
+    editItemS
+  }
+
+  // --------------------MENUS-----------------
+  open val file by lazy { menu(FileMenu()) }
+
+  open val edit by lazy { menu(EditMenu()) }
+
+  open val action by lazy { menu(ActionMenu()) }
+
+  // --------------------ACTORS----------------
+  open val quit by lazy { actor(QuitActor()) }
+
+  open val _break by lazy { actor(BreakActor()) }
+
+  open val autofill by lazy { actor(AutofillActor()) }
+
+  open val editItem by lazy { actor(EditItemActor()) }
+
+  open val editItemS by lazy { actor(EditItemSActor()) }
+
+  open val searchOperator by lazy { actor(SearchOperatorActor()) }
+
+  open val insertLine by lazy { actor(InsertLineActor()) }
+
+  open val deleteLine by lazy { actor(DeleteLineActor()) }
+
+  open val menuQuery by lazy { actor(MenuQueryActor()) }
+
+  open val serialQuery by lazy { actor(SerialQueryActor()) }
+
+  open val insertMode by lazy { actor(InsertModeActor()) }
+
+  open val save by lazy { actor(SaveActor()) }
+
+  open val delete by lazy { actor(DeleteActor()) }
+
+  open val report by lazy { actor(ReportActor()) }
+
+  open val dynamicReport by lazy { actor(DynamicReportActor()) }
+
+  open val help by lazy { actor(HelpActor()) }
+
+  open val showHideFilter by lazy { actor(ShowHideFilterActor()) }
+
+  // -------------------------------------------------------------------
+  // FORM-LEVEL COMMANDS
+  // -------------------------------------------------------------------
+  val resetForm  by lazy {
+    command(item = _break) {
+      resetForm()
+    }
+  }
+
+  val quitForm by lazy {
+    command(item = quit) {
+      quitForm()
+    }
+  }
+
+  open val helpForm by lazy {
+    command(item = help) {
+      showHelp()
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // BLOCK-LEVEL COMMANDS
+  // -------------------------------------------------------------------
+  val Block.breakCmd: Command
+    get() = command(item = _break) {
+      resetBlock()
+    }
+
+  val Block.recursiveQueryCmd: Command
+    get() = command(item = menuQuery) {
+      Commands.recursiveQuery(block)
+    }
+
+  val Block.menuQueryCmd: Command
+    get() = command(item = menuQuery) {
+      Commands.menuQuery(block)
+    }
+
+  val Block.queryMoveCmd: Command
+    get() = command(item = menuQuery) {
+      Commands.queryMove(block)
+    }
+
+  val Block.serialQueryCmd: Command
+    get() = command(item = serialQuery) {
+      Commands.serialQuery(block)
+    }
+
+  val Block.insertModeCmd: Command
+    get() = command(item = insertMode) {
+      insertMode()
+    }
+
+  val Block.saveCmd: Command
+    get() = command(item = save) {
+      saveBlock()
+    }
+  val Block.deleteCmd: Command
+    get() = command(item = delete) {
+      deleteBlock()
+    }
+
+  val Block.insertLineCmd: Command
+    get() = command(item = insertLine) {
+      insertLine()
+    }
+
+  val Block.showHideFilterCmd: Command
+    get() = command(item = showHideFilter) {
+      showHideFilter()
+    }
 
   /** Form's blocks. */
   val blocks = mutableListOf<Block>()
@@ -57,11 +214,11 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @param        visible                the number of visible elements
    */
   fun block(
-          title: String,
-          buffer: Int,
-          visible: Int,
-          init: Block.() -> Unit
-  ): Block = insertBlock(Block(title, buffer, visible), init)
+    title: String,
+    buffer: Int,
+    visible: Int,
+    init: Block.() -> Unit
+           ): Block = insertBlock(Block(title, buffer, visible), init)
 
   /**
    * Adds a new block to this page which belongs to this form.
@@ -75,7 +232,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     buffer: Int,
     visible: Int,
     init: Block.() -> Unit
-  ): Block = insertBlock(Block(title, buffer, visible), this, init)
+                    ): Block = insertBlock(Block(title, buffer, visible), this, init)
 
   /**
    * Adds a new block to this form.
@@ -297,8 +454,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-        ?: (this.javaClass.classLoader.getResource("")?.path +
-                this.javaClass.`package`.name.replace(".", "/"))
+                                    ?: (this.javaClass.classLoader.getResource("")?.path +
+                                        this.javaClass.`package`.name.replace(".", "/"))
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
@@ -312,7 +469,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter)
-            .genForm(title, blocks.map { it.ownDomains }.flatten(), menus, actors, pages, blocks)
+      .genForm(title, blocks.map { it.ownDomains }.flatten(), menus, actors, pages, blocks)
   }
 
   // ----------------------------------------------------------------------
@@ -329,3 +486,210 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     override fun formClassName(): String = this@Form.javaClass.name
   }
 }
+
+// ------------------------------------------------------------------
+// BLOCK-LEVEL ACTORS
+// ------------------------------------------------------------------
+class AutofillActor: DefaultActor(
+  menu = EditMenu(),
+  label = "Autofill",
+  help = "Gives the possible values.",
+  command = PredefinedCommand.AUTOFILL
+                                 ) {
+  init {
+    key = Key.F2
+  }
+}
+
+class BreakActor: Actor(
+  menu = FileMenu(),
+  label = "Break",
+  help = "Reset current changes.",
+                       ) {
+  init {
+    key = Key.F3
+    icon = Icon.BREAK
+  }
+}
+
+class DynamicReportActor: Actor(
+  menu = ActionMenu(),
+  label = "Dyn report",
+  help = "Create a dynamic report.",
+                               ) {
+  init {
+    key = Key.F11
+    icon = Icon.PREVIEW
+  }
+}
+
+class DeleteActor: Actor(
+  menu = ActionMenu(),
+  label = "Delete",
+  help = "Delete this record.",
+                        ) {
+  init {
+    key = Key.F5
+    icon = Icon.DELETE
+  }
+}
+
+class DeleteLineActor: Actor(
+  menu = EditMenu(),
+  label = "Row -",
+  help = "Delete this row.",
+                            ) {
+  init {
+    key = Key.F5
+    icon = Icon.DELETE_LINE
+  }
+}
+
+class EditItemActor: DefaultActor(
+  menu = EditMenu(),
+  label = "Edit",
+  help = "Edit this element.",
+  command = PredefinedCommand.EDIT_ITEM
+                                 ) {
+  init {
+    key = Key.SHIFT_F2
+  }
+}
+
+class EditItemSActor: DefaultActor(
+  menu = EditMenu(),
+  label = "Edit",
+  help = "Edit this element.",
+  command = PredefinedCommand.EDIT_ITEM_SHORTCUT
+                                  ) {
+  init {
+    key = Key.SHIFT_F2
+  }
+}
+
+class HelpActor: Actor(
+  menu = ActionMenu(),
+  label = "Help",
+  help = "Display a help.",
+                      ) {
+  init {
+    key = Key.F1
+    icon = Icon.HELP
+  }
+}
+
+class InsertLineActor: Actor(
+  menu = EditMenu(),
+  label = "Row +",
+  help = "Insert a new row to this block.",
+                            ) {
+  init {
+    key = Key.F4
+    icon = Icon.INSERT_LINE
+  }
+}
+
+class InsertModeActor: Actor(
+  menu = ActionMenu(),
+  label = "New",
+  help = "Create a new record.",
+                            ) {
+  init {
+    key = Key.F4
+    icon = Icon.INSERT
+  }
+}
+
+class MenuQueryActor: Actor(
+  menu = ActionMenu(),
+  label = "List",
+  help = "Query: display results in a list.",
+                           ) {
+  init {
+    key = Key.F8
+    icon = Icon.MENU_QUERY
+  }
+}
+
+class PDFActor: Actor(
+  menu = ActionMenu(),
+  label = "PDF",
+  help = "PDF Format",
+                     ) {
+  init {
+    key = Key.F9
+    icon = Icon.EXPORT_PDF
+  }
+}
+
+class QuitActor: Actor(
+  menu = FileMenu(),
+  label = "Quit",
+  help = "Quit this form.",
+                      ) {
+  init {
+    key = Key.ESCAPE
+    icon = Icon.QUIT
+  }
+}
+
+class ReportActor: Actor(
+  menu = ActionMenu(),
+  label = "Report",
+  help = "Create a report.",
+                        ) {
+  init {
+    key = Key.F8
+    icon = Icon.REPORT
+  }
+}
+
+class SaveActor: Actor(
+  menu = ActionMenu(),
+  label = "Save",
+  help = "Save the modifications in the database.",
+                      ) {
+  init {
+    key = Key.F7
+    icon = Icon.SAVE
+  }
+}
+
+class SearchOperatorActor: Actor(
+  menu = EditMenu(),
+  label = "Condition",
+  help = "Change the search operator.",
+                                ) {
+  init {
+    key = Key.F5
+    icon = Icon.SEARCH_OP
+  }
+}
+
+class SerialQueryActor: Actor(
+  menu = ActionMenu(),
+  label = "Query",
+  help = "Load the data after filling to the fields.",
+                             ) {
+  init {
+    key = Key.F6
+    icon = Icon.SERIAL_QUERY
+  }
+}
+
+class ShowHideFilterActor: Actor(
+  menu = ActionMenu(),
+  label = "Show/hider filter",
+  help = "Show or hide the fliter of the block",
+                                ) {
+  init {
+    key = Key.SHIFT_F12
+    icon = Icon.SEARCH_OP
+  }
+}
+
+class ActionMenu : Menu("Action")
+
+class EditMenu : Menu("Edit")
+
+class FileMenu : Menu("File")

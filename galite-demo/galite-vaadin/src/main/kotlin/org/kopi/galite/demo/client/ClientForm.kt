@@ -19,23 +19,24 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.common.FormDefault
+
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Border
-import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.VExecFailedException
 
-class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
+class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
   init {
     insertMenus()
@@ -43,19 +44,19 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
   }
 
   val list = actor(
-          menu = action,
-          label = "List",
-          help = "Display List",
-  ) {
+    menu = action,
+    label = "List",
+    help = "Display List",
+                  ) {
     key = Key.F10
     icon = Icon.LIST
   }
 
   val interSave = actor(
-          menu = action,
-          label = "Save and load",
-          help = " Save and load",
-  ) {
+    menu = action,
+    label = "Save and load",
+    help = " Save and load",
+                       ) {
     key = Key.F11
     icon = Icon.SAVE
   }
@@ -142,7 +143,7 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
       command(item = dynamicReport) {
         createDynamicReport()
       }
-      command(item = list) {
+      command(item = showHideFilter) {
         recursiveQuery()
       }
     }

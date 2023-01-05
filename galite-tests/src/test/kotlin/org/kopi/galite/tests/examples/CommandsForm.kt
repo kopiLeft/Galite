@@ -21,22 +21,23 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Locale.UK) {
-  val action = menu("Action")
+class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK) {
+  override val action = menu("Action")
   val autoFill = actor(
     menu = action,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
-  )
+                      )
   val list = actor(
     menu = action,
     label = "list",
     help = "Display List",
-  ) {
+                  ) {
     key = Key.F2
     icon = Icon.LIST
   }
@@ -44,19 +45,19 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     menu = action,
     label = "break",
     help = "Reset Block",
-  ) {
+                        ) {
     key = Key.F11
     icon = Icon.BREAK
   }
-  val serialQuery = actor(
+  override val serialQuery = actor(
     menu = action,
     label = "serialQuery",
     help = "serial query",
-  ) {
+                                  ) {
     key = Key.F6
     icon = Icon.SERIAL_QUERY
   }
-  val report = actor(
+  override val report = actor(
     menu = action,
     label = "CreateReport",
     help = "Create report",
@@ -64,7 +65,7 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     key = Key.F8
     icon = Icon.REPORT
   }
-  val dynamicReport = actor(
+  override val dynamicReport = actor(
     menu = action,
     label = "DynamicReport",
     help = " Create Dynamic Report",
@@ -112,7 +113,7 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     key = Key.F8
     icon = Icon.REPORT
   }
-  val quit = actor(
+  override val quit = actor(
     menu = action,
     label = "quit",
     help = "Quit",
@@ -120,7 +121,7 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     key = Key.ESCAPE
     icon = Icon.QUIT
   }
-  val helpForm = actor(
+  override val help = actor(
     menu = action,
     label = "Help",
     help = " Help"
@@ -128,7 +129,7 @@ class CommandsForm : ReportSelectionForm(title = "Commands Form", locale = Local
     key = Key.F1
     icon = Icon.HELP
   }
-  val helpCmd = command(item = helpForm) {
+  val helpCmd = command(item = help) {
     showHelp()
   }
   val quitCmd = command(item = quit) {

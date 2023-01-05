@@ -18,7 +18,6 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
@@ -28,9 +27,10 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 
-class CommandForm : FormDefault(title = "Commands", locale = Locale.UK) {
+class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
   val page = page("Command")
 
   init {
@@ -39,10 +39,10 @@ class CommandForm : FormDefault(title = "Commands", locale = Locale.UK) {
   }
 
   val list = actor(
-          menu = action,
-          label = "List",
-          help = "Display List",
-  ) {
+    menu = action,
+    label = "List",
+    help = "Display List",
+                  ) {
     key = Key.F1
     icon = Icon.LIST
   }

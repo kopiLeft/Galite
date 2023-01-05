@@ -28,7 +28,7 @@ import org.kopi.galite.visual.ApplicationContext
  * @param title The title of this form.
  * @param locale the window locale.
  */
-abstract class ReportSelectionForm(title: String, locale: Locale? = null) : DictionaryForm(title, locale) {
+open class ReportSelectionForm(title: String, locale: Locale? = null) : Form(title, locale) {
 
   /**
    * create a report for this form
