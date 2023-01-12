@@ -57,18 +57,28 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
         "" // having null pointer exception when display is not defined
       }
       is UTextField -> {
+        println("-------------AbstractFieldHandler-------UTextField----")
         val text = field.getText()
 
         if (!trim) {
+          println("-------------AbstractFieldHandler-------UTextField---if !trim--- :: " +text)
+
           text
         } else if (model.height == 1) {
+          println("-------------AbstractFieldHandler-------UTextField---else if---")
+
           Utils.trimString(text!!)
         } else {
+          println("-------------AbstractFieldHandler-------UTextField---else---")
+
           Utils.trailString(text!!)
         }
       }
       else -> {
         field.getObject()
+        println("-------------AbstractFieldHandler-------else field.getObject()----" + field.getObject())
+
+        println("-------------AbstractFieldHandler-------else----")
       }
     }
   }

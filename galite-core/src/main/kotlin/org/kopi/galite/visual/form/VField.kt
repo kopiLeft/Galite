@@ -576,6 +576,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @exception VException      an exception may occur in gotoNextField
    */
   fun predefinedFill() {
+    println("-----VField---predefinedFill----")
     if (hasListener) {
       var filled = false
       val listeners = fieldListener!!.listenerList
@@ -630,28 +631,39 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @exception VException      an exception is raised if text is bad
    */
   fun leave(check: Boolean) {
+    println("------------VField---leave---")
     assert(this === block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     try {
+      println("------------VField---leave---check && isChanged--- :: "+check+"--"+isChanged)
       if (check && isChanged) {
+
         if (isChangedUI && hasListener) {
+          println("------------VField---leave---isChangedUI && hasListener--- :: "+isChangedUI+"--++--"+hasListener)
           checkType(getDisplayedValue(true))
         }
         callTrigger(VConstants.TRG_PREVAL)
         if (!isNull(block!!.activeRecord)) {
+          println("----------------VField---leave----------callTrigger(VConstants.TRG_FORMAT)---")
           callTrigger(VConstants.TRG_FORMAT)
         }
         checkList()
         try {
           if (!isNull(block!!.activeRecord)) {
+            println("----------------VField---leave----------callTrigger(VConstants.TRG_VALFLD)---")
             callTrigger(VConstants.TRG_VALFLD)
           }
+          println("----------------VField---leave----------callTrigger(VConstants.TRG_POSTCHG)---")
+
           callTrigger(VConstants.TRG_POSTCHG)
         } catch (e: VFieldException) {
           e.resetValue()
           throw e
         }
       } else if (getForm().setTextOnFieldLeave()) {
+        println("----------------VField---leave----------else if (getForm().setTextOnFieldLeave())---")
+
         if (isChanged && isChangedUI && hasListener) {
+          println("----------------VField---leave----------else if ---(isChanged && isChangedUI && hasListener)---")
           checkType(getDisplayedValue(true))
         }
       }
@@ -660,6 +672,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     isChanged = false
     isChangedUI = false
+    println("----------------VField---leave----------callTrigger(VConstants.TRG_POSTFLD)---")
     callTrigger(VConstants.TRG_POSTFLD)
     block!!.activeField = null
     fireLeaved()
@@ -1495,6 +1508,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   fun getText(r: Int): String? {
+    println("------------VField------------getText------")
+
     if (alias != null) {
       return alias!!.getText(0)
     }
@@ -1633,6 +1648,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @throws VException Visual errors occurring.
    */
   fun onBeforeDrop() {
+    println("------------VField------------onBeforeDrop------")
+
     if (hasTrigger(VConstants.TRG_PREDROP)) {
       callTrigger(VConstants.TRG_PREDROP)
     }
@@ -1643,6 +1660,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @throws VException Visual errors occurring.
    */
   fun onAfterDrop() {
+    println("------------VField------------onAfterDrop------")
+
     if (hasTrigger(VConstants.TRG_POSTDROP)) {
       callTrigger(VConstants.TRG_POSTDROP)
     }
@@ -1680,6 +1699,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * if the transaction is aborted.
    */
   protected fun trail(r: Int) {
+    println("------------VField------------trail------")
+
     if (!isTransient() && !hasTrigger(VConstants.TRG_VALUE) && alias == null) {
       block!!.trailRecord(r)
     }
@@ -1689,6 +1710,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Marks the field changed, trails the record if necessary
    */
   protected fun setChanged(r: Int) {
+    println("------------VField------------setChanged---r int---")
     if (!isTransient() && !hasTrigger(VConstants.TRG_VALUE) && alias == null) {
       block!!.setRecordChanged(r, true)
     } else {
@@ -1703,6 +1725,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Marks the field changed, trails the record if necessary
    */
   fun setChanged(changed: Boolean) {
+    println("------------VField------------setChanged--boolean----")
+
     if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
     }
@@ -1713,6 +1737,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
+    println("------------VField------------chackList------")
+
     if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
       return
@@ -2543,18 +2569,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   fun getDisplayedValue(trim: Boolean): Any? {
     var value: Any? = null
+    println("-----------VField-----trim-- "+trim)
 
     if (hasListener) {
       val listeners = fieldListener!!.listenerList
       var i = listeners.size - 2
+      println("-----------VField---------fieldListener!!.listenerList---------- "+fieldListener!!.listenerList)
+      println("------------VField----------i------ "+i)
 
       while (i >= 0 && value == null) {
         if (listeners[i] === FieldListener::class.java) {
           value = (listeners[i + 1] as FieldListener).getDisplayedValue(trim)
+          println("-----------VField-------while value------- "+value)
         }
         i -= 2
       }
     }
+    println("-----VField-----value ------------ "+value)
     return value
   }
 

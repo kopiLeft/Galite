@@ -103,6 +103,8 @@ abstract class VCodeField(val bufferSize: Int,
   override fun checkType(rec: Int, s: Any?) {
     var s = s as? String
 
+    println("--------VCodeField-----s---------------- "+s)
+    println("-------VCodeField------rec---------------- "+rec)
     if (s == "") {
       setNull(rec)
     } else {
@@ -117,6 +119,10 @@ abstract class VCodeField(val bufferSize: Int,
       var i = 0
 
       while (found != -2 && i < labels.size) {
+        println("--VCodeField--while--found----- :: "+found)
+        println("-VCodeField---while--i----- :: "+i)
+        println("--VCodeField--while--labels.size----- :: "+labels.size)
+
         if (labels[i].lowercase().startsWith(s)) {
           if (labels[i].lowercase() == s) {
             found = i
@@ -130,8 +136,19 @@ abstract class VCodeField(val bufferSize: Int,
         }
         i++
       }
+      println("-----VCodeField---found----- :: "+found)
+
       when (found) {
-        -1 -> throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+        -1 -> {
+          println("--VCodeField-----when ----- labels.size -- ::"+labels.size)
+          println("--VCodeField-----when ----- s.toInt() -- ::"+s.toInt())
+          if (s.toInt() != 0 &&  s.toInt() <= labels.size) {
+            println("--VCodeField-----when ----- -1 --- if s.toInt() != 0 &&  s.toInt() <= labels.size")
+            setCode(rec, s.toInt()-1)
+          } else {
+            throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+          }
+        }
         -2 -> {
           val listDialog: VListDialog
           val selected: Int
@@ -166,16 +183,18 @@ abstract class VCodeField(val bufferSize: Int,
             throw VFieldException(this, MessageCode.getMessage("VIS-00002"))
           }
         }
-        else -> setCode(rec, found)
+        else -> {setCode(rec, found); println("----VCodeField------else--setCode------------- ::"+rec+"-++++++++++- ::"+found)}
       }
     }
   }
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
+    println("---------------VCodeField--------- fillField ----handler--" +(handler==null))
     if (handler != null) {
+
       val selected = handler.selectFromList(arrayOf(getListColumn()!!), arrayOf(getCodes()),
                                             labels)
-
+      println("----------VCodeField--------- fillField ---selected-  :: "+selected)
       if (selected != null) {
         /*
          * -1:  no match
