@@ -79,7 +79,7 @@ class DocumentationFormTests : GaliteVUITestBase() {
   @Test
   fun `test RESETFORM form trigger`() {
     //click on resetForm command to reset form and call RESET FORM trigger
-    form.resetForm.triggerCommand()
+    form._break.triggerCommand()
     expectConfirmNotification(true)
     // check that RESETFORM prevent the resent of the form and don't clear the fields
     assertEquals("INIT Trigger", form.formTriggers.initTriggerForm.findModel().getString())

@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
 class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
-  val action = menu("Action")
+  override val action = menu("Action")
   val autoFill = actor(
     menu = action,
     label = "Autofill",

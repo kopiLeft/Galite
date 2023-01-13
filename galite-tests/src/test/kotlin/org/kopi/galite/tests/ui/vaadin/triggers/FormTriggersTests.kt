@@ -80,7 +80,7 @@ class FormTriggersTests : GaliteVUITestBase() {
 
     TestTriggersForm.block._enter()
 
-    TestTriggersForm.resetForm.triggerCommand()
+    TestTriggersForm._break.triggerCommand()
     expectConfirmNotification(true)
 
     ReportTriggersTest.model.doNotModal()
@@ -250,22 +250,22 @@ class FormTriggersTests : GaliteVUITestBase() {
 }
 
 object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", locale = Locale.UK) {
-  val action = menu("Action")
+  override val action = menu("Action")
 
-  val quit = actor(
+  override val quit = actor(
     menu = action,
     label = "quit",
     help = "Quit",
-  ) {
+                           ) {
     key = Key.ESCAPE
     icon = Icon.QUIT
   }
 
-  val resetForm = actor(
+  override val _break = actor(
     menu = action,
     label = "reset Form",
     help = "Reset Form",
-  ) {
+                                ) {
     key = Key.F7
     icon = Icon.BREAK
   }
@@ -288,11 +288,11 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.DELETE
   }
 
-  val insertMode = actor(
+  override val insertMode = actor(
     menu = action,
     label = "Insert",
     help = " Insert",
-  ) {
+                                 ) {
     key = Key.F7
     icon = Icon.INSERT
   }
@@ -314,11 +314,11 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.BREAK
   }
 
-  val report = actor(
+  override val report = actor(
     menu = action,
     label = "CreateReport",
     help = "Create report",
-  ) {
+                             ) {
     key = Key.F8
     icon = Icon.REPORT
   }
@@ -336,7 +336,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     quitForm()
   }
 
-  val resetFormCmd = command(item = resetForm) {
+  val resetFormCmd = command(item = _break) {
     resetForm()
   }
 

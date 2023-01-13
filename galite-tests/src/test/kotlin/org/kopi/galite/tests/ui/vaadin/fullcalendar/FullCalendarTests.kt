@@ -67,14 +67,14 @@ class FullCalendarTests: GaliteVUITestBase() {
 }
 
 class TasksForm : ReportSelectionForm(title = "Tasks", locale = Locale.UK) {
-  val edit = menu("Edit")
+  override val edit = menu("Edit")
 
-  val autofill = actor(
+  override val autofill = actor(
     menu = edit,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
-  ) {
+                               ) {
     key = Key.F2
   }
 

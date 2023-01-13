@@ -29,13 +29,13 @@ import org.kopi.galite.visual.WindowController
 class DocumentationReportTriggers : Form(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
-  val file = menu("file")
+  override val file = menu("file")
 
-  val report = actor(
+  override val report = actor(
     menu = file,
     label = "CreateReport",
     help = "Create report",
-  ) {
+                             ) {
     key = Key.F8
     icon = Icon.REPORT
   }

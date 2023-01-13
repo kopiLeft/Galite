@@ -405,7 +405,7 @@ class CommandsFormTests : GaliteVUITestBase() {
       assertArraysEquals(arrayOf(4, "training 4", 1, BigDecimal("3129.700"), true), initialData[3])
     }
 
-    form.InsertMode.triggerCommand()
+    form.insertMode.triggerCommand()
 
     form.block.trainingName.edit("training test")
     form.block.trainingType.editText("Galite")
@@ -593,7 +593,7 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test helpForm command`() {
-    form.helpForm.triggerCommand()
+    form.help.triggerCommand()
 
     _expectOne<DHelpViewer>()
   }
@@ -623,7 +623,7 @@ class CommandsFormTests : GaliteVUITestBase() {
    */
   @Test
   fun `test close helpForm command`() {
-    form.helpForm.triggerCommand()
+    form.help.triggerCommand()
 
     _expectOne<DHelpViewer>()
 

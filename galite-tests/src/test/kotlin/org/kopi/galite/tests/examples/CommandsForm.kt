@@ -23,7 +23,6 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK) {
   override val action = menu("Action")
@@ -53,7 +52,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     menu = action,
     label = "serialQuery",
     help = "serial query",
-                                  ) {
+                        ) {
     key = Key.F6
     icon = Icon.SERIAL_QUERY
   }
@@ -97,11 +96,11 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     key = Key.F7
     icon = Icon.DETAIL_VIEW
   }
-  val InsertMode = actor(
+  override val insertMode = actor(
     menu = action,
     label = "Insert",
     help = " Insert",
-  ) {
+                                 ) {
     key = Key.F7
     icon = Icon.INSERT
   }
@@ -163,7 +162,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     command(item = Operator) {
       searchOperator()
     }
-    command(item = InsertMode) {
+    command(item = insertMode) {
       insertMode()
     }
     command(item = pivottable) {

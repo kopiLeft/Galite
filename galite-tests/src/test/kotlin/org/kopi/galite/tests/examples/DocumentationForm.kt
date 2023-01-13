@@ -35,7 +35,7 @@ import org.kopi.galite.visual.dsl.form.Key
 class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK) {
 
   //Menus Definition
-  val file = menu("file")
+  override val file = menu("file")
 
   // Actors Definition
   val cut = actor(
@@ -47,20 +47,20 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
     icon = Icon.LIST
   }
 
-  val quit = actor(
+  override val quit = actor(
     menu = file,
     label = "quit",
     help = "Quit",
-  ) {
+                           ) {
     key = Key.ESCAPE
     icon = Icon.QUIT
   }
 
-  val resetForm = actor(
+  override val _break = actor(
     menu = file,
     label = "resetForm",
     help = "Reset Form",
-  ) {
+                             ) {
     key = Key.F7
     icon = Icon.BREAK
   }
@@ -69,7 +69,7 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
     quitForm()
   }
 
-  val resetFormCmd = command(item = resetForm) {
+  val resetFormCmd = command(item = _break) {
     resetForm()
   }
 

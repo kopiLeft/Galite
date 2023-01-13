@@ -279,15 +279,6 @@ class LocalizedForm: ReportSelectionForm(title = "Formulaire", locale = Locale.F
     command = PredefinedCommand.AUTOFILL
   )
 
-  val report = actor(
-    menu = internMenu,
-    label = "Creer un rapport",
-    help = "Creer un rapport",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
-
   val internBlock = insertBlock(InternBlock())
   val externBlock = insertBlock(ExternBlock())
 

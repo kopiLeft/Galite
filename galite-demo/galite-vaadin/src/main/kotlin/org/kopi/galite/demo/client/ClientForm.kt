@@ -30,8 +30,8 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Key

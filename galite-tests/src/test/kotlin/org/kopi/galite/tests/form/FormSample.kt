@@ -51,9 +51,9 @@ val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
 
 class FormSample : Form(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
+  override val action = menu("Action")
 
-  val edit = menu("Edit")
+  override val edit = menu("Edit")
 
   val autoFill = actor(
     menu = edit,
@@ -69,12 +69,12 @@ class FormSample : Form(title = "form for test", locale = Locale.UK) {
     command = PredefinedCommand.EDIT_ITEM_SHORTCUT
   )
 
-  val editItem = actor(
+  override val editItem = actor(
     menu = edit,
     label = "Edit Item",
     help = "Edit Item",
     command = PredefinedCommand.EDIT_ITEM
-  )
+                               )
 
   val newItem = actor(
     menu = edit,

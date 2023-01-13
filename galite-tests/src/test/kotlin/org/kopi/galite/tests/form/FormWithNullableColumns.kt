@@ -73,9 +73,9 @@ object Adress : Table() {
 }
 
 object FormWithNullableColumn : DictionaryForm(title = "form for test nullable ", locale = Locale.UK) {
-  val action = menu("Action")
+  override val action = menu("Action")
 
-  val edit = menu("Edit")
+  override val edit = menu("Edit")
 
   val list = actor(
           menu = action,

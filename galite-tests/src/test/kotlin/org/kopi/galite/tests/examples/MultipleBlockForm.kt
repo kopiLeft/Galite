@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.Key
 class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val page1 = page("page1")
   val page2 = page("page2")
-  val action = menu("Action")
+  override val action = menu("Action")
   val autoFill = actor(
     menu = action,
     label = "Autofill",
@@ -80,11 +80,11 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     key = Key.F5
     icon = Icon.BREAK
   }
-  val showHideFilter = actor(
+  override val showHideFilter = actor(
     menu = action,
     label = "Show/Hide Filter",
     help = " Show Hide Filter",
-  ) {
+                                     ) {
     key = Key.F6
     icon = Icon.SEARCH_OP
   }
@@ -96,15 +96,15 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
     key = Key.F10
     icon = Icon.ADD
   }
-  val resetForm = actor(
+  override val _break = actor(
     menu = action,
     label = "resetForm",
     help = "Reset Form",
-  ) {
+                             ) {
     key = Key.F7
     icon = Icon.BREAK
   }
-  val resetFormCmd = command(item = resetForm) {
+  val resetFormCmd = command(item = _break) {
     resetForm()
   }
 

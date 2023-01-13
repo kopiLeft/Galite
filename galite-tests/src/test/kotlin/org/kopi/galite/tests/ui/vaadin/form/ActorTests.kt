@@ -63,7 +63,7 @@ class ActorTests : GaliteVUITestBase() {
 }
 
 class ActorsForm : Form(title = "Commands Form", locale = Locale.UK) {
-  val action = menu("Action")
+  override val action = menu("Action")
   val autoFill = actor(
     menu = action,
     label = "Autofill",

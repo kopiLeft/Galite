@@ -33,7 +33,7 @@ import org.kopi.galite.visual.VColor
 
 object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
+  override val action = menu("Action")
 
   val graph = actor (
           menu =   action,

@@ -26,13 +26,13 @@ import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class FormWithReport : ReportSelectionForm(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
+  override val action = menu("Action")
   val testPage = page("test page")
-  val report = actor(
+  override val report = actor(
           menu = action,
           label = "CreateReport",
           help = "Create report",
-  ) {
+                             ) {
     key = Key.F8
     icon = Icon.REPORT
   }
