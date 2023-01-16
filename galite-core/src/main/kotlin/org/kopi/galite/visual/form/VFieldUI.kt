@@ -344,6 +344,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
    * @exception        VException        an exception may occur in gotoNextField
    */
   fun fillField(): Boolean {
+    println("fillField---VFieldUI----fieldHandler.getDisplayedValue(true):: "+fieldHandler.getDisplayedValue(true))
     model.checkType(fieldHandler.getDisplayedValue(true))
     if (hasAutofill()) {
       if (hasEditItem_S()) {
@@ -374,6 +375,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
    * @exception        VException        an exception may occur in gotoNextField
    */
   fun nextEntry() {
+    println("nextEntry---VFieldUI----fieldHandler.getDisplayedValue(true):: "+fieldHandler.getDisplayedValue(true))
+
     model.checkType(fieldHandler.getDisplayedValue(true))
     if (model.hasNextPreviousEntry()) {
       model.enumerateValue(true)
@@ -388,6 +391,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
    * @exception        VException        an exception may occur in gotoNextField
    */
   fun previousEntry() {
+    println("previousEntry---VFieldUI----fieldHandler.getDisplayedValue(true):: "+fieldHandler.getDisplayedValue(true))
+
     model.checkType(fieldHandler.getDisplayedValue(true))
     if (model.hasNextPreviousEntry()) {
       model.enumerateValue(false)

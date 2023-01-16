@@ -67,6 +67,7 @@ class VTextField(bufferSize: Int,
    * @exception        org.kopi.galite.visual.VException        an exception may be raised if text is bad
    */
   override fun checkType(o: Any?) {
+    println("-------VTextField--------o--------:: "+o)
     setString(block!!.activeRecord, o as? String)
   }
 

@@ -55,9 +55,12 @@ class DRichTextEditor(
                            this)
     editor.addTextValueChangeListener {
       if (it.isFromClient && !(it.oldValue == "" && it.value == "<p><br></p>")) {
+
+        println("------DRichTextField-----it.value   -- :: "+it.value   +it.oldValue)
         valueChanged()
       }
     }
+    println("----DRichTextField------editor --"+editor)
     setFieldContent(editor)
     //editor.addNavigationListener(this) TODO
     //setContent(editor) TODO
@@ -96,6 +99,7 @@ class DRichTextEditor(
     // value change event is fired when the field is blurred.
     getModel().isChangedUI = true
     getModel().setChanged(true)
+    println("-----------DRichTextEditor----------::"+text)
     getModel().checkType(text)
   }
 

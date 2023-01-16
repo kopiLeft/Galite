@@ -102,14 +102,19 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   //---------------------------------------------------
 
   override fun setPresentationValue(newPresentationValue: String?) {
+    println("newPresentationValue ::"+newPresentationValue)
+    println("content.value ::"+content.value)
     content.value = newPresentationValue
   }
 
   open fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
+    println("addTextValueChangeListener :: " +internalField)
+    println("addTextValueChangeListener :: " +listener)
     internalField.addValueChangeListener(listener)
   }
 
   override fun getValue(): String? {
+    println("format(internalField.value)  ::"+format(internalField.value))
     return format(internalField.value)
   }
 
@@ -190,6 +195,8 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   @JvmName("setAnyValue")
   fun setValue(text: Any?) {
+    println("setValue"+text)
+    println("setValue"+value)
     value = format(text)
   }
 
@@ -203,6 +210,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     if (text == null) {
       text = "" // avoid NullPointerException
     }
+    println("text::  "+text)
     setPresentationValue(text)
     //}
   }
@@ -382,6 +390,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
             Key.CONTROL,
             Key.ALT,
             Key.ESCAPE -> {
+              println("onKeyUp")
         }
         else -> refreshSuggestions()
       }
@@ -403,7 +412,10 @@ open class InputTextField<C> internal constructor(protected val internalField: C
       val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
       if (dfs!!.decimalSeparator != '.') {
+        println("value before"+value)
         value = value?.replace('.', dfs.decimalSeparator)
+
+        println("value after"+value)
       }
     }
   }
@@ -540,6 +552,8 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   fun checkValue(rec: Int) {
     isCheckingValue = true //!!! don't check twice on field blur
     if (validationStrategy != null) {
+      println("--------inputTesxtField-------- if (value == null) \"\" else value!!.trim()------------"+ if (value == null) "" else value!!.trim())
+      println("--------inputTesxtField-------- value------------"+ value)
       validationStrategy!!.checkType(this, if (value == null) "" else value!!.trim())
     }
     isCheckingValue = false

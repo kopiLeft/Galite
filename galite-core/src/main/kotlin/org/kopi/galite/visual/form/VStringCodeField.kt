@@ -66,6 +66,7 @@ class VStringCodeField(bufferSize: Int,
    * Sets the field value of given record to a fixed value.
    */
   override fun setString(r: Int, v: String?) {
+    println ("----VStringCodeField----setString-----v---  :: "+v)
     if (v == null) {
       setCode(r, -1)
     } else {
@@ -83,6 +84,9 @@ class VStringCodeField(bufferSize: Int,
                                              + " for " + getType()
                                              + " in " + source)
       }
+
+      println ("----VStringCodeField----setString----code----  :: "+code)
+
       setCode(r, code)
     }
   }

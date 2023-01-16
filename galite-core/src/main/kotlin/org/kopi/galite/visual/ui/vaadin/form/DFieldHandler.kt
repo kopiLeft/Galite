@@ -36,6 +36,7 @@ open class DFieldHandler internal constructor(rowController: VFieldUI) : Abstrac
   override fun updateModel() {
     // model needs to be updated only when UI value has changed
     if (model.isChangedUI && model.hasFocus()) {
+      println("-------------------DFieldHandler-----getDisplayedValue(true)-------"+getDisplayedValue(true))
       model.checkType(getDisplayedValue(true))
     }
   }

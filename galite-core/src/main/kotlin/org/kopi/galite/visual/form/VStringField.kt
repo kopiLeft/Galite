@@ -103,6 +103,7 @@ open class VStringField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
+    println("--------VStringField------checkType- s- :: "+s)
     var s = s as? String
 
     if (s == null || s == "") {

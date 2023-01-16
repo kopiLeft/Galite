@@ -84,6 +84,7 @@ open class DTextField(
 
   override fun valueChanged() {
     val value = text
+    println("--DTextF----valueChanged-text- ::"+text)
 
     if (isChanged(getModel().getText(), value)) {
       checkText(value)
@@ -204,6 +205,7 @@ open class DTextField(
    * @throws VException Errors occurs during check.
    */
   private fun checkText(s: String?) {
+    println("------DTextField---checkText----s- :: "+s)
     val text = transformer!!.toModel(s ?: "")
     if (!transformer!!.checkFormat(text)) {
       return
@@ -214,6 +216,7 @@ open class DTextField(
       // affect value directly to the model.
       getModel().getForm().performAsyncAction(object : Action("check_type") {
         override fun execute() {
+          println("-----DTextField-----:: "+text)
           getModel().checkType(text)
         }
       })
@@ -224,6 +227,8 @@ open class DTextField(
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getText(): String? {
+    println("transformer!!.toModel(field.value.orEmpty()) :: "+transformer!!.toModel(field.value.orEmpty()))
+    println("field.value :: "+field.value)
     return transformer!!.toModel(field.value.orEmpty())
   }
 

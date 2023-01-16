@@ -43,6 +43,8 @@ class EnumValidator(private val enumerations: Array<String>?,
   }
 
   override fun checkType(field: InputTextField<*>, text: String) {
+    println ("----------EnumValidator------------------"+text)
+
     if ("" == text) {
       field.value = null
     } else {

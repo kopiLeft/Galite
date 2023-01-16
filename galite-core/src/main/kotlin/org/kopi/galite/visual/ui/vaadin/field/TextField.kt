@@ -416,6 +416,7 @@ class TextField(val model: VField,
   }
 
   override fun getValue(): String? {
+    println("inputField.value:: "+inputField.value)
     return inputField.value
   }
 

@@ -47,6 +47,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
 
   override fun updateModel() {
     if (model.isChanged && model.hasFocus()) {
+      println("-----AbstarctFieldHandler-------updateModel----------------"+getDisplayedValue(true))
       model.checkType(getDisplayedValue(true))
     }
   }
