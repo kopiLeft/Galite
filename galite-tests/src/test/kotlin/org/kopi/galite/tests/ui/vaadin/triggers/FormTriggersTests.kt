@@ -250,25 +250,6 @@ class FormTriggersTests : GaliteVUITestBase() {
 }
 
 object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", locale = Locale.UK) {
-  override val action = menu("Action")
-
-  override val quit = actor(
-    menu = action,
-    label = "quit",
-    help = "Quit",
-                           ) {
-    key = Key.ESCAPE
-    icon = Icon.QUIT
-  }
-
-  override val _break = actor(
-    menu = action,
-    label = "reset Form",
-    help = "Reset Form",
-                                ) {
-    key = Key.F7
-    icon = Icon.BREAK
-  }
 
   val listActor = actor(
     menu = action,
@@ -288,15 +269,6 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.DELETE
   }
 
-  override val insertMode = actor(
-    menu = action,
-    label = "Insert",
-    help = " Insert",
-                                 ) {
-    key = Key.F7
-    icon = Icon.INSERT
-  }
-
   val saveBlock = actor(
     menu = action,
     label = "Save Block",
@@ -312,15 +284,6 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
   ) {
     key = Key.F11
     icon = Icon.BREAK
-  }
-
-  override val report = actor(
-    menu = action,
-    label = "CreateReport",
-    help = "Create report",
-                             ) {
-    key = Key.F8
-    icon = Icon.REPORT
   }
 
   val graph = actor (

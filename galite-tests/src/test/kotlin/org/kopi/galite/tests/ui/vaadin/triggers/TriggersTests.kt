@@ -123,13 +123,6 @@ class TriggersTests : GaliteVUITestBase() {
 }
 
 class FormToTestTriggers : DictionaryForm(title = "Form to test triggers", locale = Locale.UK) {
-  override val action = menu("Action")
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
 
   val block = insertBlock(Clients()) {
     trigger(PREBLK) {

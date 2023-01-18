@@ -54,18 +54,6 @@ object Product : Table() {
 
 class FormWithSpecialTypes : Form(title = "form for test", locale = Locale.UK) {
 
-  override val action = menu("Action")
-  override val edit = menu("Edit")
-
-  override val save = actor(
-          menu = action,
-          label = "save",
-          help = "save",
-                           ) {
-    key = Key.F2
-    icon = Icon.SAVE
-  }
-
   val autofillitem = actor(
     menu = edit,
     label = "Autofill",

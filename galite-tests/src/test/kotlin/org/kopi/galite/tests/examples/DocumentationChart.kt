@@ -29,7 +29,6 @@ import org.kopi.galite.visual.dsl.form.Key
 class DocumentationChart : Form(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
-  override val file = menu("file")
 
   val graph = actor (
     menu =   file,

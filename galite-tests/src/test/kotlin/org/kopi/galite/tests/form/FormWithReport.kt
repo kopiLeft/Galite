@@ -26,16 +26,7 @@ import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
 class FormWithReport : ReportSelectionForm(title = "form for test", locale = Locale.UK) {
 
-  override val action = menu("Action")
   val testPage = page("test page")
-  override val report = actor(
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
-                             ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
 
   val block = testPage.insertBlock(BlockSample) {
     command(item = report) {

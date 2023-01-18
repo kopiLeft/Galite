@@ -35,9 +35,7 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK) {
 
-  override val action = menu("Action")
   val reset = menu("reset")
-  override val edit = menu("Edit")
 
   val testPage1 = page("test page1")
   val testPage2 = page("test page2")
@@ -67,26 +65,8 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
     icon = Icon.BREAK
   }
 
-  override val _break = actor(
-    menu = reset,
-    label = "resetForm",
-    help = "Reset Form",
-                             ) {
-    key = Key.F7
-    icon = Icon.BREAK
-  }
-
   val resetFormCmd = command(item = _break) {
     resetForm()
-  }
-
-  override val save = actor(
-    menu = action,
-    label = "save",
-    help = "save",
-                           ) {
-    key = Key.F2
-    icon = Icon.SAVE
   }
 
   val block3 = testPage1.insertBlock(UsersBlock()) {

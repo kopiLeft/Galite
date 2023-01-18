@@ -80,16 +80,6 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
     key = Key.F4
     icon = Icon.DELETE
   }
-
-  override val _break = actor(
-    menu = action,
-    label = "break",
-    help = "Reset Block",
-                             ) {
-    key = Key.F11
-    icon = Icon.BREAK
-  }
-
   val resetFormCmd = command(item = _break) {
     resetForm()
   }

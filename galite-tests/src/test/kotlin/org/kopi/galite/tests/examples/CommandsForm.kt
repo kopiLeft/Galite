@@ -56,22 +56,6 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     key = Key.F6
     icon = Icon.SERIAL_QUERY
   }
-  override val report = actor(
-    menu = action,
-    label = "CreateReport",
-    help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
-  override val dynamicReport = actor(
-    menu = action,
-    label = "DynamicReport",
-    help = " Create Dynamic Report",
-  ) {
-    key = Key.F9
-    icon = Icon.REPORT
-  }
   val saveBlock = actor(
     menu = action,
     label = "Save Block",
@@ -96,14 +80,6 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     key = Key.F7
     icon = Icon.DETAIL_VIEW
   }
-  override val insertMode = actor(
-    menu = action,
-    label = "Insert",
-    help = " Insert",
-                                 ) {
-    key = Key.F7
-    icon = Icon.INSERT
-  }
   val pivottable = actor(
     menu = action,
     label = "Pivot table",
@@ -112,22 +88,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     key = Key.F8
     icon = Icon.REPORT
   }
-  override val quit = actor(
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
-    key = Key.ESCAPE
-    icon = Icon.QUIT
-  }
-  override val help = actor(
-    menu = action,
-    label = "Help",
-    help = " Help"
-  ) {
-    key = Key.F1
-    icon = Icon.HELP
-  }
+
   val helpCmd = command(item = help) {
     showHelp()
   }
