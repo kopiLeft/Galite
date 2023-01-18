@@ -36,8 +36,6 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", locale = Locale.UK) {
 
-  override val action = menu("Action")
-
   val autoFill = actor(
     menu = action,
     label = "Autofill",
@@ -61,15 +59,6 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   ) {
     key = Key.F3
     icon = Icon.SAVE
-  }
-
-  override val insertMode = actor(
-    menu = action,
-    label = "Insert",
-    help = " Insert",
-                                 ) {
-    key = Key.F7
-    icon = Icon.INSERT
   }
 
   val deleteBlock = actor(

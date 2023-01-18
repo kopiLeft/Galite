@@ -25,7 +25,6 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 
 class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK) {
-  override val action = menu("Action")
   val autoFill = actor(
     menu = action,
     label = "Autofill",
@@ -47,14 +46,6 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
                         ) {
     key = Key.F11
     icon = Icon.BREAK
-  }
-  override val serialQuery = actor(
-    menu = action,
-    label = "serialQuery",
-    help = "serial query",
-                        ) {
-    key = Key.F6
-    icon = Icon.SERIAL_QUERY
   }
   val saveBlock = actor(
     menu = action,

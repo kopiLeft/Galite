@@ -29,16 +29,6 @@ import org.kopi.galite.visual.WindowController
 class DocumentationReportTriggers : Form(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
-  override val file = menu("file")
-
-  override val report = actor(
-    menu = file,
-    label = "CreateReport",
-    help = "Create report",
-                             ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
 
     /** Calling reports **/
   // call report with  WindowController.windowController.doNotModal

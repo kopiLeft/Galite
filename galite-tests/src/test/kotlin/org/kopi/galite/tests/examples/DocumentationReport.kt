@@ -28,16 +28,7 @@ import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 class DocumentationReport : ReportSelectionForm(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
-  override val file = menu("file")
 
-  override val report = actor(
-    menu = file,
-    label = "CreateReport",
-    help = "Create report",
-                             ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
 
   val block = insertBlock(SimpleBlock())
 
