@@ -90,10 +90,6 @@ object User : Table() {
 
 class FormSample : Form(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
-
-  val edit = menu("Edit")
-
   val autoFill = actor(
     menu = edit,
     label = "Autofill",

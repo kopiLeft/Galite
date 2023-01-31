@@ -135,7 +135,6 @@ object Upper : Domain<String>(5) {
 }
 
 class FormWithDomainConstraint: Form(title = "") {
-  val action = menu("Action")
 
   val autoFill = actor(
     menu = action,

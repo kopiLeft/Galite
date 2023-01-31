@@ -662,7 +662,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     assertEquals("center name", multipleField.value)
     multipleForm.block2.editRecord(1)
     multipleBlock.grid.expectRow(0, "center name", "", "", "", "", "")
-    multipleForm.resetForm.triggerCommand()
+    multipleForm._break.triggerCommand()
     expectConfirmNotification(true)
     assertEquals("", simpleField.value)
     multipleBlock.grid.expectRow(0, "", "", "", "", "", "")
