@@ -30,8 +30,7 @@ import org.kopi.galite.visual.form.VDictionaryForm
  * @param title The title of this form.
  * @param locale the window locale.
  */
-open class DictionaryForm(title: String, locale: Locale? = null) : Form(title, locale) {
-
+abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(title, locale) {
   /**
    * Searches for an existing record.
    *
