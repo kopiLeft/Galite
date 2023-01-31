@@ -143,4 +143,8 @@ abstract class VReportColumn(
       styles!!
     }
   }
+
+  fun setStyles(styles: Array<ColumnStyle>) {
+    this.styles = styles
+  }
 }
