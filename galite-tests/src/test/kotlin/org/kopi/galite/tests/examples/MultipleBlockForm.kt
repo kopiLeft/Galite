@@ -34,6 +34,8 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
   val page1 = page("page1")
   val page2 = page("page2")
 
+  override val action = menu("Action")
+
   val autoFill = actor(
     menu = action,
     label = "Autofill",
@@ -87,6 +89,14 @@ class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Local
   ) {
     key = Key.F10
     icon = Icon.ADD
+  }
+  override val _break = actor(
+    menu = action,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = Icon.BREAK
   }
 
   val resetFormCmd = command(item = _break) {

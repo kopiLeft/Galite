@@ -255,6 +255,8 @@ class FieldsTests : GaliteVUITestBase() {
 }
 
 class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = Locale.UK) {
+  override val edit = menu("Edit")
+
   val autoFill = actor(
     menu = edit,
     label = "Autofill",
@@ -266,6 +268,12 @@ class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = 
     label = "NewItem",
     help = "NewItem",
     command = PredefinedCommand.NEW_ITEM
+  )
+  override val editItem = actor(
+    menu = edit,
+    label = "Edit Item",
+    help = "Edit Item",
+    command = PredefinedCommand.EDIT_ITEM
   )
 
   val userListBlock = insertBlock(UsersListBlock()) {
@@ -291,6 +299,7 @@ class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = 
 }
 
 class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) {
+  override val action = menu("Action")
 
   val autoFill = actor(
     menu = action,
@@ -299,6 +308,14 @@ class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) 
     command = PredefinedCommand.AUTOFILL
   )
 
+  override val quit = actor(
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = Icon.QUIT
+  }
   val quitCmd = command(item = quit) {
     quitForm()
   }

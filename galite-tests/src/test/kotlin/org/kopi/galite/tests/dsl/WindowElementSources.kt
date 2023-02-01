@@ -60,7 +60,7 @@ class WindowElementSources: VApplicationTestBase() {
 class ProductBlock: Block("Product Block", 1, 1)
 
 class Product: Form(title = "Product") {
-
+  override val action = menu("Action")
   val graph = actor(
     menu = action,
     label = "Graph for test",

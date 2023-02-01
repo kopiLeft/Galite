@@ -331,6 +331,7 @@ class FormWithOneSimpleBlock : Form(title = "Clients", locale = Locale.UK) {
 
 class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val reset = menu("reset")
+  override val edit = menu("Edit")
 
   val autoFill = actor(
     menu = edit,
@@ -338,6 +339,15 @@ class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
+
+  override val _break = actor(
+    menu = reset,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = Icon.BREAK
+  }
 
   val resetFormCmd = command(item = _break) {
     resetForm()
