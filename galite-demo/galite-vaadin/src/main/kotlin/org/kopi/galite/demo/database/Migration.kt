@@ -153,9 +153,6 @@ fun createDBSchemaTables() {
   list_Of_Tables.forEach { table ->
     SchemaUtils.create(table)
   }
-  sequencesList.forEach { sequence ->
-    SchemaUtils.createSequence(sequence)
-  }
 }
 
 /**

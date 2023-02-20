@@ -39,7 +39,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.database.Connection
-import org.kopi.galite.database.FAVORITENId
+import org.kopi.galite.database.FavoritesId
 import org.kopi.galite.database.Favorites
 import org.kopi.galite.database.GroupParties
 import org.kopi.galite.database.GroupRights
@@ -581,14 +581,14 @@ class VMenuTree constructor(ctxt: Connection?,
       transaction {
         if (menuTreeUser != null) {
           Favorites.insert {
-            it[this.id] = FAVORITENId.nextIntVal()
+            it[this.id] = FavoritesId.nextIntVal()
             it[ts] = (System.currentTimeMillis() / 1000).toInt()
             it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }
             it[module] = id
           }
         } else {
           Favorites.insert {
-            it[this.id] = FAVORITENId.nextIntVal()
+            it[this.id] = FavoritesId.nextIntVal()
             it[ts] = (System.currentTimeMillis() / 1000).toInt()
             it[user] = getUserID()
             it[module] = id

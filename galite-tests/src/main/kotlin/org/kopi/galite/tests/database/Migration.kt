@@ -53,9 +53,6 @@ fun createDBSchemaTables() {
   list_Of_Tables.forEach { table ->
     SchemaUtils.create(table)
   }
-  sequencesList.forEach { sequence ->
-    SchemaUtils.createSequence(sequence)
-  }
 }
 
 /**
@@ -104,7 +101,7 @@ fun insertIntoUserRights(userName: String,
 }
 
 /**
- * Inserts data into [Module] table
+ * Inserts data into [Modules] table
  */
 fun insertIntoModule(shortname: String,
                      source: String,
