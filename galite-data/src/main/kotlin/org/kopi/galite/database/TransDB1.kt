@@ -21,6 +21,7 @@ import java.time.Instant
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.insert
 
 class TransDB1 : TransDB("galite", 1) {
@@ -40,7 +41,12 @@ class TransDB1 : TransDB("galite", 1) {
                         References,
                         Dummy,
                         Dual)
-
+    // drop tables if existing (via common/dbsSchema of Kopi)
+    tables.forEach { table ->
+      if (table.exists()) {
+        table.deleteAll()
+      }
+    }
     tables.forEach { table ->
       SchemaUtils.create(table)
     }
@@ -53,11 +59,6 @@ class TransDB1 : TransDB("galite", 1) {
   private fun initTables() {
     Dummy.deleteAll() ; Dummy.insert { it[table] = "x" }
     Dual.deleteAll() ; Dual.insert { it[table] = "x" }
-    Versions.insert {
-      it[packageName]   = module
-      it[number]        = version
-      it[date]          = Instant.now()
-    }
   }
 
   override val SOURCE: String

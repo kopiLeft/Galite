@@ -30,8 +30,8 @@ abstract class TransDB(val module: String, val version: Int) {
    * Run transDB queries
    */
   fun run() {
-    incrementVersion()
     execute()
+    incrementVersion()
   }
 
   /**

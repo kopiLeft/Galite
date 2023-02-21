@@ -431,31 +431,32 @@ class VMenuTree constructor(ctxt: Connection?,
   private fun fetchGroupRightsByGroupId(modules: List<Module>) {
     when {
       groupName != null -> {
-        fetchRights(modules, (Modules innerJoin GroupRights)
-                .slice(Modules.id, GroupRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq GroupRights.module) and (GroupRights.group
-                          inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
-                .withDistinct())
+        fetchRights(modules,
+                    Modules.innerJoin(GroupRights, { id }, { module })
+                      .slice(Modules.id, GroupRights.access, Modules.priority)
+                      .select {
+                        (GroupRights.group inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
+                      }
+                      .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
+                      .withDistinct())
       }
       menuTreeUser != null -> {
-        fetchRights(modules, (Modules innerJoin GroupRights)
-                .slice(Modules.id, GroupRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq GroupRights.module) and (GroupRights.group
-                          inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
-                .withDistinct())
+        fetchRights(modules,
+                    Modules.innerJoin(GroupRights, { id }, { module })
+                      .slice(Modules.id, GroupRights.access, Modules.priority)
+                      .select {
+                        (GroupRights.group inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
+                      }
+                      .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
+                      .withDistinct())
       }
       else -> {
-        fetchRights(modules, (Modules innerJoin GroupRights)
-                .slice(Modules.id, GroupRights.access, Modules.priority)
-                .select { (Modules.id eq GroupRights.module) and (GroupRights.group eq getUserID()) }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
-                .withDistinct())
+        fetchRights(modules,
+                    Modules.innerJoin(GroupRights, { id }, { module })
+                      .slice(Modules.id, GroupRights.access, Modules.priority)
+                      .select { (GroupRights.group eq getUserID()) }
+                      .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
+                      .withDistinct())
       }
     }
   }
@@ -463,30 +464,29 @@ class VMenuTree constructor(ctxt: Connection?,
   private fun fetchUserRights(modules: List<Module>) {
     when {
       groupName != null -> {
-        fetchRights(modules, (Modules innerJoin UserRights)
-                .slice(Modules.id, UserRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq UserRights.module) and (UserRights.user inSubQuery (
-                          Groups.slice(Groups.id).select { Groups.shortName eq groupName }
-                          ))
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+        fetchRights(modules,
+                    Modules.innerJoin(UserRights, { id }, { module })
+                      .slice(Modules.id, UserRights.access, Modules.priority)
+                      .select {
+                        (UserRights.user inSubQuery ( Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
+                      }
+                      .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       menuTreeUser != null -> {
-        fetchRights(modules, (Modules innerJoin UserRights)
-                .slice(Modules.id, UserRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq UserRights.module) and (UserRights.user inSubQuery (
-                          Users.slice(Users.id).select { Users.shortName eq menuTreeUser }
-                          ))
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+        fetchRights(modules,
+                    Modules.innerJoin(UserRights, { id }, { module })
+                      .slice(Modules.id, UserRights.access, Modules.priority)
+                      .select {
+                        (UserRights.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
+                      }
+                      .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       else -> {
-        fetchRights(modules, Modules.innerJoin(UserRights, { id }, { module })
-                .slice(Modules.id, UserRights.access, Modules.priority)
-                .select { UserRights.user eq getUserID() }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+        fetchRights(modules,
+                    Modules.innerJoin(UserRights, { id }, { module })
+                      .slice(Modules.id, UserRights.access, Modules.priority)
+                      .select { UserRights.user eq getUserID() }
+                      .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
     }
   }

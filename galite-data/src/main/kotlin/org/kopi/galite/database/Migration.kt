@@ -43,23 +43,23 @@ abstract class Migration {
   /**
    * Run database update
    */
-  private fun run(processCommandLine: Boolean) {
+  fun run(processCommandLine: Boolean) {
     connection(processCommandLine)
     var currentVersion: Int = -1
-    var currenModule: String = ""
+    var currentModule: String = ""
 
     // Execute transDB
     for (transDB in TRANSDBS) {
-      if (transDB.module != currenModule) {
-        currenModule = transDB.module
+      if (transDB.module != currentModule) {
+        currentModule = transDB.module
         transaction {
-          currentVersion = loadModuleVersion(currenModule)
+          currentVersion = loadModuleVersion(currentModule)
         }
         println("Current version of module \"${transDB.module}\" = $currentVersion")
       }
 
       if (transDB.version > currentVersion) {
-        println("Executing ${transDB.module}.TransDB ${transDB.version}")
+        println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
         transaction {
           transDB.run()
         }
