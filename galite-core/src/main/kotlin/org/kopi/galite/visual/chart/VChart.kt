@@ -42,7 +42,7 @@ import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VHelpViewer
@@ -90,11 +90,11 @@ abstract class VChart : VWindow(), CConstants, Printable {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private var cmdBarView: VCommand? = null
-  private var cmdColumnView: VCommand? = null
-  private var cmdLineView: VCommand? = null
-  private var cmdAreaView: VCommand? = null
-  private var cmdPieView: VCommand? = null
+  private var cmdBarView: Command? = null
+  private var cmdColumnView: Command? = null
+  private var cmdLineView: Command? = null
+  private var cmdAreaView: Command? = null
+  private var cmdPieView: Command? = null
   private var built = false
   private var pageTitle = ""
   var help: String? = null
@@ -105,7 +105,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
   val VKT_Dimension_Triggers = mutableListOf<Array<Trigger?>>()
   val VKT_Measure_Triggers = mutableListOf<Array<Trigger?>>()
   val VKT_Commands_Triggers = mutableListOf<Array<Trigger?>>()
-  private val activeCommands: ArrayList<VCommand> = ArrayList()
+  private val activeCommands: ArrayList<Command> = ArrayList()
   var printOptions: VPrintOptions = VPrintOptions()
 
   /**
@@ -419,7 +419,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
   /**
    * Enables/disables the actor.
    */
-  fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
+  fun setCommandEnabled(command: Command, index: Int, enable: Boolean) {
     var enable = enable
 
     if (enable) {
@@ -446,7 +446,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
   /**
    * Enables/disables the actor.
    */
-  fun setCommandEnabled(command: VCommand, enable: Boolean) {
+  fun setCommandEnabled(command: Command, enable: Boolean) {
     command.setEnabled(enable)
     if (enable) {
       activeCommands.add(command)

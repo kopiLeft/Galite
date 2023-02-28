@@ -28,7 +28,7 @@ import org.kopi.galite.visual.dsl.common.LocalizableElement
  *
  * @param domain the field's domain
  */
-abstract class Field<T>(open val domain: Domain<T>, ident: String? = null): LocalizableElement(ident) {
+abstract class Field<T>(open val domain: Domain<T>, ident: String? = null, source: String? = null): LocalizableElement(ident, source) {
   /** Field's label (text on the left) */
   var label: String? = null
 

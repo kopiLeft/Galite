@@ -15,24 +15,65 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.visual
 
-open class VCommand(mode: Int,
-                    protected var handler: ActionHandler?,
-                    var actor: VActor?,
-                    internal val trigger: Int,
-                    val actorIdent: String,
-                    internal val action: () -> Unit = {}) {
+import org.kopi.galite.visual.form.VConstants
+
+/**
+ * This class represent a command, ie a link between an actor and
+ * an action
+ *
+ * @param item                 the item
+ */
+open class Command(val item: Actor?,
+                   modes: Array<out Mode>,
+                   protected var handler: ActionHandler?,
+                   internal val action: () -> Unit) {
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
 
-  var mode: Int = mode
+  var mode: Int = VConstants.MOD_ANY
     protected set
 
   private var killed = false
+
+  var actor: Actor? = item
+  internal var trigger: Int = -1
+  var actorIdent: String = item?.ident.orEmpty()
+
+  init {
+    if (modes.isNotEmpty()) {
+      setModes(*modes)
+    }
+  }
+
+  internal constructor(mode: Int,
+                       handler: ActionHandler?,
+                       actor: Actor?,
+                       trigger: Int,
+                       actorIdent: String,
+                       action: () -> Unit = {})
+                : this(actor,
+                       *arrayOf(),
+                       handler = handler,
+                       action = action
+  ) {
+    this.mode = mode
+    this.trigger = trigger
+    this.actorIdent = actorIdent
+  }
+
+  /**
+   * Changes the access mode of the command
+   **/
+  fun setModes(vararg access: Mode) {
+    mode = 0
+    for (item in access) {
+      mode = mode or (1 shl item.value)
+    }
+  }
 
   /**
    * Kill a command: this command will never been enabled again

@@ -15,20 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.form
+package org.kopi.galite.visual
 
-import java.util.ArrayList
-
-import org.kopi.galite.visual.form.BlockAlignment
+import org.kopi.galite.visual.form.VConstants
 
 /**
- * This class describe the alignment of multi blocks
- *
- * @param targetBlock            block alignment
- * @param targets                the target column list
+ * The command access mode.
  */
-class FormBlockAlign(private val targetBlock: Block,
-                     private val targets: ArrayList<Int>) {
+enum class Mode(val value: Int) {
+  /**
+   * Mode query
+   */
+  QUERY(VConstants.MOD_QUERY),
 
-  fun getBlockAlignModel() = BlockAlignment(targetBlock.block, targets.toIntArray())
+  /**
+   * Mode insert
+   */
+  INSERT(VConstants.MOD_INSERT),
+
+  /**
+   * Mode update
+   */
+  UPDATE(VConstants.MOD_UPDATE),
+  
+  ANY(VConstants.MOD_ANY)
 }

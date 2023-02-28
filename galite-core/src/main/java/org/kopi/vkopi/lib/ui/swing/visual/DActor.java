@@ -30,7 +30,7 @@ import javax.swing.JButton;
 import javax.swing.KeyStroke;
 
 import org.kopi.galite.visual.UActor;
-import org.kopi.galite.visual.VActor;
+import org.kopi.galite.visual.Actor;
 import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
 
 @SuppressWarnings("serial")
@@ -40,7 +40,7 @@ public class DActor implements UActor {
   // CONSTRUCTOR
   // --------------------------------------------------------------------
 
-  public DActor(VActor model) {
+  public DActor(Actor model) {
     this.model = model;
     init();
   }
@@ -72,13 +72,13 @@ public class DActor implements UActor {
   }
 
   
-  public void setModel(VActor model) {
+  public void setModel(Actor model) {
     this.model = model;
     init();
   }
 
   
-  public VActor getModel() {
+  public Actor getModel() {
     return model;
   }
 
@@ -113,14 +113,14 @@ public class DActor implements UActor {
   }
 
   private void init() {
-    action = new DActorAction(model.getMenuItem(),
-                              (model.getIconName() != null) ?
-                              loadImage(model.getIconName()) :
+    action = new DActorAction(model.getMenuItem$galite_core(),
+                              (model.getIconName$galite_core() != null) ?
+                              loadImage(model.getIconName$galite_core()) :
                               null);
-    if (model.getAcceleratorKey() != KeyEvent.VK_UNDEFINED) {
+    if (model.getAcceleratorKey$galite_core() != KeyEvent.VK_UNDEFINED) {
       action.putValue(Action.ACCELERATOR_KEY,
-                      KeyStroke.getKeyStroke(model.getAcceleratorKey(),
-                                             model.getAcceleratorModifier()));
+                      KeyStroke.getKeyStroke(model.getAcceleratorKey$galite_core(),
+                                             model.getAcceleratorModifier$galite_core()));
     }
 
     action.putValue(Action.SHORT_DESCRIPTION, model.getHelp());
@@ -169,5 +169,5 @@ public class DActor implements UActor {
 
   private JButton					button;
   private Action					action;
-  private VActor					model;
+  private Actor					model;
 }

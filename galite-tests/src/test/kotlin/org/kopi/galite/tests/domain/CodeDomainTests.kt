@@ -28,7 +28,7 @@ import org.kopi.galite.visual.chart.VIntegerCodeMeasure
 import org.kopi.galite.visual.chart.VStringCodeDimension
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.form.VStringCodeField
@@ -70,7 +70,7 @@ class CodeDomainTests: VApplicationTestBase() {
     val testForm = TestForm()
     val model = testForm.model
     val block = model.blocks.single()
-    val field = block.fields.single()
+    val field = block.blockFields.single()
 
     assertIs<VStringCodeField>(field)
     assertIs<CodeDomain<String>>(testForm.block.field1.domain)

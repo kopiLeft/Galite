@@ -49,7 +49,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
@@ -171,9 +171,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
 
   /**
    * Adds a command in the menu bar.
-   * @param actorDefs The [VActor] definitions.
+   * @param actorDefs The [Actor] definitions.
    */
-  private fun addActorsToGUI(actorDefs: List<VActor>) {
+  private fun addActorsToGUI(actorDefs: List<Actor>) {
     val panel = VActorsNavigationPanel()
 
     // Add actors panel

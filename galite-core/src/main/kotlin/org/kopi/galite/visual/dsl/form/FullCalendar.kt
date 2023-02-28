@@ -19,6 +19,9 @@ package org.kopi.galite.visual.dsl.form
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
+import org.kopi.galite.visual.DefaultActor
+import org.kopi.galite.visual.cross.VFullCalendarForm
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.form.VBlock
@@ -26,6 +29,7 @@ import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -34,7 +38,7 @@ import org.kopi.galite.visual.form.VTimestampField
  *
  * @param        title                 the title of the block
  */
-open class FullCalendar(title: String) : Block(title, 1, 1) {
+open class FullCalendar(title: String) : VFullCalendarBlock(title, 1, 1) {
 
   var dateField: FormField<*>? = null
   var fromTimeField: FormField<*>? = null
@@ -66,7 +70,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
 
     return mustFill(domain, position, init).also { field ->
       dateField = field
-      block.dateField = field.vField as VDateField
+      dateFieldModel = field.vField as VDateField
     }
   }
 
@@ -94,7 +98,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
 
     return mustFill(domain, position, init).also { field ->
       fromTimeField = field
-      block.fromTimeField = field.vField as VTimeField
+      fromTimeFieldModel = field.vField as VTimeField
     }
   }
 
@@ -122,7 +126,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
 
     return mustFill(domain, position, init).also { field ->
       toTimeField = field
-      block.toTimeField = field.vField as VTimeField
+      toTimeFieldModel = field.vField as VTimeField
     }
   }
 
@@ -149,7 +153,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
                                          init: FormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
       fromField = field
-      block.fromField = field.vField as VTimestampField
+      fromFieldModel = field.vField as VTimestampField
     }
   }
 
@@ -176,40 +180,63 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
                                        init: FormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
       toField = field
-      block.toField = field.vField as VTimestampField
+      toFieldModel = field.vField as VTimestampField
     }
   }
 
-  /**
-   * Sets the block into insert mode.
-   * @exception        VException        an exception may occur during DB access
-   */
-  override fun insertMode() {
-    block.insertMode()
+  override fun setInfo(form: VForm) {
+    fields.forEach {
+      it.setInfo(super.source)
+    }
   }
 
-  fun goToDate(date: LocalDate) {
-    block.goToDate(date)
-  }
+  fun buildFullCalendarForm() {
+    fullCalendarForm = object : VFullCalendarForm() {
 
-  fun getSelectedDate(): LocalDate? = block.getSelectedDate()
+      init {
+        init()
+        initDefaultActors()
+        initDefaultCommands()
+      }
 
-  /**
-   * Refreshes the full calendar block data.
-   */
-  fun refreshEntries() {
-    block.refreshEntries()
+      override val locale: Locale?
+        get() = form.locale
+      override val fullCalendarBlock: VFullCalendarBlock
+        get() = this@FullCalendar
+
+      fun init() {
+        val vSimpleBlock = BlockModel(this, this@FullCalendar, source)
+
+        vSimpleBlock.setInfo(pageNumber, this)
+        vSimpleBlock.initIntern()
+
+        val defaultActors = form.actors.filter { actor ->
+          actor is DefaultActor &&
+                  (actor.code == CMD_AUTOFILL
+                          || actor.code == CMD_EDITITEM
+                          || actor.code == CMD_EDITITEM_S
+                          || actor.code == CMD_NEWITEM)
+
+        }.toTypedArray()
+        addActors(defaultActors)
+
+        addBlock(vSimpleBlock)
+        source = vSimpleBlock.source
+        setTitle(vSimpleBlock.title)
+      }
+
+      override fun formClassName(): String = block.javaClass.name
+    }
   }
 
   // ----------------------------------------------------------------------
   // BLOCK MODEL
   // ----------------------------------------------------------------------
 
-  override val block = FullCalendarBlockModel(this@FullCalendar)
 
   override fun getBlockModel(vForm: VForm): VBlock {
     val model = super.getBlockModel(vForm)
-    block.buildFullCalendarForm()
+    buildFullCalendarForm()
     return model
   }
 }

@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.dsl.report
 
 import org.jdom2.Element
-import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Menu
 

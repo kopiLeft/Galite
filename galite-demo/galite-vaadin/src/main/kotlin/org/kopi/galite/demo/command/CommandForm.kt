@@ -24,10 +24,10 @@ import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Icon
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 
 class CommandForm : FormDefault(title = "Commands", locale = Locale.UK) {

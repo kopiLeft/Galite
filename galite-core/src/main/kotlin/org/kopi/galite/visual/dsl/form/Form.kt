@@ -27,13 +27,13 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
-import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.form.Block
 
 /**
  * Represents a form.
@@ -97,13 +97,13 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
       block.init()
     }
     if (formPage != null) {
-      block.block.pageNumber = formPage.pageNumber
+      block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
     blocks.add(block)
 
     val vBlock = block.getBlockModel(model)
-    vBlock.setInfo(block.block.pageNumber, model)
+    vBlock.setInfo(block.pageNumber, model)
     if(vBlock !is VFullCalendarBlock) {
       vBlock.initIntern()
     }
@@ -219,7 +219,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @exception        org.kopi.galite.visual.VException        an exception may be raised by field.leave
    */
   fun gotoBlock(target: Block) {
-    model.gotoBlock(target.block)
+    model.gotoBlock(target)
   }
 
   fun showChart(chart: Chart) {

@@ -32,7 +32,6 @@ import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBInterruptionException
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.BlockListener
-import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
@@ -43,15 +42,16 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.form.Block
 
-abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VBlock(title, buffer, visible) {
+abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : Block(title, buffer, visible) {
 
   lateinit var fullCalendarForm: VFullCalendarForm
-  var dateField: VDateField? = null
-  var fromTimeField: VTimeField? = null
-  var toTimeField: VTimeField? = null
-  var fromField: VTimestampField? = null
-  var toField: VTimestampField? = null
+  var dateFieldModel: VDateField? = null
+  var fromTimeFieldModel: VTimeField? = null
+  var toTimeFieldModel: VTimeField? = null
+  var fromFieldModel: VTimestampField? = null
+  var toFieldModel: VTimestampField? = null
 
   /**
    * Returns true if this block can display more than one record.
@@ -126,11 +126,11 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
    * Warning, you should use this method inside a transaction
    */
   private fun queryEntries(week: Week): MutableList<VFullCalendarEntry> {
-    val query_tab = arrayOfNulls<VField>(fields.size)
+    val query_tab = arrayOfNulls<VField>(blockFields.size)
     var query_cnt = 0
 
     /* get the fields to build query */
-    for (field in fields) {
+    for (field in blockFields) {
 
       /* skip fields not related to the database */
       if (field.getColumnCount() == 0) {
@@ -173,8 +173,8 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
     val entries = mutableListOf<VFullCalendarEntry>()
     val ids = mutableListOf<Int>()
 
-    val query = if(dateField != null) {
-      val dateColumn = dateField!!.getColumn(0)!!.column
+    val query = if(dateFieldModel != null) {
+      val dateColumn = dateFieldModel!!.getColumn(0)!!.column
       val startDate = week.getFirstDay()
       val lastDay =  week.getLastDay()
       lastDay.plusDays(1)
@@ -183,8 +183,8 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
         .select { (dateColumn greaterEq startDate) and (dateColumn less lastDay) }
         .orderBy(*orderBys.toTypedArray())
     } else {
-      val fromColumn = fromField!!.getColumn(0)!!.column
-      val toColumn = toField!!.getColumn(0)!!.column
+      val fromColumn = fromFieldModel!!.getColumn(0)!!.column
+      val toColumn = toFieldModel!!.getColumn(0)!!.column
       val firstDayOfWeek = java.sql.Timestamp.valueOf(week.getFirstDay().atStartOfDay())
       val lastDay =  week.getLastDay()
       val firstDayOfNextWeek = java.sql.Timestamp.valueOf(lastDay.plusDays(1).atStartOfDay())
@@ -205,7 +205,7 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
 
       ids.add(result[idColumn])
 
-      val entry = if(dateField != null) {
+      val entry = if(dateFieldModel != null) {
         val values = mutableMapOf<VField, Any?>()
         lateinit var date: LocalDate
         lateinit var start: LocalTime
@@ -216,13 +216,13 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
           val value = vField.retrieveQuery(result, columns[i])
 
           when (vField) {
-            dateField -> {
+            dateFieldModel -> {
               date = value as LocalDate
             }
-            fromTimeField -> {
+            fromTimeFieldModel -> {
               start = value as LocalTime
             }
-            toTimeField -> {
+            toTimeFieldModel -> {
               end = value as LocalTime
             }
             else -> values[vField] = value
@@ -240,10 +240,10 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
           val value = vField.retrieveQuery(result, columns[i])
 
           when (vField) {
-            fromField -> {
+            fromFieldModel -> {
               start = value as Instant
             }
-            toField -> {
+            toFieldModel -> {
               end = value as Instant
             }
             else -> values[vField] = value
@@ -282,13 +282,13 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
   }
 
   fun set(startDateTime: Instant, endDateTime: Instant) {
-    if (dateField != null) {
-      dateField!!.setDate(LocalDate.from(startDateTime))
-      fromTimeField!!.setTime(LocalTime.from(startDateTime))
-      toTimeField!!.setTime(LocalTime.from(endDateTime))
+    if (dateFieldModel != null) {
+      dateFieldModel!!.setDate(LocalDate.from(startDateTime))
+      fromTimeFieldModel!!.setTime(LocalTime.from(startDateTime))
+      toTimeFieldModel!!.setTime(LocalTime.from(endDateTime))
     } else {
-      fromField!!.setTimestamp(startDateTime)
-      toField!!.setTimestamp(endDateTime)
+      fromFieldModel!!.setTimestamp(startDateTime)
+      toFieldModel!!.setTimestamp(endDateTime)
     }
   }
 

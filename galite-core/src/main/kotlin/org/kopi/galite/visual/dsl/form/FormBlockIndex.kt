@@ -26,7 +26,7 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
  * @param message                the error message in the default locale
  * @param number                 the number of this index
  */
-class FormBlockIndex(val ident: String, val message: String, private val number: Int) {
+class FormBlockIndex(val ident: String, var message: String, private val number: Int) {
 
   /**
    * Represents a combination of a list of [FormBlockIndex].

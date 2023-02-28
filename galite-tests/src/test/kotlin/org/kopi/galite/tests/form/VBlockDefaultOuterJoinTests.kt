@@ -37,7 +37,7 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 
   @Test
   fun getSearchTablesTest() {
-    val searchTables = VBlockDefaultOuterJoin.getSearchTables(FormWithList.blockWithManyTables.block)
+    val searchTables = VBlockDefaultOuterJoin.getSearchTables(FormWithList.blockWithManyTables)
 
     assertNotNull(searchTables)
 
@@ -50,7 +50,7 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
   @Test
   fun getFetchRecordConditionTest() {
     val block = FormWithList.blockWithManyTables
-    val fetchRecordCondition = VBlockDefaultOuterJoin.getFetchRecordCondition(block.block.fields)
+    val fetchRecordCondition = VBlockDefaultOuterJoin.getFetchRecordCondition(block.blockFields)
 
     assertNotNull(fetchRecordCondition)
 

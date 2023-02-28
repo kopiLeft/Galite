@@ -26,7 +26,7 @@ import kotlin.test.assertIs
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VDateField

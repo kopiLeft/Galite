@@ -57,14 +57,14 @@ open class VHelpGenerator {
   /**
    * print commands
    */
-  fun helpOnCommands(commands: Array<VCommand>?) {
+  fun helpOnCommands(commands: Array<Command>?) {
     helpOnCommands(commands!!.toList())
   }
 
   /**
    * print commands
    */
-  fun helpOnCommands(commands: List<VCommand>) {
+  fun helpOnCommands(commands: List<Command>) {
     if (commands.isNotEmpty()) {
       printer.println("<TABLE valign=\"top\">")
       for (i in commands.indices) {

@@ -24,7 +24,7 @@ import org.kopi.galite.demo.database.Provider
 import org.kopi.galite.demo.database.Stock
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 class StockForm : FormDefault(title = "Stocks", locale = Locale.UK) {
 

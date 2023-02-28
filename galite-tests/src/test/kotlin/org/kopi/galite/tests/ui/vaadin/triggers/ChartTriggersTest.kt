@@ -23,7 +23,7 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 
 object ChartTriggersTest : Chart(locale = Locale.UK, title = "Chart to test triggers") {
   val action = menu("Action")

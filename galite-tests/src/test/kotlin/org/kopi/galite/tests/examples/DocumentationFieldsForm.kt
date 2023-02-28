@@ -31,15 +31,15 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Icon
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.FileHandler
 
@@ -213,10 +213,10 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
       label = "drop File"
       droppable("pdf")
       trigger(ACTION) {
-        FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
+        FileHandler.fileHandler!!.openFile(form.getDisplay()!!, object : FileHandler.FileFilter {
           override fun accept(pathname: File?): Boolean {
             return (pathname!!.isDirectory
-                    || pathname.name.toLowerCase().endsWith(".pdf"))
+                    || pathname.name.lowercase().endsWith(".pdf"))
           }
 
           override val description: String
@@ -557,7 +557,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
         this.value = "PREUPD Trigger"
       }
       trigger(POSTUPD) {
-        block.form.notice("POSTUPD Trigger")
+        form.notice("POSTUPD Trigger")
       }
     }
 
@@ -565,7 +565,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
     val preDelTriggerField = visit(domain = STRING(20), position = at(4, 3)) {
       label = "PREDEL Trigger Field"
       trigger(PREDEL) {
-        block.form.notice("PREDEL Trigger")
+        form.notice("PREDEL Trigger")
       }
     }
 

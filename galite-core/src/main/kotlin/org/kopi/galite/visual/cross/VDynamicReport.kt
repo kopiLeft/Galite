@@ -65,7 +65,7 @@ import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VExecFailedException
 
 class VDynamicReport(block: VBlock) : VReport() {
@@ -76,14 +76,14 @@ class VDynamicReport(block: VBlock) : VReport() {
   private val columns: Array<VReportColumn?>
   private val fields: Array<VField>
   private val block: VBlock
-  private lateinit var actorsDef: Array<VActor?>
+  private lateinit var actorsDef: Array<Actor?>
   private var number = 0
   private var idColumn = 0
 
   init {
     printOptions = PConfig()
     this.block = block
-    fields = initFields(block.fields)
+    fields = initFields(block.blockFields)
     columns = arrayOfNulls(fields.size)
     idColumn = -1
     setPageTitle(block.title)
@@ -470,7 +470,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     number++
   }
 
-  override fun addActors(actorDefs: Array<VActor>?) {
+  override fun addActors(actorDefs: Array<Actor>?) {
     val actorDefs = actorDefs.orEmpty()
 
     actors.addAll(actorDefs)
@@ -489,7 +489,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given table.
    */
   private fun getColumnGroups(table: Table): Int {
-    val fields = block.fields
+    val fields = block.blockFields
     for (i in fields.indices) {
       if (fields[i].isInternal() && fields[i].getColumnCount() > 1) {
         val col: Int = fields[i].fetchColumn(table)

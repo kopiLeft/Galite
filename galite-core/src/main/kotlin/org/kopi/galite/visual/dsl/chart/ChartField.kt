@@ -26,7 +26,7 @@ import org.kopi.galite.visual.dsl.field.Field
 /**
  * A chart column.
  */
-abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>) : Field<T>(domain), Serializable {
+abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>, source: String? = null) : Field<T>(domain, source = source), Serializable {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

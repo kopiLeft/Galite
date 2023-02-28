@@ -23,7 +23,7 @@ import java.io.File
  * The Localizable element should be implemented by all classes that can be localized within the application.
  * It's an element that can be inserted into a window. it can be form element, report element or chart element.
  */
-abstract class LocalizableElement(ident: String? = null, open val source: String? = null) { // TODO: remove source getter/setter
+abstract class LocalizableElement(ident: String? = null, private val source: String? = null) {
 
   open val ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringAfterLast('$')

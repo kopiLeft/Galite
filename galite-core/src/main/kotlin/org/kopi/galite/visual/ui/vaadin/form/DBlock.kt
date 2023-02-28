@@ -106,7 +106,7 @@ open class DBlock(val parent: DForm,
    * Creates block fields
    */
   protected open fun createFields() {
-    val fields = model.fields
+    val fields = model.blockFields
     var index = 0
 
     columnViews = arrayOfNulls(fields.size)

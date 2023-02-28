@@ -30,7 +30,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.type.Month
 import org.kopi.galite.visual.VColor
 import org.jetbrains.exposed.sql.insert
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 
 /**
  * test locale, title, help for chart

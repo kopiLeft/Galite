@@ -234,7 +234,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
   private fun isProcessedField(field: Int): Boolean = processedFields!!.contains(field.toString())
 
-  private var fields: List<VField> = block.fields
+  private var fields: List<VField> = block.blockFields
   private var joinedTables: ArrayList<Table>? = ArrayList()
   private var processedFields: ArrayList<String>? = ArrayList()
   private var tables: List<Table>? = block.tables

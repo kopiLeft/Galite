@@ -20,7 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.visual
 import java.awt.Event
 import java.awt.event.KeyEvent
 
-import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.actor.VActorNavigationItem
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Styles
@@ -33,7 +32,7 @@ import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.UActor
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent
@@ -57,8 +56,8 @@ import com.vaadin.flow.component.dependency.CssImport
  *
  */
 @CssImport("./styles/galite/actor.css")
-class DActor(private var model: VActor)
-  : Actor(model.menuItem,
+class DActor(private var model: Actor)
+  : org.kopi.galite.visual.ui.vaadin.actor.Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),
           model.menuName,
           Utils.getVaadinIcon(model.iconName),
@@ -77,11 +76,11 @@ class DActor(private var model: VActor)
   // --------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------
-  override fun setModel(model: VActor) {
+  override fun setModel(model: Actor) {
     this.model = model
   }
 
-  override fun getModel(): VActor {
+  override fun getModel(): Actor {
     return model
   }
 
@@ -179,7 +178,7 @@ class DActor(private var model: VActor)
      * @param model The actor model.
      * @return The actor description.
      */
-    private fun getDescription(model: VActor): String? {
+    private fun getDescription(model: Actor): String? {
       return if (model.acceleratorKey > 0) {
         if (model.acceleratorModifier == 0) {
           model.help + " [" + KeyEvent.getKeyText(model.acceleratorKey) + "]"

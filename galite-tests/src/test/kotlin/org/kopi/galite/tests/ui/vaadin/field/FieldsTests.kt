@@ -42,13 +42,13 @@ import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.TestFieldsForm
 import org.kopi.galite.tests.examples.Trainer
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 
 import com.github.mvysny.kaributesting.v10._expectNone

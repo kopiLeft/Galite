@@ -59,7 +59,7 @@ public class DBlock extends JPanel implements UBlock {
   public DBlock(DForm parent, VBlock model) {
     SwingThreadHandler.verifyRunsInEventThread("DBlock <init>");
 
-    setBorder(model.getBorder(), model.getTitle());
+    setBorder(model.getBorder().getValue(), model.getTitle());
     setBorder(border);
     setFocusCycleRoot(true);
     setFocusable(false);
@@ -89,7 +89,7 @@ public class DBlock extends JPanel implements UBlock {
   }
 
   protected void createFields() {
-    List<VField> fields = model.getFields();
+    List<VField> fields = model.getBlockFields();
 
     columnViews = new VFieldUI[fields.size()];
     for (int i = 0; i < fields.size(); i++) {

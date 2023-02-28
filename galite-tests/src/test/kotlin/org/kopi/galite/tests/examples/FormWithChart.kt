@@ -25,8 +25,8 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.Icon
+import org.kopi.galite.visual.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.VColor

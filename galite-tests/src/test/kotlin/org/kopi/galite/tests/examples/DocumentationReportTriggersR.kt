@@ -27,7 +27,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.visual.database.transaction
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.report.triggers.avgDecimal
 import org.kopi.galite.visual.report.triggers.avgInteger
 import org.kopi.galite.visual.report.triggers.sumDecimal

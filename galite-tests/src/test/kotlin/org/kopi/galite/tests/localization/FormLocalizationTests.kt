@@ -32,8 +32,8 @@ import org.kopi.galite.tests.localization.actor.ExternActor
 import org.kopi.galite.tests.localization.block.ExternBlock
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.Icon
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.l10n.LocalizationManager

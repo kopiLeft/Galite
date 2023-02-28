@@ -70,7 +70,7 @@ import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VModel
@@ -194,7 +194,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var position: VPosition? = null
     private set
 
-  var command: Array<VCommand>? = null
+  var command: Array<Command>? = null
 
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
 
@@ -241,7 +241,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               columns: Array<VColumn?>?,
               indices: Int,
               priority: Int,
-              commands: Array<VCommand>?,
+              commands: Array<Command>?,
               pos: VPosition?,
               align: Int,
               alias: VField?) {

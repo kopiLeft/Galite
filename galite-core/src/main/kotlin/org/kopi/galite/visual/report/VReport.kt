@@ -42,7 +42,7 @@ import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VRuntimeException
@@ -77,14 +77,14 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var cmdFold: VCommand? = null
-  private var cmdUnfold: VCommand? = null
-  private var cmdSort: VCommand? = null
-  private var cmdOpenLine: VCommand? = null
-  private var cmdFoldColumn: VCommand? = null
-  private var cmdUnfoldColumn: VCommand? = null
-  private var cmdColumnInfo: VCommand? = null
-  private var cmdEditColumn: VCommand? = null
+  private var cmdFold: Command? = null
+  private var cmdUnfold: Command? = null
+  private var cmdSort: Command? = null
+  private var cmdOpenLine: Command? = null
+  private var cmdFoldColumn: Command? = null
+  private var cmdUnfoldColumn: Command? = null
+  private var cmdColumnInfo: Command? = null
+  private var cmdEditColumn: Command? = null
   val model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
@@ -92,7 +92,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   var VKT_Report_Triggers = mutableListOf<Array<Trigger?>>(arrayOfNulls(Constants.TRG_TYPES.size))
   var VKT_Fields_Triggers = mutableListOf<Array<Trigger?>>()
   var VKT_Commands_Triggers = mutableListOf<Array<Trigger?>>()
-  private val activeCommands = ArrayList<VCommand>()
+  private val activeCommands = ArrayList<Command>()
   var printOptions: PConfig = PConfig() // The print options
   var media: String? = null             // The media for this document
   var help: String? = null
@@ -206,7 +206,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   /**
    * Enables/disables the actor.
    */
-  fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
+  fun setCommandEnabled(command: Command, index: Int, enable: Boolean) {
     @Suppress("NAME_SHADOWING")
     var enable = enable
 
@@ -234,7 +234,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   /**
    * Enables/disables the actor.
    */
-  fun setCommandEnabled(command: VCommand, enable: Boolean) {
+  fun setCommandEnabled(command: Command, enable: Boolean) {
     command.setEnabled(enable)
 
     if (enable) {
@@ -638,7 +638,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
   private fun initDefaultCommands() {
     actors.forEachIndexed { index, vActor ->
-      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
+      commands.add(Command(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
 

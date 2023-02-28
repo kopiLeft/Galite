@@ -23,7 +23,7 @@ import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 
 object FormToCheckFieldVisibility: Form(title = "form for test fields visibility", locale = Locale.UK) {
   val testPage = page("test page")

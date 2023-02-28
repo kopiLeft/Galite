@@ -17,8 +17,8 @@
 package org.kopi.galite.tests.localization.actor
 
 import org.kopi.galite.tests.localization.menu.ExternMenu
-import org.kopi.galite.visual.dsl.common.Actor
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Actor
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.form.Key
 
 class ExternActor: Actor(

@@ -210,7 +210,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
 
   @Deprecated("to be removed when dateField is not supported")
   private fun check(startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
-    if(model.dateField != null && startDateTime.dayOfWeek != endDateTime.dayOfWeek) {
+    if(model.dateFieldModel != null && startDateTime.dayOfWeek != endDateTime.dayOfWeek) {
       updateEntries(calendar.entries.map { (it as FullCalendarEntry).model })
       throw VExecFailedException(MessageCode.getMessage("VIS-00070"))
     }

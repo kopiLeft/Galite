@@ -32,6 +32,7 @@ import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -45,7 +46,6 @@ import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
 import org.kopi.galite.visual.report.triggers.avgDecimal
-import org.kopi.galite.visual.VActor
 
 /**
  *
@@ -170,22 +170,17 @@ class VReportTests: JApplicationTestBase() {
   @Test
   fun reportVActorTest() {
     withReport(SimpleReport()) {
-      val f12 = VActor("File",
-                       "org/kopi/galite/visual/Window",
-                       "GotoShortcuts",
-                       "org/kopi/galite/visual/Window",
-                       null,
-                       KeyEvent.VK_F12,
-                       0)
-              .also {
-                it.menuName = "File"
-                it.menuItem = "Shortcuts"
-              }
+      val f12 = Actor._Actor("File",
+                             "org/kopi/galite/visual/Window",
+                             "Shortcuts",
+                             "org/kopi/galite/visual/Window",
+                             null,
+                             KeyEvent.VK_F12,
+                             0)
 
       // Actor checks
       assertEquals(f12, model.actors[0])
-      assertEquals(f12, model.actors[0])
-      assertEquals(-8, model.actors[0]!!.number)
+      assertEquals(-8, model.actors[0]._number)
     }
   }
 

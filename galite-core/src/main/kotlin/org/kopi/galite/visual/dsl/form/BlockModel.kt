@@ -16,18 +16,14 @@
  */
 package org.kopi.galite.visual.dsl.form
 
-import java.util.Locale
-
-import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.DefaultActor
+import org.kopi.galite.visual.form.Block
 
 class BlockModel(vForm: VForm, val block: Block, formSource: String? = null)
-  : VBlock(block.block.title,
-           block.block.bufferSize,
-           block.block.displaySize,
+  : VBlock(block.title,
+           block.bufferSize,
+           block.displaySize,
            vForm) {
 
   init {
@@ -42,81 +38,32 @@ class BlockModel(vForm: VForm, val block: Block, formSource: String? = null)
 }
 
 fun VBlock.initializeBlock(block: Block, formSource: String?) {
-  val model = block.block
 
   this.source = if (block::class.isInner && formSource != null) formSource else block.sourceFile
-  help = model.help
-  pageNumber = model.pageNumber
-  border = model.border
-  maxRowPos = model.maxRowPos
-  maxColumnPos = model.maxColumnPos
-  displayedFields = model.displayedFields
-  name = model.name
-  options = model.options
-  model.access.copyInto(access)
-  alignment = block.align?.getBlockAlignModel()
-  dropListMap = model.dropListMap
+  help = block.help
+  pageNumber = block.pageNumber
+  border = block.border
+  maxRowPos = block.maxRowPos
+  maxColumnPos = block.maxColumnPos
+  displayedFields = block.displayedFields
+  options = block.options
+  name = block.name
+  block.access.copyInto(access)
+  alignment = block.alignment
+  dropListMap = block.dropListMap
 
-  fields = block.fields.map { formField ->
+  blockFields = block.fields.map { formField ->
     formField.vField
   }.toMutableList()
 
   // Initialize from model
-  VKT_Block_Triggers = model.VKT_Block_Triggers
-  VKT_Field_Triggers = model.VKT_Field_Triggers
-  VKT_Command_Triggers = model.VKT_Command_Triggers
-  VKT_Field_Command_Triggers = model.VKT_Field_Command_Triggers
-  commands = model.commands
-  tables = model.tables
-  fields = model.fields
-  indices = model.indices
-  indicesIdents = model.indicesIdents
-}
-
-class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock(block.title, block.buffer, block.visible) {
-
-  override fun setInfo(form: VForm) {
-    block.fields.forEach {
-      it.setInfo(super.source)
-    }
-  }
-
-  fun buildFullCalendarForm() {
-    fullCalendarForm = object : VFullCalendarForm() {
-
-      init {
-        init()
-        initDefaultActors()
-        initDefaultCommands()
-      }
-
-      override val locale: Locale?
-        get() = this@FullCalendarBlockModel.block.form.locale
-      override val fullCalendarBlock: VFullCalendarBlock
-        get() = this@FullCalendarBlockModel
-
-      fun init() {
-        val vSimpleBlock = BlockModel(this, this@FullCalendarBlockModel.block, source)
-
-        vSimpleBlock.setInfo(pageNumber, this)
-        vSimpleBlock.initIntern()
-
-        val defaultActors = form.actors.filter { actor ->
-          actor is DefaultActor &&
-                  (actor.code == CMD_AUTOFILL
-                          || actor.code == CMD_EDITITEM
-                          || actor.code == CMD_EDITITEM_S
-                          || actor.code == CMD_NEWITEM)
-
-        }.toTypedArray()
-        addActors(defaultActors)
-
-        addBlock(vSimpleBlock)
-        source = vSimpleBlock.source
-        setTitle(vSimpleBlock.title)
-      }
-
-      override fun formClassName(): String = block.javaClass.name
-    }
-  }
+  VKT_Block_Triggers = block.VKT_Block_Triggers
+  VKT_Field_Triggers = block.VKT_Field_Triggers
+  VKT_Command_Triggers = block.VKT_Command_Triggers
+  VKT_Field_Command_Triggers = block.VKT_Field_Command_Triggers
+  commands = block.commands
+  tables = block.tables
+  blockFields = block.blockFields
+  indices = block.indices
+  indicesIdents = block.indicesIdents
 }

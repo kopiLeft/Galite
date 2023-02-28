@@ -30,13 +30,13 @@ import org.kopi.galite.tests.form.User
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldAlignment
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.form.Block
 import org.kopi.galite.visual.dsl.form.FormCoordinatePosition
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VConstants
@@ -64,7 +64,7 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.block.title, blockModel.title)
     assertEquals(form.block.buffer, blockModel.bufferSize)
     assertEquals(form.block.visible, blockModel.displaySize)
-    assertEquals(form.block.border.value, blockModel.border)
+    assertEquals(form.block.border, blockModel.border)
     assertEquals(2, blockModel.maxColumnPos)
     assertEquals(1, blockModel.maxRowPos)
     assertEquals(0, blockModel.pageNumber)
@@ -76,7 +76,7 @@ class FormDSLTests : VApplicationTestBase() {
   fun `test a form field`() {
     val form = FormWithOneSimpleBlock()
     val block = form.model.blocks.single()
-    val model = block.fields.single()
+    val model = block.blockFields.single()
 
     assertEquals(form.block.idClt.label, model.label)
     assertEquals(form.block.idClt.help, model.toolTip)
@@ -93,8 +93,8 @@ class FormDSLTests : VApplicationTestBase() {
   @Test
   fun `test form with aligned block`() {
     val form = FormWithAlignedBlock()
-    val targetBlockModel = form.model.blocks.single { it == form.targetBlock.block }
-    val totalBlockModel = form.model.blocks.single { it == form.totalBlock.block }
+    val targetBlockModel = form.model.blocks.single { it == form.targetBlock }
+    val totalBlockModel = form.model.blocks.single { it == form.totalBlock }
 
     assertEquals(targetBlockModel, totalBlockModel.alignment!!.block)
     assertArraysEquals(arrayOf(2, 3), totalBlockModel.alignment!!.targets.toTypedArray())
@@ -114,10 +114,10 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.title, formModel.getTitle())
     assertEquals(form.locale, formModel.locale)
     //clientBlock
-    assertEquals(3, clientBlock.fields.size)
+    assertEquals(3, clientBlock.blockFields.size)
     assertEquals(form.clientBlock.buffer, clientBlock.bufferSize)
     assertEquals(form.clientBlock.visible, clientBlock.displaySize)
-    assertEquals(form.clientBlock.border.value, clientBlock.border)
+    assertEquals(form.clientBlock.border, clientBlock.border)
     assertEquals(form.clientBlock.title, clientBlock.title)
     assertEquals(1, clientBlock.maxColumnPos)
     assertEquals(3, clientBlock.maxRowPos)
@@ -125,9 +125,9 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(0, clientBlock.displayedFields)
     assertEquals(null, clientBlock.alignment)
     //commandsBlock
-    assertEquals(2, commandsBlock.fields.size)
+    assertEquals(2, commandsBlock.blockFields.size)
     assertEquals(form.commandsBlock.visible, commandsBlock.displaySize)
-    assertEquals(form.commandsBlock.border.value, commandsBlock.border)
+    assertEquals(form.commandsBlock.border, commandsBlock.border)
     assertEquals(form.commandsBlock.title, commandsBlock.title)
     assertEquals(1, commandsBlock.maxColumnPos)
     assertEquals(1, commandsBlock.maxRowPos)
@@ -204,8 +204,8 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val idClientModel = clientBlock.fields[0]
-    val nameClientModel = clientBlock.fields[1]
+    val idClientModel = clientBlock.blockFields[0]
+    val nameClientModel = clientBlock.blockFields[1]
 
     assertTrue(nameClientModel.hasTrigger(VConstants.TRG_POSTCHG))
 
@@ -222,7 +222,7 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel = clientBlock.fields[1]
+    val nameClientModel = clientBlock.blockFields[1]
 
     assertEquals(User.name.name, nameClientModel.getColumn(0)!!.name)
     assertEquals(User, nameClientModel.getColumn(0)!!.getTable())
@@ -239,8 +239,8 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(form.resetForm.ident, formModel.commands[0].actorIdent)
     assertEquals(form.resetForm.ident, formModel.commands[0].actor!!.ident)
-    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!.menuIdent)
-    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!.iconName)
+    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!._menuIdent)
+    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!._iconName)
     assertEquals(form.resetForm.help, formModel.commands[0].actor!!.help)
   }
 
@@ -251,22 +251,22 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(3, formModel.actors.size)
 
-    assertEquals("File", formModel.actors[0].menuName)
+    assertEquals("File", formModel.actors[0]._menuName)
     assertEquals("GotoShortcuts", formModel.actors[0].ident)
-    assertEquals(null, formModel.actors[0].iconName)
+    assertEquals(null, formModel.actors[0]._iconName)
     assertEquals("Go to shortcut list", formModel.actors[0].help)
-    assertEquals(KeyEvent.VK_F12, formModel.actors[0].acceleratorKey)
+    assertEquals(KeyEvent.VK_F12, formModel.actors[0]._acceleratorKey)
 
-    assertEquals(form.edit.label, formModel.actors[1].menuName)
+    assertEquals(form.edit.label, formModel.actors[1]._menuName)
     assertEquals(form.autoFill.ident, formModel.actors[1].ident)
-    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1].iconName)
+    assertEquals(form.autoFill.icon?.iconName, formModel.actors[1]._iconName)
     assertEquals(form.autoFill.help, formModel.actors[1].help)
 
-    assertEquals(form.reset.label, formModel.actors[2].menuName)
+    assertEquals(form.reset.label, formModel.actors[2]._menuName)
     assertEquals(form.resetForm.ident, formModel.actors[2].ident)
-    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2].iconName)
+    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2]._iconName)
     assertEquals(form.resetForm.help, formModel.actors[2].help)
-    assertEquals(form.resetForm.key!!.value, formModel.actors[2].acceleratorKey)
+    assertEquals(form.resetForm.key!!.value, formModel.actors[2]._acceleratorKey)
   }
 
   @Test
@@ -274,14 +274,14 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val fileModel = clientBlock.fields[2]
+    val fileModel = clientBlock.blockFields[2]
 
     assertEquals(1, fileModel.command!!.size)
 
     assertEquals(form.autoFill.ident, fileModel.command!![0].actorIdent)
     assertEquals(form.autoFill.ident, fileModel.command!![0].actor!!.ident)
-    assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!.menuIdent)
-    assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!.iconName)
+    assertEquals(form.autoFill.menu.label, fileModel.command!![0].actor!!._menuIdent)
+    assertEquals(form.autoFill.icon?.iconName, fileModel.command!![0].actor!!._iconName)
     assertEquals(form.autoFill.help, fileModel.command!![0].actor!!.help)
   }
 
@@ -290,8 +290,8 @@ class FormDSLTests : VApplicationTestBase() {
     val form = FormWithMultipleBlock()
     val formModel = form.model
     val clientBlock = formModel.blocks[0]
-    val nameClientModel = clientBlock.fields[1]
-    val fileModel = clientBlock.fields[2]
+    val nameClientModel = clientBlock.blockFields[1]
+    val fileModel = clientBlock.blockFields[2]
 
     assertEquals(FieldOption.QUERY_LOWER.value, nameClientModel.options)
     assertEquals(FieldOption.QUERY_UPPER.value, fileModel.options)

@@ -21,6 +21,7 @@ import java.util.Locale
 import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.form.Block
 
 /**
  * Represents a report selection form.
@@ -34,7 +35,7 @@ abstract class ReportSelectionForm(title: String, locale: Locale? = null) : Dict
    * create a report for this form
    */
   protected fun Block.createReport(reportbuilder: () -> Report) {
-    model.createReport(block) {
+    model.createReport(this) {
       reportbuilder().model
     }
   }

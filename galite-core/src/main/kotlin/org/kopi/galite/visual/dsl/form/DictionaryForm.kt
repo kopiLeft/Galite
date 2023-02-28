@@ -22,6 +22,7 @@ import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.form.Block
 
 /**
  * Represents a dictionary form.
@@ -109,9 +110,9 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
    * create a report for this form
    */
   protected fun Block.createDynamicReport() {
-    val field = this.block.activeField
+    val field = this.activeField
     field?.validate()
-    VDynamicReport.createDynamicReport(this.block)
+    VDynamicReport.createDynamicReport(this)
   }
 
   // ----------------------------------------------------------------------

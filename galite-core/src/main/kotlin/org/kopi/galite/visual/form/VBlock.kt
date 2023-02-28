@@ -50,29 +50,50 @@ import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBForeignKeyException
 import org.kopi.galite.database.DBInterruptionException
 import org.kopi.galite.database.Utils
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Command
 import org.kopi.galite.visual.VDatabaseUtils
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.dsl.common.LocalizableElement
+import org.kopi.galite.visual.dsl.form.Border
+import org.kopi.galite.visual.dsl.form.FormBlockIndex
+import org.kopi.galite.visual.dsl.form.FormField
 
 abstract class VBlock(var title: String,
                       buffer: Int,
                       visible: Int)
-  : VConstants, DBContextHandler, ActionHandler {
+  : VConstants, DBContextHandler, ActionHandler, LocalizableElement() {
+
+  var dropListMap = HashMap<String, FormField<*>>()
+    internal set
+  val fields = mutableListOf<FormField<*>>() // the block's fields.
+  var tables: MutableList<Table> = mutableListOf() // the tables accessed on the database
+    internal set
+  var indices: MutableList<FormBlockIndex> = mutableListOf() // the indices for database shows error messages for violated indices
+    internal set
+  val triggers = mutableListOf<Trigger>() // the triggers executed by this form
+  var commands = mutableListOf<Command>() // the commands associated with this block
+    internal set
+  val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
+
+  var border: Border = Border.NONE // the border of the block
+
+  var help: String? = null // the help on this block
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -98,25 +119,21 @@ abstract class VBlock(var title: String,
   var displaySize = visible // max number of displayed records
   var pageNumber = 0 // page number of this block
   internal lateinit var source: String // qualified name of source file
-  lateinit var name: String // block name
-  protected lateinit var shortcut: String // block short name
+  lateinit var shortcut: String // block short name
+  internal lateinit var name: String // block name
   var alignment: BlockAlignment? = null
-  internal var help: String? = null // the help on this block
-  internal var tables = mutableListOf<Table>() // names of database tables
   internal var options = 0 // block options
   internal val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL } // access flags for each mode
-  internal var indices = mutableListOf<String>() // error messages for violated indices
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
-  internal var commands = mutableListOf<VCommand>() // commands
   internal var fieldID: VField? = null // commands
-  open var actors: Array<VActor>? = null // actors to send to form (move to block import)
-    get(): Array<VActor>? {
+  open var actors: Array<Actor>? = null // actors to send to form (move to block import)
+    get(): Array<Actor>? {
       val temp = field
       field = null
       return temp
     }
 
-  var fields = mutableListOf<VField>() // fields
+  var blockFields = mutableListOf<VField>() // fields
   internal var VKT_Block_Triggers = mutableListOf(arrayOfNulls<Trigger>(VConstants.TRG_TYPES.size))
   internal var VKT_Field_Triggers = mutableListOf<Array<Trigger?>>()
   internal var VKT_Command_Triggers = mutableListOf<Array<Trigger?>>()
@@ -124,12 +141,10 @@ abstract class VBlock(var title: String,
 
   protected var blockListener = EventListenerList()
   internal var orderModel = OrderModel()
-  var border = VConstants.BRD_NONE
   var maxRowPos = 0
   var maxColumnPos = 0
   var displayedFields = 0
   private var isFilterVisible = false
-  internal var dropListMap = HashMap<String, String>()
 
   // dynamic data
   private var mode = VConstants.MOD_QUERY // current mode
@@ -181,7 +196,7 @@ abstract class VBlock(var title: String,
       return count
     }
 
-  val activeCommands = mutableListOf<VCommand>() // commands currently active
+  val activeCommands = mutableListOf<Command>() // commands currently active
 
   private var _currentRecord = 0
   var currentRecord
@@ -285,8 +300,8 @@ abstract class VBlock(var title: String,
   fun setMode(mode: Int) {
     if (this !== form.getActiveBlock()) {
       this.mode = mode
-      for (i in fields.indices) {
-        fields[i].updateModeAccess()
+      for (i in blockFields.indices) {
+        blockFields[i].updateModeAccess()
       }
     } else {
       // is this restriction acceptable ?
@@ -294,8 +309,8 @@ abstract class VBlock(var title: String,
       val act = activeField
       act?.leave(true)
       this.mode = mode
-      for (i in fields.indices) {
-        fields[i].updateModeAccess()
+      for (i in blockFields.indices) {
+        blockFields[i].updateModeAccess()
       }
       if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= VConstants.ACS_VISIT) {
         act.enter()
@@ -330,7 +345,7 @@ abstract class VBlock(var title: String,
 
   val acceptedFlavors: MutableSet<String> get() = dropListMap.keys
 
-  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.lowercase()])
+  fun getDropTarget(flavor: String): VField? = dropListMap[flavor.lowercase()]?.vField
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -350,10 +365,10 @@ abstract class VBlock(var title: String,
       for (i in indices.indices) {
         //!!! for now, overwrite ident with localized message
         //!!! inhibits relocalization of a running form
-        indices[i] = loc.getIndexMessage(indices[i])
+        indices[i].message = loc.getIndexMessage(indices[i].message)
       }
     }
-    fields.forEach {
+    blockFields.forEach {
       if (!it.isInternal()) {
         if(ApplicationContext.getDefaultLocale() != locale) {
           val loc = manager.getBlockLocalizer(source, name)
@@ -365,6 +380,8 @@ abstract class VBlock(var title: String,
       }
     }
   }
+
+  fun getName(): String = name
   // ----------------------------------------------------------------------
   // Navigation
   // ----------------------------------------------------------------------
@@ -412,7 +429,7 @@ abstract class VBlock(var title: String,
    * access of the block, this method can be made
    * public)
    */
-  internal fun setAccess(access: Boolean) {
+  protected fun setAccess(access: Boolean) {
     if (blockAccess != access) {
       blockAccess = access
       // inform BlockListener
@@ -464,7 +481,7 @@ abstract class VBlock(var title: String,
       // for simple blocks
       return
     }
-    for (field in fields) {
+    for (field in blockFields) {
       if (!field.isInternal()) {
         field.setColor(r, foreground, background)
       }
@@ -481,7 +498,7 @@ abstract class VBlock(var title: String,
       // for simple blocks
       return
     }
-    for (field in fields) {
+    for (field in blockFields) {
       if (!field.isInternal()) {
         field.resetColor(r)
       }
@@ -498,7 +515,7 @@ abstract class VBlock(var title: String,
       // for simple blocks
       return
     }
-    for (field in fields) {
+    for (field in blockFields) {
       if (!field.isInternal()) {
         if (isRecordFilled(r)) {
           field.updateColor(r)
@@ -549,7 +566,7 @@ abstract class VBlock(var title: String,
                         hi: Int,
                         scratch: IntArray) {
     // a one-element array is always sorted
-    val field = fields[column]
+    val field = blockFields[column]
     if (lo < hi) {
       val mid = (lo + hi) / 2
 
@@ -659,7 +676,7 @@ abstract class VBlock(var title: String,
   /**
    * enter record
    */
-  internal fun enterRecord(recno: Int) {
+  protected fun enterRecord(recno: Int) {
     assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(isMulti()) { "Is not multiblock" }
     assert(activeRecord == -1) { "Is multi and activeRecord = $activeRecord" }
@@ -975,15 +992,15 @@ abstract class VBlock(var title: String,
     activeField!!.leave(true)
 
     var i = 0
-    while (target == null && i < fields.size) {
+    while (target == null && i < blockFields.size) {
       index += 1
-      if (index == fields.size) {
+      if (index == blockFields.size) {
         index = 0
       }
-      if (!fields[index].hasAction() &&
-              fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-              (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
-        target = fields[index]
+      if (!blockFields[index].hasAction() &&
+              blockFields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
+              (isDetailMode && !blockFields[index].noDetail() || !isDetailMode && !blockFields[index].noChart())) {
+        target = blockFields[index]
       }
       i += 1
     }
@@ -1008,15 +1025,15 @@ abstract class VBlock(var title: String,
     activeField!!.leave(true)
 
     var i = 0
-    while (target == null && i < fields.size) {
+    while (target == null && i < blockFields.size) {
       if (index == 0) {
-        index = fields.size
+        index = blockFields.size
       }
       index -= 1
-      if (!fields[index].hasAction() &&
-              fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-              (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
-        target = fields[index]
+      if (!blockFields[index].hasAction() &&
+              blockFields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
+              (isDetailMode && !blockFields[index].noDetail() || !isDetailMode && !blockFields[index].noChart())) {
+        target = blockFields[index]
       }
       i += 1
     }
@@ -1041,9 +1058,9 @@ abstract class VBlock(var title: String,
     var target: VField? = null
     var i = 0
 
-    while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
-        target = fields[i]
+    while (target == null && i < blockFields.size) {
+      if (!blockFields[i].hasAction() && blockFields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+        target = blockFields[i]
       }
       i += 1
     }
@@ -1069,11 +1086,11 @@ abstract class VBlock(var title: String,
     var target: VField? = null
     var i = 0
 
-    while (target == null && i < fields.size) {
-      if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
-              && fields[i].isNull(activeRecord)) {
-        target = fields[i]
+    while (target == null && i < blockFields.size) {
+      if (!blockFields[i].hasAction()
+              && blockFields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
+              && blockFields[i].isNull(activeRecord)) {
+        target = blockFields[i]
       }
       i += 1
     }
@@ -1107,29 +1124,29 @@ abstract class VBlock(var title: String,
     var target: VField? = null
     // found field
     var i = 0
-    while (i < fields.size && fields[i] !== current) {
+    while (i < blockFields.size && blockFields[i] !== current) {
       i += 1
     }
-    assert(i < fields.size) { "i: " + i + "  fields.length" + fields.size }
+    assert(i < blockFields.size) { "i: " + i + "  fields.length" + blockFields.size }
     i += 1
 
     // walk next to next
-    while (target == null && i < fields.size) {
-      if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
-              && fields[i].isNull(activeRecord)) {
-        target = fields[i]
+    while (target == null && i < blockFields.size) {
+      if (!blockFields[i].hasAction()
+              && blockFields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
+              && blockFields[i].isNull(activeRecord)) {
+        target = blockFields[i]
       }
       i += 1
     }
 
     // redo from start
     i = 0
-    while (target == null && i < fields.size) {
-      if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
-              && fields[i].isNull(activeRecord)) {
-        target = fields[i]
+    while (target == null && i < blockFields.size) {
+      if (!blockFields[i].hasAction()
+              && blockFields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
+              && blockFields[i].isNull(activeRecord)) {
+        target = blockFields[i]
       }
       i += 1
     }
@@ -1153,11 +1170,11 @@ abstract class VBlock(var title: String,
     activeField?.leave(true)
 
     var target: VField? = null
-    var i = fields.size - 1
+    var i = blockFields.size - 1
 
     while (i >= 0) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
-        target = fields[i]
+      if (!blockFields[i].hasAction() && blockFields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+        target = blockFields[i]
       }
       i -= 1
     }
@@ -1305,14 +1322,14 @@ abstract class VBlock(var title: String,
 
           if (isRecordChanged(i)) {
             j = 0
-            while (j < fields.size) {
-              val fld = fields[j]
+            while (j < blockFields.size) {
+              val fld = blockFields[j]
               if (fld.getAccess(activeRecord) >= VConstants.ACS_VISIT && !fld.isNull(i)) {
                 break
               }
               j++
             }
-            if (j == fields.size && !noDelete()) {
+            if (j == blockFields.size && !noDelete()) {
               if (!isRecordFetched(i)) {
                 setRecordChanged(i, false)
               } else {
@@ -1465,8 +1482,8 @@ abstract class VBlock(var title: String,
   /**
    * Checks that all mustfill fields are filled.
    */
-  internal fun checkMustfillFields() {
-    fields.forEach { field ->
+  protected fun checkMustfillFields() {
+    blockFields.forEach { field ->
       if (field.getAccess(activeRecord) == VConstants.ACS_MUSTFILL && field.isNull(activeRecord)) {
         // !!! lackner 04.10.2003 I don't know if it is really necessary here
         fireBlockChanged()
@@ -1499,8 +1516,8 @@ abstract class VBlock(var title: String,
         }
       }
     }
-    for (i in fields.indices) {
-      fields[i].setSearchOperator(VConstants.SOP_EQ)
+    for (i in blockFields.indices) {
+      blockFields[i].setSearchOperator(VConstants.SOP_EQ)
     }
     if (!noChart() && isDetailMode) {
       isDetailMode = false
@@ -1531,8 +1548,8 @@ abstract class VBlock(var title: String,
     }
     for (i in 0 until bufferSize) {
       activeRecord = i // also valid for single blocks
-      for (j in fields.indices) {
-        fields[j].setDefault()
+      for (j in blockFields.indices) {
+        blockFields[j].setDefault()
       }
       setRecordChanged(i, false)
     }
@@ -1549,8 +1566,8 @@ abstract class VBlock(var title: String,
     assert(this !== form.getActiveBlock() || activeField == null) {
       "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField
     }
-    for (i in fields.indices) {
-      fields[i].setAccess(value)
+    for (i in blockFields.indices) {
+      blockFields[i].setAccess(value)
     }
   }
 
@@ -1587,8 +1604,8 @@ abstract class VBlock(var title: String,
 
     // don't update access
     ignoreAccessChange = true
-    for (i in fields.indices) {
-      fields[i].clear(recno)
+    for (i in blockFields.indices) {
+      blockFields[i].clear(recno)
     }
     setRecordFetched(recno, false)
     setRecordChanged(recno, false)
@@ -1668,7 +1685,7 @@ abstract class VBlock(var title: String,
     var idqry = 0
 
     for (i in 0 until idfld) {
-      if (fields[i].getColumnCount() > 0) {
+      if (blockFields[i].getColumnCount() > 0) {
         idqry += 1
       }
     }
@@ -1698,9 +1715,9 @@ abstract class VBlock(var title: String,
       } else {
           var i = 0
           var j = 0
-          while (i < fields.size) {
-            if (fields[i].getColumnCount() > 0) {
-              fields[i].setQuery(fetchCount, result,columns[j])
+          while (i < blockFields.size) {
+            if (blockFields[i].getColumnCount() > 0) {
+              blockFields[i].setQuery(fetchCount, result, columns[j])
               j += 1
             }
             i++
@@ -1757,8 +1774,8 @@ abstract class VBlock(var title: String,
     val condition = mutableListOf<Op<Boolean>>()
 
     condition.add(Op.build { idColumn eq id })
-    if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
-      condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+    if (VBlockDefaultOuterJoin.getFetchRecordCondition(blockFields) != null) {
+      condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(blockFields)!!)
     }
 
     try {
@@ -1766,7 +1783,7 @@ abstract class VBlock(var title: String,
 
       /* set values */
       var j = 0
-      fields.forEach { field ->
+      blockFields.forEach { field ->
         if (field.getColumnCount() > 0) {
           field.setQuery(result, columns[j])
           j += 1
@@ -2029,10 +2046,10 @@ abstract class VBlock(var title: String,
    * @return    the field if found, otherwise null
    */
   protected fun getBaseTableField(field: String): VField? {
-    for (i in fields.indices) {
-      val column = fields[i].lookupColumn(0)
+    for (i in blockFields.indices) {
+      val column = blockFields[i].lookupColumn(0)
       if (column != null && column.name == field) {
-        return fields[i]
+        return blockFields[i]
       }
     }
     return null
@@ -2045,7 +2062,7 @@ abstract class VBlock(var title: String,
     val result = mutableListOf<Column<*>>()
 
     // take all visible fields with database access
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       // image fields cannot be handled in a report.
       if (field !is VImageField
               && !field.isInternal()
@@ -2055,7 +2072,7 @@ abstract class VBlock(var title: String,
     }
 
     // add ID field AT END if it exists and not already taken
-    for (field in fields) {
+    for (field in blockFields) {
       //!!! graf 20080329: should we replace fld!!.name.equals("ID") by fld == getIdField() ?
       if (field.isInternal() && field.name == idField.name && field.getColumnCount() > 0) {
         result.add(field.getColumn(0)!!.column)
@@ -2069,7 +2086,7 @@ abstract class VBlock(var title: String,
    * Returns the database columns of block.
    */
   fun getSearchColumns(): List<Column<*>> =
-          fields.filter { it.getColumnCount() > 0 }
+          blockFields.filter { it.getColumnCount() > 0 }
                   .map { it.getColumn(0)!!.column }
 
   /**
@@ -2085,7 +2102,7 @@ abstract class VBlock(var title: String,
    * Tests whether the specified table has nullable columns.
    */
   fun hasNullableColumns(table: Int): Boolean {
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       if (field.fetchColumn(table) != -1 && field.isInternal()
               && field.getColumn(field.fetchColumn(table))!!.nullable) {
         return true
@@ -2099,7 +2116,7 @@ abstract class VBlock(var title: String,
    */
   @Deprecated("use hasOnlyInternalFields(table: Table)")
   fun hasOnlyInternalFields(table: Int): Boolean {
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       if (field.fetchColumn(table) != -1 && !field.isInternal()) {
         return false
       }
@@ -2110,7 +2127,7 @@ abstract class VBlock(var title: String,
   /**
    * Tests whether this table has only internal fields.
    */
-  fun hasOnlyInternalFields(table: Table): Boolean = fields.all { it.fetchColumn(table) == -1 || it.isInternal() }
+  fun hasOnlyInternalFields(table: Table): Boolean = blockFields.all { it.fetchColumn(table) == -1 || it.isInternal() }
 
   /**
    * Returns the tables for database query, with outer joins conditions.
@@ -2123,7 +2140,7 @@ abstract class VBlock(var title: String,
   fun getSearchConditions(): Op<Boolean>? {
     val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       if (field.getColumnCount() > 0) {
         val condColumn = field.getColumn(0)!!.column as Column<String>
         val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
@@ -2153,12 +2170,12 @@ abstract class VBlock(var title: String,
    */
   open fun getSearchOrder(): MutableList<Pair<Column<*>, SortOrder>> {
     val columns = mutableListOf<Column<*>>()
-    val priorities = IntArray(fields.size)
-    val sizes = IntArray(fields.size)
+    val priorities = IntArray(blockFields.size)
+    val sizes = IntArray(blockFields.size)
     var elems = 0
 
     // get the fields connected to the database with their priorities
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       if (field.getColumnCount() != 0 && field.getPriority() != 0) {
         // this is a field connected to the database
         columns.add(field.getColumn(0)!!.column)
@@ -2245,13 +2262,13 @@ abstract class VBlock(var title: String,
     val columns = mutableListOf<Column<*>>()  // columns to select
     val conditions = mutableListOf<Op<Boolean>>()  // search conditions
 
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       if (field != currentField && field.lookupColumn(table) != null && !field.isLookupKey(table)) {
         field.setNull(activeRecord)
       }
     }
 
-    fields.forEach { field ->
+    blockFields.forEach { field ->
       val column : Column<*>? = field.lookupColumn(table)
 
       if (column != null) {
@@ -2279,7 +2296,7 @@ abstract class VBlock(var title: String,
         val result = query.single()
         var j = 0
 
-        fields.forEach { field ->
+        blockFields.forEach { field ->
           if (field.lookupColumn(table) != null) {
             field.setQuery(result, columns[j])
             j++
@@ -2372,11 +2389,11 @@ abstract class VBlock(var title: String,
    * Warning, you should use this method inside a transaction
    */
   fun buildQueryDialog(): VListDialog? {
-    val query_tab = arrayOfNulls<VField>(fields.size)
+    val query_tab = arrayOfNulls<VField>(blockFields.size)
     var query_cnt = 0
 
     /* get the fields to be displayed in the dialog */
-    for (field in fields) {
+    for (field in blockFields) {
 
       /* skip fields not related to the database */
       if (field.getColumnCount() == 0) {
@@ -2581,8 +2598,8 @@ abstract class VBlock(var title: String,
    * Returns the current block access.
    */
   fun getAccess(): Int {
-    for (i in fields.indices) {
-      if (fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+    for (i in blockFields.indices) {
+      if (blockFields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
         return VConstants.ACS_VISIT
       }
     }
@@ -2594,11 +2611,11 @@ abstract class VBlock(var title: String,
    */
   @JvmOverloads
   fun updateAccess(record: Int = activeRecord) {
-    for (i in fields.indices) {
-      if (!fields[i].isInternal()) {
+    for (i in blockFields.indices) {
+      if (!blockFields[i].isInternal()) {
         // internal fields are always hidden
         // no need for an update
-        fields[i].updateAccess(record)
+        blockFields[i].updateAccess(record)
       }
     }
   }
@@ -2742,8 +2759,8 @@ abstract class VBlock(var title: String,
       trailRecord(to)
     }
     recordInfo[to] = recordInfo[from]
-    for (i in fields.indices) {
-      fields[i].copyRecord(from, to)
+    for (i in blockFields.indices) {
+      blockFields[i].copyRecord(from, to)
     }
   }
 
@@ -2756,11 +2773,11 @@ abstract class VBlock(var title: String,
   }
 
   open fun initIntern() {
-    for (i in fields.indices) {
-      fields[i].block = this
+    for (i in blockFields.indices) {
+      blockFields[i].block = this
     }
-    for (i in fields.indices) {
-      fields[i].build()
+    for (i in blockFields.indices) {
+      blockFields[i].build()
     }
   }
   // ----------------------------------------------------------------------
@@ -2770,7 +2787,7 @@ abstract class VBlock(var title: String,
   /**
    *
    */
-  open fun getActor(i: Int): VActor = form.getActor(i)
+  open fun getActor(i: Int): Actor = form.getActor(i)
 
   /**
    * Returns true if this block can display more than one record.
@@ -2786,7 +2803,7 @@ abstract class VBlock(var title: String,
   /**
    * nb field on this block
    */
-  fun getFieldCount(): Int = fields.size
+  fun getFieldCount(): Int = blockFields.size
 
   /**
    * Returns a field from its name
@@ -2795,7 +2812,7 @@ abstract class VBlock(var title: String,
    * @return the field or null if no field with that name has been found
    */
   fun getField(name: String?): VField? {
-    return fields.find { name == it.name || name == it.label }
+    return blockFields.find { name == it.name || name == it.label }
   }
 
   fun getFieldID(): VField? {
@@ -2806,8 +2823,8 @@ abstract class VBlock(var title: String,
    * Returns the index of field in block
    */
   fun getFieldIndex(fld: VField?): Int {
-    for (i in fields.indices) {
-      if (fld == fields[i]) {
+    for (i in blockFields.indices) {
+      if (fld == blockFields[i]) {
         return i
       }
     }
@@ -3107,7 +3124,7 @@ abstract class VBlock(var title: String,
   protected fun clearLookups(recno: Int) {
     for (i in 1 until tables.size) {
       val table = tables[i]
-      fields.forEach { field ->
+      blockFields.forEach { field ->
         if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
           field.setNull(recno)
         }
@@ -3137,7 +3154,7 @@ abstract class VBlock(var title: String,
       // check if all lookup fields for this table are null.
       nullReference = true
 
-      for (field in fields) {
+      for (field in blockFields) {
         if (!nullReference) {
           break
         }
@@ -3150,7 +3167,7 @@ abstract class VBlock(var title: String,
     }
 
     // this test is useful since we use outer join only for nullable columns.
-    for (field in fields) {
+    for (field in blockFields) {
       if (!nullReference) {
         break
       }
@@ -3175,13 +3192,13 @@ abstract class VBlock(var title: String,
 
     // set internal fields to null (null reference)
     if (isNullReference(table, recno)) {
-      fields.forEach { field ->
+      blockFields.forEach { field ->
         if (field.isInternal() && field.lookupColumn(table) != null) {
           field.setNull(recno)
         }
       }
     } else {
-      fields.forEach { field ->
+      blockFields.forEach { field ->
         val column = field.lookupColumn(table) as Column<Any>?
 
         if (column != null) {
@@ -3207,7 +3224,7 @@ abstract class VBlock(var title: String,
         val result = table.slice(columns).select(conditions.compoundAnd()).single()
         var j = 0
 
-        fields.forEach { field ->
+        blockFields.forEach { field ->
           if (field.lookupColumn(table) != null) {
             field.setQuery(recno, result, columns[j])
             j++
@@ -3243,7 +3260,7 @@ abstract class VBlock(var title: String,
   protected open fun checkUniqueIndex(index: Int, recno: Int, id: Int) {
     val condition = mutableListOf<Op<Boolean>>()
 
-    for (field in fields) {
+    for (field in blockFields) {
       val column = if (field.isNull(recno) || !field.hasIndex(index)) {
         null
       } else {
@@ -3264,7 +3281,7 @@ abstract class VBlock(var title: String,
           form.setActiveBlock(this@VBlock)
           activeRecord = recno
           gotoFirstField()
-          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices[index])))
+          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices[index].message)))
         }
         assert(resultCount == 1L) {
           error("too many rows")
@@ -3289,7 +3306,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
       }
       callProtectedTrigger(VConstants.TRG_PREINS)
-      for (field in fields) {
+      for (field in blockFields) {
         field.callProtectedTrigger(VConstants.TRG_PREINS)
       }
       if (isMulti()) {
@@ -3313,7 +3330,7 @@ abstract class VBlock(var title: String,
 
       val result = mutableListOf<Pair<Column<Any?>, Any?>>()
 
-      for (field in fields) {
+      for (field in blockFields) {
         @Suppress("UNCHECKED_CAST")
         val column = field.lookupColumn(0) as? Column<Any?>
 
@@ -3340,7 +3357,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
       }
       callProtectedTrigger(VConstants.TRG_POSTINS)
-      for (field in fields) {
+      for (field in blockFields) {
         field.callProtectedTrigger(VConstants.TRG_POSTINS)
       }
       if (isMulti()) {
@@ -3377,7 +3394,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
       }
       callProtectedTrigger(VConstants.TRG_PREUPD)
-      for (field in fields) {
+      for (field in blockFields) {
         field.callProtectedTrigger(VConstants.TRG_PREUPD)
       }
       if (isMulti()) {
@@ -3397,7 +3414,7 @@ abstract class VBlock(var title: String,
 
       tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       ucField?.setInt(recno, ucField!!.getInt()!! + 1)
-      for (field in fields) {
+      for (field in blockFields) {
         /* do not update ID field */
         if (field == idField) {
           continue
@@ -3427,7 +3444,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
       }
       callProtectedTrigger(VConstants.TRG_POSTUPD)
-      for (field in fields) {
+      for (field in blockFields) {
         field.callProtectedTrigger(VConstants.TRG_POSTUPD)
       }
       if (isMulti()) {
@@ -3451,7 +3468,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
       }
       callProtectedTrigger(TRG_PREDEL)
-      fields.forEach {
+      blockFields.forEach {
         it.callProtectedTrigger(TRG_PREDEL)
       }
       if (isMulti()) {
@@ -3762,7 +3779,7 @@ abstract class VBlock(var title: String,
                        title,
                        this.help,
                        commands,
-                       fields,
+                       blockFields,
                        form.blocks.size == 1)
     }
   }
@@ -3770,11 +3787,11 @@ abstract class VBlock(var title: String,
   fun getFieldPos(field: VField): Int {
     var count = 1
 
-    for (i in fields.indices) {
-      if (field == fields[i]) {
+    for (i in blockFields.indices) {
+      if (field == blockFields[i]) {
         return count
       }
-      if (fields[i].getDefaultAccess() != VConstants.ACS_HIDDEN) {
+      if (blockFields[i].getDefaultAccess() != VConstants.ACS_HIDDEN) {
         count++
       }
     }
@@ -3794,9 +3811,9 @@ abstract class VBlock(var title: String,
     }
     var count = 1
 
-    for (i in fields.indices) {
-      if (fields[i].getDefaultAccess() != VConstants.ACS_HIDDEN) {
-        fields[i].prepareSnapshot(count++, active)
+    for (i in blockFields.indices) {
+      if (blockFields[i].getDefaultAccess() != VConstants.ACS_HIDDEN) {
+        blockFields[i].prepareSnapshot(count++, active)
       }
     }
   }
@@ -3841,8 +3858,8 @@ abstract class VBlock(var title: String,
         append(fetchPosition)
         append("\n")
         append("CURRENT RECORD:\n")
-        for (i in fields.indices) {
-          append(fields[i].toString())
+        for (i in blockFields.indices) {
+          append(blockFields[i].toString())
         }
       } catch (e: Exception) {
         append("Exception while retrieving bock information. \n")

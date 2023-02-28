@@ -53,26 +53,26 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
   private var display: UWindow? = null
-  val commands = mutableListOf<VCommand>() // commands
-  val actors = mutableListOf<VActor>() // Actors
+  val commands = mutableListOf<Command>() // commands
+  val actors = mutableListOf<Actor>() // Actors
   protected var windowTitle: String? = null
   var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
-  protected val f12: VActor
+  protected val f12: Actor
   open val locale: Locale? = null
 
   // localize the form using the default locale
   protected val manager = getLocalizationManger()
 
   init {
-    f12 = VActor("File",
-                 WINDOW_LOCALIZATION_RESOURCE,
-                 "GotoShortcuts",
-                 WINDOW_LOCALIZATION_RESOURCE,
-                 null,
-                 KeyEvent.VK_F12,
-                 0)
+    f12 = Actor("File",
+                WINDOW_LOCALIZATION_RESOURCE,
+                "GotoShortcuts",
+                WINDOW_LOCALIZATION_RESOURCE,
+                null,
+                KeyEvent.VK_F12,
+                0)
     f12.number = Constants.CMD_GOTO_SHORTCUTS
     f12.handler = this
     addActors(arrayOf(f12))
@@ -262,27 +262,27 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
   /**
    * add actor in menu
    */
-  fun addActor(actorDef: VActor) {
+  fun addActor(actorDef: Actor) {
     addActors(arrayOf(actorDef))
   }
 
   /**
    * add actors in menu
    */
-  open fun addActors(actorDefs: Array<VActor>?) {
+  open fun addActors(actorDefs: Array<Actor>?) {
     val actorDefs = actorDefs.orEmpty()
 
     actors.addAll(actorDefs)
     localizeActors(*actorDefs)
   }
 
-  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
+  open fun getActor(at: Int): Actor = actors[at + 1] // "+1" because of the f12-Actor
 
   /**
    * Enables/disables the actor.
    */
   open fun setActorEnabled(position: Int, enabled: Boolean) {
-    val actor: VActor = getActor(position)
+    val actor: Actor = getActor(position)
     actor.handler = this
     actor.isEnabled = enabled
   }
@@ -297,7 +297,7 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
    *
    * @param     actors         the actors to localize
    */
-  open fun localizeActors(vararg actors: VActor) {
+  open fun localizeActors(vararg actors: Actor) {
     actors.forEach {
       if(ApplicationContext.getDefaultLocale() != locale || !it.userActor) {
         it.localize(manager)

@@ -19,9 +19,10 @@ package org.kopi.galite.visual.dsl.form
 
 import org.jdom2.Element
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Menu
+import org.kopi.galite.visual.form.Block
 
 /**
  * This class implements an  XML localization file generator

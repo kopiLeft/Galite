@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.form
 
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.Actor
 import org.kopi.galite.visual.VlibProperties
 
 class VDefaultFormActor(menuIdent: String,
@@ -26,7 +26,7 @@ class VDefaultFormActor(menuIdent: String,
                         iconName: String,
                         acceleratorKey: Int,
                         acceleratorModifier: Int)
-                 : VActor(menuIdent,
+                  : Actor(menuIdent,
                           null,
                           actorIdent,
                           null,
