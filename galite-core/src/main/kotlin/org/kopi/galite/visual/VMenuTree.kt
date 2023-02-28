@@ -142,7 +142,7 @@ class VMenuTree constructor(ctxt: Connection?,
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
   init {
-    createActor(CMD_QUIT, "File", "Close", "quit", 0 /*KeyEvent.VK_ESCAPE*/, 0)
+    createActor(CMD_QUIT, "File", "Close", "quit", KeyEvent.VK_ESCAPE, 0)
     createActor(CMD_OPEN, "Edit", "Open", "open", KeyEvent.VK_ENTER, 0)
     createActor(CMD_SHOW, "Edit", "Show", null, 0, 0)
     createActor(CMD_ADD, "Edit", "Add", null, 0, 0)
@@ -226,7 +226,7 @@ class VMenuTree constructor(ctxt: Connection?,
     val currentDisplay = getDisplay()
 
     when (VKT_Type) {
-      CMD_QUIT -> currentDisplay.closeWindow()
+      CMD_QUIT -> close(0)
       CMD_OPEN -> currentDisplay.launchSelectedForm()
       CMD_SHOW -> {
         currentDisplay.getBookmark()!!.show()
