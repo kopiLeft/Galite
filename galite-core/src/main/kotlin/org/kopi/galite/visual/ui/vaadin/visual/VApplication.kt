@@ -20,10 +20,9 @@ package org.kopi.galite.visual.ui.vaadin.visual
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
-import java.util.MissingResourceException
-import java.util.ResourceBundle
 
 import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.database.Configuration
 import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.PrintManager
@@ -102,12 +101,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   lateinit var styleManager: StyleManager // the styles injector attached with this application instance.
   var currentUI: UI? = null
     get() = field ?: UI.getCurrent()
-  private val configProperties: ResourceBundle? =
-    try {
-      ResourceBundle.getBundle(resourceFile)
-    } catch (missingResourceException: MissingResourceException) {
-      null
-    }
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -571,13 +564,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String): String? {
-    return VaadinServlet.getCurrent()?.getInitParameter(key) ?: getConfigParameter(key)
+    return VaadinServlet.getCurrent()?.getInitParameter(key) ?: Configuration.getString(key)
   }
-
-  open val resourceFile: String get() = "config"
-
-  private fun getConfigParameter(key: String): String? =
-    if (configProperties != null && configProperties.containsKey(key)) configProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION
