@@ -263,13 +263,13 @@ class Connection {
   }
 }
 
-fun databaseConfig(schema: Schema?, traceLevel: Int?, isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): DatabaseConfig = DatabaseConfig {
+fun databaseConfig(schema: Schema?, traceLevel: Int? = null, isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): DatabaseConfig = DatabaseConfig {
   sqlLogger = Slf4jSqlInfoLogger(traceLevel)
   defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
   defaultIsolationLevel = isolationLevel
 }
 
-class Slf4jSqlInfoLogger(private val traceLevel: Int?) : SqlLogger {
+class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
   override fun log(context: StatementContext, transaction: Transaction) {
     if (exposedLogger.isInfoEnabled && (traceLevel == null || traceLevel > 0)) {
       exposedLogger.info("${System.currentTimeMillis()} ${context.expandArgs(TransactionManager.current())}")
