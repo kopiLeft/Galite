@@ -41,45 +41,45 @@ class ProviderForm : DictionaryForm(title = "Providers", locale = Locale.UK) {
       }
     }
   }
-}
 
-class BlockProvider : Block("Providers", 1, 1) {
-  val u = table(Provider)
+  class BlockProvider : Block("Providers", 1, 1) {
+    val u = table(Provider)
 
-  val idProvider = hidden(domain = INT(20)) {
-    label = "ID"
-    help = "The provider ID"
-    columns(u.idProvider)
-  }
-  val nameProvider = mustFill(domain = STRING(50), position = at(1, 1)) {
-    label = "Name"
-    help = "The provider name"
-    columns(u.nameProvider)
-  }
-  val tel = mustFill(domain = INT(25), position = at(2, 1)) {
-    label = "Phone number"
-    help = "The provider phone number"
-    columns(u.tel)
-  }
-  val description = visit(domain = STRING(50), position = at(3, 1)) {
-    label = "Description"
-    help = "The provider description"
-    columns(u.description)
-  }
-  val address = visit(domain = STRING(50), position = at(4, 1)) {
-    label = "Address"
-    help = "The provider address"
-    columns(u.address)
-  }
-  val zipCode = visit(domain = INT(30), position = at(5, 1)) {
-    label = "Zip code"
-    help = "The provider zip code"
-    columns(u.zipCode)
-  }
-  val logo = visit(domain = IMAGE(100, 100), position = at(6, 1)) {
-    label = "Provider company logo"
-    help = "The provider company logo"
-    columns(u.logo)
+    val idProvider = hidden(domain = INT(20)) {
+      label = "ID"
+      help = "The provider ID"
+      columns(u.idProvider)
+    }
+    val nameProvider = mustFill(domain = STRING(50), position = at(1, 1)) {
+      label = "Name"
+      help = "The provider name"
+      columns(u.nameProvider)
+    }
+    val tel = mustFill(domain = INT(25), position = at(2, 1)) {
+      label = "Phone number"
+      help = "The provider phone number"
+      columns(u.tel)
+    }
+    val description = visit(domain = STRING(50), position = at(3, 1)) {
+      label = "Description"
+      help = "The provider description"
+      columns(u.description)
+    }
+    val address = visit(domain = STRING(50), position = at(4, 1)) {
+      label = "Address"
+      help = "The provider address"
+      columns(u.address)
+    }
+    val zipCode = visit(domain = INT(30), position = at(5, 1)) {
+      label = "Zip code"
+      help = "The provider zip code"
+      columns(u.zipCode)
+    }
+    val logo = visit(domain = IMAGE(100, 100), position = at(6, 1)) {
+      label = "Provider company logo"
+      help = "The provider company logo"
+      columns(u.logo)
+    }
   }
 }
 

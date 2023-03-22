@@ -43,20 +43,12 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     insertCommands()
   }
 
-  val list = actor(
-    menu = action,
-    label = "List",
-    help = "Display List",
-                  ) {
+  val list = actor(menu = action, label = "List", help = "Display List", ident = "list") {
     key = Key.F10
     icon = Icon.LIST
   }
 
-  val interSave = actor(
-    menu = action,
-    label = "Save and load",
-    help = " Save and load",
-                       ) {
+  val interSave = actor(menu = action, label = "Save and load", help = " Save and load", ident = "interSave") {
     key = Key.F11
     icon = Icon.SAVE
   }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+    <menu ident="File" label="Fichier" />
+    <menu ident="Edit" label="Procédure" />
+    <menu ident="Action" label="Action" />
+    <menu ident="Help" label="Aide" />
+    <actor ident="Quit" label="Quitter" help="Ferme le formulaire." />
+    <actor ident="Break" label="Interrompre" help="Arrête l'édition en cours." />
+    <actor ident="Validate" label="Valider" help="Valider les informations saisies." />
+    <actor ident="Print" label="Imprimer" help="Imprimer le rapport." />
+    <actor ident="PrintLabel" label="Etiquette" help="Imprimer des étiquettes." />
+    <actor ident="Preview" label="Afficher" help="Afficher le rapport à l'écran." />
+    <actor ident="Mail" label="e-mail" help="Envoyer le document comme un e-mail" />
+    <actor ident="Autofill" label="Standard" help="Donne la liste des valeurs possibles." />
+    <actor ident="NewItem" label="Nouveau" help="Ajoute un nouvel élément." />
+    <actor ident="EditItem" label="Editer" help="Edite l'élément sélectionné." />
+    <actor ident="EditItem_S" label="Editer" help="Edite l'élément sélectionné." />
+    <actor ident="SearchOperator" label="Condition" help="Change l'opérateur de recherche de ce champs." />
+    <actor ident="ChangeBlock" label="Block" help="Transfère le curseur d'édition dans un autre bloc." />
+    <actor ident="CopyDocument" label="Copie" help="Fournir une copie du document appelé actuellement." />
+    <actor ident="InsertLine" label="Ligne +" help="Insere une nouvelle ligne dans le bloc." />
+    <actor ident="DeleteLine" label="Ligne -" help="Efface la ligne courante." />
+    <actor ident="All" label="Tout" help="Sélectionner tout."/>
+    <actor ident="Nothing" label="Rien" help="Ne rien sélectionner."/>
+    <actor ident="MenuQuery" label="Liste" help="Effectue la requête: donne le résultat sous forme de liste." />
+    <actor ident="SerialQuery" label="Requête" help="Charge les données d'après les champs saisis." />
+    <actor ident="InsertMode" label="Nouveau" help="Crée un nouvel enregistrement." />
+    <actor ident="Save" label="Sauver" help="Enregistre les modifications dans la base." />
+    <actor ident="Delete" label="Effacer" help="Efface cet enregistrement." />
+    <actor ident="CreateReport" label="Rapport" help="Crée le rapport." />
+    <actor ident="CreateDynamicReport" label="Rapport Dyn" help="Crée le rapport dynamique." />
+    <actor ident="ShowHideFilter" label="Afficher/Cacher filtre" help="Afficher ou cacher le flitre du block" />
+    <actor ident="Help" label="Aide" help="Affiche une aide sur le champ sélectionné." />
+</insert>

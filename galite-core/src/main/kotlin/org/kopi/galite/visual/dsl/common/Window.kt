@@ -106,7 +106,24 @@ abstract class Window(val title: String, val locale: Locale?) {
             label: String,
             help: String,
             init: (Actor.() -> Unit)? = null): Actor {
-    val actor = Actor(menu, label, help, "actor${internalActorCount}", sourceFile)
+    return actor(menu, label, help, "actor${internalActorCount}", init)
+  }
+
+  /**
+   * Adds a new actor to this form.
+   *
+   * An Actor is an item to be linked to a command.
+   *
+   * @param menu                 the containing menu
+   * @param label                the label
+   * @param help                 the help
+   */
+  fun actor(menu: Menu,
+            label: String,
+            help: String,
+            ident: String,
+            init: (Actor.() -> Unit)? = null): Actor {
+    val actor = Actor(menu, label, help, ident, sourceFile)
     internalActorCount++
 
     if (init != null) {
@@ -425,6 +442,6 @@ abstract class Window(val title: String, val locale: Locale?) {
   internal val sourceFile: String
     get() {
       val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
+      return basename + (this::class.java.enclosingClass?.simpleName ?: this.javaClass.simpleName)
     }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Produits">
+    <page ident="Id$0" title="Produits"/>
+    <block name="BlockProduct" title="Produits">
+        <field ident="FLD_1" label="Description" help="La description du produit" />
+        <field ident="FLD_2" label="Prix" help="Le prix unitaire Hors TVA du produit" />
+        <field ident="FLD_3" label="Catégorie" help="La catégorie du produit" />
+        <field ident="FLD_4" label="Taxe" help="La taxe appliquée au produit" />
+        <field ident="FLD_5" label="Image" help="L'image du produit" />
+    </block>
+</form>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Tâches">
+    <block name="Tasks" title="Tâches">
+        <field ident="FLD_3" label="De" help="De" />
+        <field ident="FLD_4" label="À" help="À" />
+        <field ident="FLD_5" label="description1" help="description1" />
+        <field ident="FLD_6" label="description2" help="description12" />
+    </block>
+</form>

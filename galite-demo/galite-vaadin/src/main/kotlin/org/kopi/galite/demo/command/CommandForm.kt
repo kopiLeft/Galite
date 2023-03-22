@@ -38,11 +38,7 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
     insertCommands()
   }
 
-  val list = actor(
-    menu = action,
-    label = "List",
-    help = "Display List",
-                  ) {
+  val list = actor(menu = action, label = "List", help = "Display List", ident = "list") {
     key = Key.F1
     icon = Icon.LIST
   }
@@ -70,59 +66,59 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
       createDynamicReport()
     }
   }
-}
 
-class BlockCommand : Block("Commands", 1, 10) {
-  val u = table(Command)
-  val v = table(Client)
+  class BlockCommand : Block("Commands", 1, 10) {
+    val u = table(Command)
+    val v = table(Client)
 
-  val numCmd = hidden(domain = INT(20)) {
-    label = "Number"
-    help = "The command number"
-    columns(u.numCmd)
-  }
+    val numCmd = hidden(domain = INT(20)) {
+      label = "Number"
+      help = "The command number"
+      columns(u.numCmd)
+    }
 
-  val idClt = mustFill(domain = INT(25), position = at(1, 1)) {
-    label = "Client ID"
-    help = "The client ID"
-    columns(u.idClt, v.idClt) {
-      priority = 1
+    val idClt = mustFill(domain = INT(25), position = at(1, 1)) {
+      label = "Client ID"
+      help = "The client ID"
+      columns(u.idClt, v.idClt) {
+        priority = 1
+      }
+    }
+    val paymentMethod = mustFill(domain = Payment, position = at(3, 1)) {
+      label = "Payment method"
+      help = "The payment method"
+      columns(u.paymentMethod) {
+        priority = 1
+      }
+    }
+    val statusCmd = mustFill(domain = CommandStatus, position = at(4, 1)) {
+      label = "Command status"
+      help = "The command status"
+      columns(u.statusCmd) {
+        priority = 1
+      }
+    }
+
+    init {
+      blockVisibility(Access.VISIT, Mode.QUERY)
     }
   }
-  val paymentMethod = mustFill(domain = Payment, position = at(3, 1)) {
-    label = "Payment method"
-    help = "The payment method"
-    columns(u.paymentMethod) {
-      priority = 1
-    }
-  }
-  val statusCmd = mustFill(domain = CommandStatus, position = at(4, 1)) {
-    label = "Command status"
-    help = "The command status"
-    columns(u.statusCmd) {
-      priority = 1
+
+  object Payment : CodeDomain<String>() {
+    init {
+      "cash" keyOf "cash"
+      "check" keyOf "check"
+      "bank card" keyOf "bank card"
     }
   }
 
-  init {
-    blockVisibility(Access.VISIT, Mode.QUERY)
-  }
-}
-
-object Payment : CodeDomain<String>() {
-  init {
-    "cash" keyOf "cash"
-    "check" keyOf "check"
-    "bank card" keyOf "bank card"
-  }
-}
-
-object CommandStatus : CodeDomain<String>() {
-  init {
-    "in preparation" keyOf "in preparation"
-    "available" keyOf "available"
-    "delivered" keyOf "delivered"
-    "canceled" keyOf "canceled"
+  object CommandStatus : CodeDomain<String>() {
+    init {
+      "in preparation" keyOf "in preparation"
+      "available" keyOf "available"
+      "delivered" keyOf "delivered"
+      "canceled" keyOf "canceled"
+    }
   }
 }
 

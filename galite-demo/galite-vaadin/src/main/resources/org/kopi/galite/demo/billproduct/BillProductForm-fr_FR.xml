@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Produits factures">
+  <page ident="Id$0" title="Produits factures"/>
+  <block name="BlockBillProduct" title="Produit facture">
+    <field ident="FLD_1" label="Quantité" help="La quantité du produit" />
+    <field ident="FLD_2" label="Montant HT" help="Le montant hors taxes" />
+    <field ident="FLD_3" label="Montant TTC" help="Le montant toutes taxes comprises" />
+  </block>
+</form>

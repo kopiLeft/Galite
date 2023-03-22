@@ -33,7 +33,7 @@ import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
 
-abstract class VFullCalendarForm : VForm() {
+abstract class VFullCalendarForm(source: String? = null) : VForm(source) {
   private var actorsDef = mutableListOf<VActor>()
   private var commandsDef = mutableListOf<VCommand>()
 

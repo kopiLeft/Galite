@@ -61,9 +61,9 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    */
   @Deprecated("use from() and to() fields instead")
   inline fun <reified T: LocalDate> date(domain: Domain<T>,
-                                    position: FormPosition,
-                                    init: FormField<T>.() -> Unit): FormField<T> {
-
+                                         position: FormPosition,
+                                         init: FormField<T>.() -> Unit): FormField<T>
+  {
     return mustFill(domain, position, init).also { field ->
       dateField = field
       block.dateField = field.vField as VDateField
@@ -89,9 +89,8 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    */
   @Deprecated("use from() and to() fields instead")
   inline fun <reified T: LocalTime> fromTime(domain: Domain<T>,
-                                        position: FormPosition,
-                                        init: FormField<T>.() -> Unit): FormField<T> {
-
+                                             position: FormPosition,
+                                             init: FormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
       fromTimeField = field
       block.fromTimeField = field.vField as VTimeField
@@ -145,8 +144,8 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @return a MUSTFILL field.
    */
   inline fun <reified T: Instant> from(domain: Domain<T>,
-                                         position: FormPosition,
-                                         init: FormField<T>.() -> Unit): FormField<T> {
+                                       position: FormPosition,
+                                       init: FormField<T>.() -> Unit): FormField<T> {
     return mustFill(domain, position, init).also { field ->
       fromField = field
       block.fromField = field.vField as VTimestampField
@@ -210,6 +209,8 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
   override fun getBlockModel(vForm: VForm): VBlock {
     val model = super.getBlockModel(vForm)
     block.buildFullCalendarForm()
+    block.source = if (this::class.isInner && vForm.source != null) vForm.source!! else sourceFile
+
     return model
   }
 }

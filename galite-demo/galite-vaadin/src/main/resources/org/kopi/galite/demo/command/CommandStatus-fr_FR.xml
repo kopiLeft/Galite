@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<insert>
+    <type ident="CommandStatus">
+        <code>
+            <codedesc ident="id$0" label="in preparation" />
+            <codedesc ident="id$1" label="available" />
+            <codedesc ident="id$2" label="delivered" />
+            <codedesc ident="id$3" label="canceled" />
+        </code>
+    </type>
+</insert>

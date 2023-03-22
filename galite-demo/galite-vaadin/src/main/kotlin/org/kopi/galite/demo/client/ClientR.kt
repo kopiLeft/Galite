@@ -37,61 +37,45 @@ import org.kopi.galite.visual.WindowController
  */
 class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   val action = menu("Action")
+  val file = menu("File")
 
-  val csv = actor(
-          menu = action,
-          label = "CSV",
-          help = "CSV Format",
-  ) {
+  val quit = actor(menu = file, label = "Quit", help = "Close Report.", ident = "quit") {
+    key = Key.ESCAPE
+    icon = Icon.QUIT
+  }
+  val csv = actor(menu = action, label = "CSV", help = "CSV Format", ident = "csv") {
     key = Key.F8           // key is optional here
     icon = Icon.EXPORT_CSV // icon is optional here
   }
 
-  val xls = actor(
-          menu = action,
-          label = "XLS",
-          help = "Excel (XLS) Format",
-  ) {
+  val xls = actor(menu = action, label = "XLS", help = "Excel (XLS) Format", ident = "xls") {
     key = Key.SHIFT_F8
     icon = Icon.EXPORT_XLSX
   }
 
-  val xlsx = actor(
-          menu = action,
-          label = "XLSX",
-          help = "Excel (XLSX) Format",
-  ) {
+  val xlsx = actor(menu = action, label = "XLSX", help = "Excel (XLSX) Format", ident = "xlsx") {
     key = Key.SHIFT_F8
     icon = Icon.EXPORT_XLSX
   }
 
-  val pdf = actor(
-          menu = action,
-          label = "PDF",
-          help = "PDF Format",
-  ) {
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
     key = Key.F9
     icon = Icon.EXPORT_PDF
   }
 
-  val editColumnData = actor(
-    menu = action,
-    label = "Edit Column Data",
-    help = "Edit Column Data",
-  ) {
+  val editColumnData = actor(menu = action, label = "Edit Column Data", help = "Edit Column Data", ident = "editData") {
     key = Key.F8
     icon = Icon.FORMULA
   }
 
-  val helpForm = actor(
-          menu = action,
-          label = "Help",
-          help = " Help"
-  ) {
+  val helpForm = actor(menu = action, label = "Help", help = " Help", ident = "help") {
     key = Key.F1
     icon = Icon.HELP
   }
 
+  val cmdQuit = command(item = quit) {
+    model.close()
+  }
   val cmdCSV = command(item = csv) {
     model.export(VReport.TYP_CSV)
   }

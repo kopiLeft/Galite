@@ -42,27 +42,27 @@ class StockForm : DictionaryForm(title = "Stocks", locale = Locale.UK) {
       }
     }
   }
-}
 
-class StockBlock : Block("Stock", 1, 1) {
-  val u = table(Stock)
-  val v = table(Product)
-  val w = table(Provider)
+  class StockBlock : Block("Stock", 1, 1) {
+    val u = table(Stock)
+    val v = table(Product)
+    val w = table(Provider)
 
-  val idStckPdt = hidden(domain = INT(20)) {
-    label = "Product_ID"
-    help = "The product ID"
-    columns(u.idStckPdt, v.idPdt)
-  }
-  val idStckProv = hidden(domain = INT(20)) {
-    label = "Provider_ID"
-    help = "The provider id"
-    columns(u.idStckProv, w.idProvider)
-  }
-  val minAlert = mustFill(domain = INT(20), position = at(1, 1)) {
-    label = "Min Alert"
-    help = "The stock's min alert"
-    // columns(u.idStckProv, w.idProvider)
+    val idStckPdt = hidden(domain = INT(20)) {
+      label = "Product_ID"
+      help = "The product ID"
+      columns(u.idStckPdt, v.idPdt)
+    }
+    val idStckProv = hidden(domain = INT(20)) {
+      label = "Provider_ID"
+      help = "The provider id"
+      columns(u.idStckProv, w.idProvider)
+    }
+    val minAlert = mustFill(domain = INT(20), position = at(1, 1)) {
+      label = "Min Alert"
+      help = "The stock's min alert"
+      // columns(u.idStckProv, w.idProvider)
+    }
   }
 }
 

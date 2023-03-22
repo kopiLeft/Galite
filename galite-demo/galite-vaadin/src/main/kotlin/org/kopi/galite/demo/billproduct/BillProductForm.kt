@@ -42,32 +42,32 @@ class BillProductForm : DictionaryForm("Bill products", Locale.UK) {
       }
     }
   }
-}
 
-class BlockBillProduct : Block("bill product", 1, 1) {
-  val u = table(BillProduct)
-  val v = table(Product)
-  val w = table(Bill)
+  class BlockBillProduct : Block("bill product", 1, 1) {
+    val u = table(BillProduct)
+    val v = table(Product)
+    val w = table(Bill)
 
-  val idBPdt = hidden(domain = INT(20)) {
-    label = "Product ID"
-    help = "The bill product ID"
-    columns(u.idBPdt, v.idPdt)
-  }
-  val quantity = mustFill(domain = INT(30), position = at(1, 1)) {
-    label = "Quantity"
-    help = "The quantity"
-    columns(u.quantity)
-  }
-  val amount = visit(domain = DECIMAL(20, 10), position = at(2, 1)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-    columns(u.amount)
-  }
-  val amountWithTaxes = visit(domain = DECIMAL(20, 10), position = at(3, 1)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
-    columns(u.amountWithTaxes, w.amountWithTaxes)
+    val idBPdt = hidden(domain = INT(20)) {
+      label = "Product ID"
+      help = "The bill product ID"
+      columns(u.idBPdt, v.idPdt)
+    }
+    val quantity = mustFill(domain = INT(30), position = at(1, 1)) {
+      label = "Quantity"
+      help = "The quantity"
+      columns(u.quantity)
+    }
+    val amount = visit(domain = DECIMAL(20, 10), position = at(2, 1)) {
+      label = "Amount before tax"
+      help = "The amount before tax to pay"
+      columns(u.amount)
+    }
+    val amountWithTaxes = visit(domain = DECIMAL(20, 10), position = at(3, 1)) {
+      label = "Amount all taxes included"
+      help = "The amount all taxes included to pay"
+      columns(u.amountWithTaxes, w.amountWithTaxes)
+    }
   }
 }
 

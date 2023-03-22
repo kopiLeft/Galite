@@ -30,12 +30,12 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
-                      )
+  )
   val list = actor(
     menu = action,
     label = "list",
     help = "Display List",
-                  ) {
+  ) {
     key = Key.F2
     icon = Icon.LIST
   }
@@ -43,7 +43,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     menu = action,
     label = "break",
     help = "Reset Block",
-                        ) {
+  ) {
     key = Key.F11
     icon = Icon.BREAK
   }

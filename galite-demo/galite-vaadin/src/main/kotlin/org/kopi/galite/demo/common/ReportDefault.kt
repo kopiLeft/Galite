@@ -22,8 +22,6 @@ import java.util.Locale
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.form.PDFActor
-import org.kopi.galite.visual.dsl.form.QuitActor
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
 
@@ -97,37 +95,39 @@ open class ReportDefault(title: String, help: String?, locale: Locale? = null) :
       model.export(VReport.TYP_XLSX)
     }
   }
-}
 
-private class CSVActor: Actor(
-  menu = ActionMenu(),
-  label = "CSV",
-  help = "CSV Format",
-) {
-  init {
-    key = Key.F8
-    icon = Icon.EXPORT_CSV
+  class QuitActor: Actor(menu = FileMenu(), label = "Quit", help = "Quit this report.", ident = "quit") {
+    init {
+      key = Key.ESCAPE
+      icon = Icon.QUIT
+    }
   }
-}
 
-class XLSActor: Actor(
-  menu = ActionMenu(),
-  label = "XLS",
-  help = "Excel (XLS) Format",
-) {
-  init {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT_XLSX
+  private class CSVActor: Actor(menu = ActionMenu(), label = "CSV", help = "CSV Format", ident = "csv") {
+    init {
+      key = Key.F8
+      icon = Icon.EXPORT_CSV
+    }
   }
-}
 
-class XLSXActor: Actor(
-  menu = ActionMenu(),
-  label = "XLSX",
-  help = "Excel (XLSX) Format",
-) {
-  init {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT
+  class XLSActor: Actor(menu = ActionMenu(), label = "XLS", help = "Excel (XLS) Format", ident = "xls") {
+    init {
+      key = Key.SHIFT_F8
+      icon = Icon.EXPORT_XLSX
+    }
+  }
+
+  class XLSXActor: Actor(menu = ActionMenu(), label = "XLSX", help = "Excel (XLSX) Format", ident = "xlsx") {
+    init {
+      key = Key.SHIFT_F8
+      icon = Icon.EXPORT
+    }
+  }
+
+  class PDFActor: Actor(menu = ActionMenu(), label = "PDF", help = "PDF Format", ident = "pdf") {
+    init {
+      key = Key.F9
+      icon = Icon.EXPORT_PDF
+    }
   }
 }

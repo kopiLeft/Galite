@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report>
+  <actor ident="quit" label="Quitter" help="Ferme le rapport." />
+  <actor ident="csv" label="CSV" help="Format CSV." />
+  <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+  <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+  <actor ident="pdf" label="PDF" help="Format PDF." />
+</report>

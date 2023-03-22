@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Rapport des clients">
+    <menu ident="Action" label="Action" />
+    <menu ident="File" label="Fichier" />
+
+    <actor ident="quit" label="Quitter" help="Ferme le rapport." />
+    <actor ident="csv" label="CSV" help="Format CSV." />
+    <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+    <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+    <actor ident="pdf" label="PDF" help="Format PDF." />
+    <actor ident="editData" label="Modifier colonne" help="Modifier le contenu de la colonne." />
+    <actor ident="help" label="Aide" help="Afficher l'aide." />
+
+    <field ident="ANM_0" label="Prénom" help="Le prénom du client" />
+    <field ident="ANM_1" label="Nom" help="Le nom du client" />
+    <field ident="ANM_2" label="Adresse" help="L'adresse du client" />
+    <field ident="ANM_3" label="Age" help="L'age du client" />
+    <field ident="ANM_4" label="Pays" help="Le pays du client" />
+    <field ident="ANM_5" label="Ville" help="La ville du client" />
+    <field ident="ANM_6" label="Code postal" help="Le code postal du client" />
+    <field ident="ANM_7" label="Actif" help="Client actif?" />
+</report>
