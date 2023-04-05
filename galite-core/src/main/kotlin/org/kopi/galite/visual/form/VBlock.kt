@@ -283,14 +283,12 @@ abstract class VBlock(var title: String,
    * @param mode the mode to set to the block.
    */
   fun setMode(mode: Int) {
-    if (this !== form.getActiveBlock()) {
+    if (this != form.getActiveBlock()) {
       this.mode = mode
       for (i in fields.indices) {
         fields[i].updateModeAccess()
       }
     } else {
-      // is this restriction acceptable ?
-      assert(!isMulti()) { "Block $name is a multiblock." }
       val act = activeField
       act?.leave(true)
       this.mode = mode
