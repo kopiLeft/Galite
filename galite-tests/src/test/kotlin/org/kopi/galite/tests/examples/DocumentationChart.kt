@@ -31,9 +31,9 @@ class DocumentationChart : Form(title = "Test Report Form", locale = Locale.UK) 
   //Menus Definition
 
   val graph = actor (
-    menu =   file,
-    label =  "Graph",
-    help =   "show graph values",
+    menu = fileMenu,
+    label = "Graph",
+    help =  "show graph values",
   ) {
     key  =  Key.F9
     icon =  Icon.COLUMN_CHART

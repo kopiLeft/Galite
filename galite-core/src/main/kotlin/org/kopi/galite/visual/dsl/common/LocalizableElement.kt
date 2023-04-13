@@ -38,7 +38,7 @@ abstract class LocalizableElement(ident: String? = null, open val source: String
       }
 
       val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
-      println("$basename${this::class.java.enclosingClass?.simpleName ?: this.javaClass.simpleName}")
+
       return "$basename${this::class.java.enclosingClass?.simpleName ?: this.javaClass.simpleName}"
     }
 }

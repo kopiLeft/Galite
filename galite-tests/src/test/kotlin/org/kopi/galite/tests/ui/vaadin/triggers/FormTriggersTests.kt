@@ -252,7 +252,7 @@ class FormTriggersTests : GaliteVUITestBase() {
 object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", locale = Locale.UK) {
 
   val listActor = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -261,7 +261,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
   }
 
   val deleteBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "delete Block",
     help = " deletes block",
   ) {
@@ -270,7 +270,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
   }
 
   val saveBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Save Block",
     help = " Save Block",
   ) {
@@ -278,7 +278,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.SAVE
   }
   val resetBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "break",
     help = "Reset Block",
   ) {
@@ -287,7 +287,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
   }
 
   val graph = actor (
-    menu =   action,
+    menu =   actionMenu,
     label =  "Graph",
     help =   "show graph values",
   ) {

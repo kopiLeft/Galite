@@ -97,14 +97,14 @@ class FieldColorsTests: GaliteVUITestBase() {
 class FormWithColoredFields: Form(title = "") {
 
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
 
   val colorFields = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Color fields",
     help = "Color fields",
   ) {

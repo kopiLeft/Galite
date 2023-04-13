@@ -31,26 +31,13 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", locale = Locale.UK) {
-  override val action = menu("Action")
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
-  val saveBlock = actor(
-    menu = action,
-    label = "Save Block",
-    help = " Save Block",
-  ) {
+  val action = menu("Action")
+  val autoFill = actor(menu = action, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
+  val saveBlock = actor(menu = action, label = "Save Block", help = " Save Block", ) {
     key = Key.F9
     icon = Icon.SAVE
   }
-  val list = actor(
-    menu = action,
-    label = "list",
-    help = "List data",
-  ) {
+  val list = actor(menu = action, label = "list", help = "List data", ) {
     key = Key.F5
     icon = Icon.LIST
   }

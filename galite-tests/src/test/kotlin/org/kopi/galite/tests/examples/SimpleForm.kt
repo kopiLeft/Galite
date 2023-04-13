@@ -36,7 +36,7 @@ import org.kopi.galite.visual.dsl.form.Block
 
 class SimpleForm : DictionaryForm(title = "Training", locale = Locale.UK) {
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL

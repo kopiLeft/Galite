@@ -26,26 +26,14 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
 
 class TestFieldsVisibilityForm : DictionaryForm(title = "Fields Visibility Form", locale = Locale.UK) {
-  val query = actor(
-          menu = action,
-          label = "Query Mode",
-          help = "Change the mode to query"
-  ) {
+  val query = actor(menu = actionMenu, label = "Query Mode", help = "Change the mode to query") {
     icon = Icon.ALL
   }
-  val insert = actor(
-          menu = action,
-          label = "Insert Mode",
-          help = "Change the mode to insert"
-  ) {
+  val insert = actor(menu = actionMenu, label = "Insert Mode", help = "Change the mode to insert") {
     icon = Icon.INSERT
   }
 
-  val update = actor(
-          menu = action,
-          label = "Update Mode",
-          help = "Change the mode to update"
-  ) {
+  val update = actor(menu = actionMenu, label = "Update Mode", help = "Change the mode to update") {
     icon = Icon.EDIT
   }
 

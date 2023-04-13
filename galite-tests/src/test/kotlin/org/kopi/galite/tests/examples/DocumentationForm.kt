@@ -38,7 +38,7 @@ class DocumentationForm : DictionaryForm(title = "Test Form", locale = Locale.UK
 
   // Actors Definition
   val cut = actor(
-    menu = file,
+    menu = fileMenu,
     label = "cut",
     help = "cut element",
   ) {

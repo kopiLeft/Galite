@@ -14,6 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.tests.form
 
 import java.io.File
@@ -50,52 +51,23 @@ object User : Table() {
 val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
 
 class FormSample : Form(title = "form for test", locale = Locale.UK) {
-  override val action = menu("Action")
+  val action = menu("Action")
 
-  override val edit = menu("Edit")
+  val edit = menu("Edit")
 
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = edit, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
 
-  val editItemShortcut = actor(
-    menu = edit,
-    label = "Edit Item Shortcut",
-    help = "Edit Item Shortcut",
-    command = PredefinedCommand.EDIT_ITEM_SHORTCUT
-  )
-
-  override val editItem = actor(
-    menu = edit,
-    label = "Edit Item",
-    help = "Edit Item",
-    command = PredefinedCommand.EDIT_ITEM
-  )
-
-  val newItem = actor(
-    menu = edit,
-    label = "New Item",
-    help = "New Item",
-    command = PredefinedCommand.NEW_ITEM
-  )
-
-  val graph = actor(
-          menu = action,
-          label = "Graph for test",
-          help = "show graph values",
-  ) {
+  override val editItemShortcut = actor(menu = edit, label = "Edit Item Shortcut", help = "Edit Item Shortcut",
+                                        command = PredefinedCommand.EDIT_ITEM_SHORTCUT)
+  override val editItem = actor(menu = edit, label = "Edit Item", help = "Edit Item",
+                                command = PredefinedCommand.EDIT_ITEM)
+  override val newItem = actor(menu = edit, label = "New Item", help = "New Item",
+                               command = PredefinedCommand.NEW_ITEM)
+  val graph = actor(menu = action, label = "Graph for test", help = "show graph values") {
     key = Key.F9
     icon = Icon.COLUMN_CHART
   }
-
-  val formActor = actor(
-          menu =   action,
-          label =  "form Command",
-          help =   "actor to test form command",
-  ) {
+  val formActor = actor(menu = action, label = "form Command", help = "actor to test form command") {
     key  =  Key.F2
     icon =  Icon.SAVE
   }

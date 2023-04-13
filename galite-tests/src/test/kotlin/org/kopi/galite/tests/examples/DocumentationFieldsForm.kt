@@ -49,14 +49,14 @@ import org.kopi.galite.visual.FileHandler
 class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", locale = Locale.UK) {
 
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
 
   val list = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -65,7 +65,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   }
 
   val saveBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Save Block",
     help = " Save Block",
   ) {
@@ -74,7 +74,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   }
 
   val deleteBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "deleteBlock",
     help = " deletes block",
   ) {

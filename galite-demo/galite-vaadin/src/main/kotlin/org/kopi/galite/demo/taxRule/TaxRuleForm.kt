@@ -40,7 +40,7 @@ class TaxRuleForm : DictionaryForm(title = "TaxRules", locale = Locale.UK) {
     insertCommands()
   }
 
-  val list = actor(menu = action, label = "List", help = "Display List", ident = "list") {
+  val list = actor(menu = actionMenu, label = "List", help = "Display List", ident = "list") {
     key = Key.F1
     icon = Icon.LIST
   }

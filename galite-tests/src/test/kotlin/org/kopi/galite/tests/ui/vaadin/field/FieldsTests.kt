@@ -255,26 +255,11 @@ class FieldsTests : GaliteVUITestBase() {
 }
 
 class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = Locale.UK) {
-  override val edit = menu("Edit")
+  val edit = menu("Edit")
 
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
-  val newItem = actor(
-    menu = edit,
-    label = "NewItem",
-    help = "NewItem",
-    command = PredefinedCommand.NEW_ITEM
-  )
-  override val editItem = actor(
-    menu = edit,
-    label = "Edit Item",
-    help = "Edit Item",
-    command = PredefinedCommand.EDIT_ITEM
-  )
+  val autoFill = actor(menu = edit, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
+  override val newItem = actor(menu = edit, label = "NewItem", help = "NewItem", command = PredefinedCommand.NEW_ITEM)
+  override val editItem = actor(menu = edit, label = "Edit Item", help = "Edit Item", command = PredefinedCommand.EDIT_ITEM)
 
   val userListBlock = insertBlock(UsersListBlock()) {
     val field = visit(domain = STRING(25), position = at(3, 1)) {
@@ -299,20 +284,10 @@ class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = 
 }
 
 class FormInPopUp : DictionaryForm(title = "form for test", locale = Locale.UK) {
-  override val action = menu("Action")
+  val action = menu("Action")
 
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
-
-  override val quit = actor(
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
+  val autoFill = actor(menu = action, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
+  override val quit = actor(menu = action, label = "quit", help = "Quit") {
     key = Key.ESCAPE
     icon = Icon.QUIT
   }

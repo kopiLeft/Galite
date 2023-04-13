@@ -33,7 +33,7 @@ import org.kopi.galite.visual.dsl.form.Key
 class TestFieldsForm : DictionaryForm(title = "Fields Form", locale = Locale.UK) {
 
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL

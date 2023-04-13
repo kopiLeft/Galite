@@ -33,11 +33,7 @@ import org.kopi.galite.visual.VColor
 
 object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
 
-  val graph = actor (
-          menu =   action,
-          label =  "Graph for test",
-          help =   "show graph values" ,
-  ) {
+  val graph = actor (menu = actionMenu, label = "Graph for test", help = "show graph values" , ) {
     key  =  Key.F9
     icon =  Icon.COLUMN_CHART
   }
@@ -50,19 +46,13 @@ object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
   }
 }
 
-class ChartSample: Chart(
-  title = "Area/population per city",
-  help = "This chart presents the area/population per city",
-  locale = Locale.UK
-) {
-
+class ChartSample: Chart(title = "Area/population per city",
+                         help = "This chart presents the area/population per city",
+                         locale = Locale.UK)
+{
   val action = menu("Action")
 
-  val greeting = actor(
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
+  val greeting = actor(menu = action, label = "Greeting", help = "Click me to show greeting", ) {
     key  =  Key.F1
     icon =  Icon.ASK
   }

@@ -55,7 +55,7 @@ object Product : Table() {
 class FormWithSpecialTypes : Form(title = "form for test", locale = Locale.UK) {
 
   val autofillitem = actor(
-    menu = edit,
+    menu = editMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL

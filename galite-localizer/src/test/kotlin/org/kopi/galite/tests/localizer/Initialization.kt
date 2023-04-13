@@ -90,27 +90,14 @@ object User : Table() {
 
 class FormSample : Form(title = "form for test", locale = Locale.UK) {
 
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = editMenu, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
 
-  val graph = actor(
-    menu = action,
-    label = "Graph for test",
-    help = "show graph values",
-  ) {
+  val graph = actor(menu = actionMenu, label = "Graph for test", help = "show graph values") {
     key = Key.F9
     icon = Icon.COLUMN_CHART
   }
 
-  val formActor = actor(
-    menu =   action,
-    label =  "form Command",
-    help =   "actor to test form command",
-  ) {
+  val formActor = actor(menu = actionMenu, label = "form Command", help = "actor to test form command") {
     key  =  Key.F2
     icon =  Icon.SAVE
   }

@@ -41,7 +41,7 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   val testPage2 = page("test page2")
 
   val list = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -50,7 +50,7 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   }
 
   val autoFill = actor(
-    menu = edit,
+    menu = editMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL

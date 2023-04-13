@@ -61,12 +61,11 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
    */
-  fun block(
-    title: String,
-    buffer: Int,
-    visible: Int,
-    init: Block.() -> Unit
-           ): Block = insertBlock(Block(title, buffer, visible), init)
+  fun block(title: String,
+            buffer: Int,
+            visible: Int,
+            init: Block.() -> Unit)
+  : Block = insertBlock(Block(title, buffer, visible), init)
 
   /**
    * Adds a new block to this page which belongs to this form.
@@ -75,12 +74,11 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @param        visible                the number of visible elements
    * @param        title                  the title of the block
    */
-  fun FormPage.block(
-    title: String,
-    buffer: Int,
-    visible: Int,
-    init: Block.() -> Unit
-                    ): Block = insertBlock(Block(title, buffer, visible), this, init)
+  fun FormPage.block(title: String,
+                     buffer: Int,
+                     visible: Int,
+                     init: Block.() -> Unit)
+  : Block = insertBlock(Block(title, buffer, visible), this, init)
 
   /**
    * Adds a new block to this form.
@@ -342,7 +340,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * Add form menus
    */
   fun insertMenus() {
-    file; edit; action
+    fileMenu; editMenu; actionMenu; helpMenu
   }
 
   /**
@@ -358,7 +356,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     mail
     autofill
     editItem
-    editItemS
+    editItemShortcut
     searchOperator
     changeBlock
     copyDocument
@@ -380,7 +378,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   fun insertCommands() {
     autofill
     editItem
-    editItemS
+    editItemShortcut
 
     quitForm; resetForm; helpForm
   }
@@ -388,72 +386,74 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   fun insertDefaultActors() {
     autofill
     editItem
-    editItemS
+    editItemShortcut
   }
 
   // --------------------MENUS-----------------
 
-  val file by lazy { menu(FileMenu()) }
+  open val fileMenu by lazy { menu(FileMenu()) }
 
-  val edit by lazy { menu(EditMenu()) }
+  open val editMenu by lazy { menu(EditMenu()) }
 
-  val action by lazy { menu(ActionMenu()) }
+  open val actionMenu by lazy { menu(ActionMenu()) }
+
+  open val helpMenu by lazy { menu(HelpMenu()) }
 
   // --------------------ACTORS----------------
 
-  val quit by lazy { actor(Quit()) }
+  open val quit by lazy { actor(Quit()) }
 
-  val _break by lazy { actor(Break()) }
+  open val _break by lazy { actor(Break()) }
 
-  val validate by lazy { actor(Validate())}
+  open val validate by lazy { actor(Validate())}
 
-  val print by lazy { actor(Print())}
+  open val print by lazy { actor(Print())}
 
-  val printLabel by lazy { actor(PrintLabel())}
+  open val printLabel by lazy { actor(PrintLabel())}
 
-  val preview by lazy { actor(Preview()) }
+  open val preview by lazy { actor(Preview()) }
 
-  val mail by lazy { actor(Mail()) }
+  open val mail by lazy { actor(Mail()) }
 
-  val autofill by lazy { actor(Autofill()) }
+  open val autofill by lazy { actor(Autofill()) }
 
-  val newItem by lazy { actor(NewItem()) }
+  open val newItem by lazy { actor(NewItem()) }
 
-  val editItem by lazy { actor(EditItem()) }
+  open val editItem by lazy { actor(EditItem()) }
 
-  val editItemS by lazy { actor(EditItem_S()) }
+  open val editItemShortcut by lazy { actor(EditItemShortcut()) }
 
-  val searchOperator by lazy { actor(SearchOperator()) }
+  open val searchOperator by lazy { actor(SearchOperator()) }
 
-  val changeBlock by lazy { actor(ChangeBlock()) }
+  open val changeBlock by lazy { actor(ChangeBlock()) }
 
-  val copyDocument by lazy { actor(CopyDocument()) }
+  open val copyDocument by lazy { actor(CopyDocument()) }
 
-  val insertLine by lazy { actor(InsertLine()) }
+  open val insertLine by lazy { actor(InsertLine()) }
 
-  val deleteLine by lazy { actor(DeleteLine()) }
+  open val deleteLine by lazy { actor(DeleteLine()) }
 
-  val all by lazy { actor(All()) }
+  open val all by lazy { actor(All()) }
 
-  val nothing by lazy { actor(Nothing()) }
+  open val nothing by lazy { actor(Nothing()) }
 
-  val menuQuery by lazy { actor(MenuQuery()) }
+  open val menuQuery by lazy { actor(MenuQuery()) }
 
-  val serialQuery by lazy { actor(SerialQuery()) }
+  open val serialQuery by lazy { actor(SerialQuery()) }
 
-  val insertMode by lazy { actor(InsertMode()) }
+  open val insertMode by lazy { actor(InsertMode()) }
 
-  val save by lazy { actor(Save()) }
+  open val save by lazy { actor(Save()) }
 
-  val delete by lazy { actor(Delete()) }
+  open val delete by lazy { actor(Delete()) }
 
-  val report by lazy { actor(CreateReport()) }
+  open val report by lazy { actor(CreateReport()) }
 
-  val dynamicReport by lazy { actor(CreateDynamicReport()) }
+  open val dynamicReport by lazy { actor(CreateDynamicReport()) }
 
-  val showHideFilter by lazy { actor(ShowHideFilter()) }
+  open val showHideFilter by lazy { actor(ShowHideFilter()) }
 
-  val help by lazy { actor(Help()) }
+  open val help by lazy { actor(Help()) }
 
   // -------------------------------------------------------------------
   // FORM-LEVEL COMMANDS
@@ -481,51 +481,51 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // BLOCK-LEVEL COMMANDS
   // -------------------------------------------------------------------
 
-  val Block.breakCmd: Command
+  val Block.breakCommand: Command
     get() = command(item = _break) {
       resetBlock()
     }
 
-  val Block.recursiveQueryCmd: Command
+  val Block.recursiveQueryCommand: Command
     get() = command(item = menuQuery) {
       Commands.recursiveQuery(block)
     }
 
-  val Block.menuQueryCmd: Command
+  val Block.menuQueryCommand: Command
     get() = command(item = menuQuery) {
       Commands.menuQuery(block)
     }
 
-  val Block.queryMoveCmd: Command
+  val Block.queryMoveCommand: Command
     get() = command(item = menuQuery) {
       Commands.queryMove(block)
     }
 
-  val Block.serialQueryCmd: Command
+  val Block.serialQueryCommand: Command
     get() = command(item = serialQuery) {
       Commands.serialQuery(block)
     }
 
-  val Block.insertModeCmd: Command
+  val Block.insertModeCommand: Command
     get() = command(item = insertMode) {
       insertMode()
     }
 
-  val Block.saveCmd: Command
+  val Block.saveCommand: Command
     get() = command(item = save) {
       saveBlock()
     }
-  val Block.deleteCmd: Command
+  val Block.deleteCommand: Command
     get() = command(item = delete) {
       deleteBlock()
     }
 
-  val Block.insertLineCmd: Command
+  val Block.insertLineCommand: Command
     get() = command(item = insertLine) {
       insertLine()
     }
 
-  val Block.showHideFilterCmd: Command
+  val Block.showHideFilterCommand: Command
     get() = command(item = showHideFilter) {
       showHideFilter()
     }
@@ -534,7 +534,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // BLOCK-LEVEL ACTORS
   // ------------------------------------------------------------------
 
-  inner class Quit : Actor(menu = FileMenu(), label = "Quit", help = "Close this form.") {
+  class Quit : Actor(menu = FileMenu(), label = "Quit", help = "Close this form.") {
     init {
       key = Key.ESCAPE
       icon = Icon.QUIT
@@ -606,7 +606,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     }
   }
 
-  class EditItem_S : DefaultActor(
+  class EditItemShortcut : DefaultActor(
     menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM_SHORTCUT
   ) {
     init {

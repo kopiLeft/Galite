@@ -259,31 +259,17 @@ class FormLocalTests : GaliteVUITestBase() {
 }
 
 class LocalizedForm: ReportSelectionForm(title = "Formulaire", locale = Locale.FRANCE) {
-  val  internMenu = menu("Menu Interne")
-
-  val internActor = actor(
-    menu = internMenu,
-    label = "Actor Interne",
-    help = "",
-  ) {
+  val internMenu = menu("Menu Interne")
+  val internActor = actor(menu = internMenu, label = "Actor Interne", help = "", ) {
     key = Key.F6
     icon = Icon.REPORT
   }
 
   val externActor = actor(ExternActor())
 
-  val autoFill = actor(
-    menu = internMenu,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = internMenu, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
 
-  override val report = actor(
-    menu = internMenu,
-    label = "Creer un rapport",
-    help = "Creer un rapport",
-  ) {
+  override val report = actor(menu = internMenu, label = "Creer un rapport", help = "Creer un rapport") {
     key = Key.F8
     icon = Icon.REPORT
   }

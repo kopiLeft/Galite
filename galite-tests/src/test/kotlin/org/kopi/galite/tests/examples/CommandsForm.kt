@@ -26,13 +26,13 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK) {
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
   val list = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -40,7 +40,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     icon = Icon.LIST
   }
   val resetBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "break",
     help = "Reset Block",
   ) {
@@ -48,7 +48,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     icon = Icon.BREAK
   }
   val saveBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Save Block",
     help = " Save Block",
   ) {
@@ -56,7 +56,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     icon = Icon.SAVE
   }
   val deleteBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "deleteBlock",
     help = " deletes block",
   ) {
@@ -64,7 +64,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     icon = Icon.DELETE
   }
   val Operator = actor(
-    menu = action,
+    menu = actionMenu,
     label = "search",
     help = " search",
   ) {
@@ -72,7 +72,7 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     icon = Icon.DETAIL_VIEW
   }
   val pivottable = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Pivot table",
     help = " Pivot table",
   ) {

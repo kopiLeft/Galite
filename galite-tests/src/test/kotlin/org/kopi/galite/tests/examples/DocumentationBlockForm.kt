@@ -37,14 +37,14 @@ import org.kopi.galite.visual.dsl.form.Key
 class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", locale = Locale.UK) {
 
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
 
   val list = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -53,7 +53,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val saveBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Save Block",
     help = " Save Block",
   ) {
@@ -62,7 +62,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   val deleteBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "delete Block",
     help = " deletes block",
   ) {
