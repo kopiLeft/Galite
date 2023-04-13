@@ -23,6 +23,7 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.type.format
+import org.kopi.galite.type.ushr
 import org.kopi.galite.visual.domain.TableInitializer
 
 /**
@@ -33,14 +34,14 @@ class VDecimalColumn(title: String,
                      table: TableInitializer?,
                      align: Int,
                      width: Int,
-                     scale: Int,
-                     sortAscending: Boolean)
-      : VListColumn(title,
-                    column,
-                    table,
-                    align,
-                    width,
-                    sortAscending) {
+                     private var scale: Int = 2,
+                     sortAscending: Boolean) : VListColumn(title,
+                                                           column,
+                                                           table,
+                                                           align,
+                                                           width,
+                                                           sortAscending) {
+
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
@@ -49,5 +50,5 @@ class VDecimalColumn(title: String,
   /**
    * Returns a string representation of value
    */
-  override fun formatObject(value: Any?): Any = (value as? BigDecimal)?.format() ?: VConstants.EMPTY_TEXT
+  override fun formatObject(value: Any?): Any = (value as? BigDecimal)?.ushr(scale)?.format() ?: VConstants.EMPTY_TEXT
 }

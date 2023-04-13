@@ -21,6 +21,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
+
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT

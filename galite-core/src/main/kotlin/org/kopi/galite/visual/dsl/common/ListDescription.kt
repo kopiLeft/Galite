@@ -19,22 +19,16 @@ package org.kopi.galite.visual.dsl.common
 
 import java.lang.RuntimeException
 
-import org.jetbrains.exposed.sql.AutoIncColumnType
-import org.jetbrains.exposed.sql.BinaryColumnType
-import org.jetbrains.exposed.sql.BooleanColumnType
-import org.jetbrains.exposed.sql.CharColumnType
-import org.jetbrains.exposed.sql.CharacterColumnType
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.IDateColumnType
-import org.jetbrains.exposed.sql.IntegerColumnType
-import org.jetbrains.exposed.sql.LongColumnType
-import org.jetbrains.exposed.sql.StringColumnType
-import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.*
+
+import org.kopi.galite.database.MonthColumnType
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.list.VBooleanColumn
 import org.kopi.galite.visual.list.VDateColumn
+import org.kopi.galite.visual.list.VDecimalColumn
 import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VMonthColumn
 import org.kopi.galite.visual.list.VStringColumn
 
 /**
@@ -67,8 +61,9 @@ class ListDescription(val title: String,
       is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.tableInitializer, domain.defaultAlignment, width, true)
       is StringColumnType -> VStringColumn(title, column, domain.tableInitializer, domain.defaultAlignment, width, true)
       is BooleanColumnType -> VBooleanColumn(title, column, domain.tableInitializer, true)
-      is IDateColumnType, ->
-        VDateColumn(title, column, domain.tableInitializer, true)
+      is IDateColumnType, -> VDateColumn(title, column, domain.tableInitializer, true)
+      is DecimalColumnType -> VDecimalColumn(title, column, domain.tableInitializer,domain.defaultAlignment, width,2, true)
+      is MonthColumnType -> VMonthColumn(title, column, domain.tableInitializer, true)
       else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
     }
   }
