@@ -3,9 +3,9 @@
 <insert>
     <type ident="Payment">
         <code>
-            <codedesc ident="id$0" label="cash" />
-            <codedesc ident="id$1" label="check" />
-            <codedesc ident="id$2" label="bank card" />
+            <codedesc ident="id$0" label="espèces" />
+            <codedesc ident="id$1" label="chèque" />
+            <codedesc ident="id$2" label="carte bancaire" />
         </code>
     </type>
 </insert>

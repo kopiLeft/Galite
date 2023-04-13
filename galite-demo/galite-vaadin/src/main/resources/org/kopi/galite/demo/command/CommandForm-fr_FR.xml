@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 
 <form title="Commandes">
     <actor ident="list" label="Liste" help = "Afficher la liste" />

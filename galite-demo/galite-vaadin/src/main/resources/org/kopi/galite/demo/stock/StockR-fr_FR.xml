@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<report title="Rapport des factures">
+<report title="Rapport de stock">
     <menu ident="Action" label="Action" />
     <menu ident="File" label="Fichier" />
 

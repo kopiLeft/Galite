@@ -3,10 +3,10 @@
 <insert>
     <type ident="CommandStatus">
         <code>
-            <codedesc ident="id$0" label="in preparation" />
-            <codedesc ident="id$1" label="available" />
-            <codedesc ident="id$2" label="delivered" />
-            <codedesc ident="id$3" label="canceled" />
+            <codedesc ident="id$0" label="en préparation" />
+            <codedesc ident="id$1" label="disponible" />
+            <codedesc ident="id$2" label="livrée" />
+            <codedesc ident="id$3" label="annulée" />
         </code>
     </type>
 </insert>
