@@ -19,7 +19,7 @@
     <module ident="5001" label="Stocks" help="Gestion du stock" />
     <!--Tax-->
     <module ident="6000" label="TAXES" help="Gestion des règles des taxes" />
-    <module ident="6001" label="Règles de taxes" help="Gestion des règles des taxes" />
+    <module ident="6001" label="Règles fiscales" help="Gestion des règles fiscales" />
     <!--Providers-->
     <module ident="7000" label="Fournisseurs" help="Gestion des fournisseurs" />
     <module ident="7001" label="Fournisseurs" help="Gestion des fournisseurs" />

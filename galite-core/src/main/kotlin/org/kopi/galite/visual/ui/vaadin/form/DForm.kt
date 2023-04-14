@@ -48,7 +48,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @return The current page index.
    */
   var currentPage = -1
-  val content: Form = Form(pageCount, model.pages)
+  val content: Form
   private val blockListener: BlockListener = BlockAccessHandler()
   private val blockViews: Array<DBlock?>
   private val blockRecordHandler: BlockRecordHandler = BlockRecordHandler()
@@ -56,6 +56,8 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   init {
     // content.locale = application.defaultLocale.toString() TODO
     model.addFormListener(this)
+    model.localize()
+    content = Form(pageCount, model.pages)
     content.addFormListener(this)
     getModel()!!.setDisplay(this)
     val blockCount = vForm!!.getBlockCount()

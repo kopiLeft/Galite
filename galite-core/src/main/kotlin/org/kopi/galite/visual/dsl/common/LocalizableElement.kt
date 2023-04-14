@@ -25,8 +25,7 @@ import java.io.File
  */
 abstract class LocalizableElement(ident: String? = null, open val source: String? = null) { // TODO: remove source getter/setter
 
-  open val ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
-          .substringAfterLast('$')
+  open val ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.").substringAfterLast('$')
 
   /**
    * Returns the qualified source file name where this element is defined.
