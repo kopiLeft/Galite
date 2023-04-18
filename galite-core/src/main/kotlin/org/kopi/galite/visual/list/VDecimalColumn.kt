@@ -34,8 +34,8 @@ class VDecimalColumn(title: String,
                      table: TableInitializer?,
                      align: Int,
                      width: Int,
-                     private var scale: Int = 2,
-                     sortAscending: Boolean) : VListColumn(title,
+                     scale: Int,
+                     sortAscending: Boolean): VListColumn(title,
                                                            column,
                                                            table,
                                                            align,
@@ -45,6 +45,8 @@ class VDecimalColumn(title: String,
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
+
+  private var scale = scale
   override fun getDataType(): KClass<*> = BigDecimal::class
 
   /**

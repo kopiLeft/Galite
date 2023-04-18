@@ -56,13 +56,15 @@ class ListDescription(val title: String,
     else -> domain.width!!
   }
 
+  var scale: Int = if(type is DecimalColumnType) type.scale else domain.scale
+
   fun buildModel(): VListColumn {
     return when(type) {
       is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.tableInitializer, domain.defaultAlignment, width, true)
       is StringColumnType -> VStringColumn(title, column, domain.tableInitializer, domain.defaultAlignment, width, true)
       is BooleanColumnType -> VBooleanColumn(title, column, domain.tableInitializer, true)
       is IDateColumnType, -> VDateColumn(title, column, domain.tableInitializer, true)
-      is DecimalColumnType -> VDecimalColumn(title, column, domain.tableInitializer,domain.defaultAlignment, width,2, true)
+      is DecimalColumnType -> VDecimalColumn(title, column, domain.tableInitializer,domain.defaultAlignment, width, scale, true)
       is MonthColumnType -> VMonthColumn(title, column, domain.tableInitializer, true)
       else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
     }

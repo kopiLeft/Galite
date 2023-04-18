@@ -87,6 +87,7 @@ open class Domain<T>(val width: Int? = null,
                      val height: Int? = null,
                      val visibleHeight: Int? = null) {
 
+  open var scale: Int = 6
   protected var isFraction = false
   protected var styled: Boolean = false
   protected var fixed: Fixed = Fixed.UNDEFINED
@@ -170,7 +171,7 @@ open class Domain<T>(val width: Int? = null,
         }
         BigDecimal::class -> VDecimalField(block.buffer,
                                            width!!,
-                                           height ?: 6,
+                                           scale,
                                            height == null,
                                            min as? BigDecimal,
                                            max as? BigDecimal)
