@@ -70,11 +70,6 @@ abstract class ListDomain<T>(width: Int? = null,
   val columns = mutableListOf<ListDescription>()
 
   /**
-   * overriding the scale of this field
-   */
-  override var scale: Int = 6
-
-  /**
    * the auto-complete type. [VList.AUTOCOMPLETE_NONE] is the default
    */
   private var autocompleteType = VList.AUTOCOMPLETE_NONE
@@ -95,8 +90,6 @@ abstract class ListDomain<T>(width: Int? = null,
    */
   infix fun String.keyOf(value: Column<*>): ListDescription {
     val listDescription = ListDescription(this, value, this@ListDomain)
-    scale = listDescription.scale
-
     columns.add(listDescription)
 
     return listDescription

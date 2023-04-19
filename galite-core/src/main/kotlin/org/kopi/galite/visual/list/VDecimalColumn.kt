@@ -45,7 +45,6 @@ class VDecimalColumn(title: String,
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-
   private var scale = scale
   override fun getDataType(): KClass<*> = BigDecimal::class
 
