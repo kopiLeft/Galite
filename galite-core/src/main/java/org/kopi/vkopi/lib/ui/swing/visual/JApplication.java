@@ -348,7 +348,9 @@ public abstract class JApplication implements Application {
                                   options.username,
                                   options.password,
                                   options.lookupUserId,
-                                  options.schema);
+                                  options.schema,
+                                  options.trace,
+                                  java.sql.Connection.TRANSACTION_SERIALIZABLE);
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();

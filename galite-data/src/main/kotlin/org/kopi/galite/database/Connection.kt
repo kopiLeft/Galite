@@ -61,8 +61,10 @@ class Connection {
    */
   private constructor(connection: java.sql.Connection,
                       lookupUserId: Boolean = true,
-                      schema: Schema? = null) {
-    val configuration = databaseConfig(schema)
+                      schema: Schema? = null,
+                      traceLevel: Int? = null,
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel)
 
     dbConnection = Database.connect({ connection }, databaseConfig = configuration)
     url = dbConnection.url
@@ -86,8 +88,10 @@ class Connection {
                       userName: String,
                       password: String,
                       lookupUserId: Boolean = true,
-                      schema: String? = null)
-          : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) })
+                      schema: String? = null,
+                      traceLevel: Int? = null,
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE)
+      : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) }, traceLevel, isolationLevel)
 
   /**
    * Creates a connection with Exposed and opens it.
@@ -103,8 +107,10 @@ class Connection {
                       userName: String,
                       password: String,
                       lookupUserId: Boolean = true,
-                      schema: Schema? = null) {
-    val configuration = databaseConfig(schema)
+                      schema: Schema? = null,
+                      traceLevel: Int? = null,
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel)
 
     dbConnection = Database.connect(url = url,
                                     driver = driver,
@@ -127,8 +133,10 @@ class Connection {
    */
   private constructor(dataSource: javax.sql.DataSource,
                       lookupUserId: Boolean = true,
-                      schema: Schema? = null) {
-    val configuration = databaseConfig(schema)
+                      schema: Schema? = null,
+                      traceLevel: Int? = null,
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel)
 
     dbConnection = Database.connect(dataSource, databaseConfig = configuration)
     url = dbConnection.url
@@ -186,8 +194,10 @@ class Connection {
      */
     fun createConnection(connection: java.sql.Connection,
                          lookupUserId: Boolean = true,
-                         schema: Schema? = null): Connection {
-      return Connection(connection, lookupUserId, schema)
+                         schema: Schema? = null,
+                         traceLevel: Int? = null,
+                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): Connection {
+      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel)
     }
 
     /**
@@ -204,8 +214,10 @@ class Connection {
                          userName: String,
                          password: String,
                          lookupUserId: Boolean = true,
-                         schema: String? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema)
+                         schema: String? = null,
+                         traceLevel: Int? = null,
+                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): Connection {
+      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, isolationLevel)
     }
 
 
@@ -223,8 +235,9 @@ class Connection {
                          userName: String,
                          password: String,
                          lookupUserId: Boolean = true,
-                         schema: Schema? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema)
+                         schema: Schema? = null,
+                         traceLevel: Int? = null): Connection {
+      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel)
     }
 
     /**
@@ -236,8 +249,10 @@ class Connection {
      */
     fun createConnection(dataSource: javax.sql.DataSource,
                          lookupUserId: Boolean = true,
-                         schema: Schema? = null): Connection {
-      return Connection(dataSource, lookupUserId, schema)
+                         schema: Schema? = null,
+                         traceLevel: Int? = null,
+                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): Connection {
+      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel)
     }
 
     // -1 not yet determined
@@ -248,15 +263,16 @@ class Connection {
   }
 }
 
-fun databaseConfig(schema: Schema?): DatabaseConfig = DatabaseConfig {
-  sqlLogger = Slf4jSqlInfoLogger
+fun databaseConfig(schema: Schema?, traceLevel: Int? = null, isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): DatabaseConfig = DatabaseConfig {
+  sqlLogger = Slf4jSqlInfoLogger(traceLevel)
   defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
+  defaultIsolationLevel = isolationLevel
 }
 
-object Slf4jSqlInfoLogger : SqlLogger {
+class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
   override fun log(context: StatementContext, transaction: Transaction) {
-    if (exposedLogger.isInfoEnabled) {
-      exposedLogger.info(context.expandArgs(TransactionManager.current()))
+    if (exposedLogger.isInfoEnabled && (traceLevel == null || traceLevel > 0)) {
+      exposedLogger.info("${System.currentTimeMillis()} ${context.expandArgs(TransactionManager.current())}")
     }
   }
 }

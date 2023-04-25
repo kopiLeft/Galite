@@ -98,9 +98,11 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * @param module The module to be added to favorites.
    */
   fun addShortcut(module: Module) {
-    if (!getModel().getShortcutsID().contains(module.id)) {
-      getModel().getShortcutsID().add(module.id)
-      getModel().addShortcutsInDatabase(module.id)
+    getModel()?.let {
+      if (!it.getShortcutsID().contains(module.id)) {
+        it.getShortcutsID().add(module.id)
+        it.addShortcutsInDatabase(module.id)
+      }
     }
   }
 
@@ -109,9 +111,11 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * @param module The module to be removed from favorites.
    */
   fun removeShortcut(module: Module) {
-    if (getModel().getShortcutsID().contains(module.id)) {
-      getModel().getShortcutsID().remove(module.id)
-      getModel().removeShortcutsFromDatabase(module.id)
+    getModel()?.let {
+      if (it.getShortcutsID().contains(module.id)) {
+        it.getShortcutsID().remove(module.id)
+        it.removeShortcutsFromDatabase(module.id)
+      }
     }
   }
 
@@ -133,15 +137,15 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    */
   override fun launchSelectedForm() {
     val module = getSelectedModule()
-    if (module != null) {
-      if (getModel().isSuperUser) {
+    if (module != null && getModel() != null) {
+      if (getModel()!!.isSuperUser) {
         if (tree.dataCommunicator.getParentItem(tree.selectedItem) != null) {
           module.accessibility = (module.accessibility + 1) % 3
           tree.getNodeComponent(module.id)?.setIcon(module.accessibility, module.objectName != null)
         }
       } else if (module.objectName != null) {
         setWaitInfo(VlibProperties.getString("menu_form_started"))
-        module.run(getModel().dBConnection!!)
+        module.run(getModel()!!.dBConnection!!)
         unsetWaitInfo()
       }
     }
@@ -149,27 +153,28 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
 
   override fun setMenu() {
     val module = getSelectedModule()
-    getModel().setActorEnabled(VMenuTree.CMD_QUIT, !getModel().isSuperUser)
-    getModel().setActorEnabled(VMenuTree.CMD_INFORMATION, true)
-    getModel().setActorEnabled(VMenuTree.CMD_HELP, true)
+
+    getModel()?.setActorEnabled(VMenuTree.CMD_QUIT, true)
+    getModel()?.setActorEnabled(VMenuTree.CMD_INFORMATION, true)
+    getModel()?.setActorEnabled(VMenuTree.CMD_HELP, true)
     if (module != null) {
-      getModel().setToolTip(module.help)
-      getModel().setActorEnabled(VMenuTree.CMD_SHOW, getModel().getShortcutsID().size > 0)
+      getModel()?.setToolTip(module.help)
+      getModel()?.setActorEnabled(VMenuTree.CMD_SHOW, getModel()!!.getShortcutsID().size > 0)
       if (module.objectName != null) {
-        getModel().setActorEnabled(VMenuTree.CMD_OPEN, true)
-        getModel().setActorEnabled(VMenuTree.CMD_ADD, !getModel().getShortcutsID().contains(module.id))
-        getModel().setActorEnabled(VMenuTree.CMD_REMOVE, getModel().getShortcutsID().contains(module.id))
-        getModel().setActorEnabled(VMenuTree.CMD_FOLD, false)
-        getModel().setActorEnabled(VMenuTree.CMD_UNFOLD, false)
+        getModel()?.setActorEnabled(VMenuTree.CMD_OPEN, true)
+        getModel()?.setActorEnabled(VMenuTree.CMD_ADD, !getModel()!!.getShortcutsID().contains(module.id))
+        getModel()?.setActorEnabled(VMenuTree.CMD_REMOVE, getModel()!!.getShortcutsID().contains(module.id))
+        getModel()?.setActorEnabled(VMenuTree.CMD_FOLD, false)
+        getModel()?.setActorEnabled(VMenuTree.CMD_UNFOLD, false)
       } else {
-        getModel().setActorEnabled(VMenuTree.CMD_OPEN, getModel().isSuperUser)
-        getModel().setActorEnabled(VMenuTree.CMD_ADD, false)
+        getModel()?.setActorEnabled(VMenuTree.CMD_OPEN, getModel()!!.isSuperUser)
+        getModel()?.setActorEnabled(VMenuTree.CMD_ADD, false)
         if (tree.isExpanded(tree.selectedItem)) {
-          getModel().setActorEnabled(VMenuTree.CMD_FOLD, true)
-          getModel().setActorEnabled(VMenuTree.CMD_UNFOLD, false)
+          getModel()?.setActorEnabled(VMenuTree.CMD_FOLD, true)
+          getModel()?.setActorEnabled(VMenuTree.CMD_UNFOLD, false)
         } else {
-          getModel().setActorEnabled(VMenuTree.CMD_FOLD, false)
-          getModel().setActorEnabled(VMenuTree.CMD_UNFOLD, true)
+          getModel()?.setActorEnabled(VMenuTree.CMD_FOLD, false)
+          getModel()?.setActorEnabled(VMenuTree.CMD_UNFOLD, true)
         }
       }
     }
@@ -185,7 +190,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * @return The selected module.
    */
   fun getSelectedModule(): Module? {
-    return if (getModel().isSuperUser) {
+    return if (getModel() != null && getModel()!!.isSuperUser) {
       tree.getModule(tree.selectedItem)
     } else {
       null
@@ -194,7 +199,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
 
   override fun run() {
     isVisible = true
-    if (getModel().isSuperUser) {
+    if (getModel() != null && getModel()!!.isSuperUser) {
       tree.focus()
     }
   }
@@ -203,7 +208,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * Calls the selected form in the tree menu.
    */
   private fun callSelectedForm() {
-    getModel().performAsyncAction(object : Action("menu_form_started2") {
+    getModel()?.performAsyncAction(object : Action("menu_form_started2") {
       override fun execute() {
         launchSelectedForm()
       }
@@ -216,8 +221,8 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * Allowed to call outside the event dispatch thread
    */
   override fun closeWindow() {
-    if (!getModel().isSuperUser) {
-      getModel().ask(Message.getMessage("confirm_quit"), false)
+    if (getModel() != null && !getModel()!!.isSuperUser) {
+      getModel()!!.ask(Message.getMessage("confirm_quit"), false)
     }
   }
 
@@ -280,11 +285,14 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
    * @return The module object.
    */
   private fun getModuleByID(id: Int): Module? {
-    for (i in getModel().moduleArray.indices) {
-      if (getModel().moduleArray[i].id == id) {
-        return getModel().moduleArray[i]
+    getModel()?.let {
+      for (i in it.moduleArray.indices) {
+        if (it.moduleArray[i].id == id) {
+          return it.moduleArray[i]
+        }
       }
     }
+
     return null
   }
 
@@ -307,7 +315,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
     }
   }
 
-  override fun getModel(): VMenuTree = super.getModel() as VMenuTree
+  override fun getModel(): VMenuTree? = super.getModel() as VMenuTree?
 
   // --------------------------------------------------
   // UMenuTree IMPLEMENTATION

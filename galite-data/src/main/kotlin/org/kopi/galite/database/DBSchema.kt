@@ -21,26 +21,37 @@ import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
 
+// ----------------------------------------------------------------------
+// VERSIONEN
+// ----------------------------------------------------------------------
+object Versions : Table("VERSIONEN") {
+  val packageName       = varchar("PAKET", 32)
+  val number            = integer("NUMMER")
+  val date              = timestamp("DATUM")
+
+  override val primaryKey = PrimaryKey(packageName, number)
+}
+
 object Modules : Table("MODULE") {
-  val id = integer("ID").autoIncrement()
-  val uc = integer("UC")
-  val ts = integer("TS")
-  val shortName = varchar("KURZNAME", 25).uniqueIndex()
-  val parent = integer("VATER")
-  val sourceName = varchar("QUELLE", 255)
-  val priority = integer("PRIORITAET")
-  val objectName = varchar("OBJEKT", 255).nullable()
-  val symbol = integer("SYMBOL").nullable()
+  val id                = integer("ID").autoIncrement("MODULEID")
+  val uc                = integer("UC")
+  val ts                = integer("TS")
+  val shortName         = varchar("KURZNAME", 25).uniqueIndex()
+  val parent            = integer("VATER")
+  val sourceName        = varchar("QUELLE", 255)
+  val priority          = integer("PRIORITAET")
+  val objectName        = varchar("OBJEKT", 255).nullable()
+  val symbol            = integer("SYMBOL").nullable()
 
   override val primaryKey = PrimaryKey(id, name = "PK_MODULE_ID")
 }
 
 object UserRights : Table("BENUTZERRECHTE") {
-  val id = integer("ID").autoIncrement()
-  val ts = integer("TS")
-  val user = integer("BENUTZER")
-  val module = integer("MODUL").references(Modules.id)
-  val access = bool("ZUGRIFF")
+  val id                = integer("ID").autoIncrement("BENUTZERRECHTEID")
+  val ts                = integer("TS")
+  val user              = integer("BENUTZER")
+  val module            = integer("MODUL")
+  val access            = bool("ZUGRIFF")
 
   init {
     uniqueIndex("BENUTZERRECHTE0", user, module)
@@ -50,11 +61,11 @@ object UserRights : Table("BENUTZERRECHTE") {
 }
 
 object GroupRights : Table("GRUPPENRECHTE") {
-  val id = integer("ID").autoIncrement()
-  val ts = integer("TS")
-  val group = integer("GRUPPE")
-  val module = integer("MODUL")
-  val access = bool("ZUGRIFF")
+  val id                = integer("ID").autoIncrement("GRUPPENRECHTEID")
+  val ts                = integer("TS")
+  val group             = integer("GRUPPE")
+  val module            = integer("MODUL")
+  val access            = bool("ZUGRIFF")
 
   init {
     uniqueIndex("GRUPPENRECHTE0", group, module)
@@ -64,10 +75,10 @@ object GroupRights : Table("GRUPPENRECHTE") {
 }
 
 object GroupParties : Table("GRUPPENZUGEHOERIGKEITEN") {
-  val id = integer("ID").autoIncrement()
-  val ts = integer("TS")
-  val user = integer("BENUTZER")
-  val group = integer("GRUPPE")
+  val id                = integer("ID").autoIncrement("GRUPPENZUGEHOERIGKEITENID")
+  val ts                = integer("TS")
+  val user              = integer("BENUTZER")
+  val group             = integer("GRUPPE")
 
   init {
     uniqueIndex("GRUPPENZUGEHOERIGKEITEN0", user, group)
@@ -77,69 +88,81 @@ object GroupParties : Table("GRUPPENZUGEHOERIGKEITEN") {
 }
 
 object Symbols : Table("SYMBOLE") {
-  val id = integer("ID").autoIncrement()
-  val ts = integer("TS")
-  val shortName = varchar("KURZNAME", 20).uniqueIndex("SYMBOLE0").nullable()
-  val description = varchar("BEZEICHNUNG", 50).uniqueIndex("SYMBOLE1").nullable()
-  val objectName = varchar("OBJEKT", 50)
+  val id                = integer("ID").autoIncrement("SYMBOLEID")
+  val ts                = integer("TS")
+  val shortName         = varchar("KURZNAME", 20).uniqueIndex("SYMBOLE0").nullable()
+  val description       = varchar("BEZEICHNUNG", 50).uniqueIndex("SYMBOLE1").nullable()
+  val objectName        = varchar("OBJEKT", 50)
 
   override val primaryKey = PrimaryKey(id, name = "PK_SYMBOLE_ID")
 }
 
 object Favorites : Table("FAVORITEN") {
-  val id = integer("ID").autoIncrement()
-  val ts = integer("TS")
-  val user = integer("BENUTZER")
-  val module = integer("MODUL")
+  val id                = integer("ID").autoIncrement("FAVORITENID")
+  val ts                = integer("TS")
+  val user              = integer("BENUTZER")
+  val module            = integer("MODUL")
 
   override val primaryKey = PrimaryKey(id, name = "PK_FAVORITEN_ID")
 }
 
 object Users : Table("KOPI_USERS") {
-  val id = integer("ID").autoIncrement()
-  val uc = integer("UC")
-  val ts = integer("TS")
-  val shortName = varchar("KURZNAME", 10).uniqueIndex("KOPI_USERS0")
-  val name = varchar("NAME", 50).uniqueIndex("KOPI_USERS1")
-  val character = varchar("ZEICHEN", 10).uniqueIndex("KOPI_USERS2")
-  val phone = varchar("TELEFON", 20).nullable()
-  val email = varchar("EMAIL", 40).nullable()
-  val active = bool("AKTIV")
-  val createdOn = timestamp("ERSTELLTAM").nullable() // TODO: should not be nullable
-  val createdBy = integer("ERSTELLTVON")
-  val changedOn = timestamp("GEAENDERTAM").nullable()
-  val changedBy = integer("GEAENDERTVON")
+  val id                = integer("ID").autoIncrement("KOPI_USERSID")
+  val uc                = integer("UC")
+  val ts                = integer("TS")
+  val shortName         = varchar("KURZNAME", 10).uniqueIndex("KOPI_USERS0")
+  val name              = varchar("NAME", 50).uniqueIndex("KOPI_USERS1")
+  val character         = varchar("ZEICHEN", 10).uniqueIndex("KOPI_USERS2")
+  val phone             = varchar("TELEFON", 20).nullable()
+  val email             = varchar("EMAIL", 40).nullable()
+  val active            = bool("AKTIV")
+  val createdOn         = timestamp("ERSTELLTAM")
+  val createdBy         = integer("ERSTELLTVON")
+  val changedOn         = timestamp("GEAENDERTAM")
+  val changedBy         = integer("GEAENDERTVON")
 
   override val primaryKey = PrimaryKey(id, name = "PK_KOPI_USERS_ID")
 }
 
 object Groups : Table("GRUPPEN") {
-  val id = integer("ID").autoIncrement()
-  val ts = integer("TS")
-  val shortName = varchar("KURZNAME", 10).uniqueIndex("GRUPPEN0")
-  val description = varchar("BEZEICHNUNG", 40).uniqueIndex("GRUPPEN1")
+  val id                = integer("ID").autoIncrement("GRUPPENID")
+  val ts                = integer("TS")
+  val shortName         = varchar("KURZNAME", 10).uniqueIndex("GRUPPEN0")
+  val description       = varchar("BEZEICHNUNG", 40).uniqueIndex("GRUPPEN1")
 
   override val primaryKey = PrimaryKey(id, name = "PK_GRUPPEN_ID")
 }
 
 object References : Table("REFERENZEN") {
-  val table = varchar("TABELLE", 255)
-  val column = varchar("SPALTE", 255)
-  val reference = varchar("REFERENZ", 255)
-  val action = char("AKTION", 1)
+  val table             = varchar("TABELLE", 255)
+  val column            = varchar("SPALTE", 255)
+  val reference         = varchar("REFERENZ", 255)
+  val action            = char("AKTION", 1)
 
   override val primaryKey = PrimaryKey(table, column)
 }
 
 object Dummy : Table("DUMMY") {
-  val table = char("dummy", 1)
+  val table             = char("dummy", 1)
 }
 
-val FAVORITENId = Sequence("FAVORITENId")
+object Dual : Table("DUAL") {
+  val table             = char("dummy", 1)
+}
+
+// Sequences
+val ModulesId                   = Sequence("MODULEID")
+val UserRightsId                = Sequence("BENUTZERRECHTEID")
+val GroupRightsId               = Sequence("GRUPPENRECHTEID")
+val GroupPartiesId              = Sequence("GRUPPENZUGEHOERIGKEITENID")
+val SymbolsId                   = Sequence("SYMBOLEID")
+val FavoritesId                 = Sequence("FAVORITENID")
+val UsersId                     = Sequence("KOPI_USERSID")
+val GroupsId                    = Sequence("GRUPPENID")
 
 val list_Of_Tables = listOf(
-  Modules, UserRights, GroupRights, GroupParties, Symbols,
+  Versions, Modules, UserRights, GroupRights, GroupParties, Symbols,
   Favorites, Users, Groups, References, Dummy
 )
 
-val sequencesList = listOf(FAVORITENId)
+val sequencesList = listOf(ModulesId, UserRightsId, GroupRightsId, GroupPartiesId, SymbolsId, FavoritesId, UsersId, GroupsId)
