@@ -231,6 +231,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean?) {
         if (yes == true) {
+////          // close DB connection
+//          println("============= BEFORE CLOSE CONNECTION ===================")
+//          dBConnection!!.dbConnection.connector().close()
+////          closeConnection()
+//          println("============= AFTER CLOSE CONNECTION ===================")
+
           // show welcome screen
           gotoWelcomeView()
         }
@@ -238,6 +244,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       }
     })
     showNotification(dialog)
+    println("########### on logout()  ########### ")
+    println("########### CHECKING CONNECTION OF DB WHEN LOG OUTTTTTTTTTTTTT  =======>  ${dBConnection!!.url}########### ")
+    println("############## DB CONNECTION VAR ####### =++++++++> $dBConnection")
+    println("############## DB CONNECTION PASS ####### =++++++++> ${dBConnection!!.password}")
+    println("############## DB CONNECTION URL  ####### =++++++++> ${dBConnection!!.url}")
+    println("/**************** MAIN VIEW **************>>>> $mainWindow")
+    println("/**************** Welcome VIEW  **************>>>> ${welcomeView}")
   }
 
   override fun startApplication() {
@@ -251,6 +264,21 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
+    println("########### in startApplication() ########### ")
+    println("########### CHECKING CONNECTION OF DB =======>  ${dBConnection!!.url}########### ")
+    println("############## DB CONNECTION VAR ####### =++++++++> $dBConnection")
+    println("############## DB CONNECTION PASS ####### =++++++++> ${dBConnection!!.password}")
+    println("############## DB CONNECTION URL  ####### =++++++++> ${dBConnection!!.url}")
+
+//    println("============== IN startApplication BEFORE LISTENER =====")
+//    mainWindow!!.addDetachListener { event ->
+//      println("============== in detach listener AKA detach event =======BEFORE CLOSE DB =====")
+//      //closing DB connection
+//      closeConnection()
+//      println("============== in detach listener AKA detach event =======AFTER CLOSE DB =====")
+//    }
+//    println("============== IN startApplication AFTER LISTENER =====")
+
   }
 
   fun remove(mainWindow: MainWindow?) {
@@ -271,8 +299,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun allowQuit(): Boolean =
-          getInitParameter("allowQuit") == null ||
-                  java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
+    getInitParameter("allowQuit") == null ||
+        java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
 
   override var applicationConfiguration: ApplicationConfiguration? = null
 
@@ -287,8 +315,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // reset application locale before.
     setLocalizationContext(Locale(event.locale.substring(0, 2), event.locale.substring(3, 5)))
     // now try to connect to database
+    println("==IN ONLONGIN METHOD ======== // now try to connect to database // ================")
     try {
+      println("==IN ONLONGIN METHOD ======== // IN TRY DEFORE CONNECTION TO DB  // ================")
+
       connectToDatabase(event.username, event.password)
+      println("==IN ONLONGIN METHOD ======== // IN TRY AFTER CONNECTION TO DB  // ================")
+      println("############## DB CONNECTION VAR ####### =++++++++> $dBConnection")
+      println("############## DB CONNECTION PASS ####### =++++++++> ${dBConnection!!.password}")
+      println("############## DB CONNECTION URL  ####### =++++++++> ${dBConnection!!.url}")
+
+
+
       startApplication() // create main window and menu
       if (welcomeView != null) {
         welcomeView = null
@@ -448,6 +486,21 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   }
 
+//  /**
+//   * Closes the database connection
+//   */
+//  fun closeConnection() {
+//    try {
+//      if (dBConnection != null) {
+//        dBConnection!!.close()
+//        dBConnection = null
+//      }
+//    } catch (e: SQLException) {
+//      // we don't care, we reinitialize the connection
+//      dBConnection = null
+//    }
+//  }
+
   /**
    * Returns the client side calculated font metrics for a given font.
    * @param fontFamily The font family.
@@ -530,7 +583,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override fun onLogout() {
     // close database connection and show welcome view
+    println("###################### IN ONLOGOUT() ##############")
+
     logout()
+    println("########### CHECKING CONNECTION OF DB WHEN LOG OUTTTTTTTTTTTTT  =======>  ${dBConnection!!.url} ########### ")
+    println("/**************** MAIN VIEW **************>>>> $mainWindow")
+    println("/**************** Welcome VIEW  **************>>>> ${welcomeView}")
+
   }
 
   override fun onUser() {
@@ -631,8 +690,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     /** Application instance */
     lateinit var instance: Application
     private val FONT_METRICS = arrayOf(
-            FontMetrics.DIGIT,
-            FontMetrics.LETTER
+      FontMetrics.DIGIT,
+      FontMetrics.LETTER
     )
 
     init {

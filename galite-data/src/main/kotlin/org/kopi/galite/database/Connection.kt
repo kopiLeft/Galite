@@ -18,20 +18,13 @@
 
 package org.kopi.galite.database
 
-import java.sql.SQLException
-
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.DatabaseConfig
-import org.jetbrains.exposed.sql.Schema
-import org.jetbrains.exposed.sql.SqlLogger
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.exposedLogger
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.StatementContext
 import org.jetbrains.exposed.sql.statements.expandArgs
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.util.base.InconsistencyException
+import java.sql.SQLException
 
 /**
  * A connection maintain information about current context, underlying
@@ -47,6 +40,7 @@ class Connection {
   val userName: String
   val password: String?
   var dbConnection: Database
+//  var conn: java.sql.Connection? = null
   var user: Int = 0
 
   // ----------------------------------------------------------------------
@@ -66,6 +60,7 @@ class Connection {
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
     val configuration = databaseConfig(schema, traceLevel, isolationLevel)
 
+//    conn = connection
     dbConnection = Database.connect({ connection }, databaseConfig = configuration)
     url = dbConnection.url
     userName = connection.metaData.userName
@@ -182,6 +177,20 @@ class Connection {
       }
     }
   }
+
+//  /**
+//   * Closes the connection to the database.
+//   */
+//  @Throws(SQLException::class)
+//  fun close() {
+//    conn = try {
+//      conn!!.rollback()
+//      conn!!.close()
+//      null
+//    } catch (e: SQLException) {
+//      throw e
+//    }
+//  }
 
   companion object {
 

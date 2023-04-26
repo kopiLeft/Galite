@@ -178,7 +178,13 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   override fun setCurrentJob(currentJob: Int) {}
   override fun updateWaitDialogMessage(message: String) {}
   override fun closeWindow() {
+    // close database connection and show welcome view
+    println("###################### closeWindow ##############")
+
     application.logout()
+    println("########### CHECKING CONNECTION OF DB WHEN LOG OUTTTTTTTTTTTTT  =======>  ${application.dBConnection!!.url} ########### ")
+    println("/**************** MAIN VIEW **************>>>> ${application.mainWindow}")
+    println("/**************** Welcome VIEW  **************>>>> ${application}")
   }
 
   override fun setWindowFocusEnabled(enabled: Boolean) {}

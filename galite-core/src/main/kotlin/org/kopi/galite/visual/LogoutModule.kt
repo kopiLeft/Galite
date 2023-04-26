@@ -30,5 +30,8 @@ class LogoutModule : Executable {
    */
   override fun doNotModal() {
     ApplicationContext.applicationContext.getApplication().logout()
+    // close database connection and show welcome view
+    println("###################### IN doNotModal() AFTER LOGOUT  ##############")
+    println("########### CHECKING CONNECTION OF DB WHEN LOG OUTTTTTTTTTTTTT  =======>  ${ApplicationContext.applicationContext.getApplication().dBConnection!!.url} ########### ")
   }
 }
