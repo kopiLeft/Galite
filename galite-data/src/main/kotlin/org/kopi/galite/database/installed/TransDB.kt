@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.database
+package org.kopi.galite.database.installed
 
 import java.time.Instant
 
@@ -23,6 +23,10 @@ import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
+
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.ModulesId
+import org.kopi.galite.database.Versions
 
 
 abstract class TransDB(val module: String, val version: Int) {
