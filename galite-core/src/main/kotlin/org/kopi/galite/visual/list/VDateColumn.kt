@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.kopi.galite.type.format
 import org.kopi.galite.visual.domain.TableInitializer
 
@@ -29,7 +29,7 @@ import org.kopi.galite.visual.domain.TableInitializer
  * Represents a list column.
  */
 class VDateColumn(title: String,
-                  column: Column<*>?,
+                  column: ExpressionWithColumnType<*>?,
                   table: TableInitializer?,
                   sortAscending: Boolean)
     : VListColumn(title,

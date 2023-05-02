@@ -17,6 +17,9 @@
 
 package org.kopi.galite.tests.form
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.rem
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.castTo
 import java.io.File
 import java.util.Locale
 
@@ -110,7 +113,7 @@ class UsersList: ListDomain<Int>(20) {
   val autoComplete = complete(AutoComplete.LEFT, 1)
 
   init {
-    "ID" keyOf Users.id
+    "ID" keyOf Users.id.castTo<String>(VarCharColumnType())
     "UC" keyOf Users.uc
     "TS" keyOf Users.ts
     "KURZNAME" keyOf Users.shortName
