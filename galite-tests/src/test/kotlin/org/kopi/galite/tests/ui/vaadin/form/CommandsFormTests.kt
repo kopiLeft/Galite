@@ -569,8 +569,8 @@ class CommandsFormTests : GaliteVUITestBase() {
     val list = _get<DListDialog>()._get<ListTable>()
 
     list.expect(arrayOf(
-      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
-      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2")
+      arrayOf("1", "training 1", "Java", "1.149,24000", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,60000", "yes", "informations training 2")
     ))
   }
 
