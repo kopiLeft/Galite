@@ -17,9 +17,6 @@
 
 package org.kopi.galite.tests.form
 
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.rem
-import org.jetbrains.exposed.sql.VarCharColumnType
-import org.jetbrains.exposed.sql.castTo
 import java.io.File
 import java.util.Locale
 
