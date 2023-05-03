@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.list
 
-import org.jetbrains.exposed.sql.*
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.*
 import org.kopi.galite.visual.domain.TableInitializer
 import org.kopi.galite.visual.l10n.ListLocalizer
 
@@ -76,65 +76,25 @@ abstract class VListColumn(
   fun ColumnSet.resolveColumn(column: ExpressionWithColumnType<*>): Expression<*> {
     return when (this) {
       is Table -> {
-        println("is Table")
-//        println()
-//        println("===============${column.toString()}")
-//      if (column is Column<*>)
         column
-//      else Alias.QueryAlias.get(column)
       }
       is QueryAlias -> {
-        println("is QueryAlias")
-//      println("========" +fields.size)
-//      println("========" +fields.toString())
-////      println("========" +fields.single { it.name == column.name })
-//println("****"+(if (column is Column<*>) get(column as Column<*>)
-//else fields.single{ (it as Column<*>).name == "ID"}))
-        //    println("===============${column.toString()}")
-
-        //  println ("=======111::"+get(column).toString())
-
-            if (column is Column<*>)  {
-//          println("================:::"+get(column as Expression<*>).toString())
-          get(column as Column<*>)
-           }
-//        else fields.single { (it as Column<*>).name.uppercase() == title.uppercase() }
-//        else columns.single { it.name.uppercase() == title.uppercase() }
-        //get(column)
-        //   else column
-
-//        println()
-//        println("==================="+(query.set.fields.filterIsInstance<Expression<*>>().toString()))
-//        println("==================="+(query.set.source.fields.toString()))
-//        println("==================="+(query.set.source.columns.toString()))
-//        println("==================="+(query.set.source.columns.filterIsInstance<Expression<*>>().toString()))
-//        println("==================="+column.toString())
-//        println("==================="+(query.set.fields.filterIsInstance<ExpressionWithColumnType<*>>().find { it == column }.toString()))
-//
-//        println()
-//        println("==================="+(query.set.fields.filterIsInstance<ExpressionAlias<*>>().find { it == column as ExpressionWithColumnType<*>}?.let {
-//          it.delegate.alias("$alias.${it.alias}").aliasOnlyExpression() ?: column as ExpressionWithColumnType<*>
-//        }.toString()))
-
-       else query.set.source.columns.find { it == column }?.clone() as Expression<*> //column
-
-
-//        query.set.fields.filterIsInstance<ExpressionAlias<*>>().find { it == column }?.let {
-//          it.delegate.alias("$alias.${it.alias}").aliasOnlyExpression() ?: column
-//        }
+        if (column is Column<*>) {
+          get(column)
+        }
+        else {
+          get(column as Expression<*>)
+        }
       }
-
-
-
-
       is Alias<*> -> {
-         println("is Alias")
-        get(column as Column<*>)
+        if (column is Column<*>) {
+          get(column)
+        }
+        else {
+          column
+        }
       }
       else -> fields.single { (it as Column<*>).name.uppercase() == title.uppercase() }
     }
   }
-
-  private fun <T : Any?> Column<T>.clone() = Column<T>(table.alias("syn__0__"), name, columnType)
-
 }

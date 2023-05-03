@@ -113,7 +113,7 @@ class UsersList: ListDomain<Int>(20) {
   val autoComplete = complete(AutoComplete.LEFT, 1)
 
   init {
-    "ID" keyOf Users.id.castTo<String>(VarCharColumnType())
+    "ID" keyOf Users.id
     "UC" keyOf Users.uc
     "TS" keyOf Users.ts
     "KURZNAME" keyOf Users.shortName
