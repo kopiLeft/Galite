@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+    <menu ident="File" label="ملف" />
+    <menu ident="Edit" label="تحرير" />
+    <menu ident="Action" label="العمل" />
+    <menu ident="Help" label="مساعدة" />
+    <actor ident="Quit" label="خروج" help="غلق النافذة" />
+    <actor ident="Break" label="إنقطاع" help="توقيف" />
+    <actor ident="Validate" label="تأكيد" help="اثبات صحه المعلومات المدخلة" />
+    <actor ident="Print" label="طباعة" help="طباعة التقرير" />
+    <actor ident="PrintLabel" label="طباعة العلامة" help="طباعة العلامة" />
+    <actor ident="Preview" label="اظهار" help="اظهار التقرير على النافذة" />
+    <actor ident="Mail" label="البريد الالكتروني" help="ارسال الوثيقة عن طريق البريد الالكتروني" />
+    <actor ident="Autofill" label="مقيس" help="اعطاء قائمة القيم الممكنة"/>
+    <actor ident="NewItem" label="جديد" help="اضافة عنصر جديد"/>
+    <actor ident="EditItem" label="تحرير" help="تحرير العنصر المختار" />
+    <actor ident="EditItem_S" label="تحرير" help="تحرير العنصر المختار" />
+    <actor ident="SearchOperator" label="بحث" help="تغيير مشغل البحث لهذا الحقل" />
+    <actor ident="ChangeBlock" label="كتلة" help="نقل مؤشر التحرير الى  كتلة أخرى "/>
+    <actor ident="CopyDocument" label="نسخة" help="نسخ الوثيقة الحالية"/>
+    <actor ident="InsertLine" label="+ السطر" help="ادخال سطر جديد في الكتلة"/>
+    <actor ident="DeleteLine" label="- السطر" help="شطب السطر الحالي"/>
+    <actor ident="All" label="الكل" help="اختيار الكل"/>
+    <actor ident="Nothing" label="لاشيء" help="اختيار لاشيء"/>
+    <actor ident="MenuQuery" label="القائمة" help="تقديم طلب معالجة : اعطاء النتيجة في شكل قائمة"/>
+    <actor ident="SerialQuery" label="طلب" help="تحميل  البيانات انطلاقا من  المواقع المسجلة"/>
+    <actor ident="InsertMode" label="ادخال" help="خلق تسجيل جديد"/>
+    <actor ident="Save" label="تسجيل" help="تسجيل الضوابط في القاعدة"/>
+    <actor ident="Delete" label="شطب" help="شطب هذا التسجيل."/>
+    <actor ident="CreateReport" label="تقرير فوري" help="خلق التقرير"/>
+    <actor ident="CreateDynamicReport" label="" help="خلق تقرير حيوي"/>
+    <actor ident="ShowHideFilter" label="عرض / إخفاء فلتر" help="عرض / إخفاء فلتر"/>
+    <actor ident="Help" label="مساعدة" help="اظهار مساعدة على الموقع المختار."/>
+</insert>

@@ -26,9 +26,8 @@ import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
 
 class FormWithCodeDomains: Form(title = "form to test domains",  locale = Locale.UK) {
-  val edit = menu("Edit")
   val autoFill = actor(
-    menu = edit,
+    menu = editMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL

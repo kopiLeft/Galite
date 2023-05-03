@@ -48,7 +48,7 @@ class ChartSample : Chart(
   }
 
   val city = dimension(STRING(10)) {
-    label = "dimension"
+    label = "city"
 
     format { value ->
       value?.toUpperCase()

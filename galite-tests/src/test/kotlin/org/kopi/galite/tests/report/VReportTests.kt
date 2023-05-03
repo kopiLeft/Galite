@@ -195,7 +195,7 @@ class VReportTests: JApplicationTestBase() {
   @Test
   fun reportSourceTitleTest() {
     withReport(SimpleReport()) {
-      assertEquals("org/kopi/galite/tests/report/SimpleReport", model.source)
+      assertEquals("org/kopi/galite/tests/report/VReportTests", model.source)
       assertEquals("SimpleReport", model.getTitle())
       assertEquals(null, model.smallIcon)
       assertEquals(PConfig(), model.printOptions)

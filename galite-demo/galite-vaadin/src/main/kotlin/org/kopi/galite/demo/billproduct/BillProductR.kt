@@ -33,11 +33,7 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
  */
 class BillProductR : ReportDefault("Bill Product Report", Locale.UK) {
 
-  val greeting = actor(
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
+  val greeting = actor(menu = action, label = "Greeting", help = "Click me to show greeting") {
     key = Key.F1     // key is optional here
     icon = Icon.ASK  // icon is optional here
   }

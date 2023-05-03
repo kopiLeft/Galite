@@ -18,10 +18,16 @@
 package org.kopi.galite.visual.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
-import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.cross.VReportSelectionForm
+import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.report.VNoRowException
+import org.kopi.galite.visual.report.VReport
 
 abstract class VDictionaryForm protected constructor(source: String? = null) : VForm(source), VDictionary {
 
@@ -198,6 +204,41 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
         throw VExecFailedException()
       }
       throw VRuntimeException(e)
+    }
+  }
+
+  /**
+   * Implements interface for COMMAND CreateReport
+   */
+  fun createReport(b: VBlock, reportBuilder: () -> VReport) {
+    b.validate()
+    try {
+      setWaitInfo(Message.getMessage("report_generation"))
+      val report = reportBuilder()
+      report.doNotModal()
+      unsetWaitInfo()
+    } catch (e: VNoRowException) {
+      unsetWaitInfo()
+      error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  companion object {
+    /**
+     * static call to createReport.
+     */
+    fun createReport(report: VReport, b: VBlock) {
+      b.validate()
+      try {
+        report.setWaitInfo(Message.getMessage("report_generation"))
+        report.doNotModal()
+        report.unsetWaitInfo()
+      } catch (e: VNoRowException) {
+        report.unsetWaitInfo()
+        report.error(MessageCode.getMessage("VIS-00057"))
+      }
+      b.setRecordChanged(0, false)
     }
   }
 }

@@ -82,7 +82,7 @@ class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock(block.
   }
 
   fun buildFullCalendarForm() {
-    fullCalendarForm = object : VFullCalendarForm() {
+    fullCalendarForm = object : VFullCalendarForm(source) {
 
       init {
         init()

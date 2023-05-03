@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Rapport des factures">
+  <menu ident="Action" label="Action" />
+  <menu ident="File" label="Fichier" />
+
+  <actor ident="quit" label="Quitter" help="Ferme le rapport." />
+  <actor ident="csv" label="CSV" help="Format CSV." />
+  <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+  <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+  <actor ident="pdf" label="PDF" help="Format PDF." />
+
+  <field ident="ANM_0" label="Numéro" help="Le numéro de facture" />
+  <field ident="ANM_1" label="Adresse" help="L'adresse de facturation" />
+  <field ident="ANM_2" label="Date" help="La date de facturation" />
+  <field ident="ANM_3" label="montant à payer" help="Le montant TTC facturé" />
+  <field ident="ANM_4" label="Référence commande" help="La référence de commande" />
+</report>

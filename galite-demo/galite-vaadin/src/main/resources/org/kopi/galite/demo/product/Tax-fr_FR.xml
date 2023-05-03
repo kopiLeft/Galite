@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<insert>
+    <type ident="Tax">
+        <code>
+            <codedesc ident="id$0" label="0%" />
+            <codedesc ident="id$1" label="19%" />
+            <codedesc ident="id$2" label="9%" />
+            <codedesc ident="id$3" label="13%" />
+            <codedesc ident="id$4" label="22%" />
+            <codedesc ident="id$5" label="11%" />
+        </code>
+    </type>
+</insert>

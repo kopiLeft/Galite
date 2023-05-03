@@ -136,13 +136,7 @@ object Upper : Domain<String>(5) {
 
 class FormWithDomainConstraint: Form(title = "") {
   val action = menu("Action")
-
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = action, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
 
   val simpleBlock = insertBlock(SimpleBlock())
   val multiBlock = insertBlock(MultiBlock())

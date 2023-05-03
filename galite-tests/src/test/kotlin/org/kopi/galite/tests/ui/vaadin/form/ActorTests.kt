@@ -64,12 +64,8 @@ class ActorTests : GaliteVUITestBase() {
 
 class ActorsForm : Form(title = "Commands Form", locale = Locale.UK) {
   val action = menu("Action")
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+
+  val autoFill = actor(menu = action, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
   val reset = actor(ResetBlock())
 
   init {

@@ -73,31 +73,15 @@ object Adress : Table() {
 }
 
 object FormWithNullableColumn : DictionaryForm(title = "form for test nullable ", locale = Locale.UK) {
-  val action = menu("Action")
 
-  val edit = menu("Edit")
-
-  val list = actor(
-          menu = action,
-          label = "list",
-          help = "Display List",
-  ) {
+  val list = actor(menu = actionMenu, label = "list", help = "Display List", ) {
     key = Key.F1   // key is optional here
     icon = Icon.LIST
   }
 
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = editMenu, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
 
-  val resetBlock = actor(
-          menu = edit,
-          label = "break",
-          help = "Reset Block",
-  ) {
+  val resetBlock = actor(menu = editMenu, label = "break", help = "Reset Block", ) {
     key = Key.F3
     icon = Icon.BREAK
   }

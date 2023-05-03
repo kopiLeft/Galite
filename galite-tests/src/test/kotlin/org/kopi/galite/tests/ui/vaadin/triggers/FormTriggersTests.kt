@@ -80,7 +80,7 @@ class FormTriggersTests : GaliteVUITestBase() {
 
     TestTriggersForm.block._enter()
 
-    TestTriggersForm.resetForm.triggerCommand()
+    TestTriggersForm._break.triggerCommand()
     expectConfirmNotification(true)
 
     ReportTriggersTest.model.doNotModal()
@@ -250,28 +250,9 @@ class FormTriggersTests : GaliteVUITestBase() {
 }
 
 object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", locale = Locale.UK) {
-  val action = menu("Action")
-
-  val quit = actor(
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
-    key = Key.ESCAPE
-    icon = Icon.QUIT
-  }
-
-  val resetForm = actor(
-    menu = action,
-    label = "reset Form",
-    help = "Reset Form",
-  ) {
-    key = Key.F7
-    icon = Icon.BREAK
-  }
 
   val listActor = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -280,7 +261,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
   }
 
   val deleteBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "delete Block",
     help = " deletes block",
   ) {
@@ -288,17 +269,8 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.DELETE
   }
 
-  val insertMode = actor(
-    menu = action,
-    label = "Insert",
-    help = " Insert",
-  ) {
-    key = Key.F7
-    icon = Icon.INSERT
-  }
-
   val saveBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Save Block",
     help = " Save Block",
   ) {
@@ -306,7 +278,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.SAVE
   }
   val resetBlock = actor(
-    menu = action,
+    menu = actionMenu,
     label = "break",
     help = "Reset Block",
   ) {
@@ -314,17 +286,8 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     icon = Icon.BREAK
   }
 
-  val report = actor(
-    menu = action,
-    label = "CreateReport",
-    help = "Create report",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
-
   val graph = actor (
-    menu =   action,
+    menu =   actionMenu,
     label =  "Graph",
     help =   "show graph values",
   ) {
@@ -336,7 +299,7 @@ object TestTriggersForm : ReportSelectionForm(title = "Form to test triggers", l
     quitForm()
   }
 
-  val resetFormCmd = command(item = resetForm) {
+  val resetFormCmd = command(item = _break) {
     resetForm()
   }
 

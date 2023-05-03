@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Produits">
+    <menu ident="Action" label="Action" />
+
+    <actor ident="quit" label="Quitter" help="Ferme le rapport." />
+    <actor ident="csv" label="CSV" help="Format CSV." />
+    <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+    <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+    <actor ident="pdf" label="PDF" help="Format PDF." />
+
+    <field ident="ANM_0" label="Catégorie" help="La catégorie du produit" />
+    <field ident="ANM_1" label="Département" help="Le département du produit" />
+    <field ident="ANM_2" label="Description" help="La description du produit" />
+    <field ident="ANM_3" label="Fournisseur" help="Le fournisseur du produit" />
+    <field ident="ANM_4" label="Taxe" help="La taxe appliquée au produit" />
+    <field ident="ANM_5" label="Prix" help="Le prix unitaire hors TVA du produit" />
+</report>

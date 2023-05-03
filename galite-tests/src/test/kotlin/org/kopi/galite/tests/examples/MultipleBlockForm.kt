@@ -33,78 +33,40 @@ import org.kopi.galite.visual.dsl.form.Key
 class MultipleBlockForm : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val page1 = page("page1")
   val page2 = page("page2")
+
   val action = menu("Action")
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
-  val list = actor(
-    menu = action,
-    label = "list",
-    help = "Display List",
-  ) {
+
+  val autoFill = actor(menu = action, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
+  val list = actor(menu = action, label = "list", help = "Display List") {
     key = Key.F2
     icon = Icon.LIST
   }
-  val query = actor(
-    menu = action,
-    label = "query",
-    help = "query",
-  ) {
+  val query = actor(menu = action, label = "query", help = "query") {
     key = Key.F3
     icon = Icon.LIST
   }
-  val load = actor(
-    menu = action,
-    label = "load",
-    help = "load",
-  ) {
+  val load = actor(menu = action, label = "load", help = "load") {
     key = Key.F8
     icon = Icon.LIST
   }
-  val changeBlock = actor(
-    menu = action,
-    label = "change Block",
-    help = "change Block",
-  ) {
+  override val changeBlock = actor(menu = action, label = "change Block", help = "change Block", ) {
     key = Key.F4
     icon = Icon.REFRESH
   }
-  val resetBlock = actor(
-    menu = action,
-    label = "break",
-    help = "Reset Block",
-  ) {
+  val resetBlock = actor(menu = action, label = "break", help = "Reset Block") {
     key = Key.F5
     icon = Icon.BREAK
   }
-  val showHideFilter = actor(
-    menu = action,
-    label = "Show/Hide Filter",
-    help = " Show Hide Filter",
-  ) {
-    key = Key.F6
-    icon = Icon.SEARCH_OP
-  }
-  val add = actor(
-    menu = action,
-    label = "add",
-    help = " add",
-  ) {
+  val add = actor(menu = action, label = "add", help = " add") {
     key = Key.F10
     icon = Icon.ADD
   }
-  val resetForm = actor(
-    menu = action,
-    label = "resetForm",
-    help = "Reset Form",
-  ) {
+  override val _break = actor(menu = action, label = "resetForm", help = "Reset Form", ) {
     key = Key.F7
     icon = Icon.BREAK
   }
-  val resetFormCmd = command(item = resetForm) {
+
+  val resetFormCmd = command(item = _break) {
     resetForm()
   }
 

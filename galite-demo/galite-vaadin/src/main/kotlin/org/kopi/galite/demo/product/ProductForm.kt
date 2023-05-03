@@ -18,7 +18,6 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
@@ -29,8 +28,9 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 
-class ProductForm : FormDefault(title = "Products", locale = Locale.UK) {
+class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
   val page = page("Product")
 
   init {
@@ -78,31 +78,31 @@ class ProductForm : FormDefault(title = "Products", locale = Locale.UK) {
 
       command(item = report) {
         createReport {
-          ProductReport()
+          ProductR()
         }
       }
     }
   }
-}
 
-object Category : CodeDomain<Int>() {
-  init {
-    "shoes" keyOf 1
-    "shirts" keyOf 2
-    "glasses" keyOf 3
-    "pullovers" keyOf 4
-    "jeans" keyOf 5
+  object Category : CodeDomain<Int>() {
+    init {
+      "shoes" keyOf 1
+      "shirts" keyOf 2
+      "glasses" keyOf 3
+      "pullovers" keyOf 4
+      "jeans" keyOf 5
+    }
   }
-}
 
-object Tax : CodeDomain<String>() {
-  init {
-    "0%"  keyOf "tax 0"
-    "19%" keyOf "tax 1"
-    "9%" keyOf "tax 2"
-    "13%" keyOf "tax 3"
-    "22%" keyOf "tax 4"
-    "11%" keyOf "tax 5"
+  object Tax : CodeDomain<String>() {
+    init {
+      "0%"  keyOf "tax 0"
+      "19%" keyOf "tax 1"
+      "9%" keyOf "tax 2"
+      "13%" keyOf "tax 3"
+      "22%" keyOf "tax 4"
+      "11%" keyOf "tax 5"
+    }
   }
 }
 

@@ -32,22 +32,12 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class TestFieldsForm : DictionaryForm(title = "Fields Form", locale = Locale.UK) {
 
-  val action = menu("Action")
   val autoFill = actor(
-    menu = action,
+    menu = actionMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
   )
-
-  val serialQuery = actor(
-    menu = action,
-    label = "serialQuery",
-    help = "serial query",
-  ) {
-    key = Key.F6
-    icon = Icon.SERIAL_QUERY
-  }
 
   val blockWithDifferentTypes = insertBlock(BlockWithDifferentTypes())
   val blockWithAllFieldVisibilityTypes = insertBlock(BlockWithAllFieldVisibilityTypes())

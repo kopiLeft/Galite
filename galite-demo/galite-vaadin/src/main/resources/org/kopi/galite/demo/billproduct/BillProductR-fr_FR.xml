@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Rapport des produits facturés">
+  <actor ident="actor0" label="Salut" help="appuyez pour montrer les salutations." />
+
+  <field ident="ANM_0" label="Quantité" help="La quantité du produite" />
+  <field ident="ANM_1" label="Montant HT" help="Le montant hors taxes" />
+  <field ident="ANM_2" label="Montant TTC" help="Le montant toutes taxes comprises" />
+</report>

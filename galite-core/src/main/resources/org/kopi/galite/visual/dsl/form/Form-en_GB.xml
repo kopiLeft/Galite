@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+    <menu ident="File" label="File" />
+    <menu ident="Edit" label="Edit" />
+    <menu ident="Action" label="Action" />
+    <menu ident="Help" label="Help" />
+    <actor ident="Quit" label="Quit" help="Close this form." />
+    <actor ident="Break" label="Break" help="Reset current changes." />
+    <actor ident="Validate" label="Validate" help="Validate form informations." />
+    <actor ident="Print" label="Print" help="Print report." />
+    <actor ident="PrintLabel" label="Label" help="Print labels." />
+    <actor ident="Preview" label="Preview" help="Show report preview." />
+    <actor ident="Mail" label="e-mail" help="Send document via e-mail." />
+    <actor ident="Autofill" label="Standard" help="List possible values." />
+    <actor ident="NewItem" label="New" help="Add new element." />
+    <actor ident="EditItem" label="Edit" help="Edit selected element." />
+    <actor ident="EditItem_S" label="Edit" help="Edit selected element." />
+    <actor ident="SearchOperator" label="Condition" help="Change search operator." />
+    <actor ident="ChangeBlock" label="Block" help="Moves cursor to another block." />
+    <actor ident="CopyDocument" label="Copy" help="Provide a copy of the currently called document." />
+    <actor ident="InsertLine" label="Line +" help="Insert a new line in block." />
+    <actor ident="DeleteLine" label="Line -" help="Delete selected line." />
+    <actor ident="All" label="All" help="Select all."/>
+    <actor ident="Nothing" label="Nothing" help="Select nothing."/>
+    <actor ident="MenuQuery" label="List" help="Query: display results in a list." />
+    <actor ident="SerialQuery" label="Query" help="Load data considering the filled fields." />
+    <actor ident="InsertMode" label="New" help="Create a new record." />
+    <actor ident="Save" label="Save" help="Save changes to database." />
+    <actor ident="Delete" label="Delete" help="Delete selected record." />
+    <actor ident="CreateReport" label="Report" help="Create report." />
+    <actor ident="CreateDynamicReport" label="Dyn. Report" help="Create dynamic report." />
+    <actor ident="ShowHideFilter" label="Show/Hide filter" help="Show or hide block filters." />
+    <actor ident="Help" label="Help" help="Show help for a selected field." />
+</insert>

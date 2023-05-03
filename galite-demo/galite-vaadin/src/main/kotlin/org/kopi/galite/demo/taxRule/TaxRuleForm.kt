@@ -18,7 +18,6 @@ package org.kopi.galite.demo.taxRule
 
 import java.util.Locale
 
-import org.kopi.galite.demo.common.FormDefault
 import org.kopi.galite.demo.database.TaxRule
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.BOOL
@@ -29,10 +28,11 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.Commands
 
-class TaxRuleForm : FormDefault(title = "TaxRules", locale = Locale.UK) {
+class TaxRuleForm : DictionaryForm(title = "TaxRules", locale = Locale.UK) {
   val page = page("TaxRule")
 
   init {
@@ -40,11 +40,7 @@ class TaxRuleForm : FormDefault(title = "TaxRules", locale = Locale.UK) {
     insertCommands()
   }
 
-  val list = actor(
-          menu = action,
-          label = "List",
-          help = "Display List",
-  ) {
+  val list = actor(menu = actionMenu, label = "List", help = "Display List", ident = "list") {
     key = Key.F1
     icon = Icon.LIST
   }

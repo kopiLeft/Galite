@@ -35,15 +35,13 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
   val reset = menu("reset")
-  val edit = menu("Edit")
 
   val testPage1 = page("test page1")
   val testPage2 = page("test page2")
 
   val list = actor(
-    menu = action,
+    menu = actionMenu,
     label = "list",
     help = "Display List",
   ) {
@@ -52,7 +50,7 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
   }
 
   val autoFill = actor(
-    menu = edit,
+    menu = editMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL
@@ -67,26 +65,8 @@ class FormWithList : DictionaryForm(title = "form for test", locale = Locale.UK)
     icon = Icon.BREAK
   }
 
-  val resetForm = actor(
-    menu = reset,
-    label = "resetForm",
-    help = "Reset Form",
-  ) {
-    key = Key.F7
-    icon = Icon.BREAK
-  }
-
-  val resetFormCmd = command(item = resetForm) {
+  val resetFormCmd = command(item = _break) {
     resetForm()
-  }
-
-  val save = actor(
-    menu = action,
-    label = "save",
-    help = "save",
-  ) {
-    key = Key.F2
-    icon = Icon.SAVE
   }
 
   val block3 = testPage1.insertBlock(UsersBlock()) {

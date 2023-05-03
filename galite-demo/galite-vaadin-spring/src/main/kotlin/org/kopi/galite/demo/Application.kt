@@ -50,7 +50,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
   override val title get() = "Galite demo"
   override val supportedLocales
     get() =
-      arrayOf(Locale.UK)
+      arrayOf(Locale.UK, Locale.FRANCE)
 
   override fun login(
           database: String,

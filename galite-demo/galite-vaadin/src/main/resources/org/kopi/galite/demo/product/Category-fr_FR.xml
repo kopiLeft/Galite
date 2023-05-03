@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<insert>
+    <type ident="Category">
+        <code>
+            <codedesc ident="id$0" label="chaussures" />
+            <codedesc ident="id$1" label="chemises" />
+            <codedesc ident="id$2" label="lunettes" />
+            <codedesc ident="id$3" label="pulls" />
+            <codedesc ident="id$4" label="jeans" />
+        </code>
+    </type>
+</insert>

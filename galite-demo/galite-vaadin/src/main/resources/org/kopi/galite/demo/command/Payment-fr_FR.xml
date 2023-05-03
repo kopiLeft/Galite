@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<insert>
+    <type ident="Payment">
+        <code>
+            <codedesc ident="id$0" label="espèces" />
+            <codedesc ident="id$1" label="chèque" />
+            <codedesc ident="id$2" label="carte bancaire" />
+        </code>
+    </type>
+</insert>

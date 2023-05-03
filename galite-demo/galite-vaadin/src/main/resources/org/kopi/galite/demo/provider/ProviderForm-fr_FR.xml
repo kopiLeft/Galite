@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Fournisseurs">
+    <page ident="Id$0" title="Fournisseur"/>
+    <block name="BlockProvider" title="Fournisseur">
+        <field ident="FLD_1" label="Nom" help="Le nom du fournisseur" />
+        <field ident="FLD_2" label="Téléphone" help="Le numéro de téléphone du fournisseur" />
+        <field ident="FLD_3" label="Description" help="La description du fournisseur" />
+        <field ident="FLD_4" label="Adresse" help="L'adresse du fournisseur" />
+        <field ident="FLD_5" label="Coda postal" help="Le code postal du fournisseur" />
+        <field ident="FLD_6" label="Logo" help="Le logo du fournisseur" />
+    </block>
+</form>

@@ -54,20 +54,8 @@ object Product : Table() {
 
 class FormWithSpecialTypes : Form(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
-  val edit = menu("Edit")
-
-  val save = actor(
-          menu = action,
-          label = "save",
-          help = "save",
-  ) {
-    key = Key.F2
-    icon = Icon.SAVE
-  }
-
   val autofillitem = actor(
-    menu = edit,
+    menu = editMenu,
     label = "Autofill",
     help = "Autofill",
     command = PredefinedCommand.AUTOFILL

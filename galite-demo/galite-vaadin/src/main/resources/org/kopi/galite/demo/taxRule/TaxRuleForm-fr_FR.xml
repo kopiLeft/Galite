@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Règles fiscales">
+    <actor ident="list" label="Liste" help="Afficher la liste" />
+    <page ident="Id$0" title="Règle fiscale"/>
+    <block name="TaxRuleBlock" title="Règle fiscale">
+        <field ident="FLD_1" label="Nom" help="Le nom fiscal" />
+        <field ident="FLD_2" label="Taux" help="Le taux de la taxe en %" />
+        <field ident="FLD_3" label="informations" help="Informations de la taxe" />
+        <field ident="FLD_4" label="%" help=" taux de la taxe en %" />
+    </block>
+</form>

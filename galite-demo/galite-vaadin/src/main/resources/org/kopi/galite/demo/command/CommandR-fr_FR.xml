@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Rapport des commandes">
+    <menu ident="Action" label="Action" />
+
+    <actor ident="csv" label="CSV" help="Format CSV." />
+    <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+    <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+    <actor ident="pdf" label="PDF" help="Format PDF." />
+
+    <field ident="ANM_0" label="Numéro commande" help="Le numéro de la commande" />
+    <field ident="ANM_1" label="Client" help="L'identifiant du client" />
+    <field ident="ANM_2" label="Date" help="La date de la commande" />
+    <field ident="ANM_3" label="Méthode de paiement" help="La méthode de paiement" />
+    <field ident="ANM_4" label="Statut" help="Le statut de la commande" />
+</report>

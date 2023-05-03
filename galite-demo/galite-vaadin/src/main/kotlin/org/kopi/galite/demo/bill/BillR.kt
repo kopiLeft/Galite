@@ -37,43 +37,35 @@ import org.kopi.galite.visual.report.VReport
 class BillR : Report("Bills_Report", locale = Locale.UK) {
 
   val action = menu("Action")
+  val file = menu("File")
 
-  val csv = actor(
-          menu = action,
-          label = "CSV",
-          help = "CSV Format",
-  ) {
+  val quit = actor(menu = file, label = "Quit", help = "Close Report.", ident = "quit") {
+    key = Key.ESCAPE
+    icon = Icon.QUIT
+  }
+  val csv = actor(menu = action, label = "CSV", help = "CSV Format", ident = "csv") {
     key = Key.F8          // key is optional here
     icon = Icon.EXPORT_CSV  // icon is optional here
   }
 
-  val xls = actor(
-          menu = action,
-          label = "XLS",
-          help = "Excel (XLS) Format",
-  ) {
+  val xls = actor(menu = action, label = "XLS", help = "Excel (XLS) Format", ident = "xls") {
     key = Key.SHIFT_F8          // key is optional here
     icon = Icon.EXPORT_XLSX  // icon is optional here
   }
 
-  val xlsx = actor(
-          menu = action,
-          label = "XLSX",
-          help = "Excel (XLSX) Format",
-  ) {
+  val xlsx = actor(menu = action, label = "XLSX", help = "Excel (XLSX) Format", ident = "xlsx") {
     key = Key.SHIFT_F8          // key is optional here
     icon = Icon.EXPORT  // icon is optional here
   }
 
-  val pdf = actor(
-          menu = action,
-          label = "PDF",
-          help = "PDF Format",
-  ) {
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
     key = Key.F9          // key is optional here
     icon = Icon.EXPORT_PDF  // icon is optional here
   }
 
+  val cmdQuit = command(item = quit) {
+    model.close()
+  }
   val cmdCSV = command(item = csv) {
     model.export(VReport.TYP_CSV)
   }

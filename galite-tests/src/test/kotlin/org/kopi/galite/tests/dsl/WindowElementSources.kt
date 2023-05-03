@@ -61,11 +61,7 @@ class ProductBlock: Block("Product Block", 1, 1)
 
 class Product: Form(title = "Product") {
   val action = menu("Action")
-  val graph = actor(
-    menu = action,
-    label = "Graph for test",
-    help = "show graph values",
-  ) {
+  val graph = actor(menu = action, label = "Graph for test", help = "show graph values") {
     key = Key.F9
     icon = Icon.COLUMN_CHART
   }
@@ -82,11 +78,7 @@ class ProductInnerBlock: Form(title = "Product") {
 
 class Action : Menu("Action")
 
-class Graph: Actor(
-  menu = Action(),
-  label = "Graph for test",
-  help = "show graph values",
-) {
+class Graph: Actor(menu = Action(), label = "Graph for test", help = "show graph values") {
   init {
     key = Key.F9
     icon = Icon.COLUMN_CHART

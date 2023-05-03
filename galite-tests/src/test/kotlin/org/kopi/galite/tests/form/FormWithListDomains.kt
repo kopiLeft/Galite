@@ -39,28 +39,10 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.FileHandler
 
 class FormWithListDomains: Form(title = "form to test list domains", locale = Locale.UK) {
-  val edit = menu("Edit")
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
-  val newItem = actor(
-    menu = edit,
-    label = "NewItem",
-    help = "NewItem",
-    command = PredefinedCommand.NEW_ITEM
-  )
-  val editItem = actor(
-    menu = edit,
-    label = "EditItem",
-    help = "EditItem",
-    command = PredefinedCommand.EDIT_ITEM
-  )
+  val autoFill = actor(menu = editMenu, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
+  override val newItem = actor(menu = editMenu, label = "NewItem", help = "NewItem", command = PredefinedCommand.NEW_ITEM)
 
   val userListBlock = insertBlock(UsersListBlock()) {
-
     val file = visit(domain = STRING(25), position = at(3, 1)) {
       label = "test"
       help = "The test"
@@ -140,32 +122,11 @@ class Module: ListDomain<String>(20) {
 }
 class SomeDictionnaryForm : DictionaryForm(title = "form for test", locale = Locale.UK) {
 
-  val action = menu("Action")
-
-  val edit = menu("Edit")
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
-
-  val quit = actor(
-    menu = action,
-    label = "quit",
-    help = "Quit",
-  ) {
-    key = Key.ESCAPE
-    icon = Icon.QUIT
-  }
+  val autoFill = actor(menu = editMenu, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
   val quitCmd = command(item = quit) {
     quitForm()
   }
-  val list = actor(
-    menu = action,
-    label = "list",
-    help = "Display List",
-  ) {
+  val list = actor(menu = actionMenu, label = "list", help = "Display List", ) {
     key = Key.F1
     icon = Icon.LIST
   }

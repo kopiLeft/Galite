@@ -18,10 +18,11 @@ package org.kopi.galite.visual.dsl.form
 
 import java.util.Locale
 
-import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.form.VDictionaryForm
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.cross.VDynamicReport
+import org.kopi.galite.visual.dsl.report.Report
+import org.kopi.galite.visual.form.VDictionaryForm
 
 /**
  * Represents a dictionary form.
@@ -30,7 +31,6 @@ import org.kopi.galite.visual.VException
  * @param locale the window locale.
  */
 abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(title, locale) {
-
   /**
    * Searches for an existing record.
    *
@@ -103,6 +103,15 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
 
   open fun setCloseOnSave() {
     model.setCloseOnSave()
+  }
+
+  /**
+   * create a customized report for this form
+   */
+  protected fun Block.createReport(reportbuilder: () -> Report) {
+    model.createReport(block) {
+      reportbuilder().model
+    }
   }
 
   /**

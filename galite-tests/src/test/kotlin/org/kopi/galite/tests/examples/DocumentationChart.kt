@@ -29,12 +29,11 @@ import org.kopi.galite.visual.dsl.form.Key
 class DocumentationChart : Form(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
-  val file = menu("file")
 
   val graph = actor (
-    menu =   file,
-    label =  "Graph",
-    help =   "show graph values",
+    menu = fileMenu,
+    label = "Graph",
+    help =  "show graph values",
   ) {
     key  =  Key.F9
     icon =  Icon.COLUMN_CHART

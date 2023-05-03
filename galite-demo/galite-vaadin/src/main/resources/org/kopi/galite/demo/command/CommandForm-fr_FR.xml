@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Commandes">
+    <actor ident="list" label="Liste" help = "Afficher la liste" />
+    <page ident="Id$0" title="Commande"/>
+    <block name="BlockCommand" title="Commande">
+        <field ident="FLD_1" label="Client" help="L'identifiant du client" />
+        <field ident="FLD_2" label="Méthode paiement" help="la méthode de paiement" />
+        <field ident="FLD_3" label="Statut" help="Le statut de la commande" />
+    </block>
+</form>

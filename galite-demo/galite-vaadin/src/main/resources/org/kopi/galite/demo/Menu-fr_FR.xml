@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modules>
+    <!--Clients-->
+    <module ident="1000" label="CLIENTS" help="Gestion des clients" />
+    <module ident="1001" label="Clients" help="Gestion des clients" />
+    <!--Commands-->
+    <module ident="2000" label="COMMANDES" help="Gestion des commandes" />
+    <module ident="2001" label="Commandes" help="Gestion des commandes" />
+    <!--Products-->
+    <module ident="3000" label="PRODUITS" help="Gestion des produits" />
+    <module ident="3001" label="Produits" help="Gestion des produits" />
+    <!--Bills-->
+    <module ident="4000" label="FACTURES" help="Gestion de facturation" />
+    <module ident="4001" label="Factures" help="Gestion de facturation" />
+    <module ident="4010" label="Produits factures" help="facturation des produits" />
+    <!--Stocks-->
+    <module ident="5000" label="STOCKS" help="Gestion du stock" />
+    <module ident="5001" label="Stocks" help="Gestion du stock" />
+    <!--Tax-->
+    <module ident="6000" label="TAXES" help="Gestion des règles des taxes" />
+    <module ident="6001" label="Règles fiscales" help="Gestion des règles fiscales" />
+    <!--Providers-->
+    <module ident="7000" label="Fournisseurs" help="Gestion des fournisseurs" />
+    <module ident="7001" label="Fournisseurs" help="Gestion des fournisseurs" />
+    <!--Tasks-->
+    <module ident="8000" label="TÂCHES" help="Tasks" />
+    <module ident="8001" label="Tâches et évènements" help="Gestion des tâches dans un calendrier complet" />
+</modules>

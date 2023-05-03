@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Rapport de stock">
+    <menu ident="Action" label="Action" />
+    <menu ident="File" label="Fichier" />
+
+    <actor ident="quit" label="Quitter" help="Ferme le rapport." />
+    <actor ident="csv" label="CSV" help="Format CSV." />
+    <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+    <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+    <actor ident="pdf" label="PDF" help="Format PDF." />
+
+    <field ident="ANM_0" label="Description" help="La description du produit" />
+    <field ident="ANM_1" label="Fournisseur" help="Le nom du fournisseur" />
+    <field ident="ANM_2" label="Min. Alerte" help="Le stock min d'alerte" />
+</report>

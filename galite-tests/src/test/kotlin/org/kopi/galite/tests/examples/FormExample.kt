@@ -34,12 +34,7 @@ import org.kopi.galite.visual.dsl.form.Block
 
 class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val action = menu("Action")
-  val autoFill = actor(
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = action, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
   val clientsPage= page("Clients")
   val block = clientsPage.insertBlock(Clients()) {
     trigger(PREBLK) {

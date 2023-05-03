@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+    <menu ident="File" label="Datei" />
+    <menu ident="Edit" label="Bearbeiten" />
+    <menu ident="Action" label="Aktionen" />
+    <menu ident="Help" label="Hilfe" />
+    <actor ident="Quit" label="Beenden" help="Eingabemaske schließen" />
+    <actor ident="Break" label="Abbrechen" help="Eingabe abbrechen" />
+    <actor ident="Validate" label="Bestätigen" help="Eingabemaske bestätigen" />
+    <actor ident="Print" label="Druck" help="Bericht drucken"/>
+    <actor ident="PrintLabel" label="Etikett" help="Etiketten drucken"/>
+    <actor ident="Preview" label="Vorschau" help="Bericht am Bildschirm anzeigen"/>
+    <actor ident="Mail" label="e-Mail" help="Dokument als e-Mail versenden"/>
+    <actor ident="Autofill" label="Standard" help="Hier erhalten Sie eine Liste der möglichen Eingabewerte."/>
+    <actor ident="NewItem" label="Neuer Eintrag" help="Anlegen eines neuen Eintrages für dieses Feld"/>
+    <actor ident="EditItem" label="Eintrag bearbeiten" help="Bearbeiten des vollständigen Feldinhaltes"/>
+    <actor ident="EditItem_S" label="Standard" help="Bearbeiten des vollständigen Feldinhaltes"/>
+    <actor ident="SearchOperator" label="Such Op" help="Erstellen komplexer Abfragen zu dieser Eingabemaske"/>
+    <actor ident="ChangeBlock" label="Block" help="Blockwechsel innerhalb der Eingabemaske"/>
+    <actor ident="CopyDocument" label="Kopie" help="Kopie des gegenwärtig aufgerufenen Beleges erstellen."/>
+    <actor ident="InsertLine" label="Zeile +" help="Leerzeile einfügen"/>
+    <actor ident="DeleteLine" label="Zeile -" help="Markierte Zeile löschen"/>
+    <actor ident="All" label="Alle" help="Alles auswählen."/>
+    <actor ident="Nothing" label="Nichts" help="Nichts auswählen."/>
+    <actor ident="MenuQuery" label="Liste" help="Suche starten"/>
+    <actor ident="SerialQuery" label="Blättern" help="Suche starten (und mit [PgUp] und [PgDown] blättern)"/>
+    <actor ident="InsertMode" label="Anlegen" help="Neuen Datensatz erfassen"/>
+    <actor ident="Save" label="Speichern" help="Datensatz speichern"/>
+    <actor ident="Delete" label="Löschen" help="Datensatz löschen"/>
+    <actor ident="CreateReport" label="Bericht" help="Bericht erstellen"/>
+    <actor ident="CreateDynamicReport" label="Bericht" help="Bericht erstellen"/>
+    <actor ident="ShowHideFilter" label="Anzeigen / Verbergen filter" help=" Anzeigen oder Verbergen Blockfilter"/>
+    <actor ident="Help" label="Hilfe" help="Hilfetext für das ausgewählte Feld"/>
+</insert>

@@ -237,11 +237,11 @@ class FormDSLTests : VApplicationTestBase() {
 
     assertEquals(1, formModel.commands.size)
 
-    assertEquals(form.resetForm.ident, formModel.commands[0].actorIdent)
-    assertEquals(form.resetForm.ident, formModel.commands[0].actor!!.ident)
-    assertEquals(form.resetForm.menu.label, formModel.commands[0].actor!!.menuIdent)
-    assertEquals(form.resetForm.icon?.iconName, formModel.commands[0].actor!!.iconName)
-    assertEquals(form.resetForm.help, formModel.commands[0].actor!!.help)
+    assertEquals(form._break.ident, formModel.commands[0].actorIdent)
+    assertEquals(form._break.ident, formModel.commands[0].actor!!.ident)
+    assertEquals(form._break.menu.label, formModel.commands[0].actor!!.menuIdent)
+    assertEquals(form._break.icon?.iconName, formModel.commands[0].actor!!.iconName)
+    assertEquals(form._break.help, formModel.commands[0].actor!!.help)
   }
 
   @Test
@@ -263,10 +263,10 @@ class FormDSLTests : VApplicationTestBase() {
     assertEquals(form.autoFill.help, formModel.actors[1].help)
 
     assertEquals(form.reset.label, formModel.actors[2].menuName)
-    assertEquals(form.resetForm.ident, formModel.actors[2].ident)
-    assertEquals(form.resetForm.icon?.iconName, formModel.actors[2].iconName)
-    assertEquals(form.resetForm.help, formModel.actors[2].help)
-    assertEquals(form.resetForm.key!!.value, formModel.actors[2].acceleratorKey)
+    assertEquals(form._break.ident, formModel.actors[2].ident)
+    assertEquals(form._break.icon?.iconName, formModel.actors[2].iconName)
+    assertEquals(form._break.help, formModel.actors[2].help)
+    assertEquals(form._break.key!!.value, formModel.actors[2].acceleratorKey)
   }
 
   @Test
@@ -331,25 +331,16 @@ class FormWithOneSimpleBlock : Form(title = "Clients", locale = Locale.UK) {
 
 class FormWithMultipleBlock : Form(title = "Information", locale = Locale.UK) {
   val reset = menu("reset")
-  val edit = menu("edit")
+  val edit = menu("Edit")
 
-  val autoFill = actor(
-    menu = edit,
-    label = "Autofill",
-    help = "Autofill",
-    command = PredefinedCommand.AUTOFILL
-  )
+  val autoFill = actor(menu = edit, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)
 
-  val resetForm = actor(
-    menu = reset,
-    label = "resetForm",
-    help = "Reset Form",
-  ) {
+  override val _break = actor(menu = reset, label = "resetForm", help = "Reset Form") {
     key = Key.F7
     icon = Icon.BREAK
   }
 
-  val resetFormCmd = command(item = resetForm) {
+  val resetFormCmd = command(item = _break) {
     resetForm()
   }
 

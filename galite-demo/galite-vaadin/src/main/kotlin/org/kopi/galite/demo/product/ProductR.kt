@@ -31,51 +31,31 @@ import org.kopi.galite.visual.report.VReport
 /**
  * Product Report
  */
-class ProductReport : Report(title = "Products", locale = Locale.UK) {
+class ProductR : Report(title = "Products", locale = Locale.UK) {
 
   val action = menu("Action")
 
-  val quit = actor(
-          menu = action,
-          label = "Quit",
-          help = "Quit",
-  ) {
+  val quit = actor(menu = action, label = "Quit", help = "Quit", ident = "quit") {
     key = Key.F1
     icon = Icon.QUIT
   }
 
-  val csv = actor(
-          menu = action,
-          label = "CSV",
-          help = "CSV Format",
-  ) {
+  val csv = actor(menu = action, label = "CSV", help = "CSV Format", ident = "csv") {
     key = Key.F8
     icon = Icon.EXPORT_CSV
   }
 
-  val xls = actor(
-          menu = action,
-          label = "XLS",
-          help = "Excel (XLS) Format",
-  ) {
+  val xls = actor(menu = action, label = "XLS", help = "Excel (XLS) Format", ident = "xls") {
     key = Key.SHIFT_F8
     icon = Icon.EXPORT_XLSX
   }
 
-  val xlsx = actor(
-          menu = action,
-          label = "XLSX",
-          help = "Excel (XLSX) Format",
-  ) {
+  val xlsx = actor(menu = action, label = "XLSX", help = "Excel (XLSX) Format", ident = "xlsx") {
     key = Key.SHIFT_F8
     icon = Icon.EXPORT_XLSX
   }
 
-  val pdf = actor(
-          menu = action,
-          label = "PDF",
-          help = "PDF Format",
-  ) {
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
     key = Key.F9
     icon = Icon.EXPORT_PDF
   }
@@ -101,7 +81,7 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
     model.close()
   }
 
-  val category = field(Category) {
+  val category = field(ProductForm.Category) {
     label = "Category"
     help = "The product category"
     group = department
@@ -117,7 +97,7 @@ class ProductReport : Report(title = "Products", locale = Locale.UK) {
     label = "Description"
     help = "The product description"
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 

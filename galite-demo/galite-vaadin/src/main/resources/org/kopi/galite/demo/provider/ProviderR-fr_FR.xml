@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Rapport des fournisseurs">
+    <menu ident="Action" label="Action" />
+
+    <actor ident="csv" label="CSV" help="Format CSV." />
+    <actor ident="xls" label="XLS" help="Format Excel (XLS)." />
+    <actor ident="xlsx" label="XLSX" help="Format Excel (XLSX)." />
+    <actor ident="pdf" label="PDF" help="Format PDF." />
+
+    <field ident="ANM_0" label="Nom" help="Le nom du fournisseur" />
+    <field ident="ANM_1" label="Téléphone" help="Le numéro du téléphone du fournisseur" />
+    <field ident="ANM_2" label="Description" help="La description du fournisseur" />
+    <field ident="ANM_3" label="Adresse" help="L'adresse du fournisseur" />
+    <field ident="ANM_4" label="Code postal" help="le code postal du fournisseur" />
+</report>

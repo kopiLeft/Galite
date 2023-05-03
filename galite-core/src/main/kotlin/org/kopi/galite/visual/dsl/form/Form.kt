@@ -23,17 +23,22 @@ import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.FormTrigger
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.Menu
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.dsl.common.LocalizableElement
 import org.kopi.galite.visual.form.Commands
-import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.DefaultActor
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.dsl.common.Command
+import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
 
 /**
  * Represents a form.
@@ -56,12 +61,11 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
    */
-  fun block(
-          title: String,
-          buffer: Int,
-          visible: Int,
-          init: Block.() -> Unit
-  ): Block = insertBlock(Block(title, buffer, visible), init)
+  fun block(title: String,
+            buffer: Int,
+            visible: Int,
+            init: Block.() -> Unit)
+  : Block = insertBlock(Block(title, buffer, visible), init)
 
   /**
    * Adds a new block to this page which belongs to this form.
@@ -70,12 +74,11 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
    * @param        visible                the number of visible elements
    * @param        title                  the title of the block
    */
-  fun FormPage.block(
-    title: String,
-    buffer: Int,
-    visible: Int,
-    init: Block.() -> Unit
-  ): Block = insertBlock(Block(title, buffer, visible), this, init)
+  fun FormPage.block(title: String,
+                     buffer: Int,
+                     visible: Int,
+                     init: Block.() -> Unit)
+  : Block = insertBlock(Block(title, buffer, visible), this, init)
 
   /**
    * Adds a new block to this form.
@@ -297,8 +300,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-        ?: (this.javaClass.classLoader.getResource("")?.path +
-                this.javaClass.`package`.name.replace(".", "/"))
+                                    ?: (this.javaClass.classLoader.getResource("")?.path +
+                                        this.javaClass.`package`.name.replace(".", "/"))
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
@@ -312,7 +315,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter)
-            .genForm(title, blocks.map { it.ownDomains }.flatten(), menus, actors, pages, blocks)
+      .genForm(title, blocks.map { it.ownDomains }.flatten(), menus, actors, pages, blocks)
   }
 
   // ----------------------------------------------------------------------
@@ -328,4 +331,409 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
     override fun formClassName(): String = this@Form.javaClass.name
   }
+
+  // ----------------------------------------------------------------------
+  // Default form settings
+  // ----------------------------------------------------------------------
+
+  /**
+   * Add form menus
+   */
+  fun insertMenus() {
+    fileMenu; editMenu; actionMenu; helpMenu
+  }
+
+  /**
+   * Add form actors
+   */
+  fun insertActors() {
+    quit
+    _break
+    validate
+    print
+    printLabel
+    preview
+    mail
+    autofill
+    editItem
+    editItemShortcut
+    searchOperator
+    changeBlock
+    copyDocument
+    insertLine
+    deleteLine
+    all
+    nothing
+    menuQuery
+    serialQuery
+    insertMode
+    save
+    delete
+    dynamicReport
+    help
+    showHideFilter
+    report
+  }
+
+  fun insertCommands() {
+    autofill
+    editItem
+    editItemShortcut
+
+    quitForm; resetForm; helpForm
+  }
+
+  fun insertDefaultActors() {
+    autofill
+    editItem
+    editItemShortcut
+  }
+
+  // --------------------MENUS-----------------
+
+  open val fileMenu by lazy { menu(FileMenu()) }
+
+  open val editMenu by lazy { menu(EditMenu()) }
+
+  open val actionMenu by lazy { menu(ActionMenu()) }
+
+  open val helpMenu by lazy { menu(HelpMenu()) }
+
+  // --------------------ACTORS----------------
+
+  open val quit by lazy { actor(Quit()) }
+
+  open val _break by lazy { actor(Break()) }
+
+  open val validate by lazy { actor(Validate())}
+
+  open val print by lazy { actor(Print())}
+
+  open val printLabel by lazy { actor(PrintLabel())}
+
+  open val preview by lazy { actor(Preview()) }
+
+  open val mail by lazy { actor(Mail()) }
+
+  open val autofill by lazy { actor(Autofill()) }
+
+  open val newItem by lazy { actor(NewItem()) }
+
+  open val editItem by lazy { actor(EditItem()) }
+
+  open val editItemShortcut by lazy { actor(EditItemShortcut()) }
+
+  open val searchOperator by lazy { actor(SearchOperator()) }
+
+  open val changeBlock by lazy { actor(ChangeBlock()) }
+
+  open val copyDocument by lazy { actor(CopyDocument()) }
+
+  open val insertLine by lazy { actor(InsertLine()) }
+
+  open val deleteLine by lazy { actor(DeleteLine()) }
+
+  open val all by lazy { actor(All()) }
+
+  open val nothing by lazy { actor(Nothing()) }
+
+  open val menuQuery by lazy { actor(MenuQuery()) }
+
+  open val serialQuery by lazy { actor(SerialQuery()) }
+
+  open val insertMode by lazy { actor(InsertMode()) }
+
+  open val save by lazy { actor(Save()) }
+
+  open val delete by lazy { actor(Delete()) }
+
+  open val report by lazy { actor(CreateReport()) }
+
+  open val dynamicReport by lazy { actor(CreateDynamicReport()) }
+
+  open val showHideFilter by lazy { actor(ShowHideFilter()) }
+
+  open val help by lazy { actor(Help()) }
+
+  // -------------------------------------------------------------------
+  // FORM-LEVEL COMMANDS
+  // -------------------------------------------------------------------
+
+  val resetForm  by lazy {
+    command(item = _break) {
+      resetForm()
+    }
+  }
+
+  val quitForm by lazy {
+    command(item = quit) {
+      quitForm()
+    }
+  }
+
+  val helpForm by lazy {
+    command(item = help) {
+      showHelp()
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // BLOCK-LEVEL COMMANDS
+  // -------------------------------------------------------------------
+
+  val Block.breakCommand: Command
+    get() = command(item = _break) {
+      resetBlock()
+    }
+
+  val Block.recursiveQueryCommand: Command
+    get() = command(item = menuQuery) {
+      Commands.recursiveQuery(block)
+    }
+
+  val Block.menuQueryCommand: Command
+    get() = command(item = menuQuery) {
+      Commands.menuQuery(block)
+    }
+
+  val Block.queryMoveCommand: Command
+    get() = command(item = menuQuery) {
+      Commands.queryMove(block)
+    }
+
+  val Block.serialQueryCommand: Command
+    get() = command(item = serialQuery) {
+      Commands.serialQuery(block)
+    }
+
+  val Block.insertModeCommand: Command
+    get() = command(item = insertMode) {
+      insertMode()
+    }
+
+  val Block.saveCommand: Command
+    get() = command(item = save) {
+      saveBlock()
+    }
+  val Block.deleteCommand: Command
+    get() = command(item = delete) {
+      deleteBlock()
+    }
+
+  val Block.insertLineCommand: Command
+    get() = command(item = insertLine) {
+      insertLine()
+    }
+
+  val Block.showHideFilterCommand: Command
+    get() = command(item = showHideFilter) {
+      showHideFilter()
+    }
+
+  // ------------------------------------------------------------------
+  // BLOCK-LEVEL ACTORS
+  // ------------------------------------------------------------------
+
+  class Quit : Actor(menu = FileMenu(), label = "Quit", help = "Close this form.") {
+    init {
+      key = Key.ESCAPE
+      icon = Icon.QUIT
+    }
+  }
+
+  class Break : Actor(menu = FileMenu(), label = "Break", help = "Reset current changes.") {
+    init {
+      key = Key.F3
+      icon = Icon.BREAK
+    }
+  }
+
+  class Validate : Actor(menu = FileMenu(), label = "Validate", help = "Validate form informations.") {
+    init {
+      key = Key.F8
+      icon = Icon.VALIDATE
+    }
+  }
+
+  class Print : Actor(menu = FileMenu(), label = "Print", help = "Print report.") {
+    init {
+      key = Key.F6
+      icon = Icon.PRINT
+    }
+  }
+
+  class PrintLabel : Actor(menu = FileMenu(), label = "Label", help = "Print labels.") {
+    init {
+      key = Key.F6
+      icon = Icon.PRINT
+    }
+  }
+
+  class Preview : Actor(menu = FileMenu(), label = "Preview", help = "Show report preview.") {
+    init {
+      key = Key.SHIFT_F6
+      icon = Icon.PREVIEW
+    }
+  }
+
+  class Mail : Actor(menu = FileMenu(), label = "e-mail", help = "Send document via e-mail.") {
+    init {
+      key = Key.F9
+      icon = Icon.MAIL
+    }
+  }
+
+ inner class Autofill : DefaultActor(
+    menu = EditMenu(), label = "Standard", help = "List possible values.", command = PredefinedCommand.AUTOFILL) {
+    init {
+      key = Key.F2
+    }
+  }
+
+  class NewItem : DefaultActor(
+    menu = EditMenu(), label = "New", help = "Add new element.", command = PredefinedCommand.NEW_ITEM
+  ) {
+    init {
+      key = Key.SHIFT_F4
+    }
+  }
+
+  class EditItem : DefaultActor(
+    menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM
+  ) {
+    init {
+      key = Key.SHIFT_F2
+    }
+  }
+
+  class EditItemShortcut : DefaultActor(
+    menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM_SHORTCUT
+  ) {
+    init {
+      key = Key.F2
+    }
+  }
+
+  class SearchOperator : Actor(menu = EditMenu(), label = "Condition", help = "Change search operator.") {
+    init {
+      key = Key.F5
+      icon = Icon.SEARCH_OP
+    }
+  }
+
+  class ChangeBlock : Actor(menu = EditMenu(), label = "Block", help = "Moves cursor to another block.") {
+    init {
+      key = Key.F8
+      icon = Icon.BLOCK
+    }
+  }
+
+  class CopyDocument :
+    Actor(menu = EditMenu(), label = "Copy", help = "Provide a copy of the currently called document.") {
+    init {
+      key = Key.F4
+      icon = Icon.COPY
+    }
+  }
+
+  class InsertLine : Actor(menu = EditMenu(), label = "Line +", help = "Insert a new line in block.") {
+    init {
+      key = Key.F4
+      icon = Icon.INSERT_LINE
+    }
+  }
+
+  class DeleteLine : Actor(menu = EditMenu(), label = "Line -", help = "Delete selected line.") {
+    init {
+      key = Key.F5
+      icon = Icon.DELETE_LINE
+    }
+  }
+
+  class All : Actor(menu = EditMenu(), label = "All", help = "Select all.") {
+    init {
+      key = Key.F4
+      icon = Icon.ALL
+    }
+  }
+
+  class Nothing : Actor(menu = EditMenu(), label = "Nothing", help = "Select nothing.") {
+    init {
+      key = Key.F5
+      icon = Icon.NOTHING
+    }
+  }
+
+  class MenuQuery : Actor(menu = ActionMenu(), label = "List", help = "Query: display results in a list.") {
+    init {
+      key = Key.F8
+      icon = Icon.MENU_QUERY
+    }
+  }
+
+  class SerialQuery : Actor(menu = ActionMenu(), label = "Query", help = "Load data considering the filled fields.") {
+    init {
+      key = Key.F6
+      icon = Icon.SERIAL_QUERY
+    }
+  }
+
+  class InsertMode : Actor(menu = ActionMenu(), label = "New", help = "Create a new record.") {
+    init {
+      key = Key.F4
+      icon = Icon.INSERT
+    }
+  }
+
+  class Save : Actor(menu = ActionMenu(), label = "Save", help = "Save changes to database.") {
+    init {
+      key = Key.F7
+      icon = Icon.SAVE
+    }
+  }
+
+  class Delete : Actor(menu = ActionMenu(), label = "Delete", help = "Delete selected record.") {
+    init {
+      key = Key.F5
+      icon = Icon.DELETE
+    }
+  }
+
+  class CreateReport : Actor(menu = ActionMenu(), label = "Report", help = "Create report.") {
+    init {
+      key = Key.F8
+      icon = Icon.REPORT
+    }
+  }
+
+  class CreateDynamicReport : Actor(menu = ActionMenu(), label = "Dyn. Report", help = "Create dynamic report.") {
+    init {
+      key = Key.F11
+      icon = Icon.PREVIEW
+    }
+  }
+
+  class ShowHideFilter : Actor(menu = ActionMenu(), label = "Show/Hide filter", help = "Show or hide block filters.") {
+    init {
+      key = Key.SHIFT_F12
+      icon = Icon.SEARCH_OP
+    }
+  }
+
+  class Help : Actor(menu = HelpMenu(), label = "Help", help = "Show help for a selected field.") {
+    init {
+      key = Key.F1
+      icon = Icon.HELP
+    }
+  }
+
+  // menu classes
+
+  class FileMenu : Menu("File")
+
+  class EditMenu : Menu("Edit")
+
+  class ActionMenu : Menu("Action")
+
+  class HelpMenu : Menu("Help")
 }

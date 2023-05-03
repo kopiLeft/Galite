@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form title="Stocks">
+    <page ident="Id$0" title="Stock"/>
+    <block name="StockBlock" title="Stock">
+        <field ident="FLD_2" label="Stock min d'alerte" help="Le stock minimum d'alerte" />
+    </block>
+</form>
