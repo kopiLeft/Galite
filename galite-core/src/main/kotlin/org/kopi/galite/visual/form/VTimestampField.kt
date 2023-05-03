@@ -334,7 +334,11 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     return if (o == null) {
       VConstants.EMPTY_TEXT
     } else {
-      val text = if (o is Instant) o.format() else o.toString()
+      val text = when (o) {
+        is Instant -> o.format()
+        is LocalDateTime -> o.format()
+        else -> o.toString()
+      }
       // this is workaround to display the timestamp in yyyy-MM-dd hh:mm:ss format
       text.substring(0, min(width, text.length))
     }

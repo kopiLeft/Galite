@@ -186,10 +186,10 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val grid = _get<DListDialog>()._get<ListTable>()
 
     grid.expect(arrayOf(
-      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
-      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
-      arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
-      arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4"),
+      arrayOf("1", "training 1", "Java", "1.149,24000", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,60000", "yes", "informations training 2"),
+      arrayOf("3", "training 3", "Kotlin", "146,90000", "yes", "informations training 3"),
+      arrayOf("4", "training 4", "Galite", "3.129,70000", "yes", "informations training 4"),
     ))
 
     // Choose third row

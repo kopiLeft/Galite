@@ -132,26 +132,28 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun addColumn(position: Int) {
-    var position = position
-    position = table.convertColumnIndexToView(position)
-    position += 1
-    val headerLabel = "col" + model.getColumnCount()
-    val span = VerticalLayout(Span(headerLabel))
-    model.addColumn(headerLabel, position)
-    val column = table.addColumn(model.getColumnCount() - 1)
-    column.setHeader(span)
-    column.flexGrow = 0
-    addHeaderListeners(column, span)
-    // move last column to position.
-    val pos = IntArray(model.getAccessibleColumnCount())
-    for (i in 0 until position) {
-      pos[i] = model.getDisplayOrder(i)
+    accessAndPush(currentUI) {
+      var position = position
+      position = table.convertColumnIndexToView(position)
+      position += 1
+      val headerLabel = "col" + model.getColumnCount()
+      val span = VerticalLayout(Span(headerLabel))
+      model.addColumn(headerLabel, position)
+      val column = table.addColumn(model.getColumnCount() - 1)
+      column.setHeader(span)
+      column.flexGrow = 0
+      addHeaderListeners(column, span)
+      // move last column to position.
+      val pos = IntArray(model.getAccessibleColumnCount())
+      for (i in 0 until position) {
+        pos[i] = model.getDisplayOrder(i)
+      }
+      for (i in position + 1 until model.getAccessibleColumnCount()) {
+        pos[i] = model.getDisplayOrder(i - 1)
+      }
+      pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
+      report.columnMoved(pos)
     }
-    for (i in position + 1 until model.getAccessibleColumnCount()) {
-      pos[i] = model.getDisplayOrder(i - 1)
-    }
-    pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
-    report.columnMoved(pos)
   }
 
   override fun addColumn() {

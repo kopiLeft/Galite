@@ -68,10 +68,10 @@ class ListTests: GaliteVUITestBase() {
     // Check that the grid data is correct
     val grid = _get<DListDialog>()._get<ListTable>()
     val data = arrayOf(
-      arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
-      arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
-      arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
-      arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4")
+      arrayOf("1", "training 1", "Java", "1.149,24000", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,60000", "yes", "informations training 2"),
+      arrayOf("3", "training 3", "Kotlin", "146,90000", "yes", "informations training 3"),
+      arrayOf("4", "training 4", "Galite", "3.129,70000", "yes", "informations training 4")
     )
 
     grid.expectRows(data.size)
@@ -109,10 +109,10 @@ class ListTests: GaliteVUITestBase() {
 
     grid.expect(
       arrayOf(
-        arrayOf("1", "training 1", "Java", "1.149,240", "yes", "informations training 1"),
-        arrayOf("2", "training 2", "Galite", "219,600", "yes", "informations training 2"),
-        arrayOf("3", "training 3", "Kotlin", "146,900", "yes", "informations training 3"),
-        arrayOf("4", "training 4", "Galite", "3.129,700", "yes", "informations training 4")
+        arrayOf("1", "training 1", "Java", "1.149,24000", "yes", "informations training 1"),
+        arrayOf("2", "training 2", "Galite", "219,60000", "yes", "informations training 2"),
+        arrayOf("3", "training 3", "Kotlin", "146,90000", "yes", "informations training 3"),
+        arrayOf("4", "training 4", "Galite", "3.129,70000", "yes", "informations training 4")
       )
     )
 
@@ -120,10 +120,10 @@ class ListTests: GaliteVUITestBase() {
     grid.setColumnOrder(grid.columns.reversed())
     grid.expect(
       arrayOf(
-        arrayOf("informations training 4", "yes", "3.129,700", "Galite", "training 4", "4"),
-        arrayOf("informations training 3", "yes", "146,900", "Kotlin", "training 3", "3"),
-        arrayOf("informations training 2", "yes", "219,600", "Galite", "training 2", "2"),
-        arrayOf("informations training 1", "yes", "1.149,240", "Java", "training 1", "1"),
+        arrayOf("informations training 4", "yes", "3.129,70000", "Galite", "training 4", "4"),
+        arrayOf("informations training 3", "yes", "146,90000", "Kotlin", "training 3", "3"),
+        arrayOf("informations training 2", "yes", "219,60000", "Galite", "training 2", "2"),
+        arrayOf("informations training 1", "yes", "1.149,24000", "Java", "training 1", "1"),
       )
     )
   }

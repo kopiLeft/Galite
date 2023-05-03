@@ -30,7 +30,7 @@ class ColumnStyle : Serializable {
   var backgroundCode = 0
   var fontName = 0
   var fontStyle = 0
-  val state = 0
+  var state = 0
 
   /**
    * Gets the background color of this component.
