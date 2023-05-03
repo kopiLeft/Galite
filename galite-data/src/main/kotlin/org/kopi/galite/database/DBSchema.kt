@@ -150,6 +150,26 @@ object Dual : Table("DUAL") {
   val table             = char("dummy", 1)
 }
 
+object ReportConfigurations: Table("REPORTCONFIGURATIONS") {
+  val id                = integer("ID").autoIncrement("REPORTCONFIGURATIONSID")
+  val uc                = integer("UC")
+  val ts                = integer("TS")
+  val report            = varchar("REPORT", 200)
+  val name              = varchar("KURZNAME", 30)
+  val description       = varchar("BEZEICHNUNG", 100).nullable()
+  val configuration     = blob("KONFIGURATION")
+  val createdOn         = timestamp("ERSTELLTAM")
+  val createdBy         = integer("ERSTELLTVON")
+  val changedOn         = timestamp("GEAENDERTAM")
+  val changedBy         = integer("GEAENDERTVON")
+
+  override val primaryKey = PrimaryKey(id)
+
+  init {
+    uniqueIndex("REPORTCONFIGURATIONS0", report, name)
+  }
+}
+
 // Sequences
 val ModulesId                   = Sequence("MODULEID")
 val UserRightsId                = Sequence("BENUTZERRECHTEID")
@@ -159,10 +179,12 @@ val SymbolsId                   = Sequence("SYMBOLEID")
 val FavoritesId                 = Sequence("FAVORITENID")
 val UsersId                     = Sequence("KOPI_USERSID")
 val GroupsId                    = Sequence("GRUPPENID")
+val ReportConfigurationsId      = Sequence("REPORTCONFIGURATIONSID")
 
 val list_Of_Tables = listOf(
   Versions, Modules, UserRights, GroupRights, GroupParties, Symbols,
-  Favorites, Users, Groups, References, Dummy
+  Favorites, Users, Groups, References, Dummy, ReportConfigurations
 )
 
-val sequencesList = listOf(ModulesId, UserRightsId, GroupRightsId, GroupPartiesId, SymbolsId, FavoritesId, UsersId, GroupsId)
+val sequencesList = listOf(ModulesId, UserRightsId, GroupRightsId, GroupPartiesId, SymbolsId,
+                           FavoritesId, UsersId, GroupsId, ReportConfigurationsId)

@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
+import org.kopi.galite.database.installed.TransDB
 import org.kopi.galite.util.base.InconsistencyException
 
 abstract class Migration {
@@ -84,7 +85,7 @@ abstract class Migration {
   /**
    * Database connection
    */
-  fun connection(processCommandLine: Boolean) {
+  open fun connection(processCommandLine: Boolean) {
     if (processCommandLine) {
       Connection.createConnection(options.database!!,
                                   options.driver!!,
