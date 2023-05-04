@@ -110,16 +110,19 @@ abstract class Migration {
    */
   private fun loadModuleVersion(module: String): Int {
     return if (Versions.exists()) {
+      // If table Versionen exists, return last saved value.
       Versions.slice(Versions.number).select { Versions.packageName eq module }.orderBy(Versions.date, SortOrder.DESC).map {
         it[Versions.number]
       }.firstOrNull() ?: -1
     } else if (module == "galite") {
+      // If table Versionen does not exist and current module is "galite", return -1.
+      // The transDB of Galite will create the table.
       -1
     } else {
+      // If table Versionen does not exist and current module is not "galite", return an exception.
       throw InconsistencyException("Can not find table Versionen. Please run Galite TransDB")
     }
   }
-
 
   // ------------------------------------------------------------------
   // DATA MEMBERS
