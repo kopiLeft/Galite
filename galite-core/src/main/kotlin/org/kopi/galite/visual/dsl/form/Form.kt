@@ -534,49 +534,49 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   // BLOCK-LEVEL ACTORS
   // ------------------------------------------------------------------
 
-  class Quit : Actor(menu = FileMenu(), label = "Quit", help = "Close this form.") {
+  class Quit : Actor(menu = FileMenu(), label = "Quit", help = "Close this form.", userActor = false) {
     init {
       key = Key.ESCAPE
       icon = Icon.QUIT
     }
   }
 
-  class Break : Actor(menu = FileMenu(), label = "Break", help = "Reset current changes.") {
+  class Break : Actor(menu = FileMenu(), label = "Break", help = "Reset current changes.", userActor = false) {
     init {
       key = Key.F3
       icon = Icon.BREAK
     }
   }
 
-  class Validate : Actor(menu = FileMenu(), label = "Validate", help = "Validate form informations.") {
+  class Validate : Actor(menu = FileMenu(), label = "Validate", help = "Validate form informations.", userActor = false) {
     init {
       key = Key.F8
       icon = Icon.VALIDATE
     }
   }
 
-  class Print : Actor(menu = FileMenu(), label = "Print", help = "Print report.") {
+  class Print : Actor(menu = FileMenu(), label = "Print", help = "Print report.", userActor = false) {
     init {
       key = Key.F6
       icon = Icon.PRINT
     }
   }
 
-  class PrintLabel : Actor(menu = FileMenu(), label = "Label", help = "Print labels.") {
+  class PrintLabel : Actor(menu = FileMenu(), label = "Label", help = "Print labels.", userActor = false) {
     init {
       key = Key.F6
       icon = Icon.PRINT
     }
   }
 
-  class Preview : Actor(menu = FileMenu(), label = "Preview", help = "Show report preview.") {
+  class Preview : Actor(menu = FileMenu(), label = "Preview", help = "Show report preview.", userActor = false) {
     init {
       key = Key.SHIFT_F6
       icon = Icon.PREVIEW
     }
   }
 
-  class Mail : Actor(menu = FileMenu(), label = "e-mail", help = "Send document via e-mail.") {
+  class Mail : Actor(menu = FileMenu(), label = "e-mail", help = "Send document via e-mail.", userActor = false) {
     init {
       key = Key.F9
       icon = Icon.MAIL
@@ -584,14 +584,14 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   }
 
  inner class Autofill : DefaultActor(
-    menu = EditMenu(), label = "Standard", help = "List possible values.", command = PredefinedCommand.AUTOFILL) {
+    menu = EditMenu(), label = "Standard", help = "List possible values.", command = PredefinedCommand.AUTOFILL, userActor = false) {
     init {
       key = Key.F2
     }
   }
 
   class NewItem : DefaultActor(
-    menu = EditMenu(), label = "New", help = "Add new element.", command = PredefinedCommand.NEW_ITEM
+    menu = EditMenu(), label = "New", help = "Add new element.", command = PredefinedCommand.NEW_ITEM, userActor = false
   ) {
     init {
       key = Key.SHIFT_F4
@@ -599,7 +599,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   }
 
   class EditItem : DefaultActor(
-    menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM
+    menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM, userActor = false
   ) {
     init {
       key = Key.SHIFT_F2
@@ -607,21 +607,21 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   }
 
   class EditItemShortcut : DefaultActor(
-    menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM_SHORTCUT
+    menu = EditMenu(), label = "Edit", help = "Edit selected element.", command = PredefinedCommand.EDIT_ITEM_SHORTCUT, userActor = false
   ) {
     init {
       key = Key.F2
     }
   }
 
-  class SearchOperator : Actor(menu = EditMenu(), label = "Condition", help = "Change search operator.") {
+  class SearchOperator : Actor(menu = EditMenu(), label = "Condition", help = "Change search operator.", userActor = false) {
     init {
       key = Key.F5
       icon = Icon.SEARCH_OP
     }
   }
 
-  class ChangeBlock : Actor(menu = EditMenu(), label = "Block", help = "Moves cursor to another block.") {
+  class ChangeBlock : Actor(menu = EditMenu(), label = "Block", help = "Moves cursor to another block.", userActor = false) {
     init {
       key = Key.F8
       icon = Icon.BLOCK
@@ -629,98 +629,98 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   }
 
   class CopyDocument :
-    Actor(menu = EditMenu(), label = "Copy", help = "Provide a copy of the currently called document.") {
+    Actor(menu = EditMenu(), label = "Copy", help = "Provide a copy of the currently called document.", userActor = false) {
     init {
       key = Key.F4
       icon = Icon.COPY
     }
   }
 
-  class InsertLine : Actor(menu = EditMenu(), label = "Line +", help = "Insert a new line in block.") {
+  class InsertLine : Actor(menu = EditMenu(), label = "Line +", help = "Insert a new line in block.", userActor = false) {
     init {
       key = Key.F4
       icon = Icon.INSERT_LINE
     }
   }
 
-  class DeleteLine : Actor(menu = EditMenu(), label = "Line -", help = "Delete selected line.") {
+  class DeleteLine : Actor(menu = EditMenu(), label = "Line -", help = "Delete selected line.", userActor = false) {
     init {
       key = Key.F5
       icon = Icon.DELETE_LINE
     }
   }
 
-  class All : Actor(menu = EditMenu(), label = "All", help = "Select all.") {
+  class All : Actor(menu = EditMenu(), label = "All", help = "Select all.", userActor = false) {
     init {
       key = Key.F4
       icon = Icon.ALL
     }
   }
 
-  class Nothing : Actor(menu = EditMenu(), label = "Nothing", help = "Select nothing.") {
+  class Nothing : Actor(menu = EditMenu(), label = "Nothing", help = "Select nothing.", userActor = false) {
     init {
       key = Key.F5
       icon = Icon.NOTHING
     }
   }
 
-  class MenuQuery : Actor(menu = ActionMenu(), label = "List", help = "Query: display results in a list.") {
+  class MenuQuery : Actor(menu = ActionMenu(), label = "List", help = "Query: display results in a list.", userActor = false) {
     init {
       key = Key.F8
       icon = Icon.MENU_QUERY
     }
   }
 
-  class SerialQuery : Actor(menu = ActionMenu(), label = "Query", help = "Load data considering the filled fields.") {
+  class SerialQuery : Actor(menu = ActionMenu(), label = "Query", help = "Load data considering the filled fields.", userActor = false) {
     init {
       key = Key.F6
       icon = Icon.SERIAL_QUERY
     }
   }
 
-  class InsertMode : Actor(menu = ActionMenu(), label = "New", help = "Create a new record.") {
+  class InsertMode : Actor(menu = ActionMenu(), label = "New", help = "Create a new record.", userActor = false) {
     init {
       key = Key.F4
       icon = Icon.INSERT
     }
   }
 
-  class Save : Actor(menu = ActionMenu(), label = "Save", help = "Save changes to database.") {
+  class Save : Actor(menu = ActionMenu(), label = "Save", help = "Save changes to database.", userActor = false) {
     init {
       key = Key.F7
       icon = Icon.SAVE
     }
   }
 
-  class Delete : Actor(menu = ActionMenu(), label = "Delete", help = "Delete selected record.") {
+  class Delete : Actor(menu = ActionMenu(), label = "Delete", help = "Delete selected record.", userActor = false) {
     init {
       key = Key.F5
       icon = Icon.DELETE
     }
   }
 
-  class CreateReport : Actor(menu = ActionMenu(), label = "Report", help = "Create report.") {
+  class CreateReport : Actor(menu = ActionMenu(), label = "Report", help = "Create report.", userActor = false) {
     init {
       key = Key.F8
       icon = Icon.REPORT
     }
   }
 
-  class CreateDynamicReport : Actor(menu = ActionMenu(), label = "Dyn. Report", help = "Create dynamic report.") {
+  class CreateDynamicReport : Actor(menu = ActionMenu(), label = "Dyn. Report", help = "Create dynamic report.", userActor = false) {
     init {
       key = Key.F11
       icon = Icon.PREVIEW
     }
   }
 
-  class ShowHideFilter : Actor(menu = ActionMenu(), label = "Show/Hide filter", help = "Show or hide block filters.") {
+  class ShowHideFilter : Actor(menu = ActionMenu(), label = "Show/Hide filter", help = "Show or hide block filters.", userActor = false) {
     init {
       key = Key.SHIFT_F12
       icon = Icon.SEARCH_OP
     }
   }
 
-  class Help : Actor(menu = HelpMenu(), label = "Help", help = "Show help for a selected field.") {
+  class Help : Actor(menu = HelpMenu(), label = "Help", help = "Show help for a selected field.", userActor = false) {
     init {
       key = Key.F1
       icon = Icon.HELP

@@ -299,7 +299,9 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
    */
   open fun localizeActors(vararg actors: VActor) {
     actors.forEach {
-      it.localize(manager)
+      if(ApplicationContext.getDefaultLocale() != locale || !it.userActor) {
+        it.localize(manager)
+      }
     }
   }
 

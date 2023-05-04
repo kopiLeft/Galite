@@ -36,8 +36,9 @@ open class DefaultActor(menu: Menu,
                         help: String,
                         val command: PredefinedCommand,
                         ident: String? = command.ident,
-                        source: String? = null)
-  : Actor(menu, label,help, ident, source) {
+                        source: String? = null,
+                        userActor: Boolean = true)
+  : Actor(menu, label,help, ident, source, userActor) {
 
   /**
    * the code of this default command
