@@ -39,8 +39,9 @@ open class Actor(val menu: Menu,
                  val label: String,
                  help: String,
                  ident: String? = null,
-                 source: String? = null)
-  : VActor(menu.label, menu.sourceFile, ident, source, help = help, userActor = true) {
+                 source: String? = null,
+                 userActor: Boolean = true)
+  : VActor(menu.label, menu.sourceFile, ident, source, help = help, userActor = userActor) {
 
   init {
     menuItem = label
