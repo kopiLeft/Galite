@@ -22,6 +22,7 @@ import java.time.LocalDate
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
+
 import org.kopi.galite.type.format
 import org.kopi.galite.visual.domain.TableInitializer
 

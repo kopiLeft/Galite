@@ -19,7 +19,17 @@ package org.kopi.galite.visual.dsl.common
 
 import java.lang.RuntimeException
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.AutoIncColumnType
+import org.jetbrains.exposed.sql.BinaryColumnType
+import org.jetbrains.exposed.sql.BooleanColumnType
+import org.jetbrains.exposed.sql.CharColumnType
+import org.jetbrains.exposed.sql.CharacterColumnType
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.IDateColumnType
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.LongColumnType
+import org.jetbrains.exposed.sql.StringColumnType
+import org.jetbrains.exposed.sql.VarCharColumnType
 
 import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.list.VBooleanColumn

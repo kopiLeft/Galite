@@ -17,7 +17,13 @@
 
 package org.kopi.galite.visual.domain
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.ColumnSet
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.QueryAlias
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.alias
+
 import org.kopi.galite.visual.dsl.common.FieldList
 import org.kopi.galite.visual.dsl.common.ListDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter

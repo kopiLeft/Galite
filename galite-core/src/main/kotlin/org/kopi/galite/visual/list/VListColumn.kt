@@ -20,7 +20,14 @@ package org.kopi.galite.visual.list
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Alias
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.QueryAlias
+import org.jetbrains.exposed.sql.Table
+
 import org.kopi.galite.visual.domain.TableInitializer
 import org.kopi.galite.visual.l10n.ListLocalizer
 
@@ -71,7 +78,7 @@ abstract class VListColumn(
   /**
    * Finds and returns the column in this [ColumnSet] corresponding to the [column] from the original table.
    *
-   * @param column The column in the original table.
+   * @param column Expression of a column from the original table.
    */
   fun ColumnSet.resolveColumn(column: ExpressionWithColumnType<*>): Expression<*> {
     return when (this) {

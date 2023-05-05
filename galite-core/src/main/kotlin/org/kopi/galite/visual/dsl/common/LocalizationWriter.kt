@@ -26,7 +26,10 @@ import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
+
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
+
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -146,7 +149,7 @@ open class LocalizationWriter {
   fun genListDesc(column: ExpressionWithColumnType<*>, title: String) {
     val self = Element("listdesc")
 
-    self.setAttribute("column", title)
+    self.setAttribute("column", if (column is Column<*>) column.name else title)
     self.setAttribute("title", title)
     peekNode("list").addContent(self)
   }

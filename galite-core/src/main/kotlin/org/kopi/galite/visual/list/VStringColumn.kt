@@ -21,6 +21,7 @@ package org.kopi.galite.visual.list
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
+
 import org.kopi.galite.visual.domain.TableInitializer
 
 class VStringColumn(title: String,
@@ -43,11 +44,12 @@ class VStringColumn(title: String,
       return VConstants.EMPTY_TEXT
     }
     var str = value.toString()
-    val strLength = str.length
     val width: Int = width
-    if (strLength > width) {
+
+    if (str.length > width) {
       str = str.substring(0, width) + "..." + str.substring(width)
     }
+
     return str
   }
 
