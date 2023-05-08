@@ -72,7 +72,7 @@ abstract class VListColumn(
    * @param     loc
    */
   fun localize(loc: ListLocalizer) {
-    title = loc.getColumnTitle(title)
+    title = loc.getColumnTitle(if (internalColumn is Column<*>) internalColumn.name else title)
   }
 
   /**

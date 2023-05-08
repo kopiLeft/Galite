@@ -20,7 +20,16 @@ package org.kopi.galite.tests.form
 import java.io.File
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.minus
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.mod
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.rem
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.alias
+import org.jetbrains.exposed.sql.castTo
+import org.jetbrains.exposed.sql.countDistinct
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.Users
@@ -86,6 +95,7 @@ class FileFilter : FileHandler.FileFilter {
 }
 
 class UsersListBlock : Block("UsersListBlock", 1, 1) {
+  val u = table(User)
   val user = mustFill(domain = UsersList(), position = at(1, 1)) {
     label = "user"
     help = "The user"
@@ -94,50 +104,92 @@ class UsersListBlock : Block("UsersListBlock", 1, 1) {
     label = "module"
     help = "The module"
   }
-}
-class UsersList: ListDomain<Int>(20) {
-
-  override val table = query(
-          Users.select {
-            Users.id greater 0
-          }
-  )
-
-  override val access = {
-    SomeDictionnaryForm()
+  val name = visit(domain = Names, position = at(1, 1)) {
+    label = "Names"
+    columns(u.name) {
+      priority = 1
+    }
   }
+  val age = visit(domain = AgesUsers, position = at(2, 1)) {
+    label = "Age"
+    columns(u.age) {
+      priority = 2
+    }
+  }
+  val job = visit(domain = Jobs, position = at(3, 1)) {
+    label = "Job"
+    columns(u.job) {
+      priority = 3
+    }
+  }
+}
 
+class UsersList: ListDomain<Int>(20) {
+  override val table = query(Users.select { Users.id greater 0 })
+  override val access = { SomeDictionnaryForm() }
   val autoComplete = complete(AutoComplete.LEFT, 1)
 
   init {
-    "ID" keyOf Users.id
-    "UC" keyOf Users.uc
-    "TS" keyOf Users.ts
-    "KURZNAME" keyOf Users.shortName
-    "ZEICHEN" keyOf Users.character
-    "TELEFON" keyOf Users.phone
-    "EMAIL" keyOf Users.email
+    "ID"        keyOf Users.id
+    "UC"        keyOf Users.uc
+    "TS"        keyOf Users.ts
+    "KURZNAME"  keyOf Users.shortName
+    "ZEICHEN"   keyOf Users.character
+    "TELEFON"   keyOf Users.phone
+    "EMAIL"     keyOf Users.email
   }
 }
 
 class Module: ListDomain<String>(20) {
-
   override val table = Modules
-
   val autoComplete = complete(AutoComplete.LEFT, 2)
 
   init {
-    "KURZNAME" keyOf Modules.shortName
-    "UC" keyOf Modules.uc
-    "ID" keyOf Modules.id
-    "TS" keyOf Modules.ts
-    "VATER" keyOf Modules.parent
-    "QUELLE" keyOf Modules.sourceName
-    "PRIORITAET" keyOf Modules.priority
-    "OBJEKT" keyOf Modules.objectName
-    "SYMBOL" keyOf Modules.symbol
+    "KURZNAME"    keyOf Modules.shortName
+    "UC"          keyOf Modules.uc
+    "ID"          keyOf Modules.id
+    "TS"          keyOf Modules.ts
+    "VATER"       keyOf Modules.parent
+    "QUELLE"      keyOf Modules.sourceName
+    "PRIORITAET"  keyOf Modules.priority
+    "OBJEKT"      keyOf Modules.objectName
+    "SYMBOL"      keyOf Modules.symbol
   }
 }
+
+object Names : ListDomain<String>(30) {
+  override val table =  User
+
+  init {
+    "name"      keyOf User.name
+    "uc + ts"   keyOf User.uc.plus(User.ts)
+    "id"        keyOf User.id.rem(2)
+  }
+}
+
+object AgesUsers : ListDomain<Int>(3) {
+  override val table = AgesUsers.query(User.slice(User.age.minus(1).alias("age"),
+                                                  User.name,
+                                                  User.id.castTo<String>(VarCharColumnType()).alias("id"))
+                                           .selectAll())
+
+  init {
+    "age"   keyOf User.age
+    "name"  keyOf User.name
+    "id"    keyOf User.id
+  }
+}
+
+object Jobs : ListDomain<String>(20) {
+  override val table =  User.alias("newUser")
+
+  init {
+    "job"   keyOf table[User.job]
+    "cv"    keyOf table[User.cv].countDistinct()
+    "id"    keyOf table[User.id].mod(5)
+  }
+}
+
 class SomeDictionnaryForm : DictionaryForm(title = "form for test", locale = Locale.UK) {
 
   val action = menu("Action")

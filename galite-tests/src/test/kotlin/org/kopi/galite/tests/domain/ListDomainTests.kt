@@ -17,10 +17,10 @@
 
 package org.kopi.galite.tests.domain
 
+import kotlin.test.assertEquals
+
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import kotlin.test.assertEquals
 
 import org.junit.Test
 
@@ -33,7 +33,7 @@ import org.kopi.galite.visual.domain.ListDomain
  */
 class ListDomainTests : VApplicationTestBase() {
 
-  val ListDomainExpression = ListDomainExpressionTest()
+  val ListDomainExpression = FormWithListDomains()
 
   /**
    * Tests the creation of a simple list domain
@@ -61,35 +61,36 @@ class ListDomainTests : VApplicationTestBase() {
   }
 
   @Test
-  fun `test generated ListDomain with ExpressionWithColumnType`() {
+  fun `test ListDomain with ExpressionWithColumnType`() {
+    val names = mutableListOf<String>("Soulaima", "Yahyaoui")
     // Declaration of the domain
     transaction {
       SchemaUtils.create(User)
       User.insert {
         it[id] = 7
-        it[name] = "SOULAIMA"
+        it[name] = "Soulaima"
         it[age] = 26
         it[ts] = 0
         it[uc] = 0
-        it[job] = "Ingénieur"
+        it[job] = "myJob"
       }
 
       val firstUser = User.selectAll().map { Triple(it[User.name], it[User.job], it[User.age]) }.firstOrNull()
 
-      // Affecte une valeur pour chaque field
-      ListDomainExpression.blockListDomainExpressionTest.listNames.vField.selectFromList(false)
-      ListDomainExpression.blockListDomainExpressionTest.listAges.vField.selectFromList(false)
-      ListDomainExpression.blockListDomainExpressionTest.job.vField.selectFromList(false)
+      // Select values from Listdomain
+      ListDomainExpression.userListBlock.name.vField.selectFromList(false)
+      ListDomainExpression.userListBlock.age.vField.selectFromList(false)
+      ListDomainExpression.userListBlock.job.vField.selectFromList(false)
 
-      // vérification des valeurs des fiels
-      assertEquals(firstUser?.first, ListDomainExpression.blockListDomainExpressionTest.listNames.value)
-      assertEquals(firstUser?.second, ListDomainExpression.blockListDomainExpressionTest.job.value)
-      assertEquals(firstUser?.third?.minus(1), ListDomainExpression.blockListDomainExpressionTest.listAges.value)
+      // Test fields values
+      assertEquals(firstUser?.first, ListDomainExpression.userListBlock.name.value)
+      assertEquals(firstUser?.second, ListDomainExpression.userListBlock.job.value)
+      assertEquals(firstUser?.third?.minus(1), ListDomainExpression.userListBlock.age.value)
 
-      // vérification des valeurs des listes domains
+      // Test Listdomain values
       assertEquals("(\"USER\".UC + \"USER\".TS)", Names.columns[1].column.toString())
       assertEquals("(\"USER\".ID % 2)", Names.columns[2].column.toString())
-      assert(AgesUsers.columns[0].column.toString().contains("AGE"))
+      assert(AgesUsers.columns[0].column.toString().split(".").last().compareTo("AGE") == 0)
       assertEquals("BIGINT", Jobs.columns[1].column.columnType.sqlType())
       assertEquals("(newUser.ID % 5)", Jobs.columns[2].column.toString())
 
