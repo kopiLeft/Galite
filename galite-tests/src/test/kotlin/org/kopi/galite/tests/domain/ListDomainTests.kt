@@ -62,7 +62,6 @@ class ListDomainTests : VApplicationTestBase() {
 
   @Test
   fun `test ListDomain with ExpressionWithColumnType`() {
-    val names = mutableListOf<String>("Soulaima", "Yahyaoui")
     // Declaration of the domain
     transaction {
       SchemaUtils.create(User)
