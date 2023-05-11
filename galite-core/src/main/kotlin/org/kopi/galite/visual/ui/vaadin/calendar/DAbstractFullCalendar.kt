@@ -174,8 +174,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
 
           check(newStart, newEnd)
           model.openForEdit((it.entry as FullCalendarEntry).record,
-                            newStart.toInstant(),
-                            newEnd.toInstant())
+                            newStart,
+                            newEnd)
         }
       })
     }
@@ -188,8 +188,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
 
           check(newStart, newEnd)
           model.openForEdit((it.entry as FullCalendarEntry).record,
-                            newStart.toInstant(),
-                            newEnd.toInstant())
+                            newStart,
+                            newEnd)
         }
       })
     }
@@ -202,7 +202,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val end = it.endDateTime
 
           check(start, end)
-          model.openForEdit(start.toInstant(), end.toInstant())
+          model.openForEdit(start, end)
         }
       })
     }

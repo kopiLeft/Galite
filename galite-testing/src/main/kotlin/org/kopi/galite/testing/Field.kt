@@ -52,6 +52,9 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.Temporal
 
 /**
  * Edit a form field.
@@ -85,7 +88,8 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T?, mainWindow: MainWind
 
   when (gridEditorField) {
     is GridEditorTimestampField -> {
-      gridEditorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
+      gridEditorField._value = if (value is LocalDateTime) value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                               else (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     is GridEditorTimeField -> {
       gridEditorField._value = (value as LocalTime).format()
@@ -120,7 +124,8 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T?, mainWindow: MainWindow
 
   when {
     (editorField as? TextField)?.getContent() is VTimeStampField -> {
-      editorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
+      editorField._value = if (value is LocalDateTime) value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                           else (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     editorField is BooleanField -> {
       val checkbox: Checkbox  = if (value == true) {

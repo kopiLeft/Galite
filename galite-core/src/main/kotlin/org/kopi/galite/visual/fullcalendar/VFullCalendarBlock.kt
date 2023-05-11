@@ -43,6 +43,8 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import java.time.LocalDateTime
+import java.time.temporal.Temporal
 
 abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VBlock(title, buffer, visible) {
 
@@ -259,12 +261,12 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
     return entries
   }
 
-  fun openForEdit(startDateTime: Instant, endDateTime: Instant) {
+  fun openForEdit(startDateTime: Temporal, endDateTime: Temporal) {
     set(startDateTime, endDateTime)
     insertMode()
   }
 
-  internal fun openForEdit(record: Int, newStart: Instant, newEnd: Instant) {
+  internal fun openForEdit(record: Int, newStart: Temporal, newEnd: Temporal) {
     fetchRecordInBlock(record)
     set(newStart, newEnd)
     fullCalendarForm.doNotModal()
@@ -281,7 +283,7 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
     }
   }
 
-  fun set(startDateTime: Instant, endDateTime: Instant) {
+  fun set(startDateTime: Temporal, endDateTime: Temporal) {
     if (dateField != null) {
       dateField!!.setDate(LocalDate.from(startDateTime))
       fromTimeField!!.setTime(LocalTime.from(startDateTime))

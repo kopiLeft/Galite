@@ -22,7 +22,7 @@ import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
 import java.sql.SQLException
-import java.time.Instant
+import java.time.temporal.Temporal
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -1099,7 +1099,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(v: Instant?) {
+  fun setTimestamp(v: Temporal?) {
     setTimestamp(block!!.currentRecord, v)
   }
 
@@ -1210,7 +1210,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setTimestamp(r: Int, v: Instant?) {
+  open fun setTimestamp(r: Int, v: Temporal?) {
     throw InconsistencyException()
   }
 
@@ -1329,7 +1329,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTimestamp(): Instant? = getTimestamp(block!!.currentRecord)
+  fun getTimestamp(): Temporal? = getTimestamp(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a time value.
@@ -1476,7 +1476,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getTimestamp(r: Int): Instant? {
+  open fun getTimestamp(r: Int): Temporal? {
     throw InconsistencyException()
   }
 

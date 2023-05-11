@@ -17,13 +17,18 @@
 package org.kopi.galite.tests.examples
 
 import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDateTime
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.tests.database.createDBSchemaTables
 import org.kopi.galite.tests.database.dropDBSchemaTables
 import org.kopi.galite.tests.database.insertIntoUsers
@@ -39,6 +44,8 @@ object Training : Table("TRAINING") {
   val informations = varchar("INFORMATION", 200).nullable()
   val uc = integer("UC").autoIncrement()
   val ts = integer("TS").autoIncrement()
+  val trainDateTimestamp = timestamp("TrainDateTimestamp").nullable()
+  val trainDateTime = datetime("TrainingDateTime").nullable()
 
   override val primaryKey = PrimaryKey(id, name = "PK_TRAINING_ID")
 }
@@ -117,6 +124,8 @@ fun addTraining(name: String, category: Int, amount: BigDecimal, info: String? =
     it[price] = amount
     it[active] = true
     it[informations] = info
+    it[trainDateTimestamp] = Instant.now()
+    it[trainDateTime] = LocalDateTime.now()
   }
 }
 
