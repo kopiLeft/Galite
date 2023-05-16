@@ -20,8 +20,9 @@ import org.junit.Test
 
 import java.time.Instant
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
 import java.util.Locale
+
+import kotlin.test.assertEquals
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase

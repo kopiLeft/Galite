@@ -19,7 +19,9 @@ package org.kopi.galite.testing
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
@@ -52,9 +54,6 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.Temporal
 
 /**
  * Edit a form field.

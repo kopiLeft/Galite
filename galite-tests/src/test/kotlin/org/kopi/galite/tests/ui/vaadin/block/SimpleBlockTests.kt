@@ -19,6 +19,7 @@ package org.kopi.galite.tests.ui.vaadin.block
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import kotlin.test.assertEquals
@@ -44,7 +45,6 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.type.format
-import java.time.LocalDateTime
 
 class SimpleBlockTests: GaliteVUITestBase() {
   val testFieldsVisibilityForm = TestFieldsVisibilityForm()

@@ -83,9 +83,6 @@ class MultipleBlockTests: GaliteVUITestBase() {
     // Go to the next record
     formExample.salesBlock.editRecord(1)
 
-    println("******** field value localdatetime /******** : ${localdatetime.getModel().getTimestamp(0)}")
-    println("******** current value localdatetime /******** : ${currentLocalDateTime}")
-
     // Check that values are sent to the model
     assertEquals(100, idClt.getModel().getInt(0))
     assertEquals("description", description.getModel().getString(0))

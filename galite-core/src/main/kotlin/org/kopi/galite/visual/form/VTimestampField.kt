@@ -101,7 +101,7 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
     val date = parseDate(timestamp[0])
     val time = parseTime(timestamp[1])
 
-    return if(kClass == LocalDateTime::class ) Timestamp.valueOf("$date $time").toLocalDateTime()
+    return if (kClass == LocalDateTime::class ) Timestamp.valueOf("$date $time").toLocalDateTime()
            else Timestamp.valueOf("$date $time").toInstant()
   }
 
@@ -434,7 +434,8 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
           // not valid, get now
           setTimestamp(record, getCurrentTimestamp())
         }
-        setTimestamp(record, getCurrentTimestamp())
+        setTimestamp(record, if (getTimestamp(record) is Instant) (getTimestamp(record) as? Instant)?.plusMillis(if (desc) -1 else 1)
+                             else (getTimestamp(record) as? LocalDateTime)?.plusNanos(if (desc) -1 else 1))
       }
     }
   }

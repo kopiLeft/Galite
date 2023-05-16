@@ -16,14 +16,13 @@
  */
 package org.kopi.galite.tests.examples
 
-import org.kopi.galite.visual.domain.*
 import java.util.Locale
 
+import org.kopi.galite.visual.domain.*
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Block
-import java.sql.Time
 
 class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val action = menu("Action")
