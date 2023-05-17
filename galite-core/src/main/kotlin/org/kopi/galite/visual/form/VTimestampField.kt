@@ -40,6 +40,7 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
+import java.time.temporal.ChronoUnit
 
 class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VField(10 + 1 + 8, 1) {
 
@@ -435,7 +436,7 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
           setTimestamp(record, getCurrentTimestamp())
         }
         setTimestamp(record, if (getTimestamp(record) is Instant) (getTimestamp(record) as? Instant)?.plusMillis(if (desc) -1 else 1)
-                             else (getTimestamp(record) as? LocalDateTime)?.plusNanos(if (desc) -1 else 1))
+                             else (getTimestamp(record) as? LocalDateTime)?.plus(if (desc) -1 else 1, ChronoUnit.MILLIS))
       }
     }
   }
