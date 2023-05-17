@@ -24,6 +24,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
 import java.util.Locale
 import java.util.StringTokenizer
@@ -40,7 +41,6 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-import java.time.temporal.ChronoUnit
 
 class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VField(10 + 1 + 8, 1) {
 
