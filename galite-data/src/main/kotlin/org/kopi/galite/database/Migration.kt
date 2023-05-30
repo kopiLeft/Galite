@@ -56,11 +56,11 @@ abstract class Migration {
         transaction {
           currentVersion = loadModuleVersion(currentModule)
         }
-        println("Current version of module \"${transDB.module}\" = $currentVersion")
+        if (traceLog(processCommandLine)) println("Current version of module \"${transDB.module}\" = $currentVersion")
       }
 
       if (transDB.version > currentVersion) {
-        println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
+        if (traceLog(processCommandLine)) println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
         transaction {
           transDB.run()
         }
@@ -103,6 +103,15 @@ abstract class Migration {
                                   Configuration.getString("schema"),
                                   Configuration.getString("trace")?.toInt())
     }
+  }
+
+  /**
+   * Check to trace log
+   */
+  fun traceLog(processCommandLine: Boolean) : Boolean {
+    val traceLevel = if (processCommandLine) options.trace else Configuration.getString("trace")?.toInt()
+
+    return traceLevel == null || traceLevel > 0
   }
 
   /**
