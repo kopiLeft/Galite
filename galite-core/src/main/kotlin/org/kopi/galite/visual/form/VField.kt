@@ -454,6 +454,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @exception VException      an exception is raised if text is bad
    */
   open fun checkType(s: Any?) {
+    println("ssssssssssssssssss :: "+s)
     checkType(block!!.activeRecord, s)
   }
 
@@ -639,6 +640,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         if (isChangedUI && hasListener) {
           println("------------VField---leave---isChangedUI && hasListener--- :: "+isChangedUI+"--++--"+hasListener)
+          println("checkType(getDisplayedValue(true)1  ::: " +checkType(getDisplayedValue(true)))
+
           checkType(getDisplayedValue(true))
         }
         callTrigger(VConstants.TRG_PREVAL)
@@ -664,6 +667,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         if (isChanged && isChangedUI && hasListener) {
           println("----------------VField---leave----------else if ---(isChanged && isChangedUI && hasListener)---")
+          println("checkType(getDisplayedValue(true)2   :::: " +checkType(getDisplayedValue(true)))
           checkType(getDisplayedValue(true))
         }
       }
@@ -1508,7 +1512,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   fun getText(r: Int): String? {
-    println("------------VField------------getText------")
+    println("------------VField------------getText------ " +r)
 
     if (alias != null) {
       return alias!!.getText(0)
@@ -1725,7 +1729,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Marks the field changed, trails the record if necessary
    */
   fun setChanged(changed: Boolean) {
-    println("------------VField------------setChanged--boolean----")
+    println("------------VField------------setChanged--boolean----"+changed)
 
     if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
@@ -2530,7 +2534,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var i = listeners.size - 2
 
       while (i >= 0) {
-        if (listeners[i] === FieldListener::class.java) {
+        if (listeners[i] == FieldListener::class.java) {
           (listeners[i + 1] as FieldListener).enter()
         }
         i -= 2
@@ -2544,7 +2548,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var i = listeners.size - 2
 
       while (i >= 0) {
-        if (listeners[i] === FieldListener::class.java) {
+        if (listeners[i] == FieldListener::class.java) {
           (listeners[i + 1] as FieldListener).leave()
         }
         i -= 2
@@ -2574,18 +2578,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (hasListener) {
       val listeners = fieldListener!!.listenerList
       var i = listeners.size - 2
-      println("-----------VField---------fieldListener!!.listenerList---------- "+fieldListener!!.listenerList)
+      println("-----------VField---------fieldListener!!.listenerList---------- "+fieldListener!!.listenerList.toString())
       println("------------VField----------i------ "+i)
 
       while (i >= 0 && value == null) {
-        if (listeners[i] === FieldListener::class.java) {
+        println("listeners[i]"+listeners[i])
+        if (listeners[i] == FieldListener::class.java) {
           value = (listeners[i + 1] as FieldListener).getDisplayedValue(trim)
           println("-----------VField-------while value------- "+value)
         }
         i -= 2
       }
     }
-    println("-----VField-----value ------------ "+value)
+    println("-----VField-----value ---------++--- "+value)
     return value
   }
 

@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.AttachEvent
 import org.kopi.galite.visual.form.ModelTransformer
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VConstants
@@ -85,10 +87,14 @@ open class DTextField(
   override fun valueChanged() {
     val value = text
     println("--DTextF----valueChanged-text- ::"+text)
+    println("isChanged(getModel().getText(), value) ===== "+isChanged(getModel().getText(), value))
+    println("getModel().getText() ===== "+getModel().getText())
+    println("value ===== "+value)
+    checkText(value, true) // isChanged(getModel().getText(), value))
 
-    if (isChanged(getModel().getText(), value)) {
-      checkText(value)
-    }
+//    if (isChanged(getModel().getText(), value)) {
+//      checkText(value)
+//    }
   }
 
   /**
@@ -137,11 +143,12 @@ open class DTextField(
   }
 
   override fun updateText() {
-    val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
+    val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
     access(currentUI) {
+      println("transformer!!.toGui(newModelTxt)?.trim() :: "+transformer!!.toGui(newModelTxt)?.trim())
       field.value = transformer!!.toGui(newModelTxt)?.trim() // FIXME
     }
-    super.updateText()
+  //  super.updateText()
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
       selectionAfterUpdateDisabled = false
     }
@@ -156,7 +163,7 @@ open class DTextField(
     if (!modelHasFocus()) {
       if (inside) {
         inside = false
-        leaveMe()
+       // leaveMe()
       }
     } else {
       if (!inside) {
@@ -174,9 +181,11 @@ open class DTextField(
   /**
    * Gets the focus to this field.
    */
+  @Synchronized
   private fun enterMe() {
     access(currentUI) {
       if (scanner) {
+        println("transformer!!.toGui() :: "+transformer!!.toGui(""))
         field.value = transformer!!.toGui("")
       }
       field.focus()
@@ -186,6 +195,7 @@ open class DTextField(
   /**
    * Leaves the field.
    */
+  @Synchronized
   private fun leaveMe() {
     reInstallSelectionFocusListener()
     // update GUI: for
@@ -193,7 +203,8 @@ open class DTextField(
     if (scanner) {
       // trick: it is now displayed on a different way
       access(currentUI) {
-        field.value = transformer!!.toModel(field.value.toString())
+        println("transformer?.toModel(getText()) :: "+transformer?.toModel(text))
+        field.value = transformer?.toModel(getText())
       }
     }
   }
@@ -204,32 +215,35 @@ open class DTextField(
    * @param s The text to be verified.
    * @throws VException Errors occurs during check.
    */
-  private fun checkText(s: String?) {
+  private fun checkText(s: String?, changed: Boolean) {
     println("------DTextField---checkText----s- :: "+s)
+    println("------DTextField---checkText---transformer!!.toModel()- :: "+transformer!!.toModel(s ?: ""))
     val text = transformer!!.toModel(s ?: "")
     if (!transformer!!.checkFormat(text)) {
       return
     }
-    getModel().onTextChange(text!!)
+  //  getModel().onTextChange(text!!)
 
-    if (getModel().checkText(text)) {
-      // affect value directly to the model.
-      getModel().getForm().performAsyncAction(object : Action("check_type") {
-        override fun execute() {
-          println("-----DTextField-----:: "+text)
-          getModel().checkType(text)
-        }
-      })
+    if (getModel().checkText(text!!) && changed) {
+      getModel().isChangedUI = true
     }
+    getModel().setChanged(changed)
   }
 
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getText(): String? {
-    println("transformer!!.toModel(field.value.orEmpty()) :: "+transformer!!.toModel(field.value.orEmpty()))
-    println("field.value :: "+field.value)
-    return transformer!!.toModel(field.value.orEmpty())
+//    return when (val value: Any? = this.field.value) {
+//      is LocalDate -> value.format()
+//      is LocalTime -> value.format()
+//      is Instant -> value.format()
+//      is LocalDateTime -> value.format()
+//      else -> value?.toString()
+//    }
+
+    return getModel().toText(field.value)
+    //return transformer!!.toModel(field.value.orEmpty())
   }
 
   override fun setHasCriticalValue(b: Boolean) {
@@ -332,34 +346,33 @@ open class DTextField(
       return convertFixedTextToSingleLine(guiTxt, col, row)
     }
 
-    override fun toGui(modelTxt: String?): String {
-      val target = StringBuffer()
-      val length = modelTxt!!.length
-      var usedRows = 1
-      var start = 0
-      while (start < length) {
-        val line = modelTxt.substring(start, (start + col).coerceAtMost(length))
-        var last = -1
-        var i = line.length - 1
-        while (last == -1 && i >= 0) {
-          if (!Character.isWhitespace(line[i])) {
-            last = i
+    override fun toGui(modelTxt: String?): String =
+      buildString {
+        val length = modelTxt!!.length
+        var usedRows = 1
+        var start = 0
+        while (start < length) {
+          val line = modelTxt.substring(start, (start + col).coerceAtMost(length))
+          var last = -1
+          var i = line.length - 1
+          while (last == -1 && i >= 0) {
+            if (!Character.isWhitespace(line[i])) {
+              last = i
+            }
+            --i
           }
-          --i
-        }
-        if (last != -1) {
-          target.append(line.substring(0, last + 1))
-        }
-        if (usedRows < row) {
-          if (start + col < length) {
-            target.append('\n')
+          if (last != -1) {
+            append(line.substring(0, last + 1))
           }
-          usedRows++
+          if (usedRows < row) {
+            if (start + col < length) {
+              append('\n')
+            }
+            usedRows++
+          }
+          start += col
         }
-        start += col
       }
-      return target.toString()
-    }
 
     override fun checkFormat(guiTxt: String?): Boolean = guiTxt!!.length <= row * col
   }
@@ -375,6 +388,7 @@ open class DTextField(
       }
       //.setData(VlibProperties.getString("item-index")) TODO
 
+      println("ooooooooooooooo  :: "+field.value)
       contextMenu.target = field
     }
   }

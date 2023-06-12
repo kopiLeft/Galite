@@ -222,6 +222,7 @@ fun <T> FormField<T>.click(): UField {
   }
 
   if(editorField is TextField) {
+    println ("--------------------+++++++++++Field+++-----------------++++++++")
     editorField._get<InputTextField<*>>().content._focus()
   }
   (editorField as ClickNotifier<*>)._clickAndWait(50)

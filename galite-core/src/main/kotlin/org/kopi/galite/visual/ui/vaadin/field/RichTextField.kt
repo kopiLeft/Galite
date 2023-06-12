@@ -68,6 +68,8 @@ class RichTextField(
       editor.setWidth((8 * col).toFloat(), Unit.PIXELS)
     }
     createNavigatorKeys()
+    println("RichTextField ===========value== "+this.value)
+
     editor.addJSKeyDownListener(editor.keyNavigators)
   }
 

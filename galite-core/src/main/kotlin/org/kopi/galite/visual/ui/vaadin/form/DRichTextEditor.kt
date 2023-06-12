@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.type.format
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VStringField
@@ -24,6 +25,10 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.RichTextField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 /**
  * Rich text editor implementation based on CK editor for vaadin.
@@ -139,7 +144,13 @@ class DRichTextEditor(
   }
 
   override fun getText(): String? {
-    return editor.value
+    return when (val value: Any? = editor.value) {
+      is LocalDate -> value.format()
+      is LocalTime -> value.format()
+      is Instant -> value.format()
+      is LocalDateTime -> value.format()
+      else -> value?.toString()
+    }
   }
 
   override fun setHasCriticalValue(b: Boolean) {}

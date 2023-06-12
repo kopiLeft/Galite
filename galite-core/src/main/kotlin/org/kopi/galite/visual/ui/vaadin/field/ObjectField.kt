@@ -43,6 +43,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle, JSKeyDownHandler {
     element.setAttribute("hideFocus", "true")
     element.setProperty("outline", "0px")
     NavigationHandler().createNavigatorKeys()
+    println("ObjectFiled ===========value== "+this.value)
     addJSKeyDownListener(keyNavigators)
   }
 

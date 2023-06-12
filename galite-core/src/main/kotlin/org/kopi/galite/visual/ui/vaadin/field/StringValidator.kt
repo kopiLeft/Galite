@@ -32,7 +32,7 @@ class StringValidator(
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun checkType(field: InputTextField<*>, text: String) {
-    println("---------StringValidator----------- :: "+text)
+    println("---------StringValidator--------checkType--- :: "+text)
 
     var text: String? = text
     if (text == null || "" == text) {
@@ -59,6 +59,8 @@ class StringValidator(
    * @param     source          the source text.
    */
   private fun convertName(source: String): String {
+    println("StringValidator convertName")
+
     val chars = source.lowercase().toCharArray()
     var found = false
     for (i in chars.indices) {
@@ -78,6 +80,8 @@ class StringValidator(
    * @return `true` if the text is valid.
    */
   private fun checkText(text: String?): Boolean {
+    println("StringValidator checkText")
+
     var end = 0
     end = textToModel(text, width, Int.MAX_VALUE, fixedNewLine).length
     return end <= width * height
@@ -92,6 +96,7 @@ class StringValidator(
      * @param     fixed   is it a fixed text ?
      */
     fun textToModel(source: String?, col: Int, lin: Int, fixed: Boolean): String {
+      println("StringValidator textToModel")
       val target = StringBuffer()
       val length = source!!.length
       var start = 0

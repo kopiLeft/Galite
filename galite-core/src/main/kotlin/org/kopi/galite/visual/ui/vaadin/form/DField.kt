@@ -444,6 +444,8 @@ abstract class DField(internal var model: VFieldUI,
   //---------------------------------------------------
 
   override fun gotoNextField() {
+    println("gotoNextField")
+
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
       override fun execute() {
         getModel().block!!.form.getActiveBlock()!!.gotoNextField()

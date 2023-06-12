@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import com.vaadin.flow.component.*
+import com.vaadin.flow.component.AbstractField
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
@@ -32,25 +34,12 @@ import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 import org.kopi.galite.visual.form.VConstants
 
-import com.vaadin.flow.component.AbstractCompositeField
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.BlurNotifier
-import com.vaadin.flow.component.DetachEvent
-import com.vaadin.flow.component.FocusNotifier
-import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.KeyDownEvent
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.KeyPressEvent
-import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
 import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.dom.DomEvent
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 
 /**
  * A text field component that can support many validation
@@ -103,18 +92,22 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   override fun setPresentationValue(newPresentationValue: String?) {
     println("newPresentationValue ::"+newPresentationValue)
-    println("content.value ::"+content.value)
+//    println("content.value ::"+content.value)
+    println("content.value = "+content.value)
     content.value = newPresentationValue
+//    this.connector.value = newPresentationValue.toString()
   }
 
   open fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
-    println("addTextValueChangeListener :: " +internalField)
+    println("addTextValueChangeListener :: $internalField")
     println("addTextValueChangeListener :: " +listener)
     internalField.addValueChangeListener(listener)
   }
 
   override fun getValue(): String? {
-    println("format(internalField.value)  ::"+format(internalField.value))
+//    println("===========internalField.value============== "+internalField.value)
+//println("connector::  "+connector)
+  //    println("format(internalField.value)  ::"+format(internalField.value))
     return format(internalField.value)
   }
 
@@ -147,6 +140,8 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     //  cancelKey()
     //  return
     //}
+    println("getSelectedText ::"+getSelectedText())
+    println("value ::"+value)
 
     // if the content if the input is selected, validate only the typed character.
     // this is typically used for enumeration fields to allow the content to be overwritten
@@ -163,6 +158,8 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     // validate the whole text input.
     if (validationStrategy != null) {
       event.key.keys.forEach {
+        println("InputTextField == it ::"+it)
+        println("InputTextField == value ::"+value)
         if (!validationStrategy!!.validate(value + it)) {
           cancelKey()
         }
@@ -185,12 +182,18 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   private fun onPasteEvent(event: DomEvent) {
     // should validate text content
     if (validationStrategy != null) {
+      println("onPasteEvent 1 :: "+value)
       val before = value
 
       if (!validationStrategy!!.validate(value)) {
+
+        println("onPasteEvent 2 :: "+value)
+        println("onPasteEvent 3 :: "+before)
+
         value = before
       }
     }
+    println("==========onPasteEvent===== "+value)
   }
 
   @JvmName("setAnyValue")
@@ -202,17 +205,17 @@ open class InputTextField<C> internal constructor(protected val internalField: C
 
   override fun setValue(text: String?) {
     var text = text
-
-    // set only valid inputs
-    //if (validationStrategy is NoeditValidator TODO
-    //  || validationStrategy!!.validate(text)
-    //) {
+println("validationStrategy" +validationStrategy)
+    println("validationStrategy is NoeditValidator :: "+(validationStrategy is NoeditValidator))
+     // set only valid inputs
+    if (validationStrategy is NoeditValidator
+      || validationStrategy!!.validate(text)) {
     if (text == null) {
       text = "" // avoid NullPointerException
     }
     println("text::  "+text)
     setPresentationValue(text)
-    //}
+    }
   }
 
   /**
@@ -552,8 +555,6 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   fun checkValue(rec: Int) {
     isCheckingValue = true //!!! don't check twice on field blur
     if (validationStrategy != null) {
-      println("--------inputTesxtField-------- if (value == null) \"\" else value!!.trim()------------"+ if (value == null) "" else value!!.trim())
-      println("--------inputTesxtField-------- value------------"+ value)
       validationStrategy!!.checkType(this, if (value == null) "" else value!!.trim())
     }
     isCheckingValue = false
@@ -573,13 +574,19 @@ open class InputTextField<C> internal constructor(protected val internalField: C
    */
   private fun refreshSuggestions() {
     // Get the raw text.
+
+    println("valueeeeeeeeeeeeeeeeeeeeeeeeee  "+ value)
     val text = value
 
     if (text == null || text.isEmpty() || text.length.toDouble() == getMaxLength()) {
+      println("if skjffiqnfnsdl "+text)
       hideSuggestions()
     } else {
       currentText = text
+      println("currentText ========== "+ currentText)
+
     }
+
     showSuggestions(text)
   }
 
@@ -692,6 +699,7 @@ open class InputTextField<C> internal constructor(protected val internalField: C
    * @param query The searched text.
    */
   internal fun showSuggestions(query: String?) {
+    println("showSuggestions :: "+query)
     if (!hasAutocomplete) {
       return
     }

@@ -30,12 +30,15 @@ open class AllowAllValidator(val maxLength: Int) : TextValidator {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun apply(value: Any?, context: ValueContext): ValidationResult =
-          if (validate(value?.toString())) ValidationResult.ok() else ValidationResult.error("TODO") // TODO
+  override fun apply(value: Any?, context: ValueContext): ValidationResult {
+    println("AllowAllValidator ===== Apply =========== value::"+value)
+         return if (validate(value?.toString())) ValidationResult.ok() else ValidationResult.error("TODO") // TODO
+     }
 
   override fun validate(c: Char): Boolean = true
 
   override fun validate(text: String?): Boolean {
+    println("AllowAllValidator =============== validate :: "+text)
     return if (text == null) {
       true // null text is considered as valid one
     } else {
@@ -49,6 +52,8 @@ open class AllowAllValidator(val maxLength: Int) : TextValidator {
   }
 
   override fun checkType(field: InputTextField<*>, text: String) {
+    println("AllowAllValidator =============== checkType :: "+text)
+
     // nothing to do, all is accepted
   }
 }

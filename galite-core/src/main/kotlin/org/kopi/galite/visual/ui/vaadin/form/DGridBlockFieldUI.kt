@@ -37,9 +37,13 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
   // IMPLEMENTATION
   // --------------------------------------------------
   override fun createDisplay(label: ULabel?, model: VField, detail: Boolean): UField {
+    println("--+-+-+-++-+-+-+createDisplay+-+-+-+-+-++-")
+
     return if (detail) {
       super.createDisplay(label, model, detail)
     } else {
+      println("--+-+-+-++-+-+-+createDisplay+-+-+-else+-+-++-")
+
       val field: DGridEditorField<*>
       when (model.getType()) {
         VField.MDL_FLD_EDITOR, VField.MDL_FLD_TEXT -> if (model is VBooleanField) {

@@ -140,8 +140,11 @@ class KeyNavigator(private val model: VField, private val box: InputTextField<*>
   }
 
   override fun onQuery(query: String?) {
+    println (
+      "KeyNavigator ---------OnQuery-----  $query")
     model.getForm().performAsyncAction(object : Action() {
       override fun execute() {
+        println(" model.getSuggestions(query) :: "+ model.getSuggestions(query))
         val suggestions = model.getSuggestions(query)
         if (box != null && suggestions != null) {
           /*BackgroundThreadHandler.access(Runnable { TODO

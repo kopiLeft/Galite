@@ -23,6 +23,8 @@ interface JSKeyDownHandler {
 
   @ClientCallable
   fun onKeyDown(key: String, value: String?) {
+    println("JSKeyDownHandler onKeyDown key ::"+key)
+    println("JSKeyDownHandler onKeyDown value ::"+value)
     val action = keyNavigators?.get(key)
 
     action?.performAction(value)

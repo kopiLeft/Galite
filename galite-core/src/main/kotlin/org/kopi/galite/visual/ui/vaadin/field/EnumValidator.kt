@@ -30,6 +30,8 @@ class EnumValidator(private val enumerations: Array<String>?,
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun validate(text: String?): Boolean {
+    println("EnumValidator  text :: $text")
+    println("EnumValidator enumerations :: ${enumerations.toString()}")
     if (enumerations != null && text != null) {
       val s = text.lowercase()
       for (i in enumerations.indices) {
@@ -76,7 +78,7 @@ class EnumValidator(private val enumerations: Array<String>?,
           // show the suggestions list
           // TextField.internalHandleQuery(text, true, true) TODO
         }
-        else -> field.value = enumerations!![found]
+        else -> { println("EnumValidator found"+found); println("EnumValidator enumerations!![found]"+enumerations!![found]) ;field.value = enumerations!![found] }
       }
     }
   }

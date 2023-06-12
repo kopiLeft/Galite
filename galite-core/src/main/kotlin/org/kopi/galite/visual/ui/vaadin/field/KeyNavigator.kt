@@ -41,7 +41,9 @@ class KeyNavigator(field: InputTextField<*>,
   //---------------------------------------------------
   override fun performAction(eagerValue: String?) {
     val oldValue = field.value
-
+    println("KeyNavigator performAction$eagerValue")
+    println("KeyNavigator oldValue:: " +oldValue)
+    println("KeyNavigator field.value :: " +field.value)
     // first sends the text value to model if changed
     if(oldValue != eagerValue) {
       // Synchronize with server side

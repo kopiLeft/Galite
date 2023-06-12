@@ -51,7 +51,7 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
       Thread {
         val text = StringBuffer(field.value)
         println("Thread text :: "+text)
-        println("Thread field.value :: "+field.value)
+      //  println("Thread field.value :: "+field.value)
         text.insert(Utils.getCursorPos(field), "\u00D8")
         access(ui) {
           field.value = text.toString()
@@ -157,6 +157,8 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
       val handler = TextFieldNavigationHandler(isMulti)
 
       handler.createNavigatorKeys(field)
+      println("TextFiledNavigation ===========value== "+field.getValue())
+
       field.addJSKeyDownListener(field.keyNavigators)
       return handler
     }

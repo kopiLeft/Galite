@@ -23,6 +23,8 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.KeyModifier
 
 fun Component.addJSKeyDownListener(shortCuts: MutableMap<String, ShortcutAction<*>>) {
+  println("Component.addJSKeyDownListener :: "+this.toString())
+  println("Component.addJSKeyDownListener ui :: "+this.ui)
   val jsCall = """
       this.addEventListener("keydown", event => {
          ${keysConditions(shortCuts)}
@@ -35,6 +37,9 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
   var first = true
 
   return buildString {
+    println("================JSUTils ================")
+    println("================JSUTils =============inputValueExpression==="+inputValueExpression())
+
     shortCuts.forEach { (navigatorKey, keyNavigator) ->
       val key = keyNavigator.key
       val modifiers = keyNavigator.modifiers

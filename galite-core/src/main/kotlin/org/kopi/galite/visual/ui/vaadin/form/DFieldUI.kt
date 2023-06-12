@@ -44,6 +44,8 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
   // VFIELDUI IMPLEMENTATION
   // --------------------------------------------------
   override fun createDisplay(label: ULabel?, model: VField, detail: Boolean): UField {
+
+    println ("--------------DFieldUI--createDisplay----- ::"+model.getType())
     return when (model.getType()) {
       VField.MDL_FLD_EDITOR -> if ((model as VTextField).isStyled) {
         DRichTextEditor(this, label as? DLabel, model.align,
@@ -57,10 +59,14 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
         DBooleanField(this, label as? DLabel, model.align, model.options,
                       detail)
       } else if (model is VStringField && model.isStyled) {
+        println("else if ")
         DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
                         model.height, detail)
       } else {
+        println("else")
+        println("label ::"+label)
+        println("detail ::"+detail)
         DTextField(this, label as? DLabel, model.align, model.options,
                    detail)
       }
@@ -99,6 +105,7 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
    * every block record here to fill out the client side cached values.
    */
   override fun fireDisplayCreated() {
+    println("fireDisplayCreated")
     for (r in 0 until getBlock().bufferSize) {
       // fire value changed only for text fields and when text value is not empty.
       if (model.getType() == VField.MDL_FLD_TEXT || model.getType() == VField.MDL_FLD_EDITOR) {
@@ -106,6 +113,9 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
           (blockView as DBlock).fireValueChanged(index, r, model.getText(r))
         }
       }
+      println("rrrrrrrr::"+r)
+      println("model.getForeground(r)"+model.getForeground(r))
+      println("model.getBackground(r)"+model.getBackground(r))
       // fire color changed for non empty colors
       if (Utils.toString(model.getForeground(r)).isNotEmpty() || Utils.toString(
                       model.getBackground(r)).isNotEmpty()) {

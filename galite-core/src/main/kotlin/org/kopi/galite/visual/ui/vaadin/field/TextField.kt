@@ -254,6 +254,7 @@ class TextField(val model: VField,
     val binder = Binder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
+    println("-----------setValidator -------------  $type")
     val validator = when (type) {
       Type.STRING -> StringValidator(col, rows, !dynamicNewLine, convertType, maxLength)
       Type.INTEGER -> IntegerValidator(minval, maxval, maxLength)
@@ -292,7 +293,9 @@ class TextField(val model: VField,
    * @return the attached text field component.
    */
   private fun createTextField(): InputTextField<*> {
+
     val text = createFieldComponent()
+println("----------------TextFiled-------- text -------$text")
 
     setValidator(text)
     setTextTransform(text)
@@ -302,6 +305,7 @@ class TextField(val model: VField,
       text.isReadOnly = true
     }
 
+    println("----------------TextFiled-----return--- text -------$text")
     return text
   }
 
@@ -310,6 +314,7 @@ class TextField(val model: VField,
    * @return the input component
    */
   private fun createFieldComponent(): InputTextField<*> {
+    println("----------createFieldComponent-------------")
     var col = col
     val size = getFieldSize()
     val text = if (noEcho && rows == 1) {
@@ -326,6 +331,8 @@ class TextField(val model: VField,
         it.setFixedNewLine(!dynamicNewLine)
       }
     } else if(!fieldParent.model.hasAction()) {
+      println("------------typeee------ "+type)
+      println("------------enumerations------ "+enumerations)
       when (type) {
         Type.INTEGER -> VIntegerField(col, minval!!, maxval!!)
         Type.DECIMAL -> VDecimalField(col, maxScale, minval, maxval, fraction)
@@ -339,11 +346,14 @@ class TextField(val model: VField,
       VInputButtonField(size)
     }
 
+    println("===========createFieldComponent============ "+text)
+    println("===========createFieldComponent=====type======= "+type)
+
     text.size = size
     text.setMaxLength(maxLength)
     text.content.width = "" + size + "ch" // TODO: temporary styling
     text.element.style["box-sizing"] = "unset"
-    text.setHasAutocomplete(model.hasAutocomplete())
+    text.setHasAutocomplete(true)//model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
     textFieldListeners.add(KeyNavigator(model, text))
@@ -412,11 +422,14 @@ class TextField(val model: VField,
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
+
+    println("==============newPresentationValue.toString()============ "+newPresentationValue.toString())
     inputField.value = newPresentationValue.toString()
   }
 
   override fun getValue(): String? {
-    println("inputField.value:: "+inputField.value)
+  //  println("inputField.value:: "+inputField.value)
+ //   println("this.value:: "+this.value)
     return inputField.value
   }
 

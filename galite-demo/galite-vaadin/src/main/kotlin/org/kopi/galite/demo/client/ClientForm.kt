@@ -24,16 +24,13 @@ import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.demo.desktop.runForm
-import org.kopi.galite.visual.domain.BOOL
-import org.kopi.galite.visual.domain.DECIMAL
-import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.domain.*
 
 class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
 
@@ -128,6 +125,10 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
       columns(c.activeClt)
     }
 
+    val test = visit(domain = PeriodeMois, position = at(6, 1)) {
+      label = "Test enum"
+    }
+
     val PostqryTrigger = trigger(POSTQRY) {
       salesBlock.idClt[0] = idClt.value
       salesBlock.load()
@@ -188,6 +189,10 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
       columns(P.price)
     }
 
+    val test = visit(domain = Test, position = at(6, 1)) {
+      label = "Test enum 2"
+    }
+
     init {
       border = Border.LINE
 
@@ -224,6 +229,24 @@ class ClientForm : FormDefault(title = "Clients", locale = Locale.UK) {
         salesBlock.gotoRecord(if (salesBlock.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
+  }
+}
+
+object Test: CodeDomain<Int>() {
+  init {
+    "Jan"               keyOf 0
+    "Fév"               keyOf 1
+    "Mar"               keyOf 2
+    "Avr"               keyOf 3
+  }
+}
+
+object PeriodeMois: CodeDomain<Int>() {
+  init {
+    "Début"             keyOf 0
+    "Fin"               keyOf 1
+    "Souus"             keyOf 2
+    "Test"              keyOf 3
   }
 }
 

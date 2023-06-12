@@ -53,20 +53,24 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   }
 
   override fun getDisplayedValue(trim: Boolean): Any? {
+    println("=========getDisplayedValue=========field============================  : "+ getCurrentDisplay())
+
     return when (val field = getCurrentDisplay()) {
+
       null -> {
         "" // having null pointer exception when display is not defined
       }
       is UTextField -> {
         println("-------------AbstractFieldHandler-------UTextField----")
-        val text = field.getText()
+        val text = (field).getText()
+println ("=======================text======================   $text")
 
         if (!trim) {
           println("-------------AbstractFieldHandler-------UTextField---if !trim--- :: " +text)
 
           text
         } else if (model.height == 1) {
-          println("-------------AbstractFieldHandler-------UTextField---else if---")
+          println("-------------AbstractFieldHandler-------UTextField---else if---$model")
 
           Utils.trimString(text!!)
         } else {

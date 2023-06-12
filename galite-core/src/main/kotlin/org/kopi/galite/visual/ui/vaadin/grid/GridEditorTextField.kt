@@ -56,6 +56,8 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
       setModelValue(value, it.isFromClient)
     }
     createNavigationActions()
+    println("GridEditorTextField ===========value== "+this.value)
+
     wrappedField.addJSKeyDownListener(keyNavigators)
     wrappedField.isAutoselect = true
   }
@@ -208,6 +210,10 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
     //---------------------------------------------------
     override fun performAction(eagerValue: String?) {
       val oldValue = value
+
+      println("GridEditorText -- KeyNavigator performAction$eagerValue")
+      println("GridEditorText -- KeyNavigator oldValue:: " +oldValue)
+      println("GridEditorText -- KeyNavigator wrappedField.value :: " +wrappedField.value)
 
       // block any navigation request if suggestions is showing
       /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO

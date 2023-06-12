@@ -139,6 +139,7 @@ abstract class VCodeField(val bufferSize: Int,
       println("-----VCodeField---found----- :: "+found)
 
       when (found) {
+
         -1 -> {
           println("--VCodeField-----when ----- labels.size -- ::"+labels.size)
           println("--VCodeField-----when ----- s.toInt() -- ::"+s.toInt())

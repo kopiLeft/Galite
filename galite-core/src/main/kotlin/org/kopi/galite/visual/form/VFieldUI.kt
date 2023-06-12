@@ -423,6 +423,10 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   // PROTECTED BUILDING METHODS
   // ----------------------------------------------------------------------
   private fun buildDisplay() {
+
+    println("=============================================================")
+    println("==================VField  buildDisplay=======================")
+    println("=============================================================")
     // building
     dl = if (model.isSortable()) {
       // !!! override dl ist not good
