@@ -16,9 +16,17 @@
  */
 package org.kopi.galite.tests.examples
 
+import org.junit.Test
+
+import java.time.Instant
+import java.time.LocalDateTime
 import java.util.Locale
 
+import kotlin.test.assertEquals
+
 import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.domain.*
 
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DATETIME
@@ -108,6 +116,29 @@ class TraineeshipWithAllFieldTypes : Block("Training", 1, 1) {
     columns(t.informations) {
       priority = 1
     }
+  }
+  val trainDateTimesStamp = visit(domain = TIMESTAMP, at(11,1)) {
+    label = "training Timestamp"
+    columns(t.trainDateTimestamp)
+    value = Instant.now()
+  }
+  val trainDateLocalDateTime = visit(domain = DATETIME, at(12,1)) {
+    label = "training DateTime"
+    columns(t.trainDateTime)
+  }
+}
+
+class testDateTime: GaliteVUITestBase() {
+  val simpleform = SimpleForm()
+  val currentLocalDateTime = LocalDateTime.now()
+  val currentTimestamp = Instant.now()
+
+  @Test
+  fun `test LocalDateTime value`() {
+    simpleform.block.trainDateLocalDateTime.value = currentLocalDateTime
+    simpleform.block.trainDateTimesStamp.value = currentTimestamp
+    assertEquals(simpleform.block.trainDateLocalDateTime.value, currentLocalDateTime)
+    assertEquals(simpleform.block.trainDateTimesStamp.value, currentTimestamp)
   }
 }
 

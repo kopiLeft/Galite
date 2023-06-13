@@ -21,6 +21,7 @@ import java.sql.SQLException
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.temporal.Temporal
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SortOrder
@@ -259,12 +260,12 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
     return entries
   }
 
-  fun openForEdit(startDateTime: Instant, endDateTime: Instant) {
+  fun openForEdit(startDateTime: Temporal, endDateTime: Temporal) {
     set(startDateTime, endDateTime)
     insertMode()
   }
 
-  internal fun openForEdit(record: Int, newStart: Instant, newEnd: Instant) {
+  internal fun openForEdit(record: Int, newStart: Temporal, newEnd: Temporal) {
     fetchRecordInBlock(record)
     set(newStart, newEnd)
     fullCalendarForm.doNotModal()
@@ -281,7 +282,7 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
     }
   }
 
-  fun set(startDateTime: Instant, endDateTime: Instant) {
+  fun set(startDateTime: Temporal, endDateTime: Temporal) {
     if (dateField != null) {
       dateField!!.setDate(LocalDate.from(startDateTime))
       fromTimeField!!.setTime(LocalTime.from(startDateTime))

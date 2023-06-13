@@ -19,6 +19,7 @@ package org.kopi.galite.tests.ui.vaadin.block
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import kotlin.test.assertEquals
@@ -64,20 +65,22 @@ class SimpleBlockTests: GaliteVUITestBase() {
 
     // Enters values to fields
     val currentTimestamp   = Instant.now()
+    val localdatetime      = LocalDateTime.now()
     val currentDate        = LocalDate.now()
     val currentWeek        = Week.now()
     val currentMonth       = Month.now()
     val currentTime        = LocalTime.now()
-    val idClt       = formExample.salesSimpleBlock.idClt.edit(100)
-    val description = formExample.salesSimpleBlock.description.edit("description")
-    val price       = formExample.salesSimpleBlock.price.edit(BigDecimal("100.2"))
-    val active      = formExample.salesSimpleBlock.active.edit(true)
-    val date        = formExample.salesSimpleBlock.date.edit(currentDate)
-    val month       = formExample.salesSimpleBlock.month.edit(currentMonth)
-    val timestamp   = formExample.salesSimpleBlock.timestamp.edit(currentTimestamp)
-    val time        = formExample.salesSimpleBlock.time.edit(currentTime)
-    val week        = formExample.salesSimpleBlock.week.edit(currentWeek)
-    val codeDomain  = formExample.salesSimpleBlock.codeDomain.editText("Galite")
+    val idClt              = formExample.salesSimpleBlock.idClt.edit(100)
+    val description        = formExample.salesSimpleBlock.description.edit("description")
+    val price              = formExample.salesSimpleBlock.price.edit(BigDecimal("100.2"))
+    val active             = formExample.salesSimpleBlock.active.edit(true)
+    val date               = formExample.salesSimpleBlock.date.edit(currentDate)
+    val month              = formExample.salesSimpleBlock.month.edit(currentMonth)
+    val timestamp          = formExample.salesSimpleBlock.timestamp.edit(currentTimestamp)
+    val localDateTime      = formExample.salesSimpleBlock.localDateTime.edit(localdatetime)
+    val time               = formExample.salesSimpleBlock.time.edit(currentTime)
+    val week               = formExample.salesSimpleBlock.week.edit(currentWeek)
+    val codeDomain         = formExample.salesSimpleBlock.codeDomain.editText("Galite")
 
     // Go to the first field
     formExample.salesSimpleBlock.idClt.click()
@@ -90,6 +93,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     assertEquals(currentDate, date.getModel().getDate(0))
     assertEquals(currentMonth, month.getModel().getMonth(0))
     assertEquals(currentTimestamp.defaultFormat(), timestamp.getModel().getTimestamp(0).defaultFormat())
+    assertEquals(localdatetime.defaultFormat(), localDateTime.getModel().getTimestamp(0).defaultFormat())
     assertEquals(currentTime.format(), time.getModel().getTime(0).toString())
     assertEquals(currentWeek, week.getModel().getWeek(0))
     assertEquals(1, codeDomain.getModel().getObject(0))

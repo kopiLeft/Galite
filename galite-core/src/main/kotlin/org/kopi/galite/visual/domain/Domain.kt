@@ -180,7 +180,7 @@ open class Domain<T>(val width: Int? = null,
         Month::class -> VMonthField(block.buffer)
         Week::class -> VWeekField(block.buffer)
         org.joda.time.LocalTime::class, LocalTime::class -> VTimeField(block.buffer)
-        Instant::class, LocalDateTime::class, DateTime::class -> VTimestampField(block.buffer)
+        Instant::class, LocalDateTime::class, DateTime::class -> VTimestampField(block.buffer, kClass)
         Image::class -> VImageField(block.buffer, width!!, height!!)
         else -> {
           if(this@Domain is TEXT) {

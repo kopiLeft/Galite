@@ -17,7 +17,7 @@
 
 package org.kopi.galite.tests.ui.vaadin
 
-import java.time.Instant
+import java.time.temporal.Temporal
 
 import org.junit.Before
 import org.junit.BeforeClass
@@ -78,7 +78,7 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     waitAndRunUIQueue(duration)
   }
 
-  fun Instant?.defaultFormat(): String? = this?.let { format("yyyy-MM-dd HH:mm:ss") }
+  fun Temporal?.defaultFormat(): String? = this?.let { format("yyyy-MM-dd HH:mm:ss") }
 
   companion object {
     @BeforeClass

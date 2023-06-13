@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DATE
+import org.kopi.galite.visual.domain.DATETIME
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
@@ -80,6 +81,10 @@ class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
     val timestamp = visit(domain = TIMESTAMP, position = at(7, 1)) {
       label = "Timestamp"
       help = "The Timestamp"
+    }
+    val localdatetime = visit(domain = DATETIME, position = at(7, 2)) {
+      label = "LocalDateTime"
+      help = "The LocalDateTime"
     }
     val time = visit(domain = TIME, position = at(8, 1)) {
       label = "Time"
@@ -146,6 +151,12 @@ class FormExample : DictionaryForm(title = "Clients", locale = Locale.UK) {
       label = "Timestamp"
       help = "The Timestamp"
     }
+
+    val localDateTime = visit(domain = DATETIME, position = at(7, 2)) {
+      label = "localDateTime"
+      help = "The local Date Time"
+    }
+
     val time = visit(domain = TIME, position = at(8, 1)) {
       label = "Time"
       help = "The time"

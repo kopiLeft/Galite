@@ -19,7 +19,9 @@ package org.kopi.galite.testing
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.form.UField
@@ -85,7 +87,8 @@ private fun <T> FormField<T>.editInMultipleBlock(value: T?, mainWindow: MainWind
 
   when (gridEditorField) {
     is GridEditorTimestampField -> {
-      gridEditorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
+      gridEditorField._value = if (value is LocalDateTime) value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                               else (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     is GridEditorTimeField -> {
       gridEditorField._value = (value as LocalTime).format()
@@ -120,7 +123,8 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T?, mainWindow: MainWindow
 
   when {
     (editorField as? TextField)?.getContent() is VTimeStampField -> {
-      editorField._value = (value as Instant).format("yyyy-MM-dd HH:mm:ss")
+      editorField._value = if (value is LocalDateTime) value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                           else (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     editorField is BooleanField -> {
       val checkbox: Checkbox  = if (value == true) {

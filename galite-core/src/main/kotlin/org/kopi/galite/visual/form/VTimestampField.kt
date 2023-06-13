@@ -24,6 +24,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import java.time.temporal.Temporal
 import java.util.Locale
 import java.util.StringTokenizer
 
@@ -40,12 +42,12 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
+class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VField(10 + 1 + 8, 1) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var value: Array<Instant?> = arrayOfNulls(2 * bufferSize)
+  private var value: Array<Temporal?> = arrayOfNulls(2 * bufferSize)
 
   override fun hasAutofill(): Boolean = true
 
@@ -95,12 +97,13 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     }
   }
 
-  internal fun parseTimestamp(s: String): Instant {
+  internal fun parseTimestamp(s: String): Temporal {
     val timestamp = s.split("[ T]".toRegex(), 2)
     val date = parseDate(timestamp[0])
     val time = parseTime(timestamp[1])
 
-    return Timestamp.valueOf("$date $time").toInstant()
+    return if (kClass == LocalDateTime::class ) Timestamp.valueOf("$date $time").toLocalDateTime()
+           else Timestamp.valueOf("$date $time").toInstant()
   }
 
   private fun parseDate(s: String): String {
@@ -280,7 +283,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Sets the field value of given record to a timestamp value.
    */
-  override fun setTimestamp(r: Int, v: Instant?) {
+  override fun setTimestamp(r: Int, v: Temporal?) {
     if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r] != v) {
@@ -298,7 +301,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    * Warning:	This method will become inaccessible to kopi users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setTimestamp(r, v as? Instant)
+    setTimestamp(r, v as? Temporal)
   }
 
   /**
@@ -323,7 +326,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the field value of given record as a timestamp value.
    */
-  override fun getTimestamp(r: Int): Instant? = getObject(r) as? Instant
+  override fun getTimestamp(r: Int): Temporal? =  if (kClass == LocalDateTime::class) getObject(r) as? LocalDateTime else getObject(r) as? Instant
 
   /**
    * Returns the field value of the current record as an object
@@ -359,7 +362,8 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     return if (value[r] == null) {
       VConstants.EMPTY_TEXT
     } else {
-      val text = value[r]!!.format()
+      val text = if (kClass == Instant::class) (value[r]!! as Instant).format()
+                 else (value[r]!! as LocalDateTime).format()
       // this is work around to display the timestamp in yyyy-MM-dd hh:mm:ss format
       // The proper way is to change the method Timestamp#toString(Locale) but this
       // will affect the SQL representation of the timestamp value.
@@ -370,7 +374,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): Instant? = value[r]
+  override fun getSqlImpl(r: Int): Temporal? = value[r]
 
   /**
    * Copies the value of a record to another
@@ -390,13 +394,20 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   }
 
   /**
+   * Returns the current LocalDateTime or Instant based on kClass
+   */
+  fun getCurrentTimestamp(): Temporal {
+    return if (kClass == LocalDateTime::class) LocalDateTime.now() else Instant.now()
+  }
+
+  /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Instant::class
+  override fun getDataType(): KClass<*> = kClass!!
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list == null) {
-      setTimestamp(block!!.activeRecord, Instant.now())
+      setTimestamp(block!!.activeRecord, getCurrentTimestamp())
       true
     } else {
       super.fillField(handler)
@@ -414,7 +425,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
         super.enumerateValue(desc)
       }
       isNull(record) -> {
-        setTimestamp(record, Instant.now())
+        setTimestamp(record, getCurrentTimestamp())
       }
       else -> {
         // try to read timestamp
@@ -422,9 +433,10 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
           checkType(getText(record))
         } catch (e: VException) {
           // not valid, get now
-          setTimestamp(record, Instant.now())
+          setTimestamp(record, getCurrentTimestamp())
         }
-        setTimestamp(record, getTimestamp(record)?.plusMillis(if (desc) -1 else 1))
+        setTimestamp(record, if (getTimestamp(record) is Instant) (getTimestamp(record) as? Instant)?.plusMillis(if (desc) -1 else 1)
+                             else (getTimestamp(record) as? LocalDateTime)?.plus(if (desc) -1 else 1, ChronoUnit.MILLIS))
       }
     }
   }
