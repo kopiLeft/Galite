@@ -23,14 +23,17 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.Table
+
 import org.kopi.galite.visual.domain.TableInitializer
 import org.kopi.galite.visual.l10n.ListLocalizer
 
 abstract class VListColumn(
   var title: String,
-  private val internalColumn: Column<*>?,
+  private val internalColumn: ExpressionWithColumnType<*>?,
   private val table: TableInitializer?,
   private val align: Int,
   val width: Int,
@@ -57,7 +60,7 @@ abstract class VListColumn(
    */
   abstract fun getDataType(): KClass<*>
 
-  val column: Column<*>? get() = internalColumn?.let { table?.let { tableInit -> tableInit().resolveColumn(it) } } ?: internalColumn
+  val column: ExpressionWithColumnType<*>? get() = internalColumn?.let { table?.let { tableInit -> tableInit().resolveColumn(it) } as ExpressionWithColumnType } ?: internalColumn
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -69,28 +72,36 @@ abstract class VListColumn(
    * @param     loc
    */
   fun localize(loc: ListLocalizer) {
-    title = loc.getColumnTitle(column!!.name)
+    title = loc.getColumnTitle(if (internalColumn is Column<*>) internalColumn.name else title)
   }
-}
 
-/**
- * Finds and returns the column in this [ColumnSet] corresponding to the [column] from the original table.
- *
- * @param column The column in the original table.
- */
-fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
-  return when (this) {
-    is Table -> {
-      column
-    }
-    is QueryAlias -> {
-      get(column)
-    }
-    is Alias<*> -> {
-      get(column)
-    }
-    else -> {
-      columns.single { it.name == column.name }
+  /**
+   * Finds and returns the column in this [ColumnSet] corresponding to the [column] from the original table.
+   *
+   * @param column Expression of a column from the original table.
+   */
+  fun ColumnSet.resolveColumn(column: ExpressionWithColumnType<*>): Expression<*> {
+    return when (this) {
+      is Table -> {
+        column
+      }
+      is QueryAlias -> {
+        if (column is Column<*>) {
+          get(column)
+        }
+        else {
+          get(column as Expression<*>)
+        }
+      }
+      is Alias<*> -> {
+        if (column is Column<*>) {
+          get(column)
+        }
+        else {
+          column
+        }
+      }
+      else -> fields.single { (it as Column<*>).name.uppercase() == title.uppercase() }
     }
   }
 }

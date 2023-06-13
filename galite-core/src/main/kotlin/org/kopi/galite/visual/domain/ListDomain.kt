@@ -17,12 +17,13 @@
 
 package org.kopi.galite.visual.domain
 
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
+
 import org.kopi.galite.visual.dsl.common.FieldList
 import org.kopi.galite.visual.dsl.common.ListDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
@@ -88,7 +89,7 @@ abstract class ListDomain<T>(width: Int? = null,
    * @receiver the text
    * @param value the value
    */
-  infix fun String.keyOf(value: Column<*>): ListDescription {
+  infix fun String.keyOf(value: ExpressionWithColumnType<*>): ListDescription {
     val listDescription = ListDescription(this, value, this@ListDomain)
 
     columns.add(listDescription)

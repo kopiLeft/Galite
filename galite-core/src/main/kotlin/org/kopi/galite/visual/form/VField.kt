@@ -1730,7 +1730,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         while (true) {
           try {
             val table = evalListTable()
-            val column = list!!.getColumn(0).column as Column<Any?>
+            val column = list!!.getColumn(0).column as ExpressionWithColumnType<Any?>
 
             val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord) }
 
@@ -1782,7 +1782,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while (true) {
           try {
-            val column = list!!.getColumn(0).column as Column<String?>
+            val column = list!!.getColumn(0).column as ExpressionWithColumnType<String?>
             val query = evalListTable().slice(column).select {
               column.substring(1, getString(block!!.activeRecord)!!.length) eq getString(block!!.activeRecord)
             }.orderBy(column)
@@ -1837,7 +1837,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           return
         } else {
           var i = 0
-          val columns = mutableListOf<Column<*>>()
+          val columns = mutableListOf<ExpressionWithColumnType<*>>()
 
           while (i < list!!.columnCount()) {
             val column = list!!.getColumn(i).column!!
@@ -1846,7 +1846,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             i++
           }
 
-          val column = list!!.getColumn(0).column as Column<String>
+          val column = list!!.getColumn(0).column as ExpressionWithColumnType<String>
           val query = evalListTable().slice(columns).select {
             column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
@@ -1870,8 +1870,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getListID(): Int {
     val table = evalListTable()
-    val column = list!!.getColumn(0).column as Column<Any?>
-    val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
+    val column = list!!.getColumn(0).column as ExpressionWithColumnType<Any?>
+    val idColumn = table.columns.find { it.name == "ID" } as ExpressionWithColumnType<Int>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
@@ -2022,7 +2022,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   @Suppress("UNCHECKED_CAST")
   /*internal*/ fun selectFromList(gotoNextField: Boolean) {
-    val columns = mutableListOf<Column<*>>()
+    val columns = mutableListOf<ExpressionWithColumnType<*>>()
 
     list!!.columns.forEach {
       columns.add(it!!.column!!)
@@ -2031,15 +2031,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     val searchCondition = if (getSearchType() == VConstants.STY_MANY) {
       val expression = when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> {
-          list!!.getColumn(0).column as Column<Any?>
+          list!!.getColumn(0).column as ExpressionWithColumnType<Any?>
         }
 
         VConstants.FDO_SEARCH_UPPER -> {
-          (list!!.getColumn(0).column as Column<String>).upperCase()
+          (list!!.getColumn(0).column as ExpressionWithColumnType<String>).upperCase()
         }
 
         VConstants.FDO_SEARCH_LOWER -> {
-          (list!!.getColumn(0).column as Column<String>).lowerCase()
+          (list!!.getColumn(0).column as ExpressionWithColumnType<String>).lowerCase()
         }
 
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
@@ -2138,9 +2138,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       null
     } else {
       val table = evalListTable()
-      val columns = mutableListOf<Column<*>>()
+      val columns = mutableListOf<ExpressionWithColumnType<*>>()
       val suggestions= mutableListOf<Array<String?>>()
-      val condition = (list!!.getColumn(0).column as Column<String>).lowerCase()
+      val condition = (list!!.getColumn(0).column as ExpressionWithColumnType<String>).lowerCase()
 
       list!!.columns.forEach {
         columns.add(it!!.column!!)

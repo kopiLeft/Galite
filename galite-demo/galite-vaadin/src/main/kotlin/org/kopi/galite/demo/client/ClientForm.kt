@@ -18,6 +18,8 @@ package org.kopi.galite.demo.client
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder
+import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.database.Client
@@ -28,6 +30,7 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Block
@@ -61,7 +64,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   inner class Clients : Block("Clients", 1, 100) {
     val c = table(Client)
 
-    val idClt = visit(domain = INT(30), position = at(1, 1..2)) {
+    val idClt = visit(domain = ClientID, position = at(1, 1..2)) {
       label = "ID"
       help = "The client id"
       columns(c.idClt)
@@ -216,6 +219,17 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
         gotoBlock(salesBlock)
         salesBlock.gotoRecord(if (salesBlock.isRecordFilled(rec)) rec + 1 else rec)
       }
+    }
+  }
+
+  object ClientID : ListDomain<Int>(30) {
+    override val table = Client
+    init {
+      "Id"      keyOf Client.idClt                                      hasWidth 5
+      "Name"    keyOf SqlExpressionBuilder.concat(Client.firstNameClt,
+                                                  stringLiteral(" "),
+                                                  Client.lastNameClt)   hasWidth 76
+      "Age"     keyOf Client.ageClt                                     hasWidth 3
     }
   }
 }
