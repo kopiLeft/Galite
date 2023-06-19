@@ -17,7 +17,7 @@
 
 package org.kopi.galite.database.installed
 
-import java.time.Instant
+import java.time.LocalDateTime
 
 import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.insert
@@ -27,7 +27,6 @@ import org.jetbrains.exposed.sql.select
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.ModulesId
 import org.kopi.galite.database.Versions
-
 
 abstract class TransDB(val module: String, val version: Int) {
   /**
@@ -46,7 +45,7 @@ abstract class TransDB(val module: String, val version: Int) {
       Versions.insert {
         it[packageName] = module
         it[number] = version
-        it[date] = Instant.now()
+        it[date] = LocalDateTime.now()
       }
     }
   }
