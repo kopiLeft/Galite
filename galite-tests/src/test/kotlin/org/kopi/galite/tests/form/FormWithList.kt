@@ -24,9 +24,9 @@ import org.kopi.galite.database.Modules
 import org.kopi.galite.database.UserRights
 import org.kopi.galite.database.Users
 import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DATETIME
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.domain.DATETIME
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.DictionaryForm

@@ -68,9 +68,6 @@ import org.kopi.galite.visual.VDatabaseUtils
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VWindow
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.LocalDateTime
 
 abstract class VBlock(var title: String,
                       buffer: Int,
