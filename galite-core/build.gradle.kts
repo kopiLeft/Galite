@@ -79,6 +79,9 @@ dependencies {
 
   // Dataframe used in Pivot Table
   implementation("org.jetbrains.kotlinx", "dataframe", Versions.KOTLINX_DATAFRAME)
+
+  // Pivot Table
+  implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
 }
 
 dependencyManagement {

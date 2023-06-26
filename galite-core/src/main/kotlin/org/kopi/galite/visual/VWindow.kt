@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual
 
-import java.awt.Frame
+import  java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
 import java.util.Locale

@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.demo.client
 
+import com.vaadin.flow.component.UI
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -126,11 +127,14 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       salesBlock.load()
     }
 
-    init {
+      init {
+//      val ui = UI.access()
       command(item = report) {
-        createReport {
-          ClientR()
-        }
+//        UI.access()
+        UI.getCurrent().navigate(ClientR::class.java)
+//        createReport {
+//          ClientR()
+//        }
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -189,9 +193,9 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       }
 
       command(item = report) {
-        createReport {
+//        createReport {
           ClientR()
-        }
+//        }
       }
       command(item = dynamicReport) {
         createDynamicReport()
