@@ -59,7 +59,8 @@ class LocalizationTests {
           driver: String,
           username: String,
           password: String,
-          schema: String?
+          schema: String?,
+          maxRetries: Int?
         ): Connection? {
           return null
         }

@@ -105,7 +105,8 @@ class GaliteApplication : JApplication(GaliteRegistry()) {
     driver: String,
     username: String,
     password: String,
-    schema: String?
+    schema: String?,
+    maxRetries: Int?
   ): Connection? {
     val username = "admin"
     val password = "admin"
