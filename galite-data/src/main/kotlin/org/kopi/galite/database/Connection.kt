@@ -63,8 +63,9 @@ class Connection {
                       lookupUserId: Boolean = true,
                       schema: Schema? = null,
                       traceLevel: Int? = null,
-                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel)
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                      maxRetries: Int? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
 
     dbConnection = Database.connect({ connection }, databaseConfig = configuration)
     url = dbConnection.url
@@ -90,8 +91,9 @@ class Connection {
                       lookupUserId: Boolean = true,
                       schema: String? = null,
                       traceLevel: Int? = null,
-                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE)
-      : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) }, traceLevel, isolationLevel)
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                      maxRetries: Int? = null)
+      : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) }, traceLevel, isolationLevel, maxRetries)
 
   /**
    * Creates a connection with Exposed and opens it.
@@ -109,8 +111,9 @@ class Connection {
                       lookupUserId: Boolean = true,
                       schema: Schema? = null,
                       traceLevel: Int? = null,
-                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel)
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                      maxRetries: Int? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
 
     dbConnection = Database.connect(url = url,
                                     driver = driver,
@@ -135,8 +138,9 @@ class Connection {
                       lookupUserId: Boolean = true,
                       schema: Schema? = null,
                       traceLevel: Int? = null,
-                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel)
+                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                      maxRetries: Int? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
 
     dbConnection = Database.connect(dataSource, databaseConfig = configuration)
     url = dbConnection.url
@@ -196,8 +200,9 @@ class Connection {
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
                          traceLevel: Int? = null,
-                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): Connection {
-      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel)
+                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                         maxRetries: Int? = null): Connection {
+      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
     }
 
     /**
@@ -216,8 +221,9 @@ class Connection {
                          lookupUserId: Boolean = true,
                          schema: String? = null,
                          traceLevel: Int? = null,
-                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, isolationLevel)
+                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                         maxRetries: Int? = null): Connection {
+      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
     }
 
 
@@ -236,8 +242,9 @@ class Connection {
                          password: String,
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
-                         traceLevel: Int? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel)
+                         traceLevel: Int? = null,
+                         maxRetries: Int? = null): Connection {
+      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, maxRetries = maxRetries)
     }
 
     /**
@@ -251,8 +258,9 @@ class Connection {
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
                          traceLevel: Int? = null,
-                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): Connection {
-      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel)
+                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                         maxRetries: Int? = null): Connection {
+      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
     }
 
     // -1 not yet determined
@@ -263,11 +271,15 @@ class Connection {
   }
 }
 
-fun databaseConfig(schema: Schema?, traceLevel: Int? = null, isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE): DatabaseConfig = DatabaseConfig {
-  sqlLogger = Slf4jSqlInfoLogger(traceLevel)
-  defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
-  defaultIsolationLevel = isolationLevel
-}
+fun databaseConfig(schema: Schema?,
+                   traceLevel: Int? = null,
+                   isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                   maxRetries: Int? = null): DatabaseConfig = DatabaseConfig {
+    sqlLogger = Slf4jSqlInfoLogger(traceLevel)
+    defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
+    defaultIsolationLevel = isolationLevel
+    defaultRepetitionAttempts = maxRetries ?: 0
+  }
 
 class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
   override fun log(context: StatementContext, transaction: Transaction) {

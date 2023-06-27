@@ -29,6 +29,9 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   @JvmField
   var schema: String? = null
 
+  @JvmField
+  var maxRetries: Int? = null
+
   override fun processOption(code: Int, g: Getopt): Boolean {
     return when (code.toChar()) {
       'b' -> {
@@ -63,6 +66,10 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
         schema = getString(g, "")
         true
       }
+      'r' -> {
+        maxRetries = getInt(g, 0)
+        true
+      }
       else -> super.processOption(code, g)
     }
   }
@@ -70,7 +77,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   override val options: Array<String?>
     get() {
       val parent = super.options
-      val total = arrayOfNulls<String>(parent.size + 8)
+      val total = arrayOfNulls<String>(parent.size + 9)
       System.arraycopy(parent, 0, total, 0, parent.size)
       total[parent.size + 0] = "  --database, -b<String>: The URL of the database"
       total[parent.size + 1] = "  --driver, -d<String>: The JDBC driver to use to access the database"
@@ -82,11 +89,12 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       total[parent.size + 6] =
         "  --properties, -q<String>: These properties override or complete the properties stored in the database."
       total[parent.size + 7] = "  --schema, -s<String>: The current database schema to be set."
+      total[parent.size + 8] = "  --maxRetries, -r<Int>: Sets the defaultRepetitionAttempts of Exposed to the value given, else 0."
       return total
     }
 
   override val shortOptions: String
-    get() = "b:d:u:p:Ut::q:s:" + super.shortOptions
+    get() = "b:d:u:p:Ut::q:s:r:" + super.shortOptions
 
   public override fun version() {
     println("Version 2.3B released 17 September 2007")
@@ -114,7 +122,8 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       LongOpt("lookupUserId", LongOpt.NO_ARGUMENT, null, 'U'.code),
       LongOpt("trace", LongOpt.OPTIONAL_ARGUMENT, null, 't'.code),
       LongOpt("properties", LongOpt.REQUIRED_ARGUMENT, null, 'q'.code),
-      LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.code)
+      LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.code),
+      LongOpt("maxRetries", LongOpt.OPTIONAL_ARGUMENT, null, 'r'.code)
     )
   }
 }

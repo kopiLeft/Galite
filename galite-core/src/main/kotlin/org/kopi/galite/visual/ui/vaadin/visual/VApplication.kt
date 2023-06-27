@@ -316,7 +316,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private fun connectToDatabase(username: String, password: String) {
     val database = getInitParameter("database")
     val driver = getInitParameter("driver")
-    val schema  = getInitParameter("schema")
+    val schema = getInitParameter("schema")
+    val maxRetires = getInitParameter("maxRetries")
 
     requireNotNull(database) { "The database url shouldn't be null" }
     requireNotNull(driver) { "The jdbc driver shouldn't be null" }
@@ -325,7 +326,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                          driver,
                          username,
                          password,
-                         schema)
+                         schema,
+                         maxRetires?.toInt())
     // check if context is created
     if (dBConnection == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))

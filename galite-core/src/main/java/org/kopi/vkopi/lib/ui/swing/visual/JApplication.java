@@ -350,7 +350,8 @@ public abstract class JApplication implements Application {
                                   options.lookupUserId,
                                   options.schema,
                                   options.trace,
-                                  java.sql.Connection.TRANSACTION_SERIALIZABLE);
+                                  java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                                  options.maxRetries);
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();
@@ -366,7 +367,8 @@ public abstract class JApplication implements Application {
               options.driver,
               options.username,
               options.password,
-              options.schema);
+              options.schema,
+              options.maxRetries);
       displaySplashScreen();
     }
 
