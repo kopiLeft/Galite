@@ -62,7 +62,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   val salesBlock = clientsPage.insertBlock(Sales())
 
   inner class Clients : Block("Clients", 1, 100) {
-    val c = table(Client)
+    val c = table(Client, "TEST")
 
     val idClt = visit(domain = ClientID, position = at(1, 1..2)) {
       label = "ID"
@@ -145,7 +145,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   }
 
   inner class Sales : Block("Sales", 10, 10) {
-    val C = table(Client)
+    val C = table(Client, "TEST")
     val S = table(Purchase)
     val P = table(Product)
 
@@ -227,8 +227,8 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     init {
       "Id"      keyOf Client.idClt                                      hasWidth 5
       "Name"    keyOf SqlExpressionBuilder.concat(Client.firstNameClt,
-                                                  stringLiteral(" "),
-                                                  Client.lastNameClt)   hasWidth 76
+        stringLiteral(" "),
+        Client.lastNameClt)   hasWidth 76
       "Age"     keyOf Client.ageClt                                     hasWidth 3
     }
   }

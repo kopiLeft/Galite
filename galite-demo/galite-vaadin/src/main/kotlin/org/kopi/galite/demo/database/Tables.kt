@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.javatime.date
 import org.jetbrains.exposed.sql.javatime.timestamp
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("ID").autoIncrement()
+  val idClt = integer("TEST").autoIncrement()
   val firstNameClt = varchar("FIRSTNAME", 25)
   val lastNameClt = varchar("LASTNAME", 25)
   val addressClt = varchar("ADDRESS", 50)

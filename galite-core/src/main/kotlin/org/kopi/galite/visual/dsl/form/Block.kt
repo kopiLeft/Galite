@@ -145,11 +145,12 @@ open class Block(val title: String,
    *
    * @param table     the database table
    */
-  fun <T : Table> table(table: T): T {
+  fun <T : Table> table(table: T, id: String? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
+    if (!id.isNullOrBlank()) block.idsFieldsName.add(id)
 
     return table
   }

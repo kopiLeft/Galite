@@ -1977,6 +1977,7 @@ abstract class VBlock(var title: String,
     }
     callProtectedTrigger(VConstants.TRG_POSTDEL)
   }
+  var idsFieldsName = arrayListOf<String>("ID") // We take the table's ID by default as "ID"
 
   /**
    * Searches the field holding the ID of the block's base table.
@@ -1984,7 +1985,7 @@ abstract class VBlock(var title: String,
    */
   val idField: VField
     get() {
-      return getBaseTableField("ID") ?: throw InconsistencyException()
+      return getBaseTableField(idsFieldsName) ?: throw InconsistencyException()
     }
 
   /**
@@ -2005,7 +2006,7 @@ abstract class VBlock(var title: String,
       // laurent : return f even if it's null until we add this field in
       // all the forms. After we can throw an Exception if the field UC
       // of the block base table is not present.
-      return getBaseTableField("UC")
+      return getBaseTableField(arrayListOf("UC"))
     }
 
   /**
@@ -2017,7 +2018,7 @@ abstract class VBlock(var title: String,
       // laurent : return f even if it's null until we add this field in
       // all the forms. After we can throw an Exception if the field UC
       // of the block base table is not present.
-      return getBaseTableField("TS")
+      return getBaseTableField(arrayListOf("TS"))
     }
 
   /**
@@ -2026,10 +2027,10 @@ abstract class VBlock(var title: String,
    * @param     field   the name of the field to search for
    * @return    the field if found, otherwise null
    */
-  protected fun getBaseTableField(field: String): VField? {
+  protected fun getBaseTableField(idsfieldName: ArrayList<String>): VField? {
     for (i in fields.indices) {
       val column = fields[i].lookupColumn(0)
-      if (column != null && column.name == field) {
+      if (column != null && idsfieldName.contains(column.name)) {
         return fields[i]
       }
     }
