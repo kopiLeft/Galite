@@ -42,6 +42,17 @@ class ClientR : AppLayout()  {
       pivotData.addColumn(column.key, column.value)
 
     pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+
     return pivotData
   }
 
