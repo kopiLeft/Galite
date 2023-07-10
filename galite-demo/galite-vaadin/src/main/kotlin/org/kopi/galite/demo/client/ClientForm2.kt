@@ -37,7 +37,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Key
 
-class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
+class ClientForm2 : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
   init {
     insertMenus()
@@ -129,19 +129,13 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
       init {
 //      val ui = UI.access()
-//      command(item = report) {
-//        val r = ClientR()
+      command(item = report) {
 //        UI.access()
 //        UI.getCurrent().navigate(ClientR::class.java)
 //        createReport {
 //          ClientR()
 //        }
-//      }
-        command(item = report){
-          createReport {
-            ClientR2()
-          }
-        }
+      }
       command(item = dynamicReport) {
         createDynamicReport()
       }
@@ -198,10 +192,10 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
         showHideFilter()
       }
 
-      command(item = report){
-        createReport {
-          ClientR2()
-        }
+      command(item = report) {
+//        createReport {
+          ClientR()
+//        }
       }
       command(item = dynamicReport) {
         createDynamicReport()
@@ -231,5 +225,5 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 }
 
 fun main() {
-  runForm(form = ClientForm::class)
+  runForm(form = ClientForm2::class)
 }

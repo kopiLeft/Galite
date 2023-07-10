@@ -19,59 +19,48 @@ package org.kopi.galite.demo.client
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.database.Client
 import org.vaadin.addons.componentfactory.PivotTable
 import org.vaadin.addons.componentfactory.PivotTable.*
+import java.math.BigDecimal
+import java.util.*
 
 //@Route
-class ClientR : AppLayout()  {
+class ClientR : DSLPivotTable("ClientR")  {
 
-  // Create Table and fill it with content
-  fun createTable(): PivotData {
-    val pivotData = PivotData()
+  val columns = mapOf("firstName" to String::class.java,
+      "lastName" to String::class.java,
+      "addressClt" to String::class.java,
+      "ageClt" to Int::class.java,
+      "countryClt" to String::class.java,
+      "cityClt" to String::class.java,
+      "zipCodeClt" to Int::class.java,
+      "activeClt" to String::class.java)
 
-    // Add Columns to pivotData
-    val columns = mapOf("firstName" to String::class.java,
-                        "lastName" to String::class.java,
-                        "addressClt" to String::class.java,
-                        "ageClt" to Int::class.java,
-                        "countryClt" to String::class.java,
-                        "cityClt" to String::class.java,
-                        "zipCodeClt" to Int::class.java,
-                        "activeClt" to String::class.java)
-    for (column in columns)
-      pivotData.addColumn(column.key, column.value)
+  fun fillRows () : List<List<Any>> {
+      val clients = Client.selectAll()
+      val rows = mutableListOf(listOf<Any>())
 
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
-    pivotData.addRow("abc", "def", "tunis", 15, "mourouj", "tunis", 8555, "yes")
+      transaction {
+          clients.forEach {
+              val row = listOf(Client.firstNameClt, Client.lastNameClt, Client.addressClt,
+                  Client.ageClt, Client.countryClt, Client.cityClt, Client.zipCodeClt, Client.activeClt)
+              rows.add(row)
+          }
+      }
 
-    return pivotData
+      return rows
   }
 
-  // Create Pivoting options
-  fun createOptions() : PivotOptions {
-    val pivotOptions = PivotOptions()
+    val rowOptions = listOf("countryClt", "activeClt")
+    val colOptions = listOf("ageClt")
 
-    pivotOptions.setRows("countryClt", "activeClt")
-    pivotOptions.setCols("ageClt")
-    pivotOptions.setCharts(true)
-
-    return pivotOptions
-  }
-
-  // Create Pivot Table
-
-  init {
-    val table = PivotTable(createTable(), createOptions(), PivotMode.INTERACTIVE)
-      content = table
-      addToDrawer(content)
-  }
+    init {
+        setColumns(columns)
+        setRows(fillRows())
+        setOptions(colOptions, rowOptions)
+    }
 }
