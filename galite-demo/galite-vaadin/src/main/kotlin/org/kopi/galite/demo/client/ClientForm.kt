@@ -139,7 +139,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 //      }
         command(item = report){
           createReport {
-            ClientR2()
+            ClientR()
           }
         }
       command(item = dynamicReport) {
@@ -200,7 +200,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
       command(item = report){
         createReport {
-          ClientR2()
+          ClientR()
         }
       }
       command(item = dynamicReport) {
