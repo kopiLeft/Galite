@@ -1977,7 +1977,8 @@ abstract class VBlock(var title: String,
     }
     callProtectedTrigger(VConstants.TRG_POSTDEL)
   }
-  var idsFieldsName = arrayListOf<String>("ID") // We take the table's ID by default as "ID"
+
+  var idsFieldsName = arrayListOf("ID") // We take the table's ID by default as "ID"
 
   /**
    * Searches the field holding the ID of the block's base table.
@@ -2024,13 +2025,14 @@ abstract class VBlock(var title: String,
   /**
    * Searches a field of block base table
    *
-   * @param     field   the name of the field to search for
+   * @param     fielsdName   the list of names of table's column of the field to search for
    * @return    the field if found, otherwise null
    */
-  protected fun getBaseTableField(idsfieldName: ArrayList<String>): VField? {
+  protected fun getBaseTableField(fielsdName: ArrayList<String>): VField? {
     for (i in fields.indices) {
       val column = fields[i].lookupColumn(0)
-      if (column != null && idsfieldName.contains(column.name)) {
+
+      if (column != null && fielsdName.contains(column.name)) {
         return fields[i]
       }
     }

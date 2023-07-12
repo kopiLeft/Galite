@@ -145,7 +145,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   }
 
   inner class Sales : Block("Sales", 10, 10) {
-    val C = table(Client, "TEST")
+    val C = table(Client, Client.idClt.name)
     val S = table(Purchase)
     val P = table(Product)
 

@@ -142,15 +142,21 @@ open class Block(val title: String,
    * Adds the [table] to this block. It refers to certain tables in the database whereby the first table
    * is the one on which the user will work. The remaining tables are the so-called "look-up tables",
    * i.e tables that are associated with the first one.
+   * The [id] represents the column name of the base table to work on.
+   * if not set, means we're using column named "ID".
    *
    * @param table     the database table
+   * @param id        the name of the table's id column
    */
   fun <T : Table> table(table: T, id: String? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
-    if (!id.isNullOrBlank()) block.idsFieldsName.add(id)
+    if (!id.isNullOrBlank() && id !in table.columns.map { c -> c.name })
+      throw InconsistencyException(" Entered id $id doesn't not belong to table ${table.tableName} !!!")
+    else if (!id.isNullOrBlank() && id != "ID")
+      block.idsFieldsName.add(id)
 
     return table
   }

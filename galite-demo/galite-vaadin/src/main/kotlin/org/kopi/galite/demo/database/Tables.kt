@@ -40,7 +40,7 @@ object Purchase: Table("PURCHASE") {
   val id = integer("ID").autoIncrement()
   val idClt = integer("CLIENT").references(Client.idClt)
   val idPdt = integer("PRODUCT").references(Product.idPdt)
-  val quantity = integer("QUANTITY")
+  val quantity = integer("TEST")
 }
 
 object Product : Table("PRODUCTS") {
