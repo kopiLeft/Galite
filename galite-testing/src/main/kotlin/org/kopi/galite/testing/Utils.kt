@@ -29,9 +29,7 @@ import com.github.mvysny.kaributesting.v10._get
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.HasMenuItems
-import com.vaadin.flow.server.VaadinSession
 
 fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
   _clickItemWithCaption(caption)
@@ -44,22 +42,9 @@ fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
 }
 
 fun waitAndRunUIQueue(duration: Long) {
-  runScheduledTasks()
+  MockVaadin.clientRoundtrip()
   Thread.sleep(duration)
-  runScheduledTasks()
-}
-
-/**
- * Runs all scheduled tasks.
- * This method doesn't clean dialogs as a workaround for the issue https://github.com/mvysny/karibu-testing/issues/156
- *
- * See also:
- * [MockVaadin.clientRoundtrip]
- */
-fun runScheduledTasks() {
-  checkNotNull(VaadinSession.getCurrent()) { "No VaadinSession" }
-  MockVaadin.runUIQueue()
-  UI.getCurrent().internals.stateTree.runExecutionsBeforeClientResponse()
+  MockVaadin.clientRoundtrip()
 }
 
 inline fun <reified T: Component> findInMainWindow(): List<T> {

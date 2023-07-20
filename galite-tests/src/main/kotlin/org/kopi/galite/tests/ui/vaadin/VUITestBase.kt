@@ -21,7 +21,6 @@ import java.time.Instant
 
 import org.junit.Before
 import org.junit.BeforeClass
-import org.kopi.galite.testing.runScheduledTasks
 import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.type.format
 
@@ -56,12 +55,7 @@ open class VUITestBase : VApplicationTestBase() {
   }
 }
 
-open class GaliteVUITestBase : VUITestBase(), TestingLifecycleHook {
-    override fun awaitBeforeLookup() {
-        if (UI.getCurrent() != null) {
-            runScheduledTasks()
-        }
-    }
+open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
 
   init {
     testingLifecycleHook = this
