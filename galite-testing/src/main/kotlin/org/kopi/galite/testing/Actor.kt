@@ -37,7 +37,7 @@ import com.github.mvysny.kaributesting.v10._get
 fun Actor.triggerCommand(duration: Long = 300) {
   val actor = findActor()
 
-  actor._clickAndWait(20)
+  actor._clickAndWait(200)
 
   // Wait after completing the view creation.
   // VWindowController.doNotModal() is crating the view synchronously.
