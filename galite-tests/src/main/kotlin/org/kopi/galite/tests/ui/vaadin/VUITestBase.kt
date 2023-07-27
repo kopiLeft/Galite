@@ -24,11 +24,7 @@ import org.junit.BeforeClass
 import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.type.format
 
-import com.github.mvysny.kaributesting.v10.MockVaadin
-import com.github.mvysny.kaributesting.v10.Routes
-import com.github.mvysny.kaributesting.v10.TestingLifecycleHook
-import com.github.mvysny.kaributesting.v10._click
-import com.github.mvysny.kaributesting.v10.testingLifecycleHook
+import com.github.mvysny.kaributesting.v10.*
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.shared.communication.PushMode
@@ -55,7 +51,7 @@ open class VUITestBase : VApplicationTestBase() {
   }
 }
 
-open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
+open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook by TestingLifecycleHookVaadin23_1(TestingLifecycleHook.default) {
 
   init {
     testingLifecycleHook = this

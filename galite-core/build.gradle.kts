@@ -79,6 +79,9 @@ dependencies {
 
   // Dataframe used in Pivot Table
   implementation("org.jetbrains.kotlinx", "dataframe", Versions.KOTLINX_DATAFRAME)
+
+  // Javax Activation dependency
+  implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
 }
 
 dependencyManagement {
