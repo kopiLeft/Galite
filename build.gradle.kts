@@ -76,9 +76,9 @@ allprojects {
           artifactId = project.name
           from(project.components["java"])
           pom {
-            name.set(artifactId)
+            configureMavenCentralPom(project)
           }
-//          signPublication(project)
+          signPublication(project)
         }
       }
     }
