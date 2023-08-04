@@ -41,7 +41,7 @@ interface Application : MessageListener {
    * @param schema The database schema.
    * @return The [Connection] containing database connection information.
    */
-  fun login(database: String, driver: String, username: String, password: String, schema: String?): Connection?
+  fun login(database: String, driver: String, username: String, password: String, schema: String?, maxRetries: Int?): Connection?
 
   /**
    * Signs out from the application.

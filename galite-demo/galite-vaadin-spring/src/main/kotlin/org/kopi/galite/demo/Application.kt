@@ -57,7 +57,8 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
           driver: String,
           username: String,
           password: String,
-          schema: String?
+          schema: String?,
+          maxRetries: Int?
   ): Connection? {
     return try {
       Connection.createConnection(database, driver, username, password, true, schema)

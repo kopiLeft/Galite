@@ -93,7 +93,8 @@ abstract class Migration {
                                   options.password!!,
                                   false,
                                   options.schema,
-                                  options.trace)
+                                  options.trace,
+                                  maxRetries = options.maxRetries)
     } else {
       Connection.createConnection(Configuration.getString("database")!!,
                                   Configuration.getString("driver")!!,
@@ -101,7 +102,8 @@ abstract class Migration {
                                   Configuration.getString("password")!!,
                                   false,
                                   Configuration.getString("schema"),
-                                  Configuration.getString("trace")?.toInt())
+                                  Configuration.getString("trace")?.toInt(),
+                                  maxRetries = Configuration.getString("maxRetries")?.toInt())
     }
   }
 
