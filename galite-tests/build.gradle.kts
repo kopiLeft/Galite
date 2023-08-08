@@ -22,7 +22,7 @@ plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.7.14"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "23.3.17"
+  id("com.vaadin") version "23.3.8"
 }
 
 vaadin {
