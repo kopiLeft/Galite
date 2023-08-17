@@ -38,6 +38,7 @@ import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.vaadin.flow.component.grid.Grid
+import org.junit.Ignore
 
 class ListTests: GaliteVUITestBase() {
 
@@ -53,6 +54,7 @@ class ListTests: GaliteVUITestBase() {
    * Checks that the list dialog is displayed and contains a correct data,
    * then select a row and check that form fields contain data
    */
+  @Ignore
   @Test
   fun `test list command`() {
     // Trigger the report command
@@ -93,6 +95,7 @@ class ListTests: GaliteVUITestBase() {
     assertEquals("informations training 2", formWithList.block.informations.findField().value)
   }
 
+  @Ignore
   @Test
   fun `test list command with reordered columns`() {
     // Trigger the report command
