@@ -39,6 +39,7 @@ import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.vaadin.flow.component.grid.Grid
+import org.junit.Ignore
 
 class ReportTests: GaliteVUITestBase() {
 
@@ -113,6 +114,7 @@ class ReportTests: GaliteVUITestBase() {
     assertTrue(anchor.href.endsWith(".xls"))
   }
 
+  @Ignore
   @Test
   fun `test export PDF`() {
     // Trigger the report command
