@@ -123,6 +123,12 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
     VDynamicReport.createDynamicReport(this.block)
   }
 
+//  protected fun Block.createPivotTable() {
+//    val field = this.block.activeField
+//    field?.validate()
+//    VPivotTable.createPivotTable(this.block)
+//  }
+
   // ----------------------------------------------------------------------
   // DICTIONARY FORM MODEL
   // ----------------------------------------------------------------------
