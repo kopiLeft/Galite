@@ -170,7 +170,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                        getColumnGroups(field),
                                        null,
                                        field.width,
-                                       1,
+                                       field.height,
                                        null)
         is VBooleanField ->
           columns[col] = VBooleanColumn(null,
