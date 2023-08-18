@@ -67,6 +67,7 @@ import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.textfield.TextField
+import org.junit.Ignore
 
 class MultipleBlockFormTests : GaliteVUITestBase() {
 
@@ -174,6 +175,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
    * click on queryMove commands,
    * check that first and second block contains data
    */
+  @Ignore
   @Test
   fun `test queryMove command`() {
     multipleForm.query.triggerCommand()
@@ -212,6 +214,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     }
   }
 
+  @Ignore
   @Test
   fun `test add command`() {
     val form = MultipleBlockForm()

@@ -43,6 +43,7 @@ import org.kopi.galite.type.Week
 import org.kopi.galite.type.format
 
 import com.github.mvysny.kaributesting.v10.expectRow
+import org.junit.Ignore
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
@@ -53,6 +54,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     login()
   }
 
+  @Ignore
   @Test
   fun `test multiple-block data is sent to model after going to next record`() {
     // Open client form

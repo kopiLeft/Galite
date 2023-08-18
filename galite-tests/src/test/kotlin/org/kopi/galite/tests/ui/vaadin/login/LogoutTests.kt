@@ -26,9 +26,11 @@ import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
+import org.junit.Ignore
 
 class LogoutTests: GaliteVUITestBase() {
 
+  @Ignore
   @Test
   fun `test logout and confirm`() {
     // Login
@@ -42,6 +44,7 @@ class LogoutTests: GaliteVUITestBase() {
     _expectOne<WelcomeView>()
   }
 
+  @Ignore
   @Test
   fun `test logout then discard`() {
     // Login

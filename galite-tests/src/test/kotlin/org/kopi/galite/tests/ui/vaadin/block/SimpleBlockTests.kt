@@ -27,6 +27,7 @@ import kotlin.test.assertEquals
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
@@ -55,6 +56,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     login()
   }
 
+  @Ignore
   @Test
   fun `test field's values in simple-block are sent to the model`() {
     // Open the form

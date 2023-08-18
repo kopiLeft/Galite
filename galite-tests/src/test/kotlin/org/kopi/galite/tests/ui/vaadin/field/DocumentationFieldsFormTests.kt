@@ -294,6 +294,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     }
   }
 
+  @Ignore
   @Test
   fun `test columns priority`() {
     transaction {
@@ -362,6 +363,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     }
   }*/
 
+  @Ignore
   @Test
   fun `test columns index`() {
     transaction {

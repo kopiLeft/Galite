@@ -49,6 +49,15 @@ subprojects {
     "implementation"(kotlin("stdlib"))
     "implementation"(kotlin("reflect"))
   }
+
+  tasks.withType<JavaCompile> {
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
+  }
+
+  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
+  }
 }
 
 allprojects {
