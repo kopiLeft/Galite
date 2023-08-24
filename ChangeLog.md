@@ -1,5 +1,37 @@
 # 1.3.0
 ## What's Changed
+* Vaadin: move up to version 23.3.8 by @mgrati
+* Configure field height in dynamic report fields by @mtousli
+* Configure defaultRepetitionAttempts when connecting to database by @adridi
+* Add use of expressions with keyOf function in ListDomain by @yahiaoui
+* Fix: use temporal format instead of instant in GaliteDomain by @adridi
+* Fix: log display depends on traceLevel value when updating database by @mgrati
+* Fix: Mark default actors defined in org.kopi.galite.visual.dsl.form.Form as non user actor to allow the application to
+localize these actors by @mgrati
+* Consider local after moving defaultForm by @mgrati
+* remove heritage of VReportSelectionForm by @mgrati
+* Add Table ReportConfigurations to dynamic reports configuration by @adridi
+* Remove multi-block assertion when calling VBlock.setMode by @yahiaoui
+* Support BigDecimal and Month types in ListDomain types by @adridi
+* Get connection info from conf/config.properties file by @mgrati
+* Add the possibility to define trace level and isolation level when establishing a database connection by @mgrati
+* Automatically execute the creation in database of tables related to the framework by @mgrati
+* Enable quit button in menu by @yahiaoui
+* Fix: add java.math.RoundingMode.HALF_UP parametre to setScale function by @mgrati
+* Addition of constraints to the domains by @hfazai [#559](https://github.com/kopiLeft/Galite/pull/559)
+* VaadinUI: workaround to avoid closing editor on application errors by @hfazai
+* Fix: keep the record open when entering an invalid value by @hfazai
+* add text transformation feature by @hfazai
+* Vaadin: move up to version 22.0.14 by @hfazai
+* VaadinUI: set navigation listeners on the notificatoion dialogs by @hfazai
+* VaadinUI: Set width to 100% input text fields in aligned blocks by @hfazai
+* move the addition of scrollPanel from a function to the constructor by @hfazai
+* VaadinUI-FIX : stay on the active field when validating boolean field value by @hfazai
+
+**Full Changelog**: [1.2.0 ... 1.3.0](https://github.com/kopiLeft/Galite/compare/1.2.0...1.3.0)
+
+# 1.3.0
+## What's Changed
 * DSL/Model: code clean and refactoring by @hfazai in [#581](https://github.com/kopiLeft/Galite/pull/581)
 * Adding PivotTable UI implementation by @hfazai in [#583](https://github.com/kopiLeft/Galite/pull/583)
 * Block: remove duplicated maxRowPos, maxColumnPos, displayedFields by @hfazai
