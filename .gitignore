@@ -45,6 +45,8 @@ build
 **/webpack.config.js
 **/webpack.generated.js
 **/.npmrc
+**/vite.config.ts
+**/vite.generated.ts
 **/frontend/generated/*
 
 galite-demo/galite-vaadin/frontend/index.html
