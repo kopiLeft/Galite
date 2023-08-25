@@ -29,6 +29,8 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eqSubQuery
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.innerJoin
@@ -87,15 +89,15 @@ class VMenuTree constructor(ctxt: Connection?,
   companion object {
 
     private val SELECT_MODULES =
-            Modules.slice(Modules.id,
-                          Modules.parent,
-                          Modules.shortName,
-                          Modules.sourceName,
-                          Modules.objectName,
-                          Modules.priority,
-                          Modules.symbol)
-                    .selectAll()
-                    .orderBy(Modules.priority to SortOrder.DESC)
+      Modules.slice(Modules.id,
+                    Modules.parent,
+                    Modules.shortName,
+                    Modules.sourceName,
+                    Modules.objectName,
+                    Modules.priority,
+                    Modules.symbol)
+        .selectAll()
+        .orderBy(Modules.priority to SortOrder.DESC)
 
     const val CMD_QUIT = 0
     const val CMD_OPEN = 1
@@ -113,8 +115,7 @@ class VMenuTree constructor(ctxt: Connection?,
     private val ROOT_MENUS = arrayOf(
       RootMenu(MAIN_MENU, "forms"),
       RootMenu(USER_MENU, "user"),
-      RootMenu(ADMIN_MENU, "admin")
-    )
+      RootMenu(ADMIN_MENU, "admin"))
     private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/visual/Menu"
 
     init {
@@ -173,8 +174,7 @@ class VMenuTree constructor(ctxt: Connection?,
         "MenuTree Actor localization",
         "MenuTreeModel.localize",
         e.message,
-        e
-      )
+        e)
       exitProcess(1)
     }
   }
@@ -386,44 +386,41 @@ class VMenuTree constructor(ctxt: Connection?,
     when {
       groupName != null -> {
         fetchRights(
-                modules,
-                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
-                                  { id },
-                                  { GroupRights.module })
-                        .slice(Modules.id, GroupRights.access, Modules.priority)
-                        .select {
-                          GroupParties.user inSubQuery (Groups.slice(
-                                  Groups.id).select { Groups.shortName eq groupName })
-                        }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
-        )
+          modules,
+          Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                            { id },
+                            { GroupRights.module })
+            .slice(Modules.id, GroupRights.access, Modules.priority)
+            .select {
+              GroupParties.user inSubQuery (Groups.slice(
+                Groups.id).select { Groups.shortName eq groupName })
+            }
+            .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
       }
       menuTreeUser != null -> {
         fetchRights(
-                modules,
-                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
-                                  { id },
-                                  { GroupRights.module })
-                        .slice(Modules.id, GroupRights.access, Modules.priority)
-                        .select {
-                          GroupParties.user inSubQuery (Users.slice(
-                                  Users.id).select { Users.shortName eq menuTreeUser })
-                        }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
-        )
+          modules,
+          Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                            { id },
+                            { GroupRights.module })
+            .slice(Modules.id, GroupRights.access, Modules.priority)
+            .select {
+              GroupParties.user inSubQuery (Users.slice(
+                Users.id).select { Users.shortName eq menuTreeUser })
+            }
+            .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
       }
       else -> {
         fetchRights(
-                modules,
-                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
-                                  { id },
-                                  { GroupRights.module })
-                        .slice(Modules.id, GroupRights.access, Modules.priority)
-                        .select {
-                          GroupParties.user eq getUserID()
-                        }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
-        )
+          modules,
+          Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                            { id },
+                            { GroupRights.module })
+            .slice(Modules.id, GroupRights.access, Modules.priority)
+            .select {
+              GroupParties.user eq getUserID()
+            }
+            .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
       }
     }
   }
@@ -518,9 +515,9 @@ class VMenuTree constructor(ctxt: Connection?,
       val query = if (isSuperUser && menuTreeUser != null) {
 
         Favorites.slice(Favorites.module, Favorites.id)
-                .select {
-                  Favorites.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
-                }.orderBy(Favorites.id)
+          .select {
+            Favorites.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
+          }.orderBy(Favorites.id)
       } else {
         Favorites.slice(Favorites.module, Favorites.id).select { Favorites.user eq getUserID() }.orderBy(Favorites.id)
       }

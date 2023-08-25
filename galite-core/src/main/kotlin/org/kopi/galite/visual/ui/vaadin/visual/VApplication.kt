@@ -89,7 +89,7 @@ import com.vaadin.flow.shared.communication.PushMode
 ])
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
-  HasDynamicTitle {
+                                                               HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -271,8 +271,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun allowQuit(): Boolean =
-          getInitParameter("allowQuit") == null ||
-                  java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
+    getInitParameter("allowQuit") == null ||
+    java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
 
   override var applicationConfiguration: ApplicationConfiguration? = null
 
@@ -318,6 +318,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     val driver = getInitParameter("driver")
     val schema = getInitParameter("schema")
     val maxRetires = getInitParameter("maxRetries")
+    val minRepetitionDelay = getInitParameter("minRepetitionDelay")
+    val maxRepetitionDelay = getInitParameter("maxRepetitionDelay")
 
     requireNotNull(database) { "The database url shouldn't be null" }
     requireNotNull(driver) { "The jdbc driver shouldn't be null" }
@@ -327,7 +329,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                          username,
                          password,
                          schema,
-                         maxRetires?.toInt())
+                         maxRetires?.toInt(),
+                         minRepetitionDelay?.toLong(),
+                         maxRepetitionDelay?.toLong())
     // check if context is created
     if (dBConnection == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -632,10 +636,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
     /** Application instance */
     lateinit var instance: Application
-    private val FONT_METRICS = arrayOf(
-            FontMetrics.DIGIT,
-            FontMetrics.LETTER
-    )
+    private val FONT_METRICS = arrayOf(FontMetrics.DIGIT, FontMetrics.LETTER)
 
     init {
       ApplicationContext.applicationContext = VApplicationContext()

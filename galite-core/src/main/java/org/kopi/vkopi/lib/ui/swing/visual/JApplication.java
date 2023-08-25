@@ -306,18 +306,18 @@ public abstract class JApplication implements Application {
       char[]    chars = options.locale.toCharArray();
 
       if(chars.length != 5
-              || chars[0] < 'a' || chars[0] > 'z'
-              || chars[1] < 'a' || chars[1] > 'z'
-              || chars[2] != '_'
-              || chars[3] < 'A' || chars[3] > 'Z'
-              || chars[4] < 'A' || chars[4] > 'Z'
+         || chars[0] < 'a' || chars[0] > 'z'
+         || chars[1] < 'a' || chars[1] > 'z'
+         || chars[2] != '_'
+         || chars[3] < 'A' || chars[3] > 'Z'
+         || chars[4] < 'A' || chars[4] > 'Z'
       ) {
         System.err.println("Error: Wrong locale format.");
         options.usage();
         return false;
       } else {
         defaultLocale = new Locale(options.locale.substring(0,2),
-                options.locale.substring(3,5));
+                                   options.locale.substring(3,5));
       }
     }
 
@@ -329,8 +329,8 @@ public abstract class JApplication implements Application {
     VerifyConfiguration       verifyConfiguration = VerifyConfiguration.Companion.getVerifyConfiguration();
     try {
       verifyConfiguration.verifyConfiguration(ApplicationContext.Companion.getDefaults().getSMTPServer(),
-	                                            ApplicationContext.Companion.getDefaults().getDebugMailRecipient(),
-	                                            ApplicationContext.Companion.getDefaults().getApplicationName());
+                                              ApplicationContext.Companion.getDefaults().getDebugMailRecipient(),
+                                              ApplicationContext.Companion.getDefaults().getApplicationName());
     } catch (PropertyException e) {
       e.printStackTrace();
     }
@@ -343,15 +343,17 @@ public abstract class JApplication implements Application {
     if (options.username != null) {
       try {
         connection = Connection.Companion
-                .createConnection(options.database,
-                                  options.driver,
-                                  options.username,
-                                  options.password,
-                                  options.lookupUserId,
-                                  options.schema,
-                                  options.trace,
-                                  java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                                  options.maxRetries);
+                         .createConnection(options.database,
+                                           options.driver,
+                                           options.username,
+                                           options.password,
+                                           options.lookupUserId,
+                                           options.schema,
+                                           options.trace,
+                                           java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                                           options.maxRetries,
+                                           options.minRepetitionDelay,
+                                           options.maxRepetitionDelay);
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();
@@ -364,11 +366,13 @@ public abstract class JApplication implements Application {
 
       removeSplashScreen();
       connection = login(options.database,
-              options.driver,
-              options.username,
-              options.password,
-              options.schema,
-              options.maxRetries);
+                         options.driver,
+                         options.username,
+                         options.password,
+                         options.schema,
+                         options.maxRetries,
+                         options.minRepetitionDelay,
+                         options.maxRepetitionDelay);
       displaySplashScreen();
     }
 

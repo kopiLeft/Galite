@@ -202,6 +202,13 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun openURL(url: String) {}
+  override fun isEnabled(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun setEnabled(enabled: Boolean) {
+    TODO("Not yet implemented")
+  }
 
   override fun modelClosed(type: Int) {}
   override fun dispose() {}

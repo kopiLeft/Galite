@@ -64,8 +64,10 @@ class Connection {
                       schema: Schema? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      minRepetitionDelay: Long? = null,
+                      maxRepetitionDelay: Long? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, minRepetitionDelay, maxRepetitionDelay)
 
     dbConnection = Database.connect({ connection }, databaseConfig = configuration)
     url = dbConnection.url
@@ -92,8 +94,20 @@ class Connection {
                       schema: String? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null)
-      : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) }, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      minRepetitionDelay: Long? = null,
+                      maxRepetitionDelay: Long? = null)
+    : this(url,
+           driver,
+           userName,
+           password,
+           lookupUserId,
+           schema?.let { Schema(schema) },
+           traceLevel,
+           isolationLevel,
+           maxRetries,
+           minRepetitionDelay,
+           maxRepetitionDelay)
 
   /**
    * Creates a connection with Exposed and opens it.
@@ -112,8 +126,10 @@ class Connection {
                       schema: Schema? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      minRepetitionDelay: Long? = null,
+                      maxRepetitionDelay: Long? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, minRepetitionDelay,maxRepetitionDelay)
 
     dbConnection = Database.connect(url = url,
                                     driver = driver,
@@ -139,8 +155,10 @@ class Connection {
                       schema: Schema? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      minRepetitionDelay: Long? = null,
+                      maxRepetitionDelay: Long? = null){
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, minRepetitionDelay, maxRepetitionDelay)
 
     dbConnection = Database.connect(dataSource, databaseConfig = configuration)
     url = dbConnection.url
@@ -201,8 +219,10 @@ class Connection {
                          schema: Schema? = null,
                          traceLevel: Int? = null,
                          isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null): Connection {
-      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
+                         maxRetries: Int? = null,
+                         minRepetitionDelay: Long? = null,
+                         maxRepetitionDelay: Long? = null): Connection {
+      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel, maxRetries, minRepetitionDelay, maxRepetitionDelay)
     }
 
     /**
@@ -222,8 +242,20 @@ class Connection {
                          schema: String? = null,
                          traceLevel: Int? = null,
                          isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
+                         maxRetries: Int? = null,
+                         minRepetitionDelay: Long? = null,
+                         maxRepetitionDelay: Long? = null): Connection {
+      return Connection(url = url,
+                        driver = driver,
+                        userName = userName,
+                        password = password,
+                        lookupUserId = lookupUserId,
+                        schema = schema,
+                        traceLevel = traceLevel,
+                        isolationLevel = isolationLevel,
+                        maxRetries = maxRetries,
+                        minRepetitionDelay = minRepetitionDelay,
+                        maxRepetitionDelay = maxRepetitionDelay)
     }
 
 
@@ -243,8 +275,19 @@ class Connection {
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
                          traceLevel: Int? = null,
-                         maxRetries: Int? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, maxRetries = maxRetries)
+                         maxRetries: Int? = null,
+                         minRepetitionDelay: Long? = null,
+                         maxRepetitionDelay: Long? = null): Connection {
+      return Connection(url,
+                        driver,
+                        userName,
+                        password,
+                        lookupUserId,
+                        schema,
+                        traceLevel,
+                        maxRetries = maxRetries,
+                        minRepetitionDelay = minRepetitionDelay,
+                        maxRepetitionDelay = maxRepetitionDelay)
     }
 
     /**
@@ -259,8 +302,10 @@ class Connection {
                          schema: Schema? = null,
                          traceLevel: Int? = null,
                          isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null): Connection {
-      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
+                         maxRetries: Int? = null,
+                         minRepetitionDelay: Long? = null,
+                         maxRepetitionDelay: Long? = null): Connection {
+      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel, maxRetries = maxRetries, minRepetitionDelay = minRepetitionDelay, maxRepetitionDelay = maxRepetitionDelay)
     }
 
     // -1 not yet determined
@@ -274,12 +319,16 @@ class Connection {
 fun databaseConfig(schema: Schema?,
                    traceLevel: Int? = null,
                    isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                   maxRetries: Int? = null): DatabaseConfig = DatabaseConfig {
-    sqlLogger = Slf4jSqlInfoLogger(traceLevel)
-    defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
-    defaultIsolationLevel = isolationLevel
-    defaultRepetitionAttempts = maxRetries ?: 0
-  }
+                   maxRetries: Int? = null,
+                   minRepetitionDelay: Long? = null,
+                   maxRepetitionDelay: Long? = null): DatabaseConfig = DatabaseConfig {
+  sqlLogger = Slf4jSqlInfoLogger(traceLevel)
+  defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
+  defaultIsolationLevel = isolationLevel
+  defaultRepetitionAttempts = maxRetries ?: 0
+  defaultMinRepetitionDelay = minRepetitionDelay ?: 0L
+  defaultMaxRepetitionDelay = maxRepetitionDelay ?: 0L
+}
 
 class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
   override fun log(context: StatementContext, transaction: Transaction) {

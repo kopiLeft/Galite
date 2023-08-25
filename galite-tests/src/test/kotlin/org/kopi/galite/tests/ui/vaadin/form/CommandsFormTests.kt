@@ -21,6 +21,7 @@ import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -511,7 +512,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     // Delete the foreign key references first.
     transaction {
       Center.deleteWhere {
-        Center.refTraining eq 1
+        Expression.build { Center.refTraining eq 1 }
       }
     }
 

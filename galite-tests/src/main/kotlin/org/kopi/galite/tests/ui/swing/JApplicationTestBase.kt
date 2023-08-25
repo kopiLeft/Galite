@@ -70,18 +70,26 @@ open class JApplicationTestBase : ApplicationTestBase() {
   }
 
   class GaliteApplication : JApplication(GaliteRegistry()) {
-    override fun login(
-            database: String,
-            driver: String,
-            username: String,
-            password: String,
-            schema: String?,
-            maxRetries: Int?
-    ): Connection? {
+    override fun login(database: String,
+                       driver: String,
+                       username: String,
+                       password: String,
+                       schema: String?,
+                       maxRetries: Int?,
+                       minRepetitionDelay: Long?,
+                       maxRepetitionDelay: Long?): Connection? {
       val username = "admin"
       val password = "admin"
       return try {
-        Connection.createConnection(database, driver, username, password, true, schema)
+        Connection.createConnection(url = database,
+                                    driver = driver,
+                                    userName = username,
+                                    password = password,
+                                    lookupUserId = true,
+                                    schema = schema,
+                                    maxRetries = maxRetries,
+                                    minRepetitionDelay = minRepetitionDelay,
+                                    maxRepetitionDelay = maxRepetitionDelay)
       } catch (exception: Throwable) {
         null
       }
@@ -97,45 +105,45 @@ open class JApplicationTestBase : ApplicationTestBase() {
 
     init {
       ApplicationConfiguration.setConfiguration(
-              object : ApplicationConfiguration() {
-                override val isDebugModeEnabled get() = true
-                override val version get(): String = "1.0"
-                override val applicationName get(): String = "MyApp"
-                override val informationText get(): String = "info"
-                override val logFile get(): String = ""
-                override val debugMailRecipient get(): String = "mail@adress"
-                override fun getSMTPServer(): String = ""
-                override val faxServer get(): String = ""
-                override val dictionaryServer get(): String = ""
-                override fun mailErrors(): Boolean = false
-                override fun logErrors(): Boolean = true
-                override fun debugMessageInTransaction(): Boolean = true
-                override val RExec get(): Rexec = TODO()
-                override fun getStringFor(key: String): String {
-                  // In a real application you can read these properties from database.
-                  // Select from some table the value where property name equals to key.
-                  return when (key) {
-                    "debugging.mail.cc" -> "mail@adress"
-                    "debugging.mail.bcc" -> "mail@adress"
-                    "debugging.mail.sender" -> "mail@adress"
-                    else -> {
-                      throw PropertyException("Property $key not found")
-                    }
-                  }
-                }
-                override fun getIntFor(key: String): Int {
-                  val value = this.getStringFor(key)
-                  return value.toInt()
-                }
-
-                override fun getBooleanFor(var1: String): Boolean {
-                  return java.lang.Boolean.valueOf(this.getStringFor(var1))
-                }
-
-                override fun isUnicodeDatabase(): Boolean = false
-                override fun useAcroread(): Boolean = TODO()
+        object : ApplicationConfiguration() {
+          override val isDebugModeEnabled get() = true
+          override val version get(): String = "1.0"
+          override val applicationName get(): String = "MyApp"
+          override val informationText get(): String = "info"
+          override val logFile get(): String = ""
+          override val debugMailRecipient get(): String = "mail@adress"
+          override fun getSMTPServer(): String = ""
+          override val faxServer get(): String = ""
+          override val dictionaryServer get(): String = ""
+          override fun mailErrors(): Boolean = false
+          override fun logErrors(): Boolean = true
+          override fun debugMessageInTransaction(): Boolean = true
+          override val RExec get(): Rexec = TODO()
+          override fun getStringFor(key: String): String {
+            // In a real application you can read these properties from database.
+            // Select from some table the value where property name equals to key.
+            return when (key) {
+              "debugging.mail.cc" -> "mail@adress"
+              "debugging.mail.bcc" -> "mail@adress"
+              "debugging.mail.sender" -> "mail@adress"
+              else -> {
+                throw PropertyException("Property $key not found")
               }
-      )
+            }
+          }
+          override fun getIntFor(key: String): Int {
+            val value = this.getStringFor(key)
+            return value.toInt()
+          }
+
+          override fun getBooleanFor(var1: String): Boolean {
+            return java.lang.Boolean.valueOf(this.getStringFor(var1))
+          }
+
+          override fun isUnicodeDatabase(): Boolean = false
+          override fun useAcroread(): Boolean = TODO()
+        }
+                                               )
     }
   }
 }

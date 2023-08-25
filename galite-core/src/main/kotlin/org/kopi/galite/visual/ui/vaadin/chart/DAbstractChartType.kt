@@ -135,6 +135,14 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     // DONE IN CLIENT SIDE
   }
 
+  override fun isEnabled(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun setEnabled(enabled: Boolean) {
+    TODO("Not yet implemented")
+  }
+
   /**
    * Returns `true` if the color list should be created.
    * @return `true` if the color list should be created.

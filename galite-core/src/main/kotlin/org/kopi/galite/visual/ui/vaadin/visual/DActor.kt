@@ -84,6 +84,7 @@ class DActor(private var model: VActor)
   override fun getModel(): VActor {
     return model
   }
+  override fun isEnabled(): Boolean = super.isEnabled()
 
 
   var currentUI: UI? = null

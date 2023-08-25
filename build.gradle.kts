@@ -17,11 +17,9 @@
 
 import org.kopi.galite.gradle._java
 import org.kopi.galite.gradle._publishing
-import org.kopi.galite.gradle.configureMavenCentralPom
-import org.kopi.galite.gradle.signPublication
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.6.10" apply false
+  id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
@@ -43,6 +41,7 @@ subprojects {
     maven {
       url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
+    mavenLocal()
   }
 
   dependencies {
@@ -76,9 +75,10 @@ allprojects {
           artifactId = project.name
           from(project.components["java"])
           pom {
-            configureMavenCentralPom(project)
+//            configureMavenCentralPom(project)
+            name.set(project.name)
           }
-          signPublication(project)
+//          signPublication(project)
         }
       }
     }

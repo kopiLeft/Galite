@@ -158,6 +158,14 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
     return !isExpanded(path)
   }
 
+  override fun isEnabled(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun setEnabled(enabled: Boolean) {
+    TODO("Not yet implemented")
+  }
+
   inner class TreeNodeComponent(val item: TreeNode, val module: Module?) : HorizontalLayout() {
 
     private val nodeCaption = Div()

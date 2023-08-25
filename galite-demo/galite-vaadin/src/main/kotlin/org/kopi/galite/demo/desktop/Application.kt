@@ -106,12 +106,22 @@ class GaliteApplication : JApplication(GaliteRegistry()) {
     username: String,
     password: String,
     schema: String?,
-    maxRetries: Int?
-  ): Connection? {
+    maxRetries: Int?,
+    minRepetitionDelay: Long?,
+    maxRepetitionDelay: Long?
+                    ): Connection? {
     val username = "admin"
     val password = "admin"
     return try {
-      Connection.createConnection(database, driver, username, password, true, schema)
+      Connection.createConnection(url = database,
+                                  driver = driver,
+                                  userName = username,
+                                  password = password,
+                                  lookupUserId = true,
+                                  schema = schema,
+                                  maxRetries = maxRetries,
+                                  minRepetitionDelay = minRepetitionDelay,
+                                  maxRepetitionDelay = maxRepetitionDelay)
     } catch (exception: Throwable) {
       null
     }

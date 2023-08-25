@@ -49,11 +49,9 @@ import com.vaadin.flow.router.Route
 open class VApplicationTestBase : ApplicationTestBase() {
 
   protected val appInstance = GaliteApplication()
-
   init {
     setupApplication()
   }
-
   fun setupApplication() {
     ApplicationContext.applicationContext = applicationContext
     FileHandler.fileHandler = fileHandler
@@ -61,18 +59,14 @@ open class VApplicationTestBase : ApplicationTestBase() {
     WindowController.windowController = windowController
     UIFactory.uiFactory = uiFactory
   }
-
   override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
-
   override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
-
   companion object {
     val applicationContext = VApplicationContext()
     val fileHandler = VFileHandler()
     val imageHandler = VImageHandler()
     val uiFactory = VUIFactory()
   }
-
   @Route("")
   class GaliteApplication : VApplication(GaliteRegistry()) {
     override val sologanImage get() = "slogan.png"
@@ -84,21 +78,28 @@ open class VApplicationTestBase : ApplicationTestBase() {
       get() =
         arrayOf(Locale.UK)
 
-    override fun login(
-            database: String,
-            driver: String,
-            username: String,
-            password: String,
-            schema: String?,
-            maxRetries: Int?
-    ): Connection? {
+    override fun login(database: String,
+                       driver: String,
+                       username: String,
+                       password: String,
+                       schema: String?,
+                       maxRetries: Int?,
+                       minRepetitionDelay: Long?,
+                       maxRepetitionDelay: Long?): Connection? {
       return try {
-        Connection.createConnection(database, driver, username, password, true, schema)
+        Connection.createConnection(url = database,
+                                    driver = driver,
+                                    userName = username,
+                                    password = password,
+                                    lookupUserId = true,
+                                    schema = schema,
+                                    maxRetries = maxRetries,
+                                    minRepetitionDelay = minRepetitionDelay,
+                                    maxRepetitionDelay = maxRepetitionDelay)
       } catch (exception: Throwable) {
         null
       }
     }
-
     override val isNoBugReport: Boolean
       get() = true
 
@@ -107,7 +108,6 @@ open class VApplicationTestBase : ApplicationTestBase() {
     }
   }
 }
-
 object ConfigurationManager : ApplicationConfiguration() {
   override val isDebugModeEnabled: Boolean = true
   override val version get(): String = "1.0"
@@ -138,11 +138,9 @@ object ConfigurationManager : ApplicationConfiguration() {
     val value = this.getStringFor(key)
     return value.toInt()
   }
-
   override fun getBooleanFor(var1: String): Boolean {
     return java.lang.Boolean.valueOf(getStringFor(var1))
   }
-
   override fun isUnicodeDatabase(): Boolean = false
   override fun useAcroread(): Boolean = TODO()
 }

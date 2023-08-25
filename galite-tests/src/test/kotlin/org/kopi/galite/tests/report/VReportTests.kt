@@ -113,6 +113,7 @@ class VReportTests: JApplicationTestBase() {
           when (cell.cellType) {
             CellType.NUMERIC -> result += cell.numericCellValue.toString() + "  "
             CellType.STRING -> result += cell.stringCellValue.toString() + "  "
+            else             -> {}
           }
         }
         result += ""

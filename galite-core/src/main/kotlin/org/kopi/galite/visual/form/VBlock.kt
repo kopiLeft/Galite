@@ -33,6 +33,7 @@ import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.deleteWhere
@@ -560,7 +561,7 @@ abstract class VBlock(var title: String,
       var t_hi = mid + 1
       for (k in lo..hi) {
         if (t_lo > mid || t_hi <= hi && field.getObject(array[t_hi]) != null && (field.getObject(array[t_lo]) == null
-                        || order * compareIt(field.getObject(array[t_hi])!!, field.getObject(array[t_lo])!!) < 0)) {
+                                                                                 || order * compareIt(field.getObject(array[t_hi])!!, field.getObject(array[t_lo])!!) < 0)) {
           scratch[k] = array[t_hi++]
         } else {
           scratch[k] = array[t_lo++]
@@ -979,8 +980,8 @@ abstract class VBlock(var title: String,
         index = 0
       }
       if (!fields[index].hasAction() &&
-              fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-              (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
+          fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
+          (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
         target = fields[index]
       }
       i += 1
@@ -1012,8 +1013,8 @@ abstract class VBlock(var title: String,
       }
       index -= 1
       if (!fields[index].hasAction() &&
-              fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-              (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
+          fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
+          (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
         target = fields[index]
       }
       i += 1
@@ -1069,8 +1070,8 @@ abstract class VBlock(var title: String,
 
     while (target == null && i < fields.size) {
       if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
-              && fields[i].isNull(activeRecord)) {
+          && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
+          && fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
@@ -1114,8 +1115,8 @@ abstract class VBlock(var title: String,
     // walk next to next
     while (target == null && i < fields.size) {
       if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
-              && fields[i].isNull(activeRecord)) {
+          && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
+          && fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
@@ -1125,8 +1126,8 @@ abstract class VBlock(var title: String,
     i = 0
     while (target == null && i < fields.size) {
       if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
-              && fields[i].isNull(activeRecord)) {
+          && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
+          && fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
@@ -1444,7 +1445,7 @@ abstract class VBlock(var title: String,
           // - inserted to get information about the usage of this code
           // - can be removed if the method checkBlock is removed
           if (ApplicationContext.getDefaults() != null
-                  && ApplicationContext.getDefaults()!!.isDebugModeEnabled) {
+              && ApplicationContext.getDefaults()!!.isDebugModeEnabled) {
             if ((form.getDisplay() as UForm).runtimeDebugInfo != null) {
               (form.getDisplay() as UForm).runtimeDebugInfo!!.printStackTrace()
             }
@@ -1573,10 +1574,10 @@ abstract class VBlock(var title: String,
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-                   || !isMulti() && activeField == null) {
+           || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
-              .toString() + " recno " + recno.toString() + " current record " + activeRecord
-              .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
+        .toString() + " recno " + recno.toString() + " current record " + activeRecord
+         .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
     }
 
     // backups the records if it is called in a
@@ -1694,15 +1695,15 @@ abstract class VBlock(var title: String,
       if (fetchCount >= bufferSize) {
         fetchCount += 1
       } else {
-          var i = 0
-          var j = 0
-          while (i < fields.size) {
-            if (fields[i].getColumnCount() > 0) {
-              fields[i].setQuery(fetchCount, result,columns[j])
-              j += 1
-            }
-            i++
+        var i = 0
+        var j = 0
+        while (i < fields.size) {
+          if (fields[i].getColumnCount() > 0) {
+            fields[i].setQuery(fetchCount, result,columns[j])
+            j += 1
           }
+          i++
+        }
 
         setRecordFetched(fetchCount, true)
         setRecordChanged(fetchCount, false)
@@ -1857,8 +1858,8 @@ abstract class VBlock(var title: String,
     }
 
     if (getMode() == VConstants.MOD_UPDATE
-      && isChanged
-      && !form.ask(Message.getMessage("confirm_insert_mode"))
+        && isChanged
+        && !form.ask(Message.getMessage("confirm_insert_mode"))
     ) {
       return
     }
@@ -2046,8 +2047,8 @@ abstract class VBlock(var title: String,
     fields.forEach { field ->
       // image fields cannot be handled in a report.
       if (field !is VImageField
-              && !field.isInternal()
-              && field.getColumnCount() > 0) {
+          && !field.isInternal()
+          && field.getColumnCount() > 0) {
         result.add(field.getColumn(0)!!.column)
       }
     }
@@ -2067,8 +2068,8 @@ abstract class VBlock(var title: String,
    * Returns the database columns of block.
    */
   fun getSearchColumns(): List<Column<*>> =
-          fields.filter { it.getColumnCount() > 0 }
-                  .map { it.getColumn(0)!!.column }
+    fields.filter { it.getColumnCount() > 0 }
+      .map { it.getColumn(0)!!.column }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
@@ -2085,7 +2086,7 @@ abstract class VBlock(var title: String,
   fun hasNullableColumns(table: Int): Boolean {
     fields.forEach { field ->
       if (field.fetchColumn(table) != -1 && field.isInternal()
-              && field.getColumn(field.fetchColumn(table))!!.nullable) {
+          && field.getColumn(field.fetchColumn(table))!!.nullable) {
         return true
       }
     }
@@ -2214,7 +2215,7 @@ abstract class VBlock(var title: String,
     assert(fld != null) { "fld = $fld" }
     assert(this == form.getActiveBlock()) {
       (name + " != "
-              + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
+       + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
     val table = fld!!.getColumn(0)!!.getTable()
 
@@ -2229,7 +2230,7 @@ abstract class VBlock(var title: String,
     assert(fld != null) { "fld = $fld" }
     assert(this == form.getActiveBlock()) {
       (name + " != "
-              + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
+       + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
     assert(fld!!.getColumnCount() == 1) { "column count: " + fld.getColumnCount() }
     val table = fld.getColumn(0)!!.getTable()
@@ -2388,8 +2389,8 @@ abstract class VBlock(var title: String,
 
       /* skip fields with fixed value */
       if (!field.isNull(activeRecord) &&
-              field.getSearchOperator() == VConstants.SOP_EQ &&
-              !field.getSql(activeRecord)!!.toString().contains('*')) {
+          field.getSearchOperator() == VConstants.SOP_EQ &&
+          !field.getSql(activeRecord)!!.toString().contains('*')) {
         continue
       }
       query_tab[query_cnt++] = field
@@ -2852,8 +2853,8 @@ abstract class VBlock(var title: String,
    */
   protected fun isAlwaysSkipped(): Boolean {
     return access[VConstants.MOD_QUERY] <= VConstants.ACS_SKIPPED &&
-            access[VConstants.MOD_UPDATE] <= VConstants.ACS_SKIPPED &&
-            access[VConstants.MOD_INSERT] <= VConstants.ACS_SKIPPED
+           access[VConstants.MOD_UPDATE] <= VConstants.ACS_SKIPPED &&
+           access[VConstants.MOD_INSERT] <= VConstants.ACS_SKIPPED
   }
 
   // ----------------------------------------------------------------------
@@ -3140,8 +3141,8 @@ abstract class VBlock(var title: String,
           break
         }
         if (field.fetchColumn(table) != -1
-                && !field.isInternal()
-                && !field.isNull(recno)) {
+            && !field.isInternal()
+            && !field.isNull(recno)) {
           nullReference = false
         }
       }
@@ -3153,10 +3154,10 @@ abstract class VBlock(var title: String,
         break
       }
       if (field.isInternal()
-              && field.fetchColumn(0) != -1
-              && field.fetchColumn(table) != -1
-              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
-                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+          && field.fetchColumn(0) != -1
+          && field.fetchColumn(table) != -1
+          && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
+               field.getColumn(field.fetchColumn(0))!!.nullable)) {
         nullReference = false
       }
     }
@@ -3505,7 +3506,7 @@ abstract class VBlock(var title: String,
       }
 
       val query = table.slice(ucColumn, tsColumn)
-              .select { idColumn eq value!! }
+        .select { idColumn eq value!! }
 
       if (query.empty()) {
         activeRecord = recno

@@ -20,6 +20,7 @@ package org.kopi.galite.visual
 
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
@@ -36,8 +37,8 @@ object VDatabaseUtils {
 
     transaction {
       val query1 = References.slice(References.table, References.column, References.action)
-              .select { References.reference eq queryTable.tableName }
-              .orderBy(References.action to SortOrder.DESC)
+        .select { References.reference eq queryTable.tableName }
+        .orderBy(References.action to SortOrder.DESC)
       val action = query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
@@ -45,21 +46,17 @@ object VDatabaseUtils {
         }
         when (query1Row[References.action][0]) {
           'R' -> transaction {
-            val query2 = auxTable.slice(auxTable.id)
-                    .select { auxTable.column eq id }
+            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             if (query2.toList()[1] != null) {
               throw VExecFailedException(
                 MessageCode.getMessage("VIS-00021", arrayOf<Any>(
-                      query1Row[References.column],
-                      query1Row[References.table]
-                ))
-              )
+                  query1Row[References.column],
+                  query1Row[References.table])))
             }
           }
 
           'C' -> transaction {
-            val query2 = auxTable.slice(auxTable.id)
-                    .select { auxTable.column eq id }
+            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             query2.forEach {
               checkForeignKeys(it[auxTable.id], query1Row[References.table])
             }
@@ -83,8 +80,8 @@ object VDatabaseUtils {
     transaction {
 
       val query1 = References.slice(References.table, References.column, References.action)
-              .select { References.reference eq table }
-              .orderBy(References.action to SortOrder.DESC)
+        .select { References.reference eq table }
+        .orderBy(References.action to SortOrder.DESC)
       val action = query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
@@ -93,20 +90,17 @@ object VDatabaseUtils {
         when (query1Row[References.action][0]) {
           'R' -> transaction {
             val query2 = auxTable.slice(auxTable.id)
-                    .select { auxTable.column eq id }
+              .select { auxTable.column eq id }
             if (query2.toList()[1] != null) {
               throw VExecFailedException(
                 MessageCode.getMessage("VIS-00021", arrayOf<Any>(
-                      query1Row[References.column],
-                      query1Row[References.table]
-                ))
-              )
+                  query1Row[References.column],
+                  query1Row[References.table])))
             }
           }
 
           'C' -> transaction {
-            val query2 = auxTable.slice(auxTable.id)
-                    .select { auxTable.column eq id }
+            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             query2.forEach {
               checkForeignKeys(it[auxTable.id], query1Row[References.table])
             }

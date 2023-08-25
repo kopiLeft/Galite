@@ -55,11 +55,11 @@ fun <T> Window.transaction(message: String? = null,
  */
 fun <T> Window.transaction(message: String? = null,
                            transactionIsolation: Int,
-                           repetitionAttempts: Int,
+                           readOnly: Boolean,
                            db: Database? = null,
                            statement: Transaction.() -> T): T {
   return if (isModelInitialized) {
-    model.transaction(message, transactionIsolation, repetitionAttempts, db, statement)
+    model.transaction(message, transactionIsolation, readOnly, db, statement)
   } else {
     org.jetbrains.exposed.sql.transactions.transaction(db, statement)
   }
@@ -75,12 +75,12 @@ fun <T> Window.transaction(message: String? = null,
 internal fun <T> VWindow.transaction(message: String? = null,
                                      db: Database? = null,
                                      statement: Transaction.() -> T): T =
-        doAndWait(message) {
-          val value = org.jetbrains.exposed.sql.transactions.transaction(db, statement)
+  doAndWait(message) {
+    val value = org.jetbrains.exposed.sql.transactions.transaction(db, statement)
 
-          if (this is VForm) commitTrail()
-          value
-        }
+    if (this is VForm) commitTrail()
+    value
+  }
 
 /**
  * Starts a protected transaction.
@@ -94,22 +94,20 @@ internal fun <T> VWindow.transaction(message: String? = null,
  */
 internal fun <T> VWindow.transaction(message: String? = null,
                                      transactionIsolation: Int,
-                                     repetitionAttempts: Int,
+                                     readOnly: Boolean,
                                      db: Database? = null,
                                      statement: Transaction.() -> T): T =
-        doAndWait(message) {
-          val value = org.jetbrains.exposed.sql.transactions.transaction(
-            transactionIsolation,
-            repetitionAttempts,
-            db,
-            statement
-          )
-
-          if (this is VForm) {
-            commitTrail()
-          }
-          value
-        }
+  doAndWait(message) {
+    val value = org.jetbrains.exposed.sql.transactions.transaction(
+      transactionIsolation,
+      readOnly,
+      db,
+      statement)
+    if (this is VForm) {
+      commitTrail()
+    }
+    value
+  }
 
 /**
  * Display waiting message while executing the task.

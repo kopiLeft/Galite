@@ -226,7 +226,6 @@ open class DTextField(
   override fun getText(): String? {
     return transformer!!.toModel(field.value.orEmpty())
   }
-
   override fun setHasCriticalValue(b: Boolean) {
     // ignore
   }

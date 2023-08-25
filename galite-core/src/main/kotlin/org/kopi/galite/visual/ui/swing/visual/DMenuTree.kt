@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.swing.visual
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
 import java.awt.event.KeyAdapter

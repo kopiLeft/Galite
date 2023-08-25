@@ -101,6 +101,14 @@ class DListDialog(
   override fun selectFromDialog(window: UWindow?, showSingleEntry: Boolean): Int =
           selectFromDialog(window, null, showSingleEntry)
 
+  override fun isEnabled(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun setEnabled(enabled: Boolean) {
+    TODO("Not yet implemented")
+  }
+
   /**
    * invoked when the user clicks outside the overlay or presses the escape key.
    */
