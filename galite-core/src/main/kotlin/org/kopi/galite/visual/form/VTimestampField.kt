@@ -310,10 +310,9 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val tmp = result[column]) {
-      is Timestamp -> tmp.toInstant()
-      is LocalDateTime -> tmp
-      is Instant -> tmp
-      else -> null
+      is Timestamp                 -> tmp.toInstant()
+      is LocalDateTime, is Instant -> tmp
+      else                         -> null
     }
   }
 

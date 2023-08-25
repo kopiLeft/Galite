@@ -19,6 +19,7 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.visual.domain.DATETIME
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
@@ -244,13 +245,23 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
   }
 
   // test NODETAIL option
-  inner class NoDetailBlock : Block("NODETAIL Block", 2, 2) {
+  inner class NoDetailBlock : Block("NODETAIL Block", 10, 5) {
     init {
       border = Border.LINE
       options(BlockOption.NODETAIL)
+      command(item = serialQuery, Mode.QUERY) { serialQuery() }
+
     }
-    val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field"
+    val t = table(Training)
+
+    val trainingID = visit(domain = INT(25), position = at(1, 1)) {
+      label = "training ID"
+      help = "training ID"
+      columns(t.id)
+    }
+    val trainDateLocalDateTime = visit(domain = DATETIME, at(1, 1)) {
+      label = "training DateTime"
+      columns(t.trainDateTime)
     }
   }
 
