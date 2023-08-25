@@ -28,7 +28,7 @@ localize these actors by @mgrati
 * move the addition of scrollPanel from a function to the constructor by @hfazai
 * VaadinUI-FIX : stay on the active field when validating boolean field value by @hfazai
 
-**Full Changelog**: [1.2.0 ... 1.3.0](https://github.com/kopiLeft/Galite/compare/1.2.0...1.3.0)
+**Full Changelog**: [1.3.0 ... 1.4.0](https://github.com/kopiLeft/Galite/compare/1.3.0...1.4.0)
 
 # 1.3.0
 ## What's Changed
