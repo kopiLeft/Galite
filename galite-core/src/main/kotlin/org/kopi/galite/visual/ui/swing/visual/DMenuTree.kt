@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.visual.ui.swing.visual
 
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
 import java.awt.event.KeyAdapter
@@ -39,9 +38,11 @@ import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeNode
 import javax.swing.tree.TreePath
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.database.Favorites
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message.getMessage

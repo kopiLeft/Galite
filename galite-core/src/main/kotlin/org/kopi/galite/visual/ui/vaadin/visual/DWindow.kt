@@ -17,6 +17,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
+import java.io.File
+import java.io.Serializable
+import java.util.concurrent.ConcurrentLinkedQueue
+
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -25,6 +29,7 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
 import com.vaadin.flow.server.VaadinSession
+
 import org.kopi.galite.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
@@ -59,9 +64,6 @@ import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import java.io.File
-import java.io.Serializable
-import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.

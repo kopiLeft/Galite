@@ -142,8 +142,7 @@ open class JApplicationTestBase : ApplicationTestBase() {
 
           override fun isUnicodeDatabase(): Boolean = false
           override fun useAcroread(): Boolean = TODO()
-        }
-                                               )
+        })
     }
   }
 }

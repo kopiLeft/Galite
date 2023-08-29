@@ -85,9 +85,8 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   override fun isEnabled(): Boolean = super.isEnabled()
 
-  override fun setEnabled(enabled: Boolean) {
-    super.setEnabled(enabled)
-  }
+  override fun setEnabled(enabled: Boolean) = super.setEnabled(enabled)
+
   /**
    * Updates the label content.
    * @param model The field model.
