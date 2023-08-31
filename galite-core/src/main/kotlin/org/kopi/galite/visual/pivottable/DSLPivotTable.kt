@@ -44,5 +44,5 @@ open class DSLPivotTable() : VWindow() {
   fun defineOptions (options: Map<String, List<String>>) {
     this.options = options
   }
-
+  
 }

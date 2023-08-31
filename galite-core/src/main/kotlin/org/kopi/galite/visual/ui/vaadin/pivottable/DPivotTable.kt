@@ -69,7 +69,7 @@ class DPivotTable(private val model: DSLPivotTable) : DWindow(model) {
 
     val pivotTable = PivotTable(pivotData, pivotOptions, PivotMode.INTERACTIVE)
 
-    setContent(pivotTable)
+    // setContent(pivotTable)
   }
 
   override fun run() {

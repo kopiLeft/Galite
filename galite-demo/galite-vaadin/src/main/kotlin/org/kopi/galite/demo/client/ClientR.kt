@@ -16,14 +16,11 @@
  */
 package org.kopi.galite.demo.client
 
-import com.vaadin.flow.component.applayout.AppLayout
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.Route
-import org.vaadin.addons.componentfactory.PivotTable
+import org.kopi.galite.visual.pivottable.DSLPivotTable
 import org.vaadin.addons.componentfactory.PivotTable.*
 
 //@Route
-class ClientR : AppLayout()  {
+class ClientR : DSLPivotTable()  {
 
   // Create Table and fill it with content
   fun createTable(): PivotData {
@@ -38,6 +35,7 @@ class ClientR : AppLayout()  {
       "cityClt" to String::class.java,
       "zipCodeClt" to Int::class.java,
       "activeClt" to String::class.java)
+
     for (column in columns)
       pivotData.addColumn(column.key, column.value)
 
@@ -70,8 +68,9 @@ class ClientR : AppLayout()  {
   // Create Pivot Table
 
   init {
-    val table = PivotTable(createTable(), createOptions(), PivotMode.INTERACTIVE)
-    content = table
-    addToDrawer(content)
+    defineCols(columns)
+    defineRows(rows)
+    defineOptions(options)
   }
+
 }

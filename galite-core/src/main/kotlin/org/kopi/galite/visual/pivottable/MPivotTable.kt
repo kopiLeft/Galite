@@ -17,35 +17,6 @@
  */
 package org.kopi.galite.visual.pivottable
 
-import org.jetbrains.kotlinx.dataframe.AnyCol
-import org.jetbrains.kotlinx.dataframe.columns.ColumnGroup
-import org.jetbrains.kotlinx.dataframe.columns.ValueColumn
-import org.jetbrains.kotlinx.dataframe.values
-
 class MPivotTable(private val pivotTable: DSLPivotTable) {
 
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-
-//  val columns : Map<String, Class<*>> = emptyMap()
-//  val rows : List<List<Any>> = mutableListOf()
-//  val options : Map<String, List<String>> = emptyMap()
-
-  //---------------------------------------------------
-  // METHODS
-  //---------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-  fun build() {
-
-  }
 }
