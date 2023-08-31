@@ -433,7 +433,6 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
           // not valid, get now
           setTimestamp(record, getCurrentTimestamp())
         }
-        if (getTimestamp(record) != null )
         setTimestamp(record, if (getTimestamp(record) is Instant?) (getTimestamp(record) as? Instant)?.plusMillis(if (desc) -1 else 1)
                              else (getTimestamp(record) as? LocalDateTime)?.plus(if (desc) -1 else 1, ChronoUnit.MILLIS))
       }
