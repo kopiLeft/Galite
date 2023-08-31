@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.tests.database
 
-import java.time.Instant
+import java.time.LocalDateTime
 
 import kotlin.reflect.KClass
 
@@ -79,9 +79,9 @@ fun insertIntoUsers(shortname: String,
     it[name] = userName
     it[character] = shortname
     it[active] = true
-    it[createdOn] = Instant.now()
+    it[createdOn] = LocalDateTime.now()
     it[createdBy] = 1
-    it[changedOn] = Instant.now()
+    it[changedOn] = LocalDateTime.now()
     it[changedBy] = 1
   }
 }

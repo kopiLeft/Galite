@@ -17,7 +17,6 @@
 package org.kopi.galite.demo.database
 
 import java.math.BigDecimal
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -179,9 +178,9 @@ fun insertIntoUsers(shortname: String,
     it[name] = userName
     it[character] = shortname
     it[active] = true
-    it[createdOn] = Instant.now()
+    it[createdOn] = LocalDateTime.now()
     it[createdBy] = 1
-    it[changedOn] = Instant.now()
+    it[changedOn] = LocalDateTime.now()
     it[changedBy] = 1
   }
 }
