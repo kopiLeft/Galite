@@ -18,6 +18,7 @@
 
 package org.kopi.galite.database
 
+import org.jetbrains.exposed.sql.NextVal
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal
@@ -29,11 +30,19 @@ class Utils {
     /**
      * Returns first free ID of table.
      */
-    fun getNextTableId(table: Table): Int {
-      val seqNextVal = Sequence(table.nameInDatabaseCase() + "Id").nextIntVal()
-      val seqNextValQuery = getDualTableName().slice(seqNextVal).selectAll()
-      val id = seqNextValQuery.firstOrNull()?.get(seqNextVal)
-        ?: throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()}")
+    fun getNextTableId(table: Table, sequence: Sequence?): Int {
+      val seqNextVal: NextVal<Int>
+      val id: Int?
+
+      if (sequence != null ) {
+        seqNextVal = sequence.nextIntVal()
+      } else {
+        val sequenceColumn: String? = if (table.autoIncColumn != null) table.autoIncColumn!!.name.trim().uppercase() else null
+        seqNextVal = Sequence(table.nameInDatabaseCase() + "_" + (sequenceColumn ?: "ID") + "_seq").nextIntVal()
+      }
+      id = getDualTableName().slice(seqNextVal).selectAll().firstOrNull()?.get(seqNextVal)
+      if (id == null) throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()}")
+
       return id
     }
 

@@ -28,12 +28,14 @@ import kotlin.test.assertTrue
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThrows
 import org.junit.Test
+import org.kopi.galite.database.Dual
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
@@ -520,7 +522,9 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       SchemaUtils.create(Training)
       SchemaUtils.create(Center)
+      SchemaUtils.create(Dual)
       SchemaUtils.createSequence(centerSequence)
+      Dual.deleteAll() ; Dual.insert { it[table] = "x" }
       Training.insert {
         it[id] = 1
         it[trainingName] = "trainingName"

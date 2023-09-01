@@ -48,7 +48,7 @@ object User : Table() {
   val cv = varchar("CURRICULUM VITAE", 70).nullable()
 }
 
-val userSequence = org.jetbrains.exposed.sql.Sequence("USERID", startWith = 1)
+val userSequence = org.jetbrains.exposed.sql.Sequence("USER_ID_seq", startWith = 1)
 
 class FormSample : Form(title = "form for test", locale = Locale.UK) {
   val action = menu("Action")

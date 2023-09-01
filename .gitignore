@@ -51,7 +51,7 @@ build
 **/vite.config.ts
 **/vite.generated.ts
 **/.pnpmfile.cjs
-
+**/vaadin-featureflags.properties
 galite-demo/galite-vaadin/frontend/index.html
 galite-demo/galite-vaadin-spring/frontend/index.html
 galite-tests/frontend/index.html

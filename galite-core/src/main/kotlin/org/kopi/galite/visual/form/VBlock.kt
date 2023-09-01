@@ -32,6 +32,7 @@ import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.compoundAnd
@@ -130,6 +131,7 @@ abstract class VBlock(var title: String,
   var displayedFields = 0
   private var isFilterVisible = false
   internal var dropListMap = HashMap<String, String>()
+  var sequence: Sequence? = null
 
   // dynamic data
   private var mode = VConstants.MOD_QUERY // current mode
@@ -137,7 +139,6 @@ abstract class VBlock(var title: String,
   protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
   protected var fetchCount = 0 // # of fetched records
   protected var fetchPosition = 0 // position of current record
-
   var activeRecord = 0 // current record
     get() {
       return if (field in 0 until bufferSize) field else -1
@@ -3358,7 +3359,7 @@ abstract class VBlock(var title: String,
   protected fun fillIdField(recno: Int, id: Int) {
     var id = id
     if (id == -1) {
-      id = Utils.getNextTableId(tables[0])
+      id = Utils.getNextTableId(tables[0], sequence)
     }
 
     idField.setInt(recno, id)

@@ -29,6 +29,7 @@ import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.transactions.transaction
 
+import org.kopi.galite.database.Dual
 import org.kopi.galite.tests.database.createDBSchemaTables
 import org.kopi.galite.tests.database.dropDBSchemaTables
 import org.kopi.galite.tests.database.insertIntoUsers
@@ -79,7 +80,9 @@ val trainingSequence = Sequence("TRAININGID")
 
 val trainerSequence = Sequence("TRAINERID")
 
-val centerSequence = Sequence("CENTERID")
+val centerSequence = Sequence("CENTER_ID_seq")
+
+val testTriggersSequence = Sequence("TRIGGERS_ID_seq")
 
 fun initDatabase() {
   transaction {
@@ -172,8 +175,8 @@ fun addTrainer(firstName: String, lastName: String) {
 fun initDocumentationData() {
   dropDocumentationTables()
   transaction {
-    SchemaUtils.create(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
+    SchemaUtils.create(TestTable, TestTable2, TestTriggers, Dual)
+    SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"), Sequence("TRIGGERS_ID_seq"))
     TestTable.insert {
       it[id] = 1
       it[name] = "TEST-1"
@@ -194,16 +197,17 @@ fun initDocumentationData() {
     }
     TestTriggers.insert {
       it[id] = 1
-      it[INS] = "INS-1"
+      it[INS] = "PREINS Trigger"
       it[UPD] = "UPD-1"
     }
+    Dual.insert { it[table] = "x" }
   }
 }
 
 fun dropDocumentationTables() {
   transaction {
-    SchemaUtils.drop(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
+    SchemaUtils.drop(TestTable, TestTable2, TestTriggers, Dual)
+    SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"), Sequence("TRIGGERS_ID_seq"))
   }
 }
 

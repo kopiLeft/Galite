@@ -20,6 +20,7 @@ package org.kopi.galite.visual.dsl.form
 import java.awt.Point
 import java.sql.SQLException
 
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
@@ -145,11 +146,12 @@ open class Block(val title: String,
    *
    * @param table     the database table
    */
-  fun <T : Table> table(table: T): T {
+  fun <T : Table> table(table: T, seq: Sequence? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
+    block.sequence = seq
 
     return table
   }
