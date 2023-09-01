@@ -17,6 +17,8 @@
 
 import org.kopi.galite.gradle._java
 import org.kopi.galite.gradle._publishing
+import org.kopi.galite.gradle.configureMavenCentralPom
+import org.kopi.galite.gradle.signPublication
 
 plugins {
   id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
@@ -41,7 +43,7 @@ subprojects {
     maven {
       url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
-    mavenLocal()
+//    mavenLocal()
   }
 
   dependencies {
@@ -75,10 +77,9 @@ allprojects {
           artifactId = project.name
           from(project.components["java"])
           pom {
-//            configureMavenCentralPom(project)
-            name.set(project.name)
+            configureMavenCentralPom(project)
           }
-//          signPublication(project)
+          signPublication(project)
         }
       }
     }

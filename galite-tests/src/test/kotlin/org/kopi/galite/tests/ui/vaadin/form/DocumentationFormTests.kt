@@ -22,6 +22,7 @@ import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
@@ -31,13 +32,12 @@ import org.kopi.galite.testing.findModel
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.DocumentationForm
-import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.examples.TestTriggers
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 
 import com.github.mvysny.kaributesting.v10._find
 import com.vaadin.flow.component.tabs.Tab
-import org.kopi.galite.tests.examples.initDocumentationData
 
 class DocumentationFormTests : GaliteVUITestBase() {
   val form = DocumentationForm()
