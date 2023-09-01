@@ -49,7 +49,8 @@ fun <T> Window.transaction(message: String? = null,
  * @param	message		        the message to be displayed.
  * @param       transactionIsolation    the transaction isolation level (Connection.TRANSACTION_SERIALIZABLE,
  * TRANSACTION_READ_UNCOMMITTED, ...). See [Connection].
- * @param       repetitionAttempts      the number of retries when [SQLException] occurs.
+ * @param       readOnly                Boolean value that specifies if Should all connections/transactions be executed
+ * in read-only mode by default or not. Default state is false.
  * @param       db                      the database to execute the statement.
  * @param       statement               the transaction statement.
  */
@@ -88,7 +89,8 @@ internal fun <T> VWindow.transaction(message: String? = null,
  * @param	message		        the message to be displayed.
  * @param       transactionIsolation    the transaction isolation level (Connection.TRANSACTION_SERIALIZABLE,
  * TRANSACTION_READ_UNCOMMITTED, ...). See [Connection].
- * @param       repetitionAttempts      the number of retries when [SQLException] occurs.
+ * @param       readOnly                Boolean value that specifies if Should all connections/transactions be executed
+ * in read-only mode by default or not. Default state is false.
  * @param       db                      the database to execute the statement.
  * @param       statement               the transaction statement.
  */

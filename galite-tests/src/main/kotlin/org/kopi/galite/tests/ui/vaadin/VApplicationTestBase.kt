@@ -100,6 +100,7 @@ open class VApplicationTestBase : ApplicationTestBase() {
         null
       }
     }
+
     override val isNoBugReport: Boolean
       get() = true
 
@@ -108,6 +109,7 @@ open class VApplicationTestBase : ApplicationTestBase() {
     }
   }
 }
+
 object ConfigurationManager : ApplicationConfiguration() {
   override val isDebugModeEnabled: Boolean = true
   override val version get(): String = "1.0"
@@ -134,13 +136,17 @@ object ConfigurationManager : ApplicationConfiguration() {
       }
     }
   }
+
   override fun getIntFor(key: String): Int {
     val value = this.getStringFor(key)
     return value.toInt()
   }
+
   override fun getBooleanFor(var1: String): Boolean {
     return java.lang.Boolean.valueOf(getStringFor(var1))
   }
+
   override fun isUnicodeDatabase(): Boolean = false
+
   override fun useAcroread(): Boolean = TODO()
 }

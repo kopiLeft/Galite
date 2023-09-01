@@ -37,6 +37,7 @@ import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 
 import com.github.mvysny.kaributesting.v10._find
 import com.vaadin.flow.component.tabs.Tab
+import org.kopi.galite.tests.examples.initDocumentationData
 
 class DocumentationFormTests : GaliteVUITestBase() {
   val form = DocumentationForm()
