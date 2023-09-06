@@ -67,6 +67,7 @@ open class Block(val title: String,
   val triggers = mutableListOf<Trigger>() // the triggers executed by this form
   val commands = mutableListOf<Command>() // the commands associated with this block
   val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
+  var countTable: Int = 0
 
   var border: Border = Border.NONE // the border of the block
     set(b) {
@@ -145,13 +146,15 @@ open class Block(val title: String,
    * i.e tables that are associated with the first one.
    *
    * @param table     the database table
+   * @param seq       the sequence of the database table
    */
   fun <T : Table> table(table: T, seq: Sequence? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
-    block.sequence = seq
+    if (seq != null && countTable == 0) block.sequence = seq
+    countTable++
 
     return table
   }

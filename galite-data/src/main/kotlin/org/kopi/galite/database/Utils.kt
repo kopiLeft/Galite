@@ -28,22 +28,20 @@ class Utils {
   companion object {
 
     /**
-     * Returns first free ID of table.
+     * Returns the first free ID of table.
      */
     fun getNextTableId(table: Table, sequence: Sequence?): Int {
       val seqNextVal: NextVal<Int>
-      val id: Int?
 
-      if (sequence != null ) {
-        seqNextVal = sequence.nextIntVal()
+      seqNextVal = if (sequence != null ) {
+        sequence.nextIntVal()
       } else {
         val sequenceColumn: String? = if (table.autoIncColumn != null) table.autoIncColumn!!.name.trim().uppercase() else null
-        seqNextVal = Sequence(table.nameInDatabaseCase() + "_" + (sequenceColumn ?: "ID") + "_seq").nextIntVal()
+        Sequence(table.nameInDatabaseCase() + "_" + (sequenceColumn ?: "ID") + "_seq").nextIntVal()
       }
-      id = getDualTableName().slice(seqNextVal).selectAll().firstOrNull()?.get(seqNextVal)
-      if (id == null) throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()}")
 
-      return id
+      return getDualTableName().slice(seqNextVal).selectAll().firstOrNull()?.get(seqNextVal)
+        ?: throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()}")
     }
 
     fun getDualTableName(): Table = Table("DUAL")

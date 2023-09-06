@@ -19,6 +19,7 @@ package org.kopi.galite.demo.tasks
 import java.util.Locale
 
 import org.kopi.galite.demo.database.Task
+import org.kopi.galite.demo.database.TASKId
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
@@ -35,7 +36,7 @@ class TasksForm : DictionaryForm(title = "Tasks", locale = Locale.UK) {
   val tasksBlock = insertBlock(Tasks())
 
   inner class Tasks : FullCalendar("Tasks") {
-    val t = table(Task)
+    val t = table(Task, TASKId)
 
     val id = hidden(INT(20)) { columns(t.id) }
     val uc = hidden(domain = INT(20)) { columns(t.uc) }

@@ -82,7 +82,7 @@ val trainerSequence = Sequence("TRAINERID")
 
 val centerSequence = Sequence("CENTER_ID_seq")
 
-val testTriggersSequence = Sequence("TRIGGERS_ID_seq")
+val testTriggersSequence = Sequence("TRIGGERSseq")
 
 fun initDatabase() {
   transaction {
@@ -176,7 +176,7 @@ fun initDocumentationData() {
   dropDocumentationTables()
   transaction {
     SchemaUtils.create(TestTable, TestTable2, TestTriggers, Dual)
-    SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"), Sequence("TRIGGERS_ID_seq"))
+    SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"), Sequence("TRIGGERS_ID_seq"), testTriggersSequence)
     TestTable.insert {
       it[id] = 1
       it[name] = "TEST-1"

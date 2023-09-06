@@ -110,6 +110,7 @@ abstract class VBlock(var title: String,
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
   internal var commands = mutableListOf<VCommand>() // commands
   internal var fieldID: VField? = null // commands
+  internal var sequence: Sequence? = null
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp = field
@@ -131,7 +132,6 @@ abstract class VBlock(var title: String,
   var displayedFields = 0
   private var isFilterVisible = false
   internal var dropListMap = HashMap<String, String>()
-  var sequence: Sequence? = null
 
   // dynamic data
   private var mode = VConstants.MOD_QUERY // current mode
@@ -3354,7 +3354,7 @@ abstract class VBlock(var title: String,
   }
 
   /**
-   *
+   * fill the field holding the ID of the block's base table.
    */
   protected fun fillIdField(recno: Int, id: Int) {
     var id = id
