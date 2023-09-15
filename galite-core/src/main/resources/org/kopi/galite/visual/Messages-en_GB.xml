@@ -89,4 +89,7 @@
   <message ident="00069" text="Maximum depth of the tree : {0} levels" />
   <message ident="00070" text="Can't select multi-days time slots because the full calendar form contains a date field" />
   <message ident="00071" text="Data entry error: this violates the constraint defined in the domain" />
+  <message ident="00072" text="Column {0} is not a column of table {1}" />
+  <message ident="00073" text="ID column should only be set for the block's main table" />
+  <message ident="00074" text="Column {0} of the main table {1} was not found" />
 </messages>

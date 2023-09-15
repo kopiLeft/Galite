@@ -1978,13 +1978,16 @@ abstract class VBlock(var title: String,
     callProtectedTrigger(VConstants.TRG_POSTDEL)
   }
 
+  open var idFieldName : String = "ID"
+
   /**
    * Searches the field holding the ID of the block's base table.
    * May be overridden by actual form.
    */
   val idField: VField
     get() {
-      return getBaseTableField("ID") ?: throw InconsistencyException()
+      return getBaseTableField(idFieldName)
+        ?: throw InconsistencyException(MessageCode.getMessage("VIS-00074", idFieldName, tables[0].tableName))
     }
 
   /**
@@ -2054,7 +2057,6 @@ abstract class VBlock(var title: String,
 
     // add ID field AT END if it exists and not already taken
     for (field in fields) {
-      //!!! graf 20080329: should we replace fld!!.name.equals("ID") by fld == getIdField() ?
       if (field.isInternal() && field.name == idField.name && field.getColumnCount() > 0) {
         result.add(field.getColumn(0)!!.column)
         break

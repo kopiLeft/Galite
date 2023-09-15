@@ -20,6 +20,7 @@ package org.kopi.galite.visual.dsl.form
 import java.awt.Point
 import java.sql.SQLException
 
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
@@ -40,6 +41,7 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
 
@@ -145,9 +147,18 @@ open class Block(val title: String,
    *
    * @param table     the database table
    */
-  fun <T : Table> table(table: T): T {
+  fun <T : Table> table(table: T, idColumn: Column<*>? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
+    idColumn?.let {
+      if (it.table != table) {
+        throw IllegalArgumentException(MessageCode.getMessage("VIS-00072", it.name, table.tableName))
+      }
+      if (block.tables.isNotEmpty()) {
+        throw IllegalArgumentException(MessageCode.getMessage("VIS-00073"))
+      }
+      block.idFieldName = idColumn.name
+    }
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
 
