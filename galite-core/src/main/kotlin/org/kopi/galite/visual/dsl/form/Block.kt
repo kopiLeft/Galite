@@ -67,7 +67,6 @@ open class Block(val title: String,
   val triggers = mutableListOf<Trigger>() // the triggers executed by this form
   val commands = mutableListOf<Command>() // the commands associated with this block
   val ownDomains = mutableListOf<Domain<*>>() // Domains of fields added to this block
-  var countTable: Int = 0
 
   var border: Border = Border.NONE // the border of the block
     set(b) {
@@ -153,8 +152,7 @@ open class Block(val title: String,
 
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
-    if (seq != null && countTable == 0) block.sequence = seq
-    countTable++
+    if (seq != null && block.tables.size == 1 )  block.sequence = seq
 
     return table
   }
