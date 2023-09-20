@@ -242,7 +242,7 @@ class FormTriggersTests : GaliteVUITestBase() {
           it[id] = 1
           it[firstNameClt] = "name"
         }
-        SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("CLIENTSID"))
+        SchemaUtils.createSequence(org.jetbrains.exposed.sql.Sequence("CLIENTS_ID_seq"))
       }
     }
     val list = arrayListOf<String>()

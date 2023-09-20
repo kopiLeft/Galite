@@ -41,6 +41,7 @@ import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
 
@@ -150,9 +151,14 @@ open class Block(val title: String,
   fun <T : Table> table(table: T, seq: Sequence? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
+    seq?.let {
+      if (block.tables.isNotEmpty()) {
+        throw InconsistencyException(MessageCode.getMessage("VIS-00072"))
+      }
+      block.sequence = seq
+    }
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)
-    if (seq != null && block.tables.size == 1 )  block.sequence = seq
 
     return table
   }
