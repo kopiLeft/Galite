@@ -1987,7 +1987,7 @@ abstract class VBlock(var title: String,
   val idField: VField
     get() {
       return getBaseTableField(idFieldName)
-        ?: throw InconsistencyException(MessageCode.getMessage("VIS-00074", idFieldName, tables[0].tableName))
+        ?: throw InconsistencyException(MessageCode.getMessage("VIS-00074", arrayOf(idFieldName, tables[0].tableName, name)))
     }
 
   /**
@@ -1996,7 +1996,8 @@ abstract class VBlock(var title: String,
   @Suppress("UNCHECKED_CAST")
   val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(tables[0]) as? Column<Int> ?: throw InconsistencyException()
+      return idField.lookupColumn(tables[0]) as? Column<Int>
+        ?: throw InconsistencyException(MessageCode.getMessage("VIS-00074", arrayOf(idFieldName, tables[0].tableName, name)))
     }
 
   /**
@@ -2031,7 +2032,7 @@ abstract class VBlock(var title: String,
    */
   protected fun getBaseTableField(field: String): VField? {
     for (i in fields.indices) {
-      val column = fields[i].lookupColumn(0)
+      val column = fields[i].lookupColumn(tables[0])
       if (column != null && column.name == field) {
         return fields[i]
       }
@@ -2351,6 +2352,7 @@ abstract class VBlock(var title: String,
         }
       }
     } catch (e: Exception) {
+      e.printStackTrace()
       if (e.message != null) {
         form.error(e.message!!)
       }

@@ -44,6 +44,7 @@ import org.kopi.galite.visual.Color
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -146,16 +147,17 @@ open class Block(val title: String,
    * i.e tables that are associated with the first one.
    *
    * @param table     the database table
+   * @param idColumn  the ID column of table. This parameter should be an Int column only defined for the main table
    */
-  fun <T : Table> table(table: T, idColumn: Column<*>? = null): T {
+  fun <T : Table> table(table: T, idColumn: Column<Int>? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     idColumn?.let {
       if (it.table != table) {
-        throw IllegalArgumentException(MessageCode.getMessage("VIS-00072", it.name, table.tableName))
+        throw VExecFailedException(MessageCode.getMessage("VIS-00072", it.name, table.tableName))
       }
       if (block.tables.isNotEmpty()) {
-        throw IllegalArgumentException(MessageCode.getMessage("VIS-00073"))
+        throw VExecFailedException(MessageCode.getMessage("VIS-00073"))
       }
       block.idFieldName = idColumn.name
     }
