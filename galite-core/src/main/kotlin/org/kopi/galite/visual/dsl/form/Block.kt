@@ -44,6 +44,7 @@ import org.kopi.galite.visual.Color
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -153,7 +154,7 @@ open class Block(val title: String,
 
     seq?.let {
       if (block.tables.isNotEmpty()) {
-        throw InconsistencyException(MessageCode.getMessage("VIS-00072"))
+        throw VExecFailedException(MessageCode.getMessage("VIS-00072"))
       }
       block.sequence = seq
     }
