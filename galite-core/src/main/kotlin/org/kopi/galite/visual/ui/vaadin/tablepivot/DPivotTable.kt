@@ -46,7 +46,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     //---------------------------------------------------
     override fun run() {
         pivotTable.initReport()
-        pivotTable.setMenu()
     }
 
     override fun build() {
@@ -75,6 +74,9 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         pivotOptions.setRows("color")
         pivotOptions.setCols("shape")
         pivotOptions.setCharts(true)
+        //pivotOptions.setRenderer(Renderer.BAR_CHART);
+        //pivotOptions.setFieldsDisabled(true);
+        pivotOptions.setAggregator(Aggregator.MINIMUM, "size");
         var table = PivotTable(pivotData, pivotOptions, PivotMode.INTERACTIVE)
 
 
@@ -95,6 +97,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
             }
         }
 
-        add(table, button)
+        add(button, table)
     }
 }

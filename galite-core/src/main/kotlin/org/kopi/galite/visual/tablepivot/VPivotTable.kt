@@ -18,20 +18,9 @@
 
 package org.kopi.galite.visual.tablepivot
 
-import java.awt.event.KeyEvent
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-
-import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.print.Printable
-import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
-import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
-import org.kopi.galite.visual.util.PrintJob
 
 /**
  * Represents a report model.
@@ -55,7 +44,6 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
     // ----------------------------------------------------------------------
     // DATA MEMBERS
     // ----------------------------------------------------------------------
-    //val model: MReport = MReport()
     private var built = false
     private var pageTitle = ""
     private var firstPageHeader = ""
@@ -94,6 +82,20 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
 
         // all commands are by default enabled
         activeCommands.clear()
+        commands.forEachIndexed { i, vCommand ->
+            setCommandEnabled(vCommand, i, true)
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // INTERFACE (COMMANDS)
+    // ----------------------------------------------------------------------
+    /**
+     * Enables/disables the actor.
+     */
+    fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
+        @Suppress("NAME_SHADOWING")
+        command.setEnabled(true)
     }
 
     // ----------------------------------------------------------------------
@@ -148,17 +150,6 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
     }
 
     // ----------------------------------------------------------------------
-    // PRIVATE METHODS
-    // ----------------------------------------------------------------------
-
-    fun setMenu() {
-        if (!built) {
-            // only when commands are displayed
-            return
-        }
-    }
-
-    // ----------------------------------------------------------------------
     // HELP
     // ----------------------------------------------------------------------
 
@@ -186,16 +177,12 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
         VHelpViewer().showHelp(genHelp())
     }
 
-    fun addDefaultReportCommands() {
-        initDefaultActors()
-        initDefaultCommands()
-    }
 
-    private fun initDefaultActors() {
-        addActors(arrayOf(
-            VDefaultReportActor("File", "Quit", VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
-            VDefaultReportActor("Help", "Help", VDynamicReport.HELP_ICON, KeyEvent.VK_F1, 0),
-        ))
+    // ----------------------------------------------------------------------
+    // Default Actors
+    // ----------------------------------------------------------------------
+    fun addDefaultReportCommands() {
+        initDefaultCommands()
     }
 
     private fun initDefaultCommands() {
