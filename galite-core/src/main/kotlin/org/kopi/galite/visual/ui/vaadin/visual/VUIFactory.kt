@@ -21,13 +21,11 @@ import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VListDialog
-import org.kopi.galite.visual.pivottable.PivotTable
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
 import org.kopi.galite.visual.ui.vaadin.form.DForm
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
-import org.kopi.galite.visual.ui.vaadin.pivottable.DPivotTable
 import org.kopi.galite.visual.ui.vaadin.preview.DPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.UIFactory
@@ -35,6 +33,7 @@ import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VItemTree
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.tablepivot.VPivotTable
 
 /**
  * The `VUIFactory` is a vaadin implementation of the [UIFactory].
@@ -70,7 +69,7 @@ class VUIFactory : UIFactory() {
       is VListDialog -> {
         createListDialog(model)
       }
-      is PivotTable -> {
+      is VPivotTable -> {
         createPivotTable(model)
       }
       else -> {
@@ -160,7 +159,8 @@ class VUIFactory : UIFactory() {
    * @param model The pivot table model
    * @return The  [DPivotTable] view.
    */
-  internal fun createPivotTable(model: PivotTable): DPivotTable {
-    return DPivotTable(model)
+
+  internal fun createPivotTable(model: VPivotTable): org.kopi.galite.visual.ui.vaadin.tablepivot.DPivotTable {
+    return org.kopi.galite.visual.ui.vaadin.tablepivot.DPivotTable(model)
   }
 }
