@@ -43,11 +43,16 @@ subprojects {
     maven {
       url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
+    maven {
+      url = uri("https://mvnrepository.com/artifact/org.vaadin.addons")
+    }
   }
 
   dependencies {
     "implementation"(kotlin("stdlib"))
     "implementation"(kotlin("reflect"))
+    // Pivot Table dependency
+    "implementation"("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
   }
 
   tasks.withType<JavaCompile> {
