@@ -37,10 +37,6 @@ class ChartSample : Chart(
 
   val area = measure(DECIMAL(width = 10, scale = 5)) {
     label = "area (ha)"
-
-    color {
-      VColor.GREEN
-    }
   }
 
   val population = measure(INT(10)) {
@@ -50,22 +46,10 @@ class ChartSample : Chart(
   val city = dimension(STRING(10)) {
     label = "city"
 
-    format { value ->
-      value?.toUpperCase()
-    }
-  }
-
-  // You can either change the chart type in INIT or CHARTTYPE trigger
-  val init = trigger(INITCHART) {
-    chartType = VChartType.BAR
-  }
-
-  // This is the type that will be taken because CHARTTYPE is executed after INIT
-  val type = trigger(CHARTTYPE) {
-    VChartType.BAR
   }
 
   init {
+
     city.add("Tunis") {
       this[area] = BigDecimal("34600")
       this[population] = 1056247

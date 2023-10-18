@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.report
+package org.kopi.galite.visual.tablepivot
 
 import java.io.Serializable
 import java.math.BigDecimal
@@ -37,8 +37,9 @@ import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
+import org.kopi.galite.visual.report.*
 
-class MReport : Constants, Serializable {
+class MPivotTable : Constants, Serializable {
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
@@ -46,8 +47,6 @@ class MReport : Constants, Serializable {
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
   var columns = mutableListOf<VReportColumn?>()    // array of column definitions
-  var accessibleColumns: Array<VReportColumn?> = arrayOf() // array of visible or hide columns
-    private set
 
   // Root is the root of the tree (which is our model to manipulate data)
   private var root: VGroupRow? = null    // root of grouping tree
@@ -56,8 +55,8 @@ class MReport : Constants, Serializable {
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
   internal var userRows: ArrayList<VBaseRow>? = ArrayList(500)
-  lateinit var baseRows: Array<VReportRow?>    // array of base data rows
-  var visibleRows: Array<VReportRow?>? = null  // array of visible rows
+  private lateinit var baseRows: Array<VReportRow?>    // array of base data rows
+  private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
   // Sortedcolumn contain the index of the sorted column
@@ -417,14 +416,14 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the desired column
    * @return    the desired column
    */
-  fun getAccessibleColumn(column: Int): VReportColumn? = accessibleColumns[column]
+  fun getAccessibleColumn(column: Int): VReportColumn? = columns[column]
 
   /**
    * Returns the number of columns visible or hide
    *
    * @return    the number or columns in the model
    */
-  fun getAccessibleColumnCount(): Int = accessibleColumns.size
+  fun getAccessibleColumnCount(): Int = columns.size
 
   /**
    * Return a row definition
@@ -466,14 +465,14 @@ class MReport : Constants, Serializable {
    * The columns are given in displayed column order
    */
   private fun computeGroupings() {
-    val columnCount = accessibleColumns.size
+    val columnCount = columns.size
     val defaultGroups = IntArray(columnCount)
     val displayGroups = IntArray(columnCount)
     var separatorPos = Int.MAX_VALUE
 
     // retrieve the groups in original column order
     for (i in 0 until columnCount) {
-      defaultGroups[i] = accessibleColumns[i]!!.groups
+      defaultGroups[i] = columns[i]!!.groups
     }
 
     // reorder the groups in displayed column order
@@ -493,7 +492,7 @@ class MReport : Constants, Serializable {
 
     // retrieve separator
     for (i in 0 until columnCount) {
-      if (accessibleColumns[displayOrder[i]] is VSeparatorColumn) {
+      if (columns[displayOrder[i]] is VSeparatorColumn) {
         separatorPos = i
       }
     }
@@ -504,7 +503,7 @@ class MReport : Constants, Serializable {
       var i = 0
       while (i < displayGroups.size) {
         displayLevels[i] = level
-        if (accessibleColumns[displayOrder[i]]!!.isVisible) {
+        if (columns[displayOrder[i]]!!.isVisible) {
           if (displayGroups[i] == -1 || i == separatorPos) {
             while (i < displayGroups.size) {
               displayLevels[i] = level
@@ -551,7 +550,7 @@ class MReport : Constants, Serializable {
     }
     // sort in ascending order
     var i = column
-    while (!accessibleColumns[i]!!.isVisible) {
+    while (!columns[i]!!.isVisible) {
       i += 1
     }
     if (i >= 0) {
@@ -593,7 +592,7 @@ class MReport : Constants, Serializable {
       while (displayLevels[next] == displayLevels[start]) {
         next++
       }
-      while (!accessibleColumns[start]!!.isVisible) {
+      while (!columns[start]!!.isVisible) {
         // to get the first visible column of this level
         start++
       }
@@ -836,7 +835,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun setColumnFolded(column: Int, fold: Boolean) {
-    accessibleColumns[column]!!.isFolded = fold
+    columns[column]!!.isFolded = fold
     fireContentChanged()
   }
 
@@ -844,7 +843,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun switchColumnFolding(column: Int) {
-    accessibleColumns[column]!!.isFolded = (!accessibleColumns[column]!!.isFolded)
+    columns[column]!!.isFolded = (!columns[column]!!.isFolded)
     fireContentChanged()
   }
 
@@ -916,7 +915,7 @@ class MReport : Constants, Serializable {
    *
    * @return    the number or columns to display
    */
-  fun getColumnCount(): Int = accessibleColumns.size
+  fun getColumnCount(): Int = columns.size
 
   /**
    * Returns the number of records managed by the data source object.
@@ -960,12 +959,12 @@ class MReport : Constants, Serializable {
    * @return    the name of the column
    */
   fun getColumnName(column: Int): String {
-    val label = accessibleColumns[column]!!.label
+    val label = columns[column]!!.label
 
     if (label.isEmpty()) {
       return ""
     }
-    return if (accessibleColumns[column]!!.isFolded) label.substring(0, 1) else label
+    return if (columns[column]!!.isFolded) label.substring(0, 1) else label
   }
 
   /**
@@ -980,30 +979,13 @@ class MReport : Constants, Serializable {
         accessiblecolumnCount += 1
       }
     }
-    accessibleColumns = arrayOfNulls(accessiblecolumnCount)
     accessiblecolumnCount = 0
     for (i in 0 until columnCount) {
       if (columns[i]!!.options and Constants.CLO_HIDDEN == 0) {
-        accessibleColumns[accessiblecolumnCount++] = columns[i]
+        columns[accessiblecolumnCount++] = columns[i]
       }
     }
   }
-
-  fun getDisplayLevels(column: Int): Int = displayLevels[column]
-
-  fun getReverseOrder(column: Int): Int = reverseOrder[column]
-
-  fun getDisplayOrder(column: Int): Int = displayOrder[column]
-
-  /**
-   * Returns the number of base rows.
-   */
-  fun getBaseRowCount(): Int = baseRows.size
-
-  /**
-   * Returns the number of visible rows.
-   */
-  fun getVisibleRowCount(): Int = visibleRows!!.size
 
   // --------------------------------------------------------------------
   // LISTENERS HANDLING

@@ -96,12 +96,6 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     model.showHelp()
   }
 
-  val editColumn = command(item = editColumnData) {
-    if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
-      val formula  = org.kopi.galite.demo.product.ProductForm()
-      WindowController.windowController.doModal(formula)
-    }
-  }
 
   val firstName = field(STRING(25)) {
     label = "First Name"

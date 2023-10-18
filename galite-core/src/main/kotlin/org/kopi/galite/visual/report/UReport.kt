@@ -68,10 +68,6 @@ interface UReport : UWindow, ReportListener {
    */
   fun resetWidth()
 
-  /**
-   * Returns the selected column
-   */
-  fun getSelectedColumn(): Int
 
   /**
    * Returns the coordinate of the selected cell

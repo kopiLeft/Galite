@@ -17,13 +17,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.tablepivot
 
-import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dialog.Dialog
 import org.kopi.galite.visual.tablepivot.UPivotTable
 import org.kopi.galite.visual.tablepivot.VPivotTable
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+
 import org.vaadin.addons.componentfactory.PivotTable
 import org.vaadin.addons.componentfactory.PivotTable.*
 
@@ -34,7 +31,7 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     //---------------------------------------------------
     private var pivotData = PivotData()
     private var pivotOptions = PivotOptions()
-    private var button = Button("to Dialog")
+    //private var button = Button("to Dialog")
 
     init {
         getModel()!!.setDisplay(this)
@@ -46,6 +43,7 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     //---------------------------------------------------
     override fun run() {
         pivotTable.initReport()
+        focus()
     }
 
     override fun build() {
@@ -81,22 +79,23 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
 
 
 
-        button.addClickListener { event: ClickEvent<Button?>? ->
-            if (getChildren().anyMatch { child: Component -> child === table }
-            ) {
-                remove(table)
-                button.setText("to Normal")
-                val dialog = Dialog()
-                dialog.add(table)
-                dialog.setWidth("100%")
-                dialog.setHeight("100%")
-                dialog.open()
-            } else {
-                button.setText("to Dialog")
-                add(table)
-            }
-        }
+//        button.addClickListener { event: ClickEvent<Button?>? ->
+//            if (getChildren().anyMatch { child: Component -> child === table }
+//            ) {
+//                remove(table)
+//                button.setText("to Normal")
+//                val dialog = Dialog()
+//                dialog.add(table)
+//                dialog.setWidth("100%")
+//                dialog.setHeight("100%")
+//                dialog.open()
+//            } else {
+//                button.setText("to Dialog")
+//                add(table)
+//            }
+//        }
 
-        add(button, table)
+        //add(button, table)
+        add(table)
     }
 }

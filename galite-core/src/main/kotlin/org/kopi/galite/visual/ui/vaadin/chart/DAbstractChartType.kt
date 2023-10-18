@@ -27,14 +27,10 @@ import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VDataSeries
 import org.kopi.galite.visual.chart.VPrintOptions
 
-import com.github.appreciated.apexcharts.ApexCharts
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder
-import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder
-import com.github.appreciated.apexcharts.config.builder.XAxisBuilder
 import com.github.appreciated.apexcharts.config.chart.Type
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
 import com.github.appreciated.apexcharts.helper.Series
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.vaadin.addons.componentfactory.PivotTable
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.
@@ -46,6 +42,12 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
                                                         private val dataSeries: Array<VDataSeries>
                                                         ) : HorizontalLayout(), UChartType {
 
+
+
+
+    private var pivotData = PivotTable.PivotData()
+    private var pivotOptions = PivotTable.PivotOptions()
+
   init {
     // FIXME: temporary styling
     minWidth = "500px"
@@ -55,19 +57,24 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun build() {
-    val apex = ApexCharts()
     val labels = mutableListOf<String>()
     val names = mutableListOf<String>()
-    val values = mutableListOf<Pair<String, Double?>>()
 
     dataSeries.forEach { series ->
       val dimension = series.dimension
       val measures = series.getMeasures()
 
+        println("ColumnDimension" + dimension.name)
+        println("RowDimension" + dimension.value)
+      pivotData.addColumn(dimension.name, dimension.name?.javaClass)
+      pivotData.addRow(dimension.value)
       labels.add(dimension.value.toString())
 
       measures.forEach {
-        values.add(it.name to it.value?.toDouble())
+          println("ColumnMeasures" + dimension.name)
+          println("RowMeasures" + dimension.value)
+          pivotData.addColumn(it.name, it.name.javaClass)
+          pivotData.addRow(it.value)
       }
 
       for (measure in measures) {
@@ -77,43 +84,9 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
     }
 
-    val finalValues = names.map { name ->
-      values.filter { it.first == name }.map { it.second }
-    }
+    var table = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
 
-    val series = finalValues.mapIndexed { index, value ->
-      Series(names[index], *value.toTypedArray())
-    }
-
-    when (type) {
-      Type.pie -> {
-        finalValues.forEach {
-          apex.setChart(ChartBuilder.get().withType(type).build())
-          apex.setSeries(*it.toTypedArray())
-          apex.setLabels(*labels.toTypedArray())
-        }
-      }
-
-      Type.bar, Type.line, Type.area -> {
-        apex.setChart(ChartBuilder.get().withType(type).build())
-        apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-        apex.setLabels(*labels.toTypedArray())
-      }
-
-      Type.rangeBar -> {
-        apex.setChart(ChartBuilder.get().withType(Type.bar).build())
-        apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-        apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
-
-      }
-      else -> {
-        throw Exception("Unsupported chart type.")
-      }
-    }
-
-    super.add(apex)
+    add(table)
   }
 
   override fun refresh() {

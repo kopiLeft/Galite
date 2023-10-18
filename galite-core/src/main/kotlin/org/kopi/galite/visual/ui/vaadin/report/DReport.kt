@@ -38,6 +38,7 @@ import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.vaadin.addons.componentfactory.PivotTable
 
 /**
  * The `DReport` is the visual part of the [VReport] model.
@@ -56,6 +57,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   private lateinit var table: DTable
   private var parameters: Parameters? = null
   private var columnsSelector: ColumnsSelector = ColumnsSelector()
+  private var pivotData = PivotTable.PivotData()
+  private var pivotOptions = PivotTable.PivotOptions()
+  private var listeRows = mutableListOf<Any>()
 
   init {
     model.addReportListener(this)
@@ -77,21 +81,27 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun build() {
     // load personal configuration
-    parameters = Parameters(Color(71, 184, 221))
     table = DTable(VTable(model, buildRows()))
-    table.isColumnReorderingAllowed = true
-    table.cellStyler = ReportCellStyler(model, parameters!!, table)
-    // 200 px is approximately the header window size + the actor pane size
-    ui.ifPresent { ui ->
-      ui.page.retrieveExtendedClientDetails {
-        table.setHeight(it.windowInnerHeight.toFloat() - 200, Unit.PIXELS)
+
+
+    model.columns.forEach {
+      if(it?.label != "" ) {
+        pivotData.addColumn(it?.label, it?.javaClass)
       }
     }
-    setContent(table)
-    resetWidth()
-    addTableListeners()
 
-    columnsSelector.build(table)
+    model.baseRows.forEach {
+      it?.data?.forEach { row ->
+        if(row != null) {
+          listeRows.add(row)
+        }
+      }
+      pivotData.addRow(*listeRows.toTypedArray())
+      listeRows.clear()
+    }
+
+    var pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
+    add(pivot)
   }
 
   override fun redisplay() {
@@ -186,9 +196,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
   }
 
-  override fun getSelectedColumn(): Int {
-    return table.selectedColumn
-  }
 
   override fun getSelectedCell(): Point = Point(table.selectedColumn, table.selectedRow)
 

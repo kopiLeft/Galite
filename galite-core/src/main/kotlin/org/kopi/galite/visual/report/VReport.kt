@@ -581,7 +581,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
   /**
    * Returns the selected column or -1 if no column is selected.
    */
-  private fun getSelectedColumn(): Int = (getDisplay() as UReport).getSelectedColumn()
+  private fun getSelectedColumn(): Int = -1
 
   /**
    * Returns the selected cell or !!! ??? if no cell is selected.

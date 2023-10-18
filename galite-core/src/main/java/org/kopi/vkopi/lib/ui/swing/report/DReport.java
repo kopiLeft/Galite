@@ -337,14 +337,6 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
   // SELECTED COMPONENTS
   // --------------------------------------------------------------------
 
-  /**
-   * Returns the selected column
-   * The index of the column is relative to the model
-   */
-  public int getSelectedColumn() {
-    int		sel = table.getSelectedColumn();
-    return sel == -1 ? -1 : table.convertColumnIndexToModel(sel);
-  }
 
   /**
    * Returns the coordinate of the selected cell
