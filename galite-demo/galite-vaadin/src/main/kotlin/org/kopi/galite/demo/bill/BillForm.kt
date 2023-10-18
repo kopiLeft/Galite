@@ -59,12 +59,12 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
       help = "The bill number"
       columns(u.numBill)
     }
-    val addressBill = mustFill(domain = STRING(30), position = at(1, 1)) {
+    val addressBill = visit(domain = STRING(30), position = at(1, 1)) {
       label = "Address"
       help = "The bill address"
       columns(u.addressBill)
     }
-    val dateBill = mustFill(domain = DATE, position = at(2, 1)) {
+    val dateBill = visit(domain = DATE, position = at(2, 1)) {
       label = "Date"
       help = "The bill date"
       columns(u.dateBill)

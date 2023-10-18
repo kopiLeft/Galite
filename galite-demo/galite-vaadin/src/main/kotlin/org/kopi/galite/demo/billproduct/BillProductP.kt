@@ -20,14 +20,10 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.demo.common.ReportDefault
 import org.kopi.galite.demo.database.BillProduct
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivotTable.PivotTable
-import org.kopi.galite.visual.dsl.pivotTable.FieldAlignment
 
 /**
  * Products Bill Report
@@ -37,7 +33,6 @@ class BillProductP : PivotTable("Bill Product Report", Locale.UK) {
   val quantity = field(INT(25)) {
     label = "Quantity"
     help = "The quantity"
-    align = FieldAlignment.LEFT
   }
 
   val amount = field(DECIMAL(25, 10)) {
@@ -48,7 +43,6 @@ class BillProductP : PivotTable("Bill Product Report", Locale.UK) {
   val amountWithTaxes = field(DECIMAL(50, 10)) {
     label = "Amount all taxes included"
     help = "The amount all taxes included to pay"
-    align = FieldAlignment.LEFT
   }
 
   val billProducts = BillProduct.selectAll()

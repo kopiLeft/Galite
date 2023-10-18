@@ -29,7 +29,6 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivotTable.PivotTable
-import org.kopi.galite.visual.dsl.pivotTable.FieldAlignment
 
 /**
  * Stock Report
@@ -61,17 +60,14 @@ class StockP : PivotTable(title = "Stocks", locale = Locale.UK) {
   val description = field(STRING(25)) {
     label = "Description"
     help = "The product description"
-    align = FieldAlignment.LEFT
   }
   val nameProvider = field(STRING(25)) {
     label = "Provider name"
     help = "The provider name"
-    align = FieldAlignment.LEFT
   }
   val minAlert = field(INT(25)) {
     label = "Min Alert"
     help = "The stock's min alert"
-    align = FieldAlignment.LEFT
   }
 
   val stocks = Stock.join(Provider, JoinType.INNER, Stock.idStckProv, Provider.idProvider)

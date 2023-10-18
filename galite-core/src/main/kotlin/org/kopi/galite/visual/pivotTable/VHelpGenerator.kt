@@ -69,12 +69,6 @@ class VHelpGenerator : VHelpGenerator() {
       printer.println("</TD>")
       printer.println("<TD>")
       printer.println("<DL>")
-      for (i in 0 until columnCount) {
-        val column: VReportColumn = model.getModelColumn(i)
-        if (column.options and Constants.CLO_HIDDEN == 0) {
-          column.helpOnColumn(this)
-        }
-      }
       printer.println("</DL>")
       printer.println("</TD>")
       printer.println("</TR>")
@@ -96,22 +90,6 @@ class VHelpGenerator : VHelpGenerator() {
     } catch (e: IOException) {
       System.err.println("IO ERROR $e")
       null
-    }
-  }
-
-  /**
-   * prints a compilation unit
-   */
-  fun helpOnColumn(label: String?,
-                   help: String?) {
-    if (label == null) {
-      return
-    }
-    printer.println("<DT>")
-    printer.println("<H2>$label</H2>")
-    printer.println("<DD>")
-    if (help != null) {
-      printer.println("<P>$help</P>")
     }
   }
 }

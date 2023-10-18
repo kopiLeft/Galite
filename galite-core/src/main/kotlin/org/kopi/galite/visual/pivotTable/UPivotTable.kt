@@ -20,85 +20,9 @@ package org.kopi.galite.visual.pivotTable
 
 import org.kopi.galite.visual.UWindow
 
-/**
- * `UReport` is the top-level interface that must be implemented
- * by all dynamic reports. It is the visual component of the [VPivotTable] model.
- */
-interface UPivotTable : UWindow, ReportListener {
+interface UPivotTable : UWindow {
   /**
    * Builds the report;
    */
   fun build()
-
-  /**
-   * Redisplays the report
-   */
-  fun redisplay()
-
-  /**
-   * Fired when report columns has moved.
-   * @param pos The new columns positions
-   */
-  fun columnMoved(pos: IntArray)
-
-  /**
-   * Removes a column having the position `position`
-   * @param position The column position
-   */
-  fun removeColumn(position: Int)
-
-  /**
-   * Adds a column at the position `position`
-   * @param position The column position
-   */
-  fun addColumn(position: Int)
-
-  /**
-   * Adds a column at the end of the report
-   */
-  fun addColumn()
-
-  /**
-   * Returns the report table.
-   */
-  fun getTable(): UTable
-
-  /**
-   * Reset columns width
-   */
-  fun resetWidth()
-
-  /**
-   * Returns the selected column
-   */
-  fun getSelectedColumn(): Int
-
-  /**
-   * Returns the coordinate of the selected cell
-   * The index of the column is relative to the model
-   */
-  fun getSelectedCell(): Point
-
-  /**
-   * Sets the column label.
-   * @param column The column number.
-   * @param label The column label
-   */
-  fun setColumnLabel(column: Int, label: String)
-
-  /**
-   * [UTable] is a report table ensuring conversion between
-   * visible indexes and model indexes
-   */
-  interface UTable {
-    /**
-     * Maps the index of the column in the view at [viewColumnIndex] to the index of the column in the table model.
-     */
-    fun convertColumnIndexToModel(viewColumnIndex: Int): Int
-
-    /**
-     * Maps the index of the column in the table model at [modelColumnIndex] to the index of the column in the view.
-     */
-    fun convertColumnIndexToView(modelColumnIndex: Int): Int
-  }
 }

@@ -38,7 +38,6 @@ class ReportLocalizationWriter : LocalizationWriter() {
       self.setAttribute("help", help)
     }
     pushNode(self)
-    // coll.genLocalization(this) TODO
 
     // Menus
     menus.forEach { menu ->

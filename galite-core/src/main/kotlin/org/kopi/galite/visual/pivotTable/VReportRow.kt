@@ -54,27 +54,6 @@ abstract class VReportRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
    */
   fun cloneArray() = data.clone()
 
-  /**
-   * Compare two VReportRows within specified column
-   *
-   * @param other Report row to compare to
-   * @param position position in data
-   * @param column
-   * @return
-   */
-  fun compareTo(other: VReportRow, position: Int, column: VReportColumn): Int {
-    val data = data[position]
-    val rowData = other.data[position]
-
-    // check for nulls: define null less than everything
-    return when {
-      data == null && rowData == null -> 0
-      data == null -> -1
-      rowData == null -> 1
-      else -> column.compareTo(data, rowData)
-    }
-  }
-
   companion object {
     private const val serialVersionUID = 0L
   }

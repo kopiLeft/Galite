@@ -26,23 +26,10 @@ import org.kopi.galite.visual.util.LineBreaker
  * Represents a report column description
  *
  * @param    ident        The identifier of the field
- * @param    options        The column options as bitmap
- * @param    align        The column alignment
- * @param    groups        The index of the column grouped by this one or -1
- * @param    function    An (optional) function
- * @param    width        The width of a cell in characters
- * @param    height        The height of a cell in characters
- * @param    format        format of the cells
+ *
  */
-abstract class VReportColumn(
-        val ident: String?,
-        val options: Int,
-        val align: Int,
-        var groups: Int,
-        val function: VCalculateColumn?,
-        var width: Int,
-        var height: Int,
-        protected var format: VCellFormat?) {
+class VReportColumn(
+        val ident: String?) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -52,55 +39,7 @@ abstract class VReportColumn(
   var isVisible: Boolean = true
   open var isFolded: Boolean = false
   var isAddedAtRuntime: Boolean = false
-  var userDefinedLabel: Boolean = false
-  private var styles: Array<ColumnStyle>? = null
 
-  /**
-   * Returns true if this Column is hidden
-   */
-  open fun isHidden(): Boolean {
-    return options and Constants.CLO_HIDDEN > 0
-  }
-
-  /**
-   * Returns the width of cells in this column in characters
-   */
-  open fun getPrintedWidth(): Double {
-    return width.toDouble()
-  }
-
-  open fun format(o: Any?): String {
-    return if (isFolded || o == null) {
-      ""
-    } else if (format != null) {
-      format!!.format(o)
-    } else if (height == 1) {
-      val str = o.toString()
-      val strLength = str.length
-      if (strLength <= width) str else str.substring(0, width)
-    } else {
-      o.toString()
-    }
-  }
-
-  fun formatWithLineBreaker(o: Any?): String {
-    return LineBreaker.modelToText(format(o), width)
-  }
-
-  /**
-   * Compare two objects.
-   *
-   * @param    object1    the first operand of the comparison
-   * @param    object2    the second operand of the comparison
-   * @return    -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
-   */
-  abstract fun compareTo(object1: Any, object2: Any): Int
-
-  fun helpOnColumn(help: VHelpGenerator) {
-    help.helpOnColumn(label, this.help)
-  }
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -110,7 +49,7 @@ abstract class VReportColumn(
    * @param     parent         the caller localizer
    */
   fun localize(parent: ReportLocalizer) {
-    if (!isHidden() && ident != "") {
+    if (ident != "") {
       val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
       label = loc.getLabel() ?: ""
@@ -126,21 +65,5 @@ abstract class VReportColumn(
    */
   protected open fun localize(parentLocalizer: FieldLocalizer) {
     // by default nothing to do
-  }
-
-  fun getStyles(): Array<ColumnStyle> {
-    return if (styles == null) {
-      val style = ColumnStyle()
-      style.fontName = 0
-      style.backgroundCode = Constants.CLR_WHITE
-      style.foregroundCode = Constants.CLR_BLACK
-      arrayOf(style)
-    } else {
-      styles!!
-    }
-  }
-
-  fun setStyles(styles: Array<ColumnStyle>) {
-    this.styles = styles
   }
 }

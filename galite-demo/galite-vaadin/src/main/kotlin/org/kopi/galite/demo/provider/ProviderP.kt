@@ -26,7 +26,6 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivotTable.PivotTable
-import org.kopi.galite.visual.dsl.pivotTable.FieldAlignment
 
 /**
  * Provider Report
@@ -59,37 +58,26 @@ class ProviderP : PivotTable(title = "Providers_Report", locale = Locale.UK) {
   val nameProvider = field(STRING(50)) {
     label = "Name"
     help = "The provider name"
-    align = FieldAlignment.LEFT
-    format { value ->
-      value.toUpperCase()
-    }
   }
 
   val tel = field(INT(25)) {
     label = "Phone number"
     help = "The provider phone number"
-    align = FieldAlignment.LEFT
   }
 
   val description = field(STRING(255)) {
     label = "Description"
     help = "The provider description"
-    align = FieldAlignment.LEFT
-    format { value ->
-      value.toUpperCase()
-    }
   }
 
   val address = field(STRING(70)) {
     label = "Address"
     help = "The provider address"
-    align = FieldAlignment.LEFT
   }
 
   val zipCode = field(INT(50)) {
     label = "Zip code"
     help = "The provider zip code"
-    align = FieldAlignment.LEFT
   }
 
   val providers = Provider.selectAll()
