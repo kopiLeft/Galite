@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.demo.taxRule
 
+import org.kopi.galite.demo.command.CommandR
 import java.util.Locale
 
 import org.kopi.galite.demo.database.TaxRule
@@ -91,6 +92,11 @@ class TaxRuleForm : DictionaryForm(title = "TaxRules", locale = Locale.UK) {
       command(item = report) {
         createReport {
           TaxRuleR()
+        }
+      }
+      command(item = pivotTable) {
+        createPivotTable {
+          TaxRuleP()
         }
       }
 

@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.demo.provider
 
+import org.kopi.galite.demo.command.CommandR
 import java.util.Locale
 
 import org.kopi.galite.demo.database.Provider
@@ -38,6 +39,11 @@ class ProviderForm : DictionaryForm(title = "Providers", locale = Locale.UK) {
     command(item = report) {
       createReport {
         ProviderR()
+      }
+    }
+    command(item = pivotTable) {
+      createPivotTable {
+        ProviderP()
       }
     }
   }

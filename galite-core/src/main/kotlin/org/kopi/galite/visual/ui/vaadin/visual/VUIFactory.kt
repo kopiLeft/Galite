@@ -33,6 +33,7 @@ import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VItemTree
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.pivotTable.VPivotTable
 
 /**
  * The `VUIFactory` is a vaadin implementation of the [UIFactory].
@@ -67,6 +68,9 @@ class VUIFactory : UIFactory() {
       }
       is VListDialog -> {
         createListDialog(model)
+      }
+      is VPivotTable -> {
+        createPivotTable(model)
       }
       else -> {
         throw IllegalArgumentException("NO UI IMPLEMENTATION FOR " + model.javaClass)
@@ -148,5 +152,14 @@ class VUIFactory : UIFactory() {
    */
   internal fun createListDialog(model: VListDialog): DListDialog {
     return DListDialog(model)
+  }
+  /**
+   * Creates the [DPivotTable] from a given model.
+   * @param model The pivot table model
+   * @return The  [DPivotTable] view.
+   */
+
+  internal fun createPivotTable(model: VPivotTable): org.kopi.galite.visual.ui.vaadin.pivotTable.DPivotTable {
+    return org.kopi.galite.visual.ui.vaadin.pivotTable.DPivotTable(model)
   }
 }

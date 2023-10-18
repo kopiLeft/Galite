@@ -29,6 +29,7 @@
     <actor ident="Delete" label="شطب" help="شطب هذا التسجيل."/>
     <actor ident="CreateReport" label="تقرير فوري" help="خلق التقرير"/>
     <actor ident="CreateDynamicReport" label="" help="خلق تقرير حيوي"/>
+    <actor ident="CreatePivotTable" label="تقرير" help="خلق تقرير" />
     <actor ident="ShowHideFilter" label="عرض / إخفاء فلتر" help="عرض / إخفاء فلتر"/>
     <actor ident="Help" label="مساعدة" help="اظهار مساعدة على الموقع المختار."/>
 </insert>

@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.demo.bill
 
+import org.kopi.galite.demo.command.CommandR
 import java.util.Locale
 
 import org.kopi.galite.demo.database.Bill
@@ -40,6 +41,11 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
     command(item = report) {
       createReport {
         BillR()
+      }
+    }
+    command(item = pivotTable) {
+      createPivotTable {
+        BillP()
       }
     }
   }

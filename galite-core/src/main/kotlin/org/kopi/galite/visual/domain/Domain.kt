@@ -275,6 +275,41 @@ open class Domain<T>(val width: Int? = null,
   }
 
   /**
+   * Builds the pivot table column model
+   */
+  open fun buildReportFieldModel(field: org.kopi.galite.visual.dsl.pivotTable.ReportField<*>, function: org.kopi.galite.visual.pivotTable.VCalculateColumn?, format: org.kopi.galite.visual.pivotTable.VCellFormat?): org.kopi.galite.visual.pivotTable.VReportColumn {
+    return with(field) {
+      when (kClass) {
+        Int::class, Long::class ->
+          org.kopi.galite.visual.pivotTable.VIntegerColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+        String::class ->
+          org.kopi.galite.visual.pivotTable.VStringColumn(
+            ident, options, align.value, groupID, function, width ?: 0,
+            height ?: 0, format
+          )
+        BigDecimal::class ->
+          org.kopi.galite.visual.pivotTable.VDecimalColumn(
+            ident, options, align.value, groupID, function, width ?: 0,
+            height ?: 0, format
+          )
+        Boolean::class ->
+          org.kopi.galite.visual.pivotTable.VBooleanColumn(ident, options, align.value, groupID, function, format)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
+          org.kopi.galite.visual.pivotTable.VDateColumn(ident, options, align.value, groupID, function, width ?: 0, format)
+        Month::class ->
+          org.kopi.galite.visual.pivotTable.VMonthColumn(ident, options, align.value, groupID, function, format)
+        Week::class ->
+          org.kopi.galite.visual.pivotTable.VWeekColumn(ident, options, align.value, groupID, function, format)
+        org.joda.time.LocalTime::class, LocalTime::class ->
+          org.kopi.galite.visual.pivotTable.VTimeColumn(ident, options, align.value, groupID, function, format)
+        Instant::class, LocalDateTime::class, DateTime::class ->
+          org.kopi.galite.visual.pivotTable.VTimestampColumn(ident, options, align.value, groupID, function, format)
+        else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }
+    }
+  }
+
+  /**
    * Returns the default alignment
    */
   val defaultAlignment: Int

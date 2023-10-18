@@ -1,0 +1,113 @@
+/*
+ * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package org.kopi.galite.demo.bill
+
+import java.util.Locale
+
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.database.Bill
+import org.kopi.galite.visual.domain.DATE
+import org.kopi.galite.visual.domain.DECIMAL
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.pivotTable.PivotTable
+import org.kopi.galite.visual.dsl.pivotTable.FieldAlignment
+
+/**
+ * Bill Report
+ */
+class BillP : PivotTable("Bills_Report", locale = Locale.UK) {
+
+  val action = menu("Action")
+  val file = menu("File")
+
+  val quit = actor(menu = file, label = "Quit", help = "Close Report.", ident = "quit") {
+    key = Key.ESCAPE
+    icon = Icon.QUIT
+  }
+  val csv = actor(menu = action, label = "CSV", help = "CSV Format", ident = "csv") {
+    key = Key.F8          // key is optional here
+    icon = Icon.EXPORT_CSV  // icon is optional here
+  }
+
+  val xls = actor(menu = action, label = "XLS", help = "Excel (XLS) Format", ident = "xls") {
+    key = Key.SHIFT_F8          // key is optional here
+    icon = Icon.EXPORT_XLSX  // icon is optional here
+  }
+
+  val xlsx = actor(menu = action, label = "XLSX", help = "Excel (XLSX) Format", ident = "xlsx") {
+    key = Key.SHIFT_F8          // key is optional here
+    icon = Icon.EXPORT  // icon is optional here
+  }
+
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
+    key = Key.F9          // key is optional here
+    icon = Icon.EXPORT_PDF  // icon is optional here
+  }
+
+  val cmdQuit = command(item = quit) {
+    model.close()
+  }
+
+  val numBill = field(INT(25)) {
+    label = "Number"
+    help = "The bill number"
+    align = FieldAlignment.LEFT
+  }
+
+  val addressBill = field(STRING(25)) {
+    label = "Address"
+    help = "The bill address"
+    align = FieldAlignment.LEFT
+  }
+  val dateBill = field(DATE) {
+    label = "Date"
+    help = "The bill date"
+    align = FieldAlignment.LEFT
+  }
+
+  val amountWithTaxes = field(DECIMAL(20, 10)) {
+    label = "Amount to pay"
+    help = "The amount including all taxes to pay"
+    align = FieldAlignment.LEFT
+  }
+
+  val refCmd = field(INT(50)) {
+    label = "Command reference"
+    help = "The command reference"
+    align = FieldAlignment.LEFT
+  }
+
+  val bills = Bill.selectAll()
+
+  init {
+    transaction {
+      bills.forEach { result ->
+        add {
+          this[numBill] = result[Bill.numBill]
+          this[addressBill] = result[Bill.addressBill]
+          this[dateBill] = result[Bill.dateBill]
+          this[amountWithTaxes] = result[Bill.amountWithTaxes]
+          this[refCmd] = result[Bill.refCmd]
+        }
+      }
+    }
+  }
+}
