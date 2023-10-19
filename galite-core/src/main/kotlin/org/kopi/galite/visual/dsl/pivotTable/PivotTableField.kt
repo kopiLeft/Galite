@@ -27,6 +27,10 @@ class PivotTableField<T>(override val domain: Domain<T>,
                          ident: String? = null,
                          override val source: String?) : Field<T>(domain, ident) {
 
+  /**
+   * Dimension values
+   */
+  var dimension: Boolean? = null
   fun initField() {
     init()
   }
@@ -36,7 +40,7 @@ class PivotTableField<T>(override val domain: Domain<T>,
   fun buildReportColumn(): VPivotTableColumn {
     model = domain.buildReportFieldModel(this).also { column ->
       column.label = label ?: ""
-      column.help = help
+      column.dimension = dimension
     }
 
     return model

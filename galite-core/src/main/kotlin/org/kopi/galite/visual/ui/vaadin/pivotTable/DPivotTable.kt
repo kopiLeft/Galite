@@ -33,6 +33,7 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
   private var pivotData = PivotTable.PivotData()
   private var pivotOptions = PivotTable.PivotOptions()
   private var listeRows = mutableListOf<Any>()
+  private var listeDimensions = mutableListOf<String>()
 
   init {
     getModel()!!.setDisplay(this)
@@ -53,6 +54,9 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
       if(it?.label != "") {
         pivotData.addColumn(it?.label, it?.javaClass)
       }
+      if (it?.dimension != null && it.dimension!!) {
+        listeDimensions.add(it.label)
+      }
     }
 
     model.userRows?.forEach {
@@ -64,6 +68,7 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
       pivotData.addRow(*listeRows.toTypedArray())
       listeRows.clear()
     }
+    pivotOptions.setCols(*listeDimensions.toTypedArray())
 
     var pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
     add(pivot)

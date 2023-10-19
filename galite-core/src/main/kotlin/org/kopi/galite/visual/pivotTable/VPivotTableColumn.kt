@@ -33,7 +33,7 @@ class VPivotTableColumn(val ident: String?) {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   var label: String = ""
-  var help: String? = null
+  var dimension: Boolean? = null
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -48,7 +48,6 @@ class VPivotTableColumn(val ident: String?) {
       val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
       label = loc.getLabel() ?: ""
-      help = loc.getHelp()
     }
   }
 }

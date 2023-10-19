@@ -21,6 +21,7 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.bill.BillP
 import org.kopi.galite.demo.command.CommandR
 
 import org.kopi.galite.demo.database.Client
@@ -136,6 +137,11 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
           ClientR()
         }
       }
+      command(item = pivotTable) {
+        createPivotTable {
+          ClientP()
+        }
+      }
       command(item = dynamicReport) {
         createDynamicReport()
       }
@@ -195,6 +201,11 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       command(item = report) {
         createReport {
           ClientR()
+        }
+      }
+      command(item = pivotTable) {
+        createPivotTable {
+          ClientP()
         }
       }
       command(item = dynamicReport) {
