@@ -18,28 +18,20 @@
 
 package org.kopi.galite.visual.pivotTable
 
-import java.awt.event.KeyEvent
-import java.io.File
-import java.net.MalformedURLException
-
-import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
 
 /**
- * Represents a report model.
+ * Represents a pivot table model.
  */
-abstract class VPivotTable internal constructor() : VWindow(), Constants, VConstants {
+abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   companion object {
 
     init {
@@ -88,7 +80,7 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
    */
   protected fun build() {
     init()
-    // localize the report using the default locale
+    // localize the pivot table using the default locale
     localize()
     model.build()
     (getDisplay() as UPivotTable?)?.build()
@@ -99,6 +91,7 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
     commands.forEachIndexed { i, vCommand ->
       setCommandEnabled(vCommand, true)
     }
+
   }
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -108,7 +101,7 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
   }
 
   /**
-   * Localizes this report
+   * Localizes this pivot table
    *
    */
   open fun localize() {
@@ -116,7 +109,7 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
   }
 
   /**
-   * Localizes this report
+   * Localizes this pivot table
    *
    * @param     manager         the manger to use for localization
    */
@@ -133,7 +126,7 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  open fun initReport() {
+  open fun initPivotTable() {
     build()
   }
   // ----------------------------------------------------------------------
@@ -161,16 +154,9 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
     setTitle(title)
   }
 
-  fun getColumn(i: Int): VReportColumn {
-    return model.getModelColumn(i)
-  }
-
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
-  override fun executeVoidTrigger(trigger: Trigger?) {
-    trigger?.action?.method?.invoke()
-  }
 
   fun setMenu() {
     if (!built) {
@@ -180,42 +166,11 @@ abstract class VPivotTable internal constructor() : VWindow(), Constants, VConst
   }
 
   // ----------------------------------------------------------------------
-  // HELP
+  // Command
   // ----------------------------------------------------------------------
 
-  fun genHelp(): String? {
-    val surl = StringBuffer()
-    val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
-                                                          commands,
-                                                          model,
-                                                          help)
-
-    return if (fileName == null) {
-      null
-    } else {
-      try {
-        surl.append(File(fileName).toURI().toURL().toString())
-      } catch (mue: MalformedURLException) {
-        throw InconsistencyException(mue)
-      }
-      surl.toString()
-    }
-  }
-
-  fun showHelp() {
-    VHelpViewer().showHelp(genHelp())
-  }
-
-  fun addDefaultReportCommands() {
-    initDefaultActors()
+  fun addDefaultPivotTableCommands() {
     initDefaultCommands()
-  }
-
-  private fun initDefaultActors() {
-    addActors(arrayOf(
-            VDefaultReportActor("File", "Quit", VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
-            VDefaultReportActor("Help", "Help", VDynamicReport.HELP_ICON, KeyEvent.VK_F1, 0),
-    ))
   }
 
   private fun initDefaultCommands() {

@@ -31,7 +31,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   constructor(title: String, locale: Locale? = null) : this(title, null, locale)
 
   /** Report's fields. */
-  val fields = mutableListOf<ReportField<*>>()
+  val fields = mutableListOf<PivotTableField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
@@ -44,12 +44,12 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    * @return a field.
    */
   inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
-                                                noinline init: ReportField<T>.() -> Unit): ReportField<T> {
+                                                noinline init: PivotTableField<T>.() -> Unit): PivotTableField<T> {
     domain.kClass = T::class
 
-    val field = ReportField(domain, init, "ANM_${fields.size}", domain.source.ifEmpty { `access$sourceFile` })
+    val field = PivotTableField(domain, init, "ANM_${fields.size}", domain.source.ifEmpty { `access$sourceFile` })
 
-    field.initialize()
+    field.initField()
 
     val pos = if(model.model.columns.size == 0) 0 else model.model.columns.size - 1
     model.model.columns.add(pos, field.buildReportColumn())
@@ -66,8 +66,8 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    * @return a field.
    */
   inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
-                                                       noinline init: ReportField<T>.() -> Unit): ReportField<T?> {
-    return field(domain, init) as ReportField<T?>
+                                                       noinline init: PivotTableField<T>.() -> Unit): PivotTableField<T?> {
+    return field(domain, init) as PivotTableField<T?>
   }
 
   /**
@@ -80,7 +80,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    */
   inline fun <reified T : Comparable<T>?> field(fieldsNumber: Int,
                                                 domain: Domain<T>,
-                                                noinline init: ReportField<T>.() -> Unit): List<ReportField<T?>> {
+                                                noinline init: PivotTableField<T>.() -> Unit): List<PivotTableField<T?>> {
     return (0 until fieldsNumber).map {
       nullableField(domain, init).also { field ->
         field.model.label = "${field.label}_${it + 1}"
@@ -115,7 +115,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any?> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<PivotTableField<*>, Any?> = reportRows[rowNumber].data
 
   /**
    * Adds default report commands
@@ -127,18 +127,11 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   // ----------------------------------------------------------------------
-  // HELP
+  // Command
   // ----------------------------------------------------------------------
 
-  fun showHelp() {
-    model.showHelp()
-  }
-
-  fun addDefaultReportCommands() {
-    model.addDefaultReportCommands()
-  }
-
-  override fun addCommandTrigger() {
+  fun addDefaultPivotTableCommands() {
+    model.addDefaultPivotTableCommands()
   }
 
   // ----------------------------------------------------------------------
@@ -153,7 +146,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
         ?: (this.javaClass.classLoader.getResource("")?.path +
                 this.javaClass.`package`.name.replace(".", "/"))
       try {
-        val writer = ReportLocalizationWriter()
+        val writer = PivotTableLocalizationWriter()
         genLocalization(writer)
         writer.write(localizationDestination, baseName, locale)
       } catch (ioe: IOException) {
@@ -164,7 +157,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as ReportLocalizationWriter).genReport(title, help, fields, menus, actors)
+    (writer as PivotTableLocalizationWriter).genReport(title, help, fields, menus, actors)
   }
 
   // ----------------------------------------------------------------------
@@ -188,7 +181,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     model.source = sourceFile
 
     if (reportCommands) {
-      addDefaultReportCommands()
+      addDefaultPivotTableCommands()
     }
   }
 

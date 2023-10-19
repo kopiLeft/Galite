@@ -22,7 +22,7 @@ import org.kopi.galite.visual.UWindow
 
 interface UPivotTable : UWindow {
   /**
-   * Builds the report;
+   * Builds the pivot table;
    */
   fun build()
 }

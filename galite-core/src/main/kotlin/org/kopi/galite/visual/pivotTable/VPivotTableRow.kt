@@ -18,44 +18,17 @@
 
 package org.kopi.galite.visual.pivotTable
 
-/**
- * Represents a description for a grouping row
- *
- * @param data The grouping row data
- * @param level the grouping row level
- */
-class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
+import javax.swing.tree.DefaultMutableTreeNode
+
+class VPivotTableRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
 
   /**
-   * Sets data row
+   * Return the object at column
    *
    * @param        column                the index of the column
-   * @param        value                the value for the column
+   * @return        the object to be displayed
    */
-  override fun setValueAt(column: Int, value: Any?) {
-    data[column] = value
-  }
-
-  /**
-   * Return the level of the node in the grouping tree
-   */
-  override fun getLevel(): Int {
-    return level
-  }
-
-  private fun setChildNodesInvisible() {
-    visible = false
-    if (getLevel() > 0) {
-      for (i in 0 until childCount) {
-        val row = getChildAt(i) as VReportRow
-        if (row is VGroupRow) {
-          row.setChildNodesInvisible()
-        } else {
-          row.visible = false
-        }
-      }
-    }
-  }
+  fun getValueAt(column: Int): Any? = data[column]
 
   companion object {
     private const val serialVersionUID = 0L

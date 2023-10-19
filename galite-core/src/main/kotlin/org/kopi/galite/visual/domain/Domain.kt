@@ -277,11 +277,11 @@ open class Domain<T>(val width: Int? = null,
   /**
    * Builds the pivot table column model
    */
-  open fun buildReportFieldModel(field: org.kopi.galite.visual.dsl.pivotTable.ReportField<*>): org.kopi.galite.visual.pivotTable.VReportColumn {
+  open fun buildReportFieldModel(field: org.kopi.galite.visual.dsl.pivotTable.PivotTableField<*>): org.kopi.galite.visual.pivotTable.VPivotTableColumn {
     return with(field) {
       when (kClass) {
         Int::class, Long::class, String::class, BigDecimal::class, Boolean::class, org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class, Month::class, Week::class, org.joda.time.LocalTime::class, LocalTime::class, Instant::class, LocalDateTime::class, DateTime::class ->
-          org.kopi.galite.visual.pivotTable.VReportColumn(ident)
+          org.kopi.galite.visual.pivotTable.VPivotTableColumn(ident)
 
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }

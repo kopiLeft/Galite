@@ -20,30 +20,20 @@ package org.kopi.galite.visual.dsl.pivotTable
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.field.Field
-import org.kopi.galite.visual.pivotTable.VReportColumn
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.pivotTable.VPivotTableColumn
 
-class ReportField<T>(override val domain: Domain<T>,
-                     val init: ReportField<T>.() -> Unit,
-                     ident: String? = null,
-                     override val source: String?) : Field<T>(domain, ident) {
-  /** the options of the field */
-  internal var options: Int = 0
-
-  /** the commands accessible in this field */
-  lateinit var commands: Array<VCommand>
-
-  fun initialize() {
-    initField()
-  }
+class PivotTableField<T>(override val domain: Domain<T>,
+                         val init: PivotTableField<T>.() -> Unit,
+                         ident: String? = null,
+                         override val source: String?) : Field<T>(domain, ident) {
 
   fun initField() {
     init()
   }
 
-  lateinit var model: VReportColumn
+  lateinit var model: VPivotTableColumn
 
-  fun buildReportColumn(): VReportColumn {
+  fun buildReportColumn(): VPivotTableColumn {
     model = domain.buildReportFieldModel(this).also { column ->
       column.label = label ?: ""
       column.help = help
@@ -59,6 +49,6 @@ class ReportField<T>(override val domain: Domain<T>,
    * Generates localization for the field in the xml file
    */
   override fun genLocalization(writer: LocalizationWriter) {
-    (writer as ReportLocalizationWriter).genField(ident, label, help)
+    (writer as PivotTableLocalizationWriter).genField(ident, label, help)
   }
 }

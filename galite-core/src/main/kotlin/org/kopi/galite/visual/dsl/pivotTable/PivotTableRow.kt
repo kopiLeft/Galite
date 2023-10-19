@@ -27,26 +27,26 @@ import org.kopi.galite.type.Week
  *
  * @param reportFields the fields that exists in the report.
  */
-class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
+class ReportRow(private val reportFields: MutableList<PivotTableField<*>>) {
   /** A report data row */
-  val data = mutableMapOf<ReportField<*>, Any?>()
+  val data = mutableMapOf<PivotTableField<*>, Any?>()
 
   /**
-   * Returns data value of a specific [ReportField] in this report row.
+   * Returns data value of a specific [PivotTableField] in this report row.
    *
    * @param field the field.
-   * @return  data value for a specific [ReportField].
+   * @return  data value for a specific [PivotTableField].
    */
   @Suppress("UNCHECKED_CAST")
-  fun <T> getValueOf(field: ReportField<T>): T = data[field] as T
+  fun <T> getValueOf(field: PivotTableField<T>): T = data[field] as T
 
   /**
    * Gets the value of the field in this report row.
    *
    * @param field the field.
-   * @return  data value for a specific [ReportField].
+   * @return  data value for a specific [PivotTableField].
    */
-  operator fun <T> get(field: ReportField<T>): T = getValueOf(field)
+  operator fun <T> get(field: PivotTableField<T>): T = getValueOf(field)
 
   /**
    * Sets the value of the field in this report row.
@@ -54,7 +54,7 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
    * @param field the field.
    * @param value the field's value.
    */
-  operator fun <T> set(field: ReportField<T>, value: T) {
+  operator fun <T> set(field: PivotTableField<T>, value: T) {
     if (field in reportFields) {
       data.putIfAbsent(field, value)
     }
@@ -67,7 +67,7 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
    * @param value the field's value.
    */
   @JvmName("setType0")
-  operator fun <T : Type0<K>, K> set(field: ReportField<T>, value: K) {
+  operator fun <T : Type0<K>, K> set(field: PivotTableField<T>, value: K) {
     if (field in reportFields) {
       data.putIfAbsent(field, field.toType0(value))
     }
@@ -77,7 +77,7 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
 /**
  * Represents the value in sql
  */
-fun <T> ReportField<*>.toType0(value: T): Any? {
+fun <T> PivotTableField<*>.toType0(value: T): Any? {
   return when(value) {
     is ExposedBlob -> value
     is Int -> {

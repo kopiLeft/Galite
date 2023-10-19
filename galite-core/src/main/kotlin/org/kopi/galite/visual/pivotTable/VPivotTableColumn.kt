@@ -18,34 +18,37 @@
 
 package org.kopi.galite.visual.pivotTable
 
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.ReportLocalizer
 
-class VDefaultReportActor(menuIdent: String,
-                          actorIdent: String,
-                          iconName: String,
-                          acceleratorKey: Int,
-                          acceleratorModifier: Int)
-                 : VActor(menuIdent,
-                          null,
-                          actorIdent,
-                          null,
-                          null,
-                          acceleratorKey,
-                          acceleratorModifier) {
+/**
+ * Represents a pivot table column description
+ *
+ * @param    ident        The identifier of the field
+ *
+ */
+class VPivotTableColumn(val ident: String?) {
 
-  init {
-    this.iconName = iconName
-    localize()
-  }
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  var label: String = ""
+  var help: String? = null
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+  /**
+   * Localizes this field
+   *
+   * @param     parent         the caller localizer
+   */
+  fun localize(parent: ReportLocalizer) {
+    if (ident != "") {
+      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
-  private fun localize() {
-    menuName = VlibProperties.getString(menuIdent)
-    menuItem = VlibProperties.getString(ident)
-    help = VlibProperties.getString("$ident-help")
+      label = loc.getLabel() ?: ""
+      help = loc.getHelp()
+    }
   }
 }

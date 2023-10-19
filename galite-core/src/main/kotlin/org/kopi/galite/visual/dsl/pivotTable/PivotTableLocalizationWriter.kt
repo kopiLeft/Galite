@@ -25,10 +25,10 @@ import org.kopi.galite.visual.dsl.common.Menu
 /**
  * This class implements an  XML localization file generator
  */
-class ReportLocalizationWriter : LocalizationWriter() {
+class PivotTableLocalizationWriter : LocalizationWriter() {
   fun genReport(title: String?,
                 help: String?,
-                fields: MutableList<ReportField<*>>,
+                fields: MutableList<PivotTableField<*>>,
                 menus: MutableList<Menu>,
                 actors: MutableList<Actor>) {
     val self = Element("report")

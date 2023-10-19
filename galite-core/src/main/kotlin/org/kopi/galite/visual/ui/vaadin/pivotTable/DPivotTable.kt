@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.pivotTable
 
-import java.awt.Color
-
 import org.kopi.galite.visual.pivotTable.MPivotTable
 import org.kopi.galite.visual.pivotTable.UPivotTable
 import org.kopi.galite.visual.pivotTable.VPivotTable
@@ -45,7 +43,7 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun run() {
-    report.initReport()
+    report.initPivotTable()
     report.setMenu()
   }
 
@@ -53,18 +51,16 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
 
     model.columns.forEach {
       if(it?.label != "") {
-        println("column : " + it?.label)
         pivotData.addColumn(it?.label, it?.javaClass)
       }
     }
 
-    model.baseRows.forEach {
-      it?.data?.forEach { row ->
+    model.userRows?.forEach {
+      it.data.forEach { row ->
         if(row != null) {
           listeRows.add(row)
         }
       }
-      println("rows : " + listeRows)
       pivotData.addRow(*listeRows.toTypedArray())
       listeRows.clear()
     }

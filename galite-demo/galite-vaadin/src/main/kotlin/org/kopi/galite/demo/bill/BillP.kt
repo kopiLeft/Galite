@@ -32,7 +32,7 @@ import org.kopi.galite.visual.dsl.pivotTable.PivotTable
 /**
  * Bill Report
  */
-class BillP : PivotTable("Bills_Report", locale = Locale.UK) {
+class BillP : PivotTable("Bills_Pivot_Table", locale = Locale.UK) {
 
   val file = menu("File")
 
