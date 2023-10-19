@@ -32,8 +32,7 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
   private val model: MPivotTable = report.model // report model
   private var pivotData = PivotTable.PivotData()
   private var pivotOptions = PivotTable.PivotOptions()
-  private var listeRows = mutableListOf<Any>()
-  private var listeDimensions = mutableListOf<String>()
+  private val listeDimensions = mutableListOf<String>()
 
   init {
     getModel()!!.setDisplay(this)
@@ -50,27 +49,23 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
 
   override fun build() {
 
-    model.columns.forEach {
-      if(it?.label != "") {
+    model.columns
+      .forEach {
         pivotData.addColumn(it?.label, it?.javaClass)
-      }
-      if (it?.dimension != null && it.dimension!!) {
-        listeDimensions.add(it.label)
-      }
-    }
-
-    model.userRows?.forEach {
-      it.data.forEach { row ->
-        if(row != null) {
-          listeRows.add(row)
+        if (it?.dimension == true) {
+          listeDimensions.add(it.label)
         }
       }
-      pivotData.addRow(*listeRows.toTypedArray())
-      listeRows.clear()
-    }
-    pivotOptions.setCols(*listeDimensions.toTypedArray())
 
-    var pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
+    model.userRows
+      ?.flatMap { it.data.filterNotNull() }
+      ?.chunked(model.columns.count()) { rows ->
+        pivotData.addRow(*rows.toTypedArray())
+      }
+
+    pivotOptions.setCols(*listeDimensions.toTypedArray())
+    val pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
+
     add(pivot)
   }
 }

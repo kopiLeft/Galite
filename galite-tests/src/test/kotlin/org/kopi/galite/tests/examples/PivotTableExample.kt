@@ -20,34 +20,28 @@ import java.util.Locale
 
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.pivottable.Function
-import org.kopi.galite.visual.pivottable.Grouping
-import org.kopi.galite.visual.pivottable.PivotTable
+import org.kopi.galite.visual.dsl.pivotTable.PivotTable
 
 class PivotTableExample : PivotTable(title = "Form to test Blocks", locale = Locale.UK) {
   val city = field(STRING(15)) {
     label = "Country"
-    help = "The country"
+    dimension = true
   }
 
   val delegation = field(STRING(15)) {
     label = "Delegation"
-    help = "The delegation"
+    dimension = true
   }
 
   val gender = field(STRING(6)) {
     label = "Gender"
-    help = "The gender"
   }
 
   val age = field(INT(3)) {
     label = "Age"
-    help = "The age"
   }
 
   init {
-    aggregate(Function.SUM, age)
-    grouping = Grouping(listOf(city), listOf(delegation, gender))
 
     add {
       this[city] = "Ben Arous"

@@ -117,9 +117,6 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     command(item = insertMode) {
       insertMode()
     }
-    command(item = pivottable) {
-      PivotTableExample().doNotModal()
-    }
   }
 }
 
