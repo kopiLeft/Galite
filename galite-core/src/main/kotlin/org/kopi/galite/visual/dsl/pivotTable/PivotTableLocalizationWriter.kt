@@ -26,17 +26,14 @@ import org.kopi.galite.visual.dsl.common.Menu
  * This class implements an  XML localization file generator
  */
 class PivotTableLocalizationWriter : LocalizationWriter() {
-  fun genReport(title: String?,
-                help: String?,
-                fields: MutableList<PivotTableField<*>>,
-                menus: MutableList<Menu>,
-                actors: MutableList<Actor>) {
-    val self = Element("report")
+  fun genPivotTable(title: String?,
+                    fields: MutableList<PivotTableField<*>>,
+                    menus: MutableList<Menu>,
+                    actors: MutableList<Actor>) {
+    val self = Element("pivotTable")
 
     self.setAttribute("title", title)
-    if (help != null) {
-      self.setAttribute("help", help)
-    }
+
     pushNode(self)
 
     // Menus
@@ -61,9 +58,7 @@ class PivotTableLocalizationWriter : LocalizationWriter() {
     if (label != null) {
       self.setAttribute("label", label)
     }
-    if (help != null) {
-      self.setAttribute("help", help)
-    }
+
     peekNode(null).addContent(self)
   }
 }

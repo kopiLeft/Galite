@@ -37,8 +37,8 @@ class PivotTableField<T>(override val domain: Domain<T>,
 
   lateinit var model: VPivotTableColumn
 
-  fun buildReportColumn(): VPivotTableColumn {
-    model = domain.buildReportFieldModel(this).also { column ->
+  fun buildPivotTableColumn(): VPivotTableColumn {
+    model = domain.buildPivotTableFieldModel(this).also { column ->
       column.label = label ?: ""
       column.dimension = dimension
     }

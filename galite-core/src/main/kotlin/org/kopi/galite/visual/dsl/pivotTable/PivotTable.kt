@@ -20,21 +20,23 @@ package org.kopi.galite.visual.dsl.pivotTable
 import java.io.IOException
 import java.util.Locale
 
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.pivotTable.VPivotTable
-import org.kopi.galite.visual.ApplicationContext
 
 abstract class PivotTable(title: String, val help: String?, locale: Locale? = null) : Window(title, locale) {
 
   constructor(title: String, locale: Locale? = null) : this(title, null, locale)
 
-  /** Report's fields. */
+  /** Pivot table's fields. */
   val fields = mutableListOf<PivotTableField<*>>()
 
-  /** Report's data rows. */
-  val reportRows = mutableListOf<ReportRow>()
+  var positionfield = 0
+
+  /** Pivot table's data rows. */
+  val pivotTableRows = mutableListOf<PivotTableRow>()
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -51,9 +53,9 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
 
     field.initField()
 
-    val pos = if(model.model.columns.size == 0) 0 else model.model.columns.size - 1
-    model.model.columns.add(pos, field.buildReportColumn())
+    model.model.columns.add(positionfield, field.buildPivotTableColumn())
     fields.add(field)
+    positionfield ++
 
     return field
   }
@@ -89,22 +91,22 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   /**
-   * Adds a row to the report.
+   * Adds a row to the Pivot table.
    *
    * @param init initializes the row with values.
    */
-  fun add(init: ReportRow.() -> Unit) {
-    val row = ReportRow(fields)
+  fun add(init: PivotTableRow.() -> Unit) {
+    val row = PivotTableRow(fields)
     row.init()
 
-    val list = row.addReportLine()
+    val list = row.addLine()
     // Last null value is added for the separator column
     model.model.addLine((list + listOf(null)).toTypedArray())
 
-    reportRows.add(row)
+    pivotTableRows.add(row)
   }
 
-  private fun ReportRow.addReportLine(): List<Any?> {
+  private fun PivotTableRow.addLine(): List<Any?> {
     return fields.map { field ->
       data[field]
     }
@@ -115,12 +117,18 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<PivotTableField<*>, Any?> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<PivotTableField<*>, Any?> = pivotTableRows[rowNumber].data
 
   /**
-   * Adds default report commands
+   * Returns rows of data for a specific [field].
+   *
+   * @param field the field.
    */
-  open val reportCommands = false
+  fun getRowsForField(field: PivotTableField<*>) = pivotTableRows.map { it.data[field] }
+  /**
+   * Adds default Pivot table commands
+   */
+  open val pivotTableCommands = false
 
   fun setMenu() {
     model.setMenu()
@@ -157,11 +165,11 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as PivotTableLocalizationWriter).genReport(title, help, fields, menus, actors)
+    (writer as PivotTableLocalizationWriter).genPivotTable(title, fields, menus, actors)
   }
 
   // ----------------------------------------------------------------------
-  // REPORT MODEL
+  // Pivot table MODEL
   // ----------------------------------------------------------------------
   override val model: VPivotTable = object : VPivotTable() {
 
@@ -180,7 +188,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     model.help = help
     model.source = sourceFile
 
-    if (reportCommands) {
+    if (pivotTableCommands) {
       addDefaultPivotTableCommands()
     }
   }

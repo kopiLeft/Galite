@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual.pivotTable
 
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VCommand
@@ -88,7 +88,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
 
     // all commands are by default enabled
     activeCommands.clear()
-    commands.forEachIndexed { i, vCommand ->
+    commands.forEach { vCommand ->
       setCommandEnabled(vCommand, true)
     }
 
@@ -115,7 +115,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
    */
   private fun localize(manager: LocalizationManager) {
     if(ApplicationContext.getDefaultLocale() != locale) {
-      val loc = manager.getReportLocalizer(source)
+      val loc = manager.getPivotTableLocalizer(source)
 
       setPageTitle(loc.getTitle())
       help = loc.getHelp()

@@ -24,12 +24,12 @@ import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 
 import org.vaadin.addons.componentfactory.PivotTable
 
-class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTable {
+class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UPivotTable {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val model: MPivotTable = report.model // report model
+  private val model: MPivotTable = pivotTable.model // report model
   private var pivotData = PivotTable.PivotData()
   private var pivotOptions = PivotTable.PivotOptions()
   private val listeDimensions = mutableListOf<String>()
@@ -43,8 +43,8 @@ class DPivotTable(private val report: VPivotTable) : DWindow(report), UPivotTabl
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun run() {
-    report.initPivotTable()
-    report.setMenu()
+    pivotTable.initPivotTable()
+    pivotTable.setMenu()
   }
 
   override fun build() {

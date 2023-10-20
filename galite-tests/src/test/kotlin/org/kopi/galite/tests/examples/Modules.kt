@@ -18,6 +18,7 @@ package org.kopi.galite.tests.examples
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.tests.database.insertIntoModule
+import org.kopi.galite.tests.form.FormWithPivotTable
 import org.kopi.galite.tests.form.FormWithReport
 import org.kopi.galite.tests.localization.LocalizedForm
 import org.kopi.galite.tests.ui.vaadin.field.FormToTestFormPopUp
@@ -30,6 +31,7 @@ fun initModules() {
   transaction {
     insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
     insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", FormWithReport::class)
+    insertIntoModule("1002", "org/kopi/galite/test/Menu", 2, "1000", FormWithPivotTable::class)
     insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
     insertIntoModule("2001", "org/kopi/galite/test/Menu", 101, "2000", CommandsForm::class)
     insertIntoModule("2002", "org/kopi/galite/test/Menu", 102, "2000", FormExample::class)

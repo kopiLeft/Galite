@@ -25,14 +25,14 @@ import org.kopi.galite.type.Week
 /**
  * Represents a data row of a [PivotTable].
  *
- * @param reportFields the fields that exists in the report.
+ * @param pivotTableFields the fields that exists in the pivot table.
  */
-class ReportRow(private val reportFields: MutableList<PivotTableField<*>>) {
-  /** A report data row */
+class PivotTableRow(private val pivotTableFields: MutableList<PivotTableField<*>>) {
+  /** A pivot table data row */
   val data = mutableMapOf<PivotTableField<*>, Any?>()
 
   /**
-   * Returns data value of a specific [PivotTableField] in this report row.
+   * Returns data value of a specific [PivotTableField] in this pivot table row.
    *
    * @param field the field.
    * @return  data value for a specific [PivotTableField].
@@ -41,7 +41,7 @@ class ReportRow(private val reportFields: MutableList<PivotTableField<*>>) {
   fun <T> getValueOf(field: PivotTableField<T>): T = data[field] as T
 
   /**
-   * Gets the value of the field in this report row.
+   * Gets the value of the field in this pivot table row.
    *
    * @param field the field.
    * @return  data value for a specific [PivotTableField].
@@ -49,26 +49,26 @@ class ReportRow(private val reportFields: MutableList<PivotTableField<*>>) {
   operator fun <T> get(field: PivotTableField<T>): T = getValueOf(field)
 
   /**
-   * Sets the value of the field in this report row.
+   * Sets the value of the field in this pivot table row.
    *
    * @param field the field.
    * @param value the field's value.
    */
   operator fun <T> set(field: PivotTableField<T>, value: T) {
-    if (field in reportFields) {
+    if (field in pivotTableFields) {
       data.putIfAbsent(field, value)
     }
   }
 
   /**
-   * Sets the value of the field in this report row.
+   * Sets the value of the field in this pivot table row.
    *
    * @param field the field.
    * @param value the field's value.
    */
   @JvmName("setType0")
   operator fun <T : Type0<K>, K> set(field: PivotTableField<T>, value: K) {
-    if (field in reportFields) {
+    if (field in pivotTableFields) {
       data.putIfAbsent(field, field.toType0(value))
     }
   }

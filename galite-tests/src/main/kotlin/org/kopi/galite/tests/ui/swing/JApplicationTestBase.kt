@@ -32,6 +32,8 @@ import org.kopi.galite.visual.ImageHandler
 import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.pivotTable.VPivotTable
+import org.kopi.galite.visual.ui.vaadin.pivotTable.DPivotTable
 import org.kopi.vkopi.lib.ui.swing.chart.DChart
 import org.kopi.vkopi.lib.ui.swing.report.DReport
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication

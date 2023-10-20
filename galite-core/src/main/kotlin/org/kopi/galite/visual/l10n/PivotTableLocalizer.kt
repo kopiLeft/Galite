@@ -16,38 +16,51 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.pivotTable
+package org.kopi.galite.visual.l10n
 
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.l10n.PivotTableLocalizer
+import org.jdom2.Document
+import org.jdom2.Element
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Represents a pivot table column description
+ * Implements a pivot table localizer.
  *
- * @param    ident        The identifier of the field
- *
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the pivot table localization
  */
-class VPivotTableColumn(val ident: String?) {
+class PivotTableLocalizer(manager: LocalizationManager, document: Document) : Localizer(manager) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  var label: String = ""
-  var dimension: Boolean? = null
+  private val root: Element = document.rootElement
 
   // ----------------------------------------------------------------------
-  // LOCALIZATION
+  // CONSTRUCTOR
   // ----------------------------------------------------------------------
-  /**
-   * Localizes this field
-   *
-   * @param     parent         the caller localizer
-   */
-  fun localize(parent: PivotTableLocalizer) {
-    if (ident != "") {
-      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
-
-      label = loc.getLabel() ?: ""
+  init {
+    if (root.name != "pivottable") {
+      throw InconsistencyException("bad root element $root")
     }
+  }
+
+  /**
+   * Returns the value of the title attribute.
+   */
+  fun getTitle(): String = root.getAttributeValue("title")
+
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String? = root.getAttributeValue("help")
+
+  /**
+   * Constructs a field localizer for the given field.
+   *
+   * @param             ident           the identifier of the field
+   */
+  fun getFieldLocalizer(ident: String): FieldLocalizer {
+    return FieldLocalizer(manager,
+                          Utils.lookupChild(root, "field", "ident", ident))
   }
 }

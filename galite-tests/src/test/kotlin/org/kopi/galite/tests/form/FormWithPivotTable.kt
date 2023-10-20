@@ -14,44 +14,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.examples
+package org.kopi.galite.tests.form
 
 import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.tests.pivotTable.SimplePivotTable
+import org.kopi.galite.tests.report.SimpleReport
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class DocumentationReport : DictionaryForm(title = "Test Report Form", locale = Locale.UK) {
+class FormWithPivotTable : DictionaryForm(title = "SimplePivotTable", locale = Locale.UK) {
 
-  //Menus Definition
+  val testPage = page("test page")
 
-
-  val block = insertBlock(SimpleBlock())
-
-  // simple block
-  inner class SimpleBlock : Block("Block1", 1, 10) {
-    val field = visit(domain = INT(20), position = at(1, 1)) {
-      label = "field"
-    }
-
-    init {
-      command(item = report) {
-        createReport {
-          DocumentationReportR()
-        }
-      }
-      command(item = pivotTable) {
-        createPivotTable {
-          DocumentationPivotTable()
-        }
+  val block = testPage.insertBlock(BlockSample) {
+    command(item = pivotTable) {
+      createPivotTable {
+        SimplePivotTable()
       }
     }
   }
 }
 
 fun main() {
-  initReportDocumentationData()
-  runForm(formName = DocumentationReport())
+  runForm(FormWithPivotTable())
 }

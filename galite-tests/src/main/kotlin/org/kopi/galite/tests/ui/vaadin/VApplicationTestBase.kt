@@ -42,6 +42,8 @@ import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.router.Route
+import org.kopi.galite.visual.pivotTable.VPivotTable
+import org.kopi.galite.visual.ui.vaadin.pivotTable.DPivotTable
 
 /**
  * TestBase class for all tests.
@@ -65,6 +67,8 @@ open class VApplicationTestBase : ApplicationTestBase() {
   override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
 
   override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
+
+  override fun getPivotTableDisplay(model: VPivotTable): UComponent? = DPivotTable(model).also { it.run() }
 
   companion object {
     val applicationContext = VApplicationContext()
