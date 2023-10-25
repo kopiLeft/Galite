@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pivottable title="Pivot table des fournisseurs">
+    <menu ident="Action" label="Action" />
+    <menu ident="File" label="Fichier" />
+
+    <actor ident="quit" label="Quitter" help="Ferme la table pivot." />
+    <actor ident="help" label="Aide" help="Afficher l'aide." />
+
+    <field ident="ANM_0" label="Nom" />
+    <field ident="ANM_1" label="Téléphone" />
+    <field ident="ANM_2" label="Description" />
+    <field ident="ANM_3" label="Adresse" />
+    <field ident="ANM_4" label="Code postal" />
+
+</pivottable>

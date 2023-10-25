@@ -32,17 +32,14 @@ class BillProductP : PivotTable("Bill Product Report", Locale.UK) {
 
   val quantity = field(INT(25)) {
     label = "Quantity"
-    help = "The quantity"
   }
 
   val amount = field(DECIMAL(25, 10)) {
     label = "Amount before tax"
-    help = "The amount before tax to pay"
 
   }
   val amountWithTaxes = field(DECIMAL(50, 10)) {
     label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
   }
 
   val billProducts = BillProduct.selectAll()

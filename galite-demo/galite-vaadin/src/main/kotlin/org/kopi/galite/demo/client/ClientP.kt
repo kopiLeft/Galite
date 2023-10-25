@@ -31,7 +31,7 @@ import org.kopi.galite.visual.dsl.pivotTable.PivotTable
 /**
  * Client Report
  */
-class ClientP : PivotTable(title = "Clients_Report", locale = Locale.UK) {
+class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
   val action = menu("Action")
   val file = menu("File")
 
@@ -52,42 +52,34 @@ class ClientP : PivotTable(title = "Clients_Report", locale = Locale.UK) {
 
   val firstName = field(STRING(25)) {
     label = "First Name"
-    help = "The client first name"
   }
 
   val lastName = field(STRING(25)) {
     label = "Last Name"
-    help = "The client last name"
   }
 
   val addressClt = field(STRING(50)) {
     label = "Address"
-    help = "The client address"
   }
 
   val ageClt = field(INT(2)) {
     label = "Age"
-    help = "The client age"
   }
 
   val countryClt = field(STRING(50)) {
     label = "Country"
-    help = "The client country"
   }
 
   val cityClt = field(STRING(50)) {
     label = "City"
-    help = "The client city"
   }
 
   val zipCodeClt = field(INT(2)) {
     label = "Zip code"
-    help = "The client zip code"
   }
 
   val activeClt = field(BOOL) {
     label = "Status"
-    help = "Is the client active?"
   }
 
   val clients = Client.selectAll()

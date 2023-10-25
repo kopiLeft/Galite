@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pivottable title="Pivot table des clients">
+    <menu ident="Action" label="Action" />
+    <menu ident="File" label="Fichier" />
+
+    <actor ident="quit" label="Quitter" help="Ferme la table pivot." />
+    <actor ident="help" label="Aide" help="Afficher l'aide." />
+
+    <field ident="ANM_0" label="Prénom" />
+    <field ident="ANM_1" label="Nom" />
+    <field ident="ANM_2" label="Adresse" />
+    <field ident="ANM_3" label="Age" />
+    <field ident="ANM_4" label="Pays" />
+    <field ident="ANM_5" label="Ville" />
+    <field ident="ANM_6" label="Code postal" />
+    <field ident="ANM_7" label="Actif" />
+
+</pivottable>

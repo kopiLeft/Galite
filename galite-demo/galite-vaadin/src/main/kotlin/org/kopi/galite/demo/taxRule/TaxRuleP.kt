@@ -36,12 +36,10 @@ class TaxRuleP : PivotTable(title = "TaxRules_Report", locale = Locale.UK) {
 
   val taxName = field(STRING(50)) {
     label = "Name"
-    help = "The tax name"
   }
 
   val rate = field(INT(25)) {
     label = "Rate in %"
-    help = "The tax rate in %"
   }
 
   val taxRules = TaxRule.selectAll()

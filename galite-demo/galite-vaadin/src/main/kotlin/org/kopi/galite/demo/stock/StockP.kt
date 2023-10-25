@@ -37,37 +37,14 @@ class StockP : PivotTable(title = "Stocks", locale = Locale.UK) {
 
   val action = menu("Action")
 
-  val csv = actor(menu = action, label = "CSV", help = "CSV Format", ident = "csv") {
-    key = Key.F8
-    icon = Icon.EXPORT_CSV
-  }
-
-  val xls = actor(menu = action, label = "XLS", help = "Excel (XLS) Format", ident = "xls") {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT_XLSX
-  }
-
-  val xlsx = actor(menu = action, label = "XLSX", help = "Excel (XLSX) Format", ident = "xlsx") {
-    key = Key.SHIFT_F8
-    icon = Icon.EXPORT
-  }
-
-  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
-    key = Key.F9
-    icon = Icon.EXPORT_PDF
-  }
-
   val description = field(STRING(25)) {
     label = "Description"
-    help = "The product description"
   }
   val nameProvider = field(STRING(25)) {
     label = "Provider name"
-    help = "The provider name"
   }
   val minAlert = field(INT(25)) {
     label = "Min Alert"
-    help = "The stock's min alert"
   }
 
   val stocks = Stock.join(Provider, JoinType.INNER, Stock.idStckProv, Provider.idProvider)
