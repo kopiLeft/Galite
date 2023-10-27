@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.pivotTable
 
+import com.vaadin.flow.component.dependency.CssImport
 import org.kopi.galite.visual.pivotTable.MPivotTable
 import org.kopi.galite.visual.pivotTable.UPivotTable
 import org.kopi.galite.visual.pivotTable.VPivotTable
@@ -24,12 +25,13 @@ import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 
 import org.vaadin.addons.componentfactory.PivotTable
 
+@CssImport("./styles/galite/pivottable.css")
 class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UPivotTable {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val model: MPivotTable = pivotTable.model // report model
+  private val model: MPivotTable = pivotTable.model // pivot table model
   private var pivotData = PivotTable.PivotData()
   private var pivotOptions = PivotTable.PivotOptions()
   private val listeDimensions = mutableListOf<String>()
@@ -63,7 +65,7 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         pivotData.addRow(*rows.toTypedArray())
       }
 
-    pivotOptions.setCols(*listeDimensions.toTypedArray())
+    pivotOptions.setRows(*listeDimensions.toTypedArray())
     val pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
 
     add(pivot)
