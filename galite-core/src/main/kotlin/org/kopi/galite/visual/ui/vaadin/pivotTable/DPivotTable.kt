@@ -39,6 +39,12 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   init {
     getModel()!!.setDisplay(this)
     setSizeFull()
+    element.style["display"] = "flex!important"
+    element.style["flex-direction"] = "column!important"
+    element.style["overflow"] = "auto!important"
+    element.style["position"] = "relative!important"
+    element.style["outline"] = "none!important"
+    element.style["z-index"] = "0!important"
   }
 
   //---------------------------------------------------
