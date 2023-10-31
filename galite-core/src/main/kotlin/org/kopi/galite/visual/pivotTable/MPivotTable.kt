@@ -50,4 +50,21 @@ class MPivotTable : Serializable {
       throw VNoRowException(MessageCode.getMessage("VIS-00015"))
     }
   }
+
+  // --------------------------------------------------------------------
+  // MEMBER ACCESS
+  // --------------------------------------------------------------------
+  /**
+   * Return a column definition
+   *
+   * @param    column        the index of the desired column
+   * @return    the desired column
+   */
+  fun getModelColumn(column: Int): VPivotTableColumn = columns[column]!!
+  /**
+   * Returns the number of model columns
+   *
+   * @return    the number or columns to display
+   */
+  fun getModelColumnCount(): Int = columns.size
 }

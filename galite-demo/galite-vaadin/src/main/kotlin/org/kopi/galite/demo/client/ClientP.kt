@@ -49,38 +49,53 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
   val cmdQuit = command(item = quit) {
     model.close()
   }
+  val helpCmd = command(item = helpForm) {
+    model.showHelp()
+  }
 
 
   val firstName = field(STRING(25)) {
     label = "First Name"
+    help = "The client first name"
+    dimensionRow = true
   }
 
   val lastName = field(STRING(25)) {
     label = "Last Name"
+    help = "The client last name"
+    dimensionRow = true
   }
 
   val addressClt = field(STRING(50)) {
     label = "Address"
+    help = "The client address"
   }
 
   val ageClt = field(INT(2)) {
     label = "Age"
+    help = "The client age"
   }
 
   val countryClt = field(STRING(50)) {
     label = "Country"
+    help = "The client country"
+    dimensionColumn = true
   }
 
   val cityClt = field(STRING(50)) {
     label = "City"
+    help = "The client city"
+    dimensionColumn = true
   }
 
   val zipCodeClt = field(INT(2)) {
     label = "Zip code"
+    help = "The client zip code"
   }
 
   val activeClt = field(BOOL) {
     label = "Status"
+    help = "Is the client active?"
   }
 
   val init = trigger(INITPIVOTTABLE) {

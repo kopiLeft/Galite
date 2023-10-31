@@ -47,16 +47,16 @@ class BillP : PivotTable("Bills_Pivot_Table", locale = Locale.UK) {
 
   val numBill = field(INT(25)) {
     label = "Number"
-    dimension = true
+    dimensionRow = true
   }
 
   val addressBill = field(STRING(25)) {
     label = "Address"
-    dimension = true
+    dimensionRow = true
   }
   val dateBill = field(DATE) {
     label = "Date"
-    dimension = true
+    dimensionRow = true
   }
 
   val amountWithTaxes = field(DECIMAL(20, 10)) {
@@ -65,7 +65,7 @@ class BillP : PivotTable("Bills_Pivot_Table", locale = Locale.UK) {
 
   val refCmd = field(INT(50)) {
     label = "Command reference"
-    dimension = true
+    dimensionRow = true
   }
 
   val bills = Bill.selectAll()

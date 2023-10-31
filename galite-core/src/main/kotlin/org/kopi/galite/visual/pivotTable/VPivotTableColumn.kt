@@ -33,7 +33,9 @@ class VPivotTableColumn(val ident: String?) {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   var label: String = ""
-  var dimension: Boolean? = null
+  var help: String? = null
+  var dimensionRow: Boolean? = null
+  var dimensionColumn: Boolean? = null
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -49,5 +51,9 @@ class VPivotTableColumn(val ident: String?) {
 
       label = loc.getLabel() ?: ""
     }
+  }
+
+  fun helpOnColumn(help: VHelpGenerator) {
+    help.helpOnColumn(label, this.help)
   }
 }

@@ -34,6 +34,14 @@ interface Constants : Constants {
     const val TABLE_HEATMAP = "Heatmap"
     const val ROW_HEATMAP = "Row Heatmap"
     const val COL_HEATMAP = "Col Heatmap"
+    const val HORIZONTAL_BAR_CHART = "Horizontal Bar Chart"
+    const val HORIZONTAL_STACKED_BAR_CHART = "Horizontal Stacked Bar Chart"
+    const val BAR_CHART = "Bar Chart"
+    const val STACKED_BAR_CHART = "Stacked Bar Chart"
+    const val LINE_CHART = "Line Chart"
+    const val AREA_CHART = "Area Chart"
+    const val SCATTER_CHART = "Scatter Chart"
+    const val TSV_EXPORT = "TSV Export"
 
     // ---------------------------------------------------------------------
     // PIVOT TABLE Aggregator
@@ -70,11 +78,6 @@ interface Constants : Constants {
     const val TRG_POST_PIVOT_TABLE = 2
     const val TRG_VOID = VConstants.TRG_VOID
     const val TRG_OBJECT = VConstants.TRG_OBJECT
-
-    // ---------------------------------------------------------------------
-    // PREDEFINED COMMANDS
-    // ---------------------------------------------------------------------
-    const val CMD_QUIT = 0
 
     // ---------------------------------------------------------------------
     // TRIGGER INFO

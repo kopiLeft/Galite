@@ -34,7 +34,8 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val model: MPivotTable = pivotTable.model // pivot table model
   private var pivotData = PivotTable.PivotData()
   private var pivotOptions = PivotTable.PivotOptions()
-  private val listeDimensions = mutableListOf<String>()
+  private val listeDimensionRows = mutableListOf<String>()
+  private val listeDimensionColumns = mutableListOf<String>()
 
   init {
     getModel()!!.setDisplay(this)
@@ -59,8 +60,11 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     model.columns
       .forEach {
         pivotData.addColumn(it?.label, it?.javaClass)
-        if (it?.dimension == true) {
-          listeDimensions.add(it.label)
+        if (it?.dimensionRow == true) {
+          listeDimensionRows.add(it.label)
+        }
+        if (it?.dimensionColumn == true) {
+          listeDimensionColumns.add(it.label)
         }
       }
 
@@ -70,9 +74,14 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         pivotData.addRow(*rows.toTypedArray())
       }
 
-    pivotOptions.setRows(*listeDimensions.toTypedArray())
+    pivotOptions.setRows(*listeDimensionRows.toTypedArray())
+    pivotOptions.setCols(*listeDimensionColumns.toTypedArray())
     pivotOptions.setRenderer(pivotTable.pivottableType)
     pivotOptions.setAggregator(pivotTable.aggregator.first, pivotTable.aggregator.second)
+
+    if(listeDimensionRows.isNotEmpty() && listeDimensionColumns.isNotEmpty()) {
+      pivotOptions.setCharts(true)
+    }
     val pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
 
     add(pivot)

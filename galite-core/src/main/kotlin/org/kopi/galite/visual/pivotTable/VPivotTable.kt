@@ -19,16 +19,12 @@
 package org.kopi.galite.visual.pivotTable
 
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
 import org.kopi.galite.visual.dsl.common.Trigger
+import java.io.File
+import java.net.MalformedURLException
 
 /**
  * Represents a pivot table model.
@@ -228,6 +224,33 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
    * Returns true if there is trigger associated with given event.
    */
   internal fun hasTrigger(event: Int): Boolean = PIVOT_TABLE_Triggers[0][event] != null
+
+  // ----------------------------------------------------------------------
+  // HELP
+  // ----------------------------------------------------------------------
+
+  fun genHelp(): String? {
+    val surl = StringBuffer()
+    val fileName: String? = VHelpGenerator().helpOnPivotTable(pageTitle,
+      commands,
+      model,
+      help)
+
+    return if (fileName == null) {
+      null
+    } else {
+      try {
+        surl.append(File(fileName).toURI().toURL().toString())
+      } catch (mue: MalformedURLException) {
+        throw InconsistencyException(mue)
+      }
+      surl.toString()
+    }
+  }
+
+  fun showHelp() {
+    VHelpViewer().showHelp(genHelp())
+  }
 
   // ----------------------------------------------------------------------
   // Command
