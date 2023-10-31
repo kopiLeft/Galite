@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.pivotTable
 
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
@@ -27,6 +28,7 @@ import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.dsl.common.Trigger
 
 /**
  * Represents a pivot table model.
@@ -53,6 +55,9 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   val model: MPivotTable = MPivotTable()
   private var built = false
   private var pageTitle = ""
+  var pivottableType = Constants.DEFAULT_RENDERER  // Default pivot table type
+  var aggregator = Pair(Constants.DEFAULT_AGGREGATOR, Constants.DEFAULT_AGGREGATE_COLUMN) // default Aggregator
+  val PIVOT_TABLE_Triggers = listOf(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
   private val activeCommands = ArrayList<VCommand>()
   var help: String? = null
 
@@ -71,6 +76,22 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   }
 
   /**
+   * Sets the new type of this pivot table model.
+   * @param type The new pivot table type.
+   */
+  internal fun setType(type: String) {
+    pivottableType = type
+  }
+
+  /**
+   * Sets the new type of this pivot table model.
+   * @param type The new pivot table type.
+   */
+  internal fun setAggregator(aggregate: Pair<String, String>) {
+    aggregator = aggregate
+  }
+
+  /**
    * initialise fields
    */
   protected abstract fun init()
@@ -82,6 +103,9 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
     init()
     // localize the pivot table using the default locale
     localize()
+    if (hasTrigger(Constants.TRG_INIT)) {
+      callTrigger(Constants.TRG_INIT)
+    }
     model.build()
     (getDisplay() as UPivotTable?)?.build()
     built = true
@@ -91,8 +115,8 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
     commands.forEach { vCommand ->
       setCommandEnabled(vCommand, true)
     }
-
   }
+
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -128,6 +152,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   // ----------------------------------------------------------------------
   open fun initPivotTable() {
     build()
+    callTrigger(Constants.TRG_PRE_PIVOT_TABLE)
   }
   // ----------------------------------------------------------------------
   // INTERFACE (COMMANDS)
@@ -164,6 +189,45 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
       return
     }
   }
+
+  // --------------------------------------------------------------------
+  // TRIGGER HANDLING
+  // --------------------------------------------------------------------
+
+  override fun executeVoidTrigger(trigger: Trigger?) {
+    trigger?.action?.method?.invoke()
+    super.executeVoidTrigger(trigger)
+  }
+
+  fun executeObjectTrigger(trigger: Trigger?): Any? {
+    return (trigger?.action?.method as () -> Any?).invoke()
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  protected fun callTrigger(event: Int): Any? {
+    return callTrigger(event, 0, PIVOT_TABLE_Triggers)
+  }
+
+  /**
+   * Calls trigger for given event, returns last trigger called 's value.
+   */
+  private fun callTrigger(event: Int, index: Int, triggers: List<Array<Trigger?>>): Any? {
+    return when (Constants.TRG_TYPES[event]) {
+      Constants.TRG_VOID -> {
+        executeVoidTrigger(triggers[index][event])
+        null
+      }
+      Constants.TRG_OBJECT -> executeObjectTrigger(triggers[index][event])
+      else -> throw InconsistencyException("BAD TYPE" + Constants.TRG_TYPES[event])
+    }
+  }
+
+  /**
+   * Returns true if there is trigger associated with given event.
+   */
+  internal fun hasTrigger(event: Int): Boolean = PIVOT_TABLE_Triggers[0][event] != null
 
   // ----------------------------------------------------------------------
   // Command

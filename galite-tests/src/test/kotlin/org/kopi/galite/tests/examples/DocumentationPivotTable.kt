@@ -30,20 +30,19 @@ class DocumentationPivotTable : PivotTable(title = "Test Pivot Table", locale = 
   // test to upper Case format + align left
   val name = field(STRING(25)) {
     label = "Name"
-    help = "The name"
   }
 
   // test to lower Case format + align right
-  val lastName = nullableField(STRING(25)) {
+  val lastName = field(STRING(25)) {
     label = "last Name "
   }
 
   // test normal format + align center
-  val middleName = nullableField(STRING(25)) {
+  val middleName = field(STRING(25)) {
     label = "middleName"
   }
 
-  val age = nullableField(INT(25)) {
+  val age = field(INT(25)) {
     label = "age"
   }
 
@@ -54,9 +53,9 @@ class DocumentationPivotTable : PivotTable(title = "Test Pivot Table", locale = 
       testTable.forEach { result ->
         add {
           this[name] = result[TestTable.name]
-          this[lastName] = result[TestTable.lastName]
-          this[middleName] = result[TestTable.lastName]
-          this[age] = result[TestTable.age]
+          this[lastName] = result[TestTable.lastName]!!
+          this[middleName] = result[TestTable.lastName]!!
+          this[age] = result[TestTable.age]!!
         }
       }
     }

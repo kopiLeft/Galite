@@ -56,7 +56,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   }
 
   override fun build() {
-
     model.columns
       .forEach {
         pivotData.addColumn(it?.label, it?.javaClass)
@@ -72,6 +71,8 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
       }
 
     pivotOptions.setRows(*listeDimensions.toTypedArray())
+    pivotOptions.setRenderer(pivotTable.pivottableType)
+    pivotOptions.setAggregator(pivotTable.aggregator.first, pivotTable.aggregator.second)
     val pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
 
     add(pivot)

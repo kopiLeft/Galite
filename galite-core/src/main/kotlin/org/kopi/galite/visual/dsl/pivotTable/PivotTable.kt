@@ -22,8 +22,9 @@ import java.util.Locale
 
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.dsl.common.*
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.pivotTable.Constants
 import org.kopi.galite.visual.pivotTable.VPivotTable
 
 abstract class PivotTable(title: String, val help: String?, locale: Locale? = null) : Window(title, locale) {
@@ -61,36 +62,6 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   /**
-   * creates and returns a field that accept nulls. It uses [init] method to initialize the field.
-   *
-   * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
-   */
-  inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
-                                                       noinline init: PivotTableField<T>.() -> Unit): PivotTableField<T?> {
-    return field(domain, init) as PivotTableField<T?>
-  }
-
-  /**
-   * creates and returns fields. It uses [init] method to initialize the fields.
-   *
-   * @param fieldsNumber the number of fields to create.
-   * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
-   */
-  inline fun <reified T : Comparable<T>?> field(fieldsNumber: Int,
-                                                domain: Domain<T>,
-                                                noinline init: PivotTableField<T>.() -> Unit): List<PivotTableField<T?>> {
-    return (0 until fieldsNumber).map {
-      nullableField(domain, init).also { field ->
-        field.model.label = "${field.label}_${it + 1}"
-      }
-    }
-  }
-
-  /**
    * Adds a row to the Pivot table.
    *
    * @param init initializes the row with values.
@@ -110,6 +81,42 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     return fields.map { field ->
       data[field]
     }
+  }
+
+  /**
+   * Adds triggers to this pivot table
+   *
+   * @param pivotTriggerEvents   the trigger events to add
+   * @param method               the method to execute when trigger is called
+   */
+  fun <T> trigger(vararg pivotTriggerEvents: PivotTableTriggerEvent<T>, method: () -> T): Trigger {
+    val event = formEventList(pivotTriggerEvents)
+    val pivotTableAction = Action(null, method)
+    val trigger = FormTrigger(event, pivotTableAction)
+
+    triggers.add(trigger)
+
+    // PIVOT TABLE TRIGGERS
+    triggers.forEach { trigger ->
+
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          model.PIVOT_TABLE_Triggers[0][i] = trigger
+        }
+      }
+    }
+
+    return trigger
+  }
+
+  private fun formEventList(PivotTableTriggerEvent: Array<out PivotTableTriggerEvent<*>>): Long {
+    var self = 0L
+
+    PivotTableTriggerEvent.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
   }
 
   /**
@@ -142,6 +149,23 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     model.addDefaultPivotTableCommands()
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+  // PIVOT TABLE TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+
+  /**
+   * Pivot table Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class PivotTableTriggerEvent<T>(val event: Int)
+
+  /**
+   * Executed at pivot table initialization.
+   */
+
+  val INITPIVOTTABLE = PivotTableTriggerEvent<Unit>(Constants.TRG_INIT)
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
@@ -167,6 +191,18 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   fun genLocalization(writer: LocalizationWriter) {
     (writer as PivotTableLocalizationWriter).genPivotTable(title, fields, menus, actors)
   }
+
+  var pivotTableType: String
+    get() = model.pivottableType
+    set(value) {
+      model.setType(value)
+    }
+
+  var aggregator: Pair<String, String>
+    get() = model.aggregator
+    set(value) {
+      model.setAggregator(value)
+    }
 
   // ----------------------------------------------------------------------
   // Pivot table MODEL

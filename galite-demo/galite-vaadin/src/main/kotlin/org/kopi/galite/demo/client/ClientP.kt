@@ -27,6 +27,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivotTable.PivotTable
+import org.kopi.galite.visual.pivotTable.Constants
 
 /**
  * Client Report
@@ -80,6 +81,11 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
 
   val activeClt = field(BOOL) {
     label = "Status"
+  }
+
+  val init = trigger(INITPIVOTTABLE) {
+    pivotTableType = Constants.TABLE_BARCHART
+    aggregator = Pair(Constants.AVERAGE, ageClt.label!!)
   }
 
   val clients = Client.selectAll()
