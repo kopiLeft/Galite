@@ -1978,13 +1978,16 @@ abstract class VBlock(var title: String,
     callProtectedTrigger(VConstants.TRG_POSTDEL)
   }
 
+  open var idFieldName : String = "ID"
+
   /**
    * Searches the field holding the ID of the block's base table.
    * May be overridden by actual form.
    */
   val idField: VField
     get() {
-      return getBaseTableField("ID") ?: throw InconsistencyException()
+      return getBaseTableField(idFieldName)
+        ?: throw InconsistencyException(MessageCode.getMessage("VIS-00074", arrayOf(idFieldName, tables[0].tableName, name)))
     }
 
   /**
@@ -1993,7 +1996,8 @@ abstract class VBlock(var title: String,
   @Suppress("UNCHECKED_CAST")
   val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(tables[0]) as? Column<Int> ?: throw InconsistencyException()
+      return idField.lookupColumn(tables[0]) as? Column<Int>
+        ?: throw InconsistencyException(MessageCode.getMessage("VIS-00074", arrayOf(idFieldName, tables[0].tableName, name)))
     }
 
   /**
@@ -2028,7 +2032,7 @@ abstract class VBlock(var title: String,
    */
   protected fun getBaseTableField(field: String): VField? {
     for (i in fields.indices) {
-      val column = fields[i].lookupColumn(0)
+      val column = fields[i].lookupColumn(tables[0])
       if (column != null && column.name == field) {
         return fields[i]
       }
@@ -2054,7 +2058,6 @@ abstract class VBlock(var title: String,
 
     // add ID field AT END if it exists and not already taken
     for (field in fields) {
-      //!!! graf 20080329: should we replace fld!!.name.equals("ID") by fld == getIdField() ?
       if (field.isInternal() && field.name == idField.name && field.getColumnCount() > 0) {
         result.add(field.getColumn(0)!!.column)
         break
@@ -2349,6 +2352,7 @@ abstract class VBlock(var title: String,
         }
       }
     } catch (e: Exception) {
+      e.printStackTrace()
       if (e.message != null) {
         form.error(e.message!!)
       }
