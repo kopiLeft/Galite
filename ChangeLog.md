@@ -1,21 +1,27 @@
+# 1.4.2
+## What's Changed
+* Fix: Allow creating galite forms with database tables without a column named "ID" @mgrati [#605](https://github.com/kopiLeft/Galite/pull/605)
+
+**Full Changelog**: [1.4.1 ... 1.4.2](https://github.com/kopiLeft/Galite/compare/1.4.1...1.4.2)
+
 # 1.4.1
 ## What's Changed
-* Fix: Bug in DATETIME domain type: Change the return type to LocalDateTime for columns of type LocalDateTime when calling retrieveQuery by @adridi [#602](https://github.com/kopiLeft/Galite/pull/602)
+* Fix: Bug in DATETIME domain type: Change the return type to LocalDateTime for columns of type LocalDateTime when calling retrieveQuery by @achraf-debug [#602](https://github.com/kopiLeft/Galite/pull/602)
 
 **Full Changelog**: [1.4.0 ... 1.4.1](https://github.com/kopiLeft/Galite/compare/1.4.0...1.4.1)
 
 # 1.4.0
 ## What's Changed
-* Upgrade Vaadin version from 22.0.14 to 23.3.8 by @mtousli in [#601](https://github.com/kopiLeft/Galite/pull/601)
-* Configure field height in dynamic report fields by @mtousli in [#599](https://github.com/kopiLeft/Galite/pull/599)
-* Configure defaultRepetitionAttempts when connecting to database by @adridi [#595](https://github.com/kopiLeft/Galite/pull/595)
+* Upgrade Vaadin version from 22.0.14 to 23.3.8 by @MedAzizTousli in [#601](https://github.com/kopiLeft/Galite/pull/601)
+* Configure field height in dynamic report fields by @MedAzizTousli in [#599](https://github.com/kopiLeft/Galite/pull/599)
+* Configure defaultRepetitionAttempts when connecting to database by @achraf-debug [#595](https://github.com/kopiLeft/Galite/pull/595)
 
 **Full Changelog**: [1.3.8 ... 1.4.0](https://github.com/kopiLeft/Galite/compare/1.3.8...1.4.0)
 
 # 1.3.8
 ## What's Changed
-* Add use of expressions with keyOf function in ListDomain by @yahiaoui [APPS-01LB]
-* Fix: Add support for java.time.LocalDateTime in addition to java.time.Instant in GaliteDomain timestamp fields by @adridi [#593](https://github.com/kopiLeft/Galite/pull/593)
+* Add use of expressions with keyOf function in ListDomain by @yahiaoui97 [APPS-01LB]
+* Fix: Add support for java.time.LocalDateTime in addition to java.time.Instant in GaliteDomain timestamp fields by @achraf-debug [#593](https://github.com/kopiLeft/Galite/pull/593)
 
 **Full Changelog**: [1.3.7 ... 1.3.8](https://github.com/kopiLeft/Galite/compare/1.3.7...1.3.8)
 
@@ -40,9 +46,9 @@
 
 # 1.3.4
 ## What's Changed
-* Add support for types BigDecimal and Month in Galite ListDomain by @adridi [#589](https://github.com/kopiLeft/Galite/pull/589)
-* Add ReportConfigurations table to be able to setup dynamic reports configuration by @adridi [APPS-01F2]
-* Remove multi-block assertion when calling VBlock.setMode by @yahiaoui [APPS-01KN]
+* Add support for types BigDecimal and Month in Galite ListDomain by @achraf-debug [#589](https://github.com/kopiLeft/Galite/pull/589)
+* Add ReportConfigurations table to be able to setup dynamic reports configuration by @achraf-debug [APPS-01F2]
+* Remove multi-block assertion when calling VBlock.setMode by @yahiaoui97 [APPS-01KN]
 
 **Full Changelog**: [1.3.3 ... 1.3.4](https://github.com/kopiLeft/Galite/compare/1.3.3...1.3.4)
 
@@ -51,7 +57,7 @@
 * Adjust and add the possibility to execute automatically the creation of tables related to the framework in the database. [#588](https://github.com/kopiLeft/Galite/pull/588)
 * Add the possibility to define trace level and isolation level when establishing a database connection with Galite. [#588](https://github.com/kopiLeft/Galite/pull/588)
 * Add the possibility to get connection info from path conf/config.properties file. [#588](https://github.com/kopiLeft/Galite/pull/588)
-* Fix : Enable click on Quit button in MenuTree by @yahiaoui [APPS-01EQ]
+* Fix : Enable click on Quit button in MenuTree by @yahiaoui97 [APPS-01EQ]
 
 **Full Changelog**: [1.3.2 ... 1.3.3](https://github.com/kopiLeft/Galite/compare/1.3.2...1.3.3)
 
