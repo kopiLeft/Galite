@@ -45,7 +45,7 @@ class MPivotTable : Serializable {
    */
   internal fun build() {
     // build accessible columns
-    columns.sortBy { it?.ident }
+    columns.sortBy { it?.ident?.substringAfter("_")?.toInt() }
     if (userRows!!.size == 0) {
       throw VNoRowException(MessageCode.getMessage("VIS-00015"))
     }

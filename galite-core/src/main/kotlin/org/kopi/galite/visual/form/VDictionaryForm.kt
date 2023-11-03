@@ -231,7 +231,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
   fun createPivotTable(b: VBlock, reportBuilder: () -> VPivotTable) {
     b.validate()
     try {
-      setWaitInfo(Message.getMessage("report_generation"))
+      setWaitInfo(Message.getMessage("pivotTable_generation"))
       val report = reportBuilder()
       report.doNotModal()
       unsetWaitInfo()
