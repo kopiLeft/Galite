@@ -429,7 +429,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
   /*** Field Triggers ***/
   inner class TriggersFieldBlock : Block("Block to test: Field Triggers", 1, 10) {
     //adding sequence to the table so we can use it when saving data to DB.
-    val t = table(TestTriggers, testTriggersSequence)
+    val t = table(TestTriggers, seq = testTriggersSequence)
 
     val id = hidden(domain = INT(20)) {
       label = "ID"

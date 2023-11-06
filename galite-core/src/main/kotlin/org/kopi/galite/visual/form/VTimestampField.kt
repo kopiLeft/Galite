@@ -310,10 +310,9 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     return when (val tmp = result[column]) {
-      is Timestamp -> tmp.toInstant()
-      is LocalDateTime -> tmp
-      is Instant -> tmp
-      else -> null
+      is Timestamp                 -> tmp.toInstant()
+      is LocalDateTime, is Instant -> tmp
+      else                         -> null
     }
   }
 
@@ -434,7 +433,7 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
           // not valid, get now
           setTimestamp(record, getCurrentTimestamp())
         }
-        setTimestamp(record, if (getTimestamp(record) is Instant) (getTimestamp(record) as? Instant)?.plusMillis(if (desc) -1 else 1)
+        setTimestamp(record, if (getTimestamp(record) is Instant?) (getTimestamp(record) as? Instant)?.plusMillis(if (desc) -1 else 1)
                              else (getTimestamp(record) as? LocalDateTime)?.plus(if (desc) -1 else 1, ChronoUnit.MILLIS))
       }
     }

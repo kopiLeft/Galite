@@ -36,7 +36,7 @@ class TasksForm : DictionaryForm(title = "Tasks", locale = Locale.UK) {
   val tasksBlock = insertBlock(Tasks())
 
   inner class Tasks : FullCalendar("Tasks") {
-    val t = table(Task, TASKId)
+    val t = table(Task, seq = TASKId)
 
     val id = hidden(INT(20)) { columns(t.id) }
     val uc = hidden(domain = INT(20)) { columns(t.uc) }

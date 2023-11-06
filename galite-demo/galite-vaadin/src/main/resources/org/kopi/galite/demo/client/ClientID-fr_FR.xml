@@ -3,7 +3,7 @@
 <insert>
     <type ident="ClientID">
         <list>
-            <listdesc column="ID" title="ID" />
+            <listdesc column="ID_CLT" title="ID" />
             <listdesc column="Name" title="Nom" />
             <listdesc column="AGE" title="Age" />
         </list>

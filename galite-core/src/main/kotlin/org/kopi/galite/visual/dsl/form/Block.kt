@@ -20,6 +20,7 @@ package org.kopi.galite.visual.dsl.form
 import java.awt.Point
 import java.sql.SQLException
 
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
@@ -147,14 +148,24 @@ open class Block(val title: String,
    * i.e tables that are associated with the first one.
    *
    * @param table     the database table
+   * @param idColumn  the ID column of table. This parameter should be an Int column only defined for the main table
    * @param seq       the sequence of the database table
    */
-  fun <T : Table> table(table: T, seq: Sequence? = null): T {
+  fun <T : Table> table(table: T, idColumn: Column<Int>? = null, seq: Sequence? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
+    idColumn?.let {
+      if (it.table != table) {
+        throw VExecFailedException(MessageCode.getMessage("VIS-00072", it.name, table.tableName))
+      }
+      if (block.tables.isNotEmpty()) {
+        throw VExecFailedException(MessageCode.getMessage("VIS-00073"))
+      }
+      block.idFieldName = idColumn.name
+    }
     seq?.let {
       if (block.tables.isNotEmpty()) {
-        throw VExecFailedException(MessageCode.getMessage("VIS-00072"))
+        throw VExecFailedException(MessageCode.getMessage("VIS-00075"))
       }
       block.sequence = seq
     }

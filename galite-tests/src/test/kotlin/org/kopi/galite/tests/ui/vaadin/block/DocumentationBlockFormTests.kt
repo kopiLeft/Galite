@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.ui.vaadin.block
 
+import java.time.LocalDateTime
+
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -35,6 +37,7 @@ import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.TestTriggers
+import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDocumentationData
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -107,6 +110,20 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
   fun `test ETCHED Border block`() {
     TODO
   }*/
+
+  @Test
+  fun `test noDetail record of type LocalDateTime`() {
+    transaction {
+      initData()
+      form.noDetailBlock.load()
+    }
+    for ( rec in 0 until form.noDetailBlock.buffer) {
+      if (form.noDetailBlock.isCurrentRecordFilled() && form.noDetailBlock.trainingDateTime[rec] != null) {
+        assertEquals(LocalDateTime::class.simpleName,
+                     form.noDetailBlock.trainingDateTime[rec]!!::class.simpleName)
+      }
+    }
+  }
 
   @Test
   fun `test NOINSERT block`() {
