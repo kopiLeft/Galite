@@ -4,7 +4,6 @@
     <!--Reports-->
     <module ident="1000" label="REPORTS" />
     <module ident="1001" label="Form with report" />
-    <module ident="1002" label="Form with pivot table" />
 
     <!--Forms-->
     <module ident="2000" label="FORMS" />

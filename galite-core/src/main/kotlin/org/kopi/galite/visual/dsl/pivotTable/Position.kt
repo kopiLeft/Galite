@@ -14,23 +14,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.pivotTable
+package org.kopi.galite.visual.dsl.pivotTable
 
-import kotlin.test.assertEquals
+import org.kopi.galite.visual.pivotTable.Constants
 
-import org.junit.Test
-import org.kopi.galite.tests.common.TestBase
-import org.kopi.galite.visual.pivotTable.VPivotTableRow
-
-class VRowTests : TestBase() {
-
-  val intData: Array<Any?> = arrayOf(1, 2, 3, 4)
-
-  @Test
-  fun vBaseRowIntTest() {
-    /**Base row containing integer data*/
-    val vBaseRowIntTest = VPivotTableRow(intData)
-
-    assertEquals(1, vBaseRowIntTest.getValueAt(0))
-  }
+enum class Position(val value: Int) {
+  MEASURE(Constants.POS_MEASURE),
+  DIMENSION_ROW(Constants.POS_DIMENSION_ROW),
+  DIMENSION_COL(Constants.POS_DIMENSION_COL),
 }

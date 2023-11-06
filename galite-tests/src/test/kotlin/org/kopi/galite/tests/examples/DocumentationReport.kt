@@ -42,11 +42,7 @@ class DocumentationReport : DictionaryForm(title = "Test Report Form", locale = 
           DocumentationReportR()
         }
       }
-      command(item = pivotTable) {
-        createPivotTable {
-          DocumentationPivotTable()
-        }
-      }
+
     }
   }
 }

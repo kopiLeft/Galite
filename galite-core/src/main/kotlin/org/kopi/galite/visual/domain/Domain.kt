@@ -75,6 +75,7 @@ import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.dsl.pivotTable.Position
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -277,11 +278,11 @@ open class Domain<T>(val width: Int? = null,
   /**
    * Builds the pivot table column model
    */
-  open fun buildPivotTableFieldModel(field: org.kopi.galite.visual.dsl.pivotTable.PivotTableField<*>): org.kopi.galite.visual.pivotTable.VPivotTableColumn {
+  open fun buildPivotTableFieldModel(field: org.kopi.galite.visual.dsl.pivotTable.PivotTableField<*>, position: Position?): org.kopi.galite.visual.pivotTable.VPivotTableColumn {
     return with(field) {
       when (kClass) {
         Int::class, Long::class, String::class, BigDecimal::class, Boolean::class, org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class, Month::class, Week::class, org.joda.time.LocalTime::class, LocalTime::class, Instant::class, LocalDateTime::class, DateTime::class ->
-          org.kopi.galite.visual.pivotTable.VPivotTableColumn(ident)
+          org.kopi.galite.visual.pivotTable.VPivotTableColumn(ident, position)
 
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }

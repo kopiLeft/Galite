@@ -20,33 +20,8 @@ package org.kopi.galite.visual.dsl.pivotTable
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.field.Field
-import org.kopi.galite.visual.pivotTable.VPivotTableColumn
 
-class PivotTableField<T>(override val domain: Domain<T>,
-                         val init: PivotTableField<T>.() -> Unit,
-                         ident: String? = null,
-                         override val source: String?) : Field<T>(domain, ident) {
-
-  /**
-   * Dimension values
-   */
-  var dimensionRow: Boolean? = null
-  var dimensionColumn: Boolean? = null
-  fun initField() {
-    init()
-  }
-
-  lateinit var model: VPivotTableColumn
-
-  fun buildPivotTableColumn(): VPivotTableColumn {
-    model = domain.buildPivotTableFieldModel(this).also { column ->
-      column.label = label ?: ""
-      column.dimensionRow = dimensionRow
-      column.dimensionColumn = dimensionColumn
-    }
-
-    return model
-  }
+abstract class PivotTableField<T>(override val domain: Domain<T>, ident: String? = null) : Field<T>(domain, ident) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

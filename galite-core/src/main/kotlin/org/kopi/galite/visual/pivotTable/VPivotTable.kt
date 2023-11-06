@@ -53,6 +53,8 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   private var pageTitle = ""
   var pivottableType = Constants.DEFAULT_RENDERER  // Default pivot table type
   var aggregator = Pair(Constants.DEFAULT_AGGREGATOR, Constants.DEFAULT_AGGREGATE_COLUMN) // default Aggregator
+  var disabledRerenders = mutableListOf<String>()
+  var interactive = Constants.MODE_INTERACTIVE
   val PIVOT_TABLE_Triggers = listOf(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
   private val activeCommands = ArrayList<VCommand>()
   var help: String? = null
@@ -80,11 +82,27 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   }
 
   /**
-   * Sets the new type of this pivot table model.
-   * @param type The new pivot table type.
+   * Sets aggregation function of this pivot table model.
+   * @param aggregate The pivot table aggregation function.
    */
   internal fun setAggregator(aggregate: Pair<String, String>) {
     aggregator = aggregate
+  }
+
+  /**
+   * Sets aggregation function of this pivot table model.
+   * @param aggregate The pivot table aggregation function.
+   */
+  internal fun setDisabledRerenders(rerenders: MutableList<String>) {
+    disabledRerenders = rerenders
+  }
+
+  /**
+   * Sets the mode of this pivot table model.
+   * @param interactive The pivot table mode.
+   */
+  internal fun setInteractive(mode: Int) {
+    interactive = mode
   }
 
   /**

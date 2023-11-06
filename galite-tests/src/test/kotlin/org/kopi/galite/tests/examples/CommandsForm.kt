@@ -71,14 +71,6 @@ class CommandsForm : DictionaryForm(title = "Commands Form", locale = Locale.UK)
     key = Key.F7
     icon = Icon.DETAIL_VIEW
   }
-  val pivottable = actor(
-    menu = actionMenu,
-    label = "Pivot table",
-    help = " Pivot table",
-  ) {
-    key = Key.F8
-    icon = Icon.REPORT
-  }
 
   val helpCmd = command(item = help) {
     showHelp()

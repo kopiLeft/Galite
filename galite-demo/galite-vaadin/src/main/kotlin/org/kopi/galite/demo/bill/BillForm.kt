@@ -42,11 +42,6 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
         BillR()
       }
     }
-    command(item = pivotTable) {
-      createPivotTable {
-        BillP()
-      }
-    }
   }
 
   class BlockBill : Block("Bills", 1, 1) {

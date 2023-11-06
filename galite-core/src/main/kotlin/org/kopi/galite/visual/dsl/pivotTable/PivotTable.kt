@@ -32,33 +32,40 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   constructor(title: String, locale: Locale? = null) : this(title, null, locale)
 
   /** Pivot table's fields. */
-  val fields = mutableListOf<PivotTableField<*>>()
-
-  var positionfield = 0
+  val dimensionListe = mutableListOf<Dimension<*>>()
+  val measureListe = mutableListOf<Measure<*>>()
 
   /** Pivot table's data rows. */
   val pivotTableRows = mutableListOf<PivotTableRow>()
 
-  /**
-   * creates and returns a field. It uses [init] method to initialize the field.
-   *
-   * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
-   */
-  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
-                                                noinline init: PivotTableField<T>.() -> Unit): PivotTableField<T> {
+
+  inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
+                                                    position: Position,
+                                                    noinline init: Dimension<T>.() -> Unit): Dimension<T> {
     domain.kClass = T::class
 
-    val field = PivotTableField(domain, init, "ANM_${fields.size}", domain.source.ifEmpty { `access$sourceFile` })
+    val dimension = Dimension(domain, init, "ANM_${dimensionListe.size}",position, domain.source.ifEmpty { `access$sourceFile` })
 
-    field.initField()
+    dimension.init()
 
-    model.model.columns.add(positionfield, field.buildPivotTableColumn())
-    fields.add(field)
-    positionfield ++
+    model.model.columns.add(dimension.buildPivotTableColumn())
+    dimensionListe.add(dimension)
 
-    return field
+    return dimension
+  }
+
+  inline fun <reified T : Comparable<T>?> measure(domain: Domain<T>,
+                                                noinline init: Measure<T>.() -> Unit): Measure<T> {
+    domain.kClass = T::class
+
+    val dimension = Measure(domain, init, "ANM_${measureListe.size}", domain.source.ifEmpty { `access$sourceFile` })
+
+    dimension.init()
+
+    model.model.columns.add(dimension.buildPivotTableColumn())
+    measureListe.add(dimension)
+
+    return dimension
   }
 
   /**
@@ -67,7 +74,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    * @param init initializes the row with values.
    */
   fun add(init: PivotTableRow.() -> Unit) {
-    val row = PivotTableRow(fields)
+    val row = PivotTableRow((dimensionListe + measureListe).toMutableList())
     row.init()
 
     val list = row.addLine()
@@ -78,7 +85,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   private fun PivotTableRow.addLine(): List<Any?> {
-    return fields.map { field ->
+    return (dimensionListe + measureListe).toMutableList().map { field ->
       data[field]
     }
   }
@@ -189,7 +196,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as PivotTableLocalizationWriter).genPivotTable(title, fields, menus, actors)
+    (writer as PivotTableLocalizationWriter).genPivotTable(title, (dimensionListe + measureListe).toMutableList(), menus, actors)
   }
 
   var pivotTableType: String
@@ -204,13 +211,28 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
       model.setAggregator(value)
     }
 
+  var disabledRerenders: MutableList<String>
+    get() = model.disabledRerenders
+  set(value) {
+    model.setDisabledRerenders(value)
+  }
+
+  var interactive: Int
+    get() = model.interactive
+    set(value) {
+      model.setInteractive(value)
+    }
+
   // ----------------------------------------------------------------------
   // Pivot table MODEL
   // ----------------------------------------------------------------------
   override val model: VPivotTable = object : VPivotTable() {
 
     override fun init() {
-      fields.forEach {
+      dimensionListe.forEach {
+        it.initField()
+      }
+      measureListe.forEach {
         it.initField()
       }
     }

@@ -68,7 +68,7 @@ allprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
     _java {
-      withJavadocJar()
+      //withJavadocJar()
       withSourcesJar()
     }
 

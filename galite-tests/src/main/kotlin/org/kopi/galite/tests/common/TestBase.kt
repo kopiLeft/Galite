@@ -24,11 +24,7 @@ import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.UChart
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.pivotTable.PivotTable
 import org.kopi.galite.visual.dsl.report.Report
-import org.kopi.galite.visual.pivotTable.MPivotTable
-import org.kopi.galite.visual.pivotTable.UPivotTable
-import org.kopi.galite.visual.pivotTable.VPivotTable
 import org.kopi.galite.visual.report.MReport
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
@@ -49,8 +45,6 @@ open class TestBase {
   open fun getReportDisplay(model: VReport): UComponent? = null
 
   open fun getChartDisplay(model: VChart): UComponent? = null
-
-  open fun getPivotTableDisplay(model: VPivotTable): UComponent? = null
 
   /**
    * Tests operation on a report.
@@ -89,26 +83,6 @@ open class TestBase {
 
     if (operations != null) {
       chart.operations(chart.model)
-    }
-  }
-
-  /**
-   * Tests operation on a pivot table.
-   *
-   * @param pivotTable The pivot table to test
-   * @param operations operations to apply on the pivot table
-   */
-  fun <T: PivotTable> withPivotTable(pivotTable: T, operations: (T.(model: MPivotTable) -> Unit)? = null) {
-    val display = getPivotTableDisplay(pivotTable.model)
-
-      //assertNotNull(display)
-
-    pivotTable.model.setDisplay(
-      (display as UPivotTable)
-    )
-
-    if (operations != null) {
-      pivotTable.operations(pivotTable.model.model)
     }
   }
 

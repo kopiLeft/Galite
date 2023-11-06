@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.pivotTable
 
 import com.vaadin.flow.component.dependency.CssImport
+import org.kopi.galite.visual.dsl.pivotTable.Position
 import org.kopi.galite.visual.pivotTable.MPivotTable
 import org.kopi.galite.visual.pivotTable.UPivotTable
 import org.kopi.galite.visual.pivotTable.VPivotTable
@@ -32,8 +33,8 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   // DATA MEMBERS
   //---------------------------------------------------
   private val model: MPivotTable = pivotTable.model // pivot table model
-  private var pivotData = PivotTable.PivotData()
-  private var pivotOptions = PivotTable.PivotOptions()
+  private val pivotData = PivotTable.PivotData()
+  private val pivotOptions = PivotTable.PivotOptions()
   private val listeDimensionRows = mutableListOf<String>()
   private val listeDimensionColumns = mutableListOf<String>()
 
@@ -53,10 +54,10 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     model.columns
       .forEach {
         pivotData.addColumn(it?.label, it?.javaClass)
-        if (it?.dimensionRow == true) {
+        if (it?.position == Position.DIMENSION_ROW) {
           listeDimensionRows.add(it.label)
         }
-        if (it?.dimensionColumn == true) {
+        if (it?.position == Position.DIMENSION_COL) {
           listeDimensionColumns.add(it.label)
         }
       }
@@ -67,15 +68,30 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         pivotData.addRow(*rows.toTypedArray())
       }
 
+    // Pivot table dimension
     pivotOptions.setRows(*listeDimensionRows.toTypedArray())
     pivotOptions.setCols(*listeDimensionColumns.toTypedArray())
+
+    // Pivot table default renderer
     pivotOptions.setRenderer(pivotTable.pivottableType)
+
+    // Pivot table aggregate function
     pivotOptions.setAggregator(pivotTable.aggregator.first, pivotTable.aggregator.second)
 
+    // Pivot table renderer
     if(listeDimensionRows.isNotEmpty() && listeDimensionColumns.isNotEmpty()) {
       pivotOptions.setCharts(true)
     }
-    val pivot = PivotTable(pivotData, pivotOptions, PivotTable.PivotMode.INTERACTIVE)
+    pivotOptions.setDisabledRenderers(*pivotTable.disabledRerenders.toTypedArray())
+
+    // Pivot table mode
+    val pivotMode = if(pivotTable.interactive == 0) {
+      PivotTable.PivotMode.INTERACTIVE
+    } else {
+      PivotTable.PivotMode.NONINTERACTIVE
+    }
+
+    val pivot = PivotTable(pivotData, pivotOptions, pivotMode)
 
     add(pivot)
   }

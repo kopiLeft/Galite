@@ -42,11 +42,6 @@ class StockForm : DictionaryForm(title = "Stocks", locale = Locale.UK) {
         StockR()
       }
     }
-    command(item = pivotTable) {
-      createPivotTable {
-        StockP()
-      }
-    }
   }
 
   class StockBlock : Block("Stock", 1, 1) {

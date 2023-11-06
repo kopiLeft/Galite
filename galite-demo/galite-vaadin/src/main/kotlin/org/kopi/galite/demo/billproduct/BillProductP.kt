@@ -30,15 +30,15 @@ import org.kopi.galite.visual.dsl.pivotTable.PivotTable
  */
 class BillProductP : PivotTable("Bill Product Report", Locale.UK) {
 
-  val quantity = field(INT(25)) {
+  val quantity = measure(INT(25)) {
     label = "Quantity"
   }
 
-  val amount = field(DECIMAL(25, 10)) {
+  val amount = measure(DECIMAL(25, 10)) {
     label = "Amount before tax"
 
   }
-  val amountWithTaxes = field(DECIMAL(50, 10)) {
+  val amountWithTaxes = measure(DECIMAL(50, 10)) {
     label = "Amount all taxes included"
   }
 

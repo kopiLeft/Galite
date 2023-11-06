@@ -41,11 +41,6 @@ class ProviderForm : DictionaryForm(title = "Providers", locale = Locale.UK) {
         ProviderR()
       }
     }
-    command(item = pivotTable) {
-      createPivotTable {
-        ProviderP()
-      }
-    }
   }
 
   class BlockProvider : Block("Providers", 1, 1) {

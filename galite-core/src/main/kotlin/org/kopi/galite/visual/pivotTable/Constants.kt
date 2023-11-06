@@ -20,6 +20,8 @@ package org.kopi.galite.visual.pivotTable
 
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.Constants
+import org.vaadin.addons.componentfactory.PivotTable.Renderer
+import org.vaadin.addons.componentfactory.PivotTable.Aggregator
 
 /**
  * Collects some constants for the pivot table implementation
@@ -27,39 +29,46 @@ import org.kopi.galite.visual.Constants
 interface Constants : Constants {
   companion object {
     // ---------------------------------------------------------------------
+    // PIVOT TABLE POSITION
+    // ---------------------------------------------------------------------
+    const val POS_MEASURE = 0
+    const val POS_DIMENSION_ROW = 1
+    const val POS_DIMENSION_COL = 2
+
+    // ---------------------------------------------------------------------
     // PIVOT TABLE RENDERER
     // ---------------------------------------------------------------------
-    const val DEFAULT_RENDERER = "Table"
-    const val TABLE_BARCHART = "Table Barchart"
-    const val TABLE_HEATMAP = "Heatmap"
-    const val ROW_HEATMAP = "Row Heatmap"
-    const val COL_HEATMAP = "Col Heatmap"
-    const val HORIZONTAL_BAR_CHART = "Horizontal Bar Chart"
-    const val HORIZONTAL_STACKED_BAR_CHART = "Horizontal Stacked Bar Chart"
-    const val BAR_CHART = "Bar Chart"
-    const val STACKED_BAR_CHART = "Stacked Bar Chart"
-    const val LINE_CHART = "Line Chart"
-    const val AREA_CHART = "Area Chart"
-    const val SCATTER_CHART = "Scatter Chart"
-    const val TSV_EXPORT = "TSV Export"
+    const val DEFAULT_RENDERER = Renderer.TABLE
+    const val TABLE_BARCHART = Renderer.TABLE_BARCHART
+    const val TABLE_HEATMAP = Renderer.TABLE_HEATMAP
+    const val ROW_HEATMAP = Renderer.ROW_HEATMAP
+    const val COL_HEATMAP = Renderer.COL_HEATMAP
+    const val HORIZONTAL_BAR_CHART = Renderer.HORIZONTAL_BAR_CHART
+    const val HORIZONTAL_STACKED_BAR_CHART = Renderer.HORIZONTAL_STACKED_BAR_CHART
+    const val BAR_CHART = Renderer.BAR_CHART
+    const val STACKED_BAR_CHART = Renderer.STACKED_BAR_CHART
+    const val LINE_CHART = Renderer.LINE_CHART
+    const val AREA_CHART = Renderer.AREA_CHART
+    const val SCATTER_CHART = Renderer.SCATTER_CHART
+    const val TSV_EXPORT = Renderer.TSV_EXPORT
 
     // ---------------------------------------------------------------------
     // PIVOT TABLE Aggregator
     // ---------------------------------------------------------------------
-    const val DEFAULT_AGGREGATOR = "Count"
+    const val DEFAULT_AGGREGATOR = Aggregator.COUNT
     const val DEFAULT_AGGREGATE_COLUMN = ""
-    const val COUNT_UNIQUE_VALUES = "Count Unique Values"
-    const val LIST_UNIQUE_VALUES = "List Unique Values"
-    const val SUM = "Sum"
-    const val INTEGER_SUM = "Integer Sum"
-    const val AVERAGE = "Average"
-    const val MEDIAN = "Median"
-    const val SAMPLE_VARIANCE = "Sample Variance"
-    const val SAMPLE_STANDARD_DEVIATION = "Sample Standard Deviation"
-    const val MINIMUM = "Minimum"
-    const val MAXIMUM = "Maximum"
-    const val FIRST = "First"
-    const val LAST = "Last"
+    const val COUNT_UNIQUE_VALUES = Aggregator.COUNT_UNIQUE_VALUES
+    const val LIST_UNIQUE_VALUES = Aggregator.LIST_UNIQUE_VALUES
+    const val SUM = Aggregator.SUM
+    const val INTEGER_SUM = Aggregator.INTEGER_SUM
+    const val AVERAGE = Aggregator.AVERAGE
+    const val MEDIAN = Aggregator.MEDIAN
+    const val SAMPLE_VARIANCE = Aggregator.SAMPLE_VARIANCE
+    const val SAMPLE_STANDARD_DEVIATION = Aggregator.SAMPLE_STANDARD_DEVIATION
+    const val MINIMUM = Aggregator.MINIMUM
+    const val MAXIMUM = Aggregator.MAXIMUM
+    const val FIRST = Aggregator.FIRST
+    const val LAST = Aggregator.LAST
     const val SUM_OVER_SUM = "Sum Over Sum"
     const val UPPER_BOUND = "80% Upper Bound"
     const val LOWER_BOUND = "80% Lower Bound"
@@ -69,6 +78,12 @@ interface Constants : Constants {
     const val COUNT_FRACTION_TOTALS = "Count as Fraction of Total"
     const val COUNT_FRACTION_ROWS = "Count as Fraction of Rows"
     const val COUNT_FRACTION_COLUMNS = "Count as Fraction of Columns"
+
+    // ---------------------------------------------------------------------
+    // PIVOT TABLE MODE
+    // ---------------------------------------------------------------------
+    const val MODE_INTERACTIVE = 0
+    const val MODE_NONINTERACTIVE = 1
 
     // ---------------------------------------------------------------------
     // TRIGGERED EVENTS

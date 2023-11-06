@@ -23,8 +23,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.TaxRule
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivotTable.PivotTable
 
 /**
@@ -34,11 +32,11 @@ class TaxRuleP : PivotTable(title = "TaxRules_Report", locale = Locale.UK) {
 
   val action = menu("Action")
 
-  val taxName = field(STRING(50)) {
+  val taxName = measure(STRING(50)) {
     label = "Name"
   }
 
-  val rate = field(INT(25)) {
+  val rate = measure(INT(25)) {
     label = "Rate in %"
   }
 
