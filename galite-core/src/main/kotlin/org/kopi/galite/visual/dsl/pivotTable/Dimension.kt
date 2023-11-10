@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@ package org.kopi.galite.visual.dsl.pivotTable
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.pivotTable.Constants
 import org.kopi.galite.visual.pivotTable.VPivotTableColumn
 
 class Dimension<T>(override val domain: Domain<T>,
@@ -49,5 +50,15 @@ class Dimension<T>(override val domain: Domain<T>,
    */
   override fun genLocalization(writer: LocalizationWriter) {
     (writer as PivotTableLocalizationWriter).genField(ident, label, help)
+  }
+
+  // ----------------------------------------------------------------------
+  // POSITION CLASS
+  // ----------------------------------------------------------------------
+
+  enum class Position(val value: Int) {
+      NONE(Constants.DIMENSION_NO_POSITION),
+      ROW(Constants.DIMENSION_ROW),
+      COLUMN(Constants.DIMENSION_COLUMN),
   }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,9 +40,9 @@ class VHelpGenerator : VHelpGenerator() {
    * prints a compilation unit
    */
   fun helpOnPivotTable(name: String,
-                      commands: List<VCommand>,
-                      model: MPivotTable,
-                      help: String?): String? {
+                       commands: List<VCommand>,
+                       model: MPivotTable,
+                       help: String?): String? {
     return try {
       val file: File = Utils.getTempFile(name.replace("[:\\\\/*\"?|<>']".toRegex(), " "), "htm")
       printer = PrintWriter(BufferedWriter(OutputStreamWriter(FileOutputStream(file), "UTF-8")))

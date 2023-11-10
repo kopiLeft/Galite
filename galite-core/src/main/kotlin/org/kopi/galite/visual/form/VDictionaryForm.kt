@@ -228,12 +228,12 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
   /**
    * Implements interface for COMMAND CreatePivotTable
    */
-  fun createPivotTable(b: VBlock, reportBuilder: () -> VPivotTable) {
+  fun createPivotTable(b: VBlock, pivotTableBuilder: () -> VPivotTable) {
     b.validate()
     try {
       setWaitInfo(Message.getMessage("pivotTable_generation"))
-      val report = reportBuilder()
-      report.doNotModal()
+      val pivotTable = pivotTableBuilder()
+      pivotTable.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoRowException) {
       unsetWaitInfo()

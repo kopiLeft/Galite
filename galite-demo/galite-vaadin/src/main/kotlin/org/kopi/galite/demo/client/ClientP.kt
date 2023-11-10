@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo.client
 
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.alias
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
@@ -26,9 +28,10 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.dsl.pivotTable.Dimension.Position
 import org.kopi.galite.visual.dsl.pivotTable.PivotTable
-import org.kopi.galite.visual.dsl.pivotTable.Position
-import org.kopi.galite.visual.pivotTable.Constants
+import org.vaadin.addons.componentfactory.PivotTable.Aggregator
+import org.vaadin.addons.componentfactory.PivotTable.Renderer
 
 /**
  * Client Report
@@ -55,32 +58,32 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
   }
 
 
-  val firstName = dimension(STRING(25), Position.DIMENSION_ROW) {
+  val firstName = dimension(STRING(25), Position.ROW) {
     label = "First Name"
     help = "The client first name"
   }
 
-  val lastName = dimension(STRING(25), Position.DIMENSION_ROW) {
+  val lastName = dimension(STRING(25), Position.ROW) {
     label = "Last Name"
     help = "The client last name"
   }
 
-  val addressClt = dimension(STRING(50), Position.DIMENSION_ROW) {
+  val addressClt = dimension(STRING(50), Position.ROW) {
     label = "Address"
     help = "The client address"
   }
 
-  val ageClt = dimension(INT(2), Position.DIMENSION_COL) {
+  val ageClt = dimension(INT(2), Position.COLUMN) {
     label = "Age"
     help = "The client age"
   }
 
-  val countryClt = dimension(STRING(50), Position.DIMENSION_ROW) {
+  val countryClt = dimension(STRING(50), Position.ROW) {
     label = "Country"
     help = "The client country"
   }
 
-  val cityClt = dimension(STRING(50), Position.MEASURE) {
+  val cityClt = dimension(STRING(50), Position.NONE) {
     label = "City"
     help = "The client city"
   }
@@ -95,10 +98,10 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     help = "Is the client active?"
   }
 
-  val init = trigger(INITPIVOTTABLE) {
-    pivotTableType = Constants.DEFAULT_RENDERER
-    aggregator = Pair(Constants.SAMPLE_VARIANCE, Constants.DEFAULT_AGGREGATE_COLUMN)
-    disabledRerenders = mutableListOf(Constants.SCATTER_CHART, Constants.LINE_CHART, Constants.HORIZONTAL_BAR_CHART, Constants.HORIZONTAL_STACKED_BAR_CHART)
+  val init = trigger(INIT) {
+    defaultRenderer = Renderer.TABLE
+    aggregator = Pair(Aggregator.SAMPLE_VARIANCE, "")
+    disabledRerenders = mutableListOf(Renderer.SCATTER_CHART, Renderer.LINE_CHART, Renderer.HORIZONTAL_BAR_CHART, Renderer.HORIZONTAL_STACKED_BAR_CHART)
     //interactive = Constants.MODE_NONINTERACTIVE
   }
 

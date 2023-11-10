@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,40 +33,34 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   constructor(title: String, locale: Locale? = null) : this(title, null, locale)
 
   /** Pivot table's fields. */
-  val dimensionListe = mutableListOf<Dimension<*>>()
-  val measureListe = mutableListOf<Measure<*>>()
+  val dimensions = mutableListOf<Dimension<*>>()
+  val measures = mutableListOf<Measure<*>>()
 
   /** Pivot table's data rows. */
-  val pivotTableRows = mutableListOf<PivotTableRow>()
+  val rows = mutableListOf<PivotTableRow>()
 
 
   inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
-                                                    position: Position,
+                                                    position: Dimension.Position,
                                                     noinline init: Dimension<T>.() -> Unit): Dimension<T> {
     domain.kClass = T::class
-
-    val dimension = Dimension(domain, init, "ANM_${dimensionListe.size}",position, domain.source.ifEmpty { `access$sourceFile` })
-
+    val dimension = Dimension(domain, init, "ANM_${(dimensions + measures).size}", position, domain.source.ifEmpty { `access$sourceFile` })
     dimension.init()
-
     model.model.columns.add(dimension.buildPivotTableColumn())
-    dimensionListe.add(dimension)
+    dimensions.add(dimension)
 
     return dimension
   }
 
   inline fun <reified T : Comparable<T>?> measure(domain: Domain<T>,
-                                                noinline init: Measure<T>.() -> Unit): Measure<T> {
+                                                  noinline init: Measure<T>.() -> Unit): Measure<T> {
     domain.kClass = T::class
+    val measure = Measure(domain, init, "ANM_${(dimensions + measures).size}", domain.source.ifEmpty { `access$sourceFile` })
+    measure.init()
+    model.model.columns.add(measure.buildPivotTableColumn())
+    measures.add(measure)
 
-    val dimension = Measure(domain, init, "ANM_${measureListe.size}", domain.source.ifEmpty { `access$sourceFile` })
-
-    dimension.init()
-
-    model.model.columns.add(dimension.buildPivotTableColumn())
-    measureListe.add(dimension)
-
-    return dimension
+    return measure
   }
 
   /**
@@ -74,18 +69,17 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    * @param init initializes the row with values.
    */
   fun add(init: PivotTableRow.() -> Unit) {
-    val row = PivotTableRow((dimensionListe + measureListe).toMutableList())
+    val row = PivotTableRow((dimensions + measures).toMutableList())
     row.init()
 
     val list = row.addLine()
-    // Last null value is added for the separator column
-    model.model.addLine((list + listOf(null)).toTypedArray())
+    model.model.addLine(list.toTypedArray())
 
-    pivotTableRows.add(row)
+    rows.add(row)
   }
 
   private fun PivotTableRow.addLine(): List<Any?> {
-    return (dimensionListe + measureListe).toMutableList().map { field ->
+    return (dimensions + measures).toMutableList().map { field ->
       data[field]
     }
   }
@@ -101,7 +95,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     val pivotTableAction = Action(null, method)
     val trigger = FormTrigger(event, pivotTableAction)
 
-    triggers.add(trigger)
+    triggers.add(FormTrigger(event, Action(null, method)))
 
     // PIVOT TABLE TRIGGERS
     triggers.forEach { trigger ->
@@ -131,29 +125,17 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<PivotTableField<*>, Any?> = pivotTableRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<PivotTableField<*>, Any?> = rows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
    *
    * @param field the field.
    */
-  fun getRowsForField(field: PivotTableField<*>) = pivotTableRows.map { it.data[field] }
-  /**
-   * Adds default Pivot table commands
-   */
-  open val pivotTableCommands = false
+  fun getRowsForField(field: PivotTableField<*>) = rows.map { it.data[field] }
 
   fun setMenu() {
     model.setMenu()
-  }
-
-  // ----------------------------------------------------------------------
-  // Command
-  // ----------------------------------------------------------------------
-
-  fun addDefaultPivotTableCommands() {
-    model.addDefaultPivotTableCommands()
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -171,7 +153,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    * Executed at pivot table initialization.
    */
 
-  val INITPIVOTTABLE = PivotTableTriggerEvent<Unit>(Constants.TRG_INIT)
+  val INIT = PivotTableTriggerEvent<Unit>(Constants.TRG_INIT)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
@@ -196,13 +178,13 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as PivotTableLocalizationWriter).genPivotTable(title, (dimensionListe + measureListe).toMutableList(), menus, actors)
+    (writer as PivotTableLocalizationWriter).genPivotTable(title, (dimensions + measures).toMutableList(), menus, actors)
   }
 
-  var pivotTableType: String
-    get() = model.pivottableType
+  var defaultRenderer: String
+    get() = model.defaultRenderer
     set(value) {
-      model.setType(value)
+      model.setDefaultRenderer(value)
     }
 
   var aggregator: Pair<String, String>
@@ -229,10 +211,10 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   override val model: VPivotTable = object : VPivotTable() {
 
     override fun init() {
-      dimensionListe.forEach {
+      dimensions.forEach {
         it.initField()
       }
-      measureListe.forEach {
+      measures.forEach {
         it.initField()
       }
     }
@@ -245,10 +227,6 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     model.setPageTitle(title)
     model.help = help
     model.source = sourceFile
-
-    if (pivotTableCommands) {
-      addDefaultPivotTableCommands()
-    }
   }
 
   @PublishedApi

@@ -23,7 +23,7 @@
   <message ident="printing" text="Impression en cours." />
   <message ident="report_generation" text="Construction du rapport en cours." />
   <message ident="chart_generation" text="Construction du chart en cours." />
-  <message ident="pivotTable_generation" text="Construction du table pivot en cours." />
+  <message ident="pivotTable_generation" text="Construction de la table pivot en cours." />
 <!-- INFO TEXTS-->
   <message ident="saved_successfully" text="Données enregistrées." />
 <!-- QUESTIONS-->

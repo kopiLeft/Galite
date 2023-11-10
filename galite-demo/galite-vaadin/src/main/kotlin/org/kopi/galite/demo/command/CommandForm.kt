@@ -50,7 +50,6 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
       }
     }
 
-
     command(item = list) {
       recursiveQuery()
     }

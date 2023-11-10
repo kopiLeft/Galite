@@ -124,6 +124,10 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
     VDynamicReport.createDynamicReport(this.block)
   }
 
+  /**
+   * create a pivot table for this form
+   */
+
   protected fun Block.createPivotTable(reportbuilder: () -> PivotTable) {
     model.createPivotTable(block) {
       reportbuilder().model

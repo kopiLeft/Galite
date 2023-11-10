@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.pivotTable
 
 import com.vaadin.flow.component.dependency.CssImport
-import org.kopi.galite.visual.dsl.pivotTable.Position
+import org.kopi.galite.visual.dsl.pivotTable.Dimension.Position
 import org.kopi.galite.visual.pivotTable.MPivotTable
 import org.kopi.galite.visual.pivotTable.UPivotTable
 import org.kopi.galite.visual.pivotTable.VPivotTable
@@ -35,8 +35,8 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val model: MPivotTable = pivotTable.model // pivot table model
   private val pivotData = PivotTable.PivotData()
   private val pivotOptions = PivotTable.PivotOptions()
-  private val listeDimensionRows = mutableListOf<String>()
-  private val listeDimensionColumns = mutableListOf<String>()
+  private val rows = mutableListOf<String>()
+  private val columns = mutableListOf<String>()
 
   init {
     getModel()!!.setDisplay(this)
@@ -51,41 +51,39 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   }
 
   override fun build() {
-    model.columns
-      .forEach {
-        pivotData.addColumn(it?.label, it?.javaClass)
-        if (it?.position == Position.DIMENSION_ROW) {
-          listeDimensionRows.add(it.label)
-        }
-        if (it?.position == Position.DIMENSION_COL) {
-          listeDimensionColumns.add(it.label)
-        }
+    model.columns.forEach {
+      pivotData.addColumn(it?.label, it?.javaClass)
+      if (it?.position == Position.ROW) {
+        rows.add(it.label)
       }
+      if (it?.position == Position.COLUMN) {
+        columns.add(it.label)
+      }
+    }
 
     model.userRows
       ?.flatMap { it.data.filterNotNull() }
       ?.chunked(model.columns.count()) { rows ->
-        pivotData.addRow(*rows.toTypedArray())
-      }
+        pivotData.addRow(*rows.toTypedArray())}
 
     // Pivot table dimension
-    pivotOptions.setRows(*listeDimensionRows.toTypedArray())
-    pivotOptions.setCols(*listeDimensionColumns.toTypedArray())
+    pivotOptions.setRows(*rows.toTypedArray())
+    pivotOptions.setCols(*columns.toTypedArray())
 
     // Pivot table default renderer
-    pivotOptions.setRenderer(pivotTable.pivottableType)
+    pivotOptions.setRenderer(pivotTable.defaultRenderer)
 
     // Pivot table aggregate function
     pivotOptions.setAggregator(pivotTable.aggregator.first, pivotTable.aggregator.second)
 
     // Pivot table renderer
-    if(listeDimensionRows.isNotEmpty() && listeDimensionColumns.isNotEmpty()) {
+    if(rows.isNotEmpty() && columns.isNotEmpty()) {
       pivotOptions.setCharts(true)
     }
     pivotOptions.setDisabledRenderers(*pivotTable.disabledRerenders.toTypedArray())
 
     // Pivot table mode
-    val pivotMode = if(pivotTable.interactive == 0) {
+    val pivotMode = if (pivotTable.interactive == 0) {
       PivotTable.PivotMode.INTERACTIVE
     } else {
       PivotTable.PivotMode.NONINTERACTIVE

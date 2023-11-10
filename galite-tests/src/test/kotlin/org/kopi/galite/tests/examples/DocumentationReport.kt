@@ -21,9 +21,9 @@ import java.util.Locale
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.ReportSelectionForm
 
-class DocumentationReport : DictionaryForm(title = "Test Report Form", locale = Locale.UK) {
+class DocumentationReport : ReportSelectionForm(title = "Test Report Form", locale = Locale.UK) {
 
   //Menus Definition
 
@@ -42,7 +42,6 @@ class DocumentationReport : DictionaryForm(title = "Test Report Form", locale = 
           DocumentationReportR()
         }
       }
-
     }
   }
 }

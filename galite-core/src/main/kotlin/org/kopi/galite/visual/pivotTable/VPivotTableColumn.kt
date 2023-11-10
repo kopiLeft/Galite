@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual.pivotTable
 
-import org.kopi.galite.visual.dsl.pivotTable.Position
+import org.kopi.galite.visual.dsl.pivotTable.Dimension
 import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.l10n.PivotTableLocalizer
 
@@ -28,7 +28,7 @@ import org.kopi.galite.visual.l10n.PivotTableLocalizer
  * @param    ident        The identifier of the field
  *
  */
-class VPivotTableColumn(val ident: String?, val position: Position?) {
+class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

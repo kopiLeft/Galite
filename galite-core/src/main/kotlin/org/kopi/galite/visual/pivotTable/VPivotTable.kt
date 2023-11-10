@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,13 +18,15 @@
 
 package org.kopi.galite.visual.pivotTable
 
+import java.io.File
+import java.net.MalformedURLException
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.dsl.common.Trigger
-import java.io.File
-import java.net.MalformedURLException
+import org.vaadin.addons.componentfactory.PivotTable.*
 
 /**
  * Represents a pivot table model.
@@ -51,8 +53,8 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   val model: MPivotTable = MPivotTable()
   private var built = false
   private var pageTitle = ""
-  var pivottableType = Constants.DEFAULT_RENDERER  // Default pivot table type
-  var aggregator = Pair(Constants.DEFAULT_AGGREGATOR, Constants.DEFAULT_AGGREGATE_COLUMN) // default Aggregator
+  var defaultRenderer = Renderer.TABLE  // Default pivot table type
+  var aggregator = Pair(Aggregator.COUNT, "") // default Aggregator
   var disabledRerenders = mutableListOf<String>()
   var interactive = Constants.MODE_INTERACTIVE
   val PIVOT_TABLE_Triggers = listOf(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
@@ -64,7 +66,6 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   /**
    * Close window
    */
-  @Deprecated("call method in display; model must not be closed")
   fun close() {
     getDisplay()!!.closeWindow()
   }
@@ -77,8 +78,8 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
    * Sets the new type of this pivot table model.
    * @param type The new pivot table type.
    */
-  internal fun setType(type: String) {
-    pivottableType = type
+  internal fun setDefaultRenderer(renderer: String) {
+    defaultRenderer = renderer
   }
 
   /**

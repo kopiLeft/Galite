@@ -16,7 +16,6 @@
  */
 package org.kopi.galite.demo.product
 
-import org.kopi.galite.demo.command.CommandR
 import java.util.Locale
 
 import org.kopi.galite.demo.database.Product

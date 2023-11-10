@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,9 +30,9 @@ class MPivotTable : Serializable {
   // Columns contains all columns defined by the user
   var columns = mutableListOf<VPivotTableColumn?>()    // array of column definitions
 
-
   // Baserows contains data give by the request of the user
-  internal var userRows: ArrayList<VPivotTableRow>? = ArrayList(500)
+  internal var userRows: ArrayList<VPivotTableRow>? = ArrayList()
+
   /**
    * Add a row to the list of rows defined by the user
    */

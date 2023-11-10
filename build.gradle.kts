@@ -48,8 +48,6 @@ subprojects {
   dependencies {
     "implementation"(kotlin("stdlib"))
     "implementation"(kotlin("reflect"))
-    // Pivot Table dependency
-    "implementation"("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
   }
 
   tasks.withType<JavaCompile> {
@@ -68,7 +66,7 @@ allprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
     _java {
-      //withJavadocJar()
+      withJavadocJar()
       withSourcesJar()
     }
 
