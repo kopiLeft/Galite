@@ -15,13 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.pivotTable
+package org.kopi.galite.visual.ui.vaadin.pivottable
 
 import com.vaadin.flow.component.dependency.CssImport
-import org.kopi.galite.visual.dsl.pivotTable.Dimension.Position
-import org.kopi.galite.visual.pivotTable.MPivotTable
-import org.kopi.galite.visual.pivotTable.UPivotTable
-import org.kopi.galite.visual.pivotTable.VPivotTable
+import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
+import org.kopi.galite.visual.pivottable.MPivotTable
+import org.kopi.galite.visual.pivottable.UPivotTable
+import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 
 import org.vaadin.addons.componentfactory.PivotTable

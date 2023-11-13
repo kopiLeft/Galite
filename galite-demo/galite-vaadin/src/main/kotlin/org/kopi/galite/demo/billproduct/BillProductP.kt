@@ -23,7 +23,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.BillProduct
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.pivotTable.PivotTable
+import org.kopi.galite.visual.dsl.pivottable.PivotTable
 
 /**
  * Products Bill Report

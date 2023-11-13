@@ -15,38 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.pivotTable
 
-import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.pivotTable.VPivotTableColumn
+package org.kopi.galite.visual.pivottable
 
-class Measure<T>(override val domain: Domain<T>,
-                 val init: Measure<T>.() -> Unit,
-                 ident: String? = null,
-                 override val source: String?) : PivotTableField<T>(domain, ident) {
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.PivotTableLocalizer
 
-  fun initField() {
-    init()
-  }
-
-  lateinit var model: VPivotTableColumn
-
-  fun buildPivotTableColumn(): VPivotTableColumn {
-    model = domain.buildPivotTableFieldModel(this, Dimension.Position.NONE).also { column ->
-      column.label = label ?: ""
-    }
-
-    return model
-  }
+/**
+ * Represents a pivot table column description
+ *
+ * @param    ident        The identifier of the field
+ *
+ */
+class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
 
   // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  var label: String = ""
+  var help: String? = null
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
   // ----------------------------------------------------------------------
   /**
-   * Generates localization for the field in the xml file
+   * Localizes this field
+   *
+   * @param     parent         the caller localizer
    */
-  override fun genLocalization(writer: LocalizationWriter) {
-    (writer as PivotTableLocalizationWriter).genField(ident, label, help)
+  fun localize(parent: PivotTableLocalizer) {
+    if (ident != "") {
+      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
+
+      label = loc.getLabel() ?: ""
+    }
+  }
+
+  fun helpOnColumn(help: VHelpGenerator) {
+    help.helpOnColumn(label, this.help)
   }
 }

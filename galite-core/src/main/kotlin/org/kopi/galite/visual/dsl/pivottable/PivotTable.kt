@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.dsl.pivotTable
+package org.kopi.galite.visual.dsl.pivottable
 
 import java.io.IOException
 import java.util.Locale
@@ -25,8 +25,8 @@ import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.*
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.pivotTable.Constants
-import org.kopi.galite.visual.pivotTable.VPivotTable
+import org.kopi.galite.visual.pivottable.Constants
+import org.kopi.galite.visual.pivottable.VPivotTable
 
 abstract class PivotTable(title: String, val help: String?, locale: Locale? = null) : Window(title, locale) {
 

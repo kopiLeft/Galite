@@ -39,9 +39,9 @@ import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.report.*
-import org.kopi.galite.visual.dsl.pivotTable.Dimension
-import org.kopi.galite.visual.dsl.pivotTable.PivotTableField
-import org.kopi.galite.visual.pivotTable.VPivotTableColumn
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.dsl.pivottable.PivotTableField
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
 
 /**
  * A domain is a data type with predefined list of allowed values.

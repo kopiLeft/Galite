@@ -15,21 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.pivotTable
 
-import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.field.Field
+package org.kopi.galite.visual.pivottable
 
-abstract class PivotTableField<T>(override val domain: Domain<T>, ident: String? = null) : Field<T>(domain, ident) {
+import javax.swing.tree.DefaultMutableTreeNode
 
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
+class VPivotTableRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
+
   /**
-   * Generates localization for the field in the xml file
+   * Return the object at column
+   *
+   * @param        column                the index of the column
+   * @return        the object to be displayed
    */
-  override fun genLocalization(writer: LocalizationWriter) {
-    (writer as PivotTableLocalizationWriter).genField(ident, label, help)
+  fun getValueAt(column: Int): Any? = data[column]
+
+  companion object {
+    private const val serialVersionUID = 0L
   }
 }

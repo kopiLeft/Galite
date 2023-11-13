@@ -15,44 +15,38 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.visual.dsl.pivottable
 
-package org.kopi.galite.visual.pivotTable
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
 
-import org.kopi.galite.visual.dsl.pivotTable.Dimension
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.l10n.PivotTableLocalizer
+class Measure<T>(override val domain: Domain<T>,
+                 val init: Measure<T>.() -> Unit,
+                 ident: String? = null,
+                 override val source: String?) : PivotTableField<T>(domain, ident) {
 
-/**
- * Represents a pivot table column description
- *
- * @param    ident        The identifier of the field
- *
- */
-class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  var label: String = ""
-  var help: String? = null
-
-  // ----------------------------------------------------------------------
-  // LOCALIZATION
-  // ----------------------------------------------------------------------
-  /**
-   * Localizes this field
-   *
-   * @param     parent         the caller localizer
-   */
-  fun localize(parent: PivotTableLocalizer) {
-    if (ident != "") {
-      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
-
-      label = loc.getLabel() ?: ""
-    }
+  fun initField() {
+    init()
   }
 
-  fun helpOnColumn(help: VHelpGenerator) {
-    help.helpOnColumn(label, this.help)
+  lateinit var model: VPivotTableColumn
+
+  fun buildPivotTableColumn(): VPivotTableColumn {
+    model = domain.buildPivotTableFieldModel(this, Dimension.Position.NONE).also { column ->
+      column.label = label ?: ""
+    }
+
+    return model
+  }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * Generates localization for the field in the xml file
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as PivotTableLocalizationWriter).genField(ident, label, help)
   }
 }

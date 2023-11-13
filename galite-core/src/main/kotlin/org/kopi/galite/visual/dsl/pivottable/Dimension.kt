@@ -15,12 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.dsl.pivotTable
+package org.kopi.galite.visual.dsl.pivottable
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.pivotTable.Constants
-import org.kopi.galite.visual.pivotTable.VPivotTableColumn
+import org.kopi.galite.visual.pivottable.Constants
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
 
 class Dimension<T>(override val domain: Domain<T>,
                    val init: Dimension<T>.() -> Unit,

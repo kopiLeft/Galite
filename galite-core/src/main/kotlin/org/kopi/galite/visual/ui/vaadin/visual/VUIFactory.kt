@@ -21,13 +21,13 @@ import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VListDialog
-import org.kopi.galite.visual.pivotTable.VPivotTable
+import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
 import org.kopi.galite.visual.ui.vaadin.form.DForm
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
-import org.kopi.galite.visual.ui.vaadin.pivotTable.DPivotTable
+import org.kopi.galite.visual.ui.vaadin.pivottable.DPivotTable
 import org.kopi.galite.visual.ui.vaadin.preview.DPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.UIFactory

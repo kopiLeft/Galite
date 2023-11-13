@@ -21,7 +21,7 @@ import java.util.Locale
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.cross.VDynamicReport
-import org.kopi.galite.visual.dsl.pivotTable.PivotTable
+import org.kopi.galite.visual.dsl.pivottable.PivotTable
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.form.VDictionaryForm
 

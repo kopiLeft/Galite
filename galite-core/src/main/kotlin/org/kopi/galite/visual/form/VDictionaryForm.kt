@@ -23,10 +23,9 @@ import org.kopi.galite.visual.MessageCode
 
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.pivotTable.VPivotTable
+import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.report.VNoRowException
 import org.kopi.galite.visual.report.VReport
 

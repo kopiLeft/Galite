@@ -28,8 +28,8 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.pivotTable.Dimension.Position
-import org.kopi.galite.visual.dsl.pivotTable.PivotTable
+import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
+import org.kopi.galite.visual.dsl.pivottable.PivotTable
 import org.vaadin.addons.componentfactory.PivotTable.Aggregator
 import org.vaadin.addons.componentfactory.PivotTable.Renderer
 
