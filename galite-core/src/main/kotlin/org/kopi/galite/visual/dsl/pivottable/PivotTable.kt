@@ -44,7 +44,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
                                                     position: Dimension.Position,
                                                     noinline init: Dimension<T>.() -> Unit): Dimension<T> {
     domain.kClass = T::class
-    val dimension = Dimension(domain, init, "ANM_${(dimensions + measures).size}", position, domain.source.ifEmpty { `access$sourceFile` })
+    val dimension = Dimension(domain, init, "DIMENSION_${dimensions.size}", position, domain.source.ifEmpty { `access$sourceFile` })
     dimension.init()
     model.model.columns.add(dimension.buildPivotTableColumn())
     dimensions.add(dimension)
@@ -55,7 +55,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
   inline fun <reified T : Comparable<T>?> measure(domain: Domain<T>,
                                                   noinline init: Measure<T>.() -> Unit): Measure<T> {
     domain.kClass = T::class
-    val measure = Measure(domain, init, "ANM_${(dimensions + measures).size}", domain.source.ifEmpty { `access$sourceFile` })
+    val measure = Measure(domain, init, "MEASURE_${measures.size}", domain.source.ifEmpty { `access$sourceFile` })
     measure.init()
     model.model.columns.add(measure.buildPivotTableColumn())
     measures.add(measure)

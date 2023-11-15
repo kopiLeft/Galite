@@ -77,14 +77,14 @@ class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
         add {
           this[department] = result[Product.department]
           this[supplier] = result[Product.supplier]
-          this[category] = decoderCategory(result[Product.category])
-          this[taxName] = decoderTaxe(result[Product.taxName])
+          this[category] = décoderCategory(result[Product.category])
+          this[taxName] = décoderTaxe(result[Product.taxName])
           this[price] = result[Product.price]
         }
       }
     }
   }
-  fun decoderCategory(category: Int) : String {
+  fun décoderCategory(category: Int) : String {
     var result: String
     when (category) {
       1 -> result= "shoes"
@@ -97,7 +97,7 @@ class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
     return result
   }
 
-  fun decoderTaxe(taxe: String) : String {
+  fun décoderTaxe(taxe: String) : String {
     var result: String
     when (taxe) {
       "tax 0" -> result= "0%"

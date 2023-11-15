@@ -7,8 +7,8 @@
   <actor ident="quit" label="Quitter" help="Ferme la table pivot." />
   <actor ident="help" label="Aide" help="Afficher l'aide." />
 
-  <field ident="ANM_0" label="Quantité" />
-  <field ident="ANM_1" label="Montant HT" />
-  <field ident="ANM_2" label="Montant TTC" />
+  <field ident="MEASURE_0" label="Quantité" />
+  <field ident="MEASURE_1" label="Montant HT" />
+  <field ident="MEASURE_2" label="Montant TTC" />
 
 </pivottable>

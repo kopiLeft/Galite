@@ -93,11 +93,6 @@ class TaxRuleForm : DictionaryForm(title = "TaxRules", locale = Locale.UK) {
           TaxRuleR()
         }
       }
-      command(item = pivotTable) {
-        createPivotTable {
-          TaxRuleP()
-        }
-      }
 
       command(item = save) {
         saveBlock()

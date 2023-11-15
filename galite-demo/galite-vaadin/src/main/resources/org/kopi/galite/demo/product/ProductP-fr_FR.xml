@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pivottable title="Produits">
+    <menu ident="Action" label="Action" />
+
+    <actor ident="quit" label="Quitter" help="Ferme le rapport." />
+
+    <field ident="DIMENSION_0" label="Catégorie" help="La catégorie du produit" />
+    <field ident="DIMENSION_1" label="Département" help="Le département du produit" />
+    <field ident="DIMENSION_2" label="Fournisseur" help="Le fournisseur du produit" />
+    <field ident="DIMENSION_3" label="Taxe" help="La taxe appliquée au produit" />
+    <field ident="MEASURE_0" label="Prix" help="Le prix unitaire hors TVA du produit" />
+</pivottable>
