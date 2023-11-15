@@ -81,6 +81,11 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
           ProductR()
         }
       }
+      command(item = pivotTable) {
+        createPivotTable {
+          ProductP()
+        }
+      }
     }
   }
 
