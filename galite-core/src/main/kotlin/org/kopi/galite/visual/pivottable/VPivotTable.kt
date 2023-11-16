@@ -21,6 +21,7 @@ package org.kopi.galite.visual.pivottable
 import java.io.File
 import java.net.MalformedURLException
 
+import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
 import org.kopi.galite.visual.form.VConstants
@@ -284,4 +285,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
       commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
+
+  @TestOnly
+  fun _hasTrigger(event: Int): Boolean = hasTrigger(event)
 }
