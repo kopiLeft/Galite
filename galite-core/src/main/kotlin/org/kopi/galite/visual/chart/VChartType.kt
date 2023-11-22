@@ -99,6 +99,11 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
     val BAR = VChartType(CConstants.TYPE_BAR, "Bar")
     val LINE = VChartType(CConstants.TYPE_LINE, "Line")
     val AREA = VChartType(CConstants.TYPE_AREA, "Area")
+    val TYPE_HISTOGRAM = VChartType(CConstants.TYPE_HISTOGRAM, "Histogram")
+    val TYPE_DONUT = VChartType(CConstants.TYPE_DONUT, "Donut")
+    val TYPE_RADIALBAR = VChartType(CConstants.TYPE_RADIALBAR, "RadiaBar")
+    val TYPE_SCATTER = VChartType(CConstants.TYPE_SCATTER, "Scatter")
+    val TYPE_BUBBLE = VChartType(CConstants.TYPE_BUBBLE, "Bubble")
     val DEFAULT = COLUMN
   }
 }

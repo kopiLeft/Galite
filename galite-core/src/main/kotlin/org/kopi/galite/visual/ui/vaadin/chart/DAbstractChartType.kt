@@ -17,24 +17,26 @@
  */
 package org.kopi.galite.visual.ui.vaadin.chart
 
-import java.awt.Color
-import java.io.OutputStream
-import java.util.Random
-
-import kotlin.collections.HashSet
-
+import com.github.appreciated.apexcharts.ApexCharts
+import com.github.appreciated.apexcharts.ApexChartsBuilder
+import com.github.appreciated.apexcharts.config.Chart
+import com.github.appreciated.apexcharts.config.builder.*
+import com.github.appreciated.apexcharts.config.chart.Type
+import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder
+import com.github.appreciated.apexcharts.config.chart.toolbar.Export
+import com.github.appreciated.apexcharts.config.chart.toolbar.builder.ToolsBuilder
+import com.github.appreciated.apexcharts.config.legend.Position
+import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
+import com.github.appreciated.apexcharts.config.plotoptions.builder.PieBuilder
+import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder
+import com.github.appreciated.apexcharts.helper.Series
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VDataSeries
 import org.kopi.galite.visual.chart.VPrintOptions
-
-import com.github.appreciated.apexcharts.ApexCharts
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder
-import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder
-import com.github.appreciated.apexcharts.config.builder.XAxisBuilder
-import com.github.appreciated.apexcharts.config.chart.Type
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
-import com.github.appreciated.apexcharts.helper.Series
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import java.awt.Color
+import java.io.OutputStream
+import java.util.*
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.
@@ -48,13 +50,16 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
 
   init {
     // FIXME: temporary styling
-    minWidth = "500px"
+    minWidth = "800px"
+//      setHeightFull()
+//      setWidthFull()
   }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun build() {
+
     val apex = ApexCharts()
     val labels = mutableListOf<String>()
     val names = mutableListOf<String>()
@@ -86,23 +91,24 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     }
 
     when (type) {
-      Type.pie -> {
-        finalValues.forEach {
-          apex.setChart(ChartBuilder.get().withType(type).build())
-          apex.setSeries(*it.toTypedArray())
-          apex.setLabels(*labels.toTypedArray())
-        }
-      }
+//      Type.PIE -> {
+//        finalValues.forEach {
+//            apex.setChart(ChartBuilder.get().withType(type).withToolbar(ToolbarBuilder.get().withExport(Export()).build()).build())
+//          apex.setSeries(*it.toTypedArray())
+//          apex.setLabels(*labels.toTypedArray())
+//
+//        }
+//      }
+//
+//      Type.BAR, Type.LINE, Type.AREA -> {
+//        apex.setChart(ChartBuilder.get().withType(type).build())
+//        apex.setSeries(*series.toTypedArray())
+//        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
+//        apex.setLabels(*labels.toTypedArray())
+//      }
 
-      Type.bar, Type.line, Type.area -> {
+      Type.RANGEBAR, Type.PIE, Type.BAR, Type.LINE, Type.AREA -> {
         apex.setChart(ChartBuilder.get().withType(type).build())
-        apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-        apex.setLabels(*labels.toTypedArray())
-      }
-
-      Type.rangeBar -> {
-        apex.setChart(ChartBuilder.get().withType(Type.bar).build())
         apex.setSeries(*series.toTypedArray())
         apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
         apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
@@ -113,7 +119,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
     }
 
-    super.add(apex)
+    add(apex)
   }
 
   override fun refresh() {
@@ -121,8 +127,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
   }
 
   override fun exportToPDF(destination: OutputStream, options: VPrintOptions) {
-    TODO()
-    // DONE IN CLIENT SIDE
   }
 
   override fun exportToPNG(destination: OutputStream, width: Int, height: Int) {

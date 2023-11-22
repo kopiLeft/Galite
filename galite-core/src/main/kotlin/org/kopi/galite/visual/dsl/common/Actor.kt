@@ -101,6 +101,7 @@ enum class Icon(val iconName: String) {
   EXPANDED_P("expanded_p"),
   EXPORT_CSV("exportCsv"),
   EXPORT_PDF("exportPdf"),
+  EXPORT_PNG("exportPng"),
   EXPORT_XLSX("exportXlsx"),
   FOLD_COLUMN("foldColumn"),
   FOLD("fold"),

@@ -21,6 +21,7 @@ import java.util.Locale
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.cross.VDynamicReport
+import org.kopi.galite.visual.dsl.chart.Chart
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.form.VDictionaryForm
 
@@ -113,6 +114,16 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
       reportbuilder().model
     }
   }
+
+  /**
+   * create a customized report for this form
+   */
+  protected fun Block.createChart(chartbuilder: () -> Chart) {
+    model.createChart(block) {
+      chartbuilder().model
+    }
+  }
+
 
   /**
    * create a report for this form

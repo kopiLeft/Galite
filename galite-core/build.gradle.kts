@@ -44,7 +44,7 @@ dependencies {
   // EnhancedDialog
   implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
   // Apex charts
-  implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
+  implementation("com.github.appreciated", "apexcharts", "23.0.1")
   // Iron Icons
   implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
   //FullCalendar for Flow dependency

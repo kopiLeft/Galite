@@ -24,13 +24,10 @@ import org.kopi.galite.visual.chart.CConstants
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.Action
-import org.kopi.galite.visual.dsl.common.FormTrigger
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.dsl.common.*
+import org.kopi.galite.visual.dsl.form.Form
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
@@ -123,26 +120,6 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     }
 
     return self
-  }
-
-  /**
-   * Adds the default chart commands.
-   * TODO!
-   */
-  open fun addDefaultChartCommands() {
-    TODO("Add the above commands")
-    /*commands.add(Command("Quit", VConstants.MOD_ANY))
-    commands.add(Command("Print", VConstants.MOD_ANY))
-    commands.add(Command("PrintOptions", VConstants.MOD_ANY))
-    commands.add(Command("ExportPNG", VConstants.MOD_ANY))
-    commands.add(Command("ExportPDF", VConstants.MOD_ANY))
-    commands.add(Command("ExportJPEG", VConstants.MOD_ANY))
-    commands.add(Command("ColumnView", VConstants.MOD_ANY))
-    commands.add(Command("BarView", VConstants.MOD_ANY))
-    commands.add(Command("LineView", VConstants.MOD_ANY))
-    commands.add(Command("AreaView", VConstants.MOD_ANY))
-    commands.add(Command("PieView", VConstants.MOD_ANY))
-    commands.add(Command("Help", VConstants.MOD_ANY))*/
   }
 
   /**
@@ -258,6 +235,10 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       model.setType(value)
     }
 
+  fun addDefaultReportCommands() {
+    model.addDefaultReportCommands()
+  }
+
   // ----------------------------------------------------------------------
   // CHART MODEL
   // ----------------------------------------------------------------------
@@ -275,6 +256,8 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       setTitle(title)
       help = this@Chart.help
       source = sourceFile
+
+      addDefaultReportCommands()
     }
   }
 

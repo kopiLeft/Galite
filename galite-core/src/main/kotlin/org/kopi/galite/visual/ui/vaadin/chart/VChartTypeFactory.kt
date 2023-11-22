@@ -31,6 +31,7 @@ class VChartTypeFactory : ChartTypeFactory() {
       CConstants.TYPE_BAR -> DBarChart(title, model.getDataSeries())
       CConstants.TYPE_LINE -> DLineChart(title, model.getDataSeries())
       CConstants.TYPE_AREA -> DAreaChart(title, model.getDataSeries())
+
       else -> throw InconsistencyException("NO UI IMPLEMENTATION FOR CHART TYPE " + model.name)
     }
     model.setDisplay(view)

@@ -26,7 +26,7 @@ import com.github.appreciated.apexcharts.config.chart.Type
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DColumnChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.rangeBar, title, dataSeries) {
+class DColumnChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.RANGEBAR, title, dataSeries) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

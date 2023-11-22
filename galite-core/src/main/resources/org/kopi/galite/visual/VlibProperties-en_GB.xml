@@ -249,6 +249,8 @@
   <property key="ExportXLSX-help" value="save data in a XLSX-file." />
   <property key="ExportPDF" value="PDF" />
   <property key="ExportPDF-help" value="save data in a PDF-file." />
+  <property key="ExportPNG" value="PNG" />
+  <property key="ExportPNG-help" value="save data in a PNG-file." />
   <property key="Fold" value="Fold" />
   <property key="Fold-help" value="Fold selection." />
   <property key="Unfold" value="unfold" />

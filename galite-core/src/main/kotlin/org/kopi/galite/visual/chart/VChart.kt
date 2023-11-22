@@ -52,6 +52,10 @@ import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
 
 import com.lowagie.text.Rectangle
+import org.kopi.galite.visual.cross.VDynamicReport
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.report.VDefaultReportActor
+import java.awt.event.KeyEvent
 
 /**
  * Creates a new chart model.
@@ -264,7 +268,8 @@ abstract class VChart : VWindow(), CConstants, Printable {
           cmdPieView = it
         }
         else -> {
-          setCommandEnabled(it, i, true)
+          //setCommandEnabled(it, i, true)
+          setCommandEnabled(it, true)
         }
       }
     }
@@ -624,6 +629,27 @@ abstract class VChart : VWindow(), CConstants, Printable {
         throw InconsistencyException(mue)
       }
       surl.toString()
+    }
+  }
+
+  fun addDefaultReportCommands() {
+    //initDefaultActors()
+    initDefaultCommands()
+  }
+
+  private fun initDefaultActors() {
+    addActors(arrayOf(
+      VDefaultChartActor("File", "Quit", "quit", KeyEvent.VK_ESCAPE, 0),
+      VDefaultChartActor("File", "ExportPDF", "export", KeyEvent.VK_F7, 0),
+      VDefaultChartActor("File", "ExportPNG", "export", KeyEvent.VK_F8, 0),
+      VDefaultChartActor("File", "ExportPDF", "export", KeyEvent.VK_F9, 0),
+      VDefaultChartActor("Help", "Help", "help", KeyEvent.VK_F1, 0),
+    ))
+  }
+
+  private fun initDefaultCommands() {
+    actors.forEachIndexed { index, vActor ->
+      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
 

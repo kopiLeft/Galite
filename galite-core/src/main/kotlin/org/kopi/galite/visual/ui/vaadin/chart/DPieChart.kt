@@ -26,7 +26,7 @@ import com.github.appreciated.apexcharts.config.chart.Type
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.pie, title, dataSeries) {
+class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.PIE, title, dataSeries) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

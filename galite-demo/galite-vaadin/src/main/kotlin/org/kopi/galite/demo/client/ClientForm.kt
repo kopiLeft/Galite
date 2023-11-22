@@ -130,6 +130,11 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     }
 
     init {
+      command(item = chart) {
+        createChart {
+          ChartSample()
+        }
+      }
       command(item = report) {
         createReport {
           ClientR()

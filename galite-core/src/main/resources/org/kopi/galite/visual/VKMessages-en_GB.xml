@@ -22,7 +22,7 @@
   <message ident="deleting_record" text="Deleting record." />
   <message ident="printing" text="Printing in progress." />
   <message ident="report_generation" text="Building report." />
-  <message ident="report_generation" text="Building chart." />
+  <message ident="chart_generation" text="Building chart." />
   <!-- INFO TEXTS-->
   <message ident="saved_successfully" text="Record saved successfully." />
   <!-- QUESTIONS-->
