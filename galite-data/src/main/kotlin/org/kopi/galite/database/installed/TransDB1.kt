@@ -22,8 +22,6 @@ import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.insert
 
-import org.kopi.galite.database.Dual
-import org.kopi.galite.database.Dummy
 import org.kopi.galite.database.Favorites
 import org.kopi.galite.database.GroupParties
 import org.kopi.galite.database.GroupRights
@@ -49,9 +47,7 @@ class TransDB1 : TransDB("galite", 1) {
                         Favorites,
                         Users,
                         Groups,
-                        References,
-                        Dummy,
-                        Dual)
+                        References)
     // drop tables if existing (via common/dbsSchema of Kopi)
     tables.forEach { table ->
       if (table.exists()) {
@@ -61,15 +57,6 @@ class TransDB1 : TransDB("galite", 1) {
     tables.forEach { table ->
       SchemaUtils.create(table)
     }
-    initTables()
-  }
-
-  /**
-   * Initialisation de la BDD
-   */
-  private fun initTables() {
-    Dummy.deleteAll() ; Dummy.insert { it[table] = "x" }
-    Dual.deleteAll() ; Dual.insert { it[table] = "x" }
   }
 
   override val SOURCE: String

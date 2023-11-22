@@ -252,7 +252,7 @@ class DocumentationBlockForm : DictionaryForm(title = "Form to test Blocks", loc
       command(item = serialQuery, Mode.QUERY) { serialQuery() }
 
     }
-    val t = table(Training)
+    val t = table(Training, sequence = trainingSequence)
 
     val trainingID = visit(domain = INT(25), position = at(1, 1)) {
       label = "Training ID"

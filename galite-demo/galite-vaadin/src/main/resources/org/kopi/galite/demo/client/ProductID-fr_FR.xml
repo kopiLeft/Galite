@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<insert>
+    <type ident="ProductID">
+        <list>
+            <listdesc column="ID" title="ID" />
+            <listdesc column="DESCRIPTION" title="Description" />
+            <listdesc column="UNIT_PRICE_EXCLUDING_VAT" title="Prix" />
+        </list>
+    </type>
+</insert>

@@ -139,6 +139,7 @@ abstract class VBlock(var title: String,
   protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
   protected var fetchCount = 0 // # of fetched records
   protected var fetchPosition = 0 // position of current record
+
   var activeRecord = 0 // current record
     get() {
       return if (field in 0 until bufferSize) field else -1
@@ -3363,7 +3364,7 @@ abstract class VBlock(var title: String,
   protected fun fillIdField(recno: Int, id: Int) {
     var id = id
     if (id == -1) {
-      id = Utils.getNextTableId(tables[0], sequence)
+      id = Utils.getNextTableId(tables[0], idFieldName, sequence)
     }
 
     idField.setInt(recno, id)

@@ -149,9 +149,9 @@ open class Block(val title: String,
    *
    * @param table     the database table
    * @param idColumn  the ID column of table. This parameter should be an Int column only defined for the main table
-   * @param seq       the sequence of the database table
+   * @param sequence  the sequence of the database table
    */
-  fun <T : Table> table(table: T, idColumn: Column<Int>? = null, seq: Sequence? = null): T {
+  fun <T : Table> table(table: T, idColumn: Column<Int>? = null, sequence: Sequence? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     idColumn?.let {
@@ -163,11 +163,11 @@ open class Block(val title: String,
       }
       block.idFieldName = idColumn.name
     }
-    seq?.let {
+    sequence?.let {
       if (block.tables.isNotEmpty()) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00075"))
       }
-      block.sequence = seq
+      block.sequence = sequence
     }
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)

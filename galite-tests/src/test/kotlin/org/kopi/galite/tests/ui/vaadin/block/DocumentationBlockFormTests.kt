@@ -239,7 +239,9 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     // POSTINS : click on insertMode command then save command and assert that POSTINS trigger change the field value of the lastBlock
     val field = form.lastBlock.postInsTrigger.findField()
 
-    assertEquals("POSTINS Trigger", field._value)
+    transaction {
+      assertEquals("POSTINS Trigger", field._value)
+    }
   }
 
   @Test

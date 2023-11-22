@@ -31,6 +31,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.database.*
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
@@ -40,12 +41,6 @@ import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
-import org.kopi.galite.database.Modules
-import org.kopi.galite.database.UserRights
-import org.kopi.galite.database.Users
-import org.kopi.galite.database.databaseConfig
-import org.kopi.galite.database.list_Of_Tables
-import org.kopi.galite.database.sequencesList
 import org.kopi.galite.type.Week
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
@@ -200,7 +195,7 @@ fun insertIntoUserRights(userName: String,
 }
 
 /**
- * Inserts data into [Module] table
+ * Inserts data into [Modules] table
  */
 fun insertIntoModule(shortname: String,
                      source: String,
@@ -222,14 +217,13 @@ fun insertIntoModule(shortname: String,
 }
 
 fun addClients() {
-  addClient(1, "Oussama", "Mellouli", "Marsa, tunis", 38, "example@mail", "Tunisia", "Tunis", 2001)
-  addClient(2, "Mohamed", "Salah", "10,Rue Lac", 56, "example@mail", "Tunisia", "Megrine", 2001)
-  addClient(3, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "example@mail", "Tunisia", "Tunis", 6000)
-  addClient(4, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "example@mail", "Tunisia", "Mourouj", 5003)
+  addClient("Oussama", "Mellouli", "Marsa, tunis", 38, "example@mail", "Tunisia", "Tunis", 2001)
+  addClient("Mohamed", "Salah", "10,Rue Lac", 56, "example@mail", "Tunisia", "Megrine", 2001)
+  addClient("Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "example@mail", "Tunisia", "Tunis", 6000)
+  addClient("Ahmed", "Bouaroua", "10,Rue du Lac", 22, "example@mail", "Tunisia", "Mourouj", 5003)
 }
 
-fun addClient(id: Int,
-              firstName: String,
+fun addClient(firstName: String,
               lastName: String,
               address: String,
               age: Int,
@@ -239,7 +233,6 @@ fun addClient(id: Int,
               zipcode: Int,
               active: Boolean = true) {
   Client.insert {
-    it[idClt] = id
     it[firstNameClt] = firstName
     it[lastNameClt] = lastName
     it[addressClt] = address
@@ -253,22 +246,14 @@ fun addClient(id: Int,
 }
 
 fun addProducts() {
-  addProduct(0, "description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"))
-  addProduct(1, "description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"))
-  addProduct(2, "description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"))
-  addProduct(3, "description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"))
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"))
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"))
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"))
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"))
 }
 
-fun addSales() {
-  addSale(1, 0, 1, 1)
-  addSale(1, 1, 1, 2)
-  addSale(1, 2, 2, 6)
-  addSale(1, 3, 3, 3)
-}
-
-fun addProduct(id: Int, description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
+fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
   Product.insert {
-    it[idPdt] = id
     it[Product.description] = description
     it[Product.department] = department
     it[Product.supplier] = supplier
@@ -278,9 +263,22 @@ fun addProduct(id: Int, description: String, category: Int, taxName: String, dep
   }
 }
 
-fun addSale(client: Int, product: Int, qty: Int, i: Int) {
+fun addSales() {
+  addSale(1, 1, 1)
+  addSale(1, 2, 1)
+  addSale(1, 3, 2)
+  addSale(1, 4, 3)
+  addSale(2, 1, 1)
+  addSale(2, 2, 2)
+  addSale(2, 3, 4)
+  addSale(3, 4, 2)
+  addSale(3, 1, 1)
+  addSale(3, 2, 3)
+  addSale(4, 2, 10)
+}
+
+fun addSale(client: Int, product: Int, qty: Int) {
   Purchase.insert {
-    it[id] = i
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
@@ -301,7 +299,7 @@ fun addFourn(id: Int, name: String, tel: Int, address: String, description: Stri
     it[Provider.tel] = tel
     it[Provider.address] = address
     it[Provider.description] = description
-    it[Provider.zipCode] = postalCode
+    it[zipCode] = postalCode
   }
 }
 
@@ -359,10 +357,10 @@ fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: Strin
 }
 
 fun addStocks() {
-  addStock(0, 0, 50)
-  addStock(1, 1, 100)
-  addStock(2, 2, 50)
-  addStock(3, 3, 20)
+  addStock(1, 0, 50)
+  addStock(2, 1, 100)
+  addStock(3, 2, 50)
+  addStock(4, 3, 20)
 }
 
 fun addStock(id: Int, idStck: Int, minAlerte: Int) {
@@ -391,10 +389,10 @@ fun addCmd(num: Int, client: Int, date: LocalDate, payment: String, status: Stri
 }
 
 fun addBillPrdts() {
-  addBillPrdt(0, 10, BigDecimal("2630"), BigDecimal("3129.7"))
-  addBillPrdt(1, 3, BigDecimal("942"), BigDecimal("1149.24"))
-  addBillPrdt(2, 1, BigDecimal("180"), BigDecimal("219.6"))
-  addBillPrdt(3, 2, BigDecimal("130"), BigDecimal("146.9"))
+  addBillPrdt(1, 10, BigDecimal("2630"), BigDecimal("3129.7"))
+  addBillPrdt(2, 3, BigDecimal("942"), BigDecimal("1149.24"))
+  addBillPrdt(3, 1, BigDecimal("180"), BigDecimal("219.6"))
+  addBillPrdt(4, 2, BigDecimal("130"), BigDecimal("146.9"))
 }
 
 fun addBillPrdt(id: Int, quantity: Int, amount: BigDecimal, amountWithTaxes: BigDecimal) {

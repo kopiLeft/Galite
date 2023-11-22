@@ -47,7 +47,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
           maxRetries: Int?
   ): Connection? {
     return try {
-      Connection.createConnection(database, driver, username, password, true, schema, maxRetries)
+      Connection.createConnection(database, driver, username, password, true, schema)
     } catch (exception: Throwable) {
       null
     }

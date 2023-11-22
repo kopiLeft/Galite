@@ -142,14 +142,6 @@ object References : Table("REFERENZEN") {
   override val primaryKey = PrimaryKey(table, column)
 }
 
-object Dummy : Table("DUMMY") {
-  val table             = char("dummy", 1)
-}
-
-object Dual : Table("DUAL") {
-  val table             = char("dummy", 1)
-}
-
 object ReportConfigurations: Table("REPORTCONFIGURATIONS") {
   val id                = integer("ID").autoIncrement("REPORTCONFIGURATIONSID")
   val uc                = integer("UC")
@@ -183,7 +175,7 @@ val ReportConfigurationsId      = Sequence("REPORTCONFIGURATIONSID")
 
 val list_Of_Tables = listOf(
   Versions, Modules, UserRights, GroupRights, GroupParties, Symbols,
-  Favorites, Users, Groups, References, Dummy, ReportConfigurations
+  Favorites, Users, Groups, References, ReportConfigurations
 )
 
 val sequencesList = listOf(ModulesId, UserRightsId, GroupRightsId, GroupPartiesId, SymbolsId,
