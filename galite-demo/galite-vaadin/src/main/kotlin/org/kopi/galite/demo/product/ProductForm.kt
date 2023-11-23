@@ -80,7 +80,7 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
 
       command(item = menuQuery) { recursiveQuery() }
       command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
-      command(item = save) { saveBlock() }
+      command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
       command(item = report) { createReport { ProductR() } }
     }
   }

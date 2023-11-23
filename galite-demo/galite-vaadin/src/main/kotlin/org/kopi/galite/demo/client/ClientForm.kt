@@ -159,7 +159,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       command(item = dynamicReport) { createDynamicReport() }
       command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
       command(item = list) { recursiveQuery() }
-      command(item = save) { save(block) }
+      command(item = save, Mode.INSERT, Mode.UPDATE) { save(block) }
     }
   }
 

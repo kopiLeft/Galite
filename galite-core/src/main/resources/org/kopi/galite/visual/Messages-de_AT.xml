@@ -92,5 +92,5 @@
   <message ident="00072" text="INTERNER FEHLER: Spalte {0} ist keine Spalte der Tabelle {1}" />
   <message ident="00073" text="INTERNER FEHLER: Die ID-Spalte sollte nur für die Haupttabelle des Blocks festgelegt werden" />
   <message ident="00074" text="INTERNER FEHLER: Spalte {0} der Haupttabelle {1} wurde im Block {2} nicht gefunden" />
-  <message ident="00075" text="Die Sequenz darf nur für die Haupttabelle definiert sein" />
+  <message ident="00075" text="INTERNER FEHLER: Die Sequenz darf nur für die Haupttabelle definiert sein" />
 </messages>
