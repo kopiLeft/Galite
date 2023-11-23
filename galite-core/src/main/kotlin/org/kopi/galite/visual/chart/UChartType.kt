@@ -38,6 +38,7 @@ interface UChartType : Serializable, UComponent {
    */
   fun refresh()
 
+
   /**
    * Exports the chart type to the PDF format.
    *

@@ -358,6 +358,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
       exported = when (type) {
         TYP_PDF -> {
           (getDisplay() as UChart).getType()!!.exportToPDF(destination, printOptions)
+
           true
         }
         TYP_PNG -> {

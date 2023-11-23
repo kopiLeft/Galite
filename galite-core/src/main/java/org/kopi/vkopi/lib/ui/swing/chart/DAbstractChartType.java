@@ -120,6 +120,7 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     }
   }
 
+
   @Override
   public void exportToPNG(OutputStream destination, int width, int height)
     throws IOException

@@ -85,6 +85,10 @@ dependencies {
 
   // Pivot Table dependency
   implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
+
+
+
+
 }
 
 dependencyManagement {

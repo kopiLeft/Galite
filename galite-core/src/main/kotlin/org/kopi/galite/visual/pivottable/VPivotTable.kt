@@ -23,16 +23,24 @@ import java.net.MalformedURLException
 
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
+import org.kopi.galite.visual.chart.UChart
+import org.kopi.galite.visual.chart.VChart
+import org.kopi.galite.visual.chart.VPrintOptions
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.vaadin.addons.componentfactory.PivotTable.*
+import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * Represents a pivot table model.
  */
 abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   companion object {
+    const val TYP_PDF = 1
+    const val TYP_PNG = 2
+    const val TYP_JPEG = 3
 
     init {
       WindowController.windowController.registerWindowBuilder(
@@ -60,6 +68,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   val PIVOT_TABLE_Triggers = listOf(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
   private val activeCommands = ArrayList<VCommand>()
   var help: String? = null
+  var printOptions: VPrintOptions = VPrintOptions()
 
   override fun getType() = org.kopi.galite.visual.Constants.MDL_PIVOT_TABLE
 
@@ -269,6 +278,65 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
 
   fun showHelp() {
     VHelpViewer().showHelp(genHelp())
+  }
+
+  /**
+   * Prints the report
+   */
+  fun export(type: Int = VChart.TYP_PNG) {
+    val ext = when (type) {
+      VChart.TYP_PNG -> ".png"
+      VChart.TYP_PDF -> ".pdf"
+      VChart.TYP_JPEG -> ".jpeg"
+      else -> throw InconsistencyException("Export type unknown")
+    }
+    val file = FileHandler.fileHandler!!.chooseFile(getDisplay()!!,
+      ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
+      "chart$ext")
+    if (file != null) {
+      try {
+        export(file, type)
+      } catch (e: IOException) {
+        throw VExecFailedException(e)
+      }
+    }
+  }
+
+  /**
+   * Exports the chart to the given format.
+   * @param file The destination file.
+   * @param type The export type.
+   * @throws IOException I/O errors.
+   */
+  fun export(file: File, type: Int) {
+    val destination = FileOutputStream(file)
+    var exported = false
+
+    setWaitInfo(VlibProperties.getString("export-message"))
+    try {
+      exported = when (type) {
+        VChart.TYP_PDF -> {
+          (getDisplay() as UPivotTable).exportToPDF(destination, printOptions)
+          true
+        }
+        VChart.TYP_PNG -> {
+          (getDisplay() as UPivotTable).exportToPDF1(destination, printOptions)
+          true
+        }
+        VChart.TYP_JPEG -> {
+          (getDisplay() as UPivotTable).exportToJPEG(destination, printOptions.imageWidth, printOptions.imageHeight, "jpeg")
+          true
+        }
+        else -> throw InconsistencyException("Export type unknown")
+      }
+    } finally {
+      destination.close()
+      unsetWaitInfo()
+      if (exported) {
+        //fireFileProduced(file)
+        println(true)
+      }
+    }
   }
 
   // ----------------------------------------------------------------------

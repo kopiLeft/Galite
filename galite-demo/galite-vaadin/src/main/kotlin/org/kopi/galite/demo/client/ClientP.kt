@@ -16,8 +16,6 @@
  */
 package org.kopi.galite.demo.client
 
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.alias
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
@@ -30,6 +28,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.dsl.pivottable.PivotTable
+import org.kopi.galite.visual.pivottable.VPivotTable
 import org.vaadin.addons.componentfactory.PivotTable.Aggregator
 import org.vaadin.addons.componentfactory.PivotTable.Renderer
 
@@ -50,11 +49,30 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     icon = Icon.HELP
   }
 
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
+    key = Key.F9
+    icon = Icon.EXPORT_PDF
+  }
+  val png = actor(menu = action, label = "PNG", help = "PNG Format", ident = "png") {
+    key = Key.F8
+    icon = Icon.PRINT
+  }
+  val jpeg = actor(menu = action, label = "JPEG", help = "JPEG Format", ident = "jpeg") {
+    key = Key.F10
+    icon = Icon.JPG_ICON
+  }
+
   val cmdQuit = command(item = quit) {
     model.close()
   }
   val helpCmd = command(item = helpForm) {
     model.showHelp()
+  }
+  val cmdPDF = command(item = pdf) {
+    model.export(VPivotTable.TYP_PDF)
+  }
+  val cmdPNG = command(item = png) {
+    model.export(VPivotTable.TYP_PNG)
   }
 
 
@@ -77,6 +95,7 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     label = "Age"
     help = "The client age"
   }
+
 
   val countryClt = dimension(STRING(50), Position.ROW) {
     label = "Country"

@@ -27,6 +27,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivottable.PivotTable
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
+import org.kopi.galite.visual.pivottable.VPivotTable
 
 /**
  * Product Report
@@ -34,14 +35,45 @@ import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
 
   val action = menu("Action")
+  val file = menu("File")
 
-  val quit = actor(menu = action, label = "Quit", help = "Quit", ident = "quit") {
-    key = Key.F1
+  val quit = actor(menu = file, label = "Quit", help = "Close Report.", ident = "quit") {
+    key = Key.ESCAPE
     icon = Icon.QUIT
+  }
+
+  val helpForm = actor(menu = action, label = "Help", help = " Help", ident = "help") {
+    key = Key.F1
+    icon = Icon.HELP
+  }
+
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
+    key = Key.F9
+    icon = Icon.EXPORT_PDF
+  }
+  val png = actor(menu = action, label = "PNG", help = "PNG Format", ident = "png") {
+    key = Key.F8
+    icon = Icon.PRINT
+  }
+  val jpeg = actor(menu = action, label = "JPEG", help = "JPEG Format", ident = "jpeg") {
+    key = Key.F10
+    icon = Icon.JPG_ICON
   }
 
   val cmdQuit = command(item = quit) {
     model.close()
+  }
+  val helpCmd = command(item = helpForm) {
+    model.showHelp()
+  }
+  val cmdPDF = command(item = pdf) {
+    model.export(VPivotTable.TYP_PDF)
+  }
+  val cmdPNG = command(item = png) {
+    model.export(VPivotTable.TYP_PNG)
+  }
+  val cmdJPEG = command(item = jpeg) {
+    model.export(VPivotTable.TYP_JPEG)
   }
 
   val category = dimension(STRING(10), Position.ROW) {
