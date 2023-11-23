@@ -178,7 +178,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       columns(S.id)
       options(FieldOption.SORTABLE)
     }
-    val productID = visit(domain = ProductID, position = at(1, 3)) {
+    val productID = mustFill(domain = ProductID, position = at(1, 3)) {
       label = "Product"
       help = "The product id"
       columns(P.idPdt, S.idPdt)
@@ -192,7 +192,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       columns(P.description)
       options(FieldOption.SORTABLE)
     }
-    val quantity = visit(domain = INT(7), position = at(2, 2)) {
+    val quantity = mustFill(domain = INT(7), position = at(2, 2)) {
       label = "Quantity"
       help = "The number of items"
       columns(S.quantity)
