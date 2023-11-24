@@ -71,6 +71,7 @@ fun VBlock.initializeBlock(block: Block, formSource: String?) {
   fields = model.fields
   indices = model.indices
   indicesIdents = model.indicesIdents
+  sequence = model.sequence
 }
 
 class FullCalendarBlockModel(val block: FullCalendar): VFullCalendarBlock(block.title, block.buffer, block.visible) {

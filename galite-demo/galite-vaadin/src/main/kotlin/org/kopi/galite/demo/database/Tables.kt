@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.javatime.date
 import org.jetbrains.exposed.sql.javatime.timestamp
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("ID_CLT").autoIncrement()
+  val idClt = integer("ID_CLT").autoIncrement("CLIENTSID")
   val firstNameClt = varchar("FIRSTNAME", 25)
   val lastNameClt = varchar("LASTNAME", 25)
   val addressClt = varchar("ADDRESS", 50)
@@ -37,18 +37,18 @@ object Client : Table("CLIENTS") {
 }
 
 object Purchase: Table("PURCHASE") {
-  val id = integer("ID").autoIncrement()
+  val id = integer("ID").autoIncrement("PURCHASE_ID_SEQ")
   val idClt = integer("CLIENT").references(Client.idClt)
   val idPdt = integer("PRODUCT").references(Product.idPdt)
   val quantity = integer("QUANTITY")
 }
 
 object Product : Table("PRODUCTS") {
-  val idPdt = integer("ID").autoIncrement()
+  val idPdt = integer("ID").autoIncrement("PRODUCTS_SEQ")
   val description = varchar("DESCRIPTION", 50)
   val category = integer("CATEGORY")
-  val department = varchar("DEPARTMENT", 10)
-  val supplier = varchar("SUPPLIER", 20)
+  val department = varchar("DEPARTMENT", 10).nullable()
+  val supplier = varchar("SUPPLIER", 20).nullable()
   val taxName = varchar("TAX", 20).references(TaxRule.taxName)
   val price = decimal("UNIT_PRICE_EXCLUDING_VAT", 9, 3)
   val photo = blob("PHOTO").nullable()
@@ -65,7 +65,7 @@ object Stock : Table("STOCK") {
 }
 
 object Provider : Table("PROVIDERS") {
-  val idProvider = integer("ID").autoIncrement()
+  val idProvider = integer("ID").autoIncrement("PROVIDERS_ID_SEQ")
   val nameProvider = varchar("NAME", 50)
   val tel = integer("PHONE")
   val description = varchar("DESCRIPTION", 70)
@@ -86,7 +86,7 @@ object BillProduct : Table("BILL_PRODUCT") {
 }
 
 object Command : Table("COMMANDS") {
-  val numCmd = integer("ID").autoIncrement()
+  val numCmd = integer("ID").autoIncrement("COMMANDS_ID_SEQ")
   val idClt = integer("CLIENT_ID").references(Client.idClt)
   val dateCmd = date("COMMAND_DATE")
   val paymentMethod = varchar("PAYMENT_METHOD", 50)
@@ -96,7 +96,7 @@ object Command : Table("COMMANDS") {
 }
 
 object Bill : Table("BILLS") {
-  val numBill = integer("BILL_NUMBER").autoIncrement()
+  val numBill = integer("BILL_NUMBER").autoIncrement("BILLS_ID_SEQ")
   val addressBill = varchar("BILL_ADDRESS", 50)
   val dateBill = date("BILL_DATE")
   val amountWithTaxes = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountWithTaxes)
@@ -106,7 +106,7 @@ object Bill : Table("BILLS") {
 }
 
 object Task : Table("Task") {
-  val id = integer("ID").autoIncrement()
+  val id = integer("ID").autoIncrement("TASKS_ID_SEQ")
   val date = date("DATE").nullable()
   val from = timestamp("FROM")
   val to = timestamp("TO")
@@ -119,7 +119,7 @@ object Task : Table("Task") {
 }
 
 object TaxRule : Table("TAX_RULE") {
-  val idTaxe = integer("ID").autoIncrement()
+  val idTaxe = integer("ID").autoIncrement("TAX_RULE_ID_SEQ")
   val taxName = varchar("NAME", 20)
   val rate = integer("RATE_IN_PERCENTAGE")
   val informations = varchar("INFORMATION", 200).nullable()

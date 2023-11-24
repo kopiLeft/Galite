@@ -26,7 +26,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.form.Block
 
 class Traineeship : Block("Training", 1, 10) {
-  val t = table(Training)
+  val t = table(Training, sequence = trainingSequence)
 
   val trainingID = visit(domain = INT(25), position = at(1, 1)) {
     label = "training ID"

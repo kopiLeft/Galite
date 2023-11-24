@@ -18,6 +18,9 @@
 
 package org.kopi.galite.database
 
+import java.sql.SQLException
+
+import org.jetbrains.exposed.sql.NextVal
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal
@@ -27,17 +30,30 @@ class Utils {
   companion object {
 
     /**
-     * Returns first free ID of table.
+     * Increments table sequence and returns the first free ID of table.
+     *
+     * The sequence name of a table can be one of the following :
+     *    - @param sequence : the sequence name added manually by the developer,
+     *    - "<Table_Name>Id : default sequence name for Galite tables,
+     *    - <Table_Name>_<Id_Name>_seq : default sequence name assigned by postgres.
      */
-    fun getNextTableId(table: Table): Int {
-      val seqNextVal = Sequence(table.nameInDatabaseCase() + "Id").nextIntVal()
-      val seqNextValQuery = getDualTableName().slice(seqNextVal).selectAll()
-      val id = seqNextValQuery.firstOrNull()?.get(seqNextVal)
-        ?: throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()}")
-      return id
-    }
+    fun getNextTableId(table: Table, id: String, sequence: Sequence? = null): Int {
+      var seqNextVal: NextVal<Int>
 
-    fun getDualTableName(): Table = Table("DUAL")
+      return try {
+        seqNextVal = (sequence ?: Sequence("${table.nameInDatabaseCase()}Id")).nextIntVal()
+
+        Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
+      } catch (e: SQLException) {
+        try {
+          seqNextVal = Sequence("${table.nameInDatabaseCase()}_${id}_seq").nextIntVal()
+
+          Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
+        } catch (e: SQLException) {
+          throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()} : ${e.message}")
+        }
+      }
+    }
 
     fun trimString(input: String): String {
       val buffer = CharArray(input.length)

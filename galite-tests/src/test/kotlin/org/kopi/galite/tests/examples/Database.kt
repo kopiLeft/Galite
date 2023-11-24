@@ -75,11 +75,11 @@ object Trainer : Table("TRAINER") {
   override val primaryKey = PrimaryKey(id, name = "PK_TRAINER_ID")
 }
 
-val trainingSequence = Sequence("TRAININGID")
+val trainingSequence = Sequence("TRAINING_ID")
 
 val trainerSequence = Sequence("TRAINERID")
 
-val centerSequence = Sequence("CENTERID")
+val centerSequence = Sequence("CENTER_ID_seq")
 
 fun initDatabase() {
   transaction {

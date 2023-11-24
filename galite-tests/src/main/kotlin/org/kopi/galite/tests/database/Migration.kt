@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.select
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.UserRights
 import org.kopi.galite.database.Users
+import org.kopi.galite.database.databaseConfig
 import org.kopi.galite.database.list_Of_Tables
 import org.kopi.galite.database.sequencesList
 
@@ -43,7 +44,7 @@ fun connectToDatabase(url: String = TEST_DB_URL,
                       user: String = TEST_DB_USER,
                       password: String = TEST_DB_USER_PASSWORD
 ) {
-  Database.connect(url, driver = driver, user = user, password = password)
+  Database.connect(url, driver = driver, user = user, password = password, databaseConfig = databaseConfig())
 }
 
 /**

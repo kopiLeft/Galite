@@ -54,7 +54,7 @@ class SimpleForm : DictionaryForm(title = "Training", locale = Locale.UK) {
 }
 
 class TraineeshipWithAllFieldTypes : Block("Training", 1, 1) {
-  val t = table(Training)
+  val t = table(Training, sequence = trainingSequence)
 
   val trainingID = visit(domain = INT(25), position = at(1, 1)) {
     label = "training ID"

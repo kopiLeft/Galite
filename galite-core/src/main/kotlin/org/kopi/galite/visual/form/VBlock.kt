@@ -32,6 +32,7 @@ import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.compoundAnd
@@ -109,6 +110,7 @@ abstract class VBlock(var title: String,
   internal var indicesIdents = mutableListOf<String>() // error messages for violated indices
   internal var commands = mutableListOf<VCommand>() // commands
   internal var fieldID: VField? = null // commands
+  internal var sequence: Sequence? = null // internal block sequence
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp = field
@@ -3357,12 +3359,12 @@ abstract class VBlock(var title: String,
   }
 
   /**
-   *
+   * fill the field holding the ID of the block's base table.
    */
   protected fun fillIdField(recno: Int, id: Int) {
     var id = id
     if (id == -1) {
-      id = Utils.getNextTableId(tables[0])
+      id = Utils.getNextTableId(tables[0], idFieldName, sequence)
     }
 
     idField.setInt(recno, id)

@@ -202,7 +202,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val end = it.endDateTime
 
           check(start, end)
-          model.openForEdit(start, end)
+          model.openForEdit(start.toInstant(), end.toInstant())
         }
       })
     }

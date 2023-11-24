@@ -21,6 +21,7 @@ import java.awt.Point
 import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
@@ -148,8 +149,9 @@ open class Block(val title: String,
    *
    * @param table     the database table
    * @param idColumn  the ID column of table. This parameter should be an Int column only defined for the main table
+   * @param sequence  the sequence of the database table
    */
-  fun <T : Table> table(table: T, idColumn: Column<Int>? = null): T {
+  fun <T : Table> table(table: T, idColumn: Column<Int>? = null, sequence: Sequence? = null): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
 
     idColumn?.let {
@@ -160,6 +162,12 @@ open class Block(val title: String,
         throw VExecFailedException(MessageCode.getMessage("VIS-00073"))
       }
       block.idFieldName = idColumn.name
+    }
+    sequence?.let {
+      if (block.tables.isNotEmpty()) {
+        throw VExecFailedException(MessageCode.getMessage("VIS-00075"))
+      }
+      block.sequence = sequence
     }
     tables.add(formBlockTable)
     block.tables.add(formBlockTable.table)

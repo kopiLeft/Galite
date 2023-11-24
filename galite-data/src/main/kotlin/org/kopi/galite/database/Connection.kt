@@ -271,12 +271,12 @@ class Connection {
   }
 }
 
-fun databaseConfig(schema: Schema?,
+fun databaseConfig(schema: Schema? = null,
                    traceLevel: Int? = null,
                    isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
                    maxRetries: Int? = null): DatabaseConfig = DatabaseConfig {
     sqlLogger = Slf4jSqlInfoLogger(traceLevel)
-    defaultSchema = schema // Feature added in https://github.com/JetBrains/Exposed/pull/1367
+    schema?.let { defaultSchema = it } // Feature added in https://github.com/JetBrains/Exposed/pull/1367
     defaultIsolationLevel = isolationLevel
     defaultRepetitionAttempts = maxRetries ?: 0
   }
