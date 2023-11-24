@@ -16,22 +16,26 @@
  */
 package org.kopi.galite.demo.client
 
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.alias
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.vaadin.addons.componentfactory.PivotTable.Renderer
+
 import org.kopi.galite.demo.database.Client
+import org.kopi.galite.demo.database.Product
+import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.dsl.pivottable.PivotTable
-import org.vaadin.addons.componentfactory.PivotTable.Aggregator
-import org.vaadin.addons.componentfactory.PivotTable.Renderer
+import org.kopi.galite.visual.pivottable.Constants
 
 /**
  * Client Report
@@ -68,19 +72,19 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     help = "The client last name"
   }
 
-  val addressClt = dimension(STRING(50), Position.ROW) {
+  val countryClt = dimension(STRING(50), Position.COLUMN) {
+    label = "Country"
+    help = "The client country"
+  }
+
+  val addressClt = dimension(STRING(50), Position.COLUMN) {
     label = "Address"
     help = "The client address"
   }
 
-  val ageClt = dimension(INT(2), Position.COLUMN) {
+  val ageClt = dimension(INT(2), Position.NONE) {
     label = "Age"
     help = "The client age"
-  }
-
-  val countryClt = dimension(STRING(50), Position.ROW) {
-    label = "Country"
-    help = "The client country"
   }
 
   val cityClt = dimension(STRING(50), Position.NONE) {
@@ -88,28 +92,40 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     help = "The client city"
   }
 
-  val zipCodeClt = measure(INT(2)) {
+  val zipCodeClt = dimension(INT(2), Position.NONE) {
     label = "Zip code"
     help = "The client zip code"
   }
 
-  val activeClt = measure(BOOL) {
+  val activeClt = dimension(BOOL, Position.NONE) {
     label = "Status"
     help = "Is the client active?"
   }
 
+  val quantity = measure(INT(10)) {
+    label = "Quantity"
+    help = "Product quantity"
+  }
+
+  val price = measure(DECIMAL(9,3)) {
+    label = "Price"
+    help = "Product price"
+  }
+
   val init = trigger(INIT) {
     defaultRenderer = Renderer.TABLE
-    aggregator = Pair(Aggregator.SAMPLE_VARIANCE, "")
+    aggregator = Pair(Constants.COUNT_FRACTION_COLUMNS, "")
     disabledRerenders = mutableListOf(Renderer.SCATTER_CHART, Renderer.LINE_CHART, Renderer.HORIZONTAL_BAR_CHART, Renderer.HORIZONTAL_STACKED_BAR_CHART)
     //interactive = Constants.MODE_NONINTERACTIVE
   }
 
-  val clients = Client.selectAll()
+  val purchase = Client.join(Purchase, JoinType.LEFT) { Purchase.idClt eq Client.idClt}
+                        .join(Product, JoinType.LEFT) { Purchase.idPdt eq Product.idPdt }
+                        .selectAll()
 
   init {
     transaction {
-      clients.forEach { result ->
+      purchase.forEach { result ->
         add {
           this[firstName] = result[Client.firstNameClt]
           this[lastName] = result[Client.lastNameClt]
@@ -119,6 +135,8 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
           this[cityClt] = result[Client.cityClt]
           this[zipCodeClt] = result[Client.zipCodeClt]
           this[activeClt] = result[Client.activeClt]
+          this[quantity] = result[Purchase.quantity]
+          this[price] = result[Product.price]
         }
       }
     }

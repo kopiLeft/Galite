@@ -17,14 +17,14 @@
  */
 package org.kopi.galite.visual.ui.vaadin.pivottable
 
+import org.vaadin.addons.componentfactory.PivotTable
 import com.vaadin.flow.component.dependency.CssImport
+
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.pivottable.MPivotTable
 import org.kopi.galite.visual.pivottable.UPivotTable
 import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-
-import org.vaadin.addons.componentfactory.PivotTable
 
 @CssImport("./styles/galite/pivottable.css")
 class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UPivotTable {
@@ -62,9 +62,9 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     }
 
     model.userRows
-      ?.flatMap { it.data.filterNotNull() }
+      ?.flatMap { it.data.asIterable() }
       ?.chunked(model.columns.count()) { rows ->
-        pivotData.addRow(*rows.toTypedArray())}
+        pivotData.addRow(*rows.map { it ?: "" }.toTypedArray())}
 
     // Pivot table dimension
     pivotOptions.setRows(*rows.toTypedArray())

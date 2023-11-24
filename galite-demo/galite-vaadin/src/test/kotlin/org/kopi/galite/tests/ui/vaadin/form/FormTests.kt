@@ -110,7 +110,7 @@ class FormTests: GaliteVUITestBase() {
       arrayOf("3", "description Product 3", "3", "65,00000")
     )
 
-    data.forEachIndexed { index, row ->
+    data.take(4).forEachIndexed { index, row ->
       block.grid.expectRow(index, *row)
     }
   }

@@ -57,8 +57,8 @@ class Dimension<T>(override val domain: Domain<T>,
   // ----------------------------------------------------------------------
 
   enum class Position(val value: Int) {
-      NONE(Constants.DIMENSION_NO_POSITION),
-      ROW(Constants.DIMENSION_ROW),
-      COLUMN(Constants.DIMENSION_COLUMN),
+    NONE(Constants.DIMENSION_NO_POSITION),
+    ROW(Constants.DIMENSION_ROW),
+    COLUMN(Constants.DIMENSION_COLUMN)
   }
 }

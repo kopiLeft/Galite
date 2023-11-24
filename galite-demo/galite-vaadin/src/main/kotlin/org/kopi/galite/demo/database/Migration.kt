@@ -253,7 +253,12 @@ fun addClient(id: Int,
 }
 
 fun addProducts() {
-  for (i in 0..499) {
+  // That data is used in automated tests
+  addProduct(0, "description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"))
+  addProduct(1, "description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"))
+  addProduct(2, "description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"))
+  addProduct(3, "description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"))
+  for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()
     val tax = "tax $category"

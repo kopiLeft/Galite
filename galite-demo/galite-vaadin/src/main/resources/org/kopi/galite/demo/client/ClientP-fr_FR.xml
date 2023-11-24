@@ -9,11 +9,13 @@
 
     <field ident="DIMENSION_0" label="Prénom" />
     <field ident="DIMENSION_1" label="Nom" />
-    <field ident="DIMENSION_2" label="Adresse" />
-    <field ident="DIMENSION_3" label="Age" />
-    <field ident="DIMENSION_4" label="Pays" />
+    <field ident="DIMENSION_2" label="Pays" />
+    <field ident="DIMENSION_3" label="Adresse" />
+    <field ident="DIMENSION_4" label="Age" />
     <field ident="DIMENSION_5" label="Ville" />
-    <field ident="MEASURE_0" label="Code postal" />
-    <field ident="MEASURE_1" label="Actif" />
+    <field ident="DIMENSION_6" label="Code postal" />
+    <field ident="DIMENSION_7" label="Actif" />
+    <field ident="MEASURE_0" label="Quantité" />
+    <field ident="MEASURE_1" label="Prix" />
 
 </pivottable>

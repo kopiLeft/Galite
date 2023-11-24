@@ -21,12 +21,13 @@ package org.kopi.galite.visual.pivottable
 import java.io.File
 import java.net.MalformedURLException
 
+import org.vaadin.addons.componentfactory.PivotTable.*
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.dsl.common.Trigger
-import org.vaadin.addons.componentfactory.PivotTable.*
 
 /**
  * Represents a pivot table model.
@@ -39,8 +40,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
         org.kopi.galite.visual.Constants.MDL_PIVOT_TABLE,
         object : WindowBuilder {
           override fun createWindow(model: VWindow): UWindow {
-            return UIFactory.uiFactory.createView(
-              model) as UPivotTable
+            return UIFactory.uiFactory.createView(model) as UPivotTable
           }
         }
       )

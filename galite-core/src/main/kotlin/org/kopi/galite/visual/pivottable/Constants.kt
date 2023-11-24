@@ -20,8 +20,6 @@ package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.Constants
-import org.vaadin.addons.componentfactory.PivotTable.Renderer
-import org.vaadin.addons.componentfactory.PivotTable.Aggregator
 
 /**
  * Collects some constants for the pivot table implementation

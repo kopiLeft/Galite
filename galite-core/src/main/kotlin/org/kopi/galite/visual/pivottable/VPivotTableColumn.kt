@@ -24,9 +24,8 @@ import org.kopi.galite.visual.l10n.PivotTableLocalizer
 
 /**
  * Represents a pivot table column description
- *
  * @param    ident        The identifier of the field
- *
+ * @param    position     The position of the dimension field
  */
 class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
 
