@@ -135,8 +135,14 @@ class ClientForm : Form(title = "form-title", locale = Locale.UK) {
 }
 
 class Clients : Block("Clients", 1, 1) {
-  val u = table(Client)
-
+  val u = table(Client, idColumn = Client.idClt, sequence = "CLIENTSID") // Adds a table to a block
+    /*
+    The table parameter refers to certain tables in the database, with the first table being the one on which the user will work, 
+    and the remaining tables being the "look-up tables" associated with the first one. 
+    The function takes three parameters: the database table, the ID column of the table which should be an Int column only defined for the main table (optional),
+    and the sequence of the database table (optional).
+     */
+    
   val idClt = visit(domain = LONG(10), position = at(1, 1..2)) {
     label = "ID"
     help = "The client id"
@@ -321,6 +327,71 @@ class ChartSample: Chart(
 }
 ````
 ![docs/chart.png](docs/chart.png)
+
+## Pivot table
+A pivot table is a statistics tool that summarizes and reorganizes selected columns and rows of data to obtain a desired report. It does not change the original data but "pivots" or turns the data to view it from different perspectives.
+
+The user will be able to select the required data along with the pivot table’s dimensions and measures.
+
+Pivot table allows users to transform columns into rows, group, count, total, or average data stored in a table, and is especially useful for analyzing large amounts of data and presenting it in a meaningful layout
+
+````KOTLIN
+class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
+
+    val action = menu("Action")
+
+    val quit = actor(menu = action, label = "Quit", help = "Quit", ident = "quit") {
+        key = Key.F1
+        icon = Icon.QUIT
+    }
+
+    val cmdQuit = command(item = quit) {
+        model.close()
+    }
+
+    val department = dimension(STRING(20), Position.COLUMN) {
+        label = "Department"
+        help = "The product department"
+    }
+    
+    val category = dimension(STRING(10), Position.COLUMN) {
+        label = "Category"
+        help = "The product category"
+    }
+
+    val supplier = dimension(STRING(20), Position.NONE) {
+        label = "Supplier"
+        help = "The supplier"
+    }
+
+    val taxName = dimension(STRING(10), Position.ROW) {
+        label = "Tax"
+        help = "The product tax name"
+    }
+
+    val price = measure(DECIMAL(10, 5)) {
+        label = "Price"
+        help = "The product unit price excluding VAT"
+    }
+
+    val products = Product.selectAll()
+
+    init {
+        transaction {
+            products.forEach { result ->
+                add {
+                    this[department] = result[Product.department]
+                    this[supplier] = result[Product.supplier]
+                    this[category] = result[Product.category]
+                    this[taxName] = result[Product.taxName]
+                    this[price] = result[Product.price]
+                }
+            }
+        }
+    }
+}
+````
+![docs/pivottable.png](docs/pivottable.png)
 
 ## Contributing
 All contributions are welcome.
