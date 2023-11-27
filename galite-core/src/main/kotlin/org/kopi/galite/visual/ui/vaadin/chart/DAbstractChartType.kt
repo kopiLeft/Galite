@@ -23,7 +23,6 @@ import com.github.appreciated.apexcharts.config.Chart
 import com.github.appreciated.apexcharts.config.builder.*
 import com.github.appreciated.apexcharts.config.chart.Type
 import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder
-import com.github.appreciated.apexcharts.config.chart.toolbar.Export
 import com.github.appreciated.apexcharts.config.chart.toolbar.builder.ToolsBuilder
 import com.github.appreciated.apexcharts.config.legend.Position
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
@@ -91,24 +90,24 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     }
 
     when (type) {
-//      Type.PIE -> {
-//        finalValues.forEach {
-//            apex.setChart(ChartBuilder.get().withType(type).withToolbar(ToolbarBuilder.get().withExport(Export()).build()).build())
-//          apex.setSeries(*it.toTypedArray())
-//          apex.setLabels(*labels.toTypedArray())
-//
-//        }
-//      }
-//
-//      Type.BAR, Type.LINE, Type.AREA -> {
-//        apex.setChart(ChartBuilder.get().withType(type).build())
-//        apex.setSeries(*series.toTypedArray())
-//        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-//        apex.setLabels(*labels.toTypedArray())
-//      }
+      Type.PIE -> {
+        finalValues.forEach {
+            apex.setChart(ChartBuilder.get().withType(type).withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
+          apex.setSeries(*it.toTypedArray())
+          apex.setLabels(*labels.toTypedArray())
 
-      Type.RANGEBAR, Type.PIE, Type.BAR, Type.LINE, Type.AREA -> {
+        }
+      }
+
+      Type.BAR, Type.LINE, Type.AREA -> {
         apex.setChart(ChartBuilder.get().withType(type).build())
+        apex.setSeries(*series.toTypedArray())
+        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
+        apex.setLabels(*labels.toTypedArray())
+      }
+
+      Type.RANGEBAR -> {
+        apex.setChart(ChartBuilder.get().withType(type).withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
         apex.setSeries(*series.toTypedArray())
         apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
         apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
