@@ -15,14 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.visual.dsl.pivottable
 
-package org.kopi.galite.visual.pivottable
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.field.Field
 
-import org.kopi.galite.visual.UWindow
+abstract class PivotTableField<T>(override val domain: Domain<T>, ident: String? = null) : Field<T>(domain, ident) {
 
-interface UPivotTable : UWindow {
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
   /**
-   * Builds the pivot table;
+   * Generates localization for the field in the xml file
    */
-  fun build()
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as PivotTableLocalizationWriter).genField(ident, label, help)
+  }
 }

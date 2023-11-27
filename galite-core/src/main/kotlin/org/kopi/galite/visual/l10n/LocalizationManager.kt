@@ -116,6 +116,15 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
   }
 
   /**
+   * Constructs a chart localizer using the specified source.
+   *
+   * @param     source          the source qualified name
+   */
+  fun getPivotTableLocalizer(source: String?): PivotTableLocalizer {
+    return PivotTableLocalizer(this, getDocument(source))
+  }
+
+  /**
    * Constructs a module localizer using the specified source.
    *
    * @param     source          the source qualified name

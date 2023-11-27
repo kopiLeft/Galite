@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,8 +18,15 @@
 
 package org.kopi.galite.visual.pivottable
 
-enum class Span {
-  NONE,
-  ROW,
-  COL
+import org.kopi.galite.visual.VRuntimeException
+
+/**
+ * This class represents exceptions occurring during execution process.
+ *
+ * @param message the associated message. It's optional
+ */
+class VNoRowException(message: String? = null) : VRuntimeException(message) {
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

@@ -370,6 +370,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     save
     delete
     dynamicReport
+    pivotTable
     help
     showHideFilter
     report
@@ -450,6 +451,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   open val report by lazy { actor(CreateReport()) }
 
   open val dynamicReport by lazy { actor(CreateDynamicReport()) }
+
+  open val pivotTable by lazy { actor(CreatePivotTable()) }
 
   open val showHideFilter by lazy { actor(ShowHideFilter()) }
 
@@ -710,6 +713,13 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     init {
       key = Key.F11
       icon = Icon.PREVIEW
+    }
+  }
+
+  class CreatePivotTable : Actor(menu = ActionMenu(), label = "Pivot Table", help = "Create pivot table.", userActor = false) {
+    init {
+      key = Key.F10
+      icon = Icon.REPORT
     }
   }
 

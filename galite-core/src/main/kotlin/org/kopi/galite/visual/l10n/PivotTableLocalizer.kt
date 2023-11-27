@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,38 +23,44 @@ import org.jdom2.Element
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Implements an actor localizer.
+ * Implements a pivot table localizer.
  *
- * @param             document        the document containing the actor localization
- * @param             ident           the identifier of the actor localization
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the pivot table localization
  */
-class ActorLocalizer(document: Document, ident: String) {
-  /**
-   * Returns the value of the label attribute.
-   */
-  fun getLabel(): String = self.getAttributeValue("label")
-
-  /**
-   * Returns the value of the help attribute.
-   */
-  fun getHelp(): String = self.getAttributeValue("help")
+class PivotTableLocalizer(manager: LocalizationManager, document: Document) : Localizer(manager) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private val self: Element
+  private val root: Element = document.rootElement
 
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
-
   init {
-    val root: Element = document.rootElement
-    val names = listOf("form", "report", "chart", "insert", "pivottable") // FIXME: Do we steel need insert root element?
-
-    if (root.name !in names) {
+    if (root.name != "pivottable") {
       throw InconsistencyException("bad root element $root")
     }
-    self = Utils.lookupChild(root, "actor", "ident", ident)
+  }
+
+  /**
+   * Returns the value of the title attribute.
+   */
+  fun getTitle(): String = root.getAttributeValue("title")
+
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String? = root.getAttributeValue("help")
+
+  /**
+   * Constructs a field localizer for the given field.
+   *
+   * @param             ident           the identifier of the field
+   */
+  fun getFieldLocalizer(ident: String): FieldLocalizer {
+    return FieldLocalizer(manager,
+                          Utils.lookupChild(root, "field", "ident", ident))
   }
 }

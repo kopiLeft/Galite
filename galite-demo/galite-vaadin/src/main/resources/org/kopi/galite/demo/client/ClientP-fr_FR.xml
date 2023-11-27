@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pivottable title="Pivot table des clients">
+    <menu ident="Action" label="Action" />
+    <menu ident="File" label="Fichier" />
+
+    <actor ident="quit" label="Quitter" help="Ferme la table pivot." />
+    <actor ident="help" label="Aide" help="Afficher l'aide." />
+
+    <field ident="DIMENSION_0" label="Prénom" />
+    <field ident="DIMENSION_1" label="Nom" />
+    <field ident="DIMENSION_2" label="Pays" />
+    <field ident="DIMENSION_3" label="Ville" />
+    <field ident="DIMENSION_4" label="Age" />
+    <field ident="DIMENSION_5" label="Code postal" />
+    <field ident="DIMENSION_6" label="Produit" />
+    <field ident="DIMENSION_7" label="Description Produit" />
+    <field ident="MEASURE_0" label="Quantité" />
+    <field ident="MEASURE_1" label="Prix" />
+
+</pivottable>

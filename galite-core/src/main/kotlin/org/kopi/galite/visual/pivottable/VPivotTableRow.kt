@@ -18,11 +18,19 @@
 
 package org.kopi.galite.visual.pivottable
 
-import org.kopi.galite.visual.UWindow
+import javax.swing.tree.DefaultMutableTreeNode
 
-interface UPivotTable : UWindow {
+class VPivotTableRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
+
   /**
-   * Builds the pivot table;
+   * Return the object at column
+   *
+   * @param        column                the index of the column
+   * @return        the object to be displayed
    */
-  fun build()
+  fun getValueAt(column: Int): Any? = data[column]
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

@@ -82,28 +82,29 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
       command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
       command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
       command(item = report) { createReport { ProductR() } }
+      command(item = pivotTable) { createPivotTable { ProductP() } }
     }
   }
+}
 
-  object Category : CodeDomain<Int>() {
-    init {
-      "shoes" keyOf 1
-      "shirts" keyOf 2
-      "glasses" keyOf 3
-      "pullovers" keyOf 4
-      "jeans" keyOf 5
-    }
+object Category : CodeDomain<Int>() {
+  init {
+    "shoes" keyOf 1
+    "shirts" keyOf 2
+    "glasses" keyOf 3
+    "pullovers" keyOf 4
+    "jeans" keyOf 5
   }
+}
 
-  object Tax : CodeDomain<String>() {
-    init {
-      "0%"  keyOf "tax 0"
-      "19%" keyOf "tax 1"
-      "9%" keyOf "tax 2"
-      "13%" keyOf "tax 3"
-      "22%" keyOf "tax 4"
-      "11%" keyOf "tax 5"
-    }
+object Tax : CodeDomain<String>() {
+  init {
+    "0%"  keyOf "tax 0"
+    "19%" keyOf "tax 1"
+    "9%" keyOf "tax 2"
+    "13%" keyOf "tax 3"
+    "22%" keyOf "tax 4"
+    "11%" keyOf "tax 5"
   }
 }
 

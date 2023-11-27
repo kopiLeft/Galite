@@ -65,6 +65,9 @@ dependencies {
   // Vaadin addons dependency
   testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
   testImplementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
+
+  // Pivot Table dependency
+  implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
 }
 
 tasks {

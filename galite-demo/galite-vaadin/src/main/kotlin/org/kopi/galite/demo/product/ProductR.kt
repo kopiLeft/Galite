@@ -81,7 +81,7 @@ class ProductR : Report(title = "Products", locale = Locale.UK) {
     model.close()
   }
 
-  val category = field(ProductForm.Category) {
+  val category = field(Category) {
     label = "Category"
     help = "The product category"
     group = department

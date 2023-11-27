@@ -246,10 +246,20 @@ fun addClient(firstName: String,
 }
 
 fun addProducts() {
+  // This data is used in automated tests
   addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"))
   addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"))
   addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"))
   addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"))
+  for (i in 4..499) {
+    val description = "description Product $i"
+    val category = (1..5).random()
+    val tax = "tax $category"
+    val gender = listOf("Men", "Women", "Children").random()
+    val supplier = listOf("Supplier 0", "Supplier 1", "Supplier 2").random()
+    val price = (50..500).random().toBigDecimal()
+    addProduct(description, category, tax, gender, supplier, price)
+  }
 }
 
 fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {

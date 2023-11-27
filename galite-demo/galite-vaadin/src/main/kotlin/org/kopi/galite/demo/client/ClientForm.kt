@@ -156,6 +156,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
     init {
       command(item = report) { createReport { ClientR() } }
+      command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
       command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
       command(item = list) { recursiveQuery() }
@@ -208,6 +209,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
       command(item = showHideFilter) { showHideFilter() }
       command(item = report) { createReport { ClientR() } }
+      command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
       command(item = list) { recursiveQuery() }
     }

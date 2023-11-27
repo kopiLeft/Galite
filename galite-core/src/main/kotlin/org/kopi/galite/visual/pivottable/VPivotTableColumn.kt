@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,40 +16,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.l10n
+package org.kopi.galite.visual.pivottable
 
-import org.jdom2.Document
-import org.jdom2.Element
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.PivotTableLocalizer
 
 /**
- * Implements a menu localizer.
- *
- * @param             document        the document containing the menu localization
- * @param             ident           the identifier of the menu localization
+ * Represents a pivot table column description
+ * @param    ident        The identifier of the field
+ * @param    position     The position of the dimension field
  */
-class MenuLocalizer(document: Document, ident: String) {
+class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private val self: Element
+  var label: String = ""
+  var help: String? = null
 
   // ----------------------------------------------------------------------
-  // CONSTRUCTOR
+  // LOCALIZATION
   // ----------------------------------------------------------------------
-  init {
-    val root: Element = document.rootElement
-    val names = listOf("form", "report", "chart", "insert", "pivottable") // FIXME: Do we steel need insert root element?
+  /**
+   * Localizes this field
+   *
+   * @param     parent         the caller localizer
+   */
+  fun localize(parent: PivotTableLocalizer) {
+    if (ident != "") {
+      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
-    if (root.name !in names) {
-      throw InconsistencyException("bad root element $root")
+      label = loc.getLabel() ?: ""
     }
-    self = Utils.lookupChild(root, "menu", "ident", ident)
   }
 
-  /**
-   * Returns the value of the label attribute.
-   */
-  fun getLabel(): String = self.getAttributeValue("label")
+  fun helpOnColumn(help: VHelpGenerator) {
+    help.helpOnColumn(label, this.help)
+  }
 }

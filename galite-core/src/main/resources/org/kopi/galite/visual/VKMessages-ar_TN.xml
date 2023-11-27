@@ -23,6 +23,7 @@
   <message ident="printing" text="الطباعة  جارية"/>
   <message ident="report_generation" text="انشاء التقرير جار"/>
   <message ident="chart_generation" text="انشاء الرسم البياني جار"/>
+  <message ident="pivotTable_generation" text="انشاء التقرير جار" />
 <!-- INFO TEXTS-->
   <message ident="saved_successfully" text="بيانات مسجلة"/>
 <!-- QUESTIONS-->

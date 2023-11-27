@@ -15,10 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.kopi.galite.gradle._java
-import org.kopi.galite.gradle._publishing
-import org.kopi.galite.gradle.configureMavenCentralPom
-import org.kopi.galite.gradle.signPublication
+import org.kopi.galite.gradle.*
 
 plugins {
   id("org.jetbrains.kotlin.jvm") version "1.6.10" apply false
@@ -42,6 +39,9 @@ subprojects {
     }
     maven {
       url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    }
+    maven {
+      url = uri("https://mvnrepository.com/artifact/org.vaadin.addons")
     }
   }
 
