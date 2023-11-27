@@ -1,6 +1,13 @@
+# 1.4.3
+## What's Changed
+* Fix : Allow creating Galite forms with database tables with a sequence name different from "<TABLE8NAME>ID" @mgrati [#604](https://github.com/kopiLeft/Galite/pull/604)
+* Feature: Add pivot table component implementation @RiadhCherni [#606](https://github.com/kopiLeft/Galite/pull/606)
+
+**Full Changelog**: [1.4.2 ... 1.4.3](https://github.com/kopiLeft/Galite/compare/1.4.2...1.4.3)
+
 # 1.4.2
 ## What's Changed
-* Fix: Allow creating galite forms with database tables without a column named "ID" @mgrati [#605](https://github.com/kopiLeft/Galite/pull/605)
+* Fix: Allow creating Galite forms with database tables without a column named "ID" @mgrati [#605](https://github.com/kopiLeft/Galite/pull/605)
 
 **Full Changelog**: [1.4.1 ... 1.4.2](https://github.com/kopiLeft/Galite/compare/1.4.1...1.4.2)
 
