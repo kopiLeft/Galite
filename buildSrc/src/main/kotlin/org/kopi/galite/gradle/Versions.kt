@@ -18,11 +18,10 @@ package org.kopi.galite.gradle
 
 object Versions {
   const val VAADIN = "23.3.8"
-  const val SPRING_BOOT = "2.7.14"
   const val KARIBU_TESTING = "1.3.23"
   const val ENHANCED_DIALOG = "23.1.2"
 
-  const val EXPOSED = "0.42.0"
+  const val EXPOSED = "0.42.1"
   const val H2 = "1.4.199"
   const val POSTGRES_NG = "0.8.6"
   const val ITEXT = "2.1.5"
