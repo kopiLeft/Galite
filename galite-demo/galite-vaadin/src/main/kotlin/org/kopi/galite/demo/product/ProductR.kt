@@ -81,13 +81,13 @@ class ProductR : Report(title = "Products", locale = Locale.UK) {
     model.close()
   }
 
-  val category = field(ProductForm.Category) {
+  val category = field(Category) {
     label = "Category"
     help = "The product category"
     group = department
   }
 
-  val department = field(STRING(20)) {
+  val department = nullableField(STRING(20)) {
     label = "Department"
     help = "The product department"
     group = description
@@ -101,7 +101,7 @@ class ProductR : Report(title = "Products", locale = Locale.UK) {
     }
   }
 
-  val supplier = field(STRING(20)) {
+  val supplier = nullableField(STRING(20)) {
     label = "Supplier"
     help = "The supplier"
   }

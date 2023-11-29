@@ -21,6 +21,7 @@ import java.util.Locale
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.cross.VDynamicReport
+import org.kopi.galite.visual.dsl.pivottable.PivotTable
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.form.VDictionaryForm
 
@@ -121,6 +122,15 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
     val field = this.block.activeField
     field?.validate()
     VDynamicReport.createDynamicReport(this.block)
+  }
+
+  /**
+   * create a pivot table for this form
+   */
+  protected fun Block.createPivotTable(reportbuilder: () -> PivotTable) {
+    model.createPivotTable(block) {
+      reportbuilder().model
+    }
   }
 
   // ----------------------------------------------------------------------

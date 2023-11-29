@@ -21,7 +21,7 @@ import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.form.VListDialog
-import org.kopi.galite.visual.pivottable.PivotTable
+import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
@@ -70,7 +70,7 @@ class VUIFactory : UIFactory() {
       is VListDialog -> {
         createListDialog(model)
       }
-      is PivotTable -> {
+      is VPivotTable -> {
         createPivotTable(model)
       }
       else -> {
@@ -160,7 +160,7 @@ class VUIFactory : UIFactory() {
    * @param model The pivot table model
    * @return The  [DPivotTable] view.
    */
-  internal fun createPivotTable(model: PivotTable): DPivotTable {
+  internal fun createPivotTable(model: VPivotTable): DPivotTable {
     return DPivotTable(model)
   }
 }

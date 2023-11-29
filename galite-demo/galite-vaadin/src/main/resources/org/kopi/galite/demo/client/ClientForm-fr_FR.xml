@@ -2,7 +2,6 @@
 
 <form title="Clients">
     <actor ident="list" label="Liste" help="Affiche la liste" />
-    <actor ident="interSave" label="Sauver" help="Sauver et recharger" />
     <page ident="Id$0" title="Client"/>
     <page ident="Id$1" title="Détails"/>
 
@@ -19,7 +18,8 @@
         <field ident="FLD_9" label="Actif" help="Client actif?" />
     </block>
     <block name="Sales" title="Ventes">
-        <field ident="FLD_2" label="ID" help="L'identifiant du produit" />
+        <field ident="FLD_1" label="ID" help="L'identifiant de vente" />
+        <field ident="FLD_2" label="Produit" help="L'identifiant du produit" />
         <field ident="FLD_3" label="Description" help="La description du produit" />
         <field ident="FLD_4" label="Quantité" help="La quantité vendue" />
         <field ident="FLD_5" label="Prix" help="Le prix du produit" />

@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.tests.database
 
-import java.time.Instant
+import java.time.LocalDateTime
 
 import kotlin.reflect.KClass
 
@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.select
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.UserRights
 import org.kopi.galite.database.Users
+import org.kopi.galite.database.databaseConfig
 import org.kopi.galite.database.list_Of_Tables
 import org.kopi.galite.database.sequencesList
 
@@ -43,7 +44,7 @@ fun connectToDatabase(url: String = TEST_DB_URL,
                       user: String = TEST_DB_USER,
                       password: String = TEST_DB_USER_PASSWORD
 ) {
-  Database.connect(url, driver = driver, user = user, password = password)
+  Database.connect(url, driver = driver, user = user, password = password, databaseConfig = databaseConfig())
 }
 
 /**
@@ -79,9 +80,9 @@ fun insertIntoUsers(shortname: String,
     it[name] = userName
     it[character] = shortname
     it[active] = true
-    it[createdOn] = Instant.now()
+    it[createdOn] = LocalDateTime.now()
     it[createdBy] = 1
-    it[changedOn] = Instant.now()
+    it[changedOn] = LocalDateTime.now()
     it[changedBy] = 1
   }
 }

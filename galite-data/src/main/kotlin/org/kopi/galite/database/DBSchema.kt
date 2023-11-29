@@ -19,7 +19,7 @@ package org.kopi.galite.database
 
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.javatime.datetime
 
 // ----------------------------------------------------------------------
 // VERSIONEN
@@ -27,7 +27,7 @@ import org.jetbrains.exposed.sql.javatime.timestamp
 object Versions : Table("VERSIONEN") {
   val packageName       = varchar("PAKET", 32)
   val number            = integer("NUMMER")
-  val date              = timestamp("DATUM")
+  val date              = datetime("DATUM")
 
   override val primaryKey = PrimaryKey(packageName, number)
 }
@@ -116,9 +116,9 @@ object Users : Table("KOPI_USERS") {
   val phone             = varchar("TELEFON", 20).nullable()
   val email             = varchar("EMAIL", 40).nullable()
   val active            = bool("AKTIV")
-  val createdOn         = timestamp("ERSTELLTAM")
+  val createdOn         = datetime("ERSTELLTAM")
   val createdBy         = integer("ERSTELLTVON")
-  val changedOn         = timestamp("GEAENDERTAM")
+  val changedOn         = datetime("GEAENDERTAM")
   val changedBy         = integer("GEAENDERTVON")
 
   override val primaryKey = PrimaryKey(id, name = "PK_KOPI_USERS_ID")
@@ -142,14 +142,6 @@ object References : Table("REFERENZEN") {
   override val primaryKey = PrimaryKey(table, column)
 }
 
-object Dummy : Table("DUMMY") {
-  val table             = char("dummy", 1)
-}
-
-object Dual : Table("DUAL") {
-  val table             = char("dummy", 1)
-}
-
 object ReportConfigurations: Table("REPORTCONFIGURATIONS") {
   val id                = integer("ID").autoIncrement("REPORTCONFIGURATIONSID")
   val uc                = integer("UC")
@@ -158,9 +150,9 @@ object ReportConfigurations: Table("REPORTCONFIGURATIONS") {
   val name              = varchar("KURZNAME", 30)
   val description       = varchar("BEZEICHNUNG", 100).nullable()
   val configuration     = blob("KONFIGURATION")
-  val createdOn         = timestamp("ERSTELLTAM")
+  val createdOn         = datetime("ERSTELLTAM")
   val createdBy         = integer("ERSTELLTVON")
-  val changedOn         = timestamp("GEAENDERTAM")
+  val changedOn         = datetime("GEAENDERTAM")
   val changedBy         = integer("GEAENDERTVON")
 
   override val primaryKey = PrimaryKey(id)
@@ -183,7 +175,7 @@ val ReportConfigurationsId      = Sequence("REPORTCONFIGURATIONSID")
 
 val list_Of_Tables = listOf(
   Versions, Modules, UserRights, GroupRights, GroupParties, Symbols,
-  Favorites, Users, Groups, References, Dummy, ReportConfigurations
+  Favorites, Users, Groups, References, ReportConfigurations
 )
 
 val sequencesList = listOf(ModulesId, UserRightsId, GroupRightsId, GroupPartiesId, SymbolsId,

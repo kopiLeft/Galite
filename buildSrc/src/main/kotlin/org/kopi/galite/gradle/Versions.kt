@@ -40,4 +40,5 @@ object Versions {
   const val JFREE_CHART = "1.0.19"
   const val WYSIWYG_EJAVA = "2.0.1"
   const val KOTLINX_DATAFRAME = "0.8.0-rc-7"
+  const val PIVOT_TABLE = "2.0.0"
 }

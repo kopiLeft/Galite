@@ -27,54 +27,21 @@ import java.time.LocalTime
 import kotlin.reflect.KClass
 
 import org.joda.time.DateTime
-import org.kopi.galite.visual.chart.VBooleanDimension
-import org.kopi.galite.visual.chart.VColumnFormat
-import org.kopi.galite.visual.chart.VDateDimension
-import org.kopi.galite.visual.chart.VDimension
-import org.kopi.galite.visual.chart.VDecimalDimension
-import org.kopi.galite.visual.chart.VDecimalMeasure
-import org.kopi.galite.visual.chart.VIntegerDimension
-import org.kopi.galite.visual.chart.VIntegerMeasure
-import org.kopi.galite.visual.chart.VMeasure
-import org.kopi.galite.visual.chart.VMonthDimension
-import org.kopi.galite.visual.chart.VStringDimension
-import org.kopi.galite.visual.chart.VTimeDimension
-import org.kopi.galite.visual.chart.VTimestampDimension
-import org.kopi.galite.visual.chart.VWeekDimension
+import org.kopi.galite.type.Image
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.chart.*
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.dsl.report.ReportField
-import org.kopi.galite.visual.form.VBooleanField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VDateField
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VDecimalField
-import org.kopi.galite.visual.form.VImageField
-import org.kopi.galite.visual.form.VIntegerField
-import org.kopi.galite.visual.form.VMonthField
-import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTextField
-import org.kopi.galite.visual.form.VTimeField
-import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.report.VBooleanColumn
-import org.kopi.galite.visual.report.VCalculateColumn
-import org.kopi.galite.visual.report.VCellFormat
-import org.kopi.galite.visual.report.VDateColumn
-import org.kopi.galite.visual.report.VDecimalColumn
-import org.kopi.galite.visual.report.VIntegerColumn
-import org.kopi.galite.visual.report.VMonthColumn
-import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.report.VStringColumn
-import org.kopi.galite.visual.report.VTimeColumn
-import org.kopi.galite.visual.report.VTimestampColumn
-import org.kopi.galite.visual.report.VWeekColumn
-import org.kopi.galite.type.Image
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Week
-import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.report.*
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.dsl.pivottable.PivotTableField
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -269,6 +236,22 @@ open class Domain<T>(val width: Int? = null,
           VTimeColumn(ident, options, align.value, groupID, function, format)
         Instant::class, LocalDateTime::class, DateTime::class ->
           VTimestampColumn(ident, options, align.value, groupID, function, format)
+        else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }
+    }
+  }
+
+  /**
+   * Builds the pivot table column model
+   */
+  open fun buildPivotTableFieldModel(field: PivotTableField<*>, position: Dimension.Position?): VPivotTableColumn {
+    return with(field) {
+      when (kClass) {
+        Int::class, Long::class, String::class, BigDecimal::class, Boolean::class, org.joda.time.LocalDate::class,
+        LocalDate::class, java.sql.Date::class, java.util.Date::class, Month::class, Week::class, org.joda.time.LocalTime::class,
+        LocalTime::class, Instant::class, LocalDateTime::class, DateTime::class ->
+          VPivotTableColumn(ident, position)
+
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }

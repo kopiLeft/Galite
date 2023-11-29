@@ -29,6 +29,7 @@
     <actor ident="Delete" label="Löschen" help="Datensatz löschen"/>
     <actor ident="CreateReport" label="Bericht" help="Bericht erstellen"/>
     <actor ident="CreateDynamicReport" label="Bericht" help="Bericht erstellen"/>
+    <actor ident="CreatePivotTable" label="Pivot Table" help="Create pivot table." />
     <actor ident="ShowHideFilter" label="Anzeigen / Verbergen filter" help=" Anzeigen oder Verbergen Blockfilter"/>
     <actor ident="Help" label="Hilfe" help="Hilfetext für das ausgewählte Feld"/>
 </insert>

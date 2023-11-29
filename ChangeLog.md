@@ -1,3 +1,90 @@
+# 1.4.3
+## What's Changed
+* Fix : Allow creating Galite forms with database tables with a sequence name different from "<TABLE8NAME>ID" @mgrati [#604](https://github.com/kopiLeft/Galite/pull/604)
+* Feature: Add pivot table component implementation @RiadhCherni [#606](https://github.com/kopiLeft/Galite/pull/606)
+
+**Full Changelog**: [1.4.2 ... 1.4.3](https://github.com/kopiLeft/Galite/compare/1.4.2...1.4.3)
+
+# 1.4.2
+## What's Changed
+* Fix: Allow creating Galite forms with database tables without a column named "ID" @mgrati [#605](https://github.com/kopiLeft/Galite/pull/605)
+
+**Full Changelog**: [1.4.1 ... 1.4.2](https://github.com/kopiLeft/Galite/compare/1.4.1...1.4.2)
+
+# 1.4.1
+## What's Changed
+* Fix: Bug in DATETIME domain type: Change the return type to LocalDateTime for columns of type LocalDateTime when calling retrieveQuery by @achraf-debug [#602](https://github.com/kopiLeft/Galite/pull/602)
+
+**Full Changelog**: [1.4.0 ... 1.4.1](https://github.com/kopiLeft/Galite/compare/1.4.0...1.4.1)
+
+# 1.4.0
+## What's Changed
+* Upgrade Vaadin version from 22.0.14 to 23.3.8 by @MedAzizTousli in [#601](https://github.com/kopiLeft/Galite/pull/601)
+* Configure field height in dynamic report fields by @MedAzizTousli in [#599](https://github.com/kopiLeft/Galite/pull/599)
+* Configure defaultRepetitionAttempts when connecting to database by @achraf-debug [#595](https://github.com/kopiLeft/Galite/pull/595)
+
+**Full Changelog**: [1.3.8 ... 1.4.0](https://github.com/kopiLeft/Galite/compare/1.3.8...1.4.0)
+
+# 1.3.8
+## What's Changed
+* Add use of expressions with keyOf function in ListDomain by @yahiaoui97 [APPS-01LB]
+* Fix: Add support for java.time.LocalDateTime in addition to java.time.Instant in GaliteDomain timestamp fields by @achraf-debug [#593](https://github.com/kopiLeft/Galite/pull/593)
+
+**Full Changelog**: [1.3.7 ... 1.3.8](https://github.com/kopiLeft/Galite/compare/1.3.7...1.3.8)
+
+# 1.3.7
+## What's Changed
+* Fix: Change SQL query logging to depend on traceLevel value by @mgrati [#594](https://github.com/kopiLeft/Galite/pull/594)
+
+**Full Changelog**: [1.3.6 ... 1.3.7](https://github.com/kopiLeft/Galite/compare/1.3.6...1.3.7)
+
+# 1.3.6
+## What's Changed
+* Fix: Mark default actors defined in org.kopi.galite.visual.dsl.form.Form as non user actor to allow the application to localize these actors by @mgrati [#590](https://github.com/kopiLeft/Galite/pull/590)
+
+**Full Changelog**: [1.3.5 ... 1.3.6](https://github.com/kopiLeft/Galite/compare/1.3.5...1.3.6)
+
+# 1.3.5
+## What's Changed
+* Remove dependency of ReportSelectionForm to DictionaryForm by @mgrati [APPS-01CJ]
+* Add default actors and commands to Galite Form and adjust compatibility with the default Galite Locales : fr_FR, en_GB, de_AT and ar_TN by @mgrati [APPS-01H0]
+
+**Full Changelog**: [1.3.4 ... 1.3.5](https://github.com/kopiLeft/Galite/compare/1.3.4...1.3.5)
+
+# 1.3.4
+## What's Changed
+* Add support for types BigDecimal and Month in Galite ListDomain by @achraf-debug [#589](https://github.com/kopiLeft/Galite/pull/589)
+* Add ReportConfigurations table to be able to setup dynamic reports configuration by @achraf-debug [APPS-01F2]
+* Remove multi-block assertion when calling VBlock.setMode by @yahiaoui97 [APPS-01KN]
+
+**Full Changelog**: [1.3.3 ... 1.3.4](https://github.com/kopiLeft/Galite/compare/1.3.3...1.3.4)
+
+# 1.3.3
+## What's Changed
+* Adjust and add the possibility to execute automatically the creation of tables related to the framework in the database. [#588](https://github.com/kopiLeft/Galite/pull/588)
+* Add the possibility to define trace level and isolation level when establishing a database connection with Galite. [#588](https://github.com/kopiLeft/Galite/pull/588)
+* Add the possibility to get connection info from path conf/config.properties file. [#588](https://github.com/kopiLeft/Galite/pull/588)
+* Fix : Enable click on Quit button in MenuTree by @yahiaoui97 [APPS-01EQ]
+
+**Full Changelog**: [1.3.2 ... 1.3.3](https://github.com/kopiLeft/Galite/compare/1.3.2...1.3.3)
+
+# 1.3.2
+## What's Changed
+* No changes
+# 1.3.1
+## What's Changed
+* Fix: Set RoundingMode parameter when calling BigDecimal setScale function by @mgrati [#587](https://github.com/kopiLeft/Galite/pull/587)
+* Add constraints to Galite domains by @hfazai [#559](https://github.com/kopiLeft/Galite/pull/559)
+* VaadinUI: workaround to avoid closing editor on application errors by @hfazai
+* Fix: Multi block UI : keep the record open when entering an invalid value by @hfazai
+* Implement text transformation feature by @hfazai
+* Vaadin: Move up to version 22.0.14 by @hfazai
+* VaadinUI: set navigation listeners on the notification dialogs by @hfazai
+* VaadinUI: Set width to 100% input text fields in aligned blocks by @hfazai
+* Fix: VaadinUI : Stay on the active field when validating boolean field value by @hfazai
+
+**Full Changelog**: [1.3.0 ... 1.3.1](https://github.com/kopiLeft/Galite/compare/1.3.0...1.3.1)
+
 # 1.3.0
 ## What's Changed
 * DSL/Model: code clean and refactoring by @hfazai in [#581](https://github.com/kopiLeft/Galite/pull/581)

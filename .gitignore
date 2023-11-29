@@ -49,6 +49,11 @@ build
 **/vite.generated.ts
 **/frontend/generated/*
 
+# Files by VAADIN 23
+**/vite.config.ts
+**/vite.generated.ts
+**/.pnpmfile.cjs
+
 galite-demo/galite-vaadin/frontend/index.html
 galite-demo/galite-vaadin-spring/frontend/index.html
 galite-tests/frontend/index.html

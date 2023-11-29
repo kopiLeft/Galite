@@ -23,9 +23,9 @@ import org.kopi.galite.visual.MessageCode
 
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.report.VNoRowException
 import org.kopi.galite.visual.report.VReport
 
@@ -216,6 +216,23 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
       setWaitInfo(Message.getMessage("report_generation"))
       val report = reportBuilder()
       report.doNotModal()
+      unsetWaitInfo()
+    } catch (e: VNoRowException) {
+      unsetWaitInfo()
+      error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  /**
+   * Implements interface for COMMAND CreatePivotTable
+   */
+  fun createPivotTable(b: VBlock, pivotTableBuilder: () -> VPivotTable) {
+    b.validate()
+    try {
+      setWaitInfo(Message.getMessage("pivotTable_generation"))
+      val pivotTable = pivotTableBuilder()
+      pivotTable.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoRowException) {
       unsetWaitInfo()

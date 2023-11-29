@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2023 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,10 +18,11 @@
 
 package org.kopi.galite.visual.pivottable
 
-import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.UWindow
 
-/**
- * `UPivotTable` is the top-level interface that must be implemented
- * by all pivot tables. It is the visual component of the [PivotTable] model.
- */
-interface UPivotTable : UReport
+interface UPivotTable : UWindow {
+  /**
+   * Builds the pivot table;
+   */
+  fun build()
+}

@@ -135,7 +135,23 @@ class ClientForm : Form(title = "form-title", locale = Locale.UK) {
 }
 
 class Clients : Block("Clients", 1, 1) {
-  val u = table(Client)
+  // Adds a link between the block and a database table
+  val u = table(Client, idColumn = Client.idClt, sequence = Sequence("CLIENTSID"))
+  /*
+    - We can add as many links to database tables as we like.
+        - The first added table is the main one : it is the table for which the inserts / updates are executed.
+        - The remaining tables are the "look-up tables" associated with the first one.
+    - The function `table` adds a table to the block. This function accepts 3 parameters :
+        - table <org.jetbrains.exposed.sql.Table> : *required* : The table reference.
+        - idColumn <org.jetbrains.exposed.sql.Column<Int>?> : *optional* : The table's ID column.
+            - This param is only valid for the main table.
+            - It should only be referenced if the table's ID column name is different from "ID"
+        - sequence <org.jetbrains.exposed.sql.Sequence?> : *optional* : The table's sequence associated to the ID column.
+            - This param is only valid for the main table.
+            - It should only be referenced if the table sequence name is different from one of the default naming conventions :
+                - <TABLE_NAME>ID
+                - <TABLE_NAME>_<ID_FIELD_NAME>_seq
+  */
 
   val idClt = visit(domain = LONG(10), position = at(1, 1..2)) {
     label = "ID"
@@ -321,6 +337,79 @@ class ChartSample: Chart(
 }
 ````
 ![docs/chart.png](docs/chart.png)
+
+## Pivot table
+A pivot table is a statistics tool that summarizes and reorganizes selected columns and rows of data to obtain a desired report. It does not change the original data but "pivots" or turns the data to view it from different perspectives.
+
+The user will be able to select the required data along with the pivot table’s dimensions and measures.
+
+Pivot table allows users to transform columns into rows, group, count, total, or average data stored in a table, and is especially useful for analyzing large amounts of data and presenting it in a meaningful layout.
+
+````KOTLIN
+
+import org.vaadin.addons.componentfactory.PivotTable.Aggregator
+import org.vaadin.addons.componentfactory.PivotTable.Renderer
+
+class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
+
+  val action = menu("Action")
+
+  val quit = actor(menu = action, label = "Quit", help = "Quit", ident = "quit") {
+    key = Key.F1
+    icon = Icon.QUIT
+  }
+  val cmdQuit = command(item = quit) { model.close() }
+
+  val product = dimension(STRING(50), Position.NONE) {
+    label = "Product"
+    help = "The product description"
+  }
+  val department = dimension(STRING(20), Position.COLUMN) {
+    label = "Department"
+    help = "The product department"
+  }
+  val supplier = dimension(STRING(20), Position.ROW) {
+    label = "Supplier"
+    help = "The supplier"
+  }
+  val tax = dimension(STRING(10), Position.ROW) {
+    label = "Tax"
+    help = "The product tax name"
+  }
+  val category = dimension(STRING(10), Position.ROW) {
+    label = "Category"
+    help = "The product category"
+  }
+  val price = measure(DECIMAL(10, 5)) {
+    label = "Price"
+    help = "The product unit price excluding VAT"
+  }
+
+  val init = trigger(INIT) {
+    // defaultRenderer = ... : Set default renderer. If not set, defaultRenderer = Renderer.TABLE
+    // aggregator = ... : Set default aggregator. If not set, aggregator = Pair(Aggregator.COUNT, "")
+    // disabledRerenders = mutableListOf(...) : Set disabled renderers for this pivot table.
+  }
+
+  init {
+    val products = Product.selectAll()
+
+    transaction {
+      products.forEach { result ->
+        add {
+          this[product] = result[Product.description]
+          this[department] = result[Product.department].orEmpty()
+          this[supplier] = result[Product.supplier].orEmpty()
+          this[category] = result[Product.category]
+          this[tax] = result[Product.taxName]
+          this[price] = result[Product.price]
+        }
+      }
+    }
+  }
+}
+````
+![docs/pivottable.png](docs/pivottable.png)
 
 ## Contributing
 All contributions are welcome.

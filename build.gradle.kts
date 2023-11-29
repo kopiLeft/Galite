@@ -43,7 +43,9 @@ subprojects {
     maven {
       url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
-//    mavenLocal()
+    maven {
+      url = uri("https://mvnrepository.com/artifact/org.vaadin.addons")
+    }
   }
 
   dependencies {

@@ -18,5 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.common
 
 import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.dependency.NpmPackage
 
+@NpmPackage(value = "@vaadin-component-factory/vcf-enhanced-dialog", version = "23.1.1")
 open class Dialog : EnhancedDialog()

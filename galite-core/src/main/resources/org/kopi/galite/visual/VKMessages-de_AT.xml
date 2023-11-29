@@ -23,6 +23,7 @@
   <message ident="printing" text="Druck wird vorbereitet." />
   <message ident="report_generation" text="Bericht wird erstellt." />
   <message ident="chart_generation" text="Diagramm wird erstellt." />
+  <message ident="pivotTable_generation" text="Pivot-Tisch wird erstellt." />
 <!-- INFO TEXTS-->
   <message ident="saved_successfully" text="Datensatz wurde geändert." />
 <!-- QUESTIONS-->

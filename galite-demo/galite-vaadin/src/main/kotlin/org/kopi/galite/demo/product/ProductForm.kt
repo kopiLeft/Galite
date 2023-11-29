@@ -18,6 +18,8 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.Sequence
+
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
@@ -41,7 +43,7 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
   val block = page.insertBlock(BlockProduct())
 
   inner class BlockProduct : Block("Products", 1, 1) {
-    val u = table(Product)
+    val u = table(Product, sequence = Sequence("PRODUCTS_SEQ"))
 
     val idPdt = hidden(domain = INT(20)) {
       label = "ID"
@@ -53,7 +55,7 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
       help = "The product description"
       columns(u.description)
     }
-    val price = visit(domain = DECIMAL(20, 10), follow(description)) {
+    val price = mustFill(domain = DECIMAL(20, 10), follow(description)) {
       label = "Price"
       help = "The product unit price excluding VAT"
       columns(u.price)
@@ -76,33 +78,33 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
     init {
       blockVisibility(Access.VISIT, Mode.QUERY)
 
-      command(item = report) {
-        createReport {
-          ProductR()
-        }
-      }
+      command(item = menuQuery) { recursiveQuery() }
+      command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
+      command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
+      command(item = report) { createReport { ProductR() } }
+      command(item = pivotTable) { createPivotTable { ProductP() } }
     }
   }
+}
 
-  object Category : CodeDomain<Int>() {
-    init {
-      "shoes" keyOf 1
-      "shirts" keyOf 2
-      "glasses" keyOf 3
-      "pullovers" keyOf 4
-      "jeans" keyOf 5
-    }
+object Category : CodeDomain<Int>() {
+  init {
+    "shoes" keyOf 1
+    "shirts" keyOf 2
+    "glasses" keyOf 3
+    "pullovers" keyOf 4
+    "jeans" keyOf 5
   }
+}
 
-  object Tax : CodeDomain<String>() {
-    init {
-      "0%"  keyOf "tax 0"
-      "19%" keyOf "tax 1"
-      "9%" keyOf "tax 2"
-      "13%" keyOf "tax 3"
-      "22%" keyOf "tax 4"
-      "11%" keyOf "tax 5"
-    }
+object Tax : CodeDomain<String>() {
+  init {
+    "0%"  keyOf "tax 0"
+    "19%" keyOf "tax 1"
+    "9%" keyOf "tax 2"
+    "13%" keyOf "tax 3"
+    "22%" keyOf "tax 4"
+    "11%" keyOf "tax 5"
   }
 }
 

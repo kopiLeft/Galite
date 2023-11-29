@@ -19,7 +19,7 @@ package org.kopi.galite.database.installed
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.javatime.datetime
 
 class TransDB2 : TransDB("galite", 2) {
   /**
@@ -41,9 +41,9 @@ private object ReportConfigurations: Table("REPORTCONFIGURATIONS") {
   val name              = varchar("KURZNAME", 30)
   val description       = varchar("BEZEICHNUNG", 100).nullable()
   val configuration     = blob("KONFIGURATION")
-  val createdOn         = timestamp("ERSTELLTAM")
+  val createdOn         = datetime("ERSTELLTAM")
   val createdBy         = integer("ERSTELLTVON")
-  val changedOn         = timestamp("GEAENDERTAM")
+  val changedOn         = datetime("GEAENDERTAM")
   val changedBy         = integer("GEAENDERTVON")
 
   override val primaryKey = PrimaryKey(id)

@@ -23,6 +23,7 @@
   <message ident="printing" text="Printing in progress." />
   <message ident="report_generation" text="Building report." />
   <message ident="report_generation" text="Building chart." />
+  <message ident="pivotTable_generation" text="Building pivot table" />
   <!-- INFO TEXTS-->
   <message ident="saved_successfully" text="Record saved successfully." />
   <!-- QUESTIONS-->
