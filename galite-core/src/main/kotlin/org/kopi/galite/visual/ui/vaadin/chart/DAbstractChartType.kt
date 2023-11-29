@@ -18,16 +18,14 @@
 package org.kopi.galite.visual.ui.vaadin.chart
 
 import com.github.appreciated.apexcharts.ApexCharts
-import com.github.appreciated.apexcharts.ApexChartsBuilder
-import com.github.appreciated.apexcharts.config.Chart
 import com.github.appreciated.apexcharts.config.builder.*
 import com.github.appreciated.apexcharts.config.chart.Type
 import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder
-import com.github.appreciated.apexcharts.config.chart.toolbar.builder.ToolsBuilder
 import com.github.appreciated.apexcharts.config.legend.Position
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
-import com.github.appreciated.apexcharts.config.plotoptions.builder.PieBuilder
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder
+import com.github.appreciated.apexcharts.config.yaxis.builder.AxisBorderBuilder
+import com.github.appreciated.apexcharts.config.yaxis.builder.TitleBuilder
 import com.github.appreciated.apexcharts.helper.Series
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import org.kopi.galite.visual.chart.UChartType
@@ -92,10 +90,23 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     when (type) {
       Type.PIE -> {
         finalValues.forEach {
-            apex.setChart(ChartBuilder.get().withType(type).withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
+            apex.setChart(ChartBuilder.get()
+                .withType(type)
+                .withToolbar(ToolbarBuilder.get().withShow(true).build())
+                .build())
+
           apex.setSeries(*it.toTypedArray())
           apex.setLabels(*labels.toTypedArray())
-
+            apex.setLegend(LegendBuilder.get()
+                  .withPosition(Position.LEFT)
+                  .build())
+          apex.setResponsive(ResponsiveBuilder.get()
+                  .withOptions(OptionsBuilder.get()
+                      .withLegend(LegendBuilder.get()
+                          .withPosition(Position.BOTTOM)
+                          .build())
+                      .build())
+                  .build())
         }
       }
 
@@ -103,14 +114,32 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
         apex.setChart(ChartBuilder.get().withType(type).build())
         apex.setSeries(*series.toTypedArray())
         apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-        apex.setLabels(*labels.toTypedArray())
+          println("series.size : " + series.size)
+        if (series.size > 1) {
+            apex.setYaxis(
+                arrayOf(
+                    YAxisBuilder.get()
+                        .withTitle(TitleBuilder.get().withText(series.toTypedArray()[0].name).build())
+                        .withAxisBorder(AxisBorderBuilder.get().withShow(false).build())
+                        .build(),
+
+                    YAxisBuilder.get()
+                        .withTitle(TitleBuilder.get().withText(series.toTypedArray()[1].name).build())
+                        .withAxisBorder(AxisBorderBuilder.get().withShow(true).build())
+                        .withOpposite(true)
+                        .build()
+                )
+            )
+        }
+
+        //apex.setLabels(*labels.toTypedArray())
       }
 
       Type.RANGEBAR -> {
-        apex.setChart(ChartBuilder.get().withType(type).withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
-        apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-        apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
+          apex.setChart(ChartBuilder.get().withType(type).build())
+          apex.setSeries(*series.toTypedArray())
+          apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
+          apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
 
       }
       else -> {

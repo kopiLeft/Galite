@@ -125,11 +125,15 @@ class ChartSample : Chart(
     label = "population"
   }
 
+  val charge = measure(INT(10)) {
+    label = "charge"
+  }
+
   val city = dimension(STRING(10)) {
     label = "city"
 
     format { value ->
-      value?.toUpperCase()
+      value?.uppercase()
     }
   }
 
@@ -147,16 +151,19 @@ class ChartSample : Chart(
     city.add("Tunis") {
       this[area] = BigDecimal("34600")
       this[population] = 1056247
+      this[charge] = 10
     }
 
     city.add("Kasserine") {
       this[area] = BigDecimal("806600")
       this[population] = 439243
+      this[charge] = 100
     }
 
     city.add("Bizerte") {
       this[area] = BigDecimal("568219")
       this[population] = 368500
+      this[charge] = 24
     }
   }
 }

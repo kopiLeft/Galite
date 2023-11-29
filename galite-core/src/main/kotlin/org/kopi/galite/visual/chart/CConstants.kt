@@ -35,10 +35,6 @@ interface CConstants : Constants {
     const val TYPE_LINE = 3
     const val TYPE_AREA = 4
     const val TYPE_HISTOGRAM = 5
-    const val TYPE_DONUT = 6
-    const val TYPE_RADIALBAR = 7
-    const val TYPE_SCATTER = 8
-    const val TYPE_BUBBLE = 9
 
     // ---------------------------------------------------------------------
     // EMPTY TEXT
