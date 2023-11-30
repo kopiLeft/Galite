@@ -111,9 +111,9 @@ class VReportTests: JApplicationTestBase() {
         while (cellIterator.hasNext()) {
           val cell: Cell = cellIterator.next()
           when (cell.cellType) {
-            CellType.NUMERIC -> result += cell.numericCellValue.toString() + "  "
-            CellType.STRING -> result += cell.stringCellValue.toString() + "  "
-            else             -> {}
+            CellType.NUMERIC    -> result += cell.numericCellValue.toString() + "  "
+            CellType.STRING     -> result += cell.stringCellValue.toString() + "  "
+            else                -> {}
           }
         }
         result += ""

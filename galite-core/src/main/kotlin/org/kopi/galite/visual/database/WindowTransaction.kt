@@ -29,7 +29,7 @@ import org.kopi.galite.visual.VWindow
 /**
  * Starts a protected transaction.
  *
- * @param	message		the message to be displayed.
+ * @param       message         the message to be displayed.
  * @param       db              the database to execute the statement.
  * @param       statement       the transaction statement.
  */
@@ -46,11 +46,11 @@ fun <T> Window.transaction(message: String? = null,
 /**
  * Starts a protected transaction.
  *
- * @param	message		        the message to be displayed.
+ * @param       message                 the message to be displayed.
  * @param       transactionIsolation    the transaction isolation level (Connection.TRANSACTION_SERIALIZABLE,
- * TRANSACTION_READ_UNCOMMITTED, ...). See [Connection].
- * @param       readOnly                Boolean value that specifies if Should all connections/transactions be executed
- * in read-only mode by default or not. Default state is false.
+ *                                      TRANSACTION_READ_UNCOMMITTED, ...). See [Connection].
+ * @param       readOnly                Boolean value that specifies if all connections/transactions should be executed
+ *                                      in read-only mode by default or not. Default state is false.
  * @param       db                      the database to execute the statement.
  * @param       statement               the transaction statement.
  */
@@ -69,7 +69,7 @@ fun <T> Window.transaction(message: String? = null,
 /**
  * Starts a protected transaction.
  *
- * @param	message		the message to be displayed.
+ * @param       message         the message to be displayed.
  * @param       db              the database to execute the statement.
  * @param       statement       the transaction statement.
  */
@@ -86,11 +86,11 @@ internal fun <T> VWindow.transaction(message: String? = null,
 /**
  * Starts a protected transaction.
  *
- * @param	message		        the message to be displayed.
+ * @param       message                 the message to be displayed.
  * @param       transactionIsolation    the transaction isolation level (Connection.TRANSACTION_SERIALIZABLE,
- * TRANSACTION_READ_UNCOMMITTED, ...). See [Connection].
+ *                                      TRANSACTION_READ_UNCOMMITTED, ...). See [Connection].
  * @param       readOnly                Boolean value that specifies if Should all connections/transactions be executed
- * in read-only mode by default or not. Default state is false.
+ *                                      in read-only mode by default or not. Default state is false.
  * @param       db                      the database to execute the statement.
  * @param       statement               the transaction statement.
  */
@@ -98,18 +98,14 @@ internal fun <T> VWindow.transaction(message: String? = null,
                                      transactionIsolation: Int,
                                      readOnly: Boolean,
                                      db: Database? = null,
-                                     statement: Transaction.() -> T): T =
-  doAndWait(message) {
-    val value = org.jetbrains.exposed.sql.transactions.transaction(
-      transactionIsolation,
-      readOnly,
-      db,
-      statement)
-    if (this is VForm) {
-      commitTrail()
-    }
-    value
+                                     statement: Transaction.() -> T)
+: T = doAndWait(message) {
+  val value = org.jetbrains.exposed.sql.transactions.transaction(transactionIsolation, readOnly, db, statement)
+  if (this is VForm) {
+    commitTrail()
   }
+  value
+}
 
 /**
  * Display waiting message while executing the task.

@@ -185,16 +185,12 @@ class Tree(
   }
 
   override fun isUnique(name: String): Boolean = isUnique(name, getItem(-1))
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
 
   override fun getRootItem(): Item = getRootItem(getItem(-1))
 
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
   /**
    * Return true if the item name done is unique in this tree
    */

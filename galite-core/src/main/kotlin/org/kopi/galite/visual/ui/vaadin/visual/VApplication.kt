@@ -88,8 +88,7 @@ import com.vaadin.flow.shared.communication.PushMode
   CssImport("./styles/galite/common.css")
 ])
 @Suppress("LeakingThis")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
-                                                               HasDynamicTitle {
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener, HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -318,8 +317,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     val driver = getInitParameter("driver")
     val schema = getInitParameter("schema")
     val maxRetires = getInitParameter("maxRetries")
-    val minRepetitionDelay = getInitParameter("minRepetitionDelay")
-    val maxRepetitionDelay = getInitParameter("maxRepetitionDelay")
+    val waitMin = getInitParameter("waitMin")
+    val waitMax = getInitParameter("waitMax")
 
     requireNotNull(database) { "The database url shouldn't be null" }
     requireNotNull(driver) { "The jdbc driver shouldn't be null" }
@@ -330,8 +329,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                          password,
                          schema,
                          maxRetires?.toInt(),
-                         minRepetitionDelay?.toLong(),
-                         maxRepetitionDelay?.toLong())
+                         waitMin?.toLong(),
+                         waitMax?.toLong())
     // check if context is created
     if (dBConnection == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))

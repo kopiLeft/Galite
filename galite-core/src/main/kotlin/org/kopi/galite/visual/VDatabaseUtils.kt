@@ -36,9 +36,13 @@ object VDatabaseUtils {
   fun checkForeignKeys_(id: Int, queryTable: Table){
 
     transaction {
-      val query1 = References.slice(References.table, References.column, References.action)
-        .select { References.reference eq queryTable.tableName }
-        .orderBy(References.action to SortOrder.DESC)
+      val query1 = References.slice(
+        References.table,
+        References.column,
+        References.action
+      ).select {
+        References.reference eq queryTable.tableName
+      }.orderBy(References.action to SortOrder.DESC)
       val action = query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
@@ -48,10 +52,8 @@ object VDatabaseUtils {
           'R' -> transaction {
             val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             if (query2.toList()[1] != null) {
-              throw VExecFailedException(
-                MessageCode.getMessage("VIS-00021", arrayOf<Any>(
-                  query1Row[References.column],
-                  query1Row[References.table])))
+              throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(query1Row[References.column],
+                                                                                          query1Row[References.table])))
             }
           }
 
@@ -79,9 +81,13 @@ object VDatabaseUtils {
     // FIXME : this should be re-implemented
     transaction {
 
-      val query1 = References.slice(References.table, References.column, References.action)
-        .select { References.reference eq table }
-        .orderBy(References.action to SortOrder.DESC)
+      val query1 = References.slice(
+        References.table,
+        References.column,
+        References.action
+      ).select {
+        References.reference eq table
+      }.orderBy(References.action to SortOrder.DESC)
       val action = query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
@@ -89,13 +95,10 @@ object VDatabaseUtils {
         }
         when (query1Row[References.action][0]) {
           'R' -> transaction {
-            val query2 = auxTable.slice(auxTable.id)
-              .select { auxTable.column eq id }
+            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             if (query2.toList()[1] != null) {
-              throw VExecFailedException(
-                MessageCode.getMessage("VIS-00021", arrayOf<Any>(
-                  query1Row[References.column],
-                  query1Row[References.table])))
+              throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(query1Row[References.column],
+                                                                                          query1Row[References.table])))
             }
           }
 

@@ -261,14 +261,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
   }
 
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
   /**
    * Disposes the window. Finalize and close this window.
    */
@@ -423,13 +415,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
   }
 
-  /**
-   * starts the window
-   * @exception        VException        an exception may be raised by triggers
-   */
-  @Throws(VException::class)
-  abstract override fun run()
-
   override fun getModel(): VWindow? {
     return model
   }
@@ -485,6 +470,10 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
     getModel()!!.willClose(VWindow.CDE_QUIT)
   }
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 
   /**
    * Displays the application information.

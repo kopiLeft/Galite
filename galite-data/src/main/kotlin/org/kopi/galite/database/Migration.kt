@@ -95,8 +95,8 @@ abstract class Migration {
                                   options.schema,
                                   options.trace,
                                   maxRetries = options.maxRetries,
-                                  minRepetitionDelay = options.minRepetitionDelay,
-                                  maxRepetitionDelay = options.maxRepetitionDelay)
+                                  waitMin = options.waitMin,
+                                  waitMax = options.waitMax)
     } else {
       Connection.createConnection(Configuration.getString("database")!!,
                                   Configuration.getString("driver")!!,
@@ -106,8 +106,8 @@ abstract class Migration {
                                   Configuration.getString("schema"),
                                   Configuration.getString("trace")?.toInt(),
                                   maxRetries = Configuration.getString("maxRetries")?.toInt(),
-                                  minRepetitionDelay = Configuration.getString("minRepetitionDelay")?.toLong(),
-                                  maxRepetitionDelay = Configuration.getString("maxRepetitionDelay")?.toLong())
+                                  waitMin = Configuration.getString("waitMin")?.toLong(),
+                                  waitMax = Configuration.getString("waitMax")?.toLong())
     }
   }
 

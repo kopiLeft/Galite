@@ -52,9 +52,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
  *
  * @param model The list dialog model.
  */
-class DListDialog(
-        private val model: VListDialog
-) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
+class DListDialog(private val model: VListDialog) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
 
   private var escaped = true
   private var doNewForm = false
@@ -100,14 +98,6 @@ class DListDialog(
 
   override fun selectFromDialog(window: UWindow?, showSingleEntry: Boolean): Int =
           selectFromDialog(window, null, showSingleEntry)
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
 
   /**
    * invoked when the user clicks outside the overlay or presses the escape key.
@@ -445,4 +435,8 @@ class DListDialog(
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 }

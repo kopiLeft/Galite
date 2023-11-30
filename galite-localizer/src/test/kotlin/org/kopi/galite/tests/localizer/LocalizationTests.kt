@@ -33,8 +33,7 @@ class LocalizationTests {
 
   @Test
   fun `test localization`() {
-    val sourceFilePath = "src/main/resources" + File.separator +
-                         this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
+    val sourceFilePath = "src/main/resources${File.separator}${this.javaClass.`package`.name.replace(".", "/")}${File.separatorChar}"
     val generatedFile = File("${sourceFilePath}/FormSample-${Locale.FRANCE}.xml")
 
     try {
@@ -54,14 +53,16 @@ class LocalizationTests {
         override val dBConnection get() = null
         override val defaultLocale get() = Locale.UK
         override val isNoBugReport get() = true
-        override fun login(database: String,
-                           driver: String,
-                           username: String,
-                           password: String,
-                           schema: String?,
-                           maxRetries: Int?,
-                           minRepetitionDelay: Long?,
-                           maxRepetitionDelay: Long?): Connection? {
+        override fun login(
+          database: String,
+          driver: String,
+          username: String,
+          password: String,
+          schema: String?,
+          maxRetries: Int?,
+          waitMin: Long?,
+          waitMax: Long?
+        ): Connection? {
           return null
         }
       }

@@ -33,10 +33,10 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   var maxRetries: Int? = null
 
   @JvmField
-  var minRepetitionDelay: Long? = null
+  var waitMin: Long? = null
 
   @JvmField
-  var maxRepetitionDelay: Long? = null
+  var waitMax: Long? = null
 
   override fun processOption(code: Int, g: Getopt): Boolean {
     return when (code.toChar()) {
@@ -77,11 +77,11 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
         true
       }
       'n' -> {
-        minRepetitionDelay = getInt(g, 0).toLong()
+        waitMin = getInt(g, 0).toLong()
         true
       }
       'x' -> {
-        maxRepetitionDelay = getInt(g, 0).toLong()
+        waitMax = getInt(g, 0).toLong()
         true
       }
       else -> super.processOption(code, g)
@@ -103,9 +103,9 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       total[parent.size + 6] =
         "  --properties, -q<String>: These properties override or complete the properties stored in the database."
       total[parent.size + 7] = "  --schema, -s<String>: The current database schema to be set."
-      total[parent.size + 8] = "  --maxRetries, -r<Int>: Sets the defaultRepetitionAttempts of Exposed to the value given, else 0."
-      total[parent.size + 9] = "  --minRepetitionDelay, -n<Long>: Sets the defaultMinRepetitionDelay of Exposed to the value given, else 0."
-      total[parent.size + 10] = "  --maxRepetitionDelay, -x<Long>: Sets the defaultMaxRepetitionDelay of Exposed to the value given, else 0."
+      total[parent.size + 8] = "  --maxRetries, -r<Int>: Set the number of maximum retries if a transaction fails."
+      total[parent.size + 9] = "  --waitMin, -n<Long>: The minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted."
+      total[parent.size + 10] = "  --waitMax, -x<Long>: The maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted (it has to be greater or equal to waitMin)."
 
       return total
     }
@@ -141,7 +141,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
       LongOpt("properties", LongOpt.REQUIRED_ARGUMENT, null, 'q'.code),
       LongOpt("schema", LongOpt.REQUIRED_ARGUMENT, null, 's'.code),
       LongOpt("maxRetries", LongOpt.OPTIONAL_ARGUMENT, null, 'r'.code),
-      LongOpt("minRepetitionDelay", LongOpt.OPTIONAL_ARGUMENT, null, 'n'.code),
-      LongOpt("maxRepetitionDelay", LongOpt.OPTIONAL_ARGUMENT, null, 'x'.code))
+      LongOpt("waitMin", LongOpt.OPTIONAL_ARGUMENT, null, 'n'.code),
+      LongOpt("waitMax", LongOpt.OPTIONAL_ARGUMENT, null, 'x'.code))
   }
 }

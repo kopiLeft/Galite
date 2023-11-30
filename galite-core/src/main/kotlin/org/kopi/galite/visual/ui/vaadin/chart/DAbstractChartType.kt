@@ -116,6 +116,10 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     super.add(apex)
   }
 
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
+
   override fun refresh() {
     TODO()
   }
@@ -133,14 +137,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
   override fun exportToJPEG(destination: OutputStream, width: Int, height: Int) {
     TODO()
     // DONE IN CLIENT SIDE
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
   }
 
   /**

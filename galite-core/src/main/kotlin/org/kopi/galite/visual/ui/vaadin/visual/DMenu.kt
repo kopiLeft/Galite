@@ -202,13 +202,6 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun openURL(url: String) {}
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
 
   override fun modelClosed(type: Int) {}
   override fun dispose() {}
@@ -241,8 +234,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   override fun getTree(): UMenuTree.UTree? = null
   override fun getBookmark(): UMenuTree.UBookmarkPanel? = null
 
-  override fun launchSelectedForm() {
-  }
+  override fun launchSelectedForm() {}
 
   override fun addSelectedElement() {}
   override fun setMenu() {}
@@ -252,4 +244,6 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun showApplicationInformation(message: String) {}
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 }

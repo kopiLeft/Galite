@@ -47,8 +47,8 @@ interface Application : MessageListener {
             password: String,
             schema: String?,
             maxRetries: Int?,
-            minRepetitionDelay: Long?,
-            maxRepetitionDelay: Long?): Connection?
+            waitMin: Long?,
+            waitMax: Long?): Connection?
 
   /**
    * Signs out from the application.

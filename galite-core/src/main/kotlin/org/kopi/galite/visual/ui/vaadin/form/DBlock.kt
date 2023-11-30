@@ -471,14 +471,6 @@ open class DBlock(val parent: DForm,
     return false
   }
 
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
   override fun createLayout(): BlockLayout {
     // label + field => 2 + lines
     val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos, this)
@@ -491,6 +483,10 @@ open class DBlock(val parent: DForm,
 
     return layout
   }
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 
   fun release() {
     columnViews.forEach {

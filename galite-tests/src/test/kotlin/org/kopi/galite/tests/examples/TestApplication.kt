@@ -50,14 +50,16 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
     get() =
       arrayOf(Locale.UK)
 
-  override fun login(database: String,
-                     driver: String,
-                     username: String,
-                     password: String,
-                     schema: String?,
-                     maxRetries: Int?,
-                     minRepetitionDelay: Long?,
-                     maxRepetitionDelay: Long?): Connection? {
+  override fun login(
+    database: String,
+    driver: String,
+    username: String,
+    password: String,
+    schema: String?,
+    maxRetries: Int?,
+    waitMin: Long?,
+    waitMax: Long?
+  ): Connection? {
     return try {
       Connection.createConnection(url = database,
                                   driver = driver,
@@ -66,8 +68,8 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
                                   lookupUserId = true,
                                   schema = schema,
                                   maxRetries = maxRetries,
-                                  minRepetitionDelay = minRepetitionDelay,
-                                  maxRepetitionDelay = maxRepetitionDelay)
+                                  waitMin = waitMin,
+                                  waitMax = waitMax)
     } catch (exception: Throwable) {
       null
     }

@@ -190,8 +190,6 @@ abstract class DField(internal var model: VFieldUI,
     // to be implemented by subclasses
   }
 
-  abstract override fun updateColor()
-
   override fun updateAccess() {
     access(currentUI) {
       access = getAccess()
@@ -249,11 +247,6 @@ abstract class DField(internal var model: VFieldUI,
    * @return        the displayed value at current position
    */
   abstract override fun getObject(): Any?
-  override fun isEnabled(): Boolean = super.isEnabled()
-
-  override fun setEnabled(enabled: Boolean) {
-    super.setEnabled(enabled)
-  }
 
   /**
    * set blink state
@@ -346,6 +339,10 @@ abstract class DField(internal var model: VFieldUI,
   override fun getBlockView(): UBlock {
     return model.blockView
   }
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 
   //-------------------------------------------------
   // FIELD LISTENER IMPLEMENTATION

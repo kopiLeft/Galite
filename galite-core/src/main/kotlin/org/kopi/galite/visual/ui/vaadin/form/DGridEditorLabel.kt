@@ -61,10 +61,6 @@ class DGridEditorLabel(text: String?,
     }
   }
 
-  override fun isEnabled(): Boolean = super.isEnabled()
-
-  override fun setEnabled(enabled: Boolean) = super.setEnabled(enabled)
-
   private fun setDescription(tooltip: String) {
     element.setProperty("title", tooltip)
   }
@@ -72,6 +68,10 @@ class DGridEditorLabel(text: String?,
   override fun orderChanged() {}
 
   override fun repaint() {}
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 
   /**
    * Updates the label content.

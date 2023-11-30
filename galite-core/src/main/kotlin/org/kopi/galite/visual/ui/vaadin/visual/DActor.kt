@@ -84,7 +84,6 @@ class DActor(private var model: VActor)
   override fun getModel(): VActor {
     return model
   }
-  override fun isEnabled(): Boolean = super.isEnabled()
 
 
   var currentUI: UI? = null
@@ -106,6 +105,8 @@ class DActor(private var model: VActor)
       item?.isEnabled = enabled
     }
   }
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
 
   override fun onComponentEvent(event: ClickEvent<Button>) {
     actionPerformed()

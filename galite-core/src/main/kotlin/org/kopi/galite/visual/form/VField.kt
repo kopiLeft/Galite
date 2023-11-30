@@ -609,8 +609,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun enter() {
     assert(block === getForm().getActiveBlock()) {
-      threadInfo() + "field : " + name + " block : " + block!!.name +
-      " active block : " + getForm().getActiveBlock()!!.name
+      "${threadInfo()} field : $name block : ${block!!.name} active block : ${getForm().getActiveBlock()!!.name}"
     }
     assert(block!!.activeRecord != -1) { threadInfo() + "current record = " + block!!.activeRecord }
     assert(block!!.activeField == null) { threadInfo() + "current field: " + block!!.activeField }
@@ -1356,13 +1355,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean =
-    alias?.isNull(0)
-    ?: if (hasTrigger(VConstants.TRG_VALUE)) {
-      callSafeTrigger(VConstants.TRG_VALUE) == null
-    } else {
-      isNullImpl(r)
-    }
+  fun isNull(r: Int): Boolean = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+    callSafeTrigger(VConstants.TRG_VALUE) == null
+  } else {
+    isNullImpl(r)
+  }
 
   /**
    * Is the field value of given record null ?
@@ -1376,13 +1373,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getObject(r: Int): Any? =
-    alias?.getObject(0)
-    ?: if (hasTrigger(VConstants.TRG_VALUE)) {
-      callSafeTrigger(VConstants.TRG_VALUE)
-    } else {
-      getObjectImpl(r)
-    }
+  fun getObject(r: Int): Any? = alias?.getObject(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+    callSafeTrigger(VConstants.TRG_VALUE)
+  } else {
+    getObjectImpl(r)
+  }
 
   /**
    * Returns the field value of the current record as an object
@@ -1589,13 +1584,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     var fireColorChanged: Boolean
 
     fireColorChanged = false
-    if (this.foreground[r] == null && foreground != null
-        || this.foreground[r] != null && this.foreground[r]!! != foreground) {
+    if (this.foreground[r] == null && foreground != null || this.foreground[r] != null && this.foreground[r] != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
-    if (this.background[r] == null && background != null
-        || this.background[r] != null && this.background[r]!! != foreground) {
+    if (this.background[r] == null && background != null || this.background[r] != null && this.background[r] != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1666,8 +1659,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+        && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+        && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -2282,9 +2275,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                        label,
                        lab ?: name,
                        toolTip)
-      if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
-          || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
-          || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
+      if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED ||
+          access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED ||
+          access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED)
+      {
         helpOnType(help)
         help.helpOnFieldCommand(command)
       }

@@ -49,9 +49,11 @@ import com.vaadin.flow.router.Route
 open class VApplicationTestBase : ApplicationTestBase() {
 
   protected val appInstance = GaliteApplication()
+
   init {
     setupApplication()
   }
+
   fun setupApplication() {
     ApplicationContext.applicationContext = applicationContext
     FileHandler.fileHandler = fileHandler
@@ -59,14 +61,18 @@ open class VApplicationTestBase : ApplicationTestBase() {
     WindowController.windowController = windowController
     UIFactory.uiFactory = uiFactory
   }
+
   override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
+
   override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
+
   companion object {
     val applicationContext = VApplicationContext()
     val fileHandler = VFileHandler()
     val imageHandler = VImageHandler()
     val uiFactory = VUIFactory()
   }
+
   @Route("")
   class GaliteApplication : VApplication(GaliteRegistry()) {
     override val sologanImage get() = "slogan.png"
@@ -78,14 +84,16 @@ open class VApplicationTestBase : ApplicationTestBase() {
       get() =
         arrayOf(Locale.UK)
 
-    override fun login(database: String,
-                       driver: String,
-                       username: String,
-                       password: String,
-                       schema: String?,
-                       maxRetries: Int?,
-                       minRepetitionDelay: Long?,
-                       maxRepetitionDelay: Long?): Connection? {
+    override fun login(
+      database: String,
+      driver: String,
+      username: String,
+      password: String,
+      schema: String?,
+      maxRetries: Int?,
+      waitMin: Long?,
+      waitMax: Long?
+    ): Connection? {
       return try {
         Connection.createConnection(url = database,
                                     driver = driver,
@@ -94,8 +102,8 @@ open class VApplicationTestBase : ApplicationTestBase() {
                                     lookupUserId = true,
                                     schema = schema,
                                     maxRetries = maxRetries,
-                                    minRepetitionDelay = minRepetitionDelay,
-                                    maxRepetitionDelay = maxRepetitionDelay)
+                                    waitMin = waitMin,
+                                    waitMax = waitMax)
       } catch (exception: Throwable) {
         null
       }
