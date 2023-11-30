@@ -25,4 +25,5 @@
     <module ident="2017" label="Form for triggers test" />
     <module ident="2018" label="Form to test localisation" />
     <module ident="2019" label="Form to test full calendar" />
+    <module ident="2020" label="Form to test pivot table" />
 </modules>

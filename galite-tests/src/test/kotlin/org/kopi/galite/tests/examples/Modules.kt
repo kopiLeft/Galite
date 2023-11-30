@@ -50,5 +50,6 @@ fun initModules() {
     insertIntoModule("2017", "org/kopi/galite/test/Menu", 106, "2000", TestTriggersForm::class)
     insertIntoModule("2018", "org/kopi/galite/test/Menu", 107, "2000", LocalizedForm::class)
     insertIntoModule("2019", "org/kopi/galite/test/Menu", 105, "2000", TasksForm::class)
+    insertIntoModule("2020", "org/kopi/galite/test/Menu", 207, "2007", DocumentationPivotTable::class)
   }
 }

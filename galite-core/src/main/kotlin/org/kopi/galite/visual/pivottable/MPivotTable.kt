@@ -21,6 +21,7 @@ package org.kopi.galite.visual.pivottable
 import java.io.Serializable
 
 import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.report.VReportRow
 
 class MPivotTable : Serializable {
 
@@ -67,4 +68,17 @@ class MPivotTable : Serializable {
    * @return    the number or columns to display
    */
   fun getModelColumnCount(): Int = columns.size
+
+  /**
+   * Returns the number of rows.
+   */
+  fun getRowCount(): Int = userRows!!.size
+
+  /**
+   * Return a row definition
+   *
+   * @param    row        the index of the desired row
+   * @return    the desired row
+   */
+  fun getRow(row: Int): VPivotTableRow? = userRows!![row]
 }

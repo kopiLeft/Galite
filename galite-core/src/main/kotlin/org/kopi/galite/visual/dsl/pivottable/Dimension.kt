@@ -37,6 +37,7 @@ class Dimension<T>(override val domain: Domain<T>,
   fun buildPivotTableColumn(): VPivotTableColumn {
     model = domain.buildPivotTableFieldModel(this, position).also { column ->
       column.label = label ?: ""
+      column.help = help
     }
 
     return model

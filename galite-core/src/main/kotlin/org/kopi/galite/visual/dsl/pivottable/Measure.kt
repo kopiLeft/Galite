@@ -35,6 +35,7 @@ class Measure<T>(override val domain: Domain<T>,
   fun buildPivotTableColumn(): VPivotTableColumn {
     model = domain.buildPivotTableFieldModel(this, Dimension.Position.NONE).also { column ->
       column.label = label ?: ""
+      column.help = help
     }
 
     return model
