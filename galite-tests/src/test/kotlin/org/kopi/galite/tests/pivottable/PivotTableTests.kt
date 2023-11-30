@@ -55,24 +55,23 @@ class PivotTableTests: VApplicationTestBase() {
 
     val firstRow = Simplepivottable.getRow(0)
     assertMapsEquals(mapOf(Simplepivottable.name to "Sami",
-      Simplepivottable.age to 22,
-      Simplepivottable.profession to "Journalist",
-      Simplepivottable.salary to BigDecimal("2000")
-    ),
+                           Simplepivottable.age to 22,
+                           Simplepivottable.profession to "Journalist",
+                           Simplepivottable.salary to BigDecimal("2000")),
                      firstRow)
 
     val secondRow = Simplepivottable.getRow(1)
     assertMapsEquals(mapOf(Simplepivottable.name to "Sofia",
-      Simplepivottable.age to 23,
-      Simplepivottable.profession to "Dentist",
-      Simplepivottable.salary to BigDecimal("2000.55")),
+                           Simplepivottable.age to 23,
+                           Simplepivottable.profession to "Dentist",
+                           Simplepivottable.salary to BigDecimal("2000.55")),
                      secondRow)
 
     val thirdRow = Simplepivottable.getRow(2)
     assertMapsEquals(mapOf(Simplepivottable.name to "Sofia",
-      Simplepivottable.age to 25,
-      Simplepivottable.profession to "Baker",
-      Simplepivottable.salary to BigDecimal("2000.55")),
+                           Simplepivottable.age to 25,
+                           Simplepivottable.profession to "Baker",
+                           Simplepivottable.salary to BigDecimal("2000.55")),
                      thirdRow)
   }
 
