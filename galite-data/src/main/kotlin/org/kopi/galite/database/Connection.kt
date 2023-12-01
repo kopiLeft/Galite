@@ -55,17 +55,24 @@ class Connection {
   /**
    * Creates a connection with Exposed from JDBC Connection
    *
-   * @param     connection          the JDBC connection
-   * @param     lookupUserId        lookup user id in table of Users ?
-   * @param     schema              the database schema to set as current schema
+   * @param     connection      the JDBC connection
+   * @param     lookupUserId    lookup user id in table of Users ?
+   * @param     schema          the database schema to set as current schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(connection: java.sql.Connection,
                       lookupUserId: Boolean = true,
                       schema: Schema? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      waitMin: Long? = null,
+                      waitMax: Long? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
 
     dbConnection = Database.connect({ connection }, databaseConfig = configuration)
     url = dbConnection.url
@@ -78,11 +85,17 @@ class Connection {
   /**
    * Creates a connection with Exposed and opens it.
    *
-   * @param        url             the URL of the database to connect to
-   * @param        userName        the name of the database user
-   * @param        password        the password of the database user
-   * @param        lookupUserId    lookup user id in table of users ?
-   * @param        schema          the database schema to set as current schema
+   * @param     url             the URL of the database to connect to
+   * @param     driver          The JDBC driver to use to access the database
+   * @param     userName        the name of the database user
+   * @param     password        the password of the database user
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the database schema to set as current schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(url: String,
                       driver: String,
@@ -92,17 +105,35 @@ class Connection {
                       schema: String? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null)
-      : this(url, driver, userName, password, lookupUserId, schema?.let { Schema(schema) }, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      waitMin: Long? = null,
+                      waitMax: Long? = null)
+    : this(url,
+           driver,
+           userName,
+           password,
+           lookupUserId,
+           schema?.let { Schema(schema) },
+           traceLevel,
+           isolationLevel,
+           maxRetries,
+           waitMin,
+           waitMax)
 
   /**
    * Creates a connection with Exposed and opens it.
    *
-   * @param        url             the URL of the database to connect to
-   * @param        userName        the name of the database user
-   * @param        password        the password of the database user
-   * @param        lookupUserId    lookup user id in table of users ?
-   * @param        schema          the database schema to set as current schema
+   * @param     url             the URL of the database to connect to
+   * @param     driver          The JDBC driver to use to access the database
+   * @param     userName        the name of the database user
+   * @param     password        the password of the database user
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the database schema to set as current schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(url: String,
                       driver: String,
@@ -112,8 +143,10 @@ class Connection {
                       schema: Schema? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      waitMin: Long? = null,
+                      waitMax: Long? = null) {
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin,waitMax)
 
     dbConnection = Database.connect(url = url,
                                     driver = driver,
@@ -133,14 +166,21 @@ class Connection {
    * @param     dataSource      the dataSource
    * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(dataSource: javax.sql.DataSource,
                       lookupUserId: Boolean = true,
                       schema: Schema? = null,
                       traceLevel: Int? = null,
                       isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries)
+                      maxRetries: Int? = null,
+                      waitMin: Long? = null,
+                      waitMax: Long? = null){
+    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
 
     dbConnection = Database.connect(dataSource, databaseConfig = configuration)
     url = dbConnection.url
@@ -192,27 +232,40 @@ class Connection {
     /**
      * Creates a connection with Exposed from JDBC Connection
      *
-     * @param     connection          the JDBC connection
-     * @param     lookupUserId        lookup user id in table of Users ?
-     * @param     schema              the database schema to set as current schema
+     * @param   connection      the JDBC connection
+     * @param   lookupUserId    lookup user id in table of Users ?
+     * @param   schema          the database schema to set as current schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   isolationLevel  the transaction isolation level
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(connection: java.sql.Connection,
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
                          traceLevel: Int? = null,
                          isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null): Connection {
-      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
+                         maxRetries: Int? = null,
+                         waitMin: Long? = null,
+                         waitMax: Long? = null): Connection {
+      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
     }
 
     /**
      * Creates a connection with Exposed and opens it.
      *
-     * @param        url             the URL of the database to connect to
-     * @param        userName        the name of the database user
-     * @param        password        the password of the database user
-     * @param        lookupUserId    lookup user id in table of users ?
-     * @param        schema          the database schema to set as current schema
+     * @param   url             the URL of the database to connect to
+     * @param   driver          The JDBC driver to use to access the database
+     * @param   userName        the name of the database user
+     * @param   password        the password of the database user
+     * @param   lookupUserId    lookup user id in table of users ?
+     * @param   schema          the database schema to set as current schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   isolationLevel  the transaction isolation level
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(url: String,
                          driver: String,
@@ -222,19 +275,36 @@ class Connection {
                          schema: String? = null,
                          traceLevel: Int? = null,
                          isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
+                         maxRetries: Int? = null,
+                         waitMin: Long? = null,
+                         waitMax: Long? = null): Connection {
+      return Connection(url,
+                        driver,
+                        userName,
+                        password,
+                        lookupUserId,
+                        schema,
+                        traceLevel,
+                        isolationLevel,
+                        maxRetries,
+                        waitMin,
+                        waitMax)
     }
 
 
     /**
      * Creates a connection with Exposed and opens it.
      *
-     * @param        url             the URL of the database to connect to
-     * @param        userName        the name of the database user
-     * @param        password        the password of the database user
-     * @param        lookupUserId    lookup user id in table of users ?
-     * @param        schema          the database schema to set as current schema
+     * @param   url             the URL of the database to connect to
+     * @param   driver          The JDBC driver to use to access the database
+     * @param   userName        the name of the database user
+     * @param   password        the password of the database user
+     * @param   lookupUserId    lookup user id in table of users ?
+     * @param   schema          the database schema to set as current schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(url: String,
                          driver: String,
@@ -243,24 +313,42 @@ class Connection {
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
                          traceLevel: Int? = null,
-                         maxRetries: Int? = null): Connection {
-      return Connection(url, driver, userName, password, lookupUserId, schema, traceLevel, maxRetries = maxRetries)
+                         maxRetries: Int? = null,
+                         waitMin: Long? = null,
+                         waitMax: Long? = null): Connection {
+      return Connection(url,
+                        driver,
+                        userName,
+                        password,
+                        lookupUserId,
+                        schema,
+                        traceLevel,
+                        maxRetries = maxRetries,
+                        waitMin = waitMin,
+                        waitMax = waitMax)
     }
 
     /**
      * Creates a connection with Exposed from a datasource.
      *
-     * @param     dataSource      the dataSource
-     * @param     lookupUserId    lookup user id in table of users ?
-     * @param     schema          the current database schema
+     * @param   dataSource      the dataSource
+     * @param   lookupUserId    lookup user id in table of users ?
+     * @param   schema          the current database schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   isolationLevel  the transaction isolation level
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(dataSource: javax.sql.DataSource,
                          lookupUserId: Boolean = true,
                          schema: Schema? = null,
                          traceLevel: Int? = null,
                          isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null): Connection {
-      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel, maxRetries)
+                         maxRetries: Int? = null,
+                         waitMin: Long? = null,
+                         waitMax: Long? = null): Connection {
+      return Connection(dataSource, lookupUserId, schema, traceLevel, isolationLevel, maxRetries = maxRetries, waitMin = waitMin, waitMax = waitMax)
     }
 
     // -1 not yet determined
@@ -274,12 +362,17 @@ class Connection {
 fun databaseConfig(schema: Schema? = null,
                    traceLevel: Int? = null,
                    isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                   maxRetries: Int? = null): DatabaseConfig = DatabaseConfig {
-    sqlLogger = Slf4jSqlInfoLogger(traceLevel)
-    schema?.let { defaultSchema = it } // Feature added in https://github.com/JetBrains/Exposed/pull/1367
-    defaultIsolationLevel = isolationLevel
-    defaultRepetitionAttempts = maxRetries ?: 0
-  }
+                   maxRetries: Int? = null,
+                   waitMin: Long? = null,
+                   waitMax: Long? = null)
+    : DatabaseConfig = DatabaseConfig {
+  sqlLogger = Slf4jSqlInfoLogger(traceLevel)
+  schema?.let { defaultSchema = it } // Feature added in https://github.com/JetBrains/Exposed/pull/1367
+  defaultIsolationLevel = isolationLevel
+  defaultRepetitionAttempts = maxRetries ?: 0
+  defaultMinRepetitionDelay = waitMin ?: 0L
+  defaultMaxRepetitionDelay = waitMax ?: 0L
+}
 
 class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
   override fun log(context: StatementContext, transaction: Transaction) {

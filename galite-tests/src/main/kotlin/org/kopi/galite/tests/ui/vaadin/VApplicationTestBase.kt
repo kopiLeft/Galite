@@ -89,15 +89,25 @@ open class VApplicationTestBase : ApplicationTestBase() {
         arrayOf(Locale.UK)
 
     override fun login(
-            database: String,
-            driver: String,
-            username: String,
-            password: String,
-            schema: String?,
-            maxRetries: Int?
+      database: String,
+      driver: String,
+      username: String,
+      password: String,
+      schema: String?,
+      maxRetries: Int?,
+      waitMin: Long?,
+      waitMax: Long?
     ): Connection? {
       return try {
-        Connection.createConnection(database, driver, username, password, true, schema)
+        Connection.createConnection(url = database,
+                                    driver = driver,
+                                    userName = username,
+                                    password = password,
+                                    lookupUserId = true,
+                                    schema = schema,
+                                    maxRetries = maxRetries,
+                                    waitMin = waitMin,
+                                    waitMax = waitMax)
       } catch (exception: Throwable) {
         null
       }
@@ -138,6 +148,7 @@ object ConfigurationManager : ApplicationConfiguration() {
       }
     }
   }
+
   override fun getIntFor(key: String): Int {
     val value = this.getStringFor(key)
     return value.toInt()
@@ -148,5 +159,6 @@ object ConfigurationManager : ApplicationConfiguration() {
   }
 
   override fun isUnicodeDatabase(): Boolean = false
+
   override fun useAcroread(): Boolean = TODO()
 }

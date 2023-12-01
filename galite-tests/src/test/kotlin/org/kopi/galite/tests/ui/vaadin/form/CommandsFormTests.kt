@@ -21,11 +21,13 @@ import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.testing._clickCell
 import org.kopi.galite.testing.edit
@@ -62,7 +64,6 @@ import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10.expectRow
-import org.junit.Ignore
 
 class CommandsFormTests : GaliteVUITestBase() {
 
@@ -510,9 +511,7 @@ class CommandsFormTests : GaliteVUITestBase() {
 
     // Delete the foreign key references first.
     transaction {
-      Center.deleteWhere {
-        Center.refTraining eq 1
-      }
+      Center.deleteWhere { Center.refTraining eq 1 }
     }
 
     form.block.trainingID.edit(1)

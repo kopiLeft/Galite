@@ -106,6 +106,8 @@ class DActor(private var model: VActor)
     }
   }
 
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
   override fun onComponentEvent(event: ClickEvent<Button>) {
     actionPerformed()
   }

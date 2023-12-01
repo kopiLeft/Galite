@@ -68,6 +68,7 @@ public abstract class JApplication implements Application {
 
   /**
    * Returns the application current instance.
+   *
    * @return The application current instance.
    */
   /*package*/ static Application getInstance() {
@@ -76,10 +77,11 @@ public abstract class JApplication implements Application {
 
   /**
    * Returns the application options.
+   *
    * @return The application options.
    */
   public static ApplicationOptions getApplicationOptions() {
-    return instance != null ? ((JApplication)instance).options : null;
+    return instance != null ? ((JApplication) instance).options : null;
   }
 
   /**
@@ -116,7 +118,7 @@ public abstract class JApplication implements Application {
       }
 
       try {
-        Executable  module;
+        Executable      module;
 
         module = Module.Companion.startForm(connection, form, "initial form");
         if (module instanceof VWindow) {
@@ -125,6 +127,7 @@ public abstract class JApplication implements Application {
             public void modelClosed(int type) {
               exitWithError(type);
             }
+
             @Override
             public void dispose() {}
           });
@@ -184,6 +187,7 @@ public abstract class JApplication implements Application {
 
   /**
    * Returns the database URL.
+   *
    * @return The database URL.
    */
   public String getURL() {
@@ -202,6 +206,7 @@ public abstract class JApplication implements Application {
 
   /**
    * Returns application the splash screen.
+   *
    * @return application the splash screen.
    */
   protected ImageIcon getSplashScreenImage() {
@@ -261,7 +266,7 @@ public abstract class JApplication implements Application {
       return false;
     }
 
-    if (! processCommandLine(args)) {
+    if (!processCommandLine(args)) {
       return false;
     }
 
@@ -270,7 +275,7 @@ public abstract class JApplication implements Application {
     // do customer-sepcific initialisations
     initialize();
 
-    if (! connectToDatabase()) {
+    if (!connectToDatabase()) {
       exitWithError(1);
       return false;
     }
@@ -295,7 +300,7 @@ public abstract class JApplication implements Application {
   private boolean processCommandLine(String[] args) {
     options = new ApplicationOptions();
 
-    if (! options.parseCommandLine(args)) {
+    if (!options.parseCommandLine(args)) {
       return false;
     }
 
@@ -305,19 +310,18 @@ public abstract class JApplication implements Application {
     } else {
       char[]    chars = options.locale.toCharArray();
 
-      if(chars.length != 5
-              || chars[0] < 'a' || chars[0] > 'z'
-              || chars[1] < 'a' || chars[1] > 'z'
-              || chars[2] != '_'
-              || chars[3] < 'A' || chars[3] > 'Z'
-              || chars[4] < 'A' || chars[4] > 'Z'
+      if (chars.length != 5
+          || chars[0] < 'a' || chars[0] > 'z'
+          || chars[1] < 'a' || chars[1] > 'z'
+          || chars[2] != '_'
+          || chars[3] < 'A' || chars[3] > 'Z'
+          || chars[4] < 'A' || chars[4] > 'Z'
       ) {
         System.err.println("Error: Wrong locale format.");
         options.usage();
         return false;
       } else {
-        defaultLocale = new Locale(options.locale.substring(0,2),
-                options.locale.substring(3,5));
+        defaultLocale = new Locale(options.locale.substring(0, 2), options.locale.substring(3, 5));
       }
     }
 
@@ -326,11 +330,11 @@ public abstract class JApplication implements Application {
   }
 
   public void verifyConfiguration() {
-    VerifyConfiguration       verifyConfiguration = VerifyConfiguration.Companion.getVerifyConfiguration();
+    VerifyConfiguration verifyConfiguration = VerifyConfiguration.Companion.getVerifyConfiguration();
     try {
       verifyConfiguration.verifyConfiguration(ApplicationContext.Companion.getDefaults().getSMTPServer(),
-	                                            ApplicationContext.Companion.getDefaults().getDebugMailRecipient(),
-	                                            ApplicationContext.Companion.getDefaults().getApplicationName());
+                                              ApplicationContext.Companion.getDefaults().getDebugMailRecipient(),
+                                              ApplicationContext.Companion.getDefaults().getApplicationName());
     } catch (PropertyException e) {
       e.printStackTrace();
     }
@@ -342,16 +346,17 @@ public abstract class JApplication implements Application {
   private boolean connectToDatabase() {
     if (options.username != null) {
       try {
-        connection = Connection.Companion
-                .createConnection(options.database,
-                                  options.driver,
-                                  options.username,
-                                  options.password,
-                                  options.lookupUserId,
-                                  options.schema,
-                                  options.trace,
-                                  java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                                  options.maxRetries);
+        connection = Connection.Companion.createConnection(options.database,
+                                                           options.driver,
+                                                           options.username,
+                                                           options.password,
+                                                           options.lookupUserId,
+                                                           options.schema,
+                                                           options.trace,
+                                                           java.sql.Connection.TRANSACTION_SERIALIZABLE,
+                                                           options.maxRetries,
+                                                           options.waitMin,
+                                                           options.waitMax);
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();
@@ -364,11 +369,13 @@ public abstract class JApplication implements Application {
 
       removeSplashScreen();
       connection = login(options.database,
-              options.driver,
-              options.username,
-              options.password,
-              options.schema,
-              options.maxRetries);
+                         options.driver,
+                         options.username,
+                         options.password,
+                         options.schema,
+                         options.maxRetries,
+                         options.waitMin,
+                         options.waitMax);
       displaySplashScreen();
     }
 
@@ -379,54 +386,44 @@ public abstract class JApplication implements Application {
   // ACCESSORS
   // ---------------------------------------------------------------------
 
-
   public boolean isNobugReport() {
     return options != null && options.nobugreport;
   }
-
 
   public Date getStartupTime() {
     return startupTime;
   }
 
-
   public VMenuTree getMenu() {
     return menuTree;
   }
-
 
   public void setGeneratingHelp() {
     isGeneratingHelp = true;
   }
 
-
   public boolean isGeneratingHelp() {
     return isGeneratingHelp;
   }
-
 
   public String getUserName() {
     return connection.getUserName();
   }
 
-
   public Registry getRegistry() {
     return registry;
   }
-
 
   public Locale getDefaultLocale() {
     return defaultLocale;
   }
 
-
   public LocalizationManager getLocalizationManager() {
     return localizationManager;
   }
 
-
   public void displayError(UComponent parent, String message) {
-    DWindow.displayError((Component)parent, message);
+    DWindow.displayError((Component) parent, message);
   }
 
   // ---------------------------------------------------------------------
@@ -459,16 +456,16 @@ public abstract class JApplication implements Application {
   // DATA MEMBERS
   // ---------------------------------------------------------------------
 
-  private static Application           	        instance;
+  private static Application                    instance;
 
-  private ApplicationOptions       		options;
-  private VMenuTree                      	menuTree;
+  private ApplicationOptions                    options;
+  private VMenuTree                             menuTree;
   private Connection connection;
-  private boolean                       	isGeneratingHelp;
-  private SplashScreen                  	splash;
-  private Registry                      	registry;
-  private Locale                        	defaultLocale;
-  private LocalizationManager           	localizationManager;
+  private boolean                               isGeneratingHelp;
+  private SplashScreen                          splash;
+  private Registry                              registry;
+  private Locale                                defaultLocale;
+  private LocalizationManager                   localizationManager;
   private PrintManager                          printManager;
   private PrinterManager                        printerManager;
   private ApplicationConfiguration              configuration;
@@ -477,7 +474,7 @@ public abstract class JApplication implements Application {
   // Failure cause informations
   // ---------------------------------------------------------------------
 
-  private final Date             		startupTime = new Date(); // remembers the startup time
+  private final Date                            startupTime = new Date(); // remembers the startup time
 
   static {
     ApplicationContext.Companion.setApplicationContext(new JApplicationContext());

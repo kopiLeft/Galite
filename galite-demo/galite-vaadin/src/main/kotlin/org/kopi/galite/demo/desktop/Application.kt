@@ -100,18 +100,26 @@ fun <T: Form> runForm(form: KClass<T>, init: (() -> Unit)? = null) {
 }
 
 class GaliteApplication : JApplication(GaliteRegistry()) {
-  override fun login(
-    database: String,
-    driver: String,
-    username: String,
-    password: String,
-    schema: String?,
-    maxRetries: Int?
-  ): Connection? {
+  override fun login(database: String,
+                     driver: String,
+                     username: String,
+                     password: String,
+                     schema: String?,
+                     maxRetries: Int?,
+                     waitMin: Long?,
+                     waitMax: Long?): Connection? {
     val username = "admin"
     val password = "admin"
     return try {
-      Connection.createConnection(database, driver, username, password, true, schema)
+      Connection.createConnection(url = database,
+                                  driver = driver,
+                                  userName = username,
+                                  password = password,
+                                  lookupUserId = true,
+                                  schema = schema,
+                                  maxRetries = maxRetries,
+                                  waitMin = waitMin,
+                                  waitMax = waitMax)
     } catch (exception: Throwable) {
       null
     }

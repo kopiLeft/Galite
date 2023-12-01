@@ -33,8 +33,7 @@ class LocalizationTests {
 
   @Test
   fun `test localization`() {
-    val sourceFilePath = "src/main/resources" + File.separator +
-            this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
+    val sourceFilePath = "src/main/resources${File.separator}${this.javaClass.`package`.name.replace(".", "/")}${File.separatorChar}"
     val generatedFile = File("${sourceFilePath}/FormSample-${Locale.FRANCE}.xml")
 
     try {
@@ -60,7 +59,9 @@ class LocalizationTests {
           username: String,
           password: String,
           schema: String?,
-          maxRetries: Int?
+          maxRetries: Int?,
+          waitMin: Long?,
+          waitMax: Long?
         ): Connection? {
           return null
         }

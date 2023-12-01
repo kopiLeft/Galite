@@ -340,6 +340,10 @@ abstract class DField(internal var model: VFieldUI,
     return model.blockView
   }
 
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
+
   //-------------------------------------------------
   // FIELD LISTENER IMPLEMENTATION
   //-------------------------------------------------

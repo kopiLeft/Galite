@@ -52,9 +52,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
  *
  * @param model The list dialog model.
  */
-class DListDialog(
-        private val model: VListDialog
-) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
+class DListDialog(private val model: VListDialog) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
 
   private var escaped = true
   private var doNewForm = false
@@ -437,4 +435,8 @@ class DListDialog(
   override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
+
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
 }

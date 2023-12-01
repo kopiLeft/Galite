@@ -94,7 +94,9 @@ abstract class Migration {
                                   false,
                                   options.schema,
                                   options.trace,
-                                  maxRetries = options.maxRetries)
+                                  maxRetries = options.maxRetries,
+                                  waitMin = options.waitMin,
+                                  waitMax = options.waitMax)
     } else {
       Connection.createConnection(Configuration.getString("database")!!,
                                   Configuration.getString("driver")!!,
@@ -103,7 +105,9 @@ abstract class Migration {
                                   false,
                                   Configuration.getString("schema"),
                                   Configuration.getString("trace")?.toInt(),
-                                  maxRetries = Configuration.getString("maxRetries")?.toInt())
+                                  maxRetries = Configuration.getString("maxRetries")?.toInt(),
+                                  waitMin = Configuration.getString("waitMin")?.toLong(),
+                                  waitMax = Configuration.getString("waitMax")?.toLong())
     }
   }
 

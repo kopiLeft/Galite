@@ -69,6 +69,10 @@ class DGridEditorLabel(text: String?,
 
   override fun repaint() {}
 
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
+
   /**
    * Updates the label content.
    * @param model The field model.

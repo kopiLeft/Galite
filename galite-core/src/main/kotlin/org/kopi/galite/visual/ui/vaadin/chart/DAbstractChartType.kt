@@ -116,6 +116,10 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     super.add(apex)
   }
 
+  override fun isEnabled(): Boolean { return super.isEnabled() }
+
+  override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
+
   override fun refresh() {
     TODO()
   }

@@ -48,9 +48,7 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
   override val title get() = "Galite demo"
   override val supportedLocales
     get() =
-      arrayOf(
-        Locale.UK
-      )
+      arrayOf(Locale.UK)
 
   override fun login(
     database: String,
@@ -58,10 +56,20 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
     username: String,
     password: String,
     schema: String?,
-    maxRetries: Int?
+    maxRetries: Int?,
+    waitMin: Long?,
+    waitMax: Long?
   ): Connection? {
     return try {
-      Connection.createConnection(database, driver, username, password, true, schema)
+      Connection.createConnection(url = database,
+                                  driver = driver,
+                                  userName = username,
+                                  password = password,
+                                  lookupUserId = true,
+                                  schema = schema,
+                                  maxRetries = maxRetries,
+                                  waitMin = waitMin,
+                                  waitMax = waitMax)
     } catch (exception: Throwable) {
       null
     }
