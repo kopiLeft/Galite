@@ -16,46 +16,7 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
-import java.math.BigDecimal
-import java.util.Locale
-
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-
-import org.kopi.galite.database.Users
-import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Form
-import org.kopi.galite.visual.dsl.form.Key
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
-import org.kopi.galite.testing.click
-import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.editText
-import org.kopi.galite.testing.findField
-import org.kopi.galite.testing.open
-import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.examples.TestFieldsForm
-import org.kopi.galite.tests.examples.Trainer
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.testing.expectErrorNotification
-import org.kopi.galite.tests.examples.initData
-import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.visual.dsl.common.Icon
-import org.kopi.galite.visual.dsl.common.PredefinedCommand
-
-import com.github.mvysny.kaributesting.v10._expectNone
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._find
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._text
+import com.github.mvysny.kaributesting.v10.*
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -63,6 +24,32 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Test
+import org.kopi.galite.database.Users
+import org.kopi.galite.testing.*
+import org.kopi.galite.tests.examples.TestFieldsForm
+import org.kopi.galite.tests.examples.Trainer
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.common.PredefinedCommand
+import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
+import java.math.BigDecimal
+import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class FieldsTests : GaliteVUITestBase() {
 
@@ -181,7 +168,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     form.blockWithDifferentTypes.upperStringField.edit(input)
     form.blockWithDifferentTypes.decimalField.click()
-    assertEquals(input.toUpperCase(), fields[0]._text)
+    assertEquals(input.uppercase(), fields[0]._text)
   }
 
   @Test
@@ -191,7 +178,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     form.blockWithDifferentTypes.lowerStringField.edit(input)
     form.blockWithDifferentTypes.decimalField.click()
-    assertEquals(input.toLowerCase(), fields[2]._text)
+    assertEquals(input.lowercase(), fields[2]._text)
   }
 
   @Test
@@ -201,7 +188,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     form.blockWithDifferentTypes.nameStringField.edit(input)
     form.blockWithDifferentTypes.decimalField.click()
-    assertEquals(input.substring(0,1).toUpperCase() + input.substring(1), fields[1]._text)
+    assertEquals(input.substring(0,1).uppercase() + input.substring(1), fields[1]._text)
   }
 
   @Test
@@ -261,12 +248,7 @@ class FormToTestFormPopUp: Form(title = "apperation of form in popup", locale = 
   override val newItem = actor(menu = edit, label = "NewItem", help = "NewItem", command = PredefinedCommand.NEW_ITEM)
   override val editItem = actor(menu = edit, label = "Edit Item", help = "Edit Item", command = PredefinedCommand.EDIT_ITEM)
 
-  val userListBlock = insertBlock(UsersListBlock()) {
-    val field = visit(domain = STRING(25), position = at(3, 1)) {
-      label = "test"
-      help = "The test"
-    }
-  }
+  val userListBlock = insertBlock(UsersListBlock()) {}
 
   inner class UsersListBlock : Block("UsersListBlock", 1, 1) {
     val user = mustFill(domain = UsersList(), position = at(1, 1)) {

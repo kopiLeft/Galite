@@ -17,20 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.visual.form.FieldHandler
-import org.kopi.galite.visual.form.UBlock
-import org.kopi.galite.visual.form.UChartLabel
-import org.kopi.galite.visual.form.UField
-import org.kopi.galite.visual.form.ULabel
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VBooleanField
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.form.VImageField
-import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTextField
-import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.ui.vaadin.base.Utils
 
 /**
  * The `DFieldUI` is the vaadin UI components implementation of
@@ -48,10 +37,10 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
       VField.MDL_FLD_EDITOR -> if ((model as VTextField).isStyled) {
         DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
-                        model.height, detail)
+                         detail)
       } else {
         DTextEditor(this, label as? DLabel, model.align, model.options,
-                    model.height, detail)
+                     detail)
       }
       VField.MDL_FLD_TEXT -> if (model is VBooleanField) {
         DBooleanField(this, label as? DLabel, model.align, model.options,
@@ -59,7 +48,7 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
       } else if (model is VStringField && model.isStyled) {
         DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
-                        model.height, detail)
+                         detail)
       } else {
         DTextField(this, label as? DLabel, model.align, model.options,
                    detail)

@@ -17,31 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.util.stream.Stream
-
-import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.form.Alignment
-import org.kopi.galite.visual.form.VActorField
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VBooleanField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
-import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
-
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.grid.ColumnResizeEvent
-import com.vaadin.flow.component.grid.ColumnTextAlign
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.grid.GridSortOrder
-import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.grid.HeaderRow
+import com.vaadin.flow.component.grid.*
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.component.grid.editor.EditorImpl
 import com.vaadin.flow.component.icon.Icon
@@ -55,6 +33,15 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+import java.util.stream.Stream
 
 /**
  * Grid based chart block implementation.
@@ -290,7 +277,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     access(currentUI) {
       filterRow = grid.appendHeaderRow()
       filterRow.also { element.classList.add("block-filter") }
-      val filterFields = grid.columns.mapIndexed { index, column ->
+      val filterFields = grid.columns.mapIndexed { _, column ->
         val cell = filterRow!!.getCell(column)
         val filter = TextField()
         val search = Icon(VaadinIcon.SEARCH)

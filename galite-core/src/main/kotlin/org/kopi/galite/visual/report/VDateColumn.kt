@@ -18,10 +18,9 @@
 
 package org.kopi.galite.visual.report
 
-import java.time.LocalDate
-
 import org.kopi.galite.type.format
 import org.kopi.galite.util.base.InconsistencyException
+import java.time.LocalDate
 
 /**
  * Represents a report column description
@@ -39,7 +38,6 @@ class VDateColumn(ident: String?,
                   align: Int,
                   groups: Int,
                   function: VCalculateColumn?,
-                  width: Int,
                   format: VCellFormat?)
   : VReportColumn(ident,
                   options,

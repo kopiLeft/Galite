@@ -17,11 +17,10 @@
  */
 package org.kopi.galite.visual.dsl.common
 
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.dsl.form.Key
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
-
-import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.VActor
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -67,7 +66,7 @@ open class Actor(val menu: Menu,
       acceleratorKey = KeyEvent.VK_UNDEFINED
     } else {
       acceleratorKey = key.value
-      acceleratorModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_MASK else 0
+      acceleratorModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_DOWN_MASK else 0
     }
   }
 

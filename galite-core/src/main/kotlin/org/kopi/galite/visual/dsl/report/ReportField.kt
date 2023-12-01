@@ -17,20 +17,15 @@
  */
 package org.kopi.galite.visual.dsl.report
 
-import java.math.BigDecimal
-
+import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
-import org.kopi.galite.visual.report.Constants
-import org.kopi.galite.visual.report.VCalculateColumn
-import org.kopi.galite.visual.report.VCellFormat
-import org.kopi.galite.visual.report.VDecimalColumn
-import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.report.*
+import java.math.BigDecimal
 
 /**
  * This class represents the definition of a report field.
@@ -124,6 +119,7 @@ class ReportField<T>(override val domain: Domain<T>,
   fun format(method: (value: T) -> String?): ReportTrigger {
     val formatMethod = {
       object : VCellFormat() {
+        @Suppress("UNCHECKED_CAST")
         override fun format(value: Any?): String = method(value as T).orEmpty()
       }
     }

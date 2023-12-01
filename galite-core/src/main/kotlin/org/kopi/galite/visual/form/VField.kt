@@ -18,6 +18,22 @@
 
 package org.kopi.galite.visual.form
 
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.database.Utils
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.l10n.BlockLocalizer
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.list.VColumn
+import org.kopi.galite.visual.list.VList
+import org.kopi.galite.visual.list.VListColumn
 import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal
@@ -25,64 +41,15 @@ import java.sql.SQLException
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.Temporal
-
 import javax.swing.event.EventListenerList
-
 import kotlin.reflect.KClass
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnSet
-import org.jetbrains.exposed.sql.EqOp
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.jetbrains.exposed.sql.GreaterEqOp
-import org.jetbrains.exposed.sql.GreaterOp
-import org.jetbrains.exposed.sql.LessEqOp
-import org.jetbrains.exposed.sql.LessOp
-import org.jetbrains.exposed.sql.LikeOp
-import org.jetbrains.exposed.sql.NeqOp
-import org.jetbrains.exposed.sql.NotLikeOp
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.intLiteral
-import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.stringLiteral
-import org.jetbrains.exposed.sql.substring
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.database.Utils
-import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.l10n.BlockLocalizer
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.list.VColumn
-import org.kopi.galite.visual.list.VList
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Week
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.Module
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VModel
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
 
 /**
  * A field is a column in the the database (a list of rows)
  * it provides an access to data both programmatically or via a UI
  * (DForm)
  */
+
 abstract class VField protected constructor(width: Int, height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
@@ -303,7 +270,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * The position of the label (left / top)
    */
-  fun setLabelPos(pos: Int) {
+  fun setLabelPos() {
     fireLabelChanged()
   }
 
@@ -481,7 +448,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * text has changed (key typed on a display)
    */
-  fun onTextChange(text: String) {
+  fun onTextChange() {
     isChanged = true
     isChangedUI = true
     autoLeave()
@@ -564,10 +531,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun autofill() {
     // programatic autofill => no UI
     fillField(null) // no Handler
-  }
-
-  fun autofill(showDialog: Boolean, gotoNextField: Boolean) {
-    autofill()
   }
 
   /**
@@ -674,14 +637,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param value the access value.
    */
   fun setAccess(at: Int, value: Int) {
-    var value = value
+    var modifiedValue = value
 
-    if (getDefaultAccess() < value) {
+    if (getDefaultAccess() < modifiedValue) {
       // access can never be higher than the default access
-      value = getDefaultAccess()
+      modifiedValue = getDefaultAccess()
     }
-    if (value != dynAccess[at]) {
-      dynAccess[at] = value
+    if (modifiedValue != dynAccess[at]) {
+      dynAccess[at] = modifiedValue
       fireAccessChanged(at)
     }
   }
@@ -791,7 +754,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         callTrigger(VConstants.TRG_DEFAULT)
       } catch (e: VException) {
-        throw InconsistencyException() // !!! NO, Just a VExc...
+        val errorMessage = e.message ?: "An error occurred while setting default values for the form fields."
+        throw InconsistencyException(errorMessage)
       }
     }
   }
@@ -883,7 +847,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             // replace substring starting at '*' by highest (ascii) char
             operand.substring(0, operand.indexOf('*')) + "\u00ff"
           }
-          else -> throw InconsistencyException()
+          else -> throw InconsistencyException("Unsupported search operator")
         }
 
         val stringOperandLiteral = getOperandExpression(stringOperand)
@@ -907,34 +871,34 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           VConstants.SOP_LT -> Op.build {
             LessOp(column, stringOperandLiteral)
           }
-          else -> throw InconsistencyException()
+          else -> throw InconsistencyException("Unexpected condition encountered while constructing search condition for operator")
         }
       } else {
-        val operand = if (operand is String) {
+        val modifiedOperand = if (operand is String) {
           getOperandExpression(operand)
         } else {
           column.wrap(operand)
         }
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            EqOp(column, operand)
+            EqOp(column, modifiedOperand)
           }
           VConstants.SOP_NE -> Op.build {
-            NeqOp(column, operand)
+            NeqOp(column, modifiedOperand)
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column, operand)
+            GreaterEqOp(column, modifiedOperand)
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column, operand)
+            GreaterOp(column, modifiedOperand)
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column, operand)
+            LessEqOp(column, modifiedOperand)
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column, operand)
+            LessOp(column, modifiedOperand)
           }
-          else -> throw InconsistencyException()
+          else -> throw InconsistencyException(" Unexpected condition encountered.")
         }
       }
     }
@@ -1125,7 +1089,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setDecimal(r: Int, v: BigDecimal?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1134,7 +1098,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setBoolean(r: Int, v: Boolean?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1143,7 +1107,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setDate(r: Int, v: LocalDate?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1152,7 +1116,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setMonth(r: Int, v: Month?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1161,7 +1125,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setWeek(r: Int, v: Week?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1170,7 +1134,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setInt(r: Int, v: Int?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1186,14 +1150,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setString(r: Int, v: String?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
    * Sets the field value of given record to a date value.
    */
   open fun setImage(r: Int, v: ByteArray?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1202,7 +1166,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setTime(r: Int, v: LocalTime?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1211,7 +1175,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setTimestamp(r: Int, v: Temporal?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1220,7 +1184,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun setColor(r: Int, v: Color?) {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1398,7 +1362,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getDecimal(r: Int): BigDecimal? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1407,7 +1371,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getBoolean(r: Int): Boolean? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1415,8 +1379,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
+
   open fun getDate(r: Int): LocalDate? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1425,7 +1390,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getMonth(r: Int): Month? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1434,7 +1399,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getWeek(r: Int): Week? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1443,14 +1408,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getInt(r: Int): Int? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
    * Returns the field value of given record as a date value.
    */
   open fun getImage(r: Int): ByteArray? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1459,7 +1424,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getString(r: Int): String? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1468,7 +1433,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getTime(r: Int): LocalTime? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1477,7 +1442,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getTimestamp(r: Int): Temporal? {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1486,7 +1451,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   open fun getColor(r: Int): Color {
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   /**
@@ -1712,6 +1677,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
+  @Suppress("UNCHECKED_CAST")
   private fun checkList() {
     if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
@@ -1868,6 +1834,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    * !!! TODO: TRY TO MERGE WITH checkList ???
    */
+  @Suppress("UNCHECKED_CAST")
   open fun getListID(): Int {
     val table = evalListTable()
     val column = list!!.getColumn(0).column as ExpressionWithColumnType<Any?>
@@ -1905,6 +1872,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return id
   }
 
+  @Suppress("UNCHECKED_CAST")
   private fun displayQueryList(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
     val columnsList = columns.map { vListColumn ->
       vListColumn!!.column
@@ -2133,6 +2101,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * and the object values of the suggestions.
    * @throws VException Visual exceptions related to database errors.
    */
+  @Suppress("UNCHECKED_CAST")
   open fun getSuggestions(query: String?): Array<Array<String?>>? {
     return if (query == null || getAutocompleteType() == VList.AUTOCOMPLETE_NONE) {
       null
@@ -2148,22 +2117,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       val cond = when (getAutocompleteType()) {
         VList.AUTOCOMPLETE_CONTAINS -> {
-          Op.build { condition like Utils.toSql("%" + query.toLowerCase() + "%") }
+          Op.build { condition like Utils.toSql("%" + query.lowercase() + "%") }
         }
         VList.AUTOCOMPLETE_STARTSWITH -> {
-          Op.build { condition like Utils.toSql(query.toLowerCase() + "%") }
+          Op.build { condition like Utils.toSql(query.lowercase() + "%") }
         }
         else -> {
           Op.build { condition eq Utils.toSql(query.toString()) }
         }
       }
 
-      val query = table.slice(columns).select(cond).orderBy(columns[0])
+      val newQuery = table.slice(columns).select(cond).orderBy(columns[0])
 
       while (true) {
         try {
           transaction {
-              query.forEach {
+            newQuery.forEach {
                 val columnsList = mutableListOf<String>()
 
                 list!!.columns.forEach { column ->
@@ -2207,7 +2176,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return try {
       list!!.table()
     } catch (e: VException) {
-      throw InconsistencyException()
+      throw InconsistencyException("List table is not found")
     }
   }
 
@@ -2278,11 +2247,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     if (lab != null) {
       lab = lab.replace(' ', '_')
-      help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+      help.helpOnField(block!!.title, block!!.getFieldPos(this), label, lab, toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2349,7 +2314,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     fieldPos        position of this field within block visible fields
    */
   fun prepareSnapshot(fieldPos: Int, active: Boolean) {
-    // !!! TO DO
+    // !!! TODO
   }
 
   override fun toString(): String {

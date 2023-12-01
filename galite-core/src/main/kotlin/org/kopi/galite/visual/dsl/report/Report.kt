@@ -17,25 +17,20 @@
 
 package org.kopi.galite.visual.dsl.report
 
-import java.io.File
-import java.io.IOException
-import java.util.Locale
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
-
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.Action
-import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.ReportTrigger
-import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.dsl.common.*
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.ApplicationContext
+import java.io.File
+import java.io.IOException
+import java.util.*
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -97,6 +92,7 @@ abstract class Report(title: String, val help: String?, locale: Locale? = null) 
    * @param init    initialization method.
    * @return a field.
    */
+  @Suppress("UNCHECKED_CAST")
   inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
                                                        noinline init: ReportField<T>.() -> Unit): ReportField<T?> {
     return field(domain, init) as ReportField<T?>

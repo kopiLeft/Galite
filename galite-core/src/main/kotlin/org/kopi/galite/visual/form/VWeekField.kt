@@ -18,14 +18,13 @@
 
 package org.kopi.galite.visual.form
 
-import kotlin.reflect.KClass
-
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.list.VWeekColumn
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VWeekColumn
+import kotlin.reflect.KClass
 
 class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
@@ -77,12 +76,12 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val s = s as? String
+    val modifiedS = s as? String
 
-    if (s == "") {
+    if (modifiedS == "") {
       setNull(rec)
     } else {
-      val week = parseWeek(s)
+      val week = parseWeek(modifiedS)
 
       checkConstraint(week)
       setWeek(rec, week)

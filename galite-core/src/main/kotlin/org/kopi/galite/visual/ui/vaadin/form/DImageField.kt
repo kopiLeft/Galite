@@ -17,22 +17,20 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.form.VImageField
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.field.ImageField
-
 import com.vaadin.flow.component.upload.FailedEvent
 import com.vaadin.flow.component.upload.SucceededEvent
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.server.StreamResource
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.field.ImageField
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * The image field implementation.
@@ -102,7 +100,7 @@ class DImageField(
     image = s
   }
 
-  override fun setBlink(b: Boolean) {
+  override fun setBlink(blink: Boolean) {
     // TODO
   }
 

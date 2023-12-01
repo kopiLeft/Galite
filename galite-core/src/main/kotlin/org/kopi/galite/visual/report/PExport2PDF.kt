@@ -18,6 +18,14 @@
 
 package org.kopi.galite.visual.report
 
+import com.lowagie.text.*
+import com.lowagie.text.pdf.*
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.report.UReport.UTable
+import org.kopi.galite.visual.util.PPaperType
+import org.kopi.galite.visual.util.PrintJob
 import java.awt.Color
 import java.io.File
 import java.io.FileInputStream
@@ -26,29 +34,7 @@ import java.io.OutputStream
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-
 import kotlin.math.max
-
-import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.util.PPaperType
-import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VlibProperties
-
-import com.lowagie.text.Chunk
-import com.lowagie.text.Document
-import com.lowagie.text.Element
-import com.lowagie.text.ExceptionConverter
-import com.lowagie.text.FontFactory
-import com.lowagie.text.Paragraph
-import com.lowagie.text.Rectangle
-import com.lowagie.text.pdf.PdfPCell
-import com.lowagie.text.pdf.PdfPTable
-import com.lowagie.text.pdf.PdfPageEventHelper
-import com.lowagie.text.pdf.PdfReader
-import com.lowagie.text.pdf.PdfStamper
-import com.lowagie.text.pdf.PdfWriter
 
 class PExport2PDF(
         table: UTable,
@@ -92,7 +78,7 @@ class PExport2PDF(
     }
   }
 
-  override fun export(out: OutputStream) {
+  override fun export(stream: OutputStream) {
     try {
       val paper: PPaperType = PPaperType.getPaperTypeFromCode(printConfig.papertype)
       val paperSize = if (printConfig.paperlayout == "Landscape") {
@@ -129,13 +115,13 @@ class PExport2PDF(
         override fun onEndPage(writer: PdfWriter, document: Document) {
           try {
             val page: Rectangle = document.pageSize
-            val head: PdfPTable = createHeader()
+            val newHead: PdfPTable = createHeader()
 
-            head.totalWidth = (page.width - document.leftMargin() - document.rightMargin())
-            head.writeSelectedRows(0,
+            newHead.totalWidth = (page.width - document.leftMargin() - document.rightMargin())
+            newHead.writeSelectedRows(0,
                                    -1,
                                    document.leftMargin(),
-                                   (page.height - document.topMargin()) + head.totalHeight + printConfig.headermargin,
+                                   (page.height - document.topMargin()) + newHead.totalHeight + printConfig.headermargin,
                                    writer.directContent)
           } catch (e: Exception) {
             throw ExceptionConverter(e)
@@ -163,7 +149,7 @@ class PExport2PDF(
       exportData()
       document.add(datatable)
       document.close()
-      addFooter(tempFile, out)
+      addFooter(tempFile, stream)
     } catch (e: Exception) {
       throw InconsistencyException(e)
     }

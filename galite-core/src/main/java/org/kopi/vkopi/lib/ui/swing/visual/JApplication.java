@@ -118,7 +118,7 @@ public abstract class JApplication implements Application {
       try {
         Executable  module;
 
-        module = Module.Companion.startForm(connection, form, "initial form");
+        module = Module.Companion.startForm(form);
         if (module instanceof VWindow) {
           ((VWindow) module).addModelCloseListener(new ModelCloseListener() {
             @Override

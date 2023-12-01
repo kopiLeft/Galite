@@ -18,39 +18,19 @@
 
 package org.kopi.galite.visual
 
-import java.awt.event.KeyEvent
-import java.sql.SQLException
-import java.util.Locale
-
-import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.TreeNode
-
-import kotlin.system.exitProcess
-
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.innerJoin
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.nextIntVal
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.database.*
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.database.Connection
-import org.kopi.galite.database.FavoritesId
-import org.kopi.galite.database.Favorites
-import org.kopi.galite.database.GroupParties
-import org.kopi.galite.database.GroupRights
-import org.kopi.galite.database.Groups
-import org.kopi.galite.database.Modules
-import org.kopi.galite.database.Symbols
-import org.kopi.galite.database.UserRights
-import org.kopi.galite.database.Users
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
+import java.awt.event.KeyEvent
+import java.sql.SQLException
+import java.util.*
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeNode
+import kotlin.system.exitProcess
 
 /**
  * Represents a menu tree model.
@@ -278,13 +258,12 @@ class VMenuTree constructor(ctxt: Connection?,
    * @param locale The locale to be used for localization
    */
   protected fun localizeRootMenus(locale: Locale?) {
-    var manager: LocalizationManager?
+    val manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
     for (rootMenu in ROOT_MENUS) {
       rootMenu.localize(manager)
     }
-    manager = null
   }
 
   /**
@@ -293,15 +272,14 @@ class VMenuTree constructor(ctxt: Connection?,
    * @param     locale  the locale to use
    */
   protected fun localizeModules(locale: Locale?) {
-    var manager: LocalizationManager?
+    val manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
 
     // localizes the modules
     items.forEach {
-      it.localize(manager!!)
+      it.localize(manager)
     }
-    manager = null
   }
 
   /**
@@ -322,7 +300,7 @@ class VMenuTree constructor(ctxt: Connection?,
     }
     if (!hasModules) {
       error(MessageCode.getMessage("VIS-00042"))
-      throw InconsistencyException() //never accessed
+      throw InconsistencyException(message = "never accessed") //never accessed
     }
     createTopLevelTree()
   }
@@ -352,7 +330,7 @@ class VMenuTree constructor(ctxt: Connection?,
   /**
    * Fetches the modules from the database.
    */
-  private fun fetchModules(isUnicode: Boolean): MutableList<Module> {
+  private fun fetchModules(): MutableList<Module> {
     val localModules: ArrayList<Module> = ArrayList()
     var icon: String? = null
 
@@ -539,7 +517,7 @@ class VMenuTree constructor(ctxt: Connection?,
     var localModules: MutableList<Module> = ArrayList()
 
     transaction {
-      localModules = fetchModules(ApplicationConfiguration.getConfiguration()!!.isUnicodeDatabase())
+      localModules = fetchModules()
       if (groupName != null) {
         fetchGroupRightsByGroupId(localModules)
       } else {
@@ -607,7 +585,7 @@ class VMenuTree constructor(ctxt: Connection?,
     try {
       transaction {
         if (menuTreeUser != null) {
-          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.orEmpty() }
+          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser }
           Favorites.deleteWhere {
             (Favorites.user eqSubQuery idSubQuery) and (Favorites.module eq id)
           }
@@ -658,8 +636,6 @@ class VMenuTree constructor(ctxt: Connection?,
   fun setToolTip(s: String?) {
     setInformationText(s)
   }
-
-  fun getModules(): MutableList<Module> = items
 
   fun getModule(objectName: String): Module? {
     items.forEach { item ->

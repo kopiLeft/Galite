@@ -17,17 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.pivottable
 
-import java.awt.Color
-
-import org.kopi.galite.visual.pivottable.PivotTable
-import org.kopi.galite.visual.pivottable.UPivotTable
-import org.kopi.galite.visual.report.Parameters
-import org.kopi.galite.visual.report.Point
-import org.kopi.galite.visual.report.UReport
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Unit
@@ -40,6 +29,15 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.select.Select
+import org.kopi.galite.visual.pivottable.PivotTable
+import org.kopi.galite.visual.pivottable.UPivotTable
+import org.kopi.galite.visual.report.Parameters
+import org.kopi.galite.visual.report.Point
+import org.kopi.galite.visual.report.UReport
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import java.awt.Color
 
 /**
  * The `DPivotTable` is the visual part of the [PivotTable] model.
@@ -100,6 +98,7 @@ class DPivotTable(private val pivottable: PivotTable) : DWindow(pivottable), UPi
 
   private fun addAggregations() {
     val aggregationLayout = VerticalLayout()
+    @Suppress("DEPRECATION")
     val aggregations = Select("Sum", "Mean", "Min", "Max") // TODO
     val fields = Select<String>()
 

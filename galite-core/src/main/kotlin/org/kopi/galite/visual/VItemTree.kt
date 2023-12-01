@@ -18,16 +18,13 @@
 
 package org.kopi.galite.visual
 
-import java.awt.event.KeyEvent
-import java.util.Locale
-
-import javax.swing.tree.TreeNode
-
-import kotlin.system.exitProcess
-
-import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.dsl.common.Trigger
+import org.kopi.galite.visual.l10n.LocalizationManager
+import java.awt.event.KeyEvent
+import java.util.*
+import javax.swing.tree.TreeNode
+import kotlin.system.exitProcess
 
 /**
  * Represents a new instance of VItemTree.
@@ -157,9 +154,9 @@ class VItemTree(rootName: String?,
   /**
    * Enables or disable the given actor
    */
-  override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    treeActors[actor]!!.handler = this
-    treeActors[actor]!!.isEnabled = enabled
+  override fun setActorEnabled(position: Int, enabled: Boolean) {
+    treeActors[position]!!.handler = this
+    treeActors[position]!!.isEnabled = enabled
   }
 
   /**
@@ -189,12 +186,12 @@ class VItemTree(rootName: String?,
   /**
    * Performs the appropriate action.
    *
-   * @param   key           the number of the actor.
+   * @param   VKT_Type           the number of the actor.
    */
-  override fun executeVoidTrigger(key: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
     val currentDisplay = getDisplay()
 
-    when (key) {
+    when (VKT_Type) {
       CMD_QUIT -> if (isChanged) {
         if (ask(Message.getMessage("confirm_quit"), false)) {
           currentDisplay.closeWindow()
@@ -222,14 +219,14 @@ class VItemTree(rootName: String?,
         currentDisplay.localiseSelectedItem()
         refresh()
       }
-      CMD_SAVE -> if (isChanged && itemTreeManager != null) {
+      CMD_SAVE -> if (isChanged) {
         setWaitInfo("")
         itemTreeManager.save()
         unsetWaitInfo()
         isChanged = false
-        currentDisplay?.setTree()
+        currentDisplay.setTree()
       }
-      else -> super.executeVoidTrigger(key)
+      else -> super.executeVoidTrigger(VKT_Type)
     }
   }
 

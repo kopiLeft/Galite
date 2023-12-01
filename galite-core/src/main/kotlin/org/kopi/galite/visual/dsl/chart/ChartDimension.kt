@@ -50,6 +50,7 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
   fun format(method: (value: T?) -> String?): ChartTrigger {
     val formatMethod = {
       object : VColumnFormat() {
+        @Suppress("UNCHECKED_CAST")
         override fun format(value: Any?): String = method(value as? T).orEmpty()
       }
     }
@@ -65,7 +66,7 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
    * @param value the dimension value
    */
   fun add(value: T, init: DimensionData<T>.() -> Unit) {
-    val dimensionValue = DimensionData<T>(value)
+    val dimensionValue = DimensionData(value)
     dimensionValue.init()
     values.add(dimensionValue)
     dimensionValue.addChartLines()

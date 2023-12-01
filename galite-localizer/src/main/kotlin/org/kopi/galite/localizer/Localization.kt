@@ -17,9 +17,6 @@
  */
 package org.kopi.galite.localizer
 
-import java.io.File
-import java.util.Locale
-
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -27,8 +24,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.database.Connection
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.Symbols
-import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.dsl.common.Window
+import java.io.File
+import java.util.*
 
 fun localizeWindows(url: String,
                     driver: String,
@@ -49,11 +48,11 @@ fun localizeWindows(url: String,
                     locale: Locale,
                     schema: String? = null,
                     output: String? = null) {
-  val dBConnection = Connection.createConnection(url, driver, userName, password, false, schema)
+  Connection.createConnection(url, driver, userName, password, false, schema)
   val modules = fetchModules()
   modules.forEach {
     if (it.objectName != null) {
-      val module = Class.forName(it.objectName).kotlin.objectInstance ?: Class.forName(it.objectName).newInstance()
+      val module = Class.forName(it.objectName).kotlin.objectInstance ?: Class.forName(it.objectName).getDeclaredConstructor().newInstance()
 
       if (module is Window) {
         localizeWindow(module, locale, output)

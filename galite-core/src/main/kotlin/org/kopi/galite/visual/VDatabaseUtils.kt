@@ -18,15 +18,8 @@
 
 package org.kopi.galite.visual
 
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import org.kopi.galite.database.References
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -38,23 +31,21 @@ object VDatabaseUtils {
       val query1 = References.slice(References.table, References.column, References.action)
               .select { References.reference eq queryTable.tableName }
               .orderBy(References.action to SortOrder.DESC)
-      val action = query1.forEach { query1Row ->
+      query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
           val column = integer(query1Row[References.column])
         }
         when (query1Row[References.action][0]) {
           'R' -> transaction {
-            val query2 = auxTable.slice(auxTable.id)
+            auxTable.slice(auxTable.id)
                     .select { auxTable.column eq id }
-            if (query2.toList()[1] != null) {
-              throw VExecFailedException(
-                MessageCode.getMessage("VIS-00021", arrayOf<Any>(
-                      query1Row[References.column],
-                      query1Row[References.table]
-                ))
-              )
-            }
+            throw VExecFailedException(
+              MessageCode.getMessage("VIS-00021", arrayOf<Any>(
+                    query1Row[References.column],
+                    query1Row[References.table]
+              ))
+            )
           }
 
           'C' -> transaction {
@@ -71,7 +62,8 @@ object VDatabaseUtils {
               it[auxTable.column] = 0
             }
           }
-          else -> throw InconsistencyException()
+          else -> throw InconsistencyException("Unrecognized action for table ${query1Row[References.table]} and column ${query1Row[References.column]}: ${query1Row[References.action]}")
+
 
         }
       }
@@ -85,23 +77,21 @@ object VDatabaseUtils {
       val query1 = References.slice(References.table, References.column, References.action)
               .select { References.reference eq table }
               .orderBy(References.action to SortOrder.DESC)
-      val action = query1.forEach { query1Row ->
+      query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
           val column = integer(query1Row[References.column])
         }
         when (query1Row[References.action][0]) {
           'R' -> transaction {
-            val query2 = auxTable.slice(auxTable.id)
-                    .select { auxTable.column eq id }
-            if (query2.toList()[1] != null) {
+              auxTable.slice(auxTable.id)
+                .select { auxTable.column eq id }
               throw VExecFailedException(
                 MessageCode.getMessage("VIS-00021", arrayOf<Any>(
                       query1Row[References.column],
                       query1Row[References.table]
                 ))
               )
-            }
           }
 
           'C' -> transaction {
@@ -118,7 +108,7 @@ object VDatabaseUtils {
               it[auxTable.column] = 0
             }
           }
-          else -> throw InconsistencyException()
+          else -> throw InconsistencyException("Unrecognized action for table ${query1Row[References.table]} and column ${query1Row[References.column]}: ${query1Row[References.action]}")
 
         }
       }

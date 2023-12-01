@@ -17,12 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.block
 
-import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.form.DField
-import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
-import org.kopi.galite.visual.ui.vaadin.label.Label
-
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
@@ -30,6 +24,11 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.data.provider.ListDataProvider
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.form.DField
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
+import org.kopi.galite.visual.ui.vaadin.label.Label
 
 /**
  * An absolute panel component.
@@ -136,12 +135,12 @@ class AlignPanel(var align: BlockAlignment?, private val targetBlockName: String
         TODO("Not supported yet")
       }
     } else {
-      val ori = ori as AbstractBlockLayout
+      val oriLayout = ori as AbstractBlockLayout
 
       for (i in aligns!!.indices) {
         val align = aligns!![i]
         if (align.x != -1) {
-          val cell = ori.getCellAtOrNull(ori.rowCount - 1, align.x)
+          val cell = oriLayout.getCellAtOrNull(oriLayout.rowCount - 1, align.x)
 
           if (cell != null) {
             add(components!![i])

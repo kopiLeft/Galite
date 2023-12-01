@@ -22,7 +22,7 @@ import org.kopi.galite.visual.VColor
 /**
  * The grid editor actor field server side implementation
  */
-class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
+class GridEditorActorField() : GridEditorField<String?>() {
 
   /**
    * The actor field icon name.

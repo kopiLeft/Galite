@@ -18,16 +18,9 @@
 
 package org.kopi.galite.visual.report
 
-import java.awt.event.KeyEvent
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
-import kotlin.jvm.Throws
-
 import org.jetbrains.annotations.TestOnly
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
@@ -35,21 +28,12 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
+import java.awt.event.KeyEvent
+import java.io.File
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * Represents a report model.
@@ -479,9 +463,9 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
 
   open fun executeObjectTrigger(trigger: Trigger?): Any = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  fun executeBooleanTrigger(trigger: Trigger?): Boolean = throw InconsistencyException("SHOULD BE REDEFINED")
+  fun executeBooleanTrigger(): Boolean = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  fun executeIntegerTrigger(trigger: Trigger?): Int = throw InconsistencyException("SHOULD BE REDEFINED")
+  fun executeIntegerTrigger(): Int = throw InconsistencyException("SHOULD BE REDEFINED")
 
   fun getDocumentType(): Int = DOC_UNKNOWN
 
@@ -489,7 +473,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
    * overridden by forms to implement triggers
    * default triggers
    */
-  protected fun execTrigger(block: Any, trigger: Trigger?): Any? {
+  protected fun execTrigger(trigger: Trigger?): Any? {
     executeVoidTrigger(trigger)
     return null
   }
@@ -525,7 +509,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
         null
       }
       Constants.TRG_OBJECT -> executeObjectTrigger(triggers[index][event])
-      Constants.TRG_BOOLEAN -> executeBooleanTrigger(triggers[index][event])
+      Constants.TRG_BOOLEAN -> executeBooleanTrigger()
       else -> throw InconsistencyException("BAD TYPE" + Constants.TRG_TYPES[event])
     }
   }
@@ -625,7 +609,7 @@ abstract class VReport internal constructor() : VWindow(), Constants, VConstants
             VDefaultReportActor("File", "Quit", VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
             VDefaultReportActor("File", "Print", VDynamicReport.PRINT_ICON, KeyEvent.VK_F6, 0),
             VDefaultReportActor("File", "ExportCSV", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F8, 0),
-            VDefaultReportActor("File", "ExportXLSX", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK),
+            VDefaultReportActor("File", "ExportXLSX", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_DOWN_MASK),
             VDefaultReportActor("File", "ExportPDF", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, 0),
             VDefaultReportActor("Action", "Fold", VDynamicReport.FOLD_ICON, KeyEvent.VK_F2, 0),
             VDefaultReportActor("Action", "Unfold", VDynamicReport.UNFOLD_ICON, KeyEvent.VK_F3, 0),

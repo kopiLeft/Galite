@@ -18,18 +18,16 @@
 
 package org.kopi.galite.visual.form
 
-import java.time.LocalDate
-
-import kotlin.math.max
-
-import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VStringColumn
+import java.time.LocalDate
+import kotlin.math.max
 
 class VListDialog(list: Array<VListColumn?>,
                   val data: Array<Array<Any?>>,
@@ -249,10 +247,10 @@ class VListDialog(list: Array<VListColumn?>,
     }
     if (columns[left]!!.isSortAscending) {
       // reverse sorting
-      for (i in 0 until count / 2) {
-        val tmp = translatedIdents[i]
-        translatedIdents[i] = translatedIdents[count - 1 - i]
-        translatedIdents[count - 1 - i] = tmp
+      for (k in 0 until count / 2) {
+        val tmp = translatedIdents[k]
+        translatedIdents[k] = translatedIdents[count - 1 - k]
+        translatedIdents[count - 1 - k] = tmp
       }
     }
   }
@@ -297,6 +295,7 @@ class VListDialog(list: Array<VListColumn?>,
     /**
      * Displays a dialog box returning position of selected element.
      */
+    @Suppress("UNCHECKED_CAST")
     fun selectFromDialog(window: VWindow, str: Array<String>): Int {
       var size = 0
 

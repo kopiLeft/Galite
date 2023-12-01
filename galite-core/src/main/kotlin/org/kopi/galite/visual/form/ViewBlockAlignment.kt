@@ -35,11 +35,11 @@ class ViewBlockAlignment(var formView: UForm,
   fun isAligned(x: Int): Boolean = align.isAligned(x)
 
   fun getMinStart(x: Int): Int {
-    var x = x
+    var modifiedX = x
     val target: Int
 
-    x-- // we want to align middle
-    target = align.getTargetAt(x)
+    modifiedX-- // we want to align middle
+    target = align.getTargetAt(modifiedX)
     val view = formView.getBlockView(align.block!!)
 
     if (target != -1) {
@@ -54,9 +54,9 @@ class ViewBlockAlignment(var formView: UForm,
   }
 
   fun getLabelMinStart(x: Int): Int {
-    var x = x
-    x-- // we want to align middle
-    val target = align.getTargetAt(x)
+    var modifiedX = x
+    modifiedX-- // we want to align middle
+    val target = align.getTargetAt(modifiedX)
     val view = formView.getBlockView(align.block!!)
 
     return if (target != -1) {

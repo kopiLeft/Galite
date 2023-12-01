@@ -18,14 +18,12 @@
 
 package org.kopi.galite.visual
 
-import kotlin.jvm.Throws
-
-import org.kopi.galite.visual.base.Image
 import org.kopi.galite.database.Connection
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.base.Image
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.l10n.ModuleLocalizer
-import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents an Module.
@@ -96,7 +94,7 @@ class Module(val id: Int,
    * @param    context        the context where to look for application
    */
   fun run(context: Connection) {
-    startForm(context, objectName, description, smallIcon)
+    startForm(objectName, smallIcon)
   }
 
   override fun toString(): String = shortname
@@ -139,8 +137,8 @@ class Module(val id: Int,
 
   companion object {
     fun getExecutable(objectName: String?): Executable {
-      return try {
-        val instance = Class.forName(objectName).kotlin.objectInstance ?: Class.forName(objectName).newInstance()
+      try {
+        val instance = Class.forName(objectName).kotlin.objectInstance ?: Class.forName(objectName).getDeclaredConstructor().newInstance()
         return if(instance is Window) {
           instance.model
         } else {
@@ -157,9 +155,7 @@ class Module(val id: Int,
 
     @JvmOverloads
     @Throws(VException::class)
-    fun startForm(ctxt: Connection,
-                  objectName: String?,
-                  description: String,
+    fun startForm(objectName: String?,
                   icon: Image? = null): Executable? {
       return try {
         if (ApplicationContext.getDefaults()!!.isDebugModeEnabled) {

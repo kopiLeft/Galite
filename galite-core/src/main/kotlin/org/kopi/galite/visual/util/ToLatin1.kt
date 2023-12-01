@@ -29,7 +29,7 @@ class ToLatin1 : Filter() {
    * @param char the character to convert
    */
   override fun convert(char: Char): Char {
-    return if (char.toInt() >= 128) conversionTable[char.toInt() - 128] else char
+    return if (char.code >= 128) conversionTable[char.code - 128] else char
   }
 
   /**

@@ -18,14 +18,13 @@ package org.kopi.galite.localizer
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.work.InputChanges
 
 /**
  * Localization task class
  */
 class LocalizationTask : DefaultTask() {
   @TaskAction
-  fun run(inputChanges: InputChanges) {
+  fun run() {
     val extension = project.extensions.getByType(LocalizationExtension::class.java)
 
     localizeWindows(extension.url,

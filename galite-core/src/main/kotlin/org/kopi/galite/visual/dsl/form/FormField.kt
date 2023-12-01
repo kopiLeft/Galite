@@ -498,7 +498,7 @@ open class FormField<T>(internal val block: Block,
       if (hasOption(VConstants.FDO_NODETAIL) || block.hasOption(VConstants.BKO_NODETAIL)) {
 
         // Get a position for the chart view.
-        position = block.positionField(this)
+        position = block.positionField()
       }
       if (!(hasOption(VConstants.FDO_NODETAIL)
                       || block.hasOption(VConstants.BKO_NODETAIL)

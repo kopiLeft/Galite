@@ -18,14 +18,8 @@
 
 package org.kopi.galite.visual.form
 
-import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SqlExpressionBuilder
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.compoundAnd
 
 class VBlockDefaultOuterJoin(block: VBlock) {
 
@@ -48,11 +42,11 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   /**
    * constructs an outer join tree.
    */
-  private fun getJoinCondition(rootTable: Table, table: Table, joinTables: Join): Join {
+  private fun getJoinCondition(rootTable: Table, table: Table, initialJoinTables: Join): Join {
     var field: VField
     var additionalConstraint: (SqlExpressionBuilder.() -> Op<Boolean>)? = null
     var condition: Op<Boolean>? = null
-    var joinTables = joinTables
+    var joinTables = initialJoinTables
 
     for (i in fields.indices) {
       if (isProcessedField(i)) {

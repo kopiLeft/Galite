@@ -18,15 +18,9 @@
 
 package org.kopi.galite.visual.chart
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.util.Locale
-
-import kotlin.collections.ArrayList
-
+import com.lowagie.text.Rectangle
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.ChartLocalizer
@@ -34,24 +28,12 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Constants
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
-
-import com.lowagie.text.Rectangle
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.util.*
 
 /**
  * Creates a new chart model.
@@ -128,12 +110,12 @@ abstract class VChart : VWindow(), CConstants, Printable {
    * @param     locale  the locale to use
    */
   fun localize(locale: Locale?) {
-    var manager: LocalizationManager?
+    val manager: LocalizationManager?
 
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
     // localizes the actors in VWindow
     localize(manager)
-    manager = null
+
   }
 
   /**
@@ -246,23 +228,28 @@ abstract class VChart : VWindow(), CConstants, Printable {
     }
     // all commands are by default enabled
     activeCommands.clear()
-    commands?.forEachIndexed { i, it ->
+    commands.forEachIndexed { i, it ->
       when (it.getIdent()) {
         "BarView" -> {
           cmdBarView = it
         }
+
         "ColumnView" -> {
           cmdColumnView = it
         }
+
         "LineView" -> {
           cmdLineView = it
         }
+
         "AreaView" -> {
           cmdAreaView = it
         }
+
         "PieView" -> {
           cmdPieView = it
         }
+
         else -> {
           setCommandEnabled(it, i, true)
         }
@@ -420,9 +407,9 @@ abstract class VChart : VWindow(), CConstants, Printable {
    * Enables/disables the actor.
    */
   fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
-    var enable = enable
+    var isEnabled = enable
 
-    if (enable) {
+    if (isEnabled) {
       // we need to check if VKT_Commands_Triggers is not empty
       // ex : org.kopi.galite.visual.cross.VDynamicReport
       if (VKT_Commands_Triggers.isNotEmpty() && hasCommandTrigger(CConstants.TRG_CMDACCESS, index)) {
@@ -433,9 +420,9 @@ abstract class VChart : VWindow(), CConstants, Printable {
           // trigger call error ==> command is considered as active
           true
         }
-        enable = active
+        isEnabled = active
       }
-      command.setEnabled(enable)
+      command.setEnabled(isEnabled)
       activeCommands.add(command)
     } else {
       activeCommands.remove(command)
@@ -468,11 +455,11 @@ abstract class VChart : VWindow(), CConstants, Printable {
     return (trigger?.action?.method as () -> Any?).invoke()
   }
 
-  fun executeBooleanTrigger(trigger: Trigger?): Boolean {
+  fun executeBooleanTrigger(): Boolean {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
-  fun executeIntegerTrigger(trigger: Trigger?): Int {
+  fun executeIntegerTrigger(): Int {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
@@ -480,7 +467,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
    * overridden by forms to implement triggers
    * default triggers
    */
-  protected fun execTrigger(block: Any, trigger: Trigger?): Any? {
+  protected fun execTrigger(trigger: Trigger?): Any? {
     executeVoidTrigger(trigger)
     return null
   }

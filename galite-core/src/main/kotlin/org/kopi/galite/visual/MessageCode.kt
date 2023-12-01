@@ -18,12 +18,11 @@
 
 package org.kopi.galite.visual
 
-import java.util.Locale
-import java.util.regex.Pattern
-
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.base.ExtendedMessageFormat
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
+import java.util.*
+import java.util.regex.Pattern
 
 /**
  * This class handles localized messages.
@@ -59,7 +58,7 @@ object MessageCode {
   @Suppress("UNCHECKED_CAST")
   @JvmOverloads
   fun getMessage(key: String, params: Any? = null, withKey: Boolean = true): String {
-    val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+    val modifiedParams = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
     if (!keyPattern.matcher(key).matches()) {
       throw InconsistencyException("Malformed message key '$key'")
@@ -75,7 +74,7 @@ object MessageCode {
       // Within a String, "''" represents a single quote in java.text.MessageFormat.
       val format = manager.getMessageLocalizer(src, ident).getText().replace("'", "''")
       val messageFormat = ExtendedMessageFormat(format, ApplicationContext.getDefaultLocale())
-      (if (withKey) "$key: " else "") + messageFormat.formatMessage(params)
+      (if (withKey) "$key: " else "") + messageFormat.formatMessage(modifiedParams)
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble(
         "localize MessageCode",

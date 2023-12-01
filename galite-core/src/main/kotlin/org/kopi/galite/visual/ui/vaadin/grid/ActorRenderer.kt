@@ -24,7 +24,7 @@ import com.vaadin.flow.shared.Registration
 /**
  * An actor field renderer that uses the actor editor field widget to display.
  */
-open class ActorRenderer(caption: String?) : ClickableRenderer<String?>, Renderer<String?>() {
+open class ActorRenderer() : ClickableRenderer<String?>, Renderer<String?>() {
   override fun addItemClickListener(listener: ClickableRenderer.ItemClickListener<String?>?): Registration {
     TODO("Not yet implemented")
   }

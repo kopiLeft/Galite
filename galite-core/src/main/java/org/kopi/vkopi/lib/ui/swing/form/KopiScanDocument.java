@@ -84,7 +84,7 @@ import org.kopi.galite.visual.form.VField;
 
         if (((VField) getModel()).checkText(text)) {
             scanedtext.append(str);
-            ((VField) getModel()).onTextChange(scanedtext.toString());
+            ((VField) getModel()).onTextChange();
             progress = (progress + 1) % PROGRESS_BAR.length();
             super.setModelText(PROGRESS_BAR.substring(0, progress + 1));
         } else {

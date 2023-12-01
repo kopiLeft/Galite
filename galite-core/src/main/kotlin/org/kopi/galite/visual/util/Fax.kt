@@ -18,24 +18,15 @@
 
 package org.kopi.galite.visual.util
 
-import java.io.BufferedReader
-import java.io.ByteArrayOutputStream
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.PrintWriter
+import org.kopi.galite.visual.base.Utils
+import java.io.*
 import java.net.ConnectException
 import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.Socket
-import java.util.StringTokenizer
-import java.util.Vector
+import java.util.*
 import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
-
-import org.kopi.galite.visual.base.Utils
 
 @Deprecated("replaced by the class HylaFAXUtils")
 class Fax(var port: Int, var host: String = HFAX_HOST) {
@@ -280,22 +271,22 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
     return response.toString()
   }
 
-  private fun setNewJob(number: String, user: String, id: String) {
+  private fun setNewJob(number: String, id: String) {
     // number check:
-    val number = checkNumber(number)
+    val newNumber = checkNumber(number)
 
-    val user = DEFAULT_USER
-    Utils.log("Fax", "NEW JOB:$id / user: $user")
+    val defaultUser = DEFAULT_USER
+    Utils.log("Fax", "NEW JOB:$id / user: $defaultUser")
 
     // Set job parameters
     command("JNEW")
-    command("JPARM FROMUSER \"$user\"")
+    command("JPARM FROMUSER \"$defaultUser\"")
     command("JPARM LASTTIME 145959")
     command("JPARM MAXDIALS 3")
     command("JPARM MAXTRIES 3")
     command("JPARM SCHEDPRI 127")
-    command("JPARM DIALSTRING \"$number\"")
-    command("JPARM NOTIFYADDR \"$user\"")
+    command("JPARM DIALSTRING \"$newNumber\"")
+    command("JPARM NOTIFYADDR \"$defaultUser\"")
     command("JPARM JOBINFO \"$id\"")
     command("JPARM VRES 196")
     command("JPARM PAGEWIDTH " + 209)
@@ -575,7 +566,7 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
       fax.command("TZONE LOCAL")
 
       val filename = fax.sendbuffer(inputStream)
-      fax.setNewJob(number, user, jobId)
+      fax.setNewJob(number, jobId)
       fax.command("JPARM DOCUMENT $filename")
       fax.command("JSUBM")
       fax.endCon()
@@ -690,13 +681,13 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
      * HANDLE THE SERVER AND MODEM STATE
      * ----------------------------------------------------------------------
      */
-    fun readSendtime(jobId: String?): String? = null
+    fun readSendtime(): String? = null
 
     /**
      * Convenience method
      */
-    fun killJob(host: String, user: String, job: String) {
-      killJob(HFAX_PORT, host, user, job)
+    fun killJob(host: String, job: String) {
+      killJob(HFAX_PORT, host, job)
     }
 
     /**
@@ -704,7 +695,6 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
      */
     fun killJob(port: Int,
                 host: String,
-                user: String,
                 job: String) {
       val fax = Fax(port, host)
 
@@ -718,9 +708,8 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
      * Convenience method
      */
     fun clearJob(host: String,
-                 user: String,
                  job: String) {
-      clearJob(HFAX_PORT, host, user, job)
+      clearJob(HFAX_PORT, host, job)
     }
 
     /**
@@ -728,7 +717,6 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
      */
     fun clearJob(port: Int,
                  host: String,
-                 user: String,
                  job: String) {
       val fax = Fax(port, host)
 

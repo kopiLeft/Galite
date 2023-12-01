@@ -18,15 +18,14 @@
 
 package org.kopi.galite.visual.form
 
-import java.math.BigDecimal
-
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.list.VList
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.list.VList
+import java.math.BigDecimal
 
 /**
  *
@@ -86,10 +85,10 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that text is valid (during typing)
    */
   override fun checkText(s: String): Boolean {
-    val s = s.lowercase()
+    val modifiedS = s.lowercase()
 
     for (i in labels.indices) {
-      if (labels[i].lowercase().startsWith(s)) {
+      if (labels[i].lowercase().startsWith(modifiedS)) {
         return true
       }
     }
@@ -101,9 +100,9 @@ abstract class VCodeField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    var s = s as? String
+    var modifiedS = s as? String
 
-    if (s == "") {
+    if (modifiedS == "") {
       setNull(rec)
     } else {
       /*
@@ -113,11 +112,11 @@ abstract class VCodeField(val bufferSize: Int,
        */
       var found = -1
 
-      s = s!!.lowercase()
+      modifiedS = modifiedS!!.lowercase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
-        if (labels[i].lowercase().startsWith(s)) {
+        if (labels[i].lowercase().startsWith(modifiedS)) {
           if (labels[i].lowercase() == s) {
             found = i
             break
@@ -140,7 +139,7 @@ abstract class VCodeField(val bufferSize: Int,
 
           var count = 0
           labels.forEach { label ->
-            if (label.lowercase().startsWith(s)) {
+            if (label.lowercase().startsWith(modifiedS)) {
               count++
             }
           }
@@ -150,7 +149,7 @@ abstract class VCodeField(val bufferSize: Int,
           var j = 0
 
           while (i < labels.size) {
-            if (labels[i].lowercase().startsWith(s)) {
+            if (labels[i].lowercase().startsWith(modifiedS)) {
               codes[j] = codes[i]
               selectedToModel[j] = i
               j++
@@ -212,15 +211,15 @@ abstract class VCodeField(val bufferSize: Int,
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    var desc = desc
+    var modifiedDesc = desc
 
-    desc = if (!getListColumn()!!.isSortAscending) desc else !desc
+    modifiedDesc = if (!getListColumn()!!.isSortAscending) modifiedDesc else !modifiedDesc
     var pos = value[block!!.activeRecord]
 
-    if (pos == -1 && desc) {
+    if (pos == -1 && modifiedDesc) {
       pos = labels.size
     }
-    pos += if (desc) -1 else 1
+    pos += if (modifiedDesc) -1 else 1
     if (pos < 0 || pos >= labels.size) {
       throw VExecFailedException() // no message to display
     } else {
@@ -285,7 +284,7 @@ abstract class VCodeField(val bufferSize: Int,
    * Returns the field value of given record as a bigdecimal value.
    */
   override fun getDecimal(r: Int): BigDecimal? {
-    throw InconsistencyException()
+    throw InconsistencyException("Unable to retrieve Decimal value at record index $r.")
   }
 
   //deprecation
@@ -293,7 +292,7 @@ abstract class VCodeField(val bufferSize: Int,
    * Returns the field value of given record as a boolean value.
    */
   override fun getBoolean(r: Int): Boolean? {
-    throw InconsistencyException()
+    throw InconsistencyException("Unable to retrieve boolean value at record index $r.")
   }
 
   //deprecation
@@ -301,14 +300,14 @@ abstract class VCodeField(val bufferSize: Int,
    * Returns the field value of given record as a int value.
    */
   override fun getInt(r: Int): Int? {
-    throw InconsistencyException()
+    throw InconsistencyException("Unable to retrieve Int value at record index $r.")
   }
 
   /**
    * Returns the field value of given record as a string value.
    */
   override fun getString(r: Int): String? {
-    throw InconsistencyException()
+    throw InconsistencyException("Unable to retrieve String value at record index $r.")
   }
 
   override fun toText(o: Any?): String {
@@ -371,21 +370,21 @@ abstract class VCodeField(val bufferSize: Int,
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
   protected open fun formatDecimal(value: BigDecimal): String {
-    throw InconsistencyException()
+    throw InconsistencyException("Unsupported operation")
   }
 
   /**
    * Returns a string representation of a boolean value wrt the field type.
    */
   protected open fun formatBoolean(value: Boolean): String {
-    throw InconsistencyException()
+    throw InconsistencyException("Unsupported operation")
   }
 
   /**
    * Returns a string representation of a int value wrt the field type.
    */
   protected open fun formatInt(value: Int): String {
-    throw InconsistencyException()
+    throw InconsistencyException("Unsupported operation")
   }
 
   // ----------------------------------------------------------------------

@@ -16,11 +16,10 @@
  */
 package org.kopi.galite.demo.client
 
-import java.util.Locale
-
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.Client
+import org.kopi.galite.visual.WindowController
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -30,11 +29,12 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.WindowController
+import java.util.*
 
 /**
  * Client Report
  */
+@Suppress("DEPRECATION", "DEPRECATION")
 class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   val action = menu("Action")
   val file = menu("File")
@@ -109,7 +109,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     group = ageClt
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -118,7 +118,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     help = "The client last name"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -127,7 +127,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     help = "The client address"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toLowerCase()
+      value.lowercase()
     }
   }
 

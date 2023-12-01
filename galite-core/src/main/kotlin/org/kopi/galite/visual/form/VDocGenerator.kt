@@ -17,10 +17,9 @@
  */
 package org.kopi.galite.visual.form
 
-import java.awt.Event
-
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VlibProperties
+import java.awt.event.InputEvent
 
 /**
  * This class implements a pretty printer
@@ -250,7 +249,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
    */
   override fun helpOnCommand(menu: String?, item: String?, icon: String?, accKey: Int, accMod: Int, help: String?) {
     latexPrinter.print("\\item{")
-    if (accMod == Event.SHIFT_MASK) {
+    if (accMod == InputEvent.SHIFT_DOWN_MASK) {
       latexPrinter.print("\\Taste{Shift} ")
     }
     if (accKey != 0) {

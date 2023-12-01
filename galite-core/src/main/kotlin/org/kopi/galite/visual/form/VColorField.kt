@@ -18,21 +18,19 @@
 
 package org.kopi.galite.visual.form
 
-import java.awt.Color
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-
-import kotlin.reflect.KClass
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import org.kopi.galite.visual.list.VColorColumn
-import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VColorColumn
+import org.kopi.galite.visual.list.VListColumn
+import java.awt.Color
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import kotlin.reflect.KClass
 
-class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
+class VColorField(val bufferSize: Int) : VField(1, 1) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -217,7 +215,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns a string representation of a date value wrt the field type.
    */
-  fun formatImage(value: Any): String = "image"
+  fun formatImage(): String = "image"
 
   /**
    * autofill

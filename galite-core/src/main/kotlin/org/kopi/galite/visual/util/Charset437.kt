@@ -65,7 +65,7 @@ class Encoder437(cs: Charset?) : CharsetEncoder(cs, 1f, 1f) {
       val c = input.get()
 
       // the char we get is only 1 byte value.
-      if (c.toInt() > 255) {
+      if (c.code > 255) {
         return CoderResult.unmappableForLength(input.length)
       } else {
         out.put(convert(c))
@@ -77,7 +77,7 @@ class Encoder437(cs: Charset?) : CharsetEncoder(cs, 1f, 1f) {
   }
 
   private fun convert(c: Char): Byte {
-    return (if (c.toInt() >= 128) conversionTable[c.toInt() - 128] else c).toByte()
+    return (if (c.code >= 128) conversionTable[c.code - 128] else c).code.toByte()
   }
 
   companion object {

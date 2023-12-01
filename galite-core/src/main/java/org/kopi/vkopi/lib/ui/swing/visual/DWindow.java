@@ -303,8 +303,9 @@ public abstract class DWindow extends JPanel implements UWindow {
   }
 
   /**
-   * @deprecated        Use closeWindow() or close(int code) instead.
+   * @deprecated Use closeWindow() or close(int code) instead.
    */
+  @Deprecated
   public void close() {
     closeWindow();
   }
@@ -332,8 +333,9 @@ public abstract class DWindow extends JPanel implements UWindow {
 
   /**
    * Builds the display structure
-   * @deprecated        do not use anymore
+   * @deprecated  do not use anymore
    */
+  @Deprecated
   public void build() {
   }
 
@@ -637,6 +639,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    * @deprecated   Use method #performAsyncAction(KopiAction action) without
    *               boolean parameter because this parameter  was ignored.
    */
+  @Deprecated
   public void performAction(final org.kopi.galite.visual.Action action, boolean block) {
     performAsyncAction(action);
   }

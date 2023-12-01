@@ -102,7 +102,7 @@ abstract class FileHandler {
      * Tests if the [pathname] of the file has the extension .PDF
      */
     override fun accept(pathname: File?): Boolean {
-      return pathname != null && pathname.name.toUpperCase().endsWith(".PDF")
+      return pathname != null && pathname.name.uppercase().endsWith(".PDF")
     }
 
     /**

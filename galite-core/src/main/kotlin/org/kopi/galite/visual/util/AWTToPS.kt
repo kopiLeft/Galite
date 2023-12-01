@@ -18,25 +18,14 @@
 
 package org.kopi.galite.visual.util
 
-import java.awt.Color
-import java.awt.Font
-import java.awt.FontMetrics
-import java.awt.Graphics
-import java.awt.Image
-import java.awt.Polygon
-import java.awt.Rectangle
-import java.awt.Shape
-import java.awt.Toolkit
+import org.kopi.galite.util.base.InconsistencyException
+import java.awt.*
 import java.awt.image.ImageObserver
 import java.awt.image.PixelGrabber
 import java.io.OutputStream
 import java.io.PrintStream
 import java.text.AttributedCharacterIterator
-
 import kotlin.experimental.or
-
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.util.base.NotImplementedException
 
 /**
  * A class to paint in a postscript file instead of screen
@@ -284,13 +273,13 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see getClipRect
    */
   override fun clipRect(x: Int, y: Int, width: Int, height: Int) {
-    val y = swapCoord(y)
-    clippingRect = Rectangle(x, y, width, height)
+    val modifiedY = swapCoord(y)
+    clippingRect = Rectangle(x, modifiedY, width, height)
     stream.println("initclip")
-    emitMoveto(x, y)
-    emitLineto(x + width, y)
-    emitLineto(x + width, y - height)
-    emitLineto(x, y - height)
+    emitMoveto(x, modifiedY)
+    emitLineto(x + width, modifiedY)
+    emitLineto(x + width, modifiedY - height)
+    emitLineto(x, modifiedY - height)
     stream.println("closepath eoclip newpath")
   }
 
@@ -319,10 +308,10 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @param y2 the second point's y coordinate
    */
   override fun drawLine(x1: Int, y1: Int, x2: Int, y2: Int) {
-    val y1 = swapCoord(y1)
-    val y2 = swapCoord(y2)
-    emitMoveto(x1, y1)
-    emitLineto(x2, y2)
+    val modifiedY1 = swapCoord(y1)
+    val modifiedY2 = swapCoord(y2)
+    emitMoveto(x1, modifiedY1)
+    emitLineto(x2, modifiedY2)
     stream.println("stroke")
   }
 
@@ -393,7 +382,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see fillRoundRect
    */
   override fun drawRoundRect(x: Int, y: Int, width: Int, height: Int, arcWidth: Int, arcHeight: Int) {
-    doRoundRect(x, y, width, height, arcWidth, arcHeight, false)
+    doRoundRect(x, y, width, height, arcHeight, false)
   }
 
   /**
@@ -408,7 +397,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see drawRoundRect
    */
   override fun fillRoundRect(x: Int, y: Int, width: Int, height: Int, arcWidth: Int, arcHeight: Int) {
-    doRoundRect(x, y, width, height, arcWidth, arcHeight, true)
+    doRoundRect(x, y, width, height, arcHeight, true)
   }
 
   /**
@@ -570,8 +559,8 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see drawBytes
    */
   override fun drawString(str: String, x: Int, y: Int) {
-    val y = swapCoord(y)
-    emitMoveto(x, y)
+    val modifiedY = swapCoord(y)
+    emitMoveto(x, modifiedY)
     with(stream) {
       print("(")
       print(str)
@@ -656,7 +645,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see ImageObserver
    */
   override fun drawImage(img: Image, x: Int, y: Int, observer: ImageObserver): Boolean {
-    return doImage(img, x, y, 0, 0, observer, null)
+    return doImage(img, x, y, 0, 0, null)
   }
 
   /**
@@ -675,7 +664,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see ImageObserver
    */
   override fun drawImage(img: Image, x: Int, y: Int, width: Int, height: Int, observer: ImageObserver?): Boolean {
-    return doImage(img, x, y, width, height, observer, null)
+    return doImage(img, x, y, width, height, null)
   }
 
   /**
@@ -692,7 +681,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see ImageObserver
    */
   override fun drawImage(img: Image, x: Int, y: Int, bgcolor: Color, observer: ImageObserver): Boolean {
-    return doImage(img, x, y, 0, 0, observer, bgcolor)
+    return doImage(img, x, y, 0, 0, bgcolor)
   }
 
   /**
@@ -718,7 +707,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
                          height: Int,
                          bgcolor: Color,
                          observer: ImageObserver): Boolean {
-    return doImage(img, x, y, width, height, observer, bgcolor)
+    return doImage(img, x, y, width, height, bgcolor)
   }
 
   /**
@@ -843,7 +832,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   }
 
   override fun drawPolyline(param1: IntArray, param2: IntArray, param3: Int) {
-    throw NotImplementedException()
+    throw NotImplementedError()
   }
 
   override fun drawImage(param1: Image,
@@ -894,29 +883,29 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   }
 
   private fun doRect(x: Int, y: Int, width: Int, height: Int, fill: Boolean) {
-    val y = swapCoord(y)
+    val modifiedY = swapCoord(y)
 
-    emitMoveto(x, y)
-    emitLineto(x + width, y)
-    emitLineto(x + width, y - height)
-    emitLineto(x, y - height)
-    emitLineto(x, y)
+    emitMoveto(x, modifiedY)
+    emitLineto(x + width, modifiedY)
+    emitLineto(x + width, modifiedY - height)
+    emitLineto(x, modifiedY - height)
+    emitLineto(x, modifiedY)
     stream.println(if (fill) "eofill" else "stroke")
   }
 
-  private fun doRoundRect(x: Int, y: Int, width: Int, height: Int, arcWidth: Int, arcHeight: Int, fill: Boolean) {
-    val y = swapCoord(y)
+  private fun doRoundRect(x: Int, y: Int, width: Int, height: Int, arcHeight: Int, fill: Boolean) {
+    val modifiedY = swapCoord(y)
 
-    emitMoveto(x + arcHeight, y)
+    emitMoveto(x + arcHeight, modifiedY)
 
     // top, left to right
     stream.print(x + width)
     stream.print(" ")
-    stream.print(y)
+    stream.print(modifiedY)
     stream.print(" ")
     stream.print(x + width)
     stream.print(" ")
-    stream.print(y - height)
+    stream.print(modifiedY - height)
     stream.print(" ")
     stream.print(arcHeight)
     stream.println(" arcto")
@@ -925,11 +914,11 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     // right, top to bottom
     stream.print(x + width)
     stream.print(" ")
-    stream.print(y - height)
+    stream.print(modifiedY - height)
     stream.print(" ")
     stream.print(x)
     stream.print(" ")
-    stream.print(y - height)
+    stream.print(modifiedY - height)
     stream.print(" ")
     stream.print(arcHeight)
     stream.println(" arcto")
@@ -938,11 +927,11 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     // top, left to right
     stream.print(x)
     stream.print(" ")
-    stream.print(y - height)
+    stream.print(modifiedY - height)
     stream.print(" ")
     stream.print(x)
     stream.print(" ")
-    stream.print(y)
+    stream.print(modifiedY)
     stream.print(" ")
     stream.print(arcHeight)
     stream.println(" arcto")
@@ -951,11 +940,11 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     // left, top to bottom
     stream.print(x)
     stream.print(" ")
-    stream.print(y)
+    stream.print(modifiedY)
     stream.print(" ")
     stream.print(x + width)
     stream.print(" ")
-    stream.print(y)
+    stream.print(modifiedY)
     stream.print(" ")
     stream.print(arcHeight)
     stream.println(" arcto")
@@ -964,13 +953,13 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   }
 
   private fun doArc(x: Int, y: Int, width: Int, height: Int, startAngle: Int, arcAngle: Int, fill: Boolean) {
-    val y = swapCoord(y)
+    val modifiedY = swapCoord(y)
 
     stream.println("gsave")
 
     // cx, cy is the center of the arc
     // translate the page to be centered there
-    emitTranslate(x + width.toFloat() / 2.0, y - height.toFloat() / 2.0)
+    emitTranslate(x + width.toFloat() / 2.0, modifiedY - height.toFloat() / 2.0)
     emitScale(1.0, (height.toFloat() / width.toFloat()).toDouble())
     if (fill) {
       emitMoveto(0, 0)
@@ -1049,10 +1038,10 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     var offset: Int
     val sb = CharArray(charsPerRow + 1)
     val bg = bgcolor?.rgb ?: -1
-    for (i in 0 until imgHeight) {
+    for (k in 0 until imgHeight) {
       offset = 0
       for (j in 0 until imgWidth) {
-        val coord = i * imgWidth + j
+        val coord = k * imgWidth + j
         var n = pix[coord]
         val alpha = n and -0x1000000
         if (alpha == 0) {
@@ -1081,8 +1070,8 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     return true
   }
 
-  fun doImage(img: Image, x: Int, y: Int, width: Int, height: Int, observer: ImageObserver?, bgcolor: Color?): Boolean {
-    return doImage(PixelConsumer(img), x, y, width, height, observer, bgcolor)
+  fun doImage(img: Image, x: Int, y: Int, width: Int, height: Int, bgcolor: Color?): Boolean {
+    return doImage(PixelConsumer(img), x, y, width, height, bgcolor)
   }
 
   fun doImage(pc: PixelConsumer,
@@ -1090,22 +1079,21 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
               y: Int,
               width: Int,
               height: Int,
-              observer: ImageObserver?,
               bgcolor: Color?): Boolean {
-    val y = swapCoord(y)
-    var width = width
-    var height = height
+    val modifiedY = swapCoord(y)
+    var modifiedWidth = width
+    var modifiedHeight = height
     stream.println("gsave")
     stream.println("20 dict begin")
     emitColorImageProlog(pc.dimensions!!.width)
-    emitTranslate(x, y)
+    emitTranslate(x, modifiedY)
 
     // compute image size. First of all, if width or height is 0, image is 1:1.
-    if (height == 0 || width == 0) {
-      height = pc.dimensions!!.height
-      width = pc.dimensions!!.width
+    if (modifiedHeight == 0 || modifiedWidth == 0) {
+      modifiedHeight = pc.dimensions!!.height
+      modifiedWidth = pc.dimensions!!.width
     }
-    emitScale(width, height)
+    emitScale(modifiedWidth, modifiedHeight)
     stream.print(pc.dimensions!!.width)
     stream.print(" ")
     stream.print(pc.dimensions!!.height)
@@ -1170,12 +1158,10 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
                 x: Int,
                 y: Int,
                 width: Int,
-                height: Int,
-                observer: ImageObserver,
-                bgcolor: Color?): Boolean {
+                height: Int): Boolean {
     // This class fetches the pixels in its constructor.
-    var width = width
-    var height = height
+    var modifiedWidth = width
+    var modifiedHeight = height
     val pc = PixelConsumer(img)
     run {
       var i = 0
@@ -1198,12 +1184,12 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     emitTranslate(x, y)
 
     // compute image size. First of all, if width or height is 0, image is 1:1.
-    if (height == 0 || width == 0) {
-      height = pc.dimensions!!.height
-      width = pc.dimensions!!.width
+    if (modifiedHeight == 0 || modifiedWidth == 0) {
+      modifiedHeight = pc.dimensions!!.height
+      modifiedWidth = pc.dimensions!!.width
     }
     stream.println("% size of image")
-    emitScale(height, width)
+    emitScale(modifiedHeight, modifiedWidth)
     stream.print(pc.dimensions!!.width)
     stream.print(" ")
     stream.print(pc.dimensions!!.height)

@@ -18,6 +18,15 @@
 
 package org.kopi.galite.visual.form
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.kopi.galite.type.format
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VTimestampColumn
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -25,21 +34,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
-import java.util.Locale
-import java.util.StringTokenizer
-
+import java.util.*
 import kotlin.math.min
 import kotlin.reflect.KClass
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.list.VTimestampColumn
-import org.kopi.galite.type.format
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
 
 class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VField(10 + 1 + 8, 1) {
 
@@ -108,7 +105,7 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
   private fun parseDate(s: String): String {
     var day = 0
     var month = 0
-    var year = -2
+    var year: Int
     val tokens = StringTokenizer(s, "/.#-")
 
     if (!tokens.hasMoreTokens()) {

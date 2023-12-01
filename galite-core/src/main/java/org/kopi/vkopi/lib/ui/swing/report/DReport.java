@@ -125,7 +125,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
     headerLabel ="col" + (model.getColumnCount());
     column.setHeaderValue(headerLabel);
     table.getColumnModel().addColumn(column);
-    model.addColumn(headerLabel, position);
+    model.addColumn(headerLabel);
     // save  columns order
     TableColumn[] newTableColumns = new TableColumn[model.getAccessibleColumnCount()];
 

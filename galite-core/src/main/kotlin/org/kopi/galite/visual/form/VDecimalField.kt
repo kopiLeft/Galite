@@ -18,19 +18,17 @@
 
 package org.kopi.galite.visual.form
 
-import java.math.BigDecimal
-
-import kotlin.math.max
-import kotlin.reflect.KClass
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
-import org.kopi.galite.visual.list.VDecimalColumn
-import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.type.format
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VDecimalColumn
+import org.kopi.galite.visual.list.VListColumn
+import java.math.BigDecimal
+import kotlin.math.max
+import kotlin.reflect.KClass
 
 /**
  *
@@ -83,12 +81,11 @@ class VDecimalField(val bufferSize: Int,
    * return the name of this field
    */
   override fun getTypeInformation(): String {
-    var min = minValue
-    var max = maxValue
+
     var nines: Long = 1
 
-    min = BigDecimal(Int.MIN_VALUE.toDouble())
-    max = BigDecimal(Int.MAX_VALUE.toDouble())
+    var min = BigDecimal(Int.MIN_VALUE.toDouble())
+    var max = BigDecimal(Int.MAX_VALUE.toDouble())
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
@@ -152,16 +149,16 @@ class VDecimalField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val modifiedS = s as? String
     val scale: Int = currentScale[rec]
 
-    if ((s == "")) {
+    if ((modifiedS == "")) {
       setNull(rec)
     } else {
       val v: BigDecimal?
       try {
-        v = scanDecimal(s)
+        v = scanDecimal(modifiedS)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -309,25 +306,25 @@ class VDecimalField(val bufferSize: Int,
    */
   override fun setDecimal(r: Int, v: BigDecimal?) {
     // trails (backup) the record if necessary
-    var v = v
+    var modifiedV = v
 
     if ((isChangedUI
-                    || (value[r] == null && v != null)
-                    || (value[r] != null && value[r] != v))) {
+                    || (value[r] == null && modifiedV != null)
+                    || (value[r] != null && value[r] != modifiedV))) {
       trail(r)
-      if (v != null) {
-        if (v.scale() != currentScale[r]) {
-          v = v.setScale(currentScale[r])
+      if (modifiedV != null) {
+        if (modifiedV.scale() != currentScale[r]) {
+          modifiedV = modifiedV.setScale(currentScale[r])
         }
-        if (v!!.compareTo(minValue) == -1) {
-          v = minValue
-        } else if (v.compareTo(maxValue) == 1) {
-          v = maxValue
+        if (modifiedV!!.compareTo(minValue) == -1) {
+          modifiedV = minValue
+        } else if (modifiedV.compareTo(maxValue) == 1) {
+          modifiedV = maxValue
         }
       }
 
       // set value in the defined row
-      value[r] = v
+      value[r] = modifiedV
       // inform that value has changed
       setChanged(r)
     }
@@ -709,7 +706,7 @@ class VDecimalField(val bufferSize: Int,
           } else {
             throw NumberFormatException()
           }
-          else -> throw InconsistencyException()
+          else -> throw InconsistencyException("Invalid state reached during parsing. Unexpected input encountered.")
         }
       }
       when (state) {

@@ -17,25 +17,24 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.awt.event.KeyEvent
-
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.form.ULabel
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.label.SortableLabel
-import org.kopi.galite.visual.VActor
-
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.UI
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
 
 /**
  * Creates a new `DLabel` instance.
  * @param text The label text.
  * @param help The label help.
  */
-open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
+open class DLabel(text: String?, help: String?) : SortableLabel(), ULabel {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -210,7 +209,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
-          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(actor.acceleratorModifier) +
+          actor.menuItem + " [" + InputEvent.getModifiersExText(actor.acceleratorModifier) +
                   "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {

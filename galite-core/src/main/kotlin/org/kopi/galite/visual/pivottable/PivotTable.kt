@@ -17,16 +17,12 @@
  */
 package org.kopi.galite.visual.pivottable
 
-import java.io.File
-import java.util.Locale
-
-import kotlin.reflect.full.starProjectedType
-
+import org.jetbrains.kotlinx.dataframe.AnyFrame
+import org.jetbrains.kotlinx.dataframe.DataColumn
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.aggregation.Aggregatable
 import org.jetbrains.kotlinx.dataframe.api.*
-import org.jetbrains.kotlinx.dataframe.AnyFrame
-import org.jetbrains.kotlinx.dataframe.DataColumn
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.dsl.report.ReportRow
@@ -34,12 +30,9 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
+import java.io.File
+import java.util.*
+import kotlin.reflect.full.starProjectedType
 
 open class PivotTable(title: String?, var help: String?, override val locale: Locale?) : VWindow(), Constants, VConstants {
 
@@ -107,6 +100,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
    * @param init    initialization method.
    * @return a field.
    */
+  @Suppress("UNCHECKED_CAST")
   inline fun <reified T: Comparable<T>?> nullableField(domain: Domain<T>,
                                                        noinline init: ReportField<T>.() -> Unit): ReportField<T?> {
     return field(domain, init) as ReportField<T?>
@@ -361,7 +355,7 @@ open class PivotTable(title: String?, var help: String?, override val locale: Lo
         this.sum(*aggregateFields)
       }
       is PivotGroupBy<*> -> {
-        (this as PivotGroupBy<Int>).sum(*aggregateFields)
+        this.sum(*aggregateFields)
       }
       else -> {
         throw UnsupportedOperationException()

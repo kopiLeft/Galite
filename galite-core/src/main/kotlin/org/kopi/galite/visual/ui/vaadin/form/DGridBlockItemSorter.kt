@@ -17,10 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.io.Serializable
-
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
+import java.io.Serializable
 
 /**
  * An item sorter implementation for the grid block. Constructs a DefaultItemSorter using the default `Comparator`
@@ -37,7 +36,7 @@ class DGridBlockItemSorter(
    *
    */
   class DefaultComparator(val model: VBlock, val field: VField) : Comparator<GridBlockItem?>, Serializable {
-
+    @Suppress("UNCHECKED_CAST")
     override fun compare(o1: GridBlockItem?, o2: GridBlockItem?): Int {
       val ascendantSortDirection = o1!!.record > o2!!.record
       val (rec1, rec2) = if (ascendantSortDirection) {

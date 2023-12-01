@@ -17,46 +17,22 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-
-import org.kopi.galite.visual.form.ModelTransformer
-import org.kopi.galite.visual.form.UTextField
-import org.kopi.galite.visual.form.VCodeField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VDateField
-import org.kopi.galite.visual.form.VDecimalField
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.form.VIntegerField
-import org.kopi.galite.visual.form.VMonthField
-import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTimeField
-import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.type.format
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDateField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorDecimalField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorEnumField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorIntegerField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorMonthField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextAreaField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimeField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTimestampField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorWeekField
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
-
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.data.renderer.TextRenderer
+import org.kopi.galite.type.format
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.grid.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 /**
  * A grid text editor based on custom components.
@@ -248,10 +224,7 @@ class DGridTextEditorField(
    */
   private fun createTextEditorField(): GridEditorTextAreaField {
     val scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
-    return GridEditorTextAreaField(if (scanner) 40 else getModel().width,
-                                   getModel().height,
-                                   (getModel() as VStringField).getVisibleHeight(),
-                                   !scanner && options and VConstants.FDO_DYNAMIC_NL > 0)
+    return GridEditorTextAreaField(if (scanner) 40 else getModel().width)
   }
 
   /**
@@ -271,11 +244,7 @@ class DGridTextEditorField(
    */
   private fun createFixnumEditorField(): GridEditorDecimalField {
     val model = getModel() as VDecimalField
-    return GridEditorDecimalField(model.width,
-                                  model.maxValue.toDouble(),
-                                  model.maxValue.toDouble(),
-                                  model.maxScale,
-                                  model.isFraction)
+    return GridEditorDecimalField(model.width)
   }
 
   /**
@@ -409,7 +378,7 @@ class DGridTextEditorField(
     }
 
     override fun checkFormat(guiTxt: String?): Boolean {
-      return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
+      return if (row == 1) true else convertToSingleLine(guiTxt, col).length <= row * col
     }
 
     companion object {
@@ -420,7 +389,7 @@ class DGridTextEditorField(
        * @param row The row index.
        * @return The converted string.
        */
-      private fun convertToSingleLine(source: String?, col: Int, row: Int): String =
+      private fun convertToSingleLine(source: String?, col: Int): String =
               buildString {
                 val length = source!!.length
                 var start = 0
@@ -511,7 +480,7 @@ class DGridTextEditorField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(guiTxt: String?): String = convertFixedTextToSingleLine(guiTxt, col, row)
+    override fun toModel(guiTxt: String?): String = convertFixedTextToSingleLine(guiTxt, col)
 
     override fun toGui(modelTxt: String?): String =
             buildString {
@@ -551,7 +520,7 @@ class DGridTextEditorField(
        * @param row The row index.
        * @return The converted string.
        */
-      private fun convertFixedTextToSingleLine(source: String?, col: Int, row: Int): String =
+      private fun convertFixedTextToSingleLine(source: String?, col: Int): String =
               buildString {
                 val length = source!!.length
                 var start = 0

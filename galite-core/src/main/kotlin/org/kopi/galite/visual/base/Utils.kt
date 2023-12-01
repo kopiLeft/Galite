@@ -18,24 +18,14 @@
 
 package org.kopi.galite.visual.base
 
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.DataInputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileWriter
-import java.io.IOException
-import java.io.InputStream
-import java.io.PrintWriter
-import java.io.UnsupportedEncodingException
+import org.kopi.galite.util.base.InconsistencyException
+import java.io.*
 import java.net.URL
 import java.nio.charset.Charset
-import java.util.ArrayList
-import java.util.Date
+import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * loading of image
@@ -212,7 +202,11 @@ open class Utils : org.kopi.galite.util.base.Utils() {
                 requireNotNull(Utils::class.java.classLoader.getResourceAsStream("version"))
         )
         while (data.available() != 0) {
-          list.add(data.readLine())
+          val reader = BufferedReader(InputStreamReader(data))
+          val line = reader.readLine()
+          if (line != null) {
+            list.add(line)
+          }
         }
         data.close()
         return list.toTypedArray()

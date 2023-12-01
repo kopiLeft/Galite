@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.field
 
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
 
 /**
  * A date validator.
@@ -44,7 +44,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
    * @param s The date text.
    */
   private fun parseDate(f: InputTextField<*>, s: String) {
-    var day = 0
+    val day: Int
     var month = 0
     var year = -2
     val tokens = s.split("[#./]".toRegex()).toTypedArray()
@@ -63,12 +63,12 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     }
     when {
       month == 0 -> {
-        val now = Date()
-        month = now.month + 1
+        val now = LocalDate.now()
+        month = now.month.value + 1
         year = now.year + 1900
       }
       year == -2 -> {
-        val now = Date()
+        val now = LocalDate.now()
         year = now.year + 1900
       }
       year < 50 -> {
@@ -137,6 +137,6 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
      */
     private fun format(year: Int, month: Int, day: Int): String =
             SimpleDateFormat("dd.MM.yyyy")
-                    .format(Date(year - 1900, month - 1, day))
+                    .format(LocalDate.of(year - 1900, month - 1, day))
   }
 }

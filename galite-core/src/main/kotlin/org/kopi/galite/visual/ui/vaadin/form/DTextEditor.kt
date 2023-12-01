@@ -34,5 +34,4 @@ class DTextEditor(model: VFieldUI,
                   label: DLabel?,
                   align: Int,
                   options: Int,
-                  height: Int,
                   detail: Boolean) : DTextField(model, label, align, options, detail)

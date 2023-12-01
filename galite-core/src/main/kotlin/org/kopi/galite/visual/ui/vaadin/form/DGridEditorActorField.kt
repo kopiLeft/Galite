@@ -17,14 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.grid.ActorRenderer
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorActorField
-
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.grid.ActorRenderer
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorActorField
 
 /**
  * The grid editor actor field.
@@ -49,7 +48,7 @@ class DGridEditorActorField(
 
   override fun getObject(): Any? = null
 
-  override fun createEditor(): GridEditorActorField = GridEditorActorField(getModel().label)
+  override fun createEditor(): GridEditorActorField = GridEditorActorField()
 
   override fun createConverter(): Converter<String?, Any?> {
     return object : Converter<String?, Any?> {
@@ -61,7 +60,7 @@ class DGridEditorActorField(
   }
 
   override fun createRenderer(): Renderer<String?> {
-    return object : ActorRenderer(getModel().label) {
+    return object : ActorRenderer() {
       override fun onClick(item: String?) {
         columnView.executeAction()
       }

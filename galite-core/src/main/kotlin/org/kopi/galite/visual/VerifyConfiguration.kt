@@ -18,12 +18,11 @@
 
 package org.kopi.galite.visual
 
+import org.kopi.galite.util.mailer.Mailer
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.net.InetAddress
 import java.net.UnknownHostException
-
-import org.kopi.galite.util.mailer.Mailer
 
 class VerifyConfiguration private constructor() {
 
@@ -53,7 +52,7 @@ class VerifyConfiguration private constructor() {
     }
 
     // check that -ea is on 
-    var isAssertOn = false
+    var isAssertOn: Boolean
     assert(true.also { isAssertOn = it })
     writer.println(formatMessage("java called with option -ea", !isAssertOn))
     configurationError = configurationError || !isAssertOn

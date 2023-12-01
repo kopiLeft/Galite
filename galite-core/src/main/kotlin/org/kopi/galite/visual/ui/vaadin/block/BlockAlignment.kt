@@ -40,15 +40,15 @@ class BlockAlignment {
    * @return `true` is there is an alignment for the given column.
    */
   fun isAligned(x: Int): Boolean {
-    var x = x
-    x--
-    return x >= 0 && x < targets.size && targets[x] != -1
+    var modifiedX = x
+    modifiedX--
+    return modifiedX >= 0 && modifiedX < targets.size && targets[modifiedX] != -1
   }
 
   /**
-   * Returns the target position for for a given column.
+   * Returns the target position for a given column.
    * @param x The column index.
-   * @return The target position for for a given column.
+   * @return The target position for a given column.
    */
   fun getTargetAt(x: Int): Int {
     return if (x < 0 || x >= targets.size) {
@@ -86,9 +86,9 @@ class BlockAlignment {
    * @return The target position of the block alignment.
    */
   protected fun getFieldTargetPos(x: Int): Int {
-    var x = x
-    x-- // we want to align middle
-    val target = getTargetAt(x)
+    var modifiedX = x
+    modifiedX-- // we want to align middle
+    val target = getTargetAt(modifiedX)
 
     // if (x >= 0 && x < targets.length && targets[x] != -1) {
     if (target != -1) {
@@ -107,9 +107,9 @@ class BlockAlignment {
    * @return The label target position.
    */
   protected fun getLabelTargetPos(x: Int): Int {
-    var x = x
-    x-- // we want to align middle
-    val target = getTargetAt(x)
+    var modifiedX = x
+    modifiedX-- // we want to align middle
+    val target = getTargetAt(modifiedX)
 
     // if (x >= 0 && x < targets.length && targets[x] != -1) {
     return if (target != -1) {

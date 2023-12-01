@@ -17,6 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VConstants
@@ -25,12 +30,6 @@ import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VColor
-
-import com.vaadin.flow.component.UI
-import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
 
 /**
  * An UField associated with the grid block in inline edit.
@@ -114,7 +113,7 @@ abstract class DGridEditorField<T>(
 
   var currentUI: UI? = null
 
-  override fun prepareSnapshot(fieldPos: Int, activ: Boolean) {}
+  override fun prepareSnapshot(fieldPos: Int, active: Boolean) {}
 
   /**
    * Sets the label alignment according to the editor alignment.

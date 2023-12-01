@@ -16,16 +16,14 @@
  */
 package org.kopi.galite.demo.client
 
-import java.math.BigDecimal
-
-import java.util.Locale
-
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.VColor
+import java.math.BigDecimal
+import java.util.*
 
 class ChartSample : Chart(
   locale = Locale.UK,
@@ -51,7 +49,7 @@ class ChartSample : Chart(
     label = "city"
 
     format { value ->
-      value?.toUpperCase()
+      value?.uppercase()
     }
   }
 

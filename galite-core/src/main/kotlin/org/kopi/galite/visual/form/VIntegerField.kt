@@ -18,14 +18,13 @@
 
 package org.kopi.galite.visual.form
 
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VIntegerColumn
+import org.kopi.galite.visual.list.VListColumn
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KClass
-
-import org.kopi.galite.visual.list.VIntegerColumn
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VlibProperties
 
 /**
  * @param     width
@@ -101,13 +100,13 @@ class VIntegerField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val s = s as? String
+    val modifiedS = s as? String
 
-    if (s == "") {
+    if (modifiedS == "") {
       setNull(rec)
     } else {
       val v = try {
-        s!!.toInt()
+        modifiedS!!.toInt()
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -137,21 +136,21 @@ class VIntegerField(val bufferSize: Int,
    * Sets the field value of given record to a int value.
    */
   override fun setInt(r: Int, v: Int?) {
-    var v = v
+    var modifiedV = v
     if (isChangedUI
-            || value[r] == null && v != null
-            || value[r] != null && value[r] != v) {
+            || value[r] == null && modifiedV != null
+            || value[r] != null && value[r] != modifiedV) {
       // trails (backup) the record if necessary
       trail(r)
-      if (v == null) {
+      if (modifiedV == null) {
         value[r] = null
       } else {
-        if (v < minValue) {
-          v = minValue
-        } else if (v > maxValue) {
-          v = maxValue
+        if (modifiedV < minValue) {
+          modifiedV = minValue
+        } else if (modifiedV > maxValue) {
+          modifiedV = maxValue
         }
-        value[r] = v
+        value[r] = modifiedV
       }
       // inform that value has changed
       setChanged(r)

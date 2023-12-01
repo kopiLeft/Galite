@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import org.kopi.galite.visual.ui.vaadin.common.VImage
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.button.Button
@@ -28,6 +26,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 import com.vaadin.flow.server.AbstractStreamResource
+import org.kopi.galite.visual.ui.vaadin.common.VImage
 
 /**
  * The component of the image field.
@@ -69,8 +68,8 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
   override val isNull: Boolean
     get() = image.isEmpty
 
-  override fun setValue(o: Any?) {
-    image.src = o as String?
+  override fun setValue(value: Any?) {
+    image.src = value as String?
   }
 
 

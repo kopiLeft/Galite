@@ -91,7 +91,7 @@ open class Domain<T> {
   /**
    * Sets the minimum value of a number domain.
    */
-  var Domain<BigDecimal>.precision : Int?
+  var Domain<BigDecimal>.precisionExt : Int?
     get() = precision
     set(value) {
       precision = value
@@ -100,7 +100,7 @@ open class Domain<T> {
   /**
    * Sets the maximum value of a number domain.
    */
-  public var Domain<BigDecimal>.scale : Int?
+  public var Domain<BigDecimal>.scaleExt : Int?
     get() = scale
     set(value) {
       scale = value

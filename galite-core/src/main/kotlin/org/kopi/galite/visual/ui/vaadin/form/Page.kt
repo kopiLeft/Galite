@@ -17,16 +17,15 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
-import org.kopi.galite.visual.ui.vaadin.block.Block
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
+import org.kopi.galite.visual.ui.vaadin.block.Block
 
 /**
  * A form page, can be either or vertical or horizontal page.
@@ -91,6 +90,7 @@ class Page<T>(private var content: T) : Div() where T : Component, T : FlexCompo
    * @param content The caption container.
    * @param block The block widget.
    */
+  @Suppress("UNCHECKED_CAST")
   protected fun <T> setCaption(content: T, block: Block) where T : Component, T : FlexComponent {
     val caption = block.caption
 

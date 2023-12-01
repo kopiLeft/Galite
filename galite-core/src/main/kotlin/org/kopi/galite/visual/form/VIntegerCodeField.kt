@@ -18,11 +18,10 @@
 
 package org.kopi.galite.visual.form
 
-import kotlin.reflect.KClass
-
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.list.VIntegerCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.util.base.InconsistencyException
+import kotlin.reflect.KClass
 
 class VIntegerCodeField : VCodeField {
 
@@ -75,6 +74,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Returns the array of codes.
    */
+  @Suppress("UNCHECKED_CAST")
   override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   // ----------------------------------------------------------------------

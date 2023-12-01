@@ -18,8 +18,7 @@
 
 package org.kopi.galite.util.base
 
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 
 /**
  * This class defines several utilities methods used in source code
@@ -48,7 +47,7 @@ open class Utils {
                 ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
     fun verify(expression: Boolean) {
       if (!expression) {
-        throw InconsistencyException()
+        throw InconsistencyException("unexpected expression")
       }
     }
 

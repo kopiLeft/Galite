@@ -18,14 +18,13 @@
 
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-
-import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.ui.vaadin.upload.FileUploader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class VFileHandler : FileHandler() {
 
@@ -107,16 +106,16 @@ class VFileHandler : FileHandler() {
    * @throws IOException    I/O errors.
    */
   internal fun createTempFile(directory: File?, defaultName: String?): File {
-    var directory = directory
+    var modifiedDirectory = directory
 
     // if parent directory does not exist, create file in java.io.tempdir directly.
-    if (directory != null && !directory.exists()) {
-      directory = null
+    if (modifiedDirectory != null && !modifiedDirectory.exists()) {
+      modifiedDirectory = null
     }
     // add a blank between the prefix and the random text
     val basename = ensurePrefixLength(getBaseFileName(defaultName)) + " "
     val extension = getExtension(defaultName)
-    return File.createTempFile(basename, extension, directory)
+    return File.createTempFile(basename, extension, modifiedDirectory)
   }
 
   /**

@@ -18,24 +18,20 @@
 
 package org.kopi.galite.visual
 
-import java.awt.Frame
-import java.awt.event.KeyEvent
-import java.io.File
-import java.util.Locale
-
-import javax.swing.event.EventListenerList
-
-import kotlin.jvm.Throws
-
 import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.kopi.galite.visual.base.Image
-import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.database.Connection
 import org.kopi.galite.database.DBContextHandler
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.XInterruptProtectedException
+import org.kopi.galite.visual.base.Image
+import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
+import java.awt.Frame
+import java.awt.event.KeyEvent
+import java.io.File
+import java.util.*
+import javax.swing.event.EventListenerList
 
 /**
  * Creates a window
@@ -270,10 +266,10 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
    * add actors in menu
    */
   open fun addActors(actorDefs: Array<VActor>?) {
-    val actorDefs = actorDefs.orEmpty()
+    val actorDefinitions = actorDefs.orEmpty()
 
-    actors.addAll(actorDefs)
-    localizeActors(*actorDefs)
+    actors.addAll(actorDefinitions)
+    localizeActors(*actorDefinitions)
   }
 
   open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor

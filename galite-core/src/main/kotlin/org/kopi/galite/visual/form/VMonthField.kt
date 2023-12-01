@@ -18,17 +18,14 @@
 
 package org.kopi.galite.visual.form
 
-import java.util.Calendar
-import java.util.GregorianCalendar
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.list.VMonthColumn
 import org.kopi.galite.type.Month
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VMonthColumn
+import java.util.*
+import kotlin.reflect.KClass
 
 class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
@@ -81,16 +78,16 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val s = (s as? String).orEmpty()
+    val modifiedS = (s as? String).orEmpty()
 
-    if (s == "") {
+    if (modifiedS == "") {
       setNull(rec)
     } else {
-      val month = if (s.indexOf(".") != -1 && s.indexOf(".") == s.lastIndexOf(".")) {
+      val month = if (modifiedS.indexOf(".") != -1 && modifiedS.indexOf(".") == modifiedS.lastIndexOf(".")) {
         // one "." and only one
         try {
-          val month = s.substring(0, s.indexOf(".")).toInt()
-          var year = s.substring(s.indexOf(".") + 1).toInt()
+          val month = modifiedS.substring(0, modifiedS.indexOf(".")).toInt()
+          var year = modifiedS.substring(modifiedS.indexOf(".") + 1).toInt()
 
           if (year < 50) {
             year += 2000
@@ -106,10 +103,10 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
         } catch (e: Exception) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
         }
-      } else if (s.indexOf(".") == -1) {
+      } else if (modifiedS.indexOf(".") == -1) {
         // just the month, complete
         try {
-          val month = s.toInt()
+          val month = modifiedS.toInt()
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {

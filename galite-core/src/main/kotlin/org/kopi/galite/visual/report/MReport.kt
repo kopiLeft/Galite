@@ -18,25 +18,21 @@
 
 package org.kopi.galite.visual.report
 
+import com.graphbuilder.math.Expression
+import com.graphbuilder.math.ExpressionTree
+import com.graphbuilder.math.FuncMap
+import com.graphbuilder.math.VarMap
+import org.kopi.galite.type.format
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
 import java.io.Serializable
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-
 import javax.swing.event.EventListenerList
-
 import kotlin.math.max
-import org.kopi.galite.type.format
-
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
-
-import com.graphbuilder.math.Expression
-import com.graphbuilder.math.ExpressionTree
-import com.graphbuilder.math.FuncMap
-import com.graphbuilder.math.VarMap
 
 class MReport : Constants, Serializable {
 
@@ -96,8 +92,8 @@ class MReport : Constants, Serializable {
     return max + 2
   }
 
-  fun removeColumn(position: Int) {
-    var position = position
+  fun removeColumn(inputPosition: Int) {
+    var position = inputPosition
     val cols = arrayOfNulls<VReportColumn>(columns.size - 1)
     var hiddenColumns = 0
 
@@ -157,7 +153,7 @@ class MReport : Constants, Serializable {
   /**
    * Adds a column at runtime.
    */
-  fun addColumn(label: String, position: Int) {
+  fun addColumn(label: String) {
     val cols = arrayOfNulls<VReportColumn>(columns.size + 1)
 
     // add the new column;
@@ -578,9 +574,9 @@ class MReport : Constants, Serializable {
     }
   }
 
-  private fun buildGroupingTree(tree: VReportRow, loRow: Int, hiRow: Int, start: Int) {
-    var loRow = loRow
-    var start = start
+  private fun buildGroupingTree(tree: VReportRow, inputLoRow: Int, hiRow: Int, inputStart: Int) {
+    var loRow = inputLoRow
+    var start = inputStart
 
     if (displayLevels[start] == 0) {    // even if the 0-index column is hidden, its displayLevels == 0
       for (i in loRow..hiRow) {

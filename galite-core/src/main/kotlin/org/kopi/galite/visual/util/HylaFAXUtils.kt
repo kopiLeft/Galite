@@ -18,16 +18,13 @@
 
 package org.kopi.galite.visual.util
 
-import java.io.IOException
-import java.net.ConnectException
-import java.util.ArrayList
-import java.util.StringTokenizer
-
-import org.kopi.galite.visual.base.Utils
-
 import gnu.hylafax.HylaFAXClient
 import gnu.hylafax.HylaFAXClientProtocol
 import gnu.inet.ftp.ServerResponseException
+import org.kopi.galite.visual.base.Utils
+import java.io.IOException
+import java.net.ConnectException
+import java.util.*
 
 object HylaFAXUtils {
 
@@ -41,11 +38,12 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF STRINGS
    * ----------------------------------------------------------------------
    */
-  fun readSendQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus> = readQueue(host,
-                                                                                                               port,
-                                                                                                               user,
-                                                                                                               password,
-                                                                                                               "sendq")
+  fun readSendQueue(host: String, user: String, password: String): ArrayList<FaxStatus> = readQueue(
+    host,
+    user,
+    password,
+    "sendq"
+  )
 
   /*
    * ----------------------------------------------------------------------
@@ -53,11 +51,12 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF FAXSTATUS
    * ----------------------------------------------------------------------
    */
-  fun readDoneQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus> = readQueue(host,
-                                                                                                               port,
-                                                                                                               user,
-                                                                                                               password,
-                                                                                                               "doneq")
+  fun readDoneQueue(host: String, user: String, password: String): ArrayList<FaxStatus> = readQueue(
+    host,
+    user,
+    password,
+    "doneq"
+  )
 
   /*
    * ----------------------------------------------------------------------
@@ -65,22 +64,23 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF FAXSTATUS
    * ----------------------------------------------------------------------
    */
-  fun readRecQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus> = readQueue(host,
-                                                                                                              port,
-                                                                                                              user,
-                                                                                                              password,
-                                                                                                              "recvq")
+  fun readRecQueue(host: String, user: String, password: String): ArrayList<FaxStatus> = readQueue(
+    host,
+    user,
+    password,
+    "recvq"
+  )
 
   /*
    * ----------------------------------------------------------------------
    * HANDLE THE SERVER AND MODEM STATE
    * ----------------------------------------------------------------------
    */
-  fun readServerStatus(host: String, port: Int, user: String, password: String): ArrayList<String> {
+  fun readServerStatus(host: String, user: String, password: String): ArrayList<String> {
     val status: ArrayList<String>
 
     try {
-      status = getQueue(host, port, user, password, "status")
+      status = getQueue(host, user, password, "status")
       Utils.log("Fax", "READ STATE : host $host / user $user")
     } catch (e: ConnectException) {
       throw FaxException("NO FAX SERVER")
@@ -102,7 +102,6 @@ object HylaFAXUtils {
    * Convenience method
    */
   fun killJob(host: String,
-              port: Int,
               user: String,
               password: String,
               job: Long) {
@@ -128,7 +127,6 @@ object HylaFAXUtils {
    * Convenience method
    */
   fun deleteJob(host: String,
-                port: Int,
                 user: String,
                 password: String,
                 job: Long) {
@@ -156,7 +154,7 @@ object HylaFAXUtils {
    * ----------------------------------------------------------------------
    */
   @Suppress("UNCHECKED_CAST")
-  private fun getQueue(host: String, port: Int, user: String, password: String, qname: String): ArrayList<String> {
+  private fun getQueue(host: String, user: String, password: String, qname: String): ArrayList<String> {
     val faxClient = HylaFAXClient()
 
     faxClient.open(host)
@@ -179,11 +177,11 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF STRINGS
    * ----------------------------------------------------------------------
    */
-  private fun readQueue(host: String, port: Int, user: String, password: String, qname: String): ArrayList<FaxStatus> {
+  private fun readQueue(host: String, user: String, password: String, qname: String): ArrayList<FaxStatus> {
     val queue = ArrayList<FaxStatus>()
 
     try {
-      val result = getQueue(host, port, user, password, qname)
+      val result = getQueue(host, user, password, qname)
 
       Utils.log("Fax", "READ $qname : host $host / user $user")
       result.forEach { element ->

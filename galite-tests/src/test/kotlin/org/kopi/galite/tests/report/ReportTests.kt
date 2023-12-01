@@ -16,12 +16,6 @@
  */
 package org.kopi.galite.tests.report
 
-import java.io.File
-import java.math.BigDecimal
-import java.util.Locale
-
-import kotlin.test.assertEquals
-
 import org.jdom2.input.SAXBuilder
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
@@ -35,6 +29,11 @@ import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.triggers.avgDecimal
 import org.kopi.galite.visual.report.triggers.avgInteger
+import java.io.File
+import java.math.BigDecimal
+import java.util.*
+import kotlin.io.path.createTempDirectory
+import kotlin.test.assertEquals
 
 class ReportTests: VApplicationTestBase() {
 
@@ -86,8 +85,8 @@ class ReportTests: VApplicationTestBase() {
   @Test
   fun fieldLocalizationTest() {
     val builder = SAXBuilder()
-    val tempDir = createTempDir("galite", "")
-    tempDir.deleteOnExit()
+    val tempDir = createTempDirectory("galite")
+    tempDir.toFile().deleteOnExit()
 
     val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.`package`.name.replace(".", "/") + File.separatorChar

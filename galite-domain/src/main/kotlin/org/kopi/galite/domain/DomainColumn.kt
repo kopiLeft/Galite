@@ -17,9 +17,6 @@
 
 package org.kopi.galite.domain
 
-import java.time.Instant
-import java.time.LocalDateTime
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
@@ -32,8 +29,10 @@ import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.joda.time.DateTime
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
+import java.time.Instant
+import java.time.LocalDateTime
 
-class DomainColumn<T>(val column: Column<T>,
+class DomainColumn<T>(val column: Column<*>,
                       val columnProperties: ColumnProperties,
                       val domain: Domain<T>)
 
@@ -73,7 +72,7 @@ inline fun <reified T> Table.column(name: String,
         else -> {
             throw RuntimeException("Type ${kClass.qualifiedName} is not supported")
         }
-    } as Column<T>
+    } as Column<*>
 
     val cp = ColumnProperties()
 

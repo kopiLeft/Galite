@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.util.Arrays
-
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.dependency.CssImport
@@ -34,7 +32,7 @@ import com.vaadin.flow.component.dependency.CssImport
 class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String>>(ComboBox<String>()), KeyNotifier {
 
   init {
-    internalField.setItems(Arrays.stream(enumerations))
+    internalField.setItems(enumerations?.toList())
     element.themeList.add("galite-combobox")
   }
 

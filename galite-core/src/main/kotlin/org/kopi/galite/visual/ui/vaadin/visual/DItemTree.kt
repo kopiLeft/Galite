@@ -17,23 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.TreeNode
-
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.Item
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UItemTree
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VItemTree
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VlibProperties
-
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.ItemClickEvent
@@ -41,6 +24,14 @@ import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
+import org.kopi.galite.visual.*
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeNode
 
 /**
  * The `DItemTree` is the vaadin implementation of the
@@ -280,7 +271,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     val maxLength =
       VItemTree.MAX_LENGTH.coerceAtMost(if (localisation) getModel()!!.localisedNameLength else getModel()!!.nameLength)
     if (inputDialog == null) {
-      createInputDialog(localisation)
+      createInputDialog()
     }
     accessAndPush(currentUI) {
       editTextField.value = if (newItem) "" else if (localisation) if (item.localisedName != null) item.localisedName else "" else item.name
@@ -296,10 +287,10 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
   /**
    * Create an input dialog
    *
-   * @param localisation if true, the edit text will
+   *  the edit text will
    * contain the localised item's name
    */
-  private fun createInputDialog(localisation: Boolean) {
+  private fun createInputDialog() {
     val popupContent = VerticalLayout()
     popupContent.width = "400px"
     editTextField = TextField("")

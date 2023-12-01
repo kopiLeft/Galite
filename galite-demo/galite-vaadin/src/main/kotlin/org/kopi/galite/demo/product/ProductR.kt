@@ -16,8 +16,6 @@
  */
 package org.kopi.galite.demo.product
 
-import java.util.Locale
-
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.Product
@@ -27,6 +25,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
+import java.util.*
 
 /**
  * Product Report
@@ -78,7 +77,8 @@ class ProductR : Report(title = "Products", locale = Locale.UK) {
 
 
   val cmdQuit = command(item = quit) {
-    model.close()
+    model.getDisplay()!!.closeWindow()
+
   }
 
   val category = field(ProductForm.Category) {

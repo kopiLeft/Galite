@@ -18,14 +18,13 @@
 
 package org.kopi.galite.visual.form
 
-import kotlin.reflect.KClass
-
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.util.LineBreaker
+import kotlin.reflect.KClass
 
 open class VStringField(val bufferSize: Int,
                         width: Int,
@@ -103,24 +102,24 @@ open class VStringField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    var s = s as? String
+    var modifiedS = s as? String
 
-    if (s == null || s == "") {
+    if (modifiedS == null || modifiedS == "") {
       setNull(rec)
     } else {
       when (convert and VConstants.FDO_CONVERT_MASK) {
         VConstants.FDO_CONVERT_NONE -> {
         }
-        VConstants.FDO_CONVERT_UPPER -> s = s.toUpperCase()
-        VConstants.FDO_CONVERT_LOWER -> s = s.toLowerCase()
-        VConstants.FDO_CONVERT_NAME -> s = convertName(s)
-        else -> throw InconsistencyException()
+        VConstants.FDO_CONVERT_UPPER -> modifiedS = modifiedS.uppercase()
+        VConstants.FDO_CONVERT_LOWER -> modifiedS = modifiedS.lowercase()
+        VConstants.FDO_CONVERT_NAME -> modifiedS = convertName(modifiedS)
+        else -> throw InconsistencyException("Unknown modifier")
       }
-      if (!checkText(s)) {
+      if (!checkText(modifiedS)) {
         throw VExecFailedException()
       }
-      checkConstraint(s)
-      setString(rec, s)
+      checkConstraint(modifiedS)
+      setString(rec, modifiedS)
     }
   }
 
@@ -130,12 +129,12 @@ open class VStringField(val bufferSize: Int,
    * @param    source        the source text.
    */
   private fun convertName(source: String): String {
-    val chars = source.toLowerCase().toCharArray()
+    val chars = source.lowercase().toCharArray()
     var found = false
 
     for (i in chars.indices) {
       if (!found && chars[i].isLetter()) {
-        chars[i] = chars[i].toUpperCase()
+        chars[i] = chars[i].uppercaseChar()
         found = true
       } else if (chars[i].isWhitespace()) {
         found = false

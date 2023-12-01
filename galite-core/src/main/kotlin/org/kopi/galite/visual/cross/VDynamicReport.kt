@@ -17,56 +17,20 @@
  */
 package org.kopi.galite.visual.cross
 
-import java.awt.event.KeyEvent
-import java.math.BigDecimal
-import java.sql.SQLException
-
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.kopi.galite.visual.database.transaction
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VBooleanCodeField
-import org.kopi.galite.visual.form.VBooleanField
-import org.kopi.galite.visual.form.VCodeField
-import org.kopi.galite.visual.form.VDateField
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VDecimalCodeField
-import org.kopi.galite.visual.form.VDecimalField
-import org.kopi.galite.visual.form.VImageField
-import org.kopi.galite.visual.form.VIntegerCodeField
-import org.kopi.galite.visual.form.VIntegerField
-import org.kopi.galite.visual.form.VMonthField
-import org.kopi.galite.visual.form.VStringCodeField
-import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTimeField
-import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.report.Constants
-import org.kopi.galite.visual.report.PConfig
-import org.kopi.galite.visual.report.VBooleanCodeColumn
-import org.kopi.galite.visual.report.VBooleanColumn
-import org.kopi.galite.visual.report.VDateColumn
-import org.kopi.galite.visual.report.VDefaultReportActor
-import org.kopi.galite.visual.report.VDecimalCodeColumn
-import org.kopi.galite.visual.report.VDecimalColumn
-import org.kopi.galite.visual.report.VIntegerCodeColumn
-import org.kopi.galite.visual.report.VIntegerColumn
-import org.kopi.galite.visual.report.VMonthColumn
-import org.kopi.galite.visual.report.VNoRowException
-import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.report.VReportCommand
-import org.kopi.galite.visual.report.VStringCodeColumn
-import org.kopi.galite.visual.report.VStringColumn
-import org.kopi.galite.visual.report.VTimeColumn
-import org.kopi.galite.visual.report.VTimestampColumn
-import org.kopi.galite.visual.report.VWeekColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.report.*
+import java.awt.event.KeyEvent
+import java.math.BigDecimal
+import java.sql.SQLException
 
 class VDynamicReport(block: VBlock) : VReport() {
 
@@ -158,6 +122,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   /**
    * create report columns and fill them with data.
    */
+  @Suppress("UNCHECKED_CAST")
   protected fun initColumns() {
     var col = 0
 
@@ -185,7 +150,6 @@ class VDynamicReport(block: VBlock) : VReport() {
                                      field.align,
                                      getColumnGroups(field),
                                      null,
-                                     1,
                                      null)
         is VDecimalField ->
           columns[col] = VDecimalColumn(null,
@@ -438,7 +402,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     createActor("File", "Quit", QUIT_ICON, KeyEvent.VK_ESCAPE, 0, Constants.CMD_QUIT)
     createActor("File", "Print", PRINT_ICON, KeyEvent.VK_F6, 0, Constants.CMD_PRINT)
     createActor("File", "ExportCSV", EXPORT_ICON, KeyEvent.VK_F8, 0, Constants.CMD_EXPORT_CSV)
-    createActor("File", "ExportXLSX", EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK, Constants.CMD_EXPORT_XLSX)
+    createActor("File", "ExportXLSX", EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_DOWN_MASK, Constants.CMD_EXPORT_XLSX)
     createActor("File", "ExportPDF", EXPORT_ICON, KeyEvent.VK_F9, 0, Constants.CMD_EXPORT_PDF)
     createActor("Action", "Fold", FOLD_ICON, KeyEvent.VK_F2, 0, Constants.CMD_FOLD)
     createActor("Action", "Unfold", UNFOLD_ICON, KeyEvent.VK_F3, 0, Constants.CMD_UNFOLD)
@@ -471,9 +435,9 @@ class VDynamicReport(block: VBlock) : VReport() {
   }
 
   override fun addActors(actorDefs: Array<VActor>?) {
-    val actorDefs = actorDefs.orEmpty()
+    val actorDefinitions = actorDefs.orEmpty()
 
-    actors.addAll(actorDefs)
+    actors.addAll(actorDefinitions)
   }
 
   // ----------------------------------------------------------------------
@@ -494,10 +458,8 @@ class VDynamicReport(block: VBlock) : VReport() {
       if (fields[i].isInternal() && fields[i].getColumnCount() > 1) {
         val col: Int = fields[i].fetchColumn(table)
         if (col != -1 && fields[i].getColumn(col)!!.name == block.idField.name) {
-          if (fields[i].fetchColumn(0) != -1) {
             // group with the Id of the block.
             return idColumn
-          }
         }
       }
     }
@@ -508,7 +470,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given field.
    */
   private fun getColumnGroups(field: VField): Int {
-    return if (field.getColumnCount() == 0 || field.getColumn(0)!!._getTable() == 0) {
+    return if (field.getColumnCount() == 0 || field.getColumn(0)!!.pos == 0) {
       -1
     } else {
       getColumnGroups(field.getColumn(0)!!.getTable())

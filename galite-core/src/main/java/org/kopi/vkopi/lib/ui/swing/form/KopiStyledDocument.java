@@ -105,7 +105,7 @@ public class KopiStyledDocument extends HTMLDocument implements KopiDocument {
 
         if (model.checkText(text)) {
             super.remove(offs, len);
-            model.onTextChange(getText(0, getLength()));
+            model.onTextChange();
         } else {
             Toolkit.getDefaultToolkit().beep();
         }
@@ -138,7 +138,7 @@ public class KopiStyledDocument extends HTMLDocument implements KopiDocument {
 
         if (model.checkText(text)) {
             super.insertString(offs, str, a);
-            model.onTextChange(getText(0, getLength()));
+            model.onTextChange();
         } else {
             Toolkit.getDefaultToolkit().beep();
         }

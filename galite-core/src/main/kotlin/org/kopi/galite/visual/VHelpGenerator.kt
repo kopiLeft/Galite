@@ -91,7 +91,7 @@ open class VHelpGenerator {
     }
     printer.println("</TD><TD>")
     if (accMod != 0) {
-      if (accMod == InputEvent.SHIFT_MASK) {
+      if (accMod == InputEvent.SHIFT_DOWN_MASK) {
         printer.print("Shift-")
       }
     }

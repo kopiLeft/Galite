@@ -17,17 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import com.vaadin.flow.component.contextmenu.ContextMenu
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.form.ModelTransformer
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
-
-import com.vaadin.flow.component.contextmenu.ContextMenu
 
 /**
  * The `DTextField` is the vaadin implementation
@@ -208,9 +207,9 @@ open class DTextField(
     if (!transformer!!.checkFormat(text)) {
       return
     }
-    getModel().onTextChange(text!!)
+    getModel().onTextChange()
 
-    if (getModel().checkText(text)) {
+    if (getModel().checkText(text!!)) {
       // affect value directly to the model.
       getModel().getForm().performAsyncAction(object : Action("check_type") {
         override fun execute() {
@@ -283,7 +282,7 @@ open class DTextField(
     }
 
     override fun checkFormat(guiTxt: String?): Boolean {
-      return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
+      return if (row == 1) true else convertToSingleLine(guiTxt, col).length <= row * col
     }
   }
 
@@ -324,7 +323,7 @@ open class DTextField(
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun toModel(guiTxt: String?): String {
-      return convertFixedTextToSingleLine(guiTxt, col, row)
+      return convertFixedTextToSingleLine(guiTxt, col)
     }
 
     override fun toGui(modelTxt: String?): String {
@@ -379,10 +378,9 @@ open class DTextField(
      * Converts a given string to a line string.
      * @param source The source text.
      * @param col The column index.
-     * @param row The row index.
      * @return The converted string.
      */
-    private fun convertToSingleLine(source: String?, col: Int, row: Int): String =
+    private fun convertToSingleLine(source: String?, col: Int): String =
             buildString {
               val length = source!!.length
               var start = 0
@@ -437,10 +435,9 @@ open class DTextField(
      * Converts a given string to a fixed line string.
      * @param source The source text.
      * @param col The column index.
-     * @param row The row index.
      * @return The converted string.
      */
-    private fun convertFixedTextToSingleLine(source: String?, col: Int, row: Int): String =
+    private fun convertFixedTextToSingleLine(source: String?, col: Int): String =
             buildString {
               val length = source!!.length
               var start = 0

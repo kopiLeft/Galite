@@ -16,8 +16,6 @@
  */
 package org.kopi.galite.demo.provider
 
-import java.util.Locale
-
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.Provider
@@ -28,6 +26,7 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
+import java.util.*
 
 /**
  * Provider Report
@@ -77,7 +76,7 @@ class ProviderR : Report(title = "Providers_Report", locale = Locale.UK) {
     help = "The provider name"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -92,7 +91,7 @@ class ProviderR : Report(title = "Providers_Report", locale = Locale.UK) {
     help = "The provider description"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 

@@ -85,7 +85,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   }
 
   override fun loadItem(mode: Int): Boolean {
-    var mode = mode
+    var localMode = mode
     var id = -1
     val dictionary = (when {
       model.list != null && model.list!!.newForm != null -> {
@@ -101,9 +101,9 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       }
     }) ?: return false
 
-    if (mode == VForm.CMD_NEWITEM) {
+    if (localMode == VForm.CMD_NEWITEM) {
       id = dictionary.add()
-    } else if (mode == VForm.CMD_EDITITEM) {
+    } else if (localMode == VForm.CMD_EDITITEM) {
       try {
         updateModel()
         if (!model.isNull(rowController.getBlock().activeRecord)) {
@@ -111,20 +111,20 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
           if (value != -1) {
             id = dictionary.edit(value)
           } else {
-            mode = VForm.CMD_EDITITEM_S
+            localMode = VForm.CMD_EDITITEM_S
           }
         } else {
-          mode = VForm.CMD_EDITITEM_S
+          localMode = VForm.CMD_EDITITEM_S
         }
       } catch (e: VException) {
-        mode = VForm.CMD_EDITITEM_S
+        localMode = VForm.CMD_EDITITEM_S
       }
     }
-    if (mode == VForm.CMD_EDITITEM_S) {
+    if (localMode == VForm.CMD_EDITITEM_S) {
       id = dictionary.search()
     }
     if (id == -1) {
-      if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
+      if (localMode == VForm.CMD_EDITITEM || localMode == VForm.CMD_EDITITEM_S) {
         model.setNull(rowController.getBlock().activeRecord)
       }
       throw VExecFailedException() // no message needed

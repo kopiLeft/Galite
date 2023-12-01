@@ -17,24 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.io.File
-import java.time.LocalDate
-
-import org.kopi.galite.visual.form.BlockListener
-import org.kopi.galite.visual.form.BlockRecordListener
-import org.kopi.galite.visual.form.UBlock
-import org.kopi.galite.visual.form.UForm
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFieldException
-import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VRuntimeException
+import java.io.File
+import java.time.LocalDate
 
 /**
  * The `DForm` is the vaadin implementation of the [UForm] specifications.
@@ -198,7 +190,6 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     for (i in 0 until blockcount) {
       vForm!!.getBlock(i).updateBlockAccess()
     }
-    vForm!!.executeAfterStart()
   }
 
   override fun onPageSelection(page: Int) {
@@ -344,8 +335,8 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
       }
     }
 
-    override fun blockViewModeLeaved(block: VBlock, actviceField: VField?) {}
-    override fun blockViewModeEntered(block: VBlock, actviceField: VField?) {}
+    override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {}
+    override fun blockViewModeEntered(block: VBlock, activeField: VField?) {}
     override fun validRecordNumberChanged() {}
     override fun recordInfoChanged(rec: Int, info: Int) {}
     override fun orderChanged() {}

@@ -39,7 +39,7 @@ object Triggers : VConstants {
   /**
    * Returns always false (= unchanged).
    */
-  fun ignoreChanges(b: VBlock): Boolean = false
+  fun ignoreChanges(): Boolean = false
 
   /**
    * Returns true if first block of form is not in query mode

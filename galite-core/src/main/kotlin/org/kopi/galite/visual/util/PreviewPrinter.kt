@@ -35,13 +35,13 @@ class PreviewPrinter(name: String, var command: String) : AbstractPrinter(name),
   /**
    * Print a file and return the output of the command
    */
-  override fun print(printData: PrintJob): String {
+  override fun print(data: PrintJob): String {
     // execute in separate process
     val dataFile = File.createTempFile("kopiprinter", "ps")
 
     // file is used with an external program (and cache printer),
     // do not delete it
-    printData.writeDataToFile(dataFile)
+    data.writeDataToFile(dataFile)
     Runtime.getRuntime().exec("$command $dataFile")
     return "NYI"
   }

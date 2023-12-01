@@ -188,8 +188,8 @@ public class SpellcheckerDialog extends JDialog {
 
     private ChangeAction() {
       super(VlibProperties.getString("aspell-dialog-change"));
-      putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_C));
-      putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_C));
+      putValue(MNEMONIC_KEY, KeyEvent.VK_C);
+      putValue(ACCELERATOR_KEY, KeyEvent.VK_C);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -206,8 +206,8 @@ public class SpellcheckerDialog extends JDialog {
 
     private ChangeAllAction() {
       super(VlibProperties.getString("aspell-dialog-change-all"));
-      putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_L));
-      putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_L));
+      putValue(MNEMONIC_KEY, KeyEvent.VK_L);
+      putValue(ACCELERATOR_KEY, KeyEvent.VK_L);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -224,8 +224,8 @@ public class SpellcheckerDialog extends JDialog {
 
     private IgnoreAction() {
       super(VlibProperties.getString("aspell-dialog-ignore"));
-      putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_I));
-      putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_I));
+      putValue(MNEMONIC_KEY, KeyEvent.VK_I);
+      putValue(ACCELERATOR_KEY, KeyEvent.VK_I);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -242,8 +242,8 @@ public class SpellcheckerDialog extends JDialog {
 
     private IgnoreAllAction() {
       super(VlibProperties.getString("aspell-dialog-ignore-all"));
-      putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_G));
-      putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_G));
+      putValue(MNEMONIC_KEY, KeyEvent.VK_G);
+      putValue(ACCELERATOR_KEY, KeyEvent.VK_G);
     }
 
     public void actionPerformed( ActionEvent event ) {

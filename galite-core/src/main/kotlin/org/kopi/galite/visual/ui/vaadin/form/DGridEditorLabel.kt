@@ -17,20 +17,15 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.awt.event.KeyEvent
-
-import org.kopi.galite.visual.form.UChartLabel
-import org.kopi.galite.visual.form.ULabel
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VFieldUI
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorLabel
-import org.kopi.galite.visual.VActor
-
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.UI
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
 
 /**
  * The editor label used as grid component header.
@@ -53,11 +48,11 @@ class DGridEditorLabel(text: String?,
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-  override fun init(text: String?, tooltip: String?) {
-    this.tooltip = tooltip
+  override fun init(text: String?, help: String?) {
+    this.tooltip = help
     access(currentUI) {
       add(text.orEmpty())
-      setDescription(Utils.createTooltip(tooltip))
+      setDescription(Utils.createTooltip(help))
     }
   }
 
@@ -95,11 +90,11 @@ class DGridEditorLabel(text: String?,
   fun buildDescription(model: VFieldUI, tooltip: String?): String {
     var description: String
     val commands = model.getAllCommands()
-    val tooltip = tooltip.orEmpty() // avoid writing null in help tooltip.
+    val modifiedTooltip = tooltip.orEmpty() // avoid writing null in help tooltip.
 
-    description = tooltip
+    description = modifiedTooltip
     if (commands.isNotEmpty()) {
-      description = "<html>$tooltip"
+      description = "<html>$modifiedTooltip"
       for (i in commands.indices) {
         if (commands[i].actor != null) {
           if (description.trim { it <= ' ' }.isNotEmpty()) {
@@ -129,7 +124,7 @@ class DGridEditorLabel(text: String?,
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
-          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(actor.acceleratorModifier) +
+          actor.menuItem + " [" +  InputEvent.getModifiersExText(actor.acceleratorModifier) +
                   "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {

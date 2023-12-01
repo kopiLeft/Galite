@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.preview.VPreviewWindow
@@ -27,13 +28,6 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWai
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowController
 
 /**
  * The `VWindowController` is the vaadin implementation

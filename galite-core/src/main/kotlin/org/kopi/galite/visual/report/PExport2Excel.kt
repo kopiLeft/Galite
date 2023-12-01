@@ -18,6 +18,14 @@
 
 package org.kopi.galite.visual.report
 
+import org.apache.poi.ss.usermodel.*
+import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Week
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.report.UReport.UTable
 import java.awt.Color
 import java.io.OutputStream
 import java.math.BigDecimal
@@ -25,24 +33,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.GregorianCalendar
-
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.usermodel.CellStyle
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.DataFormat
-import org.apache.poi.ss.usermodel.HorizontalAlignment
-import org.apache.poi.ss.usermodel.PrintSetup
-import org.apache.poi.ss.usermodel.Sheet
-import org.apache.poi.ss.usermodel.Workbook
-import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.xssf.streaming.SXSSFWorkbook
-import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Week
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VlibProperties
+import java.util.*
 
 abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig, title: String)
   : PExport(table, model, printConfig, title), Constants {
@@ -97,25 +88,25 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   override fun startGroup(subTitle: String?) {
-    var subTitle = subTitle
+    var modifiedSubTitle = subTitle
 
-    if (subTitle == null) {
-      subTitle = title
+    if (modifiedSubTitle == null) {
+      modifiedSubTitle = title
     }
 
     // Sheet name cannot be blank, greater than 31 chars,
     // or contain any of /\*?[]
-    subTitle = subTitle.replace("/|\\\\|\\*|\\?|\\[|\\]".toRegex(), "")
-    if (subTitle.length > 31) {
-      subTitle = subTitle.substring(0, 28) + "..."
-    } else if (subTitle.isEmpty()) {
-      subTitle = " "
+    modifiedSubTitle = modifiedSubTitle.replace("/|\\\\|\\*|\\?|\\[|\\]".toRegex(), "")
+    if (modifiedSubTitle.length > 31) {
+      modifiedSubTitle = modifiedSubTitle.substring(0, 28) + "..."
+    } else if (modifiedSubTitle.isEmpty()) {
+      modifiedSubTitle = " "
     }
     rowNumber = 0
     sheet = try {
-      workbook!!.createSheet(subTitle)
+      workbook!!.createSheet(modifiedSubTitle)
     } catch (e: IllegalArgumentException) {
-      workbook!!.createSheet("" + subTitle.hashCode())
+      workbook!!.createSheet("" + modifiedSubTitle.hashCode())
     }
     for (i in 0 until columnCount) {
       sheet!!.setColumnWidth(i, widths[i].toInt())
@@ -127,7 +118,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     val footer = sheet!!.footer
     val header = sheet!!.header
 
-    header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
+    header.left = title + "  " + getColumnLabel(0) + " : " + modifiedSubTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
     footer.right = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +
@@ -207,7 +198,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       }
       cell.cellType = datatype[cellPos]
     } else {
-      cell.cellType = CellType.BLANK
+      cell.setBlank()
     }
   }
 

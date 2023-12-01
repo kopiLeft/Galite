@@ -17,30 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import java.time.LocalDate
-
+import com.vaadin.flow.component.*
+import com.vaadin.flow.component.dependency.CssImport
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.form.Alignment
-import org.kopi.galite.visual.form.UBlock
-import org.kopi.galite.visual.form.UForm
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.dependency.CssImport
+import java.time.LocalDate
 
 /**
  * The `DBlock` is the vaadin implementation
@@ -190,7 +176,7 @@ open class DBlock(val parent: DForm,
    * If there is no current record, the first valid record is used
    */
   open fun refresh(force: Boolean) {
-    var redisplay = false
+    val redisplay: Boolean
     val recno: Int // row in view
 
     if (!model.isMulti()) {
@@ -247,15 +233,15 @@ open class DBlock(val parent: DForm,
         } while (displine >= model.displaySize)
 
         // scroll some more, if there are some (non deleted) records
-        var i = recno + 1
+        var k = recno + 1
         var scrollMore: Int = model.displaySize / 4
-        while (scrollMore > 0 && i < model.bufferSize) {
+        while (scrollMore > 0 && k < model.bufferSize) {
           // is there a non deleted record to see?
-          if (!model.isSortedRecordDeleted(i)) {
+          if (!model.isSortedRecordDeleted(k)) {
             sortedToprec += 1
             scrollMore--
           }
-          i++
+          k++
         }
         redisplay = true
       }
@@ -352,13 +338,13 @@ open class DBlock(val parent: DForm,
   fun setScrollPos(value: Int) {
     // Can not be called in event dispatch thread
     // Scrollbar timer is not stop if you click on one of the two buttons
-    var value = value
-    assert(value < model.bufferSize) //getRecordSize
-    if (sortedToprec != value) {
+    var modifiedValue = value
+    assert(modifiedValue < model.bufferSize) //getRecordSize
+    if (sortedToprec != modifiedValue) {
       var recno = 0 //temp sortedToprec
-      while (value > 0) {
+      while (modifiedValue > 0) {
         if (!model.isSortedRecordDeleted(recno)) {
-          value--
+          modifiedValue--
         }
         recno++
       }

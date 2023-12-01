@@ -17,12 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.VColor
-
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.UI
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 
 /**
  * A centralized way to apply styles on some component.
@@ -118,19 +117,19 @@ class StyleManager(val currentUI: UI) {
         else -> "left" // cell are left aligned by default;
       }
 
-    override fun equals(obj: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
       return when {
-        this === obj -> {
+        this === other -> {
           true
         }
-        obj is Styler -> {
-          component == obj.component
-                  && (align == obj.align)
-                  && Utils.equals(foreground, obj.foreground)
-                  && Utils.equals(background, obj.background)
+        other is Styler -> {
+          component == other.component
+                  && (align == other.align)
+                  && Utils.equals(foreground, other.foreground)
+                  && Utils.equals(background, other.background)
         }
         else -> {
-          super.equals(obj)
+          super.equals(other)
         }
       }
     }

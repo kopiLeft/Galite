@@ -17,19 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import org.kopi.galite.visual.form.VCodeField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VDecimalField
-import org.kopi.galite.visual.form.VMonthField
-import org.kopi.galite.visual.form.VStringField
-import org.kopi.galite.visual.form.VTimestampField
-import org.kopi.galite.visual.form.VWeekField
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
-import org.kopi.galite.visual.ui.vaadin.form.DTextField
-import org.kopi.galite.visual.ui.vaadin.form.KeyNavigator
-
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
@@ -38,6 +25,13 @@ import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.form.VCodeField
+import org.kopi.galite.visual.form.VDecimalField
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
+import org.kopi.galite.visual.ui.vaadin.form.DTextField
+import org.kopi.galite.visual.ui.vaadin.form.KeyNavigator
 
 /**
  * A text field component.
@@ -264,7 +258,6 @@ class TextField(val model: VField,
       Type.WEEK -> WeekValidator(maxLength)
       Type.TIMESTAMP -> TimestampValidator(maxLength)
       Type.CODE -> EnumValidator(enumerations, maxLength)
-      else -> AllowAllValidator(maxLength)
     }
 
     bindingBuilder.withValidator(validator)
@@ -328,7 +321,7 @@ class TextField(val model: VField,
     } else if(!fieldParent.model.hasAction()) {
       when (type) {
         Type.INTEGER -> VIntegerField(col, minval!!, maxval!!)
-        Type.DECIMAL -> VDecimalField(col, maxScale, minval, maxval, fraction)
+        Type.DECIMAL -> VDecimalField()
         Type.CODE -> VCodeField(enumerations)
         Type.TIME -> VTimeField()
         Type.TIMESTAMP -> VTimeStampField()

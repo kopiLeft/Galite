@@ -18,24 +18,14 @@
 
 package org.kopi.galite.visual.preview
 
-import java.awt.event.KeyEvent
-import java.io.File
-import java.util.Locale
-
-import javax.swing.event.EventListenerList
-
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Constants
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
+import java.awt.event.KeyEvent
+import java.io.File
+import java.util.*
+import javax.swing.event.EventListenerList
 
 /**
  * A special window that display an html help
@@ -226,8 +216,8 @@ class VPreviewWindow : VWindow() {
     }
   }
 
-  fun zoom(ratio: Float) {
-    var ratio = ratio
+  fun zoom(inputRatio: Float) {
+    var ratio = inputRatio
     if (height.coerceAtMost(width) * ratio < 50) {
       ratio = 50 / height.coerceAtMost(width).toFloat()
     }

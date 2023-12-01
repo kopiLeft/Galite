@@ -18,15 +18,11 @@
 
 package org.kopi.galite.visual.report
 
+import org.kopi.galite.visual.*
+import org.kopi.galite.visual.VHelpGenerator
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.print.DefaultPrintManager
 import org.kopi.galite.visual.print.PrintManager
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.PrinterManager
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpGenerator
 
 class VReportCommand(
   val report: VReport,
@@ -80,7 +76,7 @@ class VReportCommand(
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
     when (VKT_Type) {
-      Constants.CMD_QUIT -> report.close()
+      Constants.CMD_QUIT -> report.getDisplay()!!.closeWindow()
       Constants.CMD_PRINT -> {
         val pm: PrintManager = DefaultPrintManager.getPrintManager()
         pm.print(report,

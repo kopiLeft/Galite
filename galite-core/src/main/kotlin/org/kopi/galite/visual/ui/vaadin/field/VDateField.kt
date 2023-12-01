@@ -17,30 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.util.Optional
-
-import org.kopi.galite.type.format
-
+import com.vaadin.flow.component.*
 import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.ComponentEvent
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.DomEvent
-import com.vaadin.flow.component.EventData
-import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.ShortcutRegistration
-import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.shared.Registration
+import org.kopi.galite.type.format
+import java.util.*
 
 /**
  * A Date field.
@@ -99,8 +85,7 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
     textField.className = "input"
     textField.suffixComponent = icon
     textField.isClearButtonVisible = true
-    textField.isPreventInvalidInput = true
-    textField.pattern = "[0-9/\\.]*"
+    textField.allowedCharPattern = "[0-9/\\.]*"
     textField.maxLength = 10
 
     icon.element.executeJs(

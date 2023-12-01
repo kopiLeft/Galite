@@ -17,14 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.HasValue
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
-
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.HasValue
 
 /**
  * Boolean field.
@@ -115,9 +114,9 @@ class DBooleanField(
 
   override fun getObject(): Any? = wrappedField.value
 
-  override fun setBlink(b: Boolean) {
+  override fun setBlink(blink: Boolean) {
     access(currentUI) {
-      field.setBlink(b)
+      field.setBlink(blink)
     }
   }
 

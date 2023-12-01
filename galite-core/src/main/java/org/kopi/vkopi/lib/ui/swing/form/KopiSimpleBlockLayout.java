@@ -128,6 +128,7 @@ public class KopiSimpleBlockLayout implements LayoutManager {
     /**
      * @deprecated replaced by <code>addLayoutComponent(Component, Object)</code>.
      */
+    @Deprecated
     public void addLayoutComponent(String name, Component comp) {
         throw new IllegalArgumentException("dont use this deprecated method please");
     }

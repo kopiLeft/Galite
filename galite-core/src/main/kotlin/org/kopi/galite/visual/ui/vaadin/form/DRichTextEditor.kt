@@ -17,13 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.RichTextField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Rich text editor implementation based on CK editor for vaadin.
@@ -33,7 +33,6 @@ class DRichTextEditor(
         label: DLabel?,
         align: Int,
         options: Int,
-        height: Int,
         detail: Boolean
 ) : DField(model, label, align, options, detail), UTextField {
 

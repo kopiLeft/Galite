@@ -16,9 +16,9 @@
  */
 package org.kopi.galite.tests.examples
 
-import java.math.BigDecimal
-import java.util.Locale
-
+import org.jetbrains.exposed.sql.insert
+import org.kopi.galite.type.Month
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.DECIMAL
@@ -26,11 +26,10 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.MONTH
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.type.Month
-import org.kopi.galite.visual.VColor
-import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.visual.dsl.common.Icon
+import org.kopi.galite.visual.dsl.form.Key
+import java.math.BigDecimal
+import java.util.*
 
 /**
  * test locale, title, help for chart
@@ -107,7 +106,7 @@ class DocumentationChartC :  Chart(
     // test format trigger try to upperCase then to lowerCase
     // to test it remove month dimension and see the result
     format { value ->
-      value?.toUpperCase()
+      value?.uppercase()
     }
   }
 

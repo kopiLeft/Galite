@@ -24,7 +24,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 /**
  * The sortable label component.
  */
-open class SortableLabel(text: String?) : Label() {
+open class SortableLabel() : Label() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------

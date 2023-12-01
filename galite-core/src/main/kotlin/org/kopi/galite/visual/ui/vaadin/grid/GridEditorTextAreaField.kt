@@ -21,10 +21,7 @@ package org.kopi.galite.visual.ui.vaadin.grid
  * A text area editor for grid block
  */
 class GridEditorTextAreaField(
-        width: Int,
-        height: Int,
-        visibleHeight: Int,
-        fixedNewLine: Boolean
+        width: Int
 ) : GridEditorTextField(width) {
 
   override val isMultiLine: Boolean = true

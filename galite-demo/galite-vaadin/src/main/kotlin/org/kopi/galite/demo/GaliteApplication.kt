@@ -16,16 +16,14 @@
  */
 package org.kopi.galite.demo
 
-import java.util.Locale
-
+import com.vaadin.flow.router.Route
 import org.kopi.galite.database.Connection
-import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.Registry
-
-import com.vaadin.flow.router.Route
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.util.Rexec
+import java.util.*
 
 @Route("")
 class GaliteApplication : VApplication(GaliteRegistry()) {
@@ -92,8 +90,8 @@ object ConfigurationManager : ApplicationConfiguration() {
     return value.toInt()
   }
 
-  override fun getBooleanFor(var1: String): Boolean {
-    return java.lang.Boolean.valueOf(this.getStringFor(var1))
+  override fun getBooleanFor(key: String): Boolean {
+    return java.lang.Boolean.valueOf(this.getStringFor(key))
   }
 
   override fun isUnicodeDatabase(): Boolean = false

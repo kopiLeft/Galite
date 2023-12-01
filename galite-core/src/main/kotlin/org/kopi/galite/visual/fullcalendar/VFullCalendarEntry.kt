@@ -17,13 +17,12 @@
 
 package org.kopi.galite.visual.fullcalendar
 
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.VField
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.VColor
 
 /**
  * Represents a full calendar record.
@@ -54,10 +53,10 @@ data class VFullCalendarEntry(val start: Instant,
       var priority = 0
       var descriptionField: VField = fields.first()
 
-      for (field in fields) {
-        if(field.getPriority() > priority) {
-          priority = field.getPriority()
-          descriptionField = field
+      for (currentField in fields) {
+        if(currentField.getPriority() > priority) {
+          priority = currentField.getPriority()
+          descriptionField = currentField
         }
       }
 

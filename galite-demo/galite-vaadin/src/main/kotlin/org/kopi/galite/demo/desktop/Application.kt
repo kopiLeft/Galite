@@ -17,22 +17,15 @@
 
 package org.kopi.galite.demo.desktop
 
-import java.util.Locale
-
-import kotlin.reflect.KClass
-
+import org.kopi.galite.database.Connection
 import org.kopi.galite.demo.ConfigurationManager
 import org.kopi.galite.demo.GaliteRegistry
-import org.kopi.galite.demo.database.connectToDatabase
-import org.kopi.galite.demo.database.initDatabase
-import org.kopi.galite.demo.database.testDriver
-import org.kopi.galite.demo.database.testPassword
-import org.kopi.galite.demo.database.testURL
-import org.kopi.galite.demo.database.testUser
-import org.kopi.galite.database.Connection
-import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.demo.database.*
 import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
+import java.util.*
+import kotlin.reflect.KClass
 
 val testLocale: Locale = Locale.FRANCE
 
@@ -108,10 +101,10 @@ class GaliteApplication : JApplication(GaliteRegistry()) {
     schema: String?,
     maxRetries: Int?
   ): Connection? {
-    val username = "admin"
-    val password = "admin"
+    val defaultUserName = "admin"
+    val defaultPassword = "admin"
     return try {
-      Connection.createConnection(database, driver, username, password, true, schema)
+      Connection.createConnection(database, driver, defaultUserName, defaultPassword, true, schema)
     } catch (exception: Throwable) {
       null
     }

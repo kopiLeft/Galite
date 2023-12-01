@@ -17,32 +17,15 @@
  */
 package org.kopi.galite.visual.form
 
-import java.io.File
-import java.lang.Error
-import java.net.MalformedURLException
-import java.sql.SQLException
-
-import javax.swing.event.EventListenerList
-
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Constants
-import org.kopi.galite.visual.DefaultActor
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
+import java.io.File
+import java.net.MalformedURLException
+import java.sql.SQLException
+import javax.swing.event.EventListenerList
 
 abstract class VForm protected constructor(source: String? = null) : VWindow(source), VConstants {
 
@@ -387,8 +370,9 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
     return if (hasTrigger(VConstants.TRG_CHANGED)) {
       val res = try {
         callTrigger(VConstants.TRG_CHANGED)
-      } catch (e: VException) {
-        throw InconsistencyException()
+      } catch (f: VException) {
+        val errorMessage = f.message ?: "An error occurred while determining changes in the form"
+        throw InconsistencyException(errorMessage)
       }
       res as Boolean
     } else {
@@ -413,7 +397,8 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
         callTrigger(VConstants.TRG_RESET)
       } catch (e: VException) {
         e.printStackTrace()
-        throw InconsistencyException()
+        val errorMessage = e.message ?: "An error occurred "
+        throw InconsistencyException(errorMessage)
       }
       if (res as Boolean) {
         return
@@ -440,7 +425,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
    * @param        showUniqueItem        open a list if there is only one item also
    * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formatters
    */
-  fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
+  fun singleMenuQuery(showUniqueItem: Boolean): Int {
     return getBlock(0).singleMenuQuery(showUniqueItem)
   }
   // ----------------------------------------------------------------------
@@ -662,7 +647,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
         return i
       }
     }
-    throw InconsistencyException()
+    throw InconsistencyException("Invalid operation")
   }
 
   protected abstract fun formClassName(): String
@@ -753,31 +738,31 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
    * Enables the active commands or disable all commands.
    */
   override fun setCommandsEnabled(enable: Boolean) {
-    var enable = enable
-    super.setCommandsEnabled(enable)
+    var isEnable = enable
+    super.setCommandsEnabled(isEnable)
     // block-level commands
     blocks.forEach { block ->
-      if (!enable || block == activeBlock) {
+      if (!isEnable || block == activeBlock) {
         // disable all commands
-        // enable only the command of the currentblock
-        block.setCommandsEnabled(enable)
+        // Enable only the command of the currentblock
+        block.setCommandsEnabled(isEnable)
       }
     }
     // form-level commands
     commands.forEachIndexed { index, command ->
       if (command.trigger != -1) {
-        if (enable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
+        if (isEnable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
           val active: Boolean = try {
             callTrigger(VConstants.TRG_CMDACCESS, index + 1) as Boolean
           } catch (e: VException) {
             // consider the command as active if trigger call fails.
             true
           }
-          // The command is enabled if its access trigger returns <code>true</true>
-          enable = active
+          // The command is isEnabled if its access trigger returns <code>true</true>
+          isEnable = active
         }
       }
-      command.setEnabled(enable)
+      command.setEnabled(isEnable)
     }
   }
 

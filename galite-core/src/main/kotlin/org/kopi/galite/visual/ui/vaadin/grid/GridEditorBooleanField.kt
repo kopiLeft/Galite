@@ -17,13 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.VColor
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.ui.vaadin.base.Styles
 
 /**
  * An editor for boolean field.
@@ -170,12 +169,12 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     value = newPresentationValue
   }
 
-  override fun addFocusListener(function: () -> Unit) {
+  override fun addFocusListener(focusFunction: () -> Unit) {
     yes.addFocusListener {
-      function()
+      focusFunction()
     }
     no.addFocusListener {
-      function()
+      focusFunction()
     }
   }
 

@@ -17,9 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import java.awt.Event
-import java.awt.event.KeyEvent
-
+import com.vaadin.flow.component.*
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.CssImport
+import org.kopi.galite.visual.UActor
+import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.ui.vaadin.actor.Actor
 import org.kopi.galite.visual.ui.vaadin.actor.VActorNavigationItem
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
@@ -32,18 +34,8 @@ import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import org.kopi.galite.visual.UActor
-import org.kopi.galite.visual.VActor
-
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.ShortcutEventListener
-import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dependency.CssImport
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
 
 /**
  * The `DActor` is the vaadin implementation of
@@ -59,7 +51,6 @@ import com.vaadin.flow.component.dependency.CssImport
 @CssImport("./styles/galite/actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
-          Utils.createTooltip(getDescription(model)),
           model.menuName,
           Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
@@ -184,7 +175,7 @@ class DActor(private var model: VActor)
         if (model.acceleratorModifier == 0) {
           model.help + " [" + KeyEvent.getKeyText(model.acceleratorKey) + "]"
         } else {
-          model.help + " [" + KeyEvent.getKeyModifiersText(model.acceleratorModifier) +
+          model.help + " [" + InputEvent.getModifiersExText(model.acceleratorModifier) +
                   "-" + KeyEvent.getKeyText(model.acceleratorKey) + "]"
         }
       } else {
@@ -230,10 +221,10 @@ class DActor(private var model: VActor)
      */
     private fun correctAcceleratorModifier(acceleratorModifier: Int): KeyModifier? =
             when (acceleratorModifier) {
-              Event.SHIFT_MASK -> KeyModifier.of("Shift")
-              Event.ALT_MASK -> KeyModifier.of("Alt")
-              Event.CTRL_MASK -> KeyModifier.of("Control")
-              Event.META_MASK -> KeyModifier.of("Meta")
+              InputEvent.SHIFT_DOWN_MASK -> KeyModifier.of("Shift")
+              InputEvent.ALT_DOWN_MASK -> KeyModifier.of("Alt")
+              InputEvent.CTRL_DOWN_MASK -> KeyModifier.of("Control")
+              InputEvent.META_DOWN_MASK -> KeyModifier.of("Meta")
               else -> null
             }
   }

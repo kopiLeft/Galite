@@ -16,13 +16,7 @@
  */
 package org.kopi.galite.tests.examples
 
-import org.kopi.galite.visual.domain.BOOL
-import org.kopi.galite.visual.domain.CodeDomain
-import org.kopi.galite.visual.domain.DECIMAL
-import org.kopi.galite.visual.domain.Fixed
-import org.kopi.galite.visual.domain.IMAGE
-import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.domain.*
 import org.kopi.galite.visual.dsl.form.Block
 
 class Traineeship : Block("Training", 1, 10) {
@@ -42,7 +36,7 @@ class Traineeship : Block("Training", 1, 10) {
       priority = 1
     }
     trigger(DEFAULT) {
-      "training value"
+      value = "training value"
     }
   }
   val trainingType = visit(domain = Type, position = follow(trainingName)) {

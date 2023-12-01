@@ -18,17 +18,11 @@
 
 package org.kopi.galite.visual.form
 
-import java.io.Serializable
-
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock.OrderModel
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+import java.io.Serializable
 
 /**
  * This class implements all UI actions on fields
@@ -175,7 +169,8 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
         display.setBlink(false)
         transferFocus(display)
       } catch (e: VException) {
-        throw InconsistencyException()
+        val errorMessage = e.message ?: "An error occurred "
+        throw InconsistencyException(errorMessage)
       } finally {
         // ensure that the field gain focus again
         display.forceFocus()
@@ -266,7 +261,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     // 20021022 laurent : do the same for increment and decrement buttons ?
     if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
-            !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
+            model.block!!.noChart() && display != null && display!!.getAutofillButton() != null) {
       display!!.getAutofillButton()!!.setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
     }
   }
@@ -524,7 +519,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     get() = if (blockView.getDisplayLine() == -1) {
       null
     } else {
-      if (getBlock().isChart() && blockView.inDetailMode()) {
+      if (!getBlock().noChart() && blockView.inDetailMode()) {
         detailDisplay
       } else {
         if (!isDisplayInitialized) null else displays[blockView.getDisplayLine()]

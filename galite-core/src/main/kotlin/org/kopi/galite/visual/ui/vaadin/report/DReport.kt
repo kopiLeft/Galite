@@ -17,27 +17,19 @@
  */
 package org.kopi.galite.visual.ui.vaadin.report
 
-import java.awt.Color
-
-import org.kopi.galite.visual.report.MReport
-import org.kopi.galite.visual.report.Parameters
-import org.kopi.galite.visual.report.Point
-import org.kopi.galite.visual.report.UReport
-import org.kopi.galite.visual.report.VReport
-import org.kopi.galite.visual.report.VReportRow
-import org.kopi.galite.visual.report.VSeparatorColumn
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VlibProperties
-
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.report.*
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import java.awt.Color
 
 /**
  * The `DReport` is the visual part of the [VReport] model.
@@ -133,25 +125,25 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun addColumn(position: Int) {
     accessAndPush(currentUI) {
-      var position = position
-      position = table.convertColumnIndexToView(position)
-      position += 1
+      var modifiedPosition = position
+      modifiedPosition = table.convertColumnIndexToView(modifiedPosition)
+      modifiedPosition += 1
       val headerLabel = "col" + model.getColumnCount()
       val span = VerticalLayout(Span(headerLabel))
-      model.addColumn(headerLabel, position)
+      model.addColumn(headerLabel)
       val column = table.addColumn(model.getColumnCount() - 1)
       column.setHeader(span)
       column.flexGrow = 0
       addHeaderListeners(column, span)
-      // move last column to position.
+      // move last column to Position.
       val pos = IntArray(model.getAccessibleColumnCount())
-      for (i in 0 until position) {
+      for (i in 0 until modifiedPosition) {
         pos[i] = model.getDisplayOrder(i)
       }
-      for (i in position + 1 until model.getAccessibleColumnCount()) {
+      for (i in modifiedPosition + 1 until model.getAccessibleColumnCount()) {
         pos[i] = model.getDisplayOrder(i - 1)
       }
-      pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
+      pos[modifiedPosition] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
       report.columnMoved(pos)
     }
   }

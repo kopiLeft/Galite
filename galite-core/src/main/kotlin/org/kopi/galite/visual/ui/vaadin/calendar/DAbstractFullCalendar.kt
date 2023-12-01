@@ -17,29 +17,27 @@
  */
 package org.kopi.galite.visual.ui.vaadin.calendar
 
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-
-import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
-import org.vaadin.stefan.fullcalendar.CalendarViewImpl
-import org.vaadin.stefan.fullcalendar.Entry
-import org.vaadin.stefan.fullcalendar.FullCalendar
-import org.vaadin.stefan.fullcalendar.FullCalendarBuilder
-
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.vaadin.stefan.fullcalendar.CalendarViewImpl
+import org.vaadin.stefan.fullcalendar.Entry
+import org.vaadin.stefan.fullcalendar.FullCalendar
+import org.vaadin.stefan.fullcalendar.FullCalendarBuilder
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 /**
  * Creates a new abstract full calendar

@@ -20,10 +20,8 @@ package org.kopi.galite.visual.form
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
-
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.cross.VReportSelectionForm
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.report.VNoRowException
@@ -95,10 +93,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
     assert(!block!!.isMulti() || block is VFullCalendarBlock) { threadInfo() }
 
     if (newRecord) {
-      if (getBlock(0) == null) {
-        gotoBlock(block!!)
-      }
-      Commands.insertMode(block!!)
+      block!!.insertMode()
     } else if (editID != -1) {
       newRecord = true
       fetchBlockRecord(0, editID)

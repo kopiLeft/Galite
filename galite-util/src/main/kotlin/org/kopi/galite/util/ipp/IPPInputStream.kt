@@ -92,9 +92,9 @@ class IPPInputStream(private val inputStream: InputStream) {
 
     while (!end) {
       c = read()
-      if (c == -1 || c == '\n'.toInt()) {
+      if (c == -1 || c == '\n'.code) {
         end = true
-      } else if (c != '\r'.toInt()) {
+      } else if (c != '\r'.code) {
         sb.append(c.toChar())
       }
     }
@@ -105,7 +105,7 @@ class IPPInputStream(private val inputStream: InputStream) {
   fun readArray(): ByteArray {
     val buf = ByteArray(1024)
     val outputStream = ByteArrayOutputStream()
-    var nread = 0
+    var nread : Int
 
     while (inputStream.read(buf).also { nread = it } > 0) {
       outputStream.write(buf, 0, nread)

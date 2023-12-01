@@ -17,19 +17,18 @@
 
 package org.kopi.galite.tests.list
 
-import kotlin.test.assertEquals
-
 import org.junit.Test
-import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.database.Users
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.list.VColumn
+import kotlin.test.assertEquals
 
 class VColumnTests : VApplicationTestBase() {
   @Test
   fun vColumnTest() {
     val vcolumn = VColumn(2, "testName", false, true, Users.id)
 
-    assertEquals(2, vcolumn._getTable())
+    assertEquals(2, vcolumn.pos)
     assertEquals("T2.testName", vcolumn.getQualifiedName())
   }
 }

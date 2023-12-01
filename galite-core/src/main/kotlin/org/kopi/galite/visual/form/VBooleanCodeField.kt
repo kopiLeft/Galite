@@ -18,13 +18,12 @@
 
 package org.kopi.galite.visual.form
 
-import kotlin.reflect.KClass
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.list.VBooleanCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.util.base.InconsistencyException
+import kotlin.reflect.KClass
 
 open class VBooleanCodeField : VCodeField {
 
@@ -117,6 +116,7 @@ open class VBooleanCodeField : VCodeField {
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Boolean? = result[column] as? Boolean
 
+  @Suppress("UNCHECKED_CAST")
   override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   /**

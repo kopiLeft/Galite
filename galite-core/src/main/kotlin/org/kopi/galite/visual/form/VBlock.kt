@@ -18,56 +18,22 @@
 
 package org.kopi.galite.visual.form
 
-import java.sql.SQLException
-import java.util.EventListener
-import java.util.Locale
-
-import javax.swing.event.EventListenerList
-
-import kotlin.math.abs
-
 import org.jetbrains.annotations.TestOnly
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.EqOp
-import org.jetbrains.exposed.sql.IntegerColumnType
-import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.intLiteral
-import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.database.DBContextHandler
-import org.kopi.galite.database.DBDeadLockException
-import org.kopi.galite.database.DBForeignKeyException
-import org.kopi.galite.database.DBInterruptionException
-import org.kopi.galite.database.Utils
+import org.kopi.galite.database.*
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VDatabaseUtils
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VWindow
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+import kotlin.math.abs
 
 abstract class VBlock(var title: String,
                       buffer: Int,
@@ -573,7 +539,7 @@ abstract class VBlock(var title: String,
       }
     }
   }
-
+  @Suppress("UNCHECKED_CAST")
   private fun compareIt(obj1: Any, obj2: Any): Int {
     return when (obj1) {
       is Comparable<*> -> {
@@ -803,7 +769,8 @@ abstract class VBlock(var title: String,
       try {
         activeField?.leave(false)
       } catch (e: VException) {
-        throw InconsistencyException()
+        val errorMessage = e.message ?: "An error occurred while leaving the field"
+        throw InconsistencyException(errorMessage)
       }
       fetchNextRecord(record)
       try {
@@ -1231,7 +1198,8 @@ abstract class VBlock(var title: String,
           gotoFirstField()
         } catch (e: VException) {
           // should only be raised when leaving a field
-          throw InconsistencyException()
+          val errorMessage = e.message ?: "An error occurred while leaving a field"
+          throw InconsistencyException(errorMessage)
         }
       }
     }
@@ -1299,7 +1267,6 @@ abstract class VBlock(var title: String,
         for (i in 0 until bufferSize) {
           /* check if record is empty */
           activeRecord = i
-          lastRecord = i
 
           if (isRecordChanged(i)) {
             j = 0
@@ -1451,8 +1418,10 @@ abstract class VBlock(var title: String,
             println("INFO: VBlock checkBlock " + Thread.currentThread())
           }
         } catch (f: VException) {
-          throw InconsistencyException()
+          val errorMessage = f.message ?: "An error occurred"
+          throw InconsistencyException(errorMessage)
         }
+
       }
       fireRecordCountChanged()
     } else {
@@ -1484,15 +1453,18 @@ abstract class VBlock(var title: String,
             activeField!!.setNull()
             activeField!!.leave(false)
           } catch (e: VException) {
-            throw InconsistencyException()
+            val errorMessage = e.message ?: "An error occurred while leaving a field"
+            throw InconsistencyException(errorMessage)
           }
+
         }
       } else {
         if (activeRecord != -1) {
           try {
             leaveRecord(false)
           } catch (e: VException) {
-            throw InconsistencyException()
+            val errorMessage = e.message ?: "An error occurred while leaving a Record"
+            throw InconsistencyException(errorMessage)
           }
         }
       }
@@ -1884,7 +1856,8 @@ abstract class VBlock(var title: String,
     try {
       callProtectedTrigger(VConstants.TRG_PRESAVE)
     } catch (e: VException) {
-      throw InconsistencyException()
+      val errorMessage = e.message ?: "An error occurred during the TRG_PRESAVE operation"
+      throw InconsistencyException(errorMessage)
     }
     if (!isMulti()) {
       when (getMode()) {
@@ -1947,7 +1920,8 @@ abstract class VBlock(var title: String,
           try {
             activeField!!.leave(false)
           } catch (e: VException) {
-            throw InconsistencyException()
+            val errorMessage = e.message ?: "An error occurred while leaving a field"
+            throw InconsistencyException(errorMessage)
           }
         }
       } else {
@@ -1955,7 +1929,8 @@ abstract class VBlock(var title: String,
           try {
             leaveRecord(false)
           } catch (e: VException) {
-            throw InconsistencyException()
+            val errorMessage = e.message ?: "An error occurred while leaving a Record"
+            throw InconsistencyException(errorMessage)
           }
         }
       }
@@ -2085,7 +2060,7 @@ abstract class VBlock(var title: String,
   /**
    * Tests whether the specified table has nullable columns.
    */
-  fun hasNullableColumns(table: Int): Boolean {
+  fun hasNullableColumns(table: Table): Boolean {
     fields.forEach { field ->
       if (field.fetchColumn(table) != -1 && field.isInternal()
               && field.getColumn(field.fetchColumn(table))!!.nullable) {
@@ -2121,6 +2096,7 @@ abstract class VBlock(var title: String,
   /**
    * Returns the search conditions for database query.
    */
+  @Suppress("UNCHECKED_CAST")
   fun getSearchConditions(): Op<Boolean>? {
     val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
@@ -2311,7 +2287,7 @@ abstract class VBlock(var title: String,
    */
   fun singleMenuQuery(showSingleEntry: Boolean): Int {
     assert(!isMulti()) { "$name is a multi block" }
-    var dialog: VListDialog? = null
+    var dialog: VListDialog?
 
     try {
       while (true) {
@@ -2813,7 +2789,7 @@ abstract class VBlock(var title: String,
         return i
       }
     }
-    throw InconsistencyException()
+    throw InconsistencyException("Field index not found")
   }
 
   /*
@@ -3157,10 +3133,8 @@ abstract class VBlock(var title: String,
         break
       }
       if (field.isInternal()
-              && field.fetchColumn(0) != -1
               && field.fetchColumn(table) != -1
-              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
-                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+              && !(field.getColumn(field.fetchColumn(table))!!.nullable )) {
         nullReference = false
       }
     }
@@ -3250,7 +3224,7 @@ abstract class VBlock(var title: String,
         null
       } else {
         @Suppress("UNCHECKED_CAST")
-        field.lookupColumn(0) as? Column<Any>
+        field.lookupColumn(tables[0]) as? Column<Any>
       }
       if (column != null) {
         condition.add(Op.build { column eq field.getSql(recno)!! })
@@ -3317,7 +3291,7 @@ abstract class VBlock(var title: String,
 
       for (field in fields) {
         @Suppress("UNCHECKED_CAST")
-        val column = field.lookupColumn(0) as? Column<Any?>
+        val column = field.lookupColumn(tables[0]) as? Column<Any?>
 
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
@@ -3331,9 +3305,9 @@ abstract class VBlock(var title: String,
       }
       val table = tables[0]
 
-      table.insert { table ->
+      table.insert { tableContent ->
         result.forEach {
-          table[it.first] = it.second
+          tableContent[it.first] = it.second
         }
       }
       setRecordFetched(recno, true)
@@ -3360,12 +3334,12 @@ abstract class VBlock(var title: String,
    *
    */
   protected fun fillIdField(recno: Int, id: Int) {
-    var id = id
-    if (id == -1) {
-      id = Utils.getNextTableId(tables[0])
+    var localId = id
+    if (localId == -1) {
+      localId = Utils.getNextTableId(tables[0])
     }
 
-    idField.setInt(recno, id)
+    idField.setInt(recno, localId)
   }
 
   /**
@@ -3405,7 +3379,7 @@ abstract class VBlock(var title: String,
           continue
         }
         @Suppress("UNCHECKED_CAST")
-        val column = field.lookupColumn(0) as? Column<Any?>
+        val column = field.lookupColumn(tables[0]) as? Column<Any?>
 
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
@@ -3419,9 +3393,9 @@ abstract class VBlock(var title: String,
       }
       val table = tables[0]
 
-      table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
+      table.update({ idColumn eq idField.getInt(recno)!! }) { localTable ->
         result.forEach {
-          table[it.first] = it.second
+          localTable[it.first] = it.second
         }
       }
       setRecordChanged(recno, false)
@@ -3465,7 +3439,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
         throw VExecFailedException(MessageCode.getMessage("VIS-00019"))
       }
-      VDatabaseUtils.checkForeignKeys_(id, tables!![0])
+      VDatabaseUtils.checkForeignKeys_(id, tables[0])
 
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)

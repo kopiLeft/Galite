@@ -17,16 +17,15 @@
  */
 package org.kopi.galite.visual.ui.vaadin.chart
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.chart.ChartTypeFactory
 import org.kopi.galite.visual.chart.UChart
 import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.VWindow
-
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Creates a new chart view from its model.
@@ -63,15 +62,15 @@ class DChart(model: VWindow) : DWindow(model), UChart {
     return type
   }
 
-  override fun setType(newType: UChartType?) {
+  override fun setType(type: UChartType?) {
     access {
-      if (type != null && newType != null) {
-        content.remove(type as Component)
+      if (this.type != null && type != null) {
+        content.remove(this.type as Component)
       }
-      if (newType != null) {
-        type = newType
-        newType.build()
-        content.add(newType as Component)
+      if (type != null) {
+        this.type = type
+        type.build()
+        content.add(type as Component)
       }
     }
   }
