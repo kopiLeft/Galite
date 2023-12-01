@@ -36,6 +36,7 @@ import org.kopi.galite.visual.VlibProperties
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
@@ -90,6 +91,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     setContent(table)
     resetWidth()
     addTableListeners()
+    table.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
 
     columnsSelector.build(table)
   }
