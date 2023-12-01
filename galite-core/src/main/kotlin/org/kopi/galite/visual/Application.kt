@@ -34,11 +34,14 @@ interface Application : MessageListener {
 
   /**
    * Logins to the application.
-   * @param database The database URL.
-   * @param driver The database driver.
-   * @param username The user name.
-   * @param password The user password.
-   * @param schema The database schema.
+   * @param database    The database URL.
+   * @param driver      The database driver.
+   * @param username    The user name.
+   * @param password    The user password.
+   * @param schema      The database schema.
+   * @param maxRetries  The number of maximum retries if a transaction fails.
+   * @param waitMin     The minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted.
+   * @param waitMax     The maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted.
    * @return The [Connection] containing database connection information.
    */
   fun login(database: String,

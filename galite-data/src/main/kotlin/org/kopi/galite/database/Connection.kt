@@ -55,9 +55,14 @@ class Connection {
   /**
    * Creates a connection with Exposed from JDBC Connection
    *
-   * @param     connection          the JDBC connection
-   * @param     lookupUserId        lookup user id in table of Users ?
-   * @param     schema              the database schema to set as current schema
+   * @param     connection      the JDBC connection
+   * @param     lookupUserId    lookup user id in table of Users ?
+   * @param     schema          the database schema to set as current schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(connection: java.sql.Connection,
                       lookupUserId: Boolean = true,
@@ -80,11 +85,17 @@ class Connection {
   /**
    * Creates a connection with Exposed and opens it.
    *
-   * @param        url             the URL of the database to connect to
-   * @param        userName        the name of the database user
-   * @param        password        the password of the database user
-   * @param        lookupUserId    lookup user id in table of users ?
-   * @param        schema          the database schema to set as current schema
+   * @param     url             the URL of the database to connect to
+   * @param     driver          The JDBC driver to use to access the database
+   * @param     userName        the name of the database user
+   * @param     password        the password of the database user
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the database schema to set as current schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(url: String,
                       driver: String,
@@ -112,11 +123,17 @@ class Connection {
   /**
    * Creates a connection with Exposed and opens it.
    *
-   * @param        url             the URL of the database to connect to
-   * @param        userName        the name of the database user
-   * @param        password        the password of the database user
-   * @param        lookupUserId    lookup user id in table of users ?
-   * @param        schema          the database schema to set as current schema
+   * @param     url             the URL of the database to connect to
+   * @param     driver          The JDBC driver to use to access the database
+   * @param     userName        the name of the database user
+   * @param     password        the password of the database user
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the database schema to set as current schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(url: String,
                       driver: String,
@@ -149,6 +166,11 @@ class Connection {
    * @param     dataSource      the dataSource
    * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
+   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+   * @param     isolationLevel  the transaction isolation level
+   * @param     maxRetries      the number of maximum retries if a transaction fails
+   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(dataSource: javax.sql.DataSource,
                       lookupUserId: Boolean = true,
@@ -210,9 +232,14 @@ class Connection {
     /**
      * Creates a connection with Exposed from JDBC Connection
      *
-     * @param     connection          the JDBC connection
-     * @param     lookupUserId        lookup user id in table of Users ?
-     * @param     schema              the database schema to set as current schema
+     * @param   connection      the JDBC connection
+     * @param   lookupUserId    lookup user id in table of Users ?
+     * @param   schema          the database schema to set as current schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   isolationLevel  the transaction isolation level
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(connection: java.sql.Connection,
                          lookupUserId: Boolean = true,
@@ -228,11 +255,17 @@ class Connection {
     /**
      * Creates a connection with Exposed and opens it.
      *
-     * @param        url             the URL of the database to connect to
-     * @param        userName        the name of the database user
-     * @param        password        the password of the database user
-     * @param        lookupUserId    lookup user id in table of users ?
-     * @param        schema          the database schema to set as current schema
+     * @param   url             the URL of the database to connect to
+     * @param   driver          The JDBC driver to use to access the database
+     * @param   userName        the name of the database user
+     * @param   password        the password of the database user
+     * @param   lookupUserId    lookup user id in table of users ?
+     * @param   schema          the database schema to set as current schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   isolationLevel  the transaction isolation level
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(url: String,
                          driver: String,
@@ -262,11 +295,16 @@ class Connection {
     /**
      * Creates a connection with Exposed and opens it.
      *
-     * @param        url             the URL of the database to connect to
-     * @param        userName        the name of the database user
-     * @param        password        the password of the database user
-     * @param        lookupUserId    lookup user id in table of users ?
-     * @param        schema          the database schema to set as current schema
+     * @param   url             the URL of the database to connect to
+     * @param   driver          The JDBC driver to use to access the database
+     * @param   userName        the name of the database user
+     * @param   password        the password of the database user
+     * @param   lookupUserId    lookup user id in table of users ?
+     * @param   schema          the database schema to set as current schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(url: String,
                          driver: String,
@@ -293,9 +331,14 @@ class Connection {
     /**
      * Creates a connection with Exposed from a datasource.
      *
-     * @param     dataSource      the dataSource
-     * @param     lookupUserId    lookup user id in table of users ?
-     * @param     schema          the current database schema
+     * @param   dataSource      the dataSource
+     * @param   lookupUserId    lookup user id in table of users ?
+     * @param   schema          the current database schema
+     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
+     * @param   isolationLevel  the transaction isolation level
+     * @param   maxRetries      the number of maximum retries if a transaction fails
+     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(dataSource: javax.sql.DataSource,
                          lookupUserId: Boolean = true,
