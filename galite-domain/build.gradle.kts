@@ -23,8 +23,4 @@ plugins {
 
 dependencies {
   api(project(":galite-data"))
-
-  implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
 }

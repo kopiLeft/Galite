@@ -18,6 +18,7 @@
 
 package org.kopi.galite.database
 
+import com.zaxxer.hikari.HikariDataSource
 import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Database
@@ -147,12 +148,17 @@ class Connection {
                       waitMin: Long? = null,
                       waitMax: Long? = null) {
     val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin,waitMax)
+    val hikariDataSource = HikariDataSource().apply {
+      this.jdbcUrl = url
+      driver?.let { this.driverClassName = it }
+      this.username = userName
+      this.password = password
+      this.maximumPoolSize = 1
+      schema?.let { this.schema = it.identifier }
+      this.transactionIsolation = ISOLATION_LEVELS[isolationLevel]
+    }
 
-    dbConnection = Database.connect(url = url,
-                                    driver = driver,
-                                    user = userName,
-                                    password = password,
-                                    databaseConfig = configuration)
+    dbConnection = Database.connect(hikariDataSource, databaseConfig = configuration)
     this.url = url
     this.userName = userName
     this.password = password
@@ -182,7 +188,14 @@ class Connection {
                       waitMax: Long? = null){
     val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
 
-    dbConnection = Database.connect(dataSource, databaseConfig = configuration)
+    val hikariDataSource = HikariDataSource().apply {
+      this.dataSource = dataSource
+      this.maximumPoolSize = 1
+      schema?.let { this.schema = it.identifier }
+      this.transactionIsolation = ISOLATION_LEVELS[isolationLevel]
+    }
+
+    dbConnection = Database.connect(hikariDataSource, databaseConfig = configuration)
     url = dbConnection.url
     userName = dataSource.connection.metaData.userName.orEmpty()
     this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
@@ -357,6 +370,13 @@ class Connection {
     // -2 do not lookup user ID
     private const val USERID_NO_LOOKUP = -2
   }
+
+  // Isolation levels Hashmap : Links java.sql isolation levels (Int) to hikariCP isolation levels (String)
+  val ISOLATION_LEVELS = hashMapOf(java.sql.Connection.TRANSACTION_NONE             to "TRANSACTION_NONE",
+                                   java.sql.Connection.TRANSACTION_READ_UNCOMMITTED to "TRANSACTION_READ_UNCOMMITTED",
+                                   java.sql.Connection.TRANSACTION_READ_COMMITTED   to "TRANSACTION_READ_COMMITTED",
+                                   java.sql.Connection.TRANSACTION_REPEATABLE_READ  to "TRANSACTION_REPEATABLE_READ",
+                                   java.sql.Connection.TRANSACTION_SERIALIZABLE     to "TRANSACTION_SERIALIZABLE")
 }
 
 fun databaseConfig(schema: Schema? = null,
