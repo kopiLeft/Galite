@@ -16,15 +16,9 @@
  */
 package org.kopi.galite.demo.client
 
-import java.util.Locale
-
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.vaadin.addons.componentfactory.PivotTable.Aggregator
-import org.vaadin.addons.componentfactory.PivotTable.Renderer
-
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
@@ -35,6 +29,10 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.dsl.pivottable.PivotTable
+import org.kopi.galite.visual.pivottable.VPivotTable
+import org.vaadin.addons.componentfactory.PivotTable.Aggregator
+import org.vaadin.addons.componentfactory.PivotTable.Renderer
+import java.util.*
 
 /**
  * Client Report
@@ -51,8 +49,22 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     key = Key.F1
     icon = Icon.HELP
   }
+  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
+    key = Key.F9
+    icon = Icon.EXPORT_PDF
+  }
+  val png = actor(menu = action, label = "PNG", help = "PNG Format", ident = "png") {
+    key = Key.F8
+    icon = Icon.PRINT
+  }
   val cmdQuit = command(item = quit) { model.close() }
   val helpCmd = command(item = helpForm) { model.showHelp() }
+  val cmdPDF = command(item = pdf) {
+    model.export(VPivotTable.TYP_PDF)
+  }
+  val cmdPNG = command(item = png) {
+    model.export(VPivotTable.TYP_PNG)
+  }
 
   val firstName = dimension(STRING(25), Position.NONE) {
     label = "First Name"

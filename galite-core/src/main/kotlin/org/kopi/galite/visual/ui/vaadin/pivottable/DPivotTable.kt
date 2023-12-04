@@ -17,15 +17,20 @@
  */
 package org.kopi.galite.visual.ui.vaadin.pivottable
 
-import org.vaadin.addons.componentfactory.PivotTable
 import com.vaadin.flow.component.dependency.CssImport
-
+import com.vaadin.flow.component.dependency.JsModule
+import com.vaadin.flow.component.dependency.NpmPackage
+import org.kopi.galite.visual.chart.VPrintOptions
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.pivottable.MPivotTable
 import org.kopi.galite.visual.pivottable.UPivotTable
 import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-
+import org.vaadin.addons.componentfactory.PivotTable
+import java.io.OutputStream
+@NpmPackage(value = "html2canvas", version = "1.4.1")
+@NpmPackage(value = "jspdf", version = "2.5.1")
+@JsModule("./src/generatePDF.js")
 @CssImport("./styles/galite/pivottable.css")
 class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UPivotTable {
 
@@ -37,6 +42,8 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val pivotOptions = PivotTable.PivotOptions()
   private val rows = mutableListOf<String>()
   private val columns = mutableListOf<String>()
+  private lateinit var pivot: PivotTable
+
 
   init {
     getModel()!!.setDisplay(this)
@@ -89,8 +96,48 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
       PivotTable.PivotMode.NONINTERACTIVE
     }
 
-    val pivot = PivotTable(pivotData, pivotOptions, pivotMode)
+    pivot = PivotTable(pivotData, pivotOptions, pivotMode)
 
     add(pivot)
+  }
+
+  override fun exportToPDF(destination: OutputStream, options: VPrintOptions) {
+    if (::pivot.isInitialized) {
+      ui.get().access {
+        ui.get().page.executeJs("window.print()")
+      }
+    } else {
+      println("Pivot is not properly initialized ")
+    }
+  }
+
+  override fun exportToPDF1(destination: OutputStream, options: VPrintOptions) {
+    if (::pivot.isInitialized) {
+      ui.get().access {
+        ui.get().page.executeJs("generatePDFWithId('${pivot.id.get()}');")
+      }
+    } else {
+      println("Pivot is not properly initialized ")
+    }
+  }
+
+  override fun exportToPNG(destination: OutputStream, width: Int, height: Int, form: String) {
+    if (::pivot.isInitialized) {
+      ui.get().access {
+        ui.get().page.executeJs("generateImageWithId('${pivot.id.get()}', '$form' );");
+      }
+    } else {
+      println("Pivot is not properly initialized ")
+    }
+  }
+
+  override fun exportToJPEG(destination: OutputStream, width: Int, height: Int, form: String) {
+    if (::pivot.isInitialized) {
+      ui.get().access {
+        ui.get().page.executeJs("generateImageWithId('${pivot.id.get()}', '$form' );");
+      }
+    } else {
+      println("Pivot is not properly initialized ")
+    }
   }
 }
