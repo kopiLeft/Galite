@@ -21,6 +21,25 @@ import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.HasDynamicTitle
+import com.vaadin.flow.router.PreserveOnRefresh
+import com.vaadin.flow.server.AppShellRegistry
+import com.vaadin.flow.server.AppShellSettings
+import com.vaadin.flow.server.ServiceInitEvent
+import com.vaadin.flow.server.VaadinServiceInitListener
+import com.vaadin.flow.server.VaadinServlet
+import com.vaadin.flow.server.VaadinSession
+import com.vaadin.flow.shared.communication.PushMode
+
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.database.Configuration
 import org.kopi.galite.database.Connection
@@ -59,23 +78,6 @@ import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VerifyConfiguration
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
-
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.router.HasDynamicTitle
-import com.vaadin.flow.router.PreserveOnRefresh
-import com.vaadin.flow.server.AppShellRegistry
-import com.vaadin.flow.server.AppShellSettings
-import com.vaadin.flow.server.ServiceInitEvent
-import com.vaadin.flow.server.VaadinServiceInitListener
-import com.vaadin.flow.server.VaadinServlet
-import com.vaadin.flow.server.VaadinSession
-import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The entry point for all Galite WEB applications.
@@ -230,6 +232,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean?) {
         if (yes == true) {
+          closeConnection()
           // show welcome screen
           gotoWelcomeView()
         }
@@ -250,6 +253,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
+    mainWindow!!.addDetachListener { event ->
+      //closing DB connection
+      closeConnection()
+    }
   }
 
   fun remove(mainWindow: MainWindow?) {
@@ -356,9 +363,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var localizationManager: LocalizationManager? = null
 
-  override fun displayError(parent: UComponent?, message: String?) {
-    error(message)
-  }
+  override fun displayError(parent: UComponent?, message: String?) { error(message) }
 
   //---------------------------------------------------
   // UTILS
@@ -451,6 +456,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected fun setTraceLevel() {
 
+  }
+
+  /**
+   * Closes the database connection
+   */
+  fun closeConnection() {
+    dBConnection?.let { TransactionManager.closeAndUnregister(it.dbConnection) }
   }
 
   /**
