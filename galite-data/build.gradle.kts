@@ -30,7 +30,7 @@ dependencies {
   api("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
   api("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
   // HikariCP dependency : for pool connexion
-  implementation("com.zaxxer", "HikariCP", Versions.HIKARI)
+  api("com.zaxxer", "HikariCP", Versions.HIKARI)
 
   // getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)

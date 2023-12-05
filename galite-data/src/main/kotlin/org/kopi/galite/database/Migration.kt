@@ -45,26 +45,30 @@ abstract class Migration {
    * Run database update
    */
   fun run(processCommandLine: Boolean) {
-    connection(processCommandLine)
-    var currentVersion: Int = -1
-    var currentModule: String = ""
+    val dbConnection = connection(processCommandLine)
+    try {
+      var currentVersion: Int = -1
+      var currentModule: String = ""
 
-    // Execute transDB
-    for (transDB in TRANSDBS) {
-      if (transDB.module != currentModule) {
-        currentModule = transDB.module
-        transaction {
-          currentVersion = loadModuleVersion(currentModule)
+      // Execute transDB
+      for (transDB in TRANSDBS) {
+        if (transDB.module != currentModule) {
+          currentModule = transDB.module
+          transaction {
+            currentVersion = loadModuleVersion(currentModule)
+          }
+          if (traceLog(processCommandLine)) println("Current version of module \"${transDB.module}\" = $currentVersion")
         }
-        if (traceLog(processCommandLine)) println("Current version of module \"${transDB.module}\" = $currentVersion")
-      }
 
-      if (transDB.version > currentVersion) {
-        if (traceLog(processCommandLine)) println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
-        transaction {
-          transDB.run()
+        if (transDB.version > currentVersion) {
+          if (traceLog(processCommandLine)) println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
+          transaction {
+            transDB.run()
+          }
         }
       }
+    } finally {
+      dbConnection.poolConnection.close()
     }
   }
 
@@ -85,8 +89,8 @@ abstract class Migration {
   /**
    * Database connection
    */
-  open fun connection(processCommandLine: Boolean) {
-    if (processCommandLine) {
+  open fun connection(processCommandLine: Boolean) : Connection {
+    return if (processCommandLine) {
       Connection.createConnection(options.database!!,
                                   options.driver!!,
                                   options.username!!,

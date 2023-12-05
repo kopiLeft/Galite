@@ -253,8 +253,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
-    mainWindow!!.addDetachListener { event ->
-      //closing DB connection
+    mainWindow!!.addDetachListener {
+      //closing DB connection if the UI is closed after 3 heartbeats
       closeConnection()
     }
   }
@@ -462,7 +462,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Closes the database connection
    */
   fun closeConnection() {
-    dBConnection?.let { TransactionManager.closeAndUnregister(it.dbConnection) }
+    dBConnection?.poolConnection?.close()
   }
 
   /**

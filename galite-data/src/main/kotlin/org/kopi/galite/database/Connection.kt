@@ -48,40 +48,12 @@ class Connection {
   val userName: String
   val password: String?
   var dbConnection: Database
+  var poolConnection: HikariDataSource
   var user: Int = 0
 
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
-  /**
-   * Creates a connection with Exposed from JDBC Connection
-   *
-   * @param     connection      the JDBC connection
-   * @param     lookupUserId    lookup user id in table of Users ?
-   * @param     schema          the database schema to set as current schema
-   * @param     traceLevel      the trace level to print database queries before execution (0: none, 1: all)
-   * @param     isolationLevel  the transaction isolation level
-   * @param     maxRetries      the number of maximum retries if a transaction fails
-   * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
-   * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
-   */
-  private constructor(connection: java.sql.Connection,
-                      lookupUserId: Boolean = true,
-                      schema: Schema? = null,
-                      traceLevel: Int? = null,
-                      isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                      maxRetries: Int? = null,
-                      waitMin: Long? = null,
-                      waitMax: Long? = null) {
-    val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
-
-    dbConnection = Database.connect({ connection }, databaseConfig = configuration)
-    url = dbConnection.url
-    userName = connection.metaData.userName
-    password = null // already authenticated
-    user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
-    setUserID()
-  }
 
   /**
    * Creates a connection with Exposed and opens it.
@@ -99,7 +71,7 @@ class Connection {
    * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(url: String,
-                      driver: String,
+                      driver: String? = null,
                       userName: String,
                       password: String,
                       lookupUserId: Boolean = true,
@@ -137,7 +109,7 @@ class Connection {
    * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    */
   private constructor(url: String,
-                      driver: String,
+                      driver: String? = null,
                       userName: String,
                       password: String,
                       lookupUserId: Boolean = true,
@@ -148,7 +120,7 @@ class Connection {
                       waitMin: Long? = null,
                       waitMax: Long? = null) {
     val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin,waitMax)
-    val hikariDataSource = HikariDataSource().apply {
+    poolConnection = HikariDataSource().apply {
       this.jdbcUrl = url
       driver?.let { this.driverClassName = it }
       this.username = userName
@@ -157,8 +129,7 @@ class Connection {
       schema?.let { this.schema = it.identifier }
       this.transactionIsolation = ISOLATION_LEVELS[isolationLevel]
     }
-
-    dbConnection = Database.connect(hikariDataSource, databaseConfig = configuration)
+    dbConnection = Database.connect(poolConnection, databaseConfig = configuration)
     this.url = url
     this.userName = userName
     this.password = password
@@ -188,14 +159,14 @@ class Connection {
                       waitMax: Long? = null){
     val configuration = databaseConfig(schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
 
-    val hikariDataSource = HikariDataSource().apply {
+    poolConnection = HikariDataSource().apply {
       this.dataSource = dataSource
       this.maximumPoolSize = 1
       schema?.let { this.schema = it.identifier }
       this.transactionIsolation = ISOLATION_LEVELS[isolationLevel]
     }
 
-    dbConnection = Database.connect(hikariDataSource, databaseConfig = configuration)
+    dbConnection = Database.connect(poolConnection, databaseConfig = configuration)
     url = dbConnection.url
     userName = dataSource.connection.metaData.userName.orEmpty()
     this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
@@ -241,30 +212,6 @@ class Connection {
   }
 
   companion object {
-
-    /**
-     * Creates a connection with Exposed from JDBC Connection
-     *
-     * @param   connection      the JDBC connection
-     * @param   lookupUserId    lookup user id in table of Users ?
-     * @param   schema          the database schema to set as current schema
-     * @param   traceLevel      the trace level to print database queries before execution (0: none, 1: all)
-     * @param   isolationLevel  the transaction isolation level
-     * @param   maxRetries      the number of maximum retries if a transaction fails
-     * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
-     * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
-     */
-    fun createConnection(connection: java.sql.Connection,
-                         lookupUserId: Boolean = true,
-                         schema: Schema? = null,
-                         traceLevel: Int? = null,
-                         isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
-                         maxRetries: Int? = null,
-                         waitMin: Long? = null,
-                         waitMax: Long? = null): Connection {
-      return Connection(connection, lookupUserId, schema, traceLevel, isolationLevel, maxRetries, waitMin, waitMax)
-    }
-
     /**
      * Creates a connection with Exposed and opens it.
      *
