@@ -17,36 +17,20 @@
 
 package org.kopi.galite.visual.domain
 
-import java.math.BigDecimal
-
-import org.kopi.galite.visual.chart.VBooleanCodeDimension
-import org.kopi.galite.visual.chart.VColumnFormat
-import org.kopi.galite.visual.chart.VDimension
-import org.kopi.galite.visual.chart.VDecimalCodeDimension
-import org.kopi.galite.visual.chart.VDecimalCodeMeasure
-import org.kopi.galite.visual.chart.VIntegerCodeDimension
-import org.kopi.galite.visual.chart.VIntegerCodeMeasure
-import org.kopi.galite.visual.chart.VMeasure
-import org.kopi.galite.visual.chart.VStringCodeDimension
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.chart.*
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.CodeDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.dsl.pivottable.PivotTableField
 import org.kopi.galite.visual.dsl.report.ReportField
-import org.kopi.galite.visual.form.VBooleanCodeField
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VDecimalCodeField
-import org.kopi.galite.visual.form.VIntegerCodeField
-import org.kopi.galite.visual.form.VStringCodeField
-import org.kopi.galite.visual.report.VBooleanCodeColumn
-import org.kopi.galite.visual.report.VCalculateColumn
-import org.kopi.galite.visual.report.VCellFormat
-import org.kopi.galite.visual.report.VDecimalCodeColumn
-import org.kopi.galite.visual.report.VIntegerCodeColumn
-import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.report.VStringCodeColumn
-import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
+import org.kopi.galite.visual.report.*
+import java.math.BigDecimal
 
 /**
  * Represents a code domain.
@@ -216,6 +200,50 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           format,
           codes.map { it.ident }.toTypedArray(),
           codes.map { it.value as? String }.toTypedArray()
+        )
+        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }.also {
+        it.initLabels(codes.map { it.label }.toTypedArray())
+      }
+    }
+  }
+
+  /**
+   * Builds the pivot table column model
+   */
+  override fun buildPivotTableFieldModel(
+    field: PivotTableField<*>,
+    position: Dimension.Position?
+  ): VPivotTableColumn {
+    return with(field) {
+      when (kClass) {
+        Boolean::class -> org.kopi.galite.visual.pivottable.VBooleanCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source,
+          codes.map { it.ident }.toTypedArray()
+        )
+        BigDecimal::class -> org.kopi.galite.visual.pivottable.VDecimalCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source,
+          codes.map { it.ident }.toTypedArray()
+        )
+        Int::class, Long::class -> org.kopi.galite.visual.pivottable.VIntegerCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source!!,
+          codes.map { it.ident }.toTypedArray()
+        )
+        String::class -> org.kopi.galite.visual.pivottable.VStringCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source,
+          codes.map { it.ident }.toTypedArray()
         )
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }.also {

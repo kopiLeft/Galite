@@ -27,7 +27,7 @@ import org.kopi.galite.visual.l10n.PivotTableLocalizer
  * @param    ident        The identifier of the field
  * @param    position     The position of the dimension field
  */
-class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
+abstract class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -43,7 +43,7 @@ class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
    *
    * @param     parent         the caller localizer
    */
-  fun localize(parent: PivotTableLocalizer) {
+  open fun localize(parent: PivotTableLocalizer) {
     if (ident != "") {
       val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
