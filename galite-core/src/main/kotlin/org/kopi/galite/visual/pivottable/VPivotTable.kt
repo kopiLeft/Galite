@@ -20,21 +20,21 @@ package org.kopi.galite.visual.pivottable
 
 import java.io.File
 import java.net.MalformedURLException
+
 import org.jetbrains.annotations.TestOnly
-
-import org.vaadin.addons.componentfactory.PivotTable.*
-
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.dsl.common.Trigger
+import org.vaadin.addons.componentfactory.PivotTable.*
 
 /**
  * Represents a pivot table model.
  */
 abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   companion object {
+    const val TYP_PDF = 1
 
     init {
       WindowController.windowController.registerWindowBuilder(
@@ -270,6 +270,18 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
 
   fun showHelp() {
     VHelpViewer().showHelp(genHelp())
+  }
+
+  /**
+   * Prints the report
+   */
+  fun export(type: Int ) {
+    when (type) {
+      TYP_PDF -> {
+        (getDisplay() as UPivotTable).imprimer()
+      }
+      else -> throw InconsistencyException("Export type unknown")
+    }
   }
 
   // ----------------------------------------------------------------------

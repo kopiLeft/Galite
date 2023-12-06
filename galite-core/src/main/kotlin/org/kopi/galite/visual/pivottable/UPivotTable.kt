@@ -25,4 +25,9 @@ interface UPivotTable : UWindow {
    * Builds the pivot table;
    */
   fun build()
+
+  /**
+   * Print to the PDF format.
+   */
+  fun imprimer()
 }

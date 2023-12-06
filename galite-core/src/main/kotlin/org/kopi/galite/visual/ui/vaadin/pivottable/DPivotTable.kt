@@ -17,14 +17,13 @@
  */
 package org.kopi.galite.visual.ui.vaadin.pivottable
 
-import org.vaadin.addons.componentfactory.PivotTable
 import com.vaadin.flow.component.dependency.CssImport
-
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.pivottable.MPivotTable
 import org.kopi.galite.visual.pivottable.UPivotTable
 import org.kopi.galite.visual.pivottable.VPivotTable
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.vaadin.addons.componentfactory.PivotTable
 
 @CssImport("./styles/galite/pivottable.css")
 class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UPivotTable {
@@ -37,6 +36,7 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val pivotOptions = PivotTable.PivotOptions()
   private val rows = mutableListOf<String>()
   private val columns = mutableListOf<String>()
+  private lateinit var pivot: PivotTable
 
   init {
     getModel()!!.setDisplay(this)
@@ -89,8 +89,16 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
       PivotTable.PivotMode.NONINTERACTIVE
     }
 
-    val pivot = PivotTable(pivotData, pivotOptions, pivotMode)
+    pivot = PivotTable(pivotData, pivotOptions, pivotMode)
 
     add(pivot)
+  }
+
+  override fun imprimer() {
+    if (::pivot.isInitialized) {
+      ui.get().access {
+        ui.get().page.executeJs("window.print()")
+      }
+    }
   }
 }
