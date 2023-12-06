@@ -85,11 +85,6 @@ dependencies {
 
   // Pivot Table dependency
   implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
-
-
-  implementation(npm( " html2canvas ", "1.4.1"))
-  implementation(npm("jspdf","2.5.1"))
-
 }
 
 dependencyManagement {

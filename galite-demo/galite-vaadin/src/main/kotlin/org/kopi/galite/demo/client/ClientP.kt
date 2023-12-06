@@ -53,17 +53,10 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     key = Key.F9
     icon = Icon.EXPORT_PDF
   }
-  val png = actor(menu = action, label = "PNG", help = "PNG Format", ident = "png") {
-    key = Key.F8
-    icon = Icon.PRINT
-  }
   val cmdQuit = command(item = quit) { model.close() }
   val helpCmd = command(item = helpForm) { model.showHelp() }
   val cmdPDF = command(item = pdf) {
     model.export(VPivotTable.TYP_PDF)
-  }
-  val cmdPNG = command(item = png) {
-    model.export(VPivotTable.TYP_PNG)
   }
 
   val firstName = dimension(STRING(25), Position.NONE) {

@@ -19,55 +19,20 @@
 package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.chart.VPrintOptions
 import java.io.IOException
-import java.io.OutputStream
 
 interface UPivotTable : UWindow {
+
   /**
    * Builds the pivot table;
    */
   fun build()
-  /**
-   * Exports the chart type to the PDF format.
-   *
-   * @param destination Where to write the export.
-   * @param options The print options.
-   * @throws IOException I/O errors.
-   */
-
-  @Throws(IOException::class)
-  fun exportToPDF(destination: OutputStream, options: VPrintOptions)
 
   /**
-   * Exports the chart type to the PDF format.
+   * Exports to the PDF format.
    *
-   * @param destination Where to write the export.
-   * @param options The print options.
    * @throws IOException I/O errors.
    */
   @Throws(IOException::class)
-  fun exportToPDF1(destination: OutputStream, options: VPrintOptions)
-
-  /**
-   * Exports the chart type to the PNG format.
-   *
-   * @param destination Where to write the export.
-   * @param width The image width.
-   * @param height The image height.
-   * @throws IOException I/O errors.
-   */
-  @Throws(IOException::class)
-  fun exportToPNG(destination: OutputStream, width: Int, height: Int, form : String)
-
-  /**
-   * Exports the chart type to the JPEG format.
-   *
-   * @param destination Where to write the export.
-   * @param width The image width.
-   * @param height The image height.
-   * @throws IOException I/O errors.
-   */
-  @Throws(IOException::class)
-  fun exportToJPEG(destination: OutputStream, width: Int, height: Int , form : String)
+  fun exportToPDF()
 }
