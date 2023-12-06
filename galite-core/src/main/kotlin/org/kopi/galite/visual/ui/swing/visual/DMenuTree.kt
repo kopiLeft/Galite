@@ -41,7 +41,6 @@ import javax.swing.tree.TreePath
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.Favorites
 import org.kopi.galite.visual.Action
@@ -53,6 +52,7 @@ import org.kopi.galite.visual.UMenuTree.UTree
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties.getString
+import org.kopi.galite.visual.database.transaction
 import org.kopi.vkopi.lib.ui.swing.base.Utils
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication

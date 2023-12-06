@@ -26,15 +26,15 @@ import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+
 import org.kopi.galite.database.References
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.database.transaction
 
 object VDatabaseUtils {
 
   fun checkForeignKeys_(id: Int, queryTable: Table){
-
     transaction {
       val query1 = References.slice(
         References.table,
@@ -56,7 +56,6 @@ object VDatabaseUtils {
                                                                                           query1Row[References.table])))
             }
           }
-
           'C' -> transaction {
             val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             query2.forEach {
@@ -64,7 +63,6 @@ object VDatabaseUtils {
             }
             auxTable.deleteWhere { auxTable.column eq id }
           }
-
           'N' -> transaction {
             auxTable.update({ auxTable.column eq id }) {
               it[auxTable.column] = 0
@@ -80,7 +78,6 @@ object VDatabaseUtils {
   fun checkForeignKeys(id: Int, table: String) {
     // FIXME : this should be re-implemented
     transaction {
-
       val query1 = References.slice(
         References.table,
         References.column,
@@ -101,7 +98,6 @@ object VDatabaseUtils {
                                                                                           query1Row[References.table])))
             }
           }
-
           'C' -> transaction {
             val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
             query2.forEach {
@@ -109,7 +105,6 @@ object VDatabaseUtils {
             }
             auxTable.deleteWhere { auxTable.column eq id }
           }
-
           'N' -> transaction {
             auxTable.update({ auxTable.column eq id }) {
               it[auxTable.column] = 0

@@ -20,7 +20,6 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.vaadin.addons.componentfactory.PivotTable.Aggregator
 import org.vaadin.addons.componentfactory.PivotTable.Renderer
@@ -28,6 +27,7 @@ import org.vaadin.addons.componentfactory.PivotTable.Renderer
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING

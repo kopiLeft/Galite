@@ -22,6 +22,7 @@ import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VForm
 import org.kopi.galite.visual.VWindow
@@ -34,7 +35,7 @@ import org.kopi.galite.visual.VWindow
  * @param       statement       the transaction statement.
  */
 fun <T> Window.transaction(message: String? = null,
-                           db: Database? = null,
+                           db: Database? = ApplicationContext.getDBConnection()?.dbConnection,
                            statement: Transaction.() -> T): T {
   return if (isModelInitialized) {
     model.transaction(message, db, statement)
@@ -57,7 +58,7 @@ fun <T> Window.transaction(message: String? = null,
 fun <T> Window.transaction(message: String? = null,
                            transactionIsolation: Int,
                            readOnly: Boolean,
-                           db: Database? = null,
+                           db: Database? = ApplicationContext.getDBConnection()?.dbConnection,
                            statement: Transaction.() -> T): T {
   return if (isModelInitialized) {
     model.transaction(message, transactionIsolation, readOnly, db, statement)
@@ -74,7 +75,7 @@ fun <T> Window.transaction(message: String? = null,
  * @param       statement       the transaction statement.
  */
 internal fun <T> VWindow.transaction(message: String? = null,
-                                     db: Database? = null,
+                                     db: Database? = ApplicationContext.getDBConnection()?.dbConnection,
                                      statement: Transaction.() -> T): T =
   doAndWait(message) {
     val value = org.jetbrains.exposed.sql.transactions.transaction(db, statement)
@@ -97,7 +98,7 @@ internal fun <T> VWindow.transaction(message: String? = null,
 internal fun <T> VWindow.transaction(message: String? = null,
                                      transactionIsolation: Int,
                                      readOnly: Boolean,
-                                     db: Database? = null,
+                                     db: Database? = ApplicationContext.getDBConnection()?.dbConnection,
                                      statement: Transaction.() -> T)
 : T = doAndWait(message) {
   val value = org.jetbrains.exposed.sql.transactions.transaction(transactionIsolation, readOnly, db, statement)
@@ -124,3 +125,7 @@ fun <T> VWindow.doAndWait(message: String?, task: () -> T): T {
 
   return returnValue
 }
+
+fun <T> transaction(db: Database? = ApplicationContext.getDBConnection()?.dbConnection,
+                    statement: Transaction.() -> T)
+: T = org.jetbrains.exposed.sql.transactions.transaction(db, statement)

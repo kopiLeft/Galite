@@ -21,42 +21,20 @@ package org.kopi.galite.visual.form
 import java.sql.SQLException
 import java.util.EventListener
 import java.util.Locale
-
 import javax.swing.event.EventListenerList
 
 import kotlin.math.abs
 
 import org.jetbrains.annotations.TestOnly
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.EqOp
-import org.jetbrains.exposed.sql.IntegerColumnType
-import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.Sequence
-import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.intLiteral
-import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.upperCase
+
 import org.kopi.galite.database.DBContextHandler
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBForeignKeyException
 import org.kopi.galite.database.DBInterruptionException
 import org.kopi.galite.database.Utils
-import org.kopi.galite.visual.database.transaction
-import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL
-import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
@@ -70,6 +48,11 @@ import org.kopi.galite.visual.VDatabaseUtils
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.dsl.common.Trigger
+import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.list.VListColumn
 
 abstract class VBlock(var title: String,
                       buffer: Int,
@@ -342,7 +325,7 @@ abstract class VBlock(var title: String,
    * @param     manager         the manger to use for localization
    */
   fun localize(manager: LocalizationManager, locale: Locale?) {
-    if(ApplicationContext.getDefaultLocale() != locale) {
+    if (ApplicationContext.getDefaultLocale() != locale) {
       val loc = manager.getBlockLocalizer(source, name)
 
       title = loc.getTitle()
@@ -356,11 +339,11 @@ abstract class VBlock(var title: String,
     }
     fields.forEach {
       if (!it.isInternal()) {
-        if(ApplicationContext.getDefaultLocale() != locale) {
+        if (ApplicationContext.getDefaultLocale() != locale) {
           val loc = manager.getBlockLocalizer(source, name)
           it.localize(loc)
         }
-        if(it is VCodeField && it.localizedByGalite) {
+        if (it is VCodeField && it.localizedByGalite) {
           it.localize(manager)
         }
       }
@@ -1699,7 +1682,7 @@ abstract class VBlock(var title: String,
         var j = 0
         while (i < fields.size) {
           if (fields[i].getColumnCount() > 0) {
-            fields[i].setQuery(fetchCount, result,columns[j])
+            fields[i].setQuery(fetchCount, result, columns[j])
             j += 1
           }
           i++
@@ -1976,7 +1959,7 @@ abstract class VBlock(var title: String,
     callProtectedTrigger(VConstants.TRG_POSTDEL)
   }
 
-  open var idFieldName : String = "ID"
+  open var idFieldName: String = "ID"
 
   /**
    * Searches the field holding the ID of the block's base table.
@@ -2244,7 +2227,7 @@ abstract class VBlock(var title: String,
     }
 
     fields.forEach { field ->
-      val column : Column<*>? = field.lookupColumn(table)
+      val column: Column<*>? = field.lookupColumn(table)
 
       if (column != null) {
         // add column to select
@@ -2265,7 +2248,7 @@ abstract class VBlock(var title: String,
     }
 
     try {
-      transaction {
+      form.transaction {
         val condition: Op<Boolean> = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
         val result = query.single()
@@ -3076,18 +3059,15 @@ abstract class VBlock(var title: String,
    */
   fun hasTrigger(event: Int): Boolean = VKT_Block_Triggers[0][event] != null
 
-
   /**
    * Returns true if there is trigger associated with given event.
    */
   fun hasFieldCommandTrigger(event: Int, index: Int): Boolean = VKT_Field_Command_Triggers[index][event] != null
 
-
   /**
    * Returns true if there is trigger associated with given event.
    */
   fun hasFieldTrigger(event: Int, index: Int): Boolean = VKT_Field_Triggers[index][event] != null
-
 
   /**
    * Returns true if there is trigger associated with given event.
@@ -3503,7 +3483,7 @@ abstract class VBlock(var title: String,
       } else {
         var changed = false
 
-        transaction {
+        form.transaction {
           if (ucField != null) {
             changed = changed or (ucField!!.getInt(recno) != query.first()[ucColumn])
           }

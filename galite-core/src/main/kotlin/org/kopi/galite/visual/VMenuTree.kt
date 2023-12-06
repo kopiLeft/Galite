@@ -21,7 +21,6 @@ package org.kopi.galite.visual
 import java.awt.event.KeyEvent
 import java.sql.SQLException
 import java.util.Locale
-
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
@@ -38,8 +37,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.base.Utils
+
 import org.kopi.galite.database.Connection
 import org.kopi.galite.database.FavoritesId
 import org.kopi.galite.database.Favorites
@@ -50,9 +48,11 @@ import org.kopi.galite.database.Modules
 import org.kopi.galite.database.Symbols
 import org.kopi.galite.database.UserRights
 import org.kopi.galite.database.Users
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents a menu tree model.
@@ -63,7 +63,7 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
-class VMenuTree constructor(ctxt: Connection?,
+class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnection(),
                             var isSuperUser: Boolean,
                             val menuTreeUser: String?,
                             private val groupName: String?,
@@ -72,7 +72,7 @@ class VMenuTree constructor(ctxt: Connection?,
    * Constructs a new instance of VMenuTree.
    * @param ctxt the context where to look for application
    */
-  constructor(ctxt: Connection?) : this(ctxt, false, null, true)
+  constructor(ctxt: Connection? = ApplicationContext.getDBConnection()) : this(ctxt, false, null, true)
 
   /**
    * Constructs a new instance of VMenuTree.
@@ -81,7 +81,7 @@ class VMenuTree constructor(ctxt: Connection?,
    * @param userName the user name
    * @param loadFavorites should load favorites ?
    */
-  constructor(ctxt: Connection?,
+  constructor(ctxt: Connection? = ApplicationContext.getDBConnection(),
               isSuperUser: Boolean,
               userName: String?,
               loadFavorites: Boolean) : this(ctxt, isSuperUser, userName, null, loadFavorites)

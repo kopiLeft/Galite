@@ -54,7 +54,7 @@ abstract class Migration {
       for (transDB in TRANSDBS) {
         if (transDB.module != currentModule) {
           currentModule = transDB.module
-          transaction {
+          transaction(db = dbConnection.dbConnection) {
             currentVersion = loadModuleVersion(currentModule)
           }
           if (traceLog(processCommandLine)) println("Current version of module \"${transDB.module}\" = $currentVersion")
@@ -62,7 +62,7 @@ abstract class Migration {
 
         if (transDB.version > currentVersion) {
           if (traceLog(processCommandLine)) println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
-          transaction {
+          transaction(db = dbConnection.dbConnection) {
             transDB.run()
           }
         }

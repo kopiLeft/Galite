@@ -18,8 +18,9 @@
 
 package org.kopi.galite.database
 
-import com.zaxxer.hikari.HikariDataSource
 import java.sql.SQLException
+
+import com.zaxxer.hikari.HikariDataSource
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
@@ -195,7 +196,7 @@ class Connection {
         user = USERID_NO_LOOKUP
       } else {
         try {
-          transaction {
+          transaction(db = dbConnection) {
             user = Users.slice(Users.id).select {
               Users.shortName eq userName
             }.single()[Users.id]
