@@ -17,33 +17,22 @@
 
 package org.kopi.galite.visual.fullcalendar
 
-import java.sql.SQLException
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.temporal.Temporal
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.select
-import org.kopi.galite.visual.cross.VFullCalendarForm
+import org.jetbrains.exposed.sql.*
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBInterruptionException
-import org.kopi.galite.visual.database.transaction
-import org.kopi.galite.visual.form.BlockListener
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VDateField
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VTimeField
-import org.kopi.galite.visual.form.VTimestampField
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.cross.VFullCalendarForm
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.form.*
+import java.sql.SQLException
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.temporal.Temporal
 
 abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VBlock(title, buffer, visible) {
 
@@ -233,8 +222,8 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
         VFullCalendarEntry(date, start, end, values)
       } else {
         val values = mutableMapOf<VField, Any?>()
-        lateinit var start: Instant
-        lateinit var end: Instant
+        lateinit var start: LocalDateTime
+        lateinit var end: LocalDateTime
 
         for (i in 0 until query_cnt) {
           val vField = query_tab[i]!!
@@ -242,10 +231,10 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
 
           when (vField) {
             fromField -> {
-              start = value as Instant
+              start = value as LocalDateTime
             }
             toField -> {
-              end = value as Instant
+              end = value as LocalDateTime
             }
             else -> values[vField] = value
           }

@@ -16,8 +16,8 @@
  */
 package org.kopi.galite.visual.dsl.form
 
-import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 import org.kopi.galite.visual.domain.Domain
@@ -131,7 +131,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun from(position: FormPosition, init: FormField<Instant>.() -> Unit): FormField<Instant> =
+  fun from(position: FormPosition, init: FormField<LocalDateTime>.() -> Unit): FormField<LocalDateTime> =
     from(Domain(), position, init)
 
   /**
@@ -143,9 +143,9 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T: Instant> from(domain: Domain<T>,
-                                       position: FormPosition,
-                                       init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun from(domain: Domain<LocalDateTime>,
+                  position: FormPosition,
+                  init: FormField<LocalDateTime>.() -> Unit): FormField<LocalDateTime> {
     return mustFill(domain, position, init).also { field ->
       fromField = field
       block.fromField = field.vField as VTimestampField
@@ -158,7 +158,7 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a mustfill field.
    */
-  fun to(position: FormPosition, init: FormField<Instant>.() -> Unit): FormField<Instant> =
+  fun to(position: FormPosition, init: FormField<LocalDateTime>.() -> Unit): FormField<LocalDateTime> =
     to(Domain(), position, init)
 
   /**
@@ -170,9 +170,9 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T: Instant> to(domain: Domain<T>,
-                                       position: FormPosition,
-                                       init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun to(domain: Domain<LocalDateTime>,
+                position: FormPosition,
+                init: FormField<LocalDateTime>.() -> Unit): FormField<LocalDateTime> {
     return mustFill(domain, position, init).also { field ->
       toField = field
       block.toField = field.vField as VTimestampField

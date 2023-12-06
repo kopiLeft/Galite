@@ -17,29 +17,25 @@
  */
 package org.kopi.galite.visual.ui.vaadin.calendar
 
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-
-import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
-import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.Utils
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
-import org.vaadin.stefan.fullcalendar.CalendarViewImpl
-import org.vaadin.stefan.fullcalendar.Entry
-import org.vaadin.stefan.fullcalendar.FullCalendar
-import org.vaadin.stefan.fullcalendar.FullCalendarBuilder
-
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
+import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.vaadin.stefan.fullcalendar.CalendarViewImpl
+import org.vaadin.stefan.fullcalendar.Entry
+import org.vaadin.stefan.fullcalendar.FullCalendar
+import org.vaadin.stefan.fullcalendar.FullCalendarBuilder
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Creates a new abstract full calendar
@@ -110,8 +106,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     val newEntries = (entries - currentEntries.toSet()).map { fcEntry ->
       val record = fcEntry.values[model.idField] as Int
       val entry = FullCalendarEntry(record, fcEntry)
-      val start = LocalDateTime.ofInstant(fcEntry.start, ZoneId.systemDefault())
-      val end = LocalDateTime.ofInstant(fcEntry.end, ZoneId.systemDefault())
+      val start = fcEntry.start
+      val end = fcEntry.end
 
       entry.title = fcEntry.description
       entry.setStart(start, calendar.timezone)
@@ -202,7 +198,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val end = it.endDateTime
 
           check(start, end)
-          model.openForEdit(start.toInstant(), end.toInstant())
+          model.openForEdit(start, end)
         }
       })
     }
@@ -229,9 +225,9 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   class FullCalendarEntry(val record: Int, val model: VFullCalendarEntry) : Entry() {
     val updatedModel: VFullCalendarEntry
       get() {
-        return model.copy(start.toInstant(), end.toInstant())
+        return model.copy(start, end)
       }
   }
 }
 
-fun LocalDateTime.toInstant(): Instant = Instant.from(this.atZone(ZoneId.systemDefault()))
+//fun LocalDateTime.toInstant(): Instant = Instant.from(this.atZone(ZoneId.systemDefault()))
