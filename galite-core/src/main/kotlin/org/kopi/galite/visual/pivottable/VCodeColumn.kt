@@ -21,6 +21,7 @@ package org.kopi.galite.visual.pivottable
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.l10n.PivotTableLocalizer
 import org.kopi.galite.visual.l10n.TypeLocalizer
+import org.kopi.galite.visual.report.VCellFormat
 
 /**
  * Represents a pivot table column description
@@ -31,9 +32,11 @@ abstract class VCodeColumn(ident: String?,
                            position : Dimension.Position?,
                            private val type: String?,
                            private val source: String?,
+                           format: VCellFormat?,
                            private val idents: Array<String>)
   : VPivotTableColumn(ident,
-                      position) {
+                      position,
+                      format) {
 
   protected var names: Array<String?>? = null // array of external representations
 
@@ -51,14 +54,14 @@ abstract class VCodeColumn(ident: String?,
   /**
    * Return a string representation.
    */
-//  override fun format(o: Any?): String {
-//      return format?.format(o) ?: if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]
-//  }
+  override fun format(o: Any?): String {
+      return format?.format(o) ?: if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]
+  }
 
   /**
    * Get the index of the value.
    */
-  abstract fun getIndex(value: Any): Int
+  abstract fun getIndex(value: Any?): Int
 
   // ----------------------------------------------------------------------
   // LOCALIZATION

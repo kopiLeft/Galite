@@ -1,6 +1,7 @@
 package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.report.VCellFormat
 
 /**
  * Represents a pivot table column description
@@ -8,8 +9,10 @@ import org.kopi.galite.visual.dsl.pivottable.Dimension
  * @param    position     The position of the dimension field
  */
 class VStringColumn(ident: String?,
-                    position: Dimension.Position?)
+                    position: Dimension.Position?,
+                    format: VCellFormat?)
   : VPivotTableColumn(ident,
-                      position) {
+                      position,
+                      format) {
 
 }

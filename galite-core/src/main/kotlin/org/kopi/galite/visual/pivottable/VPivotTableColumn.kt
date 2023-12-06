@@ -21,19 +21,34 @@ package org.kopi.galite.visual.pivottable
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.l10n.PivotTableLocalizer
+import org.kopi.galite.visual.report.VCellFormat
 
 /**
  * Represents a pivot table column description
  * @param    ident        The identifier of the field
  * @param    position     The position of the dimension field
+ * @param    format        format of the cells
  */
-abstract class VPivotTableColumn(val ident: String?, val position: Dimension.Position?) {
+abstract class VPivotTableColumn(val ident: String?,
+                                 val position: Dimension.Position?,
+                                 protected var format: VCellFormat?) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   var label: String = ""
   var help: String? = null
+  open var isFolded: Boolean = false
+
+  open fun format(o: Any?): String {
+    return if (isFolded || o == null) {
+      ""
+    } else if (format != null) {
+      format!!.format(o)
+    } else {
+      o.toString()
+    }
+  }
 
   // ----------------------------------------------------------------------
   // LOCALIZATION

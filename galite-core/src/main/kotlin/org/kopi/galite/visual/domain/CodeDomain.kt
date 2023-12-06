@@ -213,8 +213,10 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
    */
   override fun buildPivotTableFieldModel(
     field: PivotTableField<*>,
-    position: Dimension.Position?
+    position: Dimension.Position?,
+    format: VCellFormat?
   ): VPivotTableColumn {
+    println(codes.map { it.value})
     return with(field) {
       when (kClass) {
         Boolean::class -> org.kopi.galite.visual.pivottable.VBooleanCodeColumn(
@@ -222,28 +224,36 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
-          codes.map { it.ident }.toTypedArray()
+          codes.map { it.ident }.toTypedArray(),
+          format,
+          codes.map { it.value as Boolean }.toBooleanArray()
         )
         BigDecimal::class -> org.kopi.galite.visual.pivottable.VDecimalCodeColumn(
           ident,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
-          codes.map { it.ident }.toTypedArray()
+          codes.map { it.ident }.toTypedArray(),
+          format,
+          codes.map { it.value as? BigDecimal }.toTypedArray()
         )
         Int::class, Long::class -> org.kopi.galite.visual.pivottable.VIntegerCodeColumn(
           ident,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source!!,
-          codes.map { it.ident }.toTypedArray()
+          codes.map { it.ident }.toTypedArray(),
+          format,
+          codes.map { it.value as Int }.toIntArray()
         )
         String::class -> org.kopi.galite.visual.pivottable.VStringCodeColumn(
           ident,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
-          codes.map { it.ident }.toTypedArray()
+          codes.map { it.ident }.toTypedArray(),
+          format,
+          codes.map { it.value as? String }.toTypedArray()
         )
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }.also {

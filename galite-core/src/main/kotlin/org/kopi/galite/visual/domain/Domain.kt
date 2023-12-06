@@ -242,17 +242,17 @@ open class Domain<T>(val width: Int? = null,
   /**
    * Builds the pivot table column model
    */
-  open fun buildPivotTableFieldModel(field: PivotTableField<*>, position: Dimension.Position?): VPivotTableColumn {
+  open fun buildPivotTableFieldModel(field: PivotTableField<*>, position: Dimension.Position?, format: VCellFormat?): VPivotTableColumn {
     return with(field) {
       when (kClass) {
         Int::class, Long::class->
-          org.kopi.galite.visual.pivottable.VIntegerColumn(ident, position)
+          org.kopi.galite.visual.pivottable.VIntegerColumn(ident, position, format)
         String::class->
-          org.kopi.galite.visual.pivottable.VStringColumn(ident, position)
+          org.kopi.galite.visual.pivottable.VStringColumn(ident, position, format)
         BigDecimal::class->
-          org.kopi.galite.visual.pivottable.VDecimalColumn(ident, position)
+          org.kopi.galite.visual.pivottable.VDecimalColumn(ident, position, format)
         Boolean::class ->
-          org.kopi.galite.visual.pivottable.VBooleanColumn(ident, position)
+          org.kopi.galite.visual.pivottable.VBooleanColumn(ident, position, format)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }
