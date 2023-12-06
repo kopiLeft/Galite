@@ -19,20 +19,15 @@
 package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.UWindow
-import java.io.IOException
 
 interface UPivotTable : UWindow {
-
   /**
    * Builds the pivot table;
    */
   fun build()
 
   /**
-   * Exports to the PDF format.
-   *
-   * @throws IOException I/O errors.
+   * Print to the PDF format.
    */
-  @Throws(IOException::class)
-  fun exportToPDF()
+  fun imprimer()
 }

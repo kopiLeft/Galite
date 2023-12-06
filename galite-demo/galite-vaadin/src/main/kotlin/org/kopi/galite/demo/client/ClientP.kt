@@ -49,13 +49,13 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     key = Key.F1
     icon = Icon.HELP
   }
-  val pdf = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
+  val imprimer = actor(menu = action, label = "PDF", help = "PDF Format", ident = "pdf") {
     key = Key.F9
-    icon = Icon.EXPORT_PDF
+    icon = Icon.PRINT
   }
   val cmdQuit = command(item = quit) { model.close() }
   val helpCmd = command(item = helpForm) { model.showHelp() }
-  val cmdPDF = command(item = pdf) {
+  val cmdPDF = command(item = imprimer) {
     model.export(VPivotTable.TYP_PDF)
   }
 

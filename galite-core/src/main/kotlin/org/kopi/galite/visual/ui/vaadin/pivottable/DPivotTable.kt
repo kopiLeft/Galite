@@ -94,13 +94,11 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     add(pivot)
   }
 
-  override fun exportToPDF() {
+  override fun imprimer() {
     if (::pivot.isInitialized) {
       ui.get().access {
         ui.get().page.executeJs("window.print()")
       }
-    } else {
-      println("Pivot is not properly initialized ")
     }
   }
 }

@@ -18,6 +18,9 @@
 
 package org.kopi.galite.visual.pivottable
 
+import java.io.File
+import java.net.MalformedURLException
+
 import org.jetbrains.annotations.TestOnly
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
@@ -25,8 +28,6 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.vaadin.addons.componentfactory.PivotTable.*
-import java.io.File
-import java.net.MalformedURLException
 
 /**
  * Represents a pivot table model.
@@ -275,16 +276,11 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
    * Prints the report
    */
   fun export(type: Int ) {
-    setWaitInfo(VlibProperties.getString("export-message"))
-    try {
-      when (type) {
-        VPivotTable.TYP_PDF -> {
-          (getDisplay() as UPivotTable).exportToPDF()
-        }
-        else -> throw InconsistencyException("Export type unknown")
+    when (type) {
+      TYP_PDF -> {
+        (getDisplay() as UPivotTable).imprimer()
       }
-    } finally {
-      unsetWaitInfo()
+      else -> throw InconsistencyException("Export type unknown")
     }
   }
 
