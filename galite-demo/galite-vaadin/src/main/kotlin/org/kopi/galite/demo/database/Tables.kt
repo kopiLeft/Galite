@@ -19,7 +19,7 @@ package org.kopi.galite.demo.database
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
-import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.javatime.datetime
 
 object Client : Table("CLIENTS") {
   val idClt = integer("ID_CLT").autoIncrement("CLIENTSID")
@@ -108,8 +108,8 @@ object Bill : Table("BILLS") {
 object Task : Table("Task") {
   val id = integer("ID").autoIncrement("TASKS_ID_SEQ")
   val date = date("DATE").nullable()
-  val from = timestamp("FROM")
-  val to = timestamp("TO")
+  val from = datetime("FROM")
+  val to = datetime("TO")
   val description1 = varchar("DESCRIPTION_1", 20)
   val description2 = varchar("DESCRIPTION_2", 20)
   val uc = integer("UC").autoIncrement()

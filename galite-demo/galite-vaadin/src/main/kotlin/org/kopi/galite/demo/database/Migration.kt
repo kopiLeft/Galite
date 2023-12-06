@@ -16,20 +16,7 @@
  */
 package org.kopi.galite.demo.database
 
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-
-import kotlin.reflect.KClass
-
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Schema
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.nextIntVal
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.database.*
 import org.kopi.galite.demo.bill.BillForm
@@ -42,6 +29,11 @@ import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.type.Week
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import kotlin.reflect.KClass
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"
@@ -359,8 +351,8 @@ fun addTask(date: LocalDate, from: LocalTime, to: LocalTime, description1: Strin
   Task.insert {
     it[id] = TASKId.nextIntVal()
     it[Task.date] = date
-    it[Task.from] = LocalDateTime.of(date, from).atZone(ZoneId.systemDefault()).toInstant()
-    it[Task.to] = LocalDateTime.of(date, to).atZone(ZoneId.systemDefault()).toInstant()
+    it[Task.from] = LocalDateTime.of(date, from)
+    it[Task.to] = LocalDateTime.of(date, to)
     it[Task.description1] = description1
     it[Task.description2] = description2
   }
