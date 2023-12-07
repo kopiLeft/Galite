@@ -16,11 +16,13 @@
  */
 package org.kopi.galite.tests.ui.vaadin.fullcalendar
 
+import com.github.mvysny.kaributesting.v10._get
+
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
-import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.BeforeClass
@@ -31,12 +33,8 @@ import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
-import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.FullCalendar
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-
-import com.github.mvysny.kaributesting.v10._get
 
 class FullCalendarTests: GaliteVUITestBase() {
 
@@ -101,8 +99,8 @@ class TasksForm : ReportSelectionForm(title = "Tasks", locale = Locale.UK) {
 object Task : Table("Task") {
   val id = integer("ID").autoIncrement()
   val date = date("DATE").nullable()
-  val from = timestamp("FROM")
-  val to = timestamp("TO")
+  val from = datetime("FROM")
+  val to = datetime("TO")
   val description1 = varchar("DESCRIPTION_1", 20)
   val description2 = varchar("DESCRIPTION_2", 20)
   val uc = integer("UC").autoIncrement()
