@@ -21,6 +21,7 @@ package org.kopi.galite.visual.pivottable
 import java.io.Serializable
 
 import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.report.VReportRow
 
 class MPivotTable : Serializable {
@@ -30,9 +31,16 @@ class MPivotTable : Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   var columns = mutableListOf<VPivotTableColumn?>()    // array of column definitions
+  var accessibleColumns: Array<VPivotTableColumn?> = arrayOf() // array of visible or hide columns
+    private set
 
   // Baserows contains data give by the request of the user
   internal var userRows: ArrayList<VPivotTableRow>? = ArrayList()
+  private var visibleRows: Array<VPivotTableRow?>? = null  // array of visible rows
+
+  private lateinit var displayLevels: IntArray   // column levels in display order
+
+  private lateinit var reverseOrder: IntArray    // column mapping from model to display
 
   /**
    * Add a row to the list of rows defined by the user
@@ -81,4 +89,22 @@ class MPivotTable : Serializable {
    * @return    the desired row
    */
   fun getRow(row: Int): VPivotTableRow? = userRows!![row]
+
+  /**
+   * Returns an attribute value for a cell.
+   *
+   * @param    row        the index of the row whose value is to be looked up
+   * @param    column        the index of the column whose value is to be looked up (column of the model)
+   * @return    the value Object at the specified cell
+   */
+  fun getValueAt(row: Int, column: Int): Any? {
+    var x: Any? = null
+
+    try {
+      x = visibleRows!![row]!!.getValueAt(column)
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+    return if (visibleRows!![row]!!.level < displayLevels[reverseOrder[column]]) null else x
+  }
 }

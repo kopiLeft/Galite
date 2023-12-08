@@ -216,7 +216,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
     position: Dimension.Position?,
     format: VCellFormat?
   ): VPivotTableColumn {
-    println(codes.map { it.value})
     return with(field) {
       when (kClass) {
         Boolean::class -> org.kopi.galite.visual.pivottable.VBooleanCodeColumn(
