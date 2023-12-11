@@ -20,16 +20,18 @@ import kotlin.test.assertEquals
 
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
-import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
+
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.menubar.MenuBar
+
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
+import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
 
 class MainWindowTests: GaliteVUITestBase() {
 

@@ -33,7 +33,7 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.DocumentationForm
 import org.kopi.galite.tests.examples.TestTriggers
-import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 
 import com.github.mvysny.kaributesting.v10._find
@@ -120,7 +120,7 @@ class DocumentationFormTests : GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        initModules()
+        initDatabase()
       }
     }
   }

@@ -30,6 +30,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.*
 import org.kopi.galite.demo.bill.BillForm
@@ -42,7 +43,6 @@ import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.type.Week
-import org.kopi.galite.visual.database.transaction
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"

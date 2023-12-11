@@ -17,7 +17,6 @@
 package org.kopi.galite.tests.examples
 
 import java.util.Locale
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.visual.database.transaction

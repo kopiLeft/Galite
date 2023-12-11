@@ -229,7 +229,7 @@ class Connection {
      * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(url: String,
-                         driver: String,
+                         driver: String? = null,
                          userName: String,
                          password: String,
                          lookupUserId: Boolean = true,
@@ -268,7 +268,7 @@ class Connection {
      * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      */
     fun createConnection(url: String,
-                         driver: String,
+                         driver: String? = null,
                          userName: String,
                          password: String,
                          lookupUserId: Boolean = true,
