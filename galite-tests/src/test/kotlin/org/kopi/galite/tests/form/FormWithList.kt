@@ -218,6 +218,8 @@ class BlockWithManyTables : Block("Test block", 20, 20) {
 
 fun main() {
   runForm(formName = FormWithList()) {
-    initModules()
+    org.jetbrains.exposed.sql.transactions.transaction {
+      initModules()
+    }
   }
 }

@@ -19,16 +19,17 @@ package org.kopi.galite.tests.form
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+import org.junit.Test
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.targetTables
 import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.UserRights
 import org.kopi.galite.database.Users
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.VBlockDefaultOuterJoin
 
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {

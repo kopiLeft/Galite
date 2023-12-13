@@ -18,25 +18,26 @@ package org.kopi.galite.tests.ui.vaadin.fullcalendar
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.javatime.date
-import org.jetbrains.exposed.sql.javatime.timestamp
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._get
+
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.timestamp
+
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.domain.TEXT
-import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.FullCalendar
-import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.form.ReportSelectionForm
-
-import com.github.mvysny.kaributesting.v10._get
 
 class FullCalendarTests: GaliteVUITestBase() {
 
@@ -50,6 +51,11 @@ class FullCalendarTests: GaliteVUITestBase() {
     form.open()
   }
 
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
+  }
+
   @Test
   fun `test full calendar is displayed`() {
     _get<org.vaadin.stefan.fullcalendar.FullCalendar>()
@@ -59,7 +65,7 @@ class FullCalendarTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

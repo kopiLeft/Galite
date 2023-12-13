@@ -19,9 +19,19 @@ package org.kopi.galite.tests.ui.vaadin.list
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
+import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.BeforeClass
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10.expectRow
+import com.github.mvysny.kaributesting.v10.expectRows
+
+import com.vaadin.flow.component.grid.Grid
+
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
@@ -30,15 +40,9 @@ import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.CommandsForm
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
-
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10.expectRow
-import com.github.mvysny.kaributesting.v10.expectRows
-import com.vaadin.flow.component.grid.Grid
-import org.junit.Ignore
 
 class ListTests: GaliteVUITestBase() {
 
@@ -48,6 +52,11 @@ class ListTests: GaliteVUITestBase() {
   fun `login to the App`() {
     login()
     formWithList.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   /**

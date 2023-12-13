@@ -19,12 +19,10 @@ package org.kopi.galite.tests.examples
 import java.util.Locale
 
 import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.visual.WindowController
 import org.kopi.galite.visual.domain.INT
-import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.WindowController
 
 class DocumentationReportTriggers : Form(title = "Test Report Form", locale = Locale.UK) {
 
@@ -49,6 +47,8 @@ class DocumentationReportTriggers : Form(title = "Test Report Form", locale = Lo
 }
 
 fun main() {
-  initReportDocumentationData()
+  org.jetbrains.exposed.sql.transactions.transaction {
+    initReportDocumentationData()
+  }
   runForm(formName = DocumentationReportTriggers())
 }

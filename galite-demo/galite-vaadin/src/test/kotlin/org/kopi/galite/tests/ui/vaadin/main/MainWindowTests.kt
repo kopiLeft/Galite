@@ -29,7 +29,11 @@ import com.github.mvysny.kaributesting.v10._text
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.menubar.MenuBar
 
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.database.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
 
@@ -52,7 +56,7 @@ class MainWindowTests: GaliteVUITestBase() {
         .map {
           val moduleItems = it._find<ModuleItem>()
 
-          if(moduleItems.count() == 1) {
+          if (moduleItems.count() == 1) {
             moduleItems.single()._text
           } else {
             it._text
@@ -72,6 +76,7 @@ class MainWindowTests: GaliteVUITestBase() {
       ),
       clientsModules
     )
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   companion object {
@@ -82,7 +87,9 @@ class MainWindowTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       // Using modules defined in demo application
-      org.kopi.galite.demo.database.initModules()
+      transaction(connection.dbConnection) {
+        initModules()
+      }
     }
   }
 }

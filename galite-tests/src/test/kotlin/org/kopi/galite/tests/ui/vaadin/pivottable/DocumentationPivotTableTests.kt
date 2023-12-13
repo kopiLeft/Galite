@@ -19,13 +19,14 @@ package org.kopi.galite.tests.ui.vaadin.pivottable
 
 import kotlin.test.assertEquals
 
-import com.github.mvysny.kaributesting.v10._expectOne
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import com.github.mvysny.kaributesting.v10._expectOne
+
 import org.jetbrains.exposed.sql.select
 
 import org.kopi.galite.testing.expectInformationNotification
@@ -33,18 +34,29 @@ import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.*
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.ui.vaadin.pivottable.DPivotTable
 
 class DocumentationPivotTableTests : GaliteVUITestBase() {
-  val simplePivotTableForm = DocumentationPivotTable()
-  val pivotTable = DocumentationPivotTableP()
+  lateinit var simplePivotTableForm: DocumentationPivotTable
+  lateinit var pivotTable: DocumentationPivotTableP
 
   @Before
   fun `login to the App`() {
     login()
 
+    // Initialize form and pivot table
+    simplePivotTableForm = DocumentationPivotTable()
+    pivotTable = DocumentationPivotTableP()
+
     // Open the form
     simplePivotTableForm.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -110,7 +122,7 @@ class DocumentationPivotTableTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
         initDocumentationData()
       }

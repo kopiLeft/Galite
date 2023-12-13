@@ -18,24 +18,29 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.tests.database.connectToDatabase
-import org.kopi.galite.tests.ui.vaadin.ConfigurationManager
-import org.kopi.galite.database.Connection
-import org.kopi.galite.visual.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.ApplicationConfiguration
+import com.vaadin.flow.router.Route
+
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-import com.vaadin.flow.router.Route
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.database.Connection
+import org.kopi.galite.tests.common.GaliteRegistry
+import org.kopi.galite.tests.database.connectToDatabase
+import org.kopi.galite.tests.ui.vaadin.ConfigurationManager
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 
 @SpringBootApplication
 open class TestApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
-  initDatabase()
+  transaction {
+    initDatabase()
+  }
   runApplication<TestApplication>(*args)
 }
 

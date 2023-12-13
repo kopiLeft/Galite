@@ -19,17 +19,18 @@ package org.kopi.galite.testing
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get
+
 import com.vaadin.flow.component.menubar.MenuBar
 
 import org.kopi.galite.database.Modules
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
-import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Opens a specific form.

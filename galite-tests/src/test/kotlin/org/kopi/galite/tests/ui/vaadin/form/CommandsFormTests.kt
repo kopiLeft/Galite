@@ -21,14 +21,23 @@ import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._expectNone
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._clickItemWithCaption
+import com.github.mvysny.kaributesting.v10.expectRow
+
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.selectAll
+
 import org.kopi.galite.testing._clickCell
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
@@ -49,6 +58,9 @@ import org.kopi.galite.tests.examples.Type
 import org.kopi.galite.tests.examples.initData
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
@@ -56,14 +68,6 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DActor
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
-import org.kopi.galite.visual.VlibProperties
-
-import com.github.mvysny.kaributesting.v10._expectNone
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._find
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._clickItemWithCaption
-import com.github.mvysny.kaributesting.v10.expectRow
 
 class CommandsFormTests : GaliteVUITestBase() {
 
@@ -72,14 +76,18 @@ class CommandsFormTests : GaliteVUITestBase() {
 
   @Before
   fun `login to the App`() {
-    transaction {
-      initData()
-    }
-
     login()
 
+    transaction(connection.dbConnection) {
+      initData()
+    }
     // Open the form
     form.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   /**
@@ -674,7 +682,7 @@ class CommandsFormTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initDatabase()
       }
     }

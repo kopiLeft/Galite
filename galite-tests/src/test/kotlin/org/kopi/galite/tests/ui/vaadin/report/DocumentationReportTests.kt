@@ -18,29 +18,33 @@ package org.kopi.galite.tests.ui.vaadin.report
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.testing.open
-import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10.expectRow
+
 import org.jetbrains.exposed.sql.selectAll
+
 import org.kopi.galite.testing._clickCell
 import org.kopi.galite.testing.expect
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.testing.waitAndRunUIQueue
 import org.kopi.galite.tests.examples.DocumentationReport
 import org.kopi.galite.tests.examples.DocumentationReportTriggers
 import org.kopi.galite.tests.examples.DocumentationReportTriggersR
 import org.kopi.galite.tests.examples.TestTriggers
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.examples.initReportDocumentationData
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
-
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10.expectRow
 
 class DocumentationReportTests : GaliteVUITestBase() {
   val simpleReportForm = DocumentationReport()
@@ -52,7 +56,14 @@ class DocumentationReportTests : GaliteVUITestBase() {
     login()
 
     // init report data
-    initReportDocumentationData()
+    transaction {
+      initReportDocumentationData()
+    }
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -252,7 +263,7 @@ class DocumentationReportTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

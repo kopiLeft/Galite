@@ -19,11 +19,13 @@ package org.kopi.galite.tests.desktop
 
 import java.util.Locale
 
-import org.kopi.galite.tests.database.connectToDatabase
+import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.tests.database.TEST_DB_DRIVER
 import org.kopi.galite.tests.database.TEST_DB_USER_PASSWORD
 import org.kopi.galite.tests.database.TEST_DB_URL
 import org.kopi.galite.tests.database.TEST_DB_USER
+import org.kopi.galite.tests.database.connectToDatabase
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.dsl.form.Form
@@ -35,7 +37,9 @@ val testLocale: Locale = Locale.FRANCE
  */
 fun main(args: Array<String>) {
   connectToDatabase()
-  initDatabase()
+  transaction {
+    initDatabase()
+  }
   run(args)
 }
 
@@ -88,7 +92,9 @@ fun run(formName: Form) {
  */
 fun runForm(formName: Form, init: (() -> Unit)? = null) {
   connectToDatabase()
-  initDatabase()
+  transaction {
+    initDatabase()
+  }
   init?.invoke()
   run(formName)
 }

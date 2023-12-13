@@ -24,11 +24,12 @@ import java.time.LocalTime
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
+
 import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
@@ -41,11 +42,12 @@ import org.kopi.galite.tests.examples.FormExample
 import org.kopi.galite.tests.examples.TestFieldsVisibilityForm
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.dsl.common.Mode
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.type.format
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.form.VConstants
 
 class SimpleBlockTests: GaliteVUITestBase() {
   val testFieldsVisibilityForm = TestFieldsVisibilityForm()
@@ -54,6 +56,11 @@ class SimpleBlockTests: GaliteVUITestBase() {
   @Before
   fun `login to the App`() {
     login()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Ignore
@@ -195,7 +202,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

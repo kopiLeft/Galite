@@ -18,17 +18,17 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.tests.desktop.runForm
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
-import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm(title = "Training Form", locale = Locale.UK) {
   val action = menu("Action")

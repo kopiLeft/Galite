@@ -18,23 +18,27 @@ package org.kopi.galite.tests.ui.vaadin.chart
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.select
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._expectOne
+
+import org.jetbrains.exposed.sql.select
+
+import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.tests.examples.TestTriggers
-import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.tests.examples.DocumentationChart
 import org.kopi.galite.tests.examples.DocumentationChartC
+import org.kopi.galite.tests.examples.TestTriggers
 import org.kopi.galite.tests.examples.initDocumentationData
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.ui.vaadin.chart.DAbstractChartType
-
-import com.github.mvysny.kaributesting.v10._expectOne
 
 class DocumentationChartTests : GaliteVUITestBase() {
   val simpleChartForm = DocumentationChart()
@@ -44,8 +48,16 @@ class DocumentationChartTests : GaliteVUITestBase() {
   fun `login to the App`() {
     login()
 
+    transaction {
+      initDocumentationData()
+    }
     // Open the form
     simpleChartForm.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -113,7 +125,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
         initDocumentationData()
       }

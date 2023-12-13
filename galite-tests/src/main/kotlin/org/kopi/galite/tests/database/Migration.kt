@@ -71,8 +71,7 @@ fun dropDBSchemaTables() {
 /**
  * Inserts data into [Users] table
  */
-fun insertIntoUsers(shortname: String,
-                    userName: String) {
+fun insertIntoUsers(shortname: String, userName: String) {
   Users.insert {
     it[uc] = 0
     it[ts] = 0
@@ -90,9 +89,7 @@ fun insertIntoUsers(shortname: String,
 /**
  * Inserts data into [UserRights] table
  */
-fun insertIntoUserRights(userName: String,
-                         moduleName: String,
-                         accessUser: Boolean) {
+fun insertIntoUserRights(userName: String, moduleName: String, accessUser: Boolean) {
   UserRights.insert {
     it[ts] = 0
     it[module] = Modules.slice(Modules.id).select { Modules.shortName eq moduleName }.single()[Modules.id]

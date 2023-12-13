@@ -18,13 +18,15 @@ package org.kopi.galite.tests.ui.vaadin.form
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
 import org.kopi.galite.testing.getNavigationItem
 import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Icon
@@ -45,6 +47,11 @@ class ActorTests : GaliteVUITestBase() {
     form.model.doNotModal()
   }
 
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
+  }
+
   @Test
   fun `actor navigation panel contains actors with icon and acceleratorKey`() {
     form.autoFill.getNavigationItem()
@@ -55,7 +62,7 @@ class ActorTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initDatabase()
       }
     }

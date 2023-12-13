@@ -21,33 +21,12 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
-import org.kopi.galite.testing._enter
-import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.editRecord
-import org.kopi.galite.testing.expect
-import org.kopi.galite.testing.findBlock
-import org.kopi.galite.testing.findField
-import org.kopi.galite.testing.open
-import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.testing.waitAndRunUIQueue
-import org.kopi.galite.tests.examples.FormExample
-import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
-import org.kopi.galite.tests.examples.MultipleBlockForm
-import org.kopi.galite.tests.examples.initDatabase
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
-import org.kopi.galite.visual.ui.vaadin.form.DListDialog
-import org.kopi.galite.visual.ui.vaadin.list.ListTable
-import org.kopi.galite.visual.ui.vaadin.main.VWindowsMenuItem
-import org.kopi.galite.testing.findForm
-import org.kopi.galite.testing.findForms
-import org.kopi.galite.tests.examples.initData
-import org.kopi.galite.visual.ui.vaadin.form.DForm
 
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._expect
@@ -57,6 +36,7 @@ import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.github.mvysny.kaributesting.v10.expectRow
+
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
@@ -67,7 +47,31 @@ import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.textfield.TextField
-import org.junit.Ignore
+
+import org.kopi.galite.testing._enter
+import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
+import org.kopi.galite.testing.expect
+import org.kopi.galite.testing.findBlock
+import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.findForm
+import org.kopi.galite.testing.findForms
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.tests.examples.FormExample
+import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
+import org.kopi.galite.tests.examples.MultipleBlockForm
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initDatabase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.ui.vaadin.form.DForm
+import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
+import org.kopi.galite.visual.ui.vaadin.form.DListDialog
+import org.kopi.galite.visual.ui.vaadin.list.ListTable
+import org.kopi.galite.visual.ui.vaadin.main.VWindowsMenuItem
 
 class MultipleBlockFormTests : GaliteVUITestBase() {
 
@@ -79,6 +83,11 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
   fun `login to the App`() {
     login()
     multipleForm.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   /**
@@ -396,7 +405,9 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      initDatabase()
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
+        initDatabase()
+      }
     }
   }
 }

@@ -18,7 +18,6 @@ package org.kopi.galite.tests.ui.vaadin.login
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.tests.database.insertIntoModule
@@ -36,6 +35,7 @@ import com.github.mvysny.kaributesting.v10._text
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.textfield.PasswordField
+import org.kopi.galite.visual.ApplicationContext
 
 class LoginPageTests: GaliteVUITestBase() {
   private val userNameField get() = _get<VInputText> { id = "user_name" }
@@ -61,6 +61,8 @@ class LoginPageTests: GaliteVUITestBase() {
     _expectNone<WelcomeView>()
     // Main view is displayed
     _expect<MainWindow>(1)
+
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -81,7 +83,7 @@ class LoginPageTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       // Insert one module from test application just to test the login feature.
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
       }
     }

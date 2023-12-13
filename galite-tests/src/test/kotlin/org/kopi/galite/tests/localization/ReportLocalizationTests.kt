@@ -18,28 +18,30 @@ package org.kopi.galite.tests.localization
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._get
+
 import org.kopi.galite.testing.expect
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.localization.actor.ExternActor
 import org.kopi.galite.tests.localization.code.ExternCode
 import org.kopi.galite.tests.localization.list.ExternList
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
-import org.kopi.galite.tests.examples.Training
-import org.kopi.galite.visual.domain.CodeDomain
-import org.kopi.galite.visual.domain.ListDomain
-
-import com.github.mvysny.kaributesting.v10._get
 
 /**
  * ReportLocalizationTests Report
@@ -54,6 +56,11 @@ class ReportLocalizationTests : GaliteVUITestBase() {
 
     // Open the form
     form.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -97,7 +104,7 @@ class ReportLocalizationTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

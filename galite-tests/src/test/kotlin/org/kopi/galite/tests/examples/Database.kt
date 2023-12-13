@@ -27,7 +27,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.datetime
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.nextIntVal
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.tests.database.createDBSchemaTables
 import org.kopi.galite.tests.database.dropDBSchemaTables
@@ -82,13 +81,11 @@ val trainerSequence = Sequence("TRAINERID")
 val centerSequence = Sequence("CENTER_ID_seq")
 
 fun initDatabase() {
-  transaction {
-    dropDBSchemaTables()
-    createDBSchemaTables()
-    insertIntoUsers(TEST_DB_USER, "administrator")
-    initData()
-    initModules()
-  }
+  dropDBSchemaTables()
+  createDBSchemaTables()
+  insertIntoUsers(TEST_DB_USER, "administrator")
+  initData()
+  initModules()
 }
 
 fun initData() {
@@ -171,72 +168,64 @@ fun addTrainer(firstName: String, lastName: String) {
 
 fun initDocumentationData() {
   dropDocumentationTables()
-  transaction {
-    SchemaUtils.create(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
-    TestTable.insert {
-      it[id] = 1
-      it[name] = "TEST-1"
-    }
-    TestTable.insert {
-      it[id] = 2
-      it[name] = "TEST-2"
-    }
-    TestTable.insert {
-      it[id] = 3
-      it[name] = "NAME"
-      it[lastName] = "lastname"
-    }
-    TestTable2.insert {
-      it[id] = 1
-      it[name] = "T"
-      it[refTable1] = 1
-    }
-    TestTriggers.insert {
-      it[id] = 1
-      it[INS] = "INS-1"
-      it[UPD] = "UPD-1"
-    }
+  SchemaUtils.create(TestTable, TestTable2, TestTriggers)
+  SchemaUtils.createSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
+  TestTable.insert {
+    it[id] = 1
+    it[name] = "TEST-1"
+  }
+  TestTable.insert {
+    it[id] = 2
+    it[name] = "TEST-2"
+  }
+  TestTable.insert {
+    it[id] = 3
+    it[name] = "NAME"
+    it[lastName] = "lastname"
+  }
+  TestTable2.insert {
+    it[id] = 1
+    it[name] = "T"
+    it[refTable1] = 1
+  }
+  TestTriggers.insert {
+    it[id] = 1
+    it[INS] = "INS-1"
+    it[UPD] = "UPD-1"
   }
 }
 
 fun dropDocumentationTables() {
-  transaction {
-    SchemaUtils.drop(TestTable, TestTable2, TestTriggers)
-    SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
-  }
+  SchemaUtils.drop(TestTable, TestTable2, TestTriggers)
+  SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TESTTABLE1ID"), Sequence("TRIGGERSID"))
 }
 
 fun initReportDocumentationData() {
   dropReportDocumentationTables()
-  transaction {
-    SchemaUtils.create(TestTable, TestTriggers)
-    SchemaUtils.createSequence(Sequence("TESTTABLE1ID"))
-    SchemaUtils.createSequence(Sequence("TRIGGERSID"))
-    TestTable.insert {
-      it[id] = 1
-      it[name] = "Ahmed"
-      it[lastName] = "Malouli"
-      it[age] = 40
-    }
-    TestTable.insert {
-      it[id] = 2
-      it[name] = "Ahmed"
-      it[lastName] = "Cherif"
-      it[age] = 30
-    }
-    TestTable.insert {
-      it[id] = 3
-      it[name] = "SALAH"
-      it[lastName] = "MOUELHI"
-      it[age] = 30
-    }
+  SchemaUtils.create(TestTable, TestTriggers)
+  SchemaUtils.createSequence(Sequence("TESTTABLE1ID"))
+  SchemaUtils.createSequence(Sequence("TRIGGERSID"))
+  TestTable.insert {
+    it[id] = 1
+    it[name] = "Ahmed"
+    it[lastName] = "Malouli"
+    it[age] = 40
+  }
+  TestTable.insert {
+    it[id] = 2
+    it[name] = "Ahmed"
+    it[lastName] = "Cherif"
+    it[age] = 30
+  }
+  TestTable.insert {
+    it[id] = 3
+    it[name] = "SALAH"
+    it[lastName] = "MOUELHI"
+    it[age] = 30
   }
 }
 
 fun dropReportDocumentationTables() {
-  transaction {
-    SchemaUtils.drop(TestTable, TestTriggers)
-    SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TRIGGERSID"))
-  }
+  SchemaUtils.drop(TestTable, TestTriggers)
+  SchemaUtils.dropSequence(Sequence("TESTTABLEID"), Sequence("TRIGGERSID"))
 }

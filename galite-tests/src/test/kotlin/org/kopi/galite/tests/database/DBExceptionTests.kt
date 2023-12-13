@@ -20,12 +20,14 @@ package org.kopi.galite.tests.database
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
+import org.junit.Test
+
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Test
+
 import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.database.DBNoRowException
 import org.kopi.galite.database.DBTooManyRowsException
@@ -38,7 +40,7 @@ class DBExceptionTests : ApplicationTestBase() {
    */
   @Test
   fun selectIntoTest() {
-    transaction {
+    transaction(connection.dbConnection) {
       try {
         SchemaUtils.create(Book)
         Book.insert {
@@ -56,15 +58,11 @@ class DBExceptionTests : ApplicationTestBase() {
         }
 
         assertFailsWith<DBNoRowException> {
-          Book.select { Book.id eq 2 }.into {
-
-          }
+          Book.select { Book.id eq 2 }.into {}
         }
 
         assertFailsWith<DBTooManyRowsException> {
-          Book.select { Book.title eq "b1" }.into {
-
-          }
+          Book.select { Book.title eq "b1" }.into {}
         }
       } finally {
         SchemaUtils.drop(Book)

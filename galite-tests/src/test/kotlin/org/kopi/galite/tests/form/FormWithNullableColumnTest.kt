@@ -18,10 +18,12 @@ package org.kopi.galite.tests.form
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
+
+import org.jetbrains.exposed.sql.selectAll
+
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.VBlockDefaultOuterJoin
 
 class FormWithNullableColumnsTest : JApplicationTestBase() {
