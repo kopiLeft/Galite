@@ -1906,8 +1906,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().transaction {
-            // !!! DEBUG !!!
-            println("Pool name = ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
             lineCount = 0
             for (result in query) {
               if (lineCount >= MAX_LINE_COUNT - 1) {

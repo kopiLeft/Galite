@@ -69,8 +69,6 @@ class ListDomainTests : VApplicationTestBase() {
 
   @Test
   fun `test ListDomain with ExpressionWithColumnType`() {
-    // !! DEBUG !!
-    println("Pool name (ListDoaminTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     // Declaration of the domain
     transaction {
       SchemaUtils.create(User)

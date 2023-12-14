@@ -132,7 +132,6 @@ class VBlockTests : VApplicationTestBase() {
 
     FormSample.tb1.id.value = 1
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       FormSample.tb1.block.load()
@@ -157,7 +156,6 @@ class VBlockTests : VApplicationTestBase() {
     FormWithList.blockWithManyTables.name[0] = "administrator"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
-     println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
       transaction {
         FormWithList.blockWithManyTables.block.checkUniqueIndices(0)
       }
@@ -166,7 +164,6 @@ class VBlockTests : VApplicationTestBase() {
   }
 
   fun addCenterIndicesData(id: Int, center: String, address: String, mail: String) {
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       Center.insert {
         it[Center.id] = id
@@ -183,7 +180,6 @@ class VBlockTests : VApplicationTestBase() {
     var i = 0
 
     try {
-      println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
       transaction {
         SchemaUtils.create(Training)
         SchemaUtils.create(Center)
@@ -202,7 +198,6 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.address[0] = "1"
       formMultiple.multipleBlock.mail[0] = "6"
       val vExecFailedException = assertFailsWith<VExecFailedException> {
-        println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
         transaction {
           formMultiple.multipleBlock.block.checkUniqueIndices(0)
         }
@@ -216,7 +211,6 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.address[0] = "8"
       formMultiple.multipleBlock.mail[0] = "3"
       val vExecFailedException2 = assertFailsWith<VExecFailedException> {
-        println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
         transaction {
           formMultiple.multipleBlock.block.checkUniqueIndices(0)
         }
@@ -228,7 +222,6 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.centerName[0] = "9"
       formMultiple.multipleBlock.address[0] = "12"
       formMultiple.multipleBlock.mail[0] = "13"
-      println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
       transaction {
         formMultiple.multipleBlock.block.checkUniqueIndices(0)
       }
@@ -238,12 +231,10 @@ class VBlockTests : VApplicationTestBase() {
       formMultiple.multipleBlock.centerName[0] = "15"
       formMultiple.multipleBlock.address[0] = "17"
       formMultiple.multipleBlock.mail[0] = "9"
-      println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
       transaction {
         formMultiple.multipleBlock.block.checkUniqueIndices(0)
       }
     } finally {
-      println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
       transaction {
         SchemaUtils.drop(Center)
         SchemaUtils.drop(Training)
@@ -256,7 +247,6 @@ class VBlockTests : VApplicationTestBase() {
     FormWithList.blockWithManyTables.shortName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
-      println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
       transaction {
         FormWithList.blockWithManyTables.block.refreshLookup(0)
       }
@@ -269,7 +259,6 @@ class VBlockTests : VApplicationTestBase() {
   fun refreshLookupTest() {
     FormWithList.blockWithManyTables.shortName[0] = "1000"
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initModules()
       FormWithList.blockWithManyTables.block.refreshLookup(0)
@@ -288,7 +277,6 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.job.value = "jobValue"
 
     val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" = 'myName') AND " +
@@ -312,7 +300,6 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.job.value = "jobValue*"
     val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'myName%') AND " +
@@ -338,7 +325,6 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.job.value = "jobValue"
 
     val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%myName') AND " +
@@ -362,7 +348,6 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.job.value = "*jobValue"
 
     val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE 'my%Name') AND " +
@@ -386,7 +371,6 @@ class VBlockTests : VApplicationTestBase() {
     FormSample.tb1.job.value = "job*Value"
 
     val blockSearchCondition = FormSample.tb1.block.getSearchConditions()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       assertEquals(
         "(\"USER\".TS = 0) AND (\"USER\".UC = 0) AND (\"USER\".\"NAME\" LIKE '%') AND " +
@@ -406,7 +390,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchRecord with existing ID scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       //fetch record search with id 1 and there is no exception
@@ -419,7 +402,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchRecord no such element test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       SchemaUtils.create(User)
 
@@ -433,7 +415,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchRecord too many rows scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       SchemaUtils.create(User)
       initSampleFormTables()
@@ -452,7 +433,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchNextRecord valid scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       FormSample.tb1.name.value = "AUDREY"
@@ -492,7 +472,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `save insert simple block scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       SchemaUtils.create(User)
       SchemaUtils.createSequence(userSequence)
@@ -521,7 +500,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `save update simple block scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       SchemaUtils.create(User)
       initSampleFormTables()
@@ -549,7 +527,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save insert multiple block scenario test`() {
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       SchemaUtils.create(Training)
       SchemaUtils.create(Center)
@@ -609,7 +586,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `save update multiple block scenario test`() {
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initMultipleBlockFormTables()
       formMultiple.multipleBlock.centerId[0] = 1
@@ -677,7 +653,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `delete simple block scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       var count = User.select { User.id eq 1 }.count()
@@ -702,7 +677,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `delete multiple block scenario test`() {
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initMultipleBlockFormTables()
       var count = Center.selectAll().count()
@@ -754,7 +728,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `load simple block scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       SchemaUtils.create(User)
       User.insert {
@@ -786,7 +759,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `load with set id value simple block scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
 
@@ -813,7 +785,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `load no row exception scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       FormSample.tb1.id.value = 2
@@ -828,7 +799,6 @@ class VBlockTests : VApplicationTestBase() {
 
   @Test
   fun `load multiple block scenario test`() {
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initMultipleBlockFormTables()
       formMultiple.multipleBlock.block.clear()
@@ -872,7 +842,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchLookup valid scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
 
@@ -897,7 +866,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchLookup no matching value exception scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
 
@@ -915,7 +883,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchLookup no table found exception scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       FormSample.model.setActiveBlock(FormSample.tb1.block)
       FormSample.tb1.id.value = 1
@@ -936,7 +903,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `fetchLookup not unique value exception scenario test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       User.insert {
@@ -961,7 +927,6 @@ class VBlockTests : VApplicationTestBase() {
   @Test
   fun `buildQueryDialog test`() {
     val FormSample = FormSample()
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       initSampleFormTables()
       FormSample.tb1.block.clear()
@@ -1060,7 +1025,6 @@ class VBlockTests : VApplicationTestBase() {
   fun `sort test`() {
     val blockModel = formMultiple.multipleBlock.block
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       try {
         initMultipleBlockFormTables()
@@ -1082,7 +1046,6 @@ class VBlockTests : VApplicationTestBase() {
   fun `getNumberOfValidRecord test`() {
     val blockModel = formMultiple.multipleBlock.block
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       try {
         initMultipleBlockFormTables()
@@ -1126,7 +1089,6 @@ class VBlockTests : VApplicationTestBase() {
   fun `trailRecord test`() {
     val singleBlockModel = FormWithList.block3.block
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       FormWithList.block3.load()
 
@@ -1139,7 +1101,6 @@ class VBlockTests : VApplicationTestBase() {
   fun `abortTrail test`() {
     val singleBlockModel = FormWithList.block3.block
 
-    println("Pool name (VBlockTest): ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
     transaction {
       FormWithList.block3.load()
 
