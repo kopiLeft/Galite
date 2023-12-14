@@ -38,6 +38,7 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.VColor
@@ -1905,6 +1906,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().transaction {
+            // !!! DEBUG !!!
+            println("Pool name = ${ApplicationContext.getDBConnection()?.poolConnection?.poolName}")
             lineCount = 0
             for (result in query) {
               if (lineCount >= MAX_LINE_COUNT - 1) {
