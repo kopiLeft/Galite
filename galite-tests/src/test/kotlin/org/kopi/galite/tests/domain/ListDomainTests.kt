@@ -24,7 +24,6 @@ import org.junit.Test
 
 import org.jetbrains.exposed.sql.*
 
-import org.kopi.galite.tests.database.connectToDatabase
 import org.kopi.galite.tests.form.*
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.ApplicationContext
@@ -39,8 +38,8 @@ class ListDomainTests : VApplicationTestBase() {
   val listDomainExpression = FormWithListDomains()
 
   @Before
-  fun `login to database`() {
-    connectToDatabase()
+  fun `override application context connection`() {
+    ApplicationContext.applicationContext.getApplication().dBConnection = connection
   }
 
   /**

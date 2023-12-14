@@ -64,6 +64,10 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook by TestingLife
     org.kopi.galite.testing.login(testUser, testPassword)
   }
 
+  override fun awaitBeforeLookup() {
+    MockVaadin.clientRoundtrip()
+  }
+
   @Before
   fun createRoutes() {
     setupRoutes()
