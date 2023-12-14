@@ -22,10 +22,10 @@ import kotlin.test.assertEquals
 import org.junit.Test
 
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.tests.form.*
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.ListDomain
 
 /**
@@ -63,7 +63,7 @@ class ListDomainTests : VApplicationTestBase() {
   @Test
   fun `test ListDomain with ExpressionWithColumnType`() {
     // Declaration of the domain
-    transaction {
+    transaction(connection.dbConnection) {
       SchemaUtils.create(User)
       User.insert {
         it[id] = 1
