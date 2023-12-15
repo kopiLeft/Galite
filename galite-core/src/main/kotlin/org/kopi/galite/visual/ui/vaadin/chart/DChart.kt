@@ -17,15 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.chart
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.chart.ChartTypeFactory
 import org.kopi.galite.visual.chart.UChart
 import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.VWindow
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Creates a new chart view from its model.

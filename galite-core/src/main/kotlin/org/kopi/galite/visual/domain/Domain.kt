@@ -17,6 +17,15 @@
 
 package org.kopi.galite.visual.domain
 
+import java.io.File
+import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+
+import kotlin.reflect.KClass
+
 import org.joda.time.DateTime
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
@@ -30,13 +39,7 @@ import org.kopi.galite.visual.dsl.form.FormField
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.report.*
-import java.io.File
-import java.math.BigDecimal
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import kotlin.reflect.KClass
+
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -53,7 +56,7 @@ open class Domain<T>(val width: Int? = null,
   protected var styled: Boolean = false
   protected var fixed: Fixed = Fixed.UNDEFINED
   protected var convert: Convert = Convert.NONE
-  private var constraint: Constraint<T>? = null
+  private var constraint: Constraint<Any>? = null
   val ident: String = if(this::class.qualifiedName == null) "" else this::class.java.simpleName
   val source: String =
     if(this::class.qualifiedName == null) {
@@ -97,14 +100,13 @@ open class Domain<T>(val width: Int? = null,
    * @param message the error message to display.
    * @param constraint the constraint that the field value should verify.
    */
-  fun check(message: String? = null, constraint: (value: T) -> Boolean) {
+  fun check(message: String? = null, constraint: (value: Any?) -> Boolean) {
     this.constraint = Constraint(message, constraint)
   }
 
   /**
    * Builds the form field model
    */
-  @Suppress("UNCHECKED_CAST")
   open fun buildFormFieldModel(formField: FormField<T>): VField {
     val model = with(formField) {
       when (kClass) {
@@ -161,7 +163,7 @@ open class Domain<T>(val width: Int? = null,
     }
 
     if (constraint != null) {
-      model.constraint = constraint!!.constraint as (value: Any) -> Boolean
+      model.constraint = constraint!!.constraint
       model.constraintMessage = constraint!!.message
     }
 

@@ -17,6 +17,9 @@
 
 package org.kopi.galite.visual.dsl.chart
 
+import java.io.IOException
+import java.util.*
+
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.chart.CConstants
 import org.kopi.galite.visual.chart.VChart
@@ -24,8 +27,6 @@ import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.*
 import org.kopi.galite.visual.form.VConstants
-import java.io.IOException
-import java.util.*
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
@@ -98,11 +99,11 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     triggers.add(trigger)
 
     // CHART TRIGGERS
-    triggers.forEach { triggerElement ->
+    triggers.forEach { triggerList ->
 
       for (i in VConstants.TRG_TYPES.indices) {
-        if (triggerElement.events shr i and 1 > 0) {
-          model.VKT_Chart_Triggers[0][i] = triggerElement
+        if (triggerList.events shr i and 1 > 0) {
+          model.VKT_Chart_Triggers[0][i] = triggerList
         }
       }
     }

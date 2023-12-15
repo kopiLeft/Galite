@@ -18,7 +18,15 @@
 
 package org.kopi.galite.visual.chart
 
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.util.*
+
 import com.lowagie.text.Rectangle
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
 import org.kopi.galite.visual.base.Utils
@@ -28,12 +36,6 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.util.*
 
 /**
  * Creates a new chart model.
