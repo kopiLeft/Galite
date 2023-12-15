@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.visual.dsl.form
 
+import java.awt.Point
+import java.sql.SQLException
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.util.base.InconsistencyException
@@ -27,8 +30,7 @@ import org.kopi.galite.visual.domain.ListDomain
 import org.kopi.galite.visual.dsl.common.*
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.form.*
-import java.awt.Point
-import java.sql.SQLException
+
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].

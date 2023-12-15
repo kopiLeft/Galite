@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.dsl.report
 
+import java.math.BigDecimal
+
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
@@ -25,7 +27,6 @@ import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
 import org.kopi.galite.visual.report.*
-import java.math.BigDecimal
 
 /**
  * This class represents the definition of a report field.

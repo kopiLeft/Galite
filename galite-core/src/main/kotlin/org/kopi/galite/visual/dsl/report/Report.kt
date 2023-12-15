@@ -17,6 +17,10 @@
 
 package org.kopi.galite.visual.dsl.report
 
+import java.io.File
+import java.io.IOException
+import java.util.*
+
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
 import org.kopi.galite.visual.ApplicationContext
@@ -28,9 +32,6 @@ import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.report.VSeparatorColumn
 import org.kopi.galite.visual.util.PrintJob
-import java.io.File
-import java.io.IOException
-import java.util.*
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].

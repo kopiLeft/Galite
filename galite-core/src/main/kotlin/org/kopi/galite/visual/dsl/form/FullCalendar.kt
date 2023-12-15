@@ -16,11 +16,12 @@
  */
 package org.kopi.galite.visual.dsl.form
 
-import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.form.*
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+
+import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.form.*
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].

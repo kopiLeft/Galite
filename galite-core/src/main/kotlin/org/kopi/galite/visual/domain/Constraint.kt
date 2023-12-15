@@ -22,4 +22,4 @@ package org.kopi.galite.visual.domain
  * @param message the error message to display.
  * @param constraint the constraint that the field value should verify.
  */
-class Constraint<Any>(val message: String?, val constraint: (value: Any?) -> Boolean)
+class Constraint<T>(val message: String?, val constraint: (value: T) -> Boolean)

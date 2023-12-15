@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.form
 
+import java.sql.SQLException
+
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBInterruptionException
 import org.kopi.galite.util.base.InconsistencyException
@@ -24,7 +26,6 @@ import org.kopi.galite.visual.*
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.database.transaction
-import java.sql.SQLException
 
 /**
  * This class implements predefined commands
@@ -458,7 +459,6 @@ object Commands : VConstants {
         return
       }
       else -> throw InconsistencyException("Invalid mode detected: $mode")
-
     }
   }
 
