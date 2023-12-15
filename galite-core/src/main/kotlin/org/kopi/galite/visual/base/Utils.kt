@@ -18,7 +18,6 @@
 
 package org.kopi.galite.visual.base
 
-import org.kopi.galite.util.base.InconsistencyException
 import java.io.*
 import java.net.URL
 import java.nio.charset.Charset
@@ -26,6 +25,7 @@ import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * loading of image
@@ -201,8 +201,8 @@ open class Utils : org.kopi.galite.util.base.Utils() {
         val data = DataInputStream(
                 requireNotNull(Utils::class.java.classLoader.getResourceAsStream("version"))
         )
+        val reader = BufferedReader(InputStreamReader(data))
         while (data.available() != 0) {
-          val reader = BufferedReader(InputStreamReader(data))
           val line = reader.readLine()
           if (line != null) {
             list.add(line)
