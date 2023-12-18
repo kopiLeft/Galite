@@ -18,6 +18,14 @@
 
 package org.kopi.galite.visual.form
 
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.util.*
+
+import kotlin.reflect.KClass
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
@@ -30,12 +38,6 @@ import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VImageColumn
 import org.kopi.galite.visual.list.VListColumn
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.util.*
-import kotlin.reflect.KClass
 
 class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
 

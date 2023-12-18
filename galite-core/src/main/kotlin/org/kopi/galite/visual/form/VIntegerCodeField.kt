@@ -18,10 +18,11 @@
 
 package org.kopi.galite.visual.form
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.list.VIntegerCodeColumn
 import org.kopi.galite.visual.list.VListColumn
-import kotlin.reflect.KClass
 
 class VIntegerCodeField : VCodeField {
 

@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import com.vaadin.flow.component.UI
 import java.util.concurrent.ExecutionException
+
+import com.vaadin.flow.component.UI
 
 /**
  * Collects some utilities for background threads in a vaadin application.
@@ -41,12 +42,12 @@ object BackgroundThreadHandler {
       return
     }
 
-    val localCurrentUI = currentUI ?: locateUI()
+    val updatedUI = currentUI ?: locateUI()
 
-    if (localCurrentUI == null) {
+    if (updatedUI == null) {
       command()
     } else {
-      localCurrentUI.access(command)
+      updatedUI.access(command)
     }
   }
 
@@ -61,16 +62,16 @@ object BackgroundThreadHandler {
       return
     }
 
-    val localCurrentUI = currentUI ?: locateUI()
+    val updatedUI = currentUI ?: locateUI()
 
-    if (localCurrentUI == null) {
+    if (updatedUI == null) {
       command()
     } else {
-      localCurrentUI.access {
+      updatedUI.access {
         try {
           command()
         } finally {
-          localCurrentUI.push()
+          updatedUI.push()
         }
       }
     }
@@ -94,13 +95,13 @@ object BackgroundThreadHandler {
       return
     }
 
-    val localCurrentUI = currentUI ?: locateUI()
+    val updatedUI = currentUI ?: locateUI()
 
-    if (localCurrentUI == null) {
+    if (updatedUI == null) {
       command()
     } else {
       try {
-        localCurrentUI
+        updatedUI
           .access(command)
           .get()
       } catch (executionException: ExecutionException) {

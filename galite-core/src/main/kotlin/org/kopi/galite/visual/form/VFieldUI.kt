@@ -18,11 +18,12 @@
 
 package org.kopi.galite.visual.form
 
+import java.io.Serializable
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VBlock.OrderModel
-import java.io.Serializable
 
 /**
  * This class implements all UI actions on fields
@@ -169,8 +170,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
         display.setBlink(false)
         transferFocus(display)
       } catch (e: VException) {
-        val errorMessage = e.message ?: "An error occurred "
-        throw InconsistencyException(errorMessage)
+        throw InconsistencyException(e)
       } finally {
         // ensure that the field gain focus again
         display.forceFocus()

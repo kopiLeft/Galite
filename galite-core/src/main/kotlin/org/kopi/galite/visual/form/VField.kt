@@ -49,7 +49,6 @@ import kotlin.reflect.KClass
  * it provides an access to data both programmatically or via a UI
  * (DForm)
  */
-
 abstract class VField protected constructor(width: Int, height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
@@ -637,14 +636,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param value the access value.
    */
   fun setAccess(at: Int, value: Int) {
-    var modifiedValue = value
+    var access = value
 
-    if (getDefaultAccess() < modifiedValue) {
+    if (getDefaultAccess() < access) {
       // access can never be higher than the default access
-      modifiedValue = getDefaultAccess()
+      access = getDefaultAccess()
     }
-    if (modifiedValue != dynAccess[at]) {
-      dynAccess[at] = modifiedValue
+    if (access != dynAccess[at]) {
+      dynAccess[at] = access
       fireAccessChanged(at)
     }
   }
@@ -754,8 +753,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         callTrigger(VConstants.TRG_DEFAULT)
       } catch (e: VException) {
-        val errorMessage = e.message ?: "An error occurred while setting default values for the form fields."
-        throw InconsistencyException(errorMessage)
+        throw InconsistencyException(e)
       }
     }
   }
@@ -874,29 +872,29 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException("Unexpected condition encountered while constructing search condition for operator")
         }
       } else {
-        val modifiedOperand = if (operand is String) {
+        val stringOperand = if (operand is String) {
           getOperandExpression(operand)
         } else {
           column.wrap(operand)
         }
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            EqOp(column, modifiedOperand)
+            EqOp(column, stringOperand)
           }
           VConstants.SOP_NE -> Op.build {
-            NeqOp(column, modifiedOperand)
+            NeqOp(column, stringOperand)
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column, modifiedOperand)
+            GreaterEqOp(column, stringOperand)
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column, modifiedOperand)
+            GreaterOp(column, stringOperand)
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column, modifiedOperand)
+            LessEqOp(column, stringOperand)
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column, modifiedOperand)
+            LessOp(column, stringOperand)
           }
           else -> throw InconsistencyException(" Unexpected condition encountered.")
         }
@@ -1379,7 +1377,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-
   open fun getDate(r: Int): LocalDate? {
     throw InconsistencyException("Invalid operation")
   }

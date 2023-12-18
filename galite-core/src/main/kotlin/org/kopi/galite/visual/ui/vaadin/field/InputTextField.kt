@@ -17,25 +17,39 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.*
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.textfield.Autocomplete
-import com.vaadin.flow.component.textfield.HasAutocomplete
-import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
-import com.vaadin.flow.component.textfield.TextFieldVariant
+import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+
 import org.kopi.galite.type.format
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
 import org.kopi.galite.visual.ui.vaadin.base.JSKeyDownHandler
 import org.kopi.galite.visual.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.form.DField
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import java.math.BigDecimal
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalTime
+import org.kopi.galite.visual.ui.vaadin.base.DecimalFormatSymbols
+import org.kopi.galite.visual.form.VConstants
+
+import com.vaadin.flow.component.AbstractCompositeField
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.BlurNotifier
+import com.vaadin.flow.component.DetachEvent
+import com.vaadin.flow.component.FocusNotifier
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyDownEvent
+import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.KeyUpEvent
+import com.vaadin.flow.component.textfield.Autocomplete
+import com.vaadin.flow.component.textfield.HasAutocomplete
+import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 /**
  * A text field component that can support many validation
@@ -179,16 +193,16 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   }
 
   override fun setValue(text: String?) {
-    var modifiedText = text
+    var updateText = text
 
     // set only valid inputs
     //if (validationStrategy is NoeditValidator TODO
     //  || validationStrategy!!.validate(text)
     //) {
-    if (modifiedText == null) {
-      modifiedText = "" // avoid NullPointerException
+    if (updateText == null) {
+      updateText = "" // avoid NullPointerException
     }
-    setPresentationValue(modifiedText)
+    setPresentationValue(updateText)
     //}
   }
 

@@ -17,17 +17,22 @@
  */
 package org.kopi.galite.visual.form
 
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.UnsupportedEncodingException
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.sql.vendors.currentDialect
+import org.kopi.galite.visual.list.VListColumn
+import org.kopi.galite.visual.list.VTextColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.list.VTextColumn
-import java.io.*
 
 /**
  * This class implements multi-line text fields.

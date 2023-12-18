@@ -18,6 +18,11 @@
 
 package org.kopi.galite.visual.form
 
+import java.math.BigDecimal
+
+import kotlin.math.max
+import kotlin.reflect.KClass
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.type.format
@@ -26,9 +31,6 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VDecimalColumn
 import org.kopi.galite.visual.list.VListColumn
-import java.math.BigDecimal
-import kotlin.math.max
-import kotlin.reflect.KClass
 
 /**
  *
@@ -81,11 +83,10 @@ class VDecimalField(val bufferSize: Int,
    * return the name of this field
    */
   override fun getTypeInformation(): String {
-
     var nines: Long = 1
-
     var min = BigDecimal(Int.MIN_VALUE.toDouble())
     var max = BigDecimal(Int.MAX_VALUE.toDouble())
+
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
@@ -149,8 +150,8 @@ class VDecimalField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, s: Any?) {
-    val modifiedS = s as? String
+  override fun checkType(rec: Int, tapedValue: Any?) {
+    val modifiedS = tapedValue as? String
     val scale: Int = currentScale[rec]
 
     if ((modifiedS == "")) {

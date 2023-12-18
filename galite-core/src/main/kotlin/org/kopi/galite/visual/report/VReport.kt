@@ -18,9 +18,16 @@
 
 package org.kopi.galite.visual.report
 
+import java.awt.event.KeyEvent
+import java.io.File
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+import kotlin.jvm.Throws
+
 import org.jetbrains.annotations.TestOnly
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
 import org.kopi.galite.visual.cross.VDynamicReport
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
@@ -28,12 +35,21 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.print.Printable.Companion.DOC_UNKNOWN
 import org.kopi.galite.visual.util.PrintJob
-import java.awt.event.KeyEvent
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
 /**
  * Represents a report model.

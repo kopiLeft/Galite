@@ -18,14 +18,15 @@
 
 package org.kopi.galite.visual.form
 
+import java.math.BigDecimal
+
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
+import org.kopi.galite.visual.list.VList
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.list.VList
-import java.math.BigDecimal
 
 /**
  *
@@ -84,8 +85,8 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * verify that text is valid (during typing)
    */
-  override fun checkText(s: String): Boolean {
-    val modifiedS = s.lowercase()
+  override fun checkText(tapedValue: String): Boolean {
+    val modifiedS = tapedValue.lowercase()
 
     for (i in labels.indices) {
       if (labels[i].lowercase().startsWith(modifiedS)) {
@@ -99,8 +100,8 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, s: Any?) {
-    var modifiedS = s as? String
+  override fun checkType(rec: Int, tapedValue: Any?) {
+    var modifiedS = tapedValue as? String
 
     if (modifiedS == "") {
       setNull(rec)
@@ -117,7 +118,7 @@ abstract class VCodeField(val bufferSize: Int,
 
       while (found != -2 && i < labels.size) {
         if (labels[i].lowercase().startsWith(modifiedS)) {
-          if (labels[i].lowercase() == s) {
+          if (labels[i].lowercase() == tapedValue) {
             found = i
             break
           }
@@ -210,8 +211,8 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Checks that field value exists in list
    */
-  override fun enumerateValue(desc: Boolean) {
-    var modifiedDesc = desc
+  override fun enumerateValue(check: Boolean) {
+    var modifiedDesc = check
 
     modifiedDesc = if (!getListColumn()!!.isSortAscending) modifiedDesc else !modifiedDesc
     var pos = value[block!!.activeRecord]

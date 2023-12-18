@@ -17,15 +17,17 @@
  */
 package org.kopi.galite.visual.form
 
+import java.io.File
+import java.net.MalformedURLException
+import java.sql.SQLException
+
+import javax.swing.event.EventListenerList
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.*
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
-import java.io.File
-import java.net.MalformedURLException
-import java.sql.SQLException
-import javax.swing.event.EventListenerList
 
 abstract class VForm protected constructor(source: String? = null) : VWindow(source), VConstants {
 
@@ -371,8 +373,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
       val res = try {
         callTrigger(VConstants.TRG_CHANGED)
       } catch (f: VException) {
-        val errorMessage = f.message ?: "An error occurred while determining changes in the form"
-        throw InconsistencyException(errorMessage)
+        throw InconsistencyException(f)
       }
       res as Boolean
     } else {
@@ -397,8 +398,7 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
         callTrigger(VConstants.TRG_RESET)
       } catch (e: VException) {
         e.printStackTrace()
-        val errorMessage = e.message ?: "An error occurred "
-        throw InconsistencyException(errorMessage)
+        throw InconsistencyException(e)
       }
       if (res as Boolean) {
         return

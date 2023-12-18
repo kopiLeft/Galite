@@ -18,13 +18,14 @@
 
 package org.kopi.galite.visual.form
 
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.reflect.KClass
+
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VListColumn
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.reflect.KClass
 
 /**
  * @param     width
@@ -100,13 +101,13 @@ class VIntegerField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val modifiedS = s as? String
+    val param = s as? String
 
-    if (modifiedS == "") {
+    if (param == "") {
       setNull(rec)
     } else {
       val v = try {
-        modifiedS!!.toInt()
+        param!!.toInt()
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -136,21 +137,21 @@ class VIntegerField(val bufferSize: Int,
    * Sets the field value of given record to a int value.
    */
   override fun setInt(r: Int, v: Int?) {
-    var modifiedV = v
+    var param = v
     if (isChangedUI
-            || value[r] == null && modifiedV != null
-            || value[r] != null && value[r] != modifiedV) {
+            || value[r] == null && param != null
+            || value[r] != null && value[r] != param) {
       // trails (backup) the record if necessary
       trail(r)
-      if (modifiedV == null) {
+      if (param == null) {
         value[r] = null
       } else {
-        if (modifiedV < minValue) {
-          modifiedV = minValue
-        } else if (modifiedV > maxValue) {
-          modifiedV = maxValue
+        if (param < minValue) {
+          param = minValue
+        } else if (param > maxValue) {
+          param = maxValue
         }
-        value[r] = modifiedV
+        value[r] = param
       }
       // inform that value has changed
       setChanged(r)

@@ -18,8 +18,14 @@
 
 package org.kopi.galite.visual.form
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.compoundAnd
 
 class VBlockDefaultOuterJoin(block: VBlock) {
 

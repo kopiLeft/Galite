@@ -17,11 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.UI
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.UI
 
 /**
  * A centralized way to apply styles on some component.

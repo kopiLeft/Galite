@@ -18,6 +18,10 @@
 
 package org.kopi.galite.visual.form
 
+import java.time.LocalDate
+
+import kotlin.math.max
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.UIFactory
@@ -26,8 +30,6 @@ import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
-import java.time.LocalDate
-import kotlin.math.max
 
 class VListDialog(list: Array<VListColumn?>,
                   val data: Array<Array<Any?>>,

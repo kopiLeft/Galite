@@ -18,6 +18,12 @@
 
 package org.kopi.galite.visual.form
 
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+
+import kotlin.math.abs
+
 import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
@@ -30,10 +36,6 @@ import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.list.VListColumn
-import java.sql.SQLException
-import java.util.*
-import javax.swing.event.EventListenerList
-import kotlin.math.abs
 
 abstract class VBlock(var title: String,
                       buffer: Int,
@@ -769,8 +771,7 @@ abstract class VBlock(var title: String,
       try {
         activeField?.leave(false)
       } catch (e: VException) {
-        val errorMessage = e.message ?: "An error occurred while leaving the field"
-        throw InconsistencyException(errorMessage)
+        throw InconsistencyException(e)
       }
       fetchNextRecord(record)
       try {
@@ -1198,8 +1199,7 @@ abstract class VBlock(var title: String,
           gotoFirstField()
         } catch (e: VException) {
           // should only be raised when leaving a field
-          val errorMessage = e.message ?: "An error occurred while leaving a field"
-          throw InconsistencyException(errorMessage)
+          throw InconsistencyException(e)
         }
       }
     }
@@ -1267,6 +1267,7 @@ abstract class VBlock(var title: String,
         for (i in 0 until bufferSize) {
           /* check if record is empty */
           activeRecord = i
+          lastRecord = i
 
           if (isRecordChanged(i)) {
             j = 0
@@ -1418,10 +1419,8 @@ abstract class VBlock(var title: String,
             println("INFO: VBlock checkBlock " + Thread.currentThread())
           }
         } catch (f: VException) {
-          val errorMessage = f.message ?: "An error occurred"
-          throw InconsistencyException(errorMessage)
+          throw InconsistencyException(f)
         }
-
       }
       fireRecordCountChanged()
     } else {
@@ -1453,10 +1452,8 @@ abstract class VBlock(var title: String,
             activeField!!.setNull()
             activeField!!.leave(false)
           } catch (e: VException) {
-            val errorMessage = e.message ?: "An error occurred while leaving a field"
-            throw InconsistencyException(errorMessage)
+            throw InconsistencyException(e)
           }
-
         }
       } else {
         if (activeRecord != -1) {
@@ -1856,8 +1853,7 @@ abstract class VBlock(var title: String,
     try {
       callProtectedTrigger(VConstants.TRG_PRESAVE)
     } catch (e: VException) {
-      val errorMessage = e.message ?: "An error occurred during the TRG_PRESAVE operation"
-      throw InconsistencyException(errorMessage)
+      throw InconsistencyException(e)
     }
     if (!isMulti()) {
       when (getMode()) {
@@ -1920,8 +1916,7 @@ abstract class VBlock(var title: String,
           try {
             activeField!!.leave(false)
           } catch (e: VException) {
-            val errorMessage = e.message ?: "An error occurred while leaving a field"
-            throw InconsistencyException(errorMessage)
+            throw InconsistencyException(e)
           }
         }
       } else {
@@ -1929,8 +1924,7 @@ abstract class VBlock(var title: String,
           try {
             leaveRecord(false)
           } catch (e: VException) {
-            val errorMessage = e.message ?: "An error occurred while leaving a Record"
-            throw InconsistencyException(errorMessage)
+            throw InconsistencyException(e)
           }
         }
       }

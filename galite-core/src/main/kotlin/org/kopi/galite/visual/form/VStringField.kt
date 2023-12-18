@@ -18,13 +18,14 @@
 
 package org.kopi.galite.visual.form
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.visual.list.VStringColumn
 import org.kopi.galite.visual.util.LineBreaker
-import kotlin.reflect.KClass
 
 open class VStringField(val bufferSize: Int,
                         width: Int,
@@ -102,24 +103,24 @@ open class VStringField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    var modifiedS = s as? String
+    var tapedValue = s as? String
 
-    if (modifiedS == null || modifiedS == "") {
+    if (tapedValue == null || tapedValue == "") {
       setNull(rec)
     } else {
       when (convert and VConstants.FDO_CONVERT_MASK) {
         VConstants.FDO_CONVERT_NONE -> {
         }
-        VConstants.FDO_CONVERT_UPPER -> modifiedS = modifiedS.uppercase()
-        VConstants.FDO_CONVERT_LOWER -> modifiedS = modifiedS.lowercase()
-        VConstants.FDO_CONVERT_NAME -> modifiedS = convertName(modifiedS)
+        VConstants.FDO_CONVERT_UPPER -> tapedValue = tapedValue.uppercase()
+        VConstants.FDO_CONVERT_LOWER -> tapedValue = tapedValue.lowercase()
+        VConstants.FDO_CONVERT_NAME -> tapedValue = convertName(tapedValue)
         else -> throw InconsistencyException("Unknown modifier")
       }
-      if (!checkText(modifiedS)) {
+      if (!checkText(tapedValue)) {
         throw VExecFailedException()
       }
-      checkConstraint(modifiedS)
-      setString(rec, modifiedS)
+      checkConstraint(tapedValue)
+      setString(rec, tapedValue)
     }
   }
 

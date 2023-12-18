@@ -16,15 +16,18 @@
  */
 package org.kopi.galite.visual.ui.vaadin.block
 
+import java.io.ByteArrayOutputStream
+
+import org.kopi.galite.visual.ui.vaadin.form.DBlockDropHandler
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.upload.Upload
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer
+
 import elemental.json.Json
-import org.kopi.galite.visual.ui.vaadin.form.DBlockDropHandler
-import java.io.ByteArrayOutputStream
 
 @CssImport(value = "./styles/galite/dropwrapper.css", themeFor = "vaadin-upload")
 class BlockDropWrapper(val layout: Component, dropHandler: DBlockDropHandler) : VerticalLayout() {

@@ -17,6 +17,10 @@
  */
 package org.kopi.galite.visual.pivottable
 
+import java.io.File
+import java.util.*
+import kotlin.reflect.full.starProjectedType
+
 import org.jetbrains.kotlinx.dataframe.AnyFrame
 import org.jetbrains.kotlinx.dataframe.DataColumn
 import org.jetbrains.kotlinx.dataframe.DataFrame
@@ -30,9 +34,6 @@ import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.report.Constants
 import org.kopi.galite.visual.report.VReportColumn
-import java.io.File
-import java.util.*
-import kotlin.reflect.full.starProjectedType
 
 open class PivotTable(title: String?, var help: String?, override val locale: Locale?) : VWindow(), Constants, VConstants {
 

@@ -18,21 +18,25 @@
 
 package org.kopi.galite.visual.report
 
-import com.graphbuilder.math.Expression
-import com.graphbuilder.math.ExpressionTree
-import com.graphbuilder.math.FuncMap
-import com.graphbuilder.math.VarMap
-import org.kopi.galite.type.format
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VExecFailedException
 import java.io.Serializable
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+
 import javax.swing.event.EventListenerList
+
 import kotlin.math.max
+
+import org.kopi.galite.type.format
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
+
+import com.graphbuilder.math.Expression
+import com.graphbuilder.math.ExpressionTree
+import com.graphbuilder.math.FuncMap
+import com.graphbuilder.math.VarMap
 
 class MReport : Constants, Serializable {
 
@@ -574,12 +578,12 @@ class MReport : Constants, Serializable {
     }
   }
 
-  private fun buildGroupingTree(tree: VReportRow, inputLoRow: Int, hiRow: Int, inputStart: Int) {
+  private fun buildGroupingTree(tree: VReportRow, inputLoRow: Int, inputHiRow: Int, inputStart: Int) {
     var loRow = inputLoRow
     var start = inputStart
 
     if (displayLevels[start] == 0) {    // even if the 0-index column is hidden, its displayLevels == 0
-      for (i in loRow..hiRow) {
+      for (i in loRow..inputHiRow) {
         tree.add(baseRows[i])
       }
     } else {
@@ -598,7 +602,7 @@ class MReport : Constants, Serializable {
         val value = baseRows[loRow]!!.getValueAt(displayOrder[start])
         var split = loRow
 
-        while (split <= hiRow && (value == null && baseRows[split]!!.getValueAt(displayOrder[start]) == null
+        while (split <= inputHiRow && (value == null && baseRows[split]!!.getValueAt(displayOrder[start]) == null
                         || value != null && value == baseRows[split]!!.getValueAt(displayOrder[start]))) {
           split += 1
         }
@@ -611,7 +615,7 @@ class MReport : Constants, Serializable {
         buildGroupingTree(newRow, loRow, split - 1, next)
         tree.add(newRow)
         loRow = split
-      } while (loRow <= hiRow)
+      } while (loRow <= inputHiRow)
     }
   }
 

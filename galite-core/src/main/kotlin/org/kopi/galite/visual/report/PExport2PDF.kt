@@ -18,14 +18,6 @@
 
 package org.kopi.galite.visual.report
 
-import com.lowagie.text.*
-import com.lowagie.text.pdf.*
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.report.UReport.UTable
-import org.kopi.galite.visual.util.PPaperType
-import org.kopi.galite.visual.util.PrintJob
 import java.awt.Color
 import java.io.File
 import java.io.FileInputStream
@@ -34,7 +26,29 @@ import java.io.OutputStream
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+
 import kotlin.math.max
+
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.report.UReport.UTable
+import org.kopi.galite.visual.util.PPaperType
+import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VlibProperties
+
+import com.lowagie.text.Chunk
+import com.lowagie.text.Document
+import com.lowagie.text.Element
+import com.lowagie.text.ExceptionConverter
+import com.lowagie.text.FontFactory
+import com.lowagie.text.Paragraph
+import com.lowagie.text.Rectangle
+import com.lowagie.text.pdf.PdfPCell
+import com.lowagie.text.pdf.PdfPTable
+import com.lowagie.text.pdf.PdfPageEventHelper
+import com.lowagie.text.pdf.PdfReader
+import com.lowagie.text.pdf.PdfStamper
+import com.lowagie.text.pdf.PdfWriter
 
 class PExport2PDF(
         table: UTable,

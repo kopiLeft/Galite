@@ -18,10 +18,11 @@
 
 package org.kopi.galite.visual.list
 
-import org.jetbrains.exposed.sql.Column
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.domain.TableInitializer
 import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Column
+import org.kopi.galite.visual.domain.TableInitializer
+import org.kopi.galite.visual.Message
 
 class VTextColumn(title: String, column: Column<*>?, table: TableInitializer?, align: Int, sortAscending: Boolean)
   : VListColumn(title, column, table, align, Message.getMessage("text-type").length, sortAscending) {

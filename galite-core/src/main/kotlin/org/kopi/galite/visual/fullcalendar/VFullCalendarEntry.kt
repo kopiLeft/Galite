@@ -17,12 +17,13 @@
 
 package org.kopi.galite.visual.fullcalendar
 
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.form.VField
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a full calendar record.
