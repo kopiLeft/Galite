@@ -17,9 +17,20 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.form.FieldHandler
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UChartLabel
+import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.ULabel
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.form.VStringField
+import org.kopi.galite.visual.form.VTextField
 import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * The `DFieldUI` is the vaadin UI components implementation of

@@ -17,17 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.router.HasDynamicTitle
-import com.vaadin.flow.router.PreserveOnRefresh
-import com.vaadin.flow.server.*
-import com.vaadin.flow.shared.communication.PushMode
+import java.sql.SQLException
+import java.util.*
+
 import org.kopi.galite.database.Configuration
 import org.kopi.galite.database.Connection
 import org.kopi.galite.visual.*
@@ -46,8 +38,18 @@ import org.kopi.galite.visual.ui.vaadin.notif.*
 import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import java.sql.SQLException
-import java.util.*
+
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.HasDynamicTitle
+import com.vaadin.flow.router.PreserveOnRefresh
+import com.vaadin.flow.server.*
+import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The entry point for all Galite WEB applications.

@@ -40,6 +40,7 @@ class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
           var year = text.substring(text.indexOf(".") + 1).toInt()
           if (year < 50) {
             year += 2000
+            println(year)
           } else if (year < 100) {
             year += 1900
           }
@@ -55,7 +56,7 @@ class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
         // just the month, complete
         try {
           val month = text.toInt()
-          val year = LocalDate.now().year + 1900
+          val year = LocalDate.now().year
           if (isMonth(month, year)) {
             field.value = toString(year, month)
           } else {

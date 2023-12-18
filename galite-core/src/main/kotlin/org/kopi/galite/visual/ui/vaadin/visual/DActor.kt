@@ -17,9 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import com.vaadin.flow.component.*
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dependency.CssImport
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
+
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.ui.vaadin.actor.Actor
@@ -34,8 +34,10 @@ import org.kopi.galite.visual.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.visual.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.ui.vaadin.window.Window
-import java.awt.event.InputEvent
-import java.awt.event.KeyEvent
+
+import com.vaadin.flow.component.*
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DActor` is the vaadin implementation of

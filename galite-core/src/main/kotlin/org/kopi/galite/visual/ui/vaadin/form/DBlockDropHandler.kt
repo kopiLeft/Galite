@@ -17,17 +17,27 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import com.vaadin.flow.component.upload.Receiver
-import com.vaadin.flow.component.upload.receivers.MultiFileBuffer
-import com.vaadin.flow.server.StreamVariable
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.lang.Exception
+
+import javax.activation.MimetypesFileTypeMap
+
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.form.VStringField
-import java.io.*
-import javax.activation.MimetypesFileTypeMap
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+
+import com.vaadin.flow.component.upload.Receiver
+import com.vaadin.flow.component.upload.receivers.MultiFileBuffer
+import com.vaadin.flow.server.StreamVariable
 
 /**
  * The `DBlockDropHandler` Is handling drop on a block.

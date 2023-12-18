@@ -17,17 +17,19 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.UI
-import org.kopi.galite.visual.VActor
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
+
 import org.kopi.galite.visual.form.ULabel
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.Utils
 import org.kopi.galite.visual.ui.vaadin.label.SortableLabel
-import java.awt.event.InputEvent
-import java.awt.event.KeyEvent
+import org.kopi.galite.visual.VActor
+
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
 
 /**
  * Creates a new `DLabel` instance.

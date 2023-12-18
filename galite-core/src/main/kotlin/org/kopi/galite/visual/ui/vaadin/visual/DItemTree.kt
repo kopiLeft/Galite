@@ -17,6 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeNode
+
+import org.kopi.galite.visual.*
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.ItemClickEvent
@@ -24,14 +34,6 @@ import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
-import org.kopi.galite.visual.*
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
-import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.TreeNode
 
 /**
  * The `DItemTree` is the vaadin implementation of the
@@ -286,9 +288,6 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
 
   /**
    * Create an input dialog
-   *
-   *  the edit text will
-   * contain the localised item's name
    */
   private fun createInputDialog() {
     val popupContent = VerticalLayout()

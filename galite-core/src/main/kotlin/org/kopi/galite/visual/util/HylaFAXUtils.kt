@@ -18,13 +18,16 @@
 
 package org.kopi.galite.visual.util
 
+import java.io.IOException
+import java.net.ConnectException
+import java.util.ArrayList
+import java.util.StringTokenizer
+
+import org.kopi.galite.visual.base.Utils
+
 import gnu.hylafax.HylaFAXClient
 import gnu.hylafax.HylaFAXClientProtocol
 import gnu.inet.ftp.ServerResponseException
-import org.kopi.galite.visual.base.Utils
-import java.io.IOException
-import java.net.ConnectException
-import java.util.*
 
 object HylaFAXUtils {
 

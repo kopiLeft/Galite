@@ -18,11 +18,12 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.util.mailer.Mailer
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.net.InetAddress
 import java.net.UnknownHostException
+
+import org.kopi.galite.util.mailer.Mailer
 
 class VerifyConfiguration private constructor() {
 

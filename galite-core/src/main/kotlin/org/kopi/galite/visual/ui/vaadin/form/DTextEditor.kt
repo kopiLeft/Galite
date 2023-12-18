@@ -27,7 +27,6 @@ import org.kopi.galite.visual.form.VFieldUI
  * @param label The field label.
  * @param align The field alignment.
  * @param options The field options.
- * @param height The field height.
  * @param detail Does the field belongs to the detail view ?
  */
 class DTextEditor(model: VFieldUI,

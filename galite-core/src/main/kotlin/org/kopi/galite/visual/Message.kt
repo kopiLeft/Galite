@@ -18,10 +18,11 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.util.base.InconsistencyException
+import java.util.Locale
+
 import org.kopi.galite.visual.base.ExtendedMessageFormat
 import org.kopi.galite.visual.l10n.LocalizationManager
-import java.util.*
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * This class handles localized messages
@@ -62,7 +63,7 @@ object Message {
   fun getMessage(source: String = VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE,
                  ident: String,
                  params: Any? = null): String {
-    val modifiedParams = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+    val updateParams = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
     val manager = if (ApplicationContext.isApplicationContextInitialized) {
       ApplicationContext.getLocalizationManager()
@@ -72,7 +73,7 @@ object Message {
     return try {
       //   Within a String, "''" represents a single quote in java.text.MessageFormat.
       val format = manager!!.getMessageLocalizer(source, ident).getText().replace("'", "''")
-      ExtendedMessageFormat.formatMessage(format, modifiedParams)
+      ExtendedMessageFormat.formatMessage(format, updateParams)
     } catch (e: InconsistencyException) {
       System.err.println("ERROR: " + e.message)
       "!$ident!"

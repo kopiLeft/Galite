@@ -18,9 +18,10 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.visual.l10n.LocalizationManager
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
+
+import org.kopi.galite.visual.l10n.LocalizationManager
 
 /**
  * A root menu must provide its ID and name. The root tree node
@@ -62,15 +63,15 @@ class RootMenu(id: Int, name: String) {
    * Creates the module tree for the given root module.
    * @param modules The accessible modules.
    * @param root The root module.
-   * @param initialForce Should we force module accessibility ?
+   * @param forceModuleAccessibility Should we force module accessibility ?
    * @param isSuperUser Is the connected user is a super user ?
    * @return The local root tree node.
    */
   internal fun createTree(modules: Array<Module>,
                           root: Module,
-                          initialForce: Boolean,
+                          forceModuleAccessibility: Boolean,
                           isSuperUser: Boolean): DefaultMutableTreeNode? {
-    var force = initialForce
+    var force = forceModuleAccessibility
 
     if (root.accessibility == Module.ACS_TRUE || isSuperUser) {
       force = true

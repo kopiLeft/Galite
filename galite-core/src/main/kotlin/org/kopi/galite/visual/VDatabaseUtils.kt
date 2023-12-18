@@ -18,8 +18,15 @@
 
 package org.kopi.galite.visual
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 import org.kopi.galite.database.References
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -63,8 +70,6 @@ object VDatabaseUtils {
             }
           }
           else -> throw InconsistencyException("Unrecognized action for table ${query1Row[References.table]} and column ${query1Row[References.column]}: ${query1Row[References.action]}")
-
-
         }
       }
     }
@@ -109,7 +114,6 @@ object VDatabaseUtils {
             }
           }
           else -> throw InconsistencyException("Unrecognized action for table ${query1Row[References.table]} and column ${query1Row[References.column]}: ${query1Row[References.action]}")
-
         }
       }
     }

@@ -17,11 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import org.kopi.galite.type.format
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+
+import org.kopi.galite.type.format
 
 /**
  * Time stamp validator
@@ -104,12 +105,12 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       when {
         month == 0 -> {
           val now = LocalDate.now()
-          month = now.month.value + 1
-          year = now.year + 1900
+          month = now.month.value
+          year = now.year
         }
         year == -2 -> {
           val now = LocalDate.now()
-          year = now.year + 1900
+          year = now.year
         }
         year < 50 -> {
           year += 2000

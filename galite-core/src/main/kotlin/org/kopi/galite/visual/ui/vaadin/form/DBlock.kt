@@ -17,16 +17,30 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import com.vaadin.flow.component.*
-import com.vaadin.flow.component.dependency.CssImport
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+import java.time.LocalDate
+
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.form.Alignment
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UForm
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.block.Block
 import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
 import org.kopi.galite.visual.ui.vaadin.block.SimpleBlockLayout
-import java.time.LocalDate
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DBlock` is the vaadin implementation
@@ -338,13 +352,13 @@ open class DBlock(val parent: DForm,
   fun setScrollPos(value: Int) {
     // Can not be called in event dispatch thread
     // Scrollbar timer is not stop if you click on one of the two buttons
-    var modifiedValue = value
-    assert(modifiedValue < model.bufferSize) //getRecordSize
-    if (sortedToprec != modifiedValue) {
+    var updateValue = value
+    assert(updateValue < model.bufferSize) //getRecordSize
+    if (sortedToprec != updateValue) {
       var recno = 0 //temp sortedToprec
-      while (modifiedValue > 0) {
+      while (updateValue > 0) {
         if (!model.isSortedRecordDeleted(recno)) {
-          modifiedValue--
+          updateValue--
         }
         recno++
       }

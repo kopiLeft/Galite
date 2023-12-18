@@ -125,7 +125,7 @@ class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     when {
       year == -1 -> {
         val now = LocalDate.now()
-        year = now.year + 1900
+        year = now.year
       }
       year < 50 -> {
         year += 2000

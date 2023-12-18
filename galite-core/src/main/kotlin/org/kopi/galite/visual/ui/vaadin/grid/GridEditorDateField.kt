@@ -48,7 +48,6 @@ class GridEditorDateField : GridEditorTextField(10) {
     val day: Int
     var month = 0
     var year = -2
-
     val tokens = s.split("[#./]".toRegex()).toTypedArray()
     if (tokens.isEmpty()) {
       throw InvalidEditorFieldException(this, "00003")
@@ -66,12 +65,12 @@ class GridEditorDateField : GridEditorTextField(10) {
     when {
       month == 0 -> {
         val now = LocalDate.now()
-        month = now.month.value + 1
-        year = now.year + 1900
+        month = now.month.value
+        year = now.year
       }
       year == -2 -> {
         val now = LocalDate.now()
-        year = now.year + 1900
+        year = now.year
       }
       year < 50 -> {
         year += 2000

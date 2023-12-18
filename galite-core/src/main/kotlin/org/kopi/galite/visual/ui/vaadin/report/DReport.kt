@@ -17,11 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.report
 
-import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.contextmenu.ContextMenu
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import java.awt.Color
+
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -29,7 +26,12 @@ import org.kopi.galite.visual.report.*
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
-import java.awt.Color
+
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.contextmenu.ContextMenu
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The `DReport` is the visual part of the [VReport] model.
@@ -125,9 +127,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun addColumn(position: Int) {
     accessAndPush(currentUI) {
-      var modifiedPosition = position
-      modifiedPosition = table.convertColumnIndexToView(modifiedPosition)
-      modifiedPosition += 1
+      var updatePosition = position
+      updatePosition = table.convertColumnIndexToView(updatePosition)
+      updatePosition += 1
       val headerLabel = "col" + model.getColumnCount()
       val span = VerticalLayout(Span(headerLabel))
       model.addColumn(headerLabel)
@@ -137,13 +139,13 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
       addHeaderListeners(column, span)
       // move last column to Position.
       val pos = IntArray(model.getAccessibleColumnCount())
-      for (i in 0 until modifiedPosition) {
+      for (i in 0 until updatePosition) {
         pos[i] = model.getDisplayOrder(i)
       }
-      for (i in modifiedPosition + 1 until model.getAccessibleColumnCount()) {
+      for (i in updatePosition + 1 until model.getAccessibleColumnCount()) {
         pos[i] = model.getDisplayOrder(i - 1)
       }
-      pos[modifiedPosition] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
+      pos[updatePosition] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
       report.columnMoved(pos)
     }
   }

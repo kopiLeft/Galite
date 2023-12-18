@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.io.Serializable
+
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
-import java.io.Serializable
 
 /**
  * An item sorter implementation for the grid block. Constructs a DefaultItemSorter using the default `Comparator`

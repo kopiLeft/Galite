@@ -17,13 +17,15 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.UI
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.form.UBlock
+import org.kopi.galite.visual.form.UField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.form.VImageField
+import org.kopi.galite.visual.form.VStringField
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.StyleManager
 import org.kopi.galite.visual.ui.vaadin.base.Styles
@@ -31,6 +33,12 @@ import org.kopi.galite.visual.ui.vaadin.field.AbstractField
 import org.kopi.galite.visual.ui.vaadin.field.Field
 import org.kopi.galite.visual.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VColor
+
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
 
 /**
  * The `DField` is the vaadin [UField] implementation.

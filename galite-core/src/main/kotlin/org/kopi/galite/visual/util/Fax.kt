@@ -18,7 +18,6 @@
 
 package org.kopi.galite.visual.util
 
-import org.kopi.galite.visual.base.Utils
 import java.io.*
 import java.net.ConnectException
 import java.net.InetAddress
@@ -27,6 +26,8 @@ import java.net.Socket
 import java.util.*
 import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
+
+import org.kopi.galite.visual.base.Utils
 
 @Deprecated("replaced by the class HylaFAXUtils")
 class Fax(var port: Int, var host: String = HFAX_HOST) {
@@ -273,20 +274,20 @@ class Fax(var port: Int, var host: String = HFAX_HOST) {
 
   private fun setNewJob(number: String, id: String) {
     // number check:
-    val newNumber = checkNumber(number)
+    val validatedNumber = checkNumber(number)
 
-    val defaultUser = DEFAULT_USER
-    Utils.log("Fax", "NEW JOB:$id / user: $defaultUser")
+    val user = DEFAULT_USER
+    Utils.log("Fax", "NEW JOB:$id / user: $user")
 
     // Set job parameters
     command("JNEW")
-    command("JPARM FROMUSER \"$defaultUser\"")
+    command("JPARM FROMUSER \"$user\"")
     command("JPARM LASTTIME 145959")
     command("JPARM MAXDIALS 3")
     command("JPARM MAXTRIES 3")
     command("JPARM SCHEDPRI 127")
-    command("JPARM DIALSTRING \"$newNumber\"")
-    command("JPARM NOTIFYADDR \"$defaultUser\"")
+    command("JPARM DIALSTRING \"$validatedNumber\"")
+    command("JPARM NOTIFYADDR \"$user\"")
     command("JPARM JOBINFO \"$id\"")
     command("JPARM VRES 196")
     command("JPARM PAGEWIDTH " + 209)
