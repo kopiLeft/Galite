@@ -60,7 +60,7 @@ class Connection {
    * Creates a connection with Exposed and opens it.
    *
    * @param     url             the URL of the database to connect to
-   * @param     driver          The JDBC driver to use to access the database
+   * @param     driver          the JDBC driver to use to access the database
    * @param     userName        the name of the database user
    * @param     password        the password of the database user
    * @param     lookupUserId    lookup user id in table of users ?
@@ -70,6 +70,7 @@ class Connection {
    * @param     maxRetries      the number of maximum retries if a transaction fails
    * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     logger          the SQL logger
    */
   private constructor(url: String,
                       driver: String? = null,
@@ -117,6 +118,7 @@ class Connection {
    * @param     maxRetries      the number of maximum retries if a transaction fails
    * @param     waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
    * @param     waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+   * @param     logger          the SQL logger
    */
   private constructor(dataSource: javax.sql.DataSource,
                       lookupUserId: Boolean = true,
@@ -189,7 +191,7 @@ class Connection {
      * Creates a connection with Exposed and opens it.
      *
      * @param   url             the URL of the database to connect to
-     * @param   driver          The JDBC driver to use to access the database
+     * @param   driver          the JDBC driver to use to access the database
      * @param   userName        the name of the database user
      * @param   password        the password of the database user
      * @param   lookupUserId    lookup user id in table of users ?
@@ -199,6 +201,7 @@ class Connection {
      * @param   maxRetries      the number of maximum retries if a transaction fails
      * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   logger          the SQL logger
      */
     fun createConnection(url: String,
                          driver: String? = null,
@@ -237,6 +240,7 @@ class Connection {
      * @param   maxRetries      the number of maximum retries if a transaction fails
      * @param   waitMin         the minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
      * @param   waitMax         the maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted
+     * @param   logger          the SQL logger
      */
     fun createConnection(dataSource: javax.sql.DataSource,
                          lookupUserId: Boolean = true,
