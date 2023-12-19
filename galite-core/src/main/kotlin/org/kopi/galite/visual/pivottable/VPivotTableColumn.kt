@@ -38,12 +38,9 @@ abstract class VPivotTableColumn(val ident: String?,
   // ----------------------------------------------------------------------
   var label: String = ""
   var help: String? = null
-  open var isFolded: Boolean = false
 
   open fun format(o: Any?): String {
-    return if (isFolded || o == null) {
-      ""
-    } else if (format != null) {
+    return if (format != null) {
       format!!.format(o)
     } else {
       o.toString()

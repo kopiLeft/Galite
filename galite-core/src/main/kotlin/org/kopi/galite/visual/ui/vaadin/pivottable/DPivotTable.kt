@@ -19,18 +19,11 @@ package org.kopi.galite.visual.ui.vaadin.pivottable
 
 import org.vaadin.addons.componentfactory.PivotTable
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.grid.ColumnTextAlign
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.function.ValueProvider
 
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.pivottable.MPivotTable
 import org.kopi.galite.visual.pivottable.UPivotTable
 import org.kopi.galite.visual.pivottable.VPivotTable
-import org.kopi.galite.visual.report.Constants
-import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.report.VReportRow
-import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 
 @CssImport("./styles/galite/pivottable.css")
@@ -42,6 +35,7 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val model: MPivotTable = pivotTable.model // pivot table model
   private val pivotData = PivotTable.PivotData()
   private val pivotOptions = PivotTable.PivotOptions()
+  private val baseRows = mutableListOf<String>()
   private val rows = mutableListOf<String>()
   private val columns = mutableListOf<String>()
 
@@ -58,6 +52,11 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   }
 
   override fun build() {
+    for(j in 0..model.userRows!!.count() - 1) {
+      for(i in 0..model.columns.count() - 1) {
+        baseRows.add(getValueAt(i,j))
+      }
+    }
     model.columns.forEach {
       pivotData.addColumn(it?.label, it?.javaClass)
       if (it?.position == Position.ROW) {
@@ -68,10 +67,9 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
       }
     }
 
-    model.userRows
-      ?.flatMap { it.data.asIterable() }
-      ?.chunked(model.columns.count()) { rows ->
-      pivotData.addRow(*rows.map{ it }.toTypedArray())}
+    baseRows
+      .chunked(model.columns.count()) { rows ->
+      pivotData.addRow(*rows.map{ it ?: "" }.toTypedArray())}
 
     // Pivot table dimension
     pivotOptions.setRows(*rows.toTypedArray())
@@ -102,8 +100,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   }
 
   fun getValueAt(columnIndex: Int, rowIndex: Int): String {
-    println("entree")
-    println(model.accessibleColumns[columnIndex]!!.format(model.getValueAt(rowIndex, columnIndex)))
     return model.accessibleColumns[columnIndex]!!.format(model.getValueAt(rowIndex, columnIndex))
   }
 }

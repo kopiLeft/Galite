@@ -17,20 +17,39 @@
 
 package org.kopi.galite.visual.domain
 
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.chart.*
+import java.math.BigDecimal
+
+import org.kopi.galite.visual.chart.VBooleanCodeDimension
+import org.kopi.galite.visual.chart.VColumnFormat
+import org.kopi.galite.visual.chart.VDimension
+import org.kopi.galite.visual.chart.VDecimalCodeDimension
+import org.kopi.galite.visual.chart.VDecimalCodeMeasure
+import org.kopi.galite.visual.chart.VIntegerCodeDimension
+import org.kopi.galite.visual.chart.VIntegerCodeMeasure
+import org.kopi.galite.visual.chart.VMeasure
+import org.kopi.galite.visual.chart.VStringCodeDimension
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.CodeDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
-import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.dsl.pivottable.PivotTableField
 import org.kopi.galite.visual.dsl.report.ReportField
-import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.form.VBooleanCodeField
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VDecimalCodeField
+import org.kopi.galite.visual.form.VIntegerCodeField
+import org.kopi.galite.visual.form.VStringCodeField
 import org.kopi.galite.visual.pivottable.VPivotTableColumn
-import org.kopi.galite.visual.report.*
-import java.math.BigDecimal
+import org.kopi.galite.visual.report.VBooleanCodeColumn
+import org.kopi.galite.visual.report.VCalculateColumn
+import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VDecimalCodeColumn
+import org.kopi.galite.visual.report.VIntegerCodeColumn
+import org.kopi.galite.visual.report.VReportColumn
+import org.kopi.galite.visual.report.VStringCodeColumn
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a code domain.

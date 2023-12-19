@@ -21,8 +21,6 @@ package org.kopi.galite.visual.pivottable
 import java.io.Serializable
 
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.report.VReportColumn
-import org.kopi.galite.visual.report.VReportRow
 
 class MPivotTable : Serializable {
 
@@ -35,7 +33,7 @@ class MPivotTable : Serializable {
     private set
 
   // Baserows contains data give by the request of the user
-  internal var userRows: ArrayList<VPivotTableRow>? = ArrayList()
+  var userRows = mutableListOf<VPivotTableRow?>()
   private var visibleRows: Array<VPivotTableRow?>? = null  // array of visible rows
 
   private lateinit var displayLevels: IntArray   // column levels in display order
@@ -101,10 +99,10 @@ class MPivotTable : Serializable {
     var x: Any? = null
 
     try {
-      x = visibleRows!![row]!!.getValueAt(column)
+      x = userRows!![row]!!.getValueAt(column)
     } catch (e: Exception) {
       e.printStackTrace()
     }
-    return if (visibleRows!![row]!!.level < displayLevels[reverseOrder[column]]) null else x
+    return x
   }
 }

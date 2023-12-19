@@ -17,6 +17,15 @@
 
 package org.kopi.galite.visual.domain
 
+import java.io.File
+import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+
+import kotlin.reflect.KClass
+
 import org.joda.time.DateTime
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
@@ -33,13 +42,7 @@ import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.pivottable.VPivotTableColumn
 import org.kopi.galite.visual.report.*
-import java.io.File
-import java.math.BigDecimal
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import kotlin.reflect.KClass
+
 
 /**
  * A domain is a data type with predefined list of allowed values.
