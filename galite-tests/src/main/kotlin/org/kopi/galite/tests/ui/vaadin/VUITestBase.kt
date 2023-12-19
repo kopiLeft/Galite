@@ -64,6 +64,11 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook by TestingLife
     org.kopi.galite.testing.login(testUser, testPassword)
   }
 
+  /**
+   * Runs the UI Queue Automatically
+   *   --> MockVaadin.clientRoundtrip() runs all submitted tasks and blocks until all the tasks have been processed.
+   * see : https://github.com/mvysny/karibu-testing/tree/master/karibu-testing-v10#testing-asynchronous-application
+   */
   override fun awaitBeforeLookup() {
     MockVaadin.clientRoundtrip()
   }

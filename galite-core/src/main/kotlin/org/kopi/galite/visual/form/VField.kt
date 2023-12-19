@@ -29,16 +29,35 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
+import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.GreaterEqOp
+import org.jetbrains.exposed.sql.GreaterOp
+import org.jetbrains.exposed.sql.LessEqOp
+import org.jetbrains.exposed.sql.LessOp
+import org.jetbrains.exposed.sql.LikeEscapeOp
+import org.jetbrains.exposed.sql.NeqOp
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.intLiteral
+import org.jetbrains.exposed.sql.lowerCase
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.stringLiteral
+import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.upperCase
 
 import org.kopi.galite.database.Utils
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.VColor
