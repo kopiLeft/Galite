@@ -16,21 +16,22 @@
  */
 package org.kopi.galite.tests.examples
 
-import org.jetbrains.exposed.sql.insert
-import org.kopi.galite.visual.database.transaction
+import java.math.BigDecimal
+import java.util.Locale
+
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
-import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
+import org.jetbrains.exposed.sql.insert
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.report.triggers.avgDecimal
 import org.kopi.galite.visual.report.triggers.avgInteger
 import org.kopi.galite.visual.report.triggers.sumDecimal
 import org.kopi.galite.visual.report.triggers.sumInteger
-import java.math.BigDecimal
-import java.util.*
 
 /**
  * test field triggers [compute]

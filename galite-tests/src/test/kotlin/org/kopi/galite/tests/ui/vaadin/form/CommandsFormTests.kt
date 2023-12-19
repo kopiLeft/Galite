@@ -16,7 +16,11 @@
  */
 package org.kopi.galite.tests.ui.vaadin.form
 
-import com.github.mvysny.kaributesting.v10.*
+import java.math.BigDecimal
+
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -24,10 +28,26 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
-import org.kopi.galite.testing.*
-import org.kopi.galite.tests.examples.*
+import org.kopi.galite.testing._clickCell
+import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
+import org.kopi.galite.testing.editText
+import org.kopi.galite.testing.expect
+import org.kopi.galite.testing.expectConfirmNotification
+import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.findForms
+import org.kopi.galite.testing.findMultiBlock
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.testing.waitAndRunUIQueue
+import org.kopi.galite.tests.examples.Center
+import org.kopi.galite.tests.examples.CommandsForm
+import org.kopi.galite.tests.examples.MultipleBlockForm
+import org.kopi.galite.tests.examples.Training
+import org.kopi.galite.tests.examples.Type
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initDatabase
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.report.VDecimalColumn
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
@@ -35,9 +55,14 @@ import org.kopi.galite.visual.ui.vaadin.report.DReport
 import org.kopi.galite.visual.ui.vaadin.report.DTable
 import org.kopi.galite.visual.ui.vaadin.visual.DActor
 import org.kopi.galite.visual.ui.vaadin.visual.DHelpViewer
-import java.math.BigDecimal
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import org.kopi.galite.visual.VlibProperties
+
+import com.github.mvysny.kaributesting.v10._expectNone
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._clickItemWithCaption
+import com.github.mvysny.kaributesting.v10.expectRow
 
 class CommandsFormTests : GaliteVUITestBase() {
 

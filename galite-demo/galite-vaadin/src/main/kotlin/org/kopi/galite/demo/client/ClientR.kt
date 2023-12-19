@@ -16,10 +16,11 @@
  */
 package org.kopi.galite.demo.client
 
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.Client
-import org.kopi.galite.visual.WindowController
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
@@ -29,12 +30,11 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
-import java.util.*
+import org.kopi.galite.visual.WindowController
 
 /**
  * Client Report
  */
-@Suppress("DEPRECATION", "DEPRECATION")
 class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   val action = menu("Action")
   val file = menu("File")
@@ -74,7 +74,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
   }
 
   val cmdQuit = command(item = quit) {
-    model.close()
+    model.getDisplay()!!.closeWindow()
   }
   val cmdCSV = command(item = csv) {
     model.export(VReport.TYP_CSV)

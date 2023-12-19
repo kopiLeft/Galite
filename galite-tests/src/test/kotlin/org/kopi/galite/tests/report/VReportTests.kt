@@ -16,6 +16,15 @@
  */
 package org.kopi.galite.tests.report
 
+import java.awt.event.KeyEvent
+import java.io.File
+import java.io.FileInputStream
+import java.math.BigDecimal
+import java.util.Locale
+import java.util.Scanner
+
+import kotlin.test.assertEquals
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellType
@@ -23,7 +32,6 @@ import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
-import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -37,12 +45,7 @@ import org.kopi.galite.visual.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.visual.report.VReport.Companion.TYP_XLSX
 import org.kopi.galite.visual.report.triggers.avgDecimal
-import java.awt.event.KeyEvent
-import java.io.File
-import java.io.FileInputStream
-import java.math.BigDecimal
-import java.util.*
-import kotlin.test.assertEquals
+import org.kopi.galite.visual.VActor
 
 /**
  *
@@ -86,13 +89,13 @@ class VReportTests: JApplicationTestBase() {
     var result = ""
 
     try {
-      val modifiedFile = FileInputStream(file)
+      val inputFile = FileInputStream(file)
       val workbook = if(type == TYP_XLS) {
         //Create Workbook instance holding reference to .xls file
-        HSSFWorkbook(modifiedFile) //xls
+        HSSFWorkbook(inputFile) //xls
       } else {
         //Create Workbook instance holding reference to .xlsx file
-        XSSFWorkbook(modifiedFile) // xlsx
+        XSSFWorkbook(inputFile) // xlsx
       }
 
       //Get first/desired sheet from the workbook
@@ -110,15 +113,12 @@ class VReportTests: JApplicationTestBase() {
           result += when (cell.cellType) {
             CellType.NUMERIC -> cell.numericCellValue.toString() + "  "
             CellType.STRING -> cell.stringCellValue.toString() + "  "
-            CellType.FORMULA -> cell.cellFormula.toString() + " "
-            CellType.BOOLEAN -> cell.booleanCellValue.toString() + " "
-            CellType.ERROR -> cell.errorCellValue.toString() + " "
             else -> ""
           }
         }
         result += ""
       }
-      modifiedFile.close()
+      inputFile.close()
     } catch (e: Exception) {
       e.printStackTrace()
     }

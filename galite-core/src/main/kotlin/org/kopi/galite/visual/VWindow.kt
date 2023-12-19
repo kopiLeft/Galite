@@ -18,6 +18,13 @@
 
 package org.kopi.galite.visual
 
+import java.awt.Frame
+import java.awt.event.KeyEvent
+import java.io.File
+import java.util.*
+
+import javax.swing.event.EventListenerList
+
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.kopi.galite.database.Connection
 import org.kopi.galite.database.DBContextHandler
@@ -27,11 +34,6 @@ import org.kopi.galite.visual.base.Image
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
-import java.awt.Frame
-import java.awt.event.KeyEvent
-import java.io.File
-import java.util.*
-import javax.swing.event.EventListenerList
 
 /**
  * Creates a window

@@ -17,24 +17,35 @@
 
 package org.kopi.galite.tests.form
 
-import org.jetbrains.exposed.sql.*
+import java.io.File
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.minus
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.mod
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.rem
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.alias
+import org.jetbrains.exposed.sql.castTo
+import org.jetbrains.exposed.sql.countDistinct
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.Users
-import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.domain.*
+import org.kopi.galite.visual.domain.AutoComplete
+import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.DATETIME
+import org.kopi.galite.visual.domain.INT
+import org.kopi.galite.visual.domain.ListDomain
+import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
-import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
-import java.io.File
-import java.util.*
+import org.kopi.galite.visual.FileHandler
 
 class FormWithListDomains: Form(title = "form to test list domains", locale = Locale.UK) {
   val autoFill = actor(menu = editMenu, label = "Autofill", help = "Autofill", command = PredefinedCommand.AUTOFILL)

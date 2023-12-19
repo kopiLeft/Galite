@@ -17,6 +17,9 @@
 
 package org.kopi.galite.domain
 
+import java.time.Instant
+import java.time.LocalDateTime
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
@@ -29,8 +32,6 @@ import org.jetbrains.exposed.sql.vendors.currentDialect
 import org.joda.time.DateTime
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
-import java.time.Instant
-import java.time.LocalDateTime
 
 class DomainColumn<T>(val column: Column<*>,
                       val columnProperties: ColumnProperties,

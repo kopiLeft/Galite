@@ -20,6 +20,7 @@ package org.kopi.galite.visual.form
 
 import java.sql.SQLException
 import java.util.*
+
 import javax.swing.event.EventListenerList
 
 import kotlin.math.abs
@@ -1267,7 +1268,6 @@ abstract class VBlock(var title: String,
         for (i in 0 until bufferSize) {
           /* check if record is empty */
           activeRecord = i
-          lastRecord = i
 
           if (isRecordChanged(i)) {
             j = 0

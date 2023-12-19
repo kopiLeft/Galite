@@ -16,6 +16,13 @@
  */
 package org.kopi.galite.tests.form
 
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
@@ -24,7 +31,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
-import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldException
 import org.kopi.galite.visual.form.VPosition
@@ -32,7 +38,7 @@ import org.kopi.galite.visual.list.VColumn
 import org.kopi.galite.visual.list.VIntegerColumn
 import org.kopi.galite.visual.list.VList
 import org.kopi.galite.visual.list.VStringColumn
-import kotlin.test.*
+import org.kopi.galite.visual.MessageCode
 
 class VFieldTests : JApplicationTestBase() {
 

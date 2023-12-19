@@ -16,13 +16,13 @@
  */
 package org.kopi.galite.tests.ui.vaadin.field
 
-import com.github.mvysny.kaributesting.v10.*
-import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.grid.GridSortOrder
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.data.provider.SortDirection
-import org.jetbrains.exposed.sql.JoinType
+import java.math.BigDecimal
+
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,10 +30,29 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
-import org.kopi.galite.testing.*
-import org.kopi.galite.tests.examples.*
+import org.kopi.galite.testing._enter
+import org.kopi.galite.testing.click
+import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
+import org.kopi.galite.testing.editText
+import org.kopi.galite.testing.expectConfirmNotification
+import org.kopi.galite.testing.expectErrorNotification
+import org.kopi.galite.testing.expectInformationNotification
+import org.kopi.galite.testing.findBlock
+import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.examples.BoolCode
+import org.kopi.galite.tests.examples.DecimalCode
+import org.kopi.galite.tests.examples.DocumentationFieldsForm
+import org.kopi.galite.tests.examples.initDocumentationData
+import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.tests.examples.IntCode
+import org.kopi.galite.tests.examples.StringCode
+import org.kopi.galite.tests.examples.TestTable
+import org.kopi.galite.tests.examples.TestTable2
+import org.kopi.galite.tests.examples.TestTriggers
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 import org.kopi.galite.visual.ui.vaadin.field.VPasswordField
 import org.kopi.galite.visual.ui.vaadin.form.DBlock
@@ -41,9 +60,20 @@ import org.kopi.galite.visual.ui.vaadin.form.DGridBlock
 import org.kopi.galite.visual.ui.vaadin.form.DListDialog
 import org.kopi.galite.visual.ui.vaadin.list.ListTable
 import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
-import java.math.BigDecimal
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
+import org.kopi.galite.visual.MessageCode
+
+import com.github.mvysny.kaributesting.v10._expectNone
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._value
+import com.github.mvysny.kaributesting.v10.expectRow
+import com.github.mvysny.kaributesting.v10.expectRows
+import com.github.mvysny.kaributesting.v10.getSuggestionItems
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridSortOrder
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.data.provider.SortDirection
 
 class DocumentationFieldsFormTests : GaliteVUITestBase() {
   val form = DocumentationFieldsForm()

@@ -17,10 +17,12 @@
 
 package org.kopi.galite.tests.form
 
+import java.io.File
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
@@ -28,9 +30,14 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
-import org.kopi.galite.visual.dsl.form.*
-import java.io.File
-import java.util.*
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.FieldOption
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.Key
+import org.kopi.galite.visual.FileHandler
+
 
 object User : Table() {
   val id = integer("ID")

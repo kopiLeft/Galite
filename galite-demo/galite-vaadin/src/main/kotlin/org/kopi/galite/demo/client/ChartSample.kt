@@ -16,14 +16,16 @@
  */
 package org.kopi.galite.demo.client
 
-import org.kopi.galite.visual.VColor
+import java.math.BigDecimal
+
+import java.util.Locale
+
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.chart.Chart
-import java.math.BigDecimal
-import java.util.*
+import org.kopi.galite.visual.VColor
 
 class ChartSample : Chart(
   locale = Locale.UK,

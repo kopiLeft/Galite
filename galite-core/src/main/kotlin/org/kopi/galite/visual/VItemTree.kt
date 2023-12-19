@@ -18,13 +18,16 @@
 
 package org.kopi.galite.visual
 
+import java.awt.event.KeyEvent
+import java.util.Locale
+
+import javax.swing.tree.TreeNode
+
+import kotlin.system.exitProcess
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
-import java.awt.event.KeyEvent
-import java.util.*
-import javax.swing.tree.TreeNode
-import kotlin.system.exitProcess
 
 /**
  * Represents a new instance of VItemTree.

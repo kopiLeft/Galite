@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.demo.common
 
+import java.util.Locale
+
 import org.kopi.galite.visual.dsl.common.Actor
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
-import java.util.*
 
 open class ReportDefault(title: String, help: String?, locale: Locale? = null) : Report(title, help, locale) {
 

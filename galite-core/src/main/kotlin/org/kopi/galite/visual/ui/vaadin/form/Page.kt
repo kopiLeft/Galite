@@ -17,15 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
+import org.kopi.galite.visual.ui.vaadin.block.Block
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.base.VScrollablePanel
-import org.kopi.galite.visual.ui.vaadin.block.Block
 
 /**
  * A form page, can be either or vertical or horizontal page.

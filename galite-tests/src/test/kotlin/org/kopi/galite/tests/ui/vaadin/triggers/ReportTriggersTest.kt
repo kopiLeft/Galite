@@ -16,11 +16,12 @@
  */
 package org.kopi.galite.tests.ui.vaadin.triggers
 
+import java.util.Locale
+
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.Report
-import java.util.*
 
 object ReportTriggersTest : Report(title = "Report to test triggers", locale = Locale.UK) {
   val action = menu("Action")

@@ -18,6 +18,15 @@
 
 package org.kopi.galite.visual
 
+import java.awt.event.KeyEvent
+import java.sql.SQLException
+import java.util.*
+
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeNode
+
+import kotlin.system.exitProcess
+
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.database.*
@@ -25,12 +34,6 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
-import java.awt.event.KeyEvent
-import java.sql.SQLException
-import java.util.*
-import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.TreeNode
-import kotlin.system.exitProcess
 
 /**
  * Represents a menu tree model.
@@ -300,7 +303,7 @@ class VMenuTree constructor(ctxt: Connection?,
     }
     if (!hasModules) {
       error(MessageCode.getMessage("VIS-00042"))
-      throw InconsistencyException(message = "never accessed") //never accessed
+      throw InconsistencyException(message = "Modules not found in the tree")
     }
     createTopLevelTree()
   }

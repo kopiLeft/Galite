@@ -16,8 +16,10 @@
  */
 package org.kopi.galite.tests.examples
 
+import java.math.BigDecimal
+import java.util.Locale
+
 import org.kopi.galite.tests.desktop.runForm
-import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -27,8 +29,7 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import java.math.BigDecimal
-import java.util.*
+import org.kopi.galite.visual.VColor
 
 object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
 

@@ -18,7 +18,8 @@
 
 package org.kopi.galite.util.base
 
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 /**
  * This class defines several utilities methods used in source code

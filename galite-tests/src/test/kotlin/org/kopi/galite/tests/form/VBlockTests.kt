@@ -16,22 +16,38 @@
  */
 package org.kopi.galite.tests.form
 
-import org.jetbrains.exposed.sql.*
+import java.math.BigDecimal
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import org.kopi.galite.database.Users
-import org.kopi.galite.tests.examples.*
+import org.kopi.galite.tests.examples.Center
+import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
+import org.kopi.galite.tests.examples.Training
+import org.kopi.galite.tests.examples.centerSequence
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.database.Users
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
-import java.math.BigDecimal
-import kotlin.test.*
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
 

@@ -16,7 +16,11 @@
  */
 package org.kopi.galite.testing
 
-import com.github.mvysny.kaributesting.v10.*
+import com.github.mvysny.kaributesting.v10._expectEditableByUser
+import com.github.mvysny.kaributesting.v10._fireEvent
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10.expectRow
+import com.github.mvysny.kaributesting.v10.expectRows
 import com.github.mvysny.kaributools._internalId
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.ItemClickEvent

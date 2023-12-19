@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests.examples
 
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.WindowController
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
@@ -29,7 +30,7 @@ import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
-import java.util.*
+import org.kopi.galite.visual.WindowController
 
 /**
  * Training Report

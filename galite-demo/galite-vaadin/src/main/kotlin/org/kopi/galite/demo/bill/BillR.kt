@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo.bill
 
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.database.Bill
@@ -28,12 +30,11 @@ import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.report.FieldAlignment
 import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.VReport
-import java.util.*
 
 /**
  * Bill Report
  */
-@Suppress("DEPRECATION")
+
 class BillR : Report("Bills_Report", locale = Locale.UK) {
 
   val action = menu("Action")
@@ -64,7 +65,7 @@ class BillR : Report("Bills_Report", locale = Locale.UK) {
   }
 
   val cmdQuit = command(item = quit) {
-    model.close()
+    model.getDisplay()!!.closeWindow()
   }
   val cmdCSV = command(item = csv) {
     model.export(VReport.TYP_CSV)

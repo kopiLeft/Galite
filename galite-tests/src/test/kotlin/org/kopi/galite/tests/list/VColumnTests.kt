@@ -17,11 +17,12 @@
 
 package org.kopi.galite.tests.list
 
-import org.junit.Test
-import org.kopi.galite.database.Users
-import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.visual.list.VColumn
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.database.Users
+import org.kopi.galite.visual.list.VColumn
 
 class VColumnTests : VApplicationTestBase() {
   @Test

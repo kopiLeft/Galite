@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.localizer
 
+import java.io.File
+import java.util.*
+
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -26,8 +29,6 @@ import org.kopi.galite.database.Modules
 import org.kopi.galite.database.Symbols
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.dsl.common.Window
-import java.io.File
-import java.util.*
 
 fun localizeWindows(url: String,
                     driver: String,

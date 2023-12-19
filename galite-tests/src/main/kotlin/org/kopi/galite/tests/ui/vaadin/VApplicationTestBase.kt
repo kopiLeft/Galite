@@ -17,19 +17,31 @@
 
 package org.kopi.galite.tests.ui.vaadin
 
+import java.util.Locale
+
 import com.vaadin.flow.router.Route
+
 import org.kopi.galite.database.Connection
 import org.kopi.galite.tests.common.ApplicationTestBase
 import org.kopi.galite.tests.common.GaliteRegistry
-import org.kopi.galite.visual.*
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.PropertyException
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.WindowController
 import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.ui.vaadin.chart.DChart
 import org.kopi.galite.visual.ui.vaadin.report.DReport
-import org.kopi.galite.visual.ui.vaadin.visual.*
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.ui.vaadin.visual.VApplicationContext
+import org.kopi.galite.visual.ui.vaadin.visual.VFileHandler
+import org.kopi.galite.visual.ui.vaadin.visual.VImageHandler
+import org.kopi.galite.visual.ui.vaadin.visual.VUIFactory
 import org.kopi.galite.visual.util.Rexec
-import java.util.*
 
 /**
  * TestBase class for all tests.
