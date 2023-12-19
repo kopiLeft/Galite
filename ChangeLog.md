@@ -1,3 +1,14 @@
+# 1.5.0
+## What's Changed
+* Upgrade Exposed version to 0.42.1 and Kotlin version to 1.9.0 by @mgrati and @achraf-debug in [#603](https://github.com/kopiLeft/Galite/pull/603)
+* Implement waitMin and waitMax params for retrying aborted transactions by @mgrati and @achraf-debug in [#603](https://github.com/kopiLeft/Galite/pull/603)
+* Use HikariCP pool connection for galite-data connections by @mgrati in [#613](https://github.com/kopiLeft/Galite/pull/613)
+* Fix : Fix unusual behaviour for applications with multiple connections by @mgrati in [#613](https://github.com/kopiLeft/Galite/pull/613)
+* Allow display of multi-line report rows by @MedAzizTousli in [#597](https://github.com/kopiLeft/Galite/pull/597)
+* Implement automated testing for pivot table module by @RiadhCherni in [#607](https://github.com/kopiLeft/Galite/pull/607)
+
+**Full Changelog**: [1.4.3 ... 1.5.0](https://github.com/kopiLeft/Galite/compare/1.4.3...1.5.0)
+
 # 1.4.3
 ## What's Changed
 * Fix : Allow creating Galite forms with database tables with a sequence name different from "<TABLE8NAME>ID" @mgrati [#604](https://github.com/kopiLeft/Galite/pull/604)
