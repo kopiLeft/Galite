@@ -125,7 +125,7 @@ class GaliteApplication : JApplication(GaliteRegistry()) {
     }
   }
 
-  override val dBConnection: Connection? = null
+  override var dBConnection: Connection? = null
   override var isGeneratingHelp: Boolean = false
   override val isNoBugReport: Boolean
     get() = true

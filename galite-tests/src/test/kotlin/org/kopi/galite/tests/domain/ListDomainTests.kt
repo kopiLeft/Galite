@@ -19,13 +19,15 @@ package org.kopi.galite.tests.domain
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
-
+import org.junit.Before
 import org.junit.Test
+
+import org.jetbrains.exposed.sql.*
 
 import org.kopi.galite.tests.form.*
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.ListDomain
 
 /**
@@ -34,6 +36,11 @@ import org.kopi.galite.visual.domain.ListDomain
 class ListDomainTests : VApplicationTestBase() {
 
   val listDomainExpression = FormWithListDomains()
+
+  @Before
+  fun `override application context connection`() {
+    ApplicationContext.applicationContext.getApplication().dBConnection = connection
+  }
 
   /**
    * Tests the creation of a simple list domain

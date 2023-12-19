@@ -22,6 +22,7 @@ object Versions {
   const val ENHANCED_DIALOG = "23.1.2"
 
   const val EXPOSED = "0.42.1"
+  const val HIKARI = "5.1.0"
   const val H2 = "1.4.199"
   const val POSTGRES_NG = "0.8.6"
   const val ITEXT = "2.1.5"

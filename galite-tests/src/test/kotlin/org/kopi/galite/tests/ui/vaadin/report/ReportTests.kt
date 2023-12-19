@@ -19,27 +19,31 @@ package org.kopi.galite.tests.ui.vaadin.report
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
-import org.kopi.galite.visual.ui.vaadin.download.DownloadAnchor
+
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10.expectRow
+import com.github.mvysny.kaributesting.v10.expectRows
+
+import com.vaadin.flow.component.grid.Grid
+
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.form.FormWithReport
 import org.kopi.galite.tests.report.SimpleReport
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.ui.vaadin.common.VCaption
+import org.kopi.galite.visual.ui.vaadin.download.DownloadAnchor
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
 import org.kopi.galite.visual.ui.vaadin.report.DReport
-
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10.expectRow
-import com.github.mvysny.kaributesting.v10.expectRows
-import com.vaadin.flow.component.grid.Grid
-import org.junit.Ignore
 
 class ReportTests: GaliteVUITestBase() {
 
@@ -55,6 +59,11 @@ class ReportTests: GaliteVUITestBase() {
   fun `login to the App`() {
     login()
     formWithReport.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -133,7 +142,9 @@ class ReportTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      initModules()
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
+        initModules()
+      }
     }
   }
 }

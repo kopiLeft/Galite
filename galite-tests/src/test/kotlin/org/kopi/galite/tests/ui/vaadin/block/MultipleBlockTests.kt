@@ -24,10 +24,14 @@ import java.time.LocalTime
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10.expectRow
+
 import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
@@ -41,9 +45,7 @@ import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.type.format
-
-import com.github.mvysny.kaributesting.v10.expectRow
-import org.junit.Ignore
+import org.kopi.galite.visual.ApplicationContext
 
 class MultipleBlockTests: GaliteVUITestBase() {
 
@@ -52,6 +54,11 @@ class MultipleBlockTests: GaliteVUITestBase() {
   @Before
   fun `login to the App`() {
     login()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Ignore
@@ -142,7 +149,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

@@ -99,7 +99,7 @@ interface Application : MessageListener {
   /**
    * The [Connection] containing user connection information.
    */
-  val dBConnection: Connection?
+  var dBConnection: Connection?
 
   /**
    * The connected user name.

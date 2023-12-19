@@ -50,7 +50,7 @@ class LocalizationTests {
     fun init() {
       initDatabase()
       VApplication.instance = object : JApplication(Registry("", null)) {
-        override val dBConnection get() = null
+        override var dBConnection = null as Connection?
         override val defaultLocale get() = Locale.UK
         override val isNoBugReport get() = true
         override fun login(

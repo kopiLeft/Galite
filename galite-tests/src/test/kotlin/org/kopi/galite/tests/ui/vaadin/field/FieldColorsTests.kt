@@ -18,10 +18,11 @@ package org.kopi.galite.tests.ui.vaadin.field
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
 import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.open
@@ -29,6 +30,8 @@ import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.form.Days
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.INT
@@ -41,7 +44,6 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.VColor
 
 class FieldColorsTests: GaliteVUITestBase() {
 
@@ -53,6 +55,11 @@ class FieldColorsTests: GaliteVUITestBase() {
 
     // Open the form
     form.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -87,7 +94,7 @@ class FieldColorsTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

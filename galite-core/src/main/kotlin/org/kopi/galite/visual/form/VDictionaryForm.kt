@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.visual.form
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.pivottable.VPivotTable

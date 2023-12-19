@@ -133,7 +133,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   companion object {
     private val LONGOPTS = arrayOf(
       LongOpt("database", LongOpt.REQUIRED_ARGUMENT, null, 'b'.code),
-      LongOpt("driver", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
+      LongOpt("driver", LongOpt.OPTIONAL_ARGUMENT, null, 'd'.code),
       LongOpt("username", LongOpt.REQUIRED_ARGUMENT, null, 'u'.code),
       LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'p'.code),
       LongOpt("lookupUserId", LongOpt.NO_ARGUMENT, null, 'U'.code),

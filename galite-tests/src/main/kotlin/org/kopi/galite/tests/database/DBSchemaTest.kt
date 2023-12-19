@@ -17,13 +17,14 @@
 
 package org.kopi.galite.tests.database
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.kopi.galite.tests.common.TestBase
+
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.database.Connection
 import org.kopi.galite.database.Users
-import org.kopi.galite.database.databaseConfig
+import org.kopi.galite.tests.common.TestBase
 
 /**
  * Creates a connection and initializes the database. Useful if your test/demo needs a connection, the initial
@@ -36,6 +37,7 @@ open class DBSchemaTest : TestBase() {
     const val testDriver = "org.h2.Driver"
     const val testUser = "admin"
     const val testPassword = "admin"
+    lateinit var connection: Connection
 
     /**
      * Initializes the test
@@ -43,8 +45,8 @@ open class DBSchemaTest : TestBase() {
     @BeforeClass
     @JvmStatic
     fun init() {
-      Database.connect(testURL, testDriver, testUser, testPassword, databaseConfig = databaseConfig())
-      transaction {
+      connection = Connection.createConnection(testURL, testDriver, testUser, testPassword, false)
+      transaction(connection.dbConnection) {
         createDBSchemaTables()
         insertIntoUsers(testUser, "administrator")
       }
@@ -56,22 +58,13 @@ open class DBSchemaTest : TestBase() {
     @AfterClass
     @JvmStatic
     fun reset() {
-      Database.connect(testURL, testDriver, testUser, testPassword, databaseConfig = databaseConfig())
-      transaction {
-        exec("DROP ALL OBJECTS")
+      try {
+        transaction(connection.dbConnection) {
+          exec("DROP ALL OBJECTS")
+        }
+      } finally {
+        connection.poolConnection.close()
       }
-    }
-  }
-
-
-  /**
-   * Initialises the database with creating the necessary tables and creates users.
-   */
-  open fun initDatabase() {
-    transaction {
-      createDBSchemaTables()
-
-      insertIntoUsers(testUser, "administrator")
     }
   }
 }

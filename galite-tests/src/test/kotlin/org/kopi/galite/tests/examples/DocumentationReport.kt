@@ -47,6 +47,8 @@ class DocumentationReport : ReportSelectionForm(title = "Test Report Form", loca
 }
 
 fun main() {
-  initReportDocumentationData()
+  org.jetbrains.exposed.sql.transactions.transaction {
+    initReportDocumentationData()
+  }
   runForm(formName = DocumentationReport())
 }

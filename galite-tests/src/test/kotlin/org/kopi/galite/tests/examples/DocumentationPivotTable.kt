@@ -44,6 +44,8 @@ class DocumentationPivotTable : Form(title = "Test pivot table Form", locale = L
 }
 
 fun main() {
-  initReportDocumentationData()
+  org.jetbrains.exposed.sql.transactions.transaction {
+    initReportDocumentationData()
+  }
   runForm(formName = DocumentationPivotTable())
 }

@@ -16,23 +16,27 @@
  */
 package org.kopi.galite.tests.ui.vaadin.triggers
 
+import org.jetbrains.exposed.sql.Database
 import java.util.Locale
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
+
 import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.edit
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.testing.expectConfirmNotification
 import org.kopi.galite.testing.findField
 import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
@@ -49,6 +53,11 @@ class FormTriggersTests : GaliteVUITestBase() {
 
     // Open the form
     TestTriggersForm.model.doNotModal()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -235,7 +244,7 @@ class FormTriggersTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         org.kopi.galite.tests.examples.initModules()
         SchemaUtils.create(Client)
         Client.insert {

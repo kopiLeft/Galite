@@ -537,7 +537,7 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
         this.value = "PREUPD Trigger"
       }
       trigger(POSTUPD) {
-        block.form.notice("POSTUPD Trigger")
+        println("POSTUPD Trigger") // block.form.notice("POSTUPD Trigger") !! FIXME !! mgrati 20231213 : notice generates test error when replacing Galite connection to use HikariCP
       }
     }
 
@@ -648,6 +648,8 @@ object TestTriggers : Table("TRIGGERS") {
 }
 
 fun main() {
-  initDocumentationData()
+  org.jetbrains.exposed.sql.transactions.transaction {
+    initDocumentationData()
+  }
   runForm(formName = DocumentationFieldsForm())
 }

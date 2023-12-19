@@ -25,7 +25,6 @@ import java.sql.SQLException
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.Temporal
-
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
@@ -52,16 +51,9 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
-import org.kopi.galite.visual.base.UComponent
+
 import org.kopi.galite.database.Utils
-import org.kopi.galite.visual.dsl.form.Access
-import org.kopi.galite.visual.l10n.BlockLocalizer
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.list.VColumn
-import org.kopi.galite.visual.list.VList
-import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
@@ -76,6 +68,14 @@ import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.dsl.form.Access
+import org.kopi.galite.visual.l10n.BlockLocalizer
+import org.kopi.galite.visual.l10n.FieldLocalizer
+import org.kopi.galite.visual.list.VColumn
+import org.kopi.galite.visual.list.VList
+import org.kopi.galite.visual.list.VListColumn
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -340,13 +340,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getAutocompleteLength(): Int = if (list != null) list!!.autocompleteLength else 0
 
-
   /**
    * Returns the auto complete type.
    * @return The auto complete type.
    */
   open fun getAutocompleteType(): Int = if (list != null) list!!.autocompleteType else VList.AUTOCOMPLETE_NONE
-
 
   /**
    * return true if this field implements "enumerateValue"
@@ -463,7 +461,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun checkConstraint(s: Any) {
     if (constraint?.invoke(s) == false) {
-      if(constraintMessage != null) {
+      if (constraintMessage != null) {
         throw VFieldException(this, constraintMessage)
       } else {
         throw VFieldException(this, MessageCode.getMessage("VIS-00071"))
@@ -938,7 +936,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  private fun getOperandExpression(stringOperand: String) : ExpressionWithColumnType<String> {
+  private fun getOperandExpression(stringOperand: String): ExpressionWithColumnType<String> {
     return when (options and VConstants.FDO_SEARCH_MASK) {
       VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
       VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()
@@ -1729,7 +1727,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (alreadyProtected) {
               exists = !query.empty()
             } else {
-              transaction {
+              getForm().transaction {
                 exists = !query.empty()
               }
             }
@@ -1785,7 +1783,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               if (count > 0) result = query.first()[column]
               if (count > 2) count = 2
             } else {
-              transaction {
+              getForm().transaction {
                 count = query.count().toInt()
                 if (count > 0) result = query.first()[column]
                 if (count > 2) count = 2
@@ -1872,7 +1870,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-          transaction {
+          getForm().transaction {
             val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord) }
 
             if (!query.empty()) {
@@ -1926,7 +1924,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-          transaction {
+          getForm().transaction {
             lineCount = 0
             for (result in query) {
               if (lineCount >= MAX_LINE_COUNT - 1) {
@@ -1983,7 +1981,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           while (true) {
             try {
-              result = transaction {
+              result = getForm().transaction {
                 val table = evalListTable()
                 val column = list!!.getColumn(0).column!!
                 val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
@@ -2073,7 +2071,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       Op.build { list!!.getColumn(0).column!! less getSql(block!!.activeRecord).toString() }
     }
 
-    val orderBy = if (desc) SortOrder.ASC else  SortOrder.DESC
+    val orderBy = if (desc) SortOrder.ASC else SortOrder.DESC
 
     val query = if (isNull(block!!.activeRecord)) {
       table.slice(column!!).selectAll()
@@ -2083,7 +2081,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     while (true) {
       try {
-        transaction {
+        getForm().transaction {
           query.forEach {
             if (value == null) {
               value = it[column]
@@ -2154,7 +2152,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       while (true) {
         try {
-          transaction {
+          getForm().transaction {
             query.forEach {
               val columnsList = mutableListOf<String>()
 
@@ -2236,7 +2234,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-          result = transaction {
+          result = getForm().transaction {
             val table = evalListTable()
             val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
             val firstRecord = table.slice(list!!.getColumn(0).column!!).select {
@@ -2284,7 +2282,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
   }
-
 
   /**
    * return the name of this field
@@ -2587,7 +2584,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   @Deprecated("")
   inner class Compatible {
     fun getDisplayedValue(trim: Boolean): Any? = this@VField.getDisplayedValue(trim)
-
   }
 
   @Deprecated("")

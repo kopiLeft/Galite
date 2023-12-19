@@ -25,9 +25,12 @@ dependencies {
   api(project(":galite-util"))
 
   // Exposed dependency
-  implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
-  implementation("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
+  // HikariCP dependency : for pool connexion
+  api("com.zaxxer", "HikariCP", Versions.HIKARI)
 
   // getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)

@@ -19,16 +19,19 @@ package org.kopi.galite.tests.ui.vaadin.field
 import java.time.LocalDate
 
 import org.apache.commons.lang3.StringUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
+import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
-import org.kopi.galite.testing._enter
 import org.kopi.galite.testing.expectErrorNotification
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.PredefinedCommand
 import org.kopi.galite.visual.dsl.form.Block
@@ -44,6 +47,11 @@ class FieldConstraintsTests: GaliteVUITestBase() {
 
     // Open the form
     form.model.doNotModal()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -103,7 +111,7 @@ class FieldConstraintsTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

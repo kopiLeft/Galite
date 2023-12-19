@@ -25,34 +25,44 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+import org.junit.Assert.assertThrows
+import org.junit.Before
+import org.junit.Test
+
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Assert.assertThrows
-import org.junit.Test
+
+import org.kopi.galite.database.Users
+import org.kopi.galite.tests.database.connectToDatabase
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.database.Users
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VQueryNoRowException
 import org.kopi.galite.visual.form.VSkipRecordException
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : VApplicationTestBase() {
 
   val FormWithList = FormWithList()
   val formMultiple = FormToTestSaveMultipleBlock()
+
+  @Before
+  fun `override application context connection`() {
+    ApplicationContext.applicationContext.getApplication().dBConnection = connection
+  }
 
   fun initSampleFormTables() {
     SchemaUtils.create(User)

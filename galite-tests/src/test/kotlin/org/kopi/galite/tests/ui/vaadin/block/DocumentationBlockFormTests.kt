@@ -22,33 +22,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.testing._enter
-import org.kopi.galite.testing.click
-import org.kopi.galite.testing.edit
-import org.kopi.galite.testing.editRecord
-import org.kopi.galite.testing.expectConfirmNotification
-import org.kopi.galite.testing.expectErrorNotification
-import org.kopi.galite.testing.findField
-import org.kopi.galite.testing.open
-import org.kopi.galite.testing.triggerCommand
-import org.kopi.galite.tests.examples.TestTriggers
-import org.kopi.galite.tests.examples.initData
-import org.kopi.galite.tests.examples.initDocumentationData
-import org.kopi.galite.tests.examples.initModules
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.testing.expectInformationNotification
-import org.kopi.galite.testing.findActor
-import org.kopi.galite.testing.findMultiBlock
-import org.kopi.galite.tests.examples.DocumentationBlockForm
-import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.form.DBlock
 
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -56,8 +33,36 @@ import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.github.mvysny.kaributesting.v10.expectRow
+
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+
+import org.jetbrains.exposed.sql.selectAll
+
+import org.kopi.galite.testing._enter
+import org.kopi.galite.testing.click
+import org.kopi.galite.testing.edit
+import org.kopi.galite.testing.editRecord
+import org.kopi.galite.testing.expectConfirmNotification
+import org.kopi.galite.testing.expectErrorNotification
+import org.kopi.galite.testing.expectInformationNotification
+import org.kopi.galite.testing.findActor
+import org.kopi.galite.testing.findField
+import org.kopi.galite.testing.findMultiBlock
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
+import org.kopi.galite.tests.examples.DocumentationBlockForm
+import org.kopi.galite.tests.examples.TestTriggers
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initDocumentationData
+import org.kopi.galite.tests.examples.initModules
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.form.DBlock
+import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
 
 class DocumentationBlockFormTests : GaliteVUITestBase() {
   val form = DocumentationBlockForm()
@@ -68,6 +73,11 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
     // Open the form
     form.open()
+  }
+
+  @After
+  fun `close pool connection`() {
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -387,7 +397,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
         initModules()
       }
     }

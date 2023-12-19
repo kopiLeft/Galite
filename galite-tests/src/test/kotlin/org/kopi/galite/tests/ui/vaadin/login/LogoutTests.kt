@@ -17,16 +17,17 @@
 package org.kopi.galite.tests.ui.vaadin.login
 
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._expectNone
+import com.github.mvysny.kaributesting.v10._expectOne
+
 import org.kopi.galite.testing.logout
 import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.welcome.WelcomeView
-
-import com.github.mvysny.kaributesting.v10._expectNone
-import com.github.mvysny.kaributesting.v10._expectOne
-import org.junit.Ignore
 
 class LogoutTests: GaliteVUITestBase() {
 
@@ -62,7 +63,9 @@ class LogoutTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      initModules()
+      org.jetbrains.exposed.sql.transactions.transaction(connection.dbConnection) {
+        initModules()
+      }
     }
   }
 }

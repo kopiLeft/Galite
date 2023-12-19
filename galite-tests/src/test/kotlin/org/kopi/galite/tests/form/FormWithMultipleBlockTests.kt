@@ -23,7 +23,6 @@ import kotlin.test.assertTrue
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.junit.Test
 import org.kopi.galite.tests.examples.Center
@@ -31,6 +30,7 @@ import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
 import org.kopi.galite.tests.examples.centerSequence
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.database.transaction
 
 class FormWithMultipleBlockTests : JApplicationTestBase() {
 

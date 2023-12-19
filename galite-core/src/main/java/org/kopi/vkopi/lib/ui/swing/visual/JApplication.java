@@ -356,7 +356,8 @@ public abstract class JApplication implements Application {
                                                            java.sql.Connection.TRANSACTION_SERIALIZABLE,
                                                            options.maxRetries,
                                                            options.waitMin,
-                                                           options.waitMax);
+                                                           options.waitMax,
+                                                           null);
       } catch (Exception e) {
         System.err.println(e.getMessage());
         options.usage();

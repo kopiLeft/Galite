@@ -18,13 +18,20 @@ package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
+
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10.expectRow
+
+import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.demo.database.addClients
 import org.kopi.galite.demo.database.addProducts
 import org.kopi.galite.demo.database.addSales
 import org.kopi.galite.demo.database.addTaxRules
+import org.kopi.galite.demo.database.initModules
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
@@ -38,13 +45,10 @@ import org.kopi.galite.testing.findMultiBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.ui.vaadin.common.VCaption
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.ui.vaadin.main.VWindowContainer
-
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10.expectRow
 
 class FormTests: GaliteVUITestBase() {
 
@@ -93,6 +97,8 @@ class FormTests: GaliteVUITestBase() {
 
     providersForm.open()
     assertEquals(providersForm.title, windowCaption.getCaption())
+
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   @Test
@@ -113,6 +119,7 @@ class FormTests: GaliteVUITestBase() {
     data.forEachIndexed { index, row ->
       block.grid.expectRow(index, *row)
     }
+    ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
   companion object {
@@ -122,15 +129,15 @@ class FormTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      transaction {
+      transaction(connection.dbConnection) {
         createApplicationTables()
         addClients()
         addTaxRules()
         addProducts()
         addSales()
+        // Using modules defined in demo application
+        initModules()
       }
-      // Using modules defined in demo application
-      org.kopi.galite.demo.database.initModules()
     }
   }
 }

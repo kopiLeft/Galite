@@ -21,7 +21,7 @@ import org.jetbrains.exposed.sql.insert
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING

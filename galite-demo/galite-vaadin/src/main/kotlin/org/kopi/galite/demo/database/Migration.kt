@@ -31,6 +31,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.database.*
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
@@ -84,8 +85,8 @@ fun initDatabase() {
     addBillPrdts()
     addBills()
     addTasks()
+    initModules()
   }
-  initModules()
 }
 
 /**
@@ -119,25 +120,23 @@ val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
 val listOfSequences = listOf(TASKId)
 
 fun initModules() {
-  transaction {
-    insertIntoModule("1000", "org/kopi/galite/demo/Menu", 0)
-    insertIntoModule("1001", "org/kopi/galite/demo/Menu", 1, "1000", ClientForm::class)
-    insertIntoModule("2000", "org/kopi/galite/demo/Menu", 100)
-    insertIntoModule("2001", "org/kopi/galite/demo/Menu", 101, "2000", CommandForm::class)
-    insertIntoModule("3000", "org/kopi/galite/demo/Menu", 200)
-    insertIntoModule("3001", "org/kopi/galite/demo/Menu", 201, "3000", ProductForm::class)
-    insertIntoModule("4000", "org/kopi/galite/demo/Menu", 300)
-    insertIntoModule("4001", "org/kopi/galite/demo/Menu", 301, "4000", BillForm::class)
-    insertIntoModule("4010", "org/kopi/galite/demo/Menu", 401, "4000", BillProductForm::class)
-    insertIntoModule("5000", "org/kopi/galite/demo/Menu", 500)
-    insertIntoModule("5001", "org/kopi/galite/demo/Menu", 501, "5000", StockForm::class)
-    insertIntoModule("6000", "org/kopi/galite/demo/Menu", 600)
-    insertIntoModule("6001", "org/kopi/galite/demo/Menu", 601, "6000", TaxRuleForm::class)
-    insertIntoModule("7000", "org/kopi/galite/demo/Menu", 700)
-    insertIntoModule("7001", "org/kopi/galite/demo/Menu", 701, "7000", ProviderForm::class)
-    insertIntoModule("8000", "org/kopi/galite/demo/Menu", 800)
-    insertIntoModule("8001", "org/kopi/galite/demo/Menu", 801, "8000", TasksForm::class)
-  }
+  insertIntoModule("1000", "org/kopi/galite/demo/Menu", 0)
+  insertIntoModule("1001", "org/kopi/galite/demo/Menu", 1, "1000", ClientForm::class)
+  insertIntoModule("2000", "org/kopi/galite/demo/Menu", 100)
+  insertIntoModule("2001", "org/kopi/galite/demo/Menu", 101, "2000", CommandForm::class)
+  insertIntoModule("3000", "org/kopi/galite/demo/Menu", 200)
+  insertIntoModule("3001", "org/kopi/galite/demo/Menu", 201, "3000", ProductForm::class)
+  insertIntoModule("4000", "org/kopi/galite/demo/Menu", 300)
+  insertIntoModule("4001", "org/kopi/galite/demo/Menu", 301, "4000", BillForm::class)
+  insertIntoModule("4010", "org/kopi/galite/demo/Menu", 401, "4000", BillProductForm::class)
+  insertIntoModule("5000", "org/kopi/galite/demo/Menu", 500)
+  insertIntoModule("5001", "org/kopi/galite/demo/Menu", 501, "5000", StockForm::class)
+  insertIntoModule("6000", "org/kopi/galite/demo/Menu", 600)
+  insertIntoModule("6001", "org/kopi/galite/demo/Menu", 601, "6000", TaxRuleForm::class)
+  insertIntoModule("7000", "org/kopi/galite/demo/Menu", 700)
+  insertIntoModule("7001", "org/kopi/galite/demo/Menu", 701, "7000", ProviderForm::class)
+  insertIntoModule("8000", "org/kopi/galite/demo/Menu", 800)
+  insertIntoModule("8001", "org/kopi/galite/demo/Menu", 801, "8000", TasksForm::class)
 }
 
 /**
