@@ -23,15 +23,14 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.Temporal
 
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
+import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBInterruptionException
-import org.kopi.galite.type.Week
-import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.BlockListener
 import org.kopi.galite.visual.form.VBlock
@@ -40,13 +39,11 @@ import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
+import org.kopi.galite.type.Week
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-
-
-
 
 abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VBlock(title, buffer, visible) {
 
