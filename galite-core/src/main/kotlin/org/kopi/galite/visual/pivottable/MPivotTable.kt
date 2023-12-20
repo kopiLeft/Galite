@@ -29,16 +29,9 @@ class MPivotTable : Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   var columns = mutableListOf<VPivotTableColumn?>()    // array of column definitions
-  var accessibleColumns: Array<VPivotTableColumn?> = arrayOf() // array of visible or hide columns
-    private set
 
   // Baserows contains data give by the request of the user
   var userRows = mutableListOf<VPivotTableRow?>()
-  private var visibleRows: Array<VPivotTableRow?>? = null  // array of visible rows
-
-  private lateinit var displayLevels: IntArray   // column levels in display order
-
-  private lateinit var reverseOrder: IntArray    // column mapping from model to display
 
   /**
    * Add a row to the list of rows defined by the user
@@ -99,7 +92,7 @@ class MPivotTable : Serializable {
     var x: Any? = null
 
     try {
-      x = userRows!![row]!!.getValueAt(column)
+      x = userRows[row]!!.getValueAt(column)
     } catch (e: Exception) {
       e.printStackTrace()
     }

@@ -52,11 +52,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   }
 
   override fun build() {
-    for(j in 0..model.userRows!!.count() - 1) {
-      for(i in 0..model.columns.count() - 1) {
-        baseRows.add(getValueAt(i,j))
-      }
-    }
     model.columns.forEach {
       pivotData.addColumn(it?.label, it?.javaClass)
       if (it?.position == Position.ROW) {
@@ -66,10 +61,10 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         columns.add(it.label)
       }
     }
-
+    changeValue()
     baseRows
       .chunked(model.columns.count()) { rows ->
-      pivotData.addRow(*rows.map{ it ?: "" }.toTypedArray())}
+        pivotData.addRow(*rows.map{ it }.toTypedArray())}
 
     // Pivot table dimension
     pivotOptions.setRows(*rows.toTypedArray())
@@ -99,7 +94,15 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     add(pivot)
   }
 
+  private fun changeValue(){
+    for (j in 0 until model.userRows.count()) {
+      for (i in 0 until model.columns.count()) {
+        baseRows.add(getValueAt(i, j))
+      }
+    }
+  }
+
   fun getValueAt(columnIndex: Int, rowIndex: Int): String {
-    return model.accessibleColumns[columnIndex]!!.format(model.getValueAt(rowIndex, columnIndex))
+    return model.columns[columnIndex]!!.format(model.getValueAt(rowIndex, columnIndex))
   }
 }
