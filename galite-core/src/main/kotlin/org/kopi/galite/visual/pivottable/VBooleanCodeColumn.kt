@@ -20,6 +20,11 @@ class VBooleanCodeColumn (ident: String?,
       throw InconsistencyException("Can't define more than two codes for a boolean column")
     }
   }
+
+  override fun compareTo(object1: Any, object2: Any): Int {
+    return if (object1 == object2) 0 else if (true == object1) 1 else -1
+  }
+
   override fun getIndex(value: Any?): Int {
     return if ((value as Boolean) == codes[0]) 0 else 1
   }

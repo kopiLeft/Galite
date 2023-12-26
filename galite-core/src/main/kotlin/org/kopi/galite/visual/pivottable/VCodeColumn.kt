@@ -46,7 +46,7 @@ abstract class VCodeColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  //abstract override fun compareTo(object1: Any, object2: Any): Int
+  abstract override fun compareTo(object1: Any, object2: Any): Int
 
   /**
    * Return a string representation.
