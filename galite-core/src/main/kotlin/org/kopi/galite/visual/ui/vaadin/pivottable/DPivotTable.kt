@@ -43,7 +43,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     getModel()!!.setDisplay(this)
   }
 
-
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
