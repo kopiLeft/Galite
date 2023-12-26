@@ -31,7 +31,7 @@ class MPivotTable : Serializable {
   var columns = mutableListOf<VPivotTableColumn?>()    // array of column definitions
 
   // Baserows contains data give by the request of the user
-  var userRows = mutableListOf<VPivotTableRow?>()
+  internal var userRows: ArrayList<VPivotTableRow>? = ArrayList()
 
   /**
    * Add a row to the list of rows defined by the user
@@ -92,7 +92,7 @@ class MPivotTable : Serializable {
     var x: Any? = null
 
     try {
-      x = userRows[row]!!.getValueAt(column)
+      x = userRows?.get(row)!!.getValueAt(column)
     } catch (e: Exception) {
       e.printStackTrace()
     }

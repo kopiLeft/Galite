@@ -33,9 +33,9 @@ import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.CodeDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
+import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.dsl.pivottable.PivotTableField
 import org.kopi.galite.visual.dsl.report.ReportField
-import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VDecimalCodeField
@@ -233,7 +233,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
   override fun buildPivotTableFieldModel(
     field: PivotTableField<*>,
     position: Dimension.Position?,
-    format: VCellFormat?
   ): VPivotTableColumn {
     return with(field) {
       when (kClass) {
@@ -243,7 +242,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
           codes.map { it.ident }.toTypedArray(),
-          format,
           codes.map { it.value as Boolean }.toBooleanArray()
         )
         BigDecimal::class -> org.kopi.galite.visual.pivottable.VDecimalCodeColumn(
@@ -252,7 +250,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
           codes.map { it.ident }.toTypedArray(),
-          format,
           codes.map { it.value as? BigDecimal }.toTypedArray()
         )
         Int::class, Long::class -> org.kopi.galite.visual.pivottable.VIntegerCodeColumn(
@@ -261,7 +258,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           this@CodeDomain.ident.ifEmpty { ident },
           field.source!!,
           codes.map { it.ident }.toTypedArray(),
-          format,
           codes.map { it.value as Int }.toIntArray()
         )
         String::class -> org.kopi.galite.visual.pivottable.VStringCodeColumn(
@@ -270,7 +266,6 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
           codes.map { it.ident }.toTypedArray(),
-          format,
           codes.map { it.value as? String }.toTypedArray()
         )
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")

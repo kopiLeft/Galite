@@ -35,13 +35,14 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val model: MPivotTable = pivotTable.model // pivot table model
   private val pivotData = PivotTable.PivotData()
   private val pivotOptions = PivotTable.PivotOptions()
-  private val baseRows = mutableListOf<String>()
+  private val rowsValues = mutableListOf<String>()
   private val rows = mutableListOf<String>()
   private val columns = mutableListOf<String>()
 
   init {
     getModel()!!.setDisplay(this)
   }
+
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -61,8 +62,8 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         columns.add(it.label)
       }
     }
-    changeValue()
-    baseRows
+    buildRows()
+    rowsValues
       .chunked(model.columns.count()) { rows ->
         pivotData.addRow(*rows.map{ it }.toTypedArray())}
 
@@ -94,10 +95,10 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     add(pivot)
   }
 
-  private fun changeValue(){
-    for (j in 0 until model.userRows.count()) {
-      for (i in 0 until model.columns.count()) {
-        baseRows.add(getValueAt(i, j))
+  private fun buildRows(){
+    for (i in 0 until model.userRows!!.count()) {
+      for (j in 0 until model.columns.count()) {
+        rowsValues.add(getValueAt(j, i))
       }
     }
   }

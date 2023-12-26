@@ -1,20 +1,17 @@
 package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.dsl.pivottable.Dimension
-import org.kopi.galite.visual.report.VCellFormat
 
 class VIntegerCodeColumn (ident: String?,
                           position: Dimension.Position?,
                           type: String?,
                           source: String?,
                           name: Array<String>,
-                          format: VCellFormat?,
                           private val codes: IntArray)
               : VCodeColumn(ident,
               position,
               type,
               source,
-              format,
               name) {
 
   private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}

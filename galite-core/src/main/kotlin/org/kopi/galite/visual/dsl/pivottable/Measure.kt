@@ -19,9 +19,7 @@ package org.kopi.galite.visual.dsl.pivottable
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
-import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.pivottable.VPivotTableColumn
-import org.kopi.galite.visual.report.VCellFormat
 
 class Measure<T>(override val domain: Domain<T>,
                  val init: Measure<T>.() -> Unit,
@@ -32,19 +30,10 @@ class Measure<T>(override val domain: Domain<T>,
     init()
   }
 
-  /** format trigger */
-  internal var formatTrigger: Trigger? = null
-
   lateinit var model: VPivotTableColumn
 
   fun buildPivotTableColumn(): VPivotTableColumn {
-    val format: VCellFormat? = if (formatTrigger != null) {
-      formatTrigger!!.action.method() as VCellFormat
-    } else {
-      null
-    }
-
-    model = domain.buildPivotTableFieldModel(this, Dimension.Position.NONE, format).also { column ->
+    model = domain.buildPivotTableFieldModel(this, Dimension.Position.NONE).also { column ->
       column.label = label ?: ""
       column.help = help
     }

@@ -2,20 +2,17 @@ package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.dsl.pivottable.Dimension
-import org.kopi.galite.visual.report.VCellFormat
 
 class VBooleanCodeColumn (ident: String?,
                           position: Dimension.Position?,
                           type: String?,
                           source: String?,
                           name: Array<String>,
-                          format: VCellFormat?,
                           private val codes: BooleanArray)
             : VCodeColumn(ident,
             position,
             type,
             source,
-            format,
             name) {
 
   init {
