@@ -39,6 +39,16 @@ abstract class VPivotTableColumn(val ident: String?,
   open fun format(o: Any?): String {
     return o.toString()
   }
+  /**
+   * Compare two objects.
+   *
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  abstract fun compareTo(object1: Any, object2: Any): Int
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -48,12 +58,21 @@ abstract class VPivotTableColumn(val ident: String?,
    *
    * @param     parent         the caller localizer
    */
-  open fun localize(parent: PivotTableLocalizer) {
+  fun localize(parent: PivotTableLocalizer) {
     if (ident != "") {
       val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
       label = loc.getLabel() ?: ""
     }
+  }
+
+  /**
+   * Localizes this field
+   *
+   * @param     parentLocalizer         the caller localizer
+   */
+  protected open fun localize(parentLocalizer: FieldLocalizer) {
+    // by default nothing to do
   }
 
   fun helpOnColumn(help: VHelpGenerator) {

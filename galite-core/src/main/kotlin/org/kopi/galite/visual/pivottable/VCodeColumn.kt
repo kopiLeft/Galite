@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.dsl.pivottable.Dimension
-import org.kopi.galite.visual.l10n.PivotTableLocalizer
+import org.kopi.galite.visual.l10n.FieldLocalizer
 import org.kopi.galite.visual.l10n.TypeLocalizer
 
 /**
@@ -66,10 +66,10 @@ abstract class VCodeColumn(ident: String?,
   /**
    * Localizes this field
    *
-   * @param     parent         the caller localizer
+   * @param     parentLocalizer         the caller localizer
    */
-  override fun localize(parent: PivotTableLocalizer) {
-    val loc: TypeLocalizer = parent.manager.getTypeLocalizer(source, type)
+  override fun localize(parentLocalizer: FieldLocalizer) {
+    val loc: TypeLocalizer = parentLocalizer.manager.getTypeLocalizer(source, type)
     names = Array(idents.size) { i ->
       val label = loc.getCodeLabel(idents[i])
       label

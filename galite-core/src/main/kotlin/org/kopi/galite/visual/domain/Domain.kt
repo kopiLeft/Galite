@@ -256,6 +256,16 @@ open class Domain<T>(val width: Int? = null,
           org.kopi.galite.visual.pivottable.VDecimalColumn(ident, position)
         Boolean::class ->
           org.kopi.galite.visual.pivottable.VBooleanColumn(ident, position)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
+          org.kopi.galite.visual.pivottable.VDateColumn(ident, position)
+        Month::class ->
+          org.kopi.galite.visual.pivottable.VMonthColumn(ident, position)
+        Week::class ->
+          org.kopi.galite.visual.pivottable.VWeekColumn(ident, position)
+        org.joda.time.LocalTime::class, LocalTime::class ->
+          org.kopi.galite.visual.pivottable.VTimeColumn(ident, position)
+        Instant::class, LocalDateTime::class, DateTime::class ->
+          org.kopi.galite.visual.pivottable.VTimestampColumn(ident, position)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }
