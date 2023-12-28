@@ -345,7 +345,7 @@ class TextField(val model: VField,
     text.element.style["box-sizing"] = "unset"
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
-    TextFieldNavigationHandler.createNavigator(text, rows > 1)
+    TextFieldNavigationHandler.createNavigator(text)
     textFieldListeners.add(KeyNavigator(model, text))
     return text
   }

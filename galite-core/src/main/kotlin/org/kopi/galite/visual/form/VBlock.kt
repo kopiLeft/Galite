@@ -983,7 +983,8 @@ abstract class VBlock(var title: String,
       }
       if (!fields[index].hasAction() &&
           fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-          (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
+          (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())
+          && fields[index] !is VImageField) {
         target = fields[index]
       }
       i += 1
@@ -1016,7 +1017,8 @@ abstract class VBlock(var title: String,
       index -= 1
       if (!fields[index].hasAction() &&
           fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-          (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
+          (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())
+          && fields[index] !is VImageField) {
         target = fields[index]
       }
       i += 1
@@ -1043,7 +1045,8 @@ abstract class VBlock(var title: String,
     var i = 0
 
     while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
+        && fields[i] !is VImageField) {
         target = fields[i]
       }
       i += 1
@@ -1073,7 +1076,8 @@ abstract class VBlock(var title: String,
     while (target == null && i < fields.size) {
       if (!fields[i].hasAction()
           && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
-          && fields[i].isNull(activeRecord)) {
+          && fields[i].isNull(activeRecord)
+          && fields[i] !is VImageField) {
         target = fields[i]
       }
       i += 1
@@ -1118,7 +1122,8 @@ abstract class VBlock(var title: String,
     while (target == null && i < fields.size) {
       if (!fields[i].hasAction()
           && fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL
-          && fields[i].isNull(activeRecord)) {
+          && fields[i].isNull(activeRecord)
+          && fields[i] !is VImageField) {
         target = fields[i]
       }
       i += 1
@@ -1157,7 +1162,8 @@ abstract class VBlock(var title: String,
     var i = fields.size - 1
 
     while (i >= 0) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
+          && fields[i] !is VImageField) {
         target = fields[i]
       }
       i -= 1

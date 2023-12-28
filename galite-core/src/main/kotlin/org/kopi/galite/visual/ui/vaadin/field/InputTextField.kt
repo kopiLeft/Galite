@@ -197,14 +197,14 @@ open class InputTextField<C> internal constructor(protected val internalField: C
     var text = text
 
     // set only valid inputs
-    //if (validationStrategy is NoeditValidator TODO
-    //  || validationStrategy!!.validate(text)
-    //) {
+    if (validationStrategy is NoeditValidator
+      || validationStrategy!!.validate(text)
+    ) {
     if (text == null) {
       text = "" // avoid NullPointerException
     }
     setPresentationValue(text)
-    //}
+    }
   }
 
   /**

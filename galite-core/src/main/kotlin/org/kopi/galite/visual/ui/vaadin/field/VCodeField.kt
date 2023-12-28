@@ -35,6 +35,7 @@ class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String
 
   init {
     internalField.setItems(Arrays.stream(enumerations))
+    internalField.isAutofocus = true
     element.themeList.add("galite-combobox")
   }
 
