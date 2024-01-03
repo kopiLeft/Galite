@@ -30,7 +30,6 @@ import org.kopi.galite.visual.ui.vaadin.base.Styles
  * The actor component
  *
  * @param caption The actor caption.
- * @param description The actor help.
  * @param menu The menu to which this actor belongs to.
  * @param icon The actor icon. The name will be translated after to a
  * vaadin or iron icon.

@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.pivottable
 
 import java.io.File
-import java.util.*
+import java.util.Locale
 import kotlin.reflect.full.starProjectedType
 
 import org.jetbrains.kotlinx.dataframe.AnyFrame

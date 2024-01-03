@@ -19,19 +19,50 @@
 package org.kopi.galite.visual.form
 
 import java.sql.SQLException
-import java.util.*
+import java.util.Locale
+import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
 import kotlin.math.abs
 
 import org.jetbrains.annotations.TestOnly
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.intLiteral
+import org.jetbrains.exposed.sql.lowerCase
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.database.*
+import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.upperCase
+import org.kopi.galite.database.DBContextHandler
+import org.kopi.galite.database.DBDeadLockException
+import org.kopi.galite.database.DBForeignKeyException
+import org.kopi.galite.database.DBInterruptionException
+import org.kopi.galite.database.Utils
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VDatabaseUtils
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants.Companion.TRG_PREDEL

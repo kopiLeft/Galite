@@ -34,9 +34,9 @@ class BlockAlignment(val block: VBlock?,
   fun isChart(): Boolean = block != null && !block.noChart()
 
   fun isAligned(position: Int): Boolean {
-    var updatedPosition = position
-    updatedPosition--
-    return updatedPosition >= 0 && updatedPosition < targets.size && targets[updatedPosition] != -1
+    var x = position
+    x--
+    return x >= 0 && x < targets.size && targets[x] != -1
   }
 
   fun getTargetAt(position: Int): Int {

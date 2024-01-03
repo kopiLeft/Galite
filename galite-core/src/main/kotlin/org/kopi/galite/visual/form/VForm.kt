@@ -23,11 +23,25 @@ import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.DefaultActor
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
 abstract class VForm protected constructor(source: String? = null) : VWindow(source), VConstants {
 

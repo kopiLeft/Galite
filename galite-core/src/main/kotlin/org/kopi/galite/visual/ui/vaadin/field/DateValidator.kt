@@ -64,12 +64,12 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     when {
       month == 0 -> {
         val now = LocalDate.now()
-        month = now.month.value + 1
-        year = now.year + 1900
+        month = now.month.value
+        year = now.year
       }
       year == -2 -> {
         val now = LocalDate.now()
-        year = now.year + 1900
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -137,6 +137,6 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
      */
     private fun format(year: Int, month: Int, day: Int): String =
             SimpleDateFormat("dd.MM.yyyy")
-                    .format(LocalDate.of(year - 1900, month - 1, day))
+                    .format(LocalDate.of(year , month , day))
   }
 }

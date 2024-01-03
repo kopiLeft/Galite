@@ -23,12 +23,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.MalformedURLException
 import java.text.MessageFormat
-import java.util.*
+import java.util.Locale
 
-import com.lowagie.text.Rectangle
+import kotlin.collections.ArrayList
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.ChartLocalizer
@@ -36,6 +34,24 @@ import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.print.Printable
 import org.kopi.galite.visual.util.PPaperType
 import org.kopi.galite.visual.util.PrintJob
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
+
+import com.lowagie.text.Rectangle
 
 /**
  * Creates a new chart model.

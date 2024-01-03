@@ -21,7 +21,11 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VDateField
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.visual.form.VTimeField
+import org.kopi.galite.visual.form.VTimestampField
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].

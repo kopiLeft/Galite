@@ -21,8 +21,27 @@ import java.io.File
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.server.ErrorEvent
+import com.vaadin.flow.server.ErrorHandler
+import com.vaadin.flow.server.VaadinSession
+
 import org.kopi.galite.util.base.Utils.Companion.doAfter
-import org.kopi.galite.visual.*
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.MessageListener
+import org.kopi.galite.visual.PropertyException
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
@@ -34,16 +53,16 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWai
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findDialog
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.download.Downloader
-import org.kopi.galite.visual.ui.vaadin.notif.*
+import org.kopi.galite.visual.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.visual.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.visual.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.visual.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.visual.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.visual.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.visual.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
-
-import com.vaadin.flow.component.*
-import com.vaadin.flow.server.ErrorEvent
-import com.vaadin.flow.server.ErrorHandler
-import com.vaadin.flow.server.VaadinSession
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.

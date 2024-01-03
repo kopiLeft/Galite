@@ -42,12 +42,12 @@ object BackgroundThreadHandler {
       return
     }
 
-    val updatedUI = currentUI ?: locateUI()
+    val selectedUI = currentUI ?: locateUI()
 
-    if (updatedUI == null) {
+    if (selectedUI == null) {
       command()
     } else {
-      updatedUI.access(command)
+      selectedUI.access(command)
     }
   }
 

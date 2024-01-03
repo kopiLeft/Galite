@@ -22,15 +22,29 @@ import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.domain.ListDomain
-import org.kopi.galite.visual.dsl.common.*
 import org.kopi.galite.visual.dsl.common.Action
-import org.kopi.galite.visual.form.*
-
+import org.kopi.galite.visual.dsl.common.Actor
+import org.kopi.galite.visual.dsl.common.Command
+import org.kopi.galite.visual.dsl.common.FormTrigger
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.Mode
+import org.kopi.galite.visual.dsl.common.Trigger
+import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.dsl.common.LocalizableElement
+import org.kopi.galite.visual.form.Commands
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VForm
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].

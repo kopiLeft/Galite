@@ -151,15 +151,15 @@ class VDecimalField(val bufferSize: Int,
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, tapedValue: Any?) {
-    val modifiedS = tapedValue as? String
+    val s = tapedValue as? String
     val scale: Int = currentScale[rec]
 
-    if ((modifiedS == "")) {
+    if ((s == "")) {
       setNull(rec)
     } else {
       val v: BigDecimal?
       try {
-        v = scanDecimal(modifiedS)
+        v = scanDecimal(s)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }

@@ -22,7 +22,12 @@ import java.sql.SQLException
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBInterruptionException
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.visual.database.transaction

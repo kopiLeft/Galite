@@ -26,7 +26,11 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.ReportTrigger
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
-import org.kopi.galite.visual.report.*
+import org.kopi.galite.visual.report.Constants
+import org.kopi.galite.visual.report.VCalculateColumn
+import org.kopi.galite.visual.report.VCellFormat
+import org.kopi.galite.visual.report.VDecimalColumn
+import org.kopi.galite.visual.report.VReportColumn
 
 /**
  * This class represents the definition of a report field.

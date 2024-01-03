@@ -19,7 +19,7 @@
 package org.kopi.galite.visual.form
 
 import java.time.LocalDate
-import java.util.*
+import java.util.StringTokenizer
 
 import kotlin.reflect.KClass
 
@@ -79,12 +79,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, tapedValue: Any?) {
-    val modifiedS = tapedValue as? String
+    val s = tapedValue as? String
 
-    if (modifiedS == "") {
+    if (s == "") {
       setNull(rec)
     } else {
-      val date = parseDate(modifiedS)
+      val date = parseDate(s)
 
       checkConstraint(date)
       setDate(rec, date)

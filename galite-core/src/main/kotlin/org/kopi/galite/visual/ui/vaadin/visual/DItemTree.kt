@@ -20,12 +20,19 @@ package org.kopi.galite.visual.ui.vaadin.visual
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.visual.*
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
+import org.kopi.galite.visual.Item
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UItemTree
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VItemTree
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button

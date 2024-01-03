@@ -18,14 +18,18 @@
 package org.kopi.galite.visual.dsl.chart
 
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.chart.CConstants
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.domain.Domain
-import org.kopi.galite.visual.dsl.common.*
+import org.kopi.galite.visual.dsl.common.Action
+import org.kopi.galite.visual.dsl.common.FormTrigger
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.Trigger
+import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VConstants
 
 /**

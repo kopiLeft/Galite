@@ -86,10 +86,10 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that text is valid (during typing)
    */
   override fun checkText(tapedValue: String): Boolean {
-    val modifiedS = tapedValue.lowercase()
+    val s = tapedValue.lowercase()
 
     for (i in labels.indices) {
-      if (labels[i].lowercase().startsWith(modifiedS)) {
+      if (labels[i].lowercase().startsWith(s)) {
         return true
       }
     }
@@ -101,9 +101,9 @@ abstract class VCodeField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, tapedValue: Any?) {
-    var modifiedS = tapedValue as? String
+    var s = tapedValue as? String
 
-    if (modifiedS == "") {
+    if (s == "") {
       setNull(rec)
     } else {
       /*
@@ -113,11 +113,11 @@ abstract class VCodeField(val bufferSize: Int,
        */
       var found = -1
 
-      modifiedS = modifiedS!!.lowercase()
+      s = s!!.lowercase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
-        if (labels[i].lowercase().startsWith(modifiedS)) {
+        if (labels[i].lowercase().startsWith(s)) {
           if (labels[i].lowercase() == tapedValue) {
             found = i
             break
@@ -140,7 +140,7 @@ abstract class VCodeField(val bufferSize: Int,
 
           var count = 0
           labels.forEach { label ->
-            if (label.lowercase().startsWith(modifiedS)) {
+            if (label.lowercase().startsWith(s)) {
               count++
             }
           }
@@ -150,7 +150,7 @@ abstract class VCodeField(val bufferSize: Int,
           var j = 0
 
           while (i < labels.size) {
-            if (labels[i].lowercase().startsWith(modifiedS)) {
+            if (labels[i].lowercase().startsWith(s)) {
               codes[j] = codes[i]
               selectedToModel[j] = i
               j++

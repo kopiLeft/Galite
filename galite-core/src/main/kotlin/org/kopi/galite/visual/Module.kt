@@ -176,8 +176,7 @@ class Module(val id: Int,
       } catch (t: Throwable) {
         ApplicationContext.reportTrouble(
           "Form loading",
-          "Module.startForm(Connection ctxt, " +
-                  "String object, String description, ImageIcon icon)",
+          "Module.startForm(String object, ImageIcon icon)",
           t.message,
           t
         )

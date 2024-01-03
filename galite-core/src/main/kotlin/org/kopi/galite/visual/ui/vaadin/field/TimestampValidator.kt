@@ -147,12 +147,12 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
       when {
         month == 0 -> {
           val now = LocalDate.now()
-          month = now.month.value + 1
-          year = now.year + 1900
+          month = now.month.value 
+          year = now.year
         }
         year == -2 -> {
           val now = LocalDate.now()
-          year = now.year + 1900
+          year = now.year
         }
         year < 50 -> {
           year += 2000

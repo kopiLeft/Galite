@@ -63,7 +63,7 @@ object Message {
   fun getMessage(source: String = VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE,
                  ident: String,
                  params: Any? = null): String {
-    val updateParams = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+    val listeParams = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
     val manager = if (ApplicationContext.isApplicationContextInitialized) {
       ApplicationContext.getLocalizationManager()
@@ -73,7 +73,7 @@ object Message {
     return try {
       //   Within a String, "''" represents a single quote in java.text.MessageFormat.
       val format = manager!!.getMessageLocalizer(source, ident).getText().replace("'", "''")
-      ExtendedMessageFormat.formatMessage(format, updateParams)
+      ExtendedMessageFormat.formatMessage(format, listeParams)
     } catch (e: InconsistencyException) {
       System.err.println("ERROR: " + e.message)
       "!$ident!"

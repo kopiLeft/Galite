@@ -20,18 +20,36 @@ package org.kopi.galite.visual
 
 import java.awt.event.KeyEvent
 import java.sql.SQLException
-import java.util.*
+import java.util.Locale
 
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
 import kotlin.system.exitProcess
 
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.database.*
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.innerJoin
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.nextIntVal
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+
+import org.kopi.galite.database.Connection
+import org.kopi.galite.database.FavoritesId
+import org.kopi.galite.database.Favorites
+import org.kopi.galite.database.GroupParties
+import org.kopi.galite.database.GroupRights
+import org.kopi.galite.database.Groups
+import org.kopi.galite.database.Modules
+import org.kopi.galite.database.Symbols
+import org.kopi.galite.database.UserRights
+import org.kopi.galite.database.Users
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.l10n.LocalizationManager
 
