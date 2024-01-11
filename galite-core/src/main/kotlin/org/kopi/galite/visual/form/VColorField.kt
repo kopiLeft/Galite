@@ -32,7 +32,6 @@ import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
-
 class VColorField(val bufferSize: Int) : VField(1, 1) {
 
   // ----------------------------------------------------------------------

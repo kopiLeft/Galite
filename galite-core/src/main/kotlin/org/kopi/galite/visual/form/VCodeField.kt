@@ -85,11 +85,11 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * verify that text is valid (during typing)
    */
-  override fun checkText(tapedValue: String): Boolean {
-    val s = tapedValue.lowercase()
+  override fun checkText(s: String): Boolean {
+    val tapedValue = s.lowercase()
 
     for (i in labels.indices) {
-      if (labels[i].lowercase().startsWith(s)) {
+      if (labels[i].lowercase().startsWith(tapedValue)) {
         return true
       }
     }
@@ -100,10 +100,10 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, tapedValue: Any?) {
-    var s = tapedValue as? String
+  override fun checkType(rec: Int, s: Any?) {
+    var tapedValue = s as? String
 
-    if (s == "") {
+    if (tapedValue == "") {
       setNull(rec)
     } else {
       /*
@@ -113,12 +113,12 @@ abstract class VCodeField(val bufferSize: Int,
        */
       var found = -1
 
-      s = s!!.lowercase()
+      tapedValue = tapedValue!!.lowercase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
-        if (labels[i].lowercase().startsWith(s)) {
-          if (labels[i].lowercase() == tapedValue) {
+        if (labels[i].lowercase().startsWith(tapedValue)) {
+          if (labels[i].lowercase() == s) {
             found = i
             break
           }
@@ -140,7 +140,7 @@ abstract class VCodeField(val bufferSize: Int,
 
           var count = 0
           labels.forEach { label ->
-            if (label.lowercase().startsWith(s)) {
+            if (label.lowercase().startsWith(tapedValue)) {
               count++
             }
           }
@@ -150,7 +150,7 @@ abstract class VCodeField(val bufferSize: Int,
           var j = 0
 
           while (i < labels.size) {
-            if (labels[i].lowercase().startsWith(s)) {
+            if (labels[i].lowercase().startsWith(tapedValue)) {
               codes[j] = codes[i]
               selectedToModel[j] = i
               j++
@@ -211,16 +211,16 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Checks that field value exists in list
    */
-  override fun enumerateValue(check: Boolean) {
-    var modifiedDesc = check
+  override fun enumerateValue(desc: Boolean) {
+    var checkValue = desc
 
-    modifiedDesc = if (!getListColumn()!!.isSortAscending) modifiedDesc else !modifiedDesc
+    checkValue = if (!getListColumn()!!.isSortAscending) checkValue else !checkValue
     var pos = value[block!!.activeRecord]
 
-    if (pos == -1 && modifiedDesc) {
+    if (pos == -1 && checkValue) {
       pos = labels.size
     }
-    pos += if (modifiedDesc) -1 else 1
+    pos += if (checkValue) -1 else 1
     if (pos < 0 || pos >= labels.size) {
       throw VExecFailedException() // no message to display
     } else {

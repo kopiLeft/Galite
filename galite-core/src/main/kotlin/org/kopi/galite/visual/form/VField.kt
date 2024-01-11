@@ -18,7 +18,6 @@
 
 package org.kopi.galite.visual.form
 
-
 import java.awt.Color
 import java.io.InputStream
 import java.math.BigDecimal

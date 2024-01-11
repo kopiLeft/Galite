@@ -40,7 +40,6 @@ class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
           var year = text.substring(text.indexOf(".") + 1).toInt()
           if (year < 50) {
             year += 2000
-            println(year)
           } else if (year < 100) {
             year += 1900
           }

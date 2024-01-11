@@ -59,13 +59,13 @@ import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FormLocalTests : GaliteVUITestBase() {
@@ -204,7 +204,7 @@ class FormLocalTests : GaliteVUITestBase() {
     val trainingName = localizationList.getColumnTitle("Name")
 
     val trainingField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[2]
-    val autofill = trainingField._get<IronIcon> {}
+    val autofill = trainingField._get<IronIcons.Icon> {}
 
     autofill._clickAndWait(500)
 
@@ -229,7 +229,7 @@ class FormLocalTests : GaliteVUITestBase() {
     val category = localizationList.getColumnTitle("type")
 
     val categoryField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[4]
-    val autofill = categoryField._get<IronIcon> {}
+    val autofill = categoryField._get<IronIcons.Icon> {}
 
     autofill._clickAndWait(500)
 

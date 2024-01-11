@@ -205,7 +205,6 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
                                                + " " + orig.javaClass + " of " + orig)
         }
       }
-      cell.cellType = datatype[cellPos]
     } else {
       cell.setBlank()
     }

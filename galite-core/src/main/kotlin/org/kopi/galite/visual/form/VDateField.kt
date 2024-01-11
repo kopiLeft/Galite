@@ -78,13 +78,13 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, tapedValue: Any?) {
-    val s = tapedValue as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val tapedValue = s as? String
 
-    if (s == "") {
+    if (tapedValue == "") {
       setNull(rec)
     } else {
-      val date = parseDate(s)
+      val date = parseDate(tapedValue)
 
       checkConstraint(date)
       setDate(rec, date)

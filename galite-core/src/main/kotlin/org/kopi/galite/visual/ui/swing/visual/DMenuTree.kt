@@ -367,7 +367,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
       }
     }
     if (!getModel().getShortcutsID().isEmpty() && !getModel().isSuperUser) {
-      toolbar.show()
+      toolbar.isVisible = false
       toolbar.toFront()
     }
     if (tree.rowCount > 0) {

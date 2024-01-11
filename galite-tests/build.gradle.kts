@@ -65,6 +65,10 @@ dependencies {
   // Vaadin addons dependency
   testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
   testImplementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
+
+  // Iron Icons
+  implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
+
 }
 
 tasks {

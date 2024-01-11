@@ -56,12 +56,12 @@ import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class FieldsTests : GaliteVUITestBase() {
@@ -235,7 +235,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     field.focus()
 
-    val icon = (field as Component)._get<IronIcon> {  }
+    val icon = (field as Component)._get<IronIcons.Icon> {  }
 
     icon._clickAndWait(500)
 

@@ -38,7 +38,6 @@ import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.FileHandler
 
-
 object User : Table() {
   val id = integer("ID")
   val uc = integer("UC")
