@@ -31,8 +31,6 @@ import org.kopi.galite.visual.dsl.report.Report
 import org.kopi.galite.visual.report.UReport
 import org.kopi.galite.visual.report.VReport
 import org.kopi.galite.visual.WindowController
-import org.kopi.galite.visual.domain.DECIMAL
-import org.kopi.galite.visual.report.triggers.moyenneCompute
 
 /**
  * Client Report
@@ -151,18 +149,10 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     align = FieldAlignment.LEFT
   }
 
-  val zipCodeClt = field(DECIMAL(2,0)) {
+  val zipCodeClt = field(INT(2)) {
     label = "Zip code"
     help = "The client zip code"
     align = FieldAlignment.LEFT
-  }
-
-  val zipCodeClt2 = field(DECIMAL(2,0)) {
-    label = "triggers"
-    align = FieldAlignment.LEFT
-    compute {
-      moyenneCompute(-1, 2)
-    }
   }
 
   val activeClt = field(BOOL) {
@@ -182,7 +172,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
           this[ageClt] = result[Client.ageClt]
           this[countryClt] = result[Client.countryClt]
           this[cityClt] = result[Client.cityClt]
-          this[zipCodeClt] = result[Client.zipCodeClt].toBigDecimal()
+          this[zipCodeClt] = result[Client.zipCodeClt]
           this[activeClt] = result[Client.activeClt]
         }
       }

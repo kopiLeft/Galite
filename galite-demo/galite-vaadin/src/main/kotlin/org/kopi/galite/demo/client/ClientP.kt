@@ -35,8 +35,6 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
 import org.kopi.galite.visual.dsl.pivottable.PivotTable
-import org.kopi.galite.visual.pivottable.triggers.div
-import org.kopi.galite.visual.pivottable.triggers.multi
 
 /**
  * Client Report
@@ -92,23 +90,10 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     label = "Quantity"
     help = "Product quantity"
   }
-  val price0 = measure(DECIMAL(9,3)) {
-    label = "trigger1"
-    compute {
-      div(1)
-    }
-  }
 
   val price = measure(DECIMAL(9,3)) {
     label = "Price"
     help = "Product price"
-  }
-
-  val price2 = measure(DECIMAL(9,3)) {
-    label = "trigger2"
-    compute {
-      multi(-1,-2)
-    }
   }
 
   val init = trigger(INIT) {
