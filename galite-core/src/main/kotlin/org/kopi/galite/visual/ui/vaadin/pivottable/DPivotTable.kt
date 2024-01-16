@@ -62,16 +62,6 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
       }
     }
     buildRows()
-
-    var index = 0
-    for (i in 0 until model.userRows!!.size) {
-      for (j in 0 until model.columns.size) {
-        print("${rowsValues[index]}\t")
-        index++
-      }
-      println()
-    }
-
     rowsValues
       .chunked(model.columns.count()) { rows ->
         pivotData.addRow(*rows.map{ it }.toTypedArray()) }
