@@ -28,11 +28,13 @@ import org.kopi.galite.visual.l10n.TypeLocalizer
  * @param    position     The position of the dimension field
  */
 abstract class VCodeColumn(ident: String?,
+                           function: VCalculateColumn?,
                            position : Dimension.Position?,
                            private val type: String?,
                            private val source: String?,
                            private val idents: Array<String>)
   : VPivotTableColumn(ident,
+                      function,
                       position) {
 
   protected var names: Array<String?>? = null // array of external representations

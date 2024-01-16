@@ -27,8 +27,10 @@ import java.math.BigDecimal
  * @param    position     The position of the dimension field
  */
 class VDecimalColumn(ident: String?,
+                     function: VCalculateColumn?,
                       position: Dimension.Position?)
       : VPivotTableColumn(ident,
+                          function,
                           position) {
 
   /**

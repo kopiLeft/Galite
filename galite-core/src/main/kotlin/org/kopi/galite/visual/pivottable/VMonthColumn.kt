@@ -27,8 +27,10 @@ import org.kopi.galite.visual.dsl.pivottable.Dimension
  * @param    position     The position of the dimension field
  */
 class VMonthColumn(ident: String?,
-                    position: Dimension.Position?)
+                   function: VCalculateColumn?,
+                   position: Dimension.Position?)
       : VPivotTableColumn(ident,
+                          function,
                           position) {
 
   /**

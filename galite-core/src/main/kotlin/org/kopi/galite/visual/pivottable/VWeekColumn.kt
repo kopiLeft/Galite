@@ -27,8 +27,10 @@ import org.kopi.galite.visual.dsl.pivottable.Dimension
  * @param    position     The position of the dimension field
  */
 class VWeekColumn(ident: String?,
+                  function: VCalculateColumn?,
                   position: Dimension.Position?)
       : VPivotTableColumn(ident,
+                          function,
                           position) {
 
   /**

@@ -25,9 +25,11 @@ import org.kopi.galite.visual.l10n.PivotTableLocalizer
 /**
  * Represents a pivot table column description
  * @param    ident        The identifier of the field
+ * @param    function    An (optional) function
  * @param    position     The position of the dimension field
  */
 abstract class VPivotTableColumn(val ident: String?,
+                                 val function: VCalculateColumn?,
                                  val position: Dimension.Position?) {
 
   // ----------------------------------------------------------------------

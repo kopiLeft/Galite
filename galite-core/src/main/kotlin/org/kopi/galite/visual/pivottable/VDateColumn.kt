@@ -27,8 +27,10 @@ import java.time.LocalDate
  * @param    position     The position of the dimension field
  */
 class VDateColumn (ident: String?,
+                   function: VCalculateColumn?,
                    position: Dimension.Position?)
   : VPivotTableColumn(ident,
+                      function,
                       position) {
 
   /**

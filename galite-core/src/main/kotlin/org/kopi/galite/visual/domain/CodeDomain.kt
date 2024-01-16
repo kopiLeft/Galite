@@ -232,12 +232,14 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
    */
   override fun buildPivotTableFieldModel(
     field: PivotTableField<*>,
+    function: org.kopi.galite.visual.pivottable.VCalculateColumn?,
     position: Dimension.Position?,
   ): VPivotTableColumn {
     return with(field) {
       when (kClass) {
         Boolean::class -> org.kopi.galite.visual.pivottable.VBooleanCodeColumn(
           ident,
+          function,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
@@ -246,6 +248,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         BigDecimal::class -> org.kopi.galite.visual.pivottable.VDecimalCodeColumn(
           ident,
+          function,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,
@@ -254,6 +257,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         Int::class, Long::class -> org.kopi.galite.visual.pivottable.VIntegerCodeColumn(
           ident,
+          function,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source!!,
@@ -262,6 +266,7 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
         )
         String::class -> org.kopi.galite.visual.pivottable.VStringCodeColumn(
           ident,
+          function,
           position,
           this@CodeDomain.ident.ifEmpty { ident },
           field.source,

@@ -21,12 +21,14 @@ package org.kopi.galite.visual.pivottable
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 
 class VIntegerCodeColumn (ident: String?,
+                          function: VCalculateColumn?,
                           position: Dimension.Position?,
                           type: String?,
                           source: String?,
                           name: Array<String>,
                           private val codes: IntArray)
   : VCodeColumn(ident,
+                function,
                 position,
                 type,
                 source,

@@ -27,8 +27,10 @@ import java.time.Instant
  * @param    position     The position of the dimension field
  */
 class VTimestampColumn(ident: String?,
+                       function: VCalculateColumn?,
                        position: Dimension.Position?)
       : VPivotTableColumn(ident,
+                          function,
                           position) {
 
   /**

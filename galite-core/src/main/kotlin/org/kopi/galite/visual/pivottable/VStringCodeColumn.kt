@@ -22,12 +22,14 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 
 class VStringCodeColumn (ident: String?,
+                         function: VCalculateColumn?,
                          position: Dimension.Position?,
                          type: String?,
                          source: String?,
                          name: Array<String>,
                          private val codes: Array<String?>)
           : VCodeColumn(ident,
+                        function,
                         position,
                         type,
                         source,

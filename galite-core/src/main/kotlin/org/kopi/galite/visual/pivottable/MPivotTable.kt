@@ -30,7 +30,7 @@ class MPivotTable : Serializable {
   // Columns contains all columns defined by the user
   var columns = mutableListOf<VPivotTableColumn?>()    // array of column definitions
 
-  // Baserows contains data give by the request of the user
+  // UserRows contains data give by the request of the user
   internal var userRows: ArrayList<VPivotTableRow>? = ArrayList()
 
   /**
@@ -79,7 +79,7 @@ class MPivotTable : Serializable {
    * @param    row        the index of the desired row
    * @return    the desired row
    */
-  fun getRow(row: Int): VPivotTableRow? = userRows!![row]
+  fun getRow(row: Int): VPivotTableRow? = userRows?.get(row)
 
   /**
    * Returns an attribute value for a cell.
@@ -97,5 +97,20 @@ class MPivotTable : Serializable {
       e.printStackTrace()
     }
     return x
+  }
+
+  /**
+   * Calculate all columns which need to be calculated
+   */
+  fun calculateColumns() {
+    for (i in columns.indices) {
+      val function: VCalculateColumn? = columns[i]!!.function
+
+      if (function != null) {
+        userRows?.forEach {
+          function.calculate(it, i)
+        }
+      }
+    }
   }
 }

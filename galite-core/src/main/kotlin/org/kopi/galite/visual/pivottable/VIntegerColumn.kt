@@ -21,8 +21,10 @@ package org.kopi.galite.visual.pivottable
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 
 class VIntegerColumn(ident: String?,
+                     function: VCalculateColumn?,
                      position: Dimension.Position?)
       : VPivotTableColumn(ident,
+                          function,
                           position) {
 
   /**

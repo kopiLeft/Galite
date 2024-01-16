@@ -58,8 +58,9 @@ interface Constants : Constants {
     const val TRG_INIT = 0
     const val TRG_PRE_PIVOT_TABLE = 1
     const val TRG_POST_PIVOT_TABLE = 2
-    const val TRG_VOID = VConstants.TRG_VOID
-    const val TRG_OBJECT = VConstants.TRG_OBJECT
+    const val TRG_COMPUTE = 3
+    const val TRG_VOID: Int = VConstants.TRG_VOID
+    const val TRG_OBJECT: Int = VConstants.TRG_OBJECT
 
     // ---------------------------------------------------------------------
     // TRIGGER INFO
@@ -68,11 +69,13 @@ interface Constants : Constants {
             "TRG_INIT",
             "TRG_PRE_PIVOT_TABLE",
             "TRG_POST_PIVOT_TABLE",
+            "TRG_COMPUTE"
     )
     val TRG_TYPES = intArrayOf(
             TRG_VOID,
             TRG_VOID,
-            TRG_VOID
+            TRG_VOID,
+            TRG_OBJECT
     )
   }
 }
