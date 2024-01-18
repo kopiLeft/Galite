@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.util.Date
+import java.time.LocalDate
 
 /**
  * Week validator.
@@ -124,8 +124,8 @@ class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
     }
     when {
       year == -1 -> {
-        val now = Date()
-        year = now.year + 1900
+        val now = LocalDate.now()
+        year = now.year
       }
       year < 50 -> {
         year += 2000

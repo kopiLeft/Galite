@@ -18,7 +18,7 @@
 package org.kopi.galite.visual.ui.vaadin.grid
 
 import java.lang.Exception
-import java.util.Date
+import java.time.LocalDate
 
 /**
  * Server side implementation of a month editor field.
@@ -59,7 +59,8 @@ class GridEditorMonthField : GridEditorTextField(7) {
       // just the month, complete
       try {
         val month = text.toInt()
-        val year = Date().year + 1900
+        val now: LocalDate = LocalDate.now()
+        val year = now.year
         if (isMonth(month, year)) {
           value = toString(year, month)
         } else {
