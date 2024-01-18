@@ -18,9 +18,8 @@
 
 package org.kopi.galite.visual.pivottable
 
+import org.kopi.galite.type.Month
 import org.kopi.galite.visual.dsl.pivottable.Dimension
-import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.l10n.PivotTableLocalizer
 
 /**
  * Represents a pivot table column description
@@ -28,19 +27,13 @@ import org.kopi.galite.visual.l10n.PivotTableLocalizer
  * @param    function    An (optional) function
  * @param    position     The position of the dimension field
  */
-abstract class VPivotTableColumn(val ident: String?,
-                                 val function: VCalculateColumn?,
-                                 val position: Dimension.Position?) {
+class VMonthColumn(ident: String?,
+                   function: VCalculateColumn?,
+                   position: Dimension.Position?)
+      : VPivotTableColumn(ident,
+                          function,
+                          position) {
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  var label: String = ""
-  var help: String? = null
-
-  open fun format(o: Any?): String {
-    return o.toString()
-  }
   /**
    * Compare two objects.
    *
@@ -50,34 +43,7 @@ abstract class VPivotTableColumn(val ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  abstract fun compareTo(object1: Any, object2: Any): Int
-
-  // ----------------------------------------------------------------------
-  // LOCALIZATION
-  // ----------------------------------------------------------------------
-  /**
-   * Localizes this field
-   *
-   * @param     parent         the caller localizer
-   */
-  fun localize(parent: PivotTableLocalizer) {
-    if (ident != "") {
-      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
-
-      label = loc.getLabel() ?: ""
-    }
-  }
-
-  /**
-   * Localizes this field
-   *
-   * @param     parentLocalizer         the caller localizer
-   */
-  protected open fun localize(parentLocalizer: FieldLocalizer) {
-    // by default nothing to do
-  }
-
-  fun helpOnColumn(help: VHelpGenerator) {
-    help.helpOnColumn(label, this.help)
+  override fun compareTo(object1: Any, object2: Any): Int {
+    return (object1 as Month).compareTo(object2 as Month)
   }
 }

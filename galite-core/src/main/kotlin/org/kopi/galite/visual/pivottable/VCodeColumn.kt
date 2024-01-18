@@ -20,7 +20,7 @@ package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.l10n.PivotTableLocalizer
+import org.kopi.galite.visual.l10n.TypeLocalizer
 
 /**
  * Represents a pivot table column description
@@ -28,21 +28,20 @@ import org.kopi.galite.visual.l10n.PivotTableLocalizer
  * @param    function    An (optional) function
  * @param    position     The position of the dimension field
  */
-abstract class VPivotTableColumn(val ident: String?,
-                                 val function: VCalculateColumn?,
-                                 val position: Dimension.Position?) {
+abstract class VCodeColumn(ident: String?,
+                           function: VCalculateColumn?,
+                           position : Dimension.Position?,
+                           private val type: String?,
+                           private val source: String?,
+                           private val idents: Array<String>)
+  : VPivotTableColumn(ident,
+                      function,
+                      position) {
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  var label: String = ""
-  var help: String? = null
+  protected var names: Array<String?>? = null // array of external representations
 
-  open fun format(o: Any?): String {
-    return o.toString()
-  }
   /**
-   * Compare two objects.
+   * Compares two objects.
    *
    * @param    object1    the first operand of the comparison
    * @param    object2    the second operand of the comparison
@@ -50,7 +49,19 @@ abstract class VPivotTableColumn(val ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  abstract fun compareTo(object1: Any, object2: Any): Int
+  abstract override fun compareTo(object1: Any, object2: Any): Int
+
+  /**
+   * Return a string representation.
+   */
+  override fun format(o: Any?): String {
+      return if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]
+  }
+
+  /**
+   * Get the index of the value.
+   */
+  abstract fun getIndex(value: Any?): Int
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -58,26 +69,19 @@ abstract class VPivotTableColumn(val ident: String?,
   /**
    * Localizes this field
    *
-   * @param     parent         the caller localizer
+   * @param     parentLocalizer         the caller localizer
    */
-  fun localize(parent: PivotTableLocalizer) {
-    if (ident != "") {
-      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
-
-      label = loc.getLabel() ?: ""
+  override fun localize(parentLocalizer: FieldLocalizer) {
+    val loc: TypeLocalizer = parentLocalizer.manager.getTypeLocalizer(source, type)
+    names = Array(idents.size) { i ->
+      val label = loc.getCodeLabel(idents[i])
+      label
     }
   }
 
-  /**
-   * Localizes this field
-   *
-   * @param     parentLocalizer         the caller localizer
-   */
-  protected open fun localize(parentLocalizer: FieldLocalizer) {
-    // by default nothing to do
-  }
-
-  fun helpOnColumn(help: VHelpGenerator) {
-    help.helpOnColumn(label, this.help)
+  fun initLabels(labels: Array<String>) {
+    names = labels.map {
+      it
+    }.toTypedArray()
   }
 }

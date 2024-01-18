@@ -91,11 +91,11 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
    * @param method               the method to execute when trigger is called
    */
   fun <T> trigger(vararg pivotTriggerEvents: PivotTableTriggerEvent<T>, method: () -> T): Trigger {
-    val event = formEventList(pivotTriggerEvents)
+    val event = pivotEventList(pivotTriggerEvents)
     val pivotTableAction = Action(null, method)
-    val trigger = FormTrigger(event, pivotTableAction)
+    val trigger = PivotTableTrigger(event, pivotTableAction)
 
-    triggers.add(FormTrigger(event, Action(null, method)))
+    triggers.add(PivotTableTrigger(event, Action(null, method)))
     // PIVOT TABLE TRIGGERS
     triggers.forEach { trigger ->
       for (i in VConstants.TRG_TYPES.indices) {
@@ -108,7 +108,7 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
     return trigger
   }
 
-  private fun formEventList(PivotTableTriggerEvent: Array<out PivotTableTriggerEvent<*>>): Long {
+  private fun pivotEventList(PivotTableTriggerEvent: Array<out PivotTableTriggerEvent<*>>): Long {
     var self = 0L
 
     PivotTableTriggerEvent.forEach { trigger ->

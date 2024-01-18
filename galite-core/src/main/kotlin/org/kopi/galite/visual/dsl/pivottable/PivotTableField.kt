@@ -18,10 +18,31 @@
 package org.kopi.galite.visual.dsl.pivottable
 
 import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.dsl.common.PivotTableTrigger
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.field.Field
+import org.kopi.galite.visual.pivottable.Constants
+import org.kopi.galite.visual.pivottable.VCalculateColumn
 
 abstract class PivotTableField<T>(override val domain: Domain<T>, ident: String? = null) : Field<T>(domain, ident) {
+
+  /** compute trigger */
+  internal var computeTrigger: Trigger? = null
+
+  /**
+   * executed when the pivot Table is displayed and can be used to compute expressions on the pivot columns and show
+   * the result.
+   *
+   * @param method    The method to execute when compute trigger is executed.
+   */
+  fun compute(method: () -> VCalculateColumn): PivotTableTrigger {
+    val fieldAction = Action(null, method)
+    return PivotTableTrigger(0L or (1L shl Constants.TRG_COMPUTE), fieldAction).also {
+      computeTrigger = it
+    }
+  }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

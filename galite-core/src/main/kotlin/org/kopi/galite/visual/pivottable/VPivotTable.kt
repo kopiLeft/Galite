@@ -77,7 +77,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
 
   /**
    * Sets the new type of this pivot table model.
-   * @param type The new pivot table type.
+   * @param renderer The new pivot table type.
    */
   internal fun setDefaultRenderer(renderer: String) {
     defaultRenderer = renderer
@@ -92,8 +92,8 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   }
 
   /**
-   * Sets aggregation function of this pivot table model.
-   * @param aggregate The pivot table aggregation function.
+   * Sets rerenders of this pivot table model.
+   * @param rerenders The pivot table rerenders.
    */
   internal fun setDisabledRerenders(rerenders: MutableList<String>) {
     disabledRerenders = rerenders
@@ -101,7 +101,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
 
   /**
    * Sets the mode of this pivot table model.
-   * @param interactive The pivot table mode.
+   * @param mode The pivot table mode.
    */
   internal fun setInteractive(mode: Int) {
     interactive = mode
@@ -123,6 +123,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
       callTrigger(Constants.TRG_INIT)
     }
     model.build()
+    model.calculateColumns()
     (getDisplay() as UPivotTable?)?.build()
     built = true
 

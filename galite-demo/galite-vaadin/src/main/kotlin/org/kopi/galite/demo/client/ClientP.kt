@@ -90,6 +90,7 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     label = "Quantity"
     help = "Product quantity"
   }
+
   val price = measure(DECIMAL(9,3)) {
     label = "Price"
     help = "Product price"

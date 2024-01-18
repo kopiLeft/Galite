@@ -19,6 +19,7 @@ package org.kopi.galite.visual.dsl.pivottable
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
+import org.kopi.galite.visual.pivottable.VCalculateColumn
 import org.kopi.galite.visual.pivottable.VPivotTableColumn
 
 class Measure<T>(override val domain: Domain<T>,
@@ -33,7 +34,12 @@ class Measure<T>(override val domain: Domain<T>,
   lateinit var model: VPivotTableColumn
 
   fun buildPivotTableColumn(): VPivotTableColumn {
-    model = domain.buildPivotTableFieldModel(this, Dimension.Position.NONE).also { column ->
+    val function: VCalculateColumn? = if (computeTrigger != null) {
+      computeTrigger!!.action.method() as VCalculateColumn
+    } else {
+      null
+    }
+    model = domain.buildPivotTableFieldModel(this, function, Dimension.Position.NONE).also { column ->
       column.label = label ?: ""
       column.help = help
     }

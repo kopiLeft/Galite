@@ -23,6 +23,16 @@ import javax.swing.tree.DefaultMutableTreeNode
 class VPivotTableRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
 
   /**
+   * Sets data row
+   *
+   * @param        column                the index of the column
+   * @param        value                the value for the column
+   */
+  fun setValueAt(column: Int, value: Any?) {
+    data[column] = value
+  }
+
+  /**
    * Return the object at column
    *
    * @param        column                the index of the column
