@@ -20,8 +20,8 @@ package org.kopi.galite.visual.dsl.pivottable
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.pivottable.Constants
-import org.kopi.galite.visual.pivottable.VPivotTableColumn
 import org.kopi.galite.visual.pivottable.VCalculateColumn
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
 
 class Dimension<T>(override val domain: Domain<T>,
                    val init: Dimension<T>.() -> Unit,

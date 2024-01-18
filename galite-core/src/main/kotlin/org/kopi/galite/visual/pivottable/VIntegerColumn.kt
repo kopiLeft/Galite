@@ -20,6 +20,12 @@ package org.kopi.galite.visual.pivottable
 
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 
+/**
+ * Represents a pivot table column description
+ * @param    ident        The identifier of the field
+ * @param    function    An (optional) function
+ * @param    position     The position of the dimension field
+ */
 class VIntegerColumn(ident: String?,
                      function: VCalculateColumn?,
                      position: Dimension.Position?)

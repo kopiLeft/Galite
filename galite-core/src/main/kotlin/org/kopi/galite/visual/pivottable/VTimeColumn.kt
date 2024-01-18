@@ -24,6 +24,7 @@ import java.time.LocalTime
 /**
  * Represents a pivot table column description
  * @param    ident        The identifier of the field
+ * @param    function    An (optional) function
  * @param    position     The position of the dimension field
  */
 class VTimeColumn(ident: String?,

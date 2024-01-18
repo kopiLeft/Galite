@@ -26,7 +26,6 @@ import org.kopi.galite.visual.report.VCCDepthFirstCircuitN
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VGroupRow
 import org.kopi.galite.visual.report.VReportRow
-import java.math.RoundingMode
 
 ///////////////////////////////////////////////////////////////////////////
 // This file regroups predefined report triggers
@@ -284,106 +283,4 @@ fun ReportField<BigDecimal>.avgDecimal(): VCalculateColumn {
       }
     }
   }
-}
-
-/**
- * Calcul de moyenne sur une période
- */
-fun moyenneCompute(posCol1: Int, valeur: Int): VCalculateColumn {
-  return customCompute(posCol1, object : OneColumnsComputation() {
-    override fun compute(c1: Number): BigDecimal {
-      val valeur1 = BigDecimal(c1.toString()).setScale(2, RoundingMode.HALF_UP)
-      val valeur2 = BigDecimal(valeur.toString()).setScale(2, RoundingMode.HALF_UP)
-
-      return if (valeur1.compareTo(BigDecimal.ZERO) == 0) {
-        BigDecimal.ZERO
-      } else {
-        valeur1.div(valeur2)
-      }
-    }
-  })
-}
-
-/**
- * calcul basé sur une colonne : se baser sur les valeurs d'une colonne pour calculer
- * les valeurs d'une autre colonne
- */
-fun customCompute(posCol1: Int,
-                  calc: OneColumnsComputation): VCalculateColumn {
-
-  return object : VCCDepthFirstCircuitN() {
-    fun sumColumn(row: VReportRow, column: Int, pos: Int): Number {
-      return if (pos < 0) {
-        println("pos < 0")
-        // the sum of this column is ever done.
-        if (row.getValueAt(column + pos) != null) {
-          println("row.getValueAt(column + pos)" + row.getValueAt(column + pos))
-          row.getValueAt(column + pos) as Number
-        } else {
-          BigDecimal.ZERO
-        }
-      } else {
-        println("pos > 0")
-        // compute the sum for this column
-        sumFixed(row, column + pos) as Number
-      }
-    }
-
-    override fun evalNode(row: VReportRow, column: Int): Any {
-      val   sum1 = sumColumn(row, column, posCol1)
-      println("sum1 : " + sum1)
-
-      return calc.compute(sum1)
-    }
-
-    override fun evalLeaf(row: VReportRow, column: Int): Any {
-      return evalNode(row, column)
-    }
-  }
-}
-
-/**
- * addition des valeurs décimales
- */
-fun sumFixed(row: VReportRow, column: Int): Any {
-  val       childCount = row.childCount
-  var       result = BigDecimal.ZERO
-
-  for (i in 1 until childCount) {
-    val     child = row.getChildAt(i) as VReportRow
-    val     value = child.getValueAt(column) as BigDecimal?
-
-    if (value != null) {
-      result += value
-    }
-  }
-  (row as VGroupRow).setValueAt(column, result)
-
-  return result
-}
-
-//---------------------------------------------------
-// INNER CLASSES
-//---------------------------------------------------
-
-/**
- * Classe utilitaire pour effectuer un calcul basé
- * sur deux colonnes.
- */
-abstract class TwoColumnsComputation {
-  /**
-   * Effectuer le calcul basé sur deux object.
-   */
-  abstract fun compute(c1: Number, c2: Number): Number
-}
-
-/**
- * Classe utilitaire pour effectuer un calcul basé
- * sur une colonne.
- */
-abstract class OneColumnsComputation {
-  /**
-   * Effectuer le calcul basé sur deux object.
-   */
-  abstract fun compute(c1: Number): Number
 }
