@@ -38,6 +38,7 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.UIFactory
@@ -264,7 +265,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
           cmdPieView = it
         }
         else -> {
-          setCommandEnabled(it, i, true)
+          setCommandEnabled(it, true)
         }
       }
     }
@@ -624,6 +625,16 @@ abstract class VChart : VWindow(), CConstants, Printable {
         throw InconsistencyException(mue)
       }
       surl.toString()
+    }
+  }
+
+  fun addDefaultChartCommands() {
+    initDefaultCommands()
+  }
+
+  private fun initDefaultCommands() {
+    actors.forEachIndexed { index, vActor ->
+      commands.add(VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.ident))
     }
   }
 

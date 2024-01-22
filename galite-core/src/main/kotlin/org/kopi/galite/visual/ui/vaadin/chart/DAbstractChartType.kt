@@ -28,13 +28,21 @@ import org.kopi.galite.visual.chart.VDataSeries
 import org.kopi.galite.visual.chart.VPrintOptions
 
 import com.github.appreciated.apexcharts.ApexCharts
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder
-import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder
-import com.github.appreciated.apexcharts.config.builder.XAxisBuilder
+import com.github.appreciated.apexcharts.config.builder.*
 import com.github.appreciated.apexcharts.config.chart.Type
+import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder
+import com.github.appreciated.apexcharts.config.legend.Position
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
+import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder
+import com.github.appreciated.apexcharts.config.subtitle.Align
+import com.github.appreciated.apexcharts.config.subtitle.builder.StyleBuilder
+import com.github.appreciated.apexcharts.config.yaxis.builder.AxisBorderBuilder
+import com.github.appreciated.apexcharts.config.yaxis.builder.TitleBuilder
 import com.github.appreciated.apexcharts.helper.Series
+import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import java.time.LocalDate
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.
@@ -48,7 +56,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
 
   init {
     // FIXME: temporary styling
-    minWidth = "500px"
+    minWidth = "800px"
   }
 
   //---------------------------------------------------
@@ -86,34 +94,56 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     }
 
     when (type) {
-      Type.pie -> {
+      Type.PIE -> {
         finalValues.forEach {
-          apex.setChart(ChartBuilder.get().withType(type).build())
+          apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.LEFT).withStyle(StyleBuilder.get().withFontSize("20px").withColor("black").build()).build())
+          apex.setChart(ChartBuilder.get().withType(type).withFontFamily("Helvetica, Arial, sans-serif").withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
           apex.setSeries(*it.toTypedArray())
           apex.setLabels(*labels.toTypedArray())
+          apex.setLegend(LegendBuilder.get().withPosition(Position.RIGHT).build())
+          apex.setResponsive(ResponsiveBuilder.get().withBreakpoint(480.0).withOptions(OptionsBuilder.get().withLegend(LegendBuilder.get().withPosition(Position.BOTTOM).build()).build()).build())
         }
       }
 
-      Type.bar, Type.line, Type.area -> {
+      Type.BAR, Type.LINE, Type.AREA -> {
+        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.LEFT).withStyle(StyleBuilder.get().withFontSize("20px").withColor("black").build()).build())
         apex.setChart(ChartBuilder.get().withType(type).build())
         apex.setSeries(*series.toTypedArray())
+        apex.setDataLabels(DataLabelsBuilder.get().withEnabled(true).build())
         apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
+        if (series.size > 1) {
+          apex.setYaxis(
+                  arrayOf(
+                          YAxisBuilder.get()
+                                  .withTitle(TitleBuilder.get().withText(series.toTypedArray()[0].name).build())
+                                  .withAxisBorder(AxisBorderBuilder.get().withShow(false).build())
+                                  .build(),
+
+                          YAxisBuilder.get()
+                                  .withTitle(TitleBuilder.get().withText(series.toTypedArray()[1].name).build())
+                                  .withAxisBorder(AxisBorderBuilder.get().withShow(true).build())
+                                  .withOpposite(true)
+                                  .build()
+                  )
+          )
+        }
         apex.setLabels(*labels.toTypedArray())
       }
 
-      Type.rangeBar -> {
-        apex.setChart(ChartBuilder.get().withType(Type.bar).build())
+      Type.RANGEBAR -> {
+        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.LEFT).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
+        apex.setChart(ChartBuilder.get().withType(Type.BAR).build())
+        apex.setLabels(*labels.toTypedArray())
         apex.setSeries(*series.toTypedArray())
         apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
         apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
-
       }
       else -> {
         throw Exception("Unsupported chart type.")
       }
     }
 
-    super.add(apex)
+    add(apex)
   }
 
   override fun isEnabled(): Boolean { return super.isEnabled() }

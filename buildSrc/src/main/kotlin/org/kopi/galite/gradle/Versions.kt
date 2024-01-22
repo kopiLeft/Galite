@@ -32,7 +32,7 @@ object Versions {
   const val JDOM = "2.0.5"
   const val APACHE_POI = "4.1.2"
   const val SLF4J = "1.7.30"
-  const val APEX_CHARTS = "2.0.0.beta10"
+  const val APEX_CHARTS = "23.0.1"
   const val IRON_ICONS = "2.0.1"
   const val JAVAX_SERVLET_API = "4.0.1"
   const val JAVAX_MAIL = "1.4"

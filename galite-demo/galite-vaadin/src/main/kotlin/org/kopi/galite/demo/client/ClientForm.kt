@@ -155,6 +155,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     }
 
     init {
+      command(item = chart) { createChart { ChartSample() } }
       command(item = report) { createReport { ClientR() } }
       command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }

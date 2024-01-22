@@ -126,26 +126,6 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   }
 
   /**
-   * Adds the default chart commands.
-   * TODO!
-   */
-  open fun addDefaultChartCommands() {
-    TODO("Add the above commands")
-    /*commands.add(Command("Quit", VConstants.MOD_ANY))
-    commands.add(Command("Print", VConstants.MOD_ANY))
-    commands.add(Command("PrintOptions", VConstants.MOD_ANY))
-    commands.add(Command("ExportPNG", VConstants.MOD_ANY))
-    commands.add(Command("ExportPDF", VConstants.MOD_ANY))
-    commands.add(Command("ExportJPEG", VConstants.MOD_ANY))
-    commands.add(Command("ColumnView", VConstants.MOD_ANY))
-    commands.add(Command("BarView", VConstants.MOD_ANY))
-    commands.add(Command("LineView", VConstants.MOD_ANY))
-    commands.add(Command("AreaView", VConstants.MOD_ANY))
-    commands.add(Command("PieView", VConstants.MOD_ANY))
-    commands.add(Command("Help", VConstants.MOD_ANY))*/
-  }
-
-  /**
    * Creates a chart measure, with the specified [domain], used to store values of measure values.
    *
    * @param domain the dimension domain.
@@ -275,6 +255,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       setTitle(title)
       help = this@Chart.help
       source = sourceFile
+      addDefaultChartCommands()
     }
   }
 

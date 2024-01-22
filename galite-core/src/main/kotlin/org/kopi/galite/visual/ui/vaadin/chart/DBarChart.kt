@@ -26,7 +26,7 @@ import com.github.appreciated.apexcharts.config.chart.Type
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DBarChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.bar, title, dataSeries) {
+class DBarChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.BAR, title, dataSeries) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
