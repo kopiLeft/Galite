@@ -59,8 +59,7 @@ class GridEditorMonthField : GridEditorTextField(7) {
       // just the month, complete
       try {
         val month = text.toInt()
-        val now: LocalDate = LocalDate.now()
-        val year = now.year
+        val year = LocalDate.now().year
         if (isMonth(month, year)) {
           value = toString(year, month)
         } else {
