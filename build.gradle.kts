@@ -46,6 +46,10 @@ subprojects {
     maven {
       url = uri("https://mvnrepository.com/artifact/org.vaadin.addons")
     }
+    maven {
+      url = uri("file:///home/ichaabane/.m2/repository")
+      isAllowInsecureProtocol = true
+    }
   }
 
   dependencies {

@@ -74,7 +74,13 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     pivotOptions.setRenderer(pivotTable.defaultRenderer)
 
     // Pivot table aggregate function
-    pivotOptions.setAggregator(pivotTable.aggregator.first, pivotTable.aggregator.second)
+    if (pivotTable.customAggregators.isNotEmpty()){
+      for ((innerMap, stringValue) in pivotTable.customAggregators) {
+        pivotOptions.setCustomAggregators(innerMap, stringValue)
+      }
+    } else {
+      pivotOptions.setAggregator(pivotTable.aggregator.first, pivotTable.aggregator.second)
+    }
 
     // Pivot table renderer
     if(rows.isNotEmpty() && columns.isNotEmpty()) {
