@@ -29,7 +29,6 @@ import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Form
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.VColor
 
 object FormWithChart: Form(title = "form for test", locale = Locale.UK) {
 
@@ -63,10 +62,6 @@ class ChartSample: Chart(title = "Area/population per city",
 
   val area = measure(DECIMAL(width = 10, scale = 5)) {
     label = "area (ha)"
-
-    color {
-      VColor.GREEN
-    }
   }
 
   val population = measure(INT(10)) {

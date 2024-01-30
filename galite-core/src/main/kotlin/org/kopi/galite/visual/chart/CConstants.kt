@@ -48,7 +48,6 @@ interface CConstants : Constants {
     const val TRG_CHARTTYPE = 2
     const val TRG_INIT = 3
     const val TRG_FORMAT = 4
-    const val TRG_COLOR = 5
     const val TRG_CMDACCESS = 6
     const val TRG_VOID = VConstants.TRG_VOID
     const val TRG_OBJECT = VConstants.TRG_OBJECT
@@ -69,7 +68,6 @@ interface CConstants : Constants {
             "TRG_CHARTTYPE",
             "TRG_INIT",
             "TRG_FORMAT",
-            "TRG_COLOR",
             "TRG_CMDACCESS"
     )
     val TRG_TYPES = intArrayOf(
@@ -77,7 +75,6 @@ interface CConstants : Constants {
             TRG_VOID,
             TRG_OBJECT,
             TRG_VOID,
-            TRG_OBJECT,
             TRG_OBJECT,
             TRG_BOOLEAN
     )

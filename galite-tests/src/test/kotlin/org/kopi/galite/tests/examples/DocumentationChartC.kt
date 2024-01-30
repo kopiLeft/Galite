@@ -22,7 +22,6 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.insert
 
 import org.kopi.galite.type.Month
-import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.DECIMAL
@@ -82,11 +81,6 @@ class DocumentationChartC :  Chart(
 
   val area = measure(DECIMAL(width = 10, scale = 5)) {
     label = "area (ha)"
-
-    // test color trigger !!
-    color {
-      VColor.GREEN
-    }
   }
 
   /** Creating Charts dimensions and measures **/

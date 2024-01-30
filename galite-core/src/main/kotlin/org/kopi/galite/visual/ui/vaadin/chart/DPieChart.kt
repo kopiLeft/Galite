@@ -27,11 +27,4 @@ import com.github.appreciated.apexcharts.config.chart.Type
  * @param dataSeries The data series model.
  */
 class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.PIE, title, dataSeries) {
-
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  override fun setColorsList(): Boolean {
-    return true
-  }
 }

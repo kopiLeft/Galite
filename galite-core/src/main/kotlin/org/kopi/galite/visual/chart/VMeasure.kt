@@ -18,15 +18,12 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.VColor
-
 /**
  * A chart measure represented by its label and its value.
  *
  * @param ident The measure identifier.
- * @param color The color to be used.
  */
-abstract class VMeasure protected constructor(ident: String, var color: VColor?) : VColumn(ident) {
+abstract class VMeasure protected constructor(ident: String) : VColumn(ident) {
   /**
    * Returns the number representation of the given value.
    *

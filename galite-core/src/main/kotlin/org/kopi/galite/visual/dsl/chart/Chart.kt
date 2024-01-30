@@ -149,9 +149,6 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     // MEASURE TRIGGERS
     val fieldTriggerArray = arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)
 
-    if(colorTrigger != null) {
-      fieldTriggerArray[CConstants.TRG_COLOR] = colorTrigger
-    }
     // TODO : Add field triggers here
     this@Chart.model.VKT_Measure_Triggers.add(fieldTriggerArray)
   }

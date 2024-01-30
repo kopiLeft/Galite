@@ -46,7 +46,6 @@ import org.kopi.galite.visual.report.VDecimalCodeColumn
 import org.kopi.galite.visual.report.VIntegerCodeColumn
 import org.kopi.galite.visual.report.VReportColumn
 import org.kopi.galite.visual.report.VStringCodeColumn
-import org.kopi.galite.visual.VColor
 
 /**
  * Represents a code domain.
@@ -133,17 +132,15 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
   /**
    * Builds the chart measure model
    */
-  override fun buildMeasureModel(measure: ChartMeasure<*>, color: VColor?): VMeasure {
+  override fun buildMeasureModel(measure: ChartMeasure<*>): VMeasure {
     return with(measure) {
       when (kClass) {
         BigDecimal::class -> VDecimalCodeMeasure(ident,
-                                                 color,
                                                  this@CodeDomain.ident.ifEmpty { ident },
                                                  measure.source,
                                                  codes.map { it.ident }.toTypedArray(),
                                                  codes.map { it.value as? BigDecimal }.toTypedArray())
         Int::class, Long::class -> VIntegerCodeMeasure(ident,
-                                                       color,
                                                        this@CodeDomain.ident.ifEmpty { ident },
                                                        measure.source,
                                                        codes.map { it.ident }.toTypedArray(),
