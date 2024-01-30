@@ -18,14 +18,14 @@
 
 package org.kopi.galite.visual.chart
 
-import java.math.BigDecimal
-
 import org.kopi.galite.util.base.InconsistencyException
+import java.math.BigDecimal
 
 /**
  * Represents a decimal code chart column.
  *
  * @param ident         The column identifier.
+ * @param format        The dimension format
  * @param type          The column type.
  * @param source        The column localization source.
  * @param idents        The column labels.

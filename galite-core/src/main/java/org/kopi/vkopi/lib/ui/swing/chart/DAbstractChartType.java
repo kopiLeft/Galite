@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -36,14 +35,11 @@ import org.kopi.galite.visual.chart.UChartType;
 import org.kopi.galite.visual.chart.VDataSeries;
 import org.kopi.galite.visual.chart.VDimensionData;
 import org.kopi.galite.visual.chart.VMeasureData;
-import org.kopi.galite.visual.chart.VPrintOptions;
-import org.kopi.galite.visual.util.PPaperType;
 import org.kopi.galite.visual.ApplicationContext;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.DefaultFontMapper;
 import com.lowagie.text.pdf.FontMapper;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfTemplate;
@@ -83,59 +79,6 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     }
   }
 
-  @Override
-  public void refresh() {
-    invalidate();
-    repaint();
-    validate();
-  }
-
-  @Override
-  public void exportToPDF(OutputStream destination, VPrintOptions options)
-    throws IOException
-  {
-    if (getChart() == null) {
-      return;
-    } else {
-      PPaperType	paper = PPaperType.Companion.getPaperTypeFromCode(options.getPaperType());
-      int		width;
-      int 		height;
-
-      if (options.getPaperLayout().equals("Landscape")) {
-        width = paper.getHeight();
-        height = paper.getWidth();
-      } else {
-        width = paper.getWidth();
-        height = paper.getHeight();
-      }
-      // write the pdf
-      writeAsPDF(destination,
-	         width,
-	         height,
-	         options.getLeftMargin(),
-	         options.getRightMargin(),
-	         options.getTopMargin(),
-	         options.getBottomMargin(),
-	         new DefaultFontMapper());
-    }
-  }
-
-  @Override
-  public void exportToPNG(OutputStream destination, int width, int height)
-    throws IOException
-  {
-    if (getChart() != null) {
-      ChartUtilities.writeChartAsPNG(destination, getChart(), width , height);
-    }
-  }
-
-  @Override
-  public void exportToJPEG(OutputStream destination, int width, int height) throws IOException {
-    if (getChart() != null) {
-      ChartUtilities.writeChartAsJPEG(destination, getChart(), width , height);
-    }
-  }
-  
   /**
    * Creates the category data set for the chart.
    * @param series The data series.

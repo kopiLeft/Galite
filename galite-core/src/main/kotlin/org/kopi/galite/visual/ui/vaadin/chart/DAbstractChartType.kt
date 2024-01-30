@@ -18,14 +18,12 @@
 package org.kopi.galite.visual.ui.vaadin.chart
 
 import java.awt.Color
-import java.io.OutputStream
 import java.util.Random
 
 import kotlin.collections.HashSet
 
 import org.kopi.galite.visual.chart.UChartType
 import org.kopi.galite.visual.chart.VDataSeries
-import org.kopi.galite.visual.chart.VPrintOptions
 
 import com.github.appreciated.apexcharts.ApexCharts
 import com.github.appreciated.apexcharts.config.builder.*
@@ -39,10 +37,7 @@ import com.github.appreciated.apexcharts.config.subtitle.builder.StyleBuilder
 import com.github.appreciated.apexcharts.config.yaxis.builder.AxisBorderBuilder
 import com.github.appreciated.apexcharts.config.yaxis.builder.TitleBuilder
 import com.github.appreciated.apexcharts.helper.Series
-import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import java.time.LocalDate
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.
@@ -55,7 +50,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
                                                         ) : HorizontalLayout(), UChartType {
 
   init {
-    // FIXME: temporary styling
     minWidth = "800px"
   }
 
@@ -96,7 +90,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     when (type) {
       Type.PIE -> {
         finalValues.forEach {
-          apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.LEFT).withStyle(StyleBuilder.get().withFontSize("20px").withColor("black").build()).build())
+          apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.CENTER).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
           apex.setChart(ChartBuilder.get().withType(type).withFontFamily("Helvetica, Arial, sans-serif").withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
           apex.setSeries(*it.toTypedArray())
           apex.setLabels(*labels.toTypedArray())
@@ -106,7 +100,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
 
       Type.BAR, Type.LINE, Type.AREA -> {
-        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.LEFT).withStyle(StyleBuilder.get().withFontSize("20px").withColor("black").build()).build())
+        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.CENTER).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
         apex.setChart(ChartBuilder.get().withType(type).build())
         apex.setSeries(*series.toTypedArray())
         apex.setDataLabels(DataLabelsBuilder.get().withEnabled(true).build())
@@ -131,7 +125,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
 
       Type.RANGEBAR -> {
-        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.LEFT).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
+        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.CENTER).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
         apex.setChart(ChartBuilder.get().withType(Type.BAR).build())
         apex.setLabels(*labels.toTypedArray())
         apex.setSeries(*series.toTypedArray())
@@ -149,25 +143,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
   override fun isEnabled(): Boolean { return super.isEnabled() }
 
   override fun setEnabled(enabled: Boolean) { super.setEnabled(enabled) }
-
-  override fun refresh() {
-    TODO()
-  }
-
-  override fun exportToPDF(destination: OutputStream, options: VPrintOptions) {
-    TODO()
-    // DONE IN CLIENT SIDE
-  }
-
-  override fun exportToPNG(destination: OutputStream, width: Int, height: Int) {
-    TODO()
-    // DONE IN CLIENT SIDE
-  }
-
-  override fun exportToJPEG(destination: OutputStream, width: Int, height: Int) {
-    TODO()
-    // DONE IN CLIENT SIDE
-  }
 
   /**
    * Returns `true` if the color list should be created.
@@ -204,12 +179,6 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
   //---------------------------------------------------
   // ABSTRACT METHODS
   //---------------------------------------------------
-  /**
-   * Creates the chart data to be used for the chart type.
-   * @param name The chart data name.
-   * @return The chart data to be used.
-   */
-  protected abstract fun createChartData(name: String?)
 
   companion object {
     // colors

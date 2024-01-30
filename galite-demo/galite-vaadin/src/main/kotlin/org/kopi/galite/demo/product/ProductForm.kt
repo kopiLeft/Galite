@@ -19,6 +19,7 @@ package org.kopi.galite.demo.product
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Sequence
+import org.kopi.galite.demo.client.ChartSample
 
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
@@ -81,6 +82,7 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
       command(item = menuQuery) { recursiveQuery() }
       command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
       command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
+      command(item = chart) { createChart { ProductChart() } }
       command(item = report) { createReport { ProductR() } }
       command(item = pivotTable) { createPivotTable { ProductP() } }
     }

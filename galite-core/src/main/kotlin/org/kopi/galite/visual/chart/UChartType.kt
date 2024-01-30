@@ -18,8 +18,6 @@
 
 package org.kopi.galite.visual.chart
 
-import java.io.IOException
-import java.io.OutputStream
 import java.io.Serializable
 
 import org.kopi.galite.visual.base.UComponent
@@ -32,41 +30,4 @@ interface UChartType : Serializable, UComponent {
    * Builds the content of this chart type.
    */
   fun build()
-
-  /**
-   * Refreshes the content of this chart type.
-   */
-  fun refresh()
-
-  /**
-   * Exports the chart type to the PDF format.
-   *
-   * @param destination Where to write the export.
-   * @param options The print options.
-   * @throws IOException I/O errors.
-   */
-  @Throws(IOException::class)
-  fun exportToPDF(destination: OutputStream, options: VPrintOptions)
-
-  /**
-   * Exports the chart type to the PNG format.
-   *
-   * @param destination Where to write the export.
-   * @param width The image width.
-   * @param height The image height.
-   * @throws IOException I/O errors.
-   */
-  @Throws(IOException::class)
-  fun exportToPNG(destination: OutputStream, width: Int, height: Int)
-
-  /**
-   * Exports the chart type to the JPEG format.
-   *
-   * @param destination Where to write the export.
-   * @param width The image width.
-   * @param height The image height.
-   * @throws IOException I/O errors.
-   */
-  @Throws(IOException::class)
-  fun exportToJPEG(destination: OutputStream, width: Int, height: Int)
 }

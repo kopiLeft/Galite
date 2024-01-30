@@ -19,40 +19,28 @@
 package org.kopi.galite.visual.chart
 
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
 import kotlin.collections.ArrayList
 
-import org.kopi.galite.visual.base.Utils
-import org.kopi.galite.visual.dsl.common.Trigger
-import org.kopi.galite.visual.l10n.ChartLocalizer
-import org.kopi.galite.visual.l10n.LocalizationManager
-import org.kopi.galite.visual.print.Printable
-import org.kopi.galite.visual.util.PPaperType
-import org.kopi.galite.visual.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.l10n.ChartLocalizer
+import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
-
-import com.lowagie.text.Rectangle
 
 /**
  * Creates a new chart model.
@@ -70,12 +58,9 @@ import com.lowagie.text.Rectangle
  *
  * @throws VException Visual errors.
  */
-abstract class VChart : VWindow(), CConstants, Printable {
+abstract class VChart : VWindow(), CConstants {
 
   companion object {
-    const val TYP_PDF = 1
-    const val TYP_PNG = 2
-    const val TYP_JPEG = 3
 
     // --------------------------------------------------------------------
     // STATIC INITIALIZATION
@@ -107,7 +92,6 @@ abstract class VChart : VWindow(), CConstants, Printable {
   val VKT_Measure_Triggers = mutableListOf<Array<Trigger?>>()
   val VKT_Commands_Triggers = mutableListOf<Array<Trigger?>>()
   private val activeCommands: ArrayList<VCommand> = ArrayList()
-  var printOptions: VPrintOptions = VPrintOptions()
 
   /**
    * The chart dimensions. The actual version supports only one dimension
@@ -124,7 +108,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
   // LOCALIZATION
   // ----------------------------------------------------------------------
   /**
-   * Localizes this report
+   * Localizes this chart
    *
    * @param     locale  the locale to use
    */
@@ -138,7 +122,7 @@ abstract class VChart : VWindow(), CConstants, Printable {
   }
 
   /**
-   * Localizes this report
+   * Localizes this chart
    *
    * @param     manager         the manger to use for localization
    */
@@ -162,36 +146,6 @@ abstract class VChart : VWindow(), CConstants, Printable {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
-
-  override fun createPrintJob(): PrintJob {
-    return try {
-      val printJob: PrintJob
-      val file = Utils.getTempFile("galite", "pdf")
-      val paper = PPaperType.getPaperTypeFromCode(printOptions.paperType)
-
-      val page = if (printOptions.paperLayout == "Landscape") {
-        Rectangle(paper.height.toFloat(), paper.width.toFloat())
-      } else {
-        Rectangle(paper.width.toFloat(), paper.height.toFloat())
-      }
-      export(file, TYP_PDF)
-      printJob = PrintJob(file, true, page)
-      printJob.dataType = PrintJob.DAT_PDF
-      printJob.title = getTitle()
-      printJob.numberOfPages = 1
-      printJob.documentType = getDocumentType()
-      printJob
-    } catch (e: IOException) {
-      throw VExecFailedException(e)
-    }
-  }
-
-  /**
-   * Returns the document type.
-   * @return The document type.
-   */
-  open fun getDocumentType(): Int = Printable.DOC_UNKNOWN
-
   override fun getType(): Int = Constants.MDL_CHART
 
   /**
@@ -320,64 +274,6 @@ abstract class VChart : VWindow(), CConstants, Printable {
    */
   fun setType(type: VChartType) {
     setType(type, true)
-  }
-
-  /**
-   * Prints the report
-   */
-  fun export(type: Int = TYP_PNG) {
-    val ext = when (type) {
-      TYP_PNG -> ".png"
-      TYP_PDF -> ".pdf"
-      TYP_JPEG -> ".jpeg"
-      else -> throw InconsistencyException("Export type unknown")
-    }
-    val file = FileHandler.fileHandler!!.chooseFile(getDisplay()!!,
-                                                    ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
-                                                    "chart$ext")
-    if (file != null) {
-      try {
-        export(file, type)
-      } catch (e: IOException) {
-        throw VExecFailedException(e)
-      }
-    }
-  }
-
-  /**
-   * Exports the chart to the given format.
-   * @param file The destination file.
-   * @param type The export type.
-   * @throws IOException I/O errors.
-   */
-  fun export(file: File, type: Int) {
-    val destination = FileOutputStream(file)
-    var exported = false
-
-    setWaitInfo(VlibProperties.getString("export-message"))
-    try {
-      exported = when (type) {
-        TYP_PDF -> {
-          (getDisplay() as UChart).getType()!!.exportToPDF(destination, printOptions)
-          true
-        }
-        TYP_PNG -> {
-          (getDisplay() as UChart).getType()!!.exportToPNG(destination, printOptions.imageWidth, printOptions.imageHeight)
-          true
-        }
-        TYP_JPEG -> {
-          (getDisplay() as UChart).getType()!!.exportToJPEG(destination, printOptions.imageWidth, printOptions.imageHeight)
-          true
-        }
-        else -> throw InconsistencyException("Export type unknown")
-      }
-    } finally {
-      destination.close()
-      unsetWaitInfo()
-      if (exported) {
-        fireFileProduced(file)
-      }
-    }
   }
 
   /**

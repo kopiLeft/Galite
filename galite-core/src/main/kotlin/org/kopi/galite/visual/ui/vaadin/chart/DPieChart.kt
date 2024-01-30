@@ -31,10 +31,6 @@ class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChart
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun createChartData(name: String?) {
-    TODO()
-  }
-
   override fun setColorsList(): Boolean {
     return true
   }

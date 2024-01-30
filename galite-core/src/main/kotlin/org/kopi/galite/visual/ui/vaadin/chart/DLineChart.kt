@@ -26,12 +26,4 @@ import com.github.appreciated.apexcharts.config.chart.Type
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DLineChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.LINE, title, dataSeries) {
-
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  override fun createChartData(name: String?) {
-    TODO()
-  }
-}
+class DLineChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.LINE, title, dataSeries) {}
