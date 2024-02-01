@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.demo.product
 
-import org.jetbrains.exposed.sql.select
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.count
+import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.database.transaction
@@ -30,8 +31,8 @@ import org.kopi.galite.visual.dsl.form.Key
 
 class ProductChart  : Chart(
   locale = Locale.UK,
-  title = "number per Category ",
-  help = "This chart presents the number per Category"
+  title = "Quantity of products per category",
+  help = "This chart presents the quantity of product per Category"
 ) {
 
   val action = menu("Action")
@@ -73,9 +74,9 @@ class ProductChart  : Chart(
     model.setType(VChartType.COLUMN)
   }
 
-  val number = measure(LONG(10)) {
-    label = "number"
-    help = "The number of Category "
+  val quantity = measure(LONG(10)) {
+    label = "Product quantity"
+    help = "The quantity of product per Category"
   }
 
   val category = dimension(STRING(50)) {
@@ -94,29 +95,30 @@ class ProductChart  : Chart(
 
   init {
     transaction {
-      val shoes = Product.select { Product.category eq 1 }.count()
-      val shirts = Product.select { Product.category eq 2 }.count()
-      val glasses = Product.select { Product.category eq 3 }.count()
-      val pullovers = Product.select { Product.category eq 4 }.count()
-      val jeans = Product.select { Product.category eq 5 }.count()
+      val products = Product.slice(Product.category, Product.category.count())
+        .selectAll()
+        .groupBy(Product.category)
 
-
-      category.add("shoes") {
-        this[number] = shoes
-      }
-      category.add("shirts") {
-        this[number] = shirts
-
-      }
-      category.add("glasses") {
-        this[number] = glasses
-      }
-      category.add("pullovers") {
-        this[number] = pullovers
-      }
-      category.add("jeans") {
-        this[number] = jeans
+      products.forEach { result ->
+        category.add(decodeCategory(result[Product.category])) {
+          this[quantity] = result[Product.category.count()]
+        }
       }
     }
+  }
+}
+
+/**
+ * Decode category code
+ * !!! FIXME : Fix pivot table to accept CodeDomain type and automatically convert a code to its value
+ */
+fun decodeCategory(category: Int) : String {
+  return when (category) {
+    1 -> "shoes"
+    2 -> "shirts"
+    3 -> "glasses"
+    4 -> "pullovers"
+    5 -> "jeans"
+    else -> "UNKNOWN"
   }
 }

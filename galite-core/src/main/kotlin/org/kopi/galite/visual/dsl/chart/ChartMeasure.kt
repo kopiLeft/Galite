@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,13 +18,14 @@ package org.kopi.galite.visual.dsl.chart
 
 import org.kopi.galite.visual.chart.VMeasure
 import org.kopi.galite.visual.domain.Domain
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
 
 /**
  * Represents a measure used to store numeric values in chart.
  *
  * @param domain dimension domain.
  */
-open class ChartMeasure<T>(domain: Domain<T>, override val source: String = "") : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
+open class ChartMeasure<T>(domain: Domain<T>, ident: String? = null, override val source: String = "") : ChartField<T>(domain, ident) where T : Comparable<T>?, T : Number? {
 
   val model: VMeasure
     get() {
@@ -36,4 +37,14 @@ open class ChartMeasure<T>(domain: Domain<T>, override val source: String = "") 
         }
       }
     }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * Generates localization for the field in the xml file
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as ChartLocalizationWriter).genField(ident, label, help)
+  }
 }

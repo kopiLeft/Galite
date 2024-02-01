@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,6 @@ import com.github.appreciated.apexcharts.config.chart.Type
 import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder
 import com.github.appreciated.apexcharts.config.legend.Position
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
-import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder
 import com.github.appreciated.apexcharts.config.subtitle.Align
 import com.github.appreciated.apexcharts.config.subtitle.builder.StyleBuilder
 import com.github.appreciated.apexcharts.config.yaxis.builder.AxisBorderBuilder
@@ -45,7 +44,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
                                                         ) : HorizontalLayout(), UChartType {
 
   init {
-    minWidth = "800px"
+    minWidth = "700px"
   }
 
   //---------------------------------------------------
@@ -85,21 +84,43 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     when (type) {
       Type.PIE -> {
         finalValues.forEach {
-          apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.CENTER).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
-          apex.setChart(ChartBuilder.get().withType(type).withFontFamily("Helvetica, Arial, sans-serif").withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
+          apex.setTitle(TitleSubtitleBuilder.get()
+            .withText(title?.uppercase())
+            .withMargin(10.0)
+            .withOffsetX(224.0)
+            .withOffsetY(-2.0)
+            .withStyle(StyleBuilder.get()
+              .withColor("black")
+              .build())
+            .build())
+          apex.setChart(ChartBuilder.get()
+            .withType(type)
+            .withFontFamily("Helvetica, Arial, sans-serif")
+            .withToolbar(ToolbarBuilder.get().withShow(true).build()).build())
           apex.setSeries(*it.toTypedArray())
           apex.setLabels(*labels.toTypedArray())
-          apex.setLegend(LegendBuilder.get().withPosition(Position.RIGHT).build())
-          apex.setResponsive(ResponsiveBuilder.get().withBreakpoint(480.0).withOptions(OptionsBuilder.get().withLegend(LegendBuilder.get().withPosition(Position.BOTTOM).build()).build()).build())
+          apex.setLegend(LegendBuilder.get()
+            .withPosition(Position.RIGHT)
+            .build())
         }
       }
 
       Type.BAR, Type.LINE, Type.AREA -> {
-        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.CENTER).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
-        apex.setChart(ChartBuilder.get().withType(type).build())
+        apex.setTitle(TitleSubtitleBuilder.get()
+          .withText(title?.uppercase())
+          .withAlign(Align.CENTER)
+          .withStyle(StyleBuilder.get().withColor("black").build())
+          .build())
+        apex.setChart(ChartBuilder.get()
+          .withType(type)
+          .build())
         apex.setSeries(*series.toTypedArray())
-        apex.setDataLabels(DataLabelsBuilder.get().withEnabled(true).build())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
+        apex.setDataLabels(DataLabelsBuilder.get()
+          .withEnabled(true)
+          .build())
+        apex.setXaxis(XAxisBuilder.get()
+          .withCategories(*labels.toTypedArray())
+          .build())
         if (series.size > 1) {
           apex.setYaxis(
                   arrayOf(
@@ -120,12 +141,29 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
 
       Type.RANGEBAR -> {
-        apex.setTitle(TitleSubtitleBuilder.get().withText(title?.uppercase()).withAlign(Align.CENTER).withStyle(StyleBuilder.get().withFontSize("30px").withColor("black").build()).build())
-        apex.setChart(ChartBuilder.get().withType(Type.BAR).build())
+        apex.setTitle(TitleSubtitleBuilder.get()
+          .withText(title?.uppercase())
+          .withAlign(Align.CENTER)
+          .withStyle(StyleBuilder.get()
+            .withColor("black")
+            .build())
+          .build())
+        apex.setChart(ChartBuilder.get()
+          .withType(Type.BAR)
+          .build())
         apex.setLabels(*labels.toTypedArray())
         apex.setSeries(*series.toTypedArray())
-        apex.setXaxis(XAxisBuilder.get().withCategories(*labels.toTypedArray()).build())
-        apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
+        apex.setXaxis(XAxisBuilder.get()
+          .withTitle(com.github.appreciated.apexcharts.config.xaxis.builder.TitleBuilder.get()
+            .withText(series.toTypedArray()[0].name)
+            .build())
+          .withCategories(*labels.toTypedArray())
+          .build())
+        apex.setPlotOptions(PlotOptionsBuilder.get()
+          .withBar(BarBuilder.get()
+            .withHorizontal(true)
+            .build())
+          .build())
       }
       else -> {
         throw Exception("Unsupported chart type.")

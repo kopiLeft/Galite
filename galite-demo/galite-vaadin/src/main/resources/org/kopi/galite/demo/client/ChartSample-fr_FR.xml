@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<chart title="superficie/population par ville">
-    <menu ident="Action" label="Action" />
-
-    <field ident="areas" label="Superficie (ha)" />
-    <field ident="population" label="Population" />
-    <field ident="city" label="Ville" />
-</chart>

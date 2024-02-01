@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -64,7 +64,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
                                                     init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
-    val chartDimension = ChartDimension(domain, this, `access$sourceFile`)
+    val chartDimension = ChartDimension(domain, "DIMENSION_0", this, `access$sourceFile`)
     chartDimension.init()
     dimension = chartDimension
 
@@ -136,7 +136,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
           init: ChartMeasure<T>.() -> Unit
   ): ChartMeasure<T> where T : Comparable<T>?, T : Number? {
     domain.kClass = T::class
-    val chartMeasure = ChartMeasure(domain, `access$sourceFile`)
+    val chartMeasure = ChartMeasure(domain, "MEASURE_${measures.size}", `access$sourceFile`)
     chartMeasure.init()
     addMeasure(chartMeasure)
 
@@ -158,7 +158,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     model.measures.add(chartMeasure.model)
   }
 
-  open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+  open fun getFields(): List<ChartField<*>> = (listOf(dimension) + measures).toMutableList()
 
 
   override fun addCommandTrigger() {

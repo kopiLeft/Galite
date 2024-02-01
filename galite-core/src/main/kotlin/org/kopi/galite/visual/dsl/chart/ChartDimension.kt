@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@ import org.kopi.galite.visual.chart.VDimension
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.dsl.common.Action
 import org.kopi.galite.visual.dsl.common.ChartTrigger
+import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 
 /**
@@ -31,8 +32,9 @@ import org.kopi.galite.visual.dsl.common.Trigger
  * @param domain dimension domain.
  */
 open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
+                                              ident: String? = null,
                                               private val chart: Chart,
-                                              override val source: String? = null) : ChartField<T>(domain) {
+                                              override val source: String? = null) : ChartField<T>(domain, ident) {
 
   /**
    * Dimension values
@@ -93,4 +95,14 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>,
         }
       }
     }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * Generates localization for the field in the xml file
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as ChartLocalizationWriter).genField(ident, label, help)
+  }
 }

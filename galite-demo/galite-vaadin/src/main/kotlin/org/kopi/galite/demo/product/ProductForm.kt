@@ -19,8 +19,6 @@ package org.kopi.galite.demo.product
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Sequence
-import org.kopi.galite.demo.client.ChartSample
-
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.domain.CodeDomain
