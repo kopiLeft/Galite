@@ -64,7 +64,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
                                                     init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
-    val chartDimension = ChartDimension(domain, "DIMENSION_0", this, `access$sourceFile`)
+    val chartDimension = ChartDimension(domain, "DIMENSION", this, `access$sourceFile`)
     chartDimension.init()
     dimension = chartDimension
 

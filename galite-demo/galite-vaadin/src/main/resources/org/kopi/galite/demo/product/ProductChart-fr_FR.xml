@@ -9,6 +9,6 @@
     <actor ident="Pie view" label="Pie" help="Un graphique circulaire (Pie)." />
     <actor ident="Column view" label="Column" help="Un graphique à barres horizontales (Column)." />
 
+    <field ident="DIMENSION" label="Catégorie" help="La catégorie du produit." />
     <field ident="MEASURE_0" label="quantité du produit" help="La quantité du produit." />
-    <field ident="DIMENSION_0" label="Catégorie" help="La catégorie du produit." />
 </chart>

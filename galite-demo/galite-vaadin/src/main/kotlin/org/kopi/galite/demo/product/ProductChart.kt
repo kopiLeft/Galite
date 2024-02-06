@@ -110,7 +110,7 @@ class ProductChart  : Chart(
 
 /**
  * Decode category code
- * !!! FIXME : Fix pivot table to accept CodeDomain type and automatically convert a code to its value
+ * !!! FIXME : Fix chart to accept CodeDomain type and automatically convert a code to its value
  */
 fun decodeCategory(category: Int) : String {
   return when (category) {
