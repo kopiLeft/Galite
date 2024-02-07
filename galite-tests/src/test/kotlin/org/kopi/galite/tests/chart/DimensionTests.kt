@@ -40,7 +40,7 @@ class DimensionTests: VApplicationTestBase() {
    */
   @Test
   fun monthDimensionTest() {
-    val monthDimension = ChartDimension(MONTH, chart)
+    val monthDimension = ChartDimension(MONTH, chart=chart)
     val measure1 = ChartMeasure(DECIMAL(20, 10))
     measure1.label = "measure 1"
     monthDimension.add(Month(2021, 1)) {
@@ -64,7 +64,7 @@ class DimensionTests: VApplicationTestBase() {
    */
   @Test
   fun intDimensionTest() {
-    val intDimension = ChartDimension(INT(10), chart)
+    val intDimension = ChartDimension(INT(10), chart=chart)
     val measure1 = ChartMeasure(INT(10))
     val measure2 = ChartMeasure(INT(10))
 
