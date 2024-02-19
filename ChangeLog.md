@@ -1,3 +1,12 @@
+# 1.5.1
+## What's Changed
+* Fix fatal error linked to the management of temporal fields in Full Calendar component by @Iyedchaabane [#611](https://github.com/kopiLeft/Galite/pull/611)
+* Fix fields of type CodeDomain in pivot table by @Iyedchaabane [#615](https://github.com/kopiLeft/Galite/pull/615)
+* Use java.time.LocalDate / java.time.LocalDateTime for all fields of type date / timestamp by @Iyedchaabane [#619](https://github.com/kopiLeft/Galite/pull/619)
+* Fix chart implementation by @Iyedchaabane in [#620](https://github.com/kopiLeft/Galite/pull/620)
+
+**Full Changelog**: [1.5.0 ... 1.5.1](https://github.com/kopiLeft/Galite/compare/1.5.0...1.5.1)
+
 # 1.5.0
 ## What's Changed
 * Upgrade Exposed version to 0.42.1 and Kotlin version to 1.9.0 by @mgrati and @achraf-debug in [#603](https://github.com/kopiLeft/Galite/pull/603)
