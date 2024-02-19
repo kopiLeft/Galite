@@ -36,12 +36,12 @@ import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
-import org.kopi.galite.visual.dsl.report.ReportField
-import org.kopi.galite.visual.form.*
-import org.kopi.galite.visual.report.*
 import org.kopi.galite.visual.dsl.pivottable.Dimension
 import org.kopi.galite.visual.dsl.pivottable.PivotTableField
+import org.kopi.galite.visual.dsl.report.ReportField
+import org.kopi.galite.visual.form.*
 import org.kopi.galite.visual.pivottable.VPivotTableColumn
+import org.kopi.galite.visual.report.*
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -182,8 +182,8 @@ open class Domain<T>(val width: Int? = null,
         BigDecimal::class -> VDecimalDimension(ident, format, height ?: 6, true)
         String::class -> VStringDimension(ident, format)
         Boolean::class -> VBooleanDimension(ident, format)
-        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
-          VDateDimension(ident, format)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class
+        -> VDateDimension(ident, format)
         Month::class -> VMonthDimension(ident, format)
         Week::class -> VWeekDimension(ident, format)
         org.joda.time.LocalTime::class, LocalTime::class -> VTimeDimension(ident, format)
@@ -247,11 +247,24 @@ open class Domain<T>(val width: Int? = null,
   open fun buildPivotTableFieldModel(field: PivotTableField<*>, position: Dimension.Position?): VPivotTableColumn {
     return with(field) {
       when (kClass) {
-        Int::class, Long::class, String::class, BigDecimal::class, Boolean::class, org.joda.time.LocalDate::class,
-        LocalDate::class, java.sql.Date::class, java.util.Date::class, Month::class, Week::class, org.joda.time.LocalTime::class,
-        LocalTime::class, Instant::class, LocalDateTime::class, DateTime::class ->
-          VPivotTableColumn(ident, position)
-
+        Int::class, Long::class->
+          org.kopi.galite.visual.pivottable.VIntegerColumn(ident, position)
+        String::class->
+          org.kopi.galite.visual.pivottable.VStringColumn(ident, position)
+        BigDecimal::class->
+          org.kopi.galite.visual.pivottable.VDecimalColumn(ident, position)
+        Boolean::class ->
+          org.kopi.galite.visual.pivottable.VBooleanColumn(ident, position)
+        org.joda.time.LocalDate::class, LocalDate::class, java.sql.Date::class, java.util.Date::class ->
+          org.kopi.galite.visual.pivottable.VDateColumn(ident, position)
+        Month::class ->
+          org.kopi.galite.visual.pivottable.VMonthColumn(ident, position)
+        Week::class ->
+          org.kopi.galite.visual.pivottable.VWeekColumn(ident, position)
+        org.joda.time.LocalTime::class, LocalTime::class ->
+          org.kopi.galite.visual.pivottable.VTimeColumn(ident, position)
+        Instant::class, LocalDateTime::class, DateTime::class ->
+          org.kopi.galite.visual.pivottable.VTimestampColumn(ident, position)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }

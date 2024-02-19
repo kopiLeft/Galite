@@ -33,12 +33,15 @@ import org.kopi.galite.visual.dsl.chart.ChartMeasure
 import org.kopi.galite.visual.dsl.common.CodeDescription
 import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.form.FormField
+import org.kopi.galite.visual.dsl.pivottable.Dimension
+import org.kopi.galite.visual.dsl.pivottable.PivotTableField
 import org.kopi.galite.visual.dsl.report.ReportField
 import org.kopi.galite.visual.form.VBooleanCodeField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VDecimalCodeField
 import org.kopi.galite.visual.form.VIntegerCodeField
 import org.kopi.galite.visual.form.VStringCodeField
+import org.kopi.galite.visual.pivottable.VPivotTableColumn
 import org.kopi.galite.visual.report.VBooleanCodeColumn
 import org.kopi.galite.visual.report.VCalculateColumn
 import org.kopi.galite.visual.report.VCellFormat
@@ -214,6 +217,54 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
           function,
           width ?: 0,
           format,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as? String }.toTypedArray()
+        )
+        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }.also {
+        it.initLabels(codes.map { it.label }.toTypedArray())
+      }
+    }
+  }
+
+  /**
+   * Builds the pivot table column model
+   */
+  override fun buildPivotTableFieldModel(
+    field: PivotTableField<*>,
+    position: Dimension.Position?,
+  ): VPivotTableColumn {
+    return with(field) {
+      when (kClass) {
+        Boolean::class -> org.kopi.galite.visual.pivottable.VBooleanCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as Boolean }.toBooleanArray()
+        )
+        BigDecimal::class -> org.kopi.galite.visual.pivottable.VDecimalCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as? BigDecimal }.toTypedArray()
+        )
+        Int::class, Long::class -> org.kopi.galite.visual.pivottable.VIntegerCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source!!,
+          codes.map { it.ident }.toTypedArray(),
+          codes.map { it.value as Int }.toIntArray()
+        )
+        String::class -> org.kopi.galite.visual.pivottable.VStringCodeColumn(
+          ident,
+          position,
+          this@CodeDomain.ident.ifEmpty { ident },
+          field.source,
           codes.map { it.ident }.toTypedArray(),
           codes.map { it.value as? String }.toTypedArray()
         )

@@ -35,6 +35,7 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
   private val model: MPivotTable = pivotTable.model // pivot table model
   private val pivotData = PivotTable.PivotData()
   private val pivotOptions = PivotTable.PivotOptions()
+  private val rowsValues = mutableListOf<String>()
   private val rows = mutableListOf<String>()
   private val columns = mutableListOf<String>()
 
@@ -60,11 +61,10 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
         columns.add(it.label)
       }
     }
-
-    model.userRows
-      ?.flatMap { it.data.asIterable() }
-      ?.chunked(model.columns.count()) { rows ->
-        pivotData.addRow(*rows.map { it ?: "" }.toTypedArray())}
+    buildRows()
+    rowsValues
+      .chunked(model.columns.count()) { rows ->
+        pivotData.addRow(*rows.map{ it }.toTypedArray())}
 
     // Pivot table dimension
     pivotOptions.setRows(*rows.toTypedArray())
@@ -92,5 +92,17 @@ class DPivotTable(private val pivotTable: VPivotTable) : DWindow(pivotTable), UP
     val pivot = PivotTable(pivotData, pivotOptions, pivotMode)
 
     add(pivot)
+  }
+
+  private fun buildRows(){
+    for (i in 0 until model.userRows!!.count()) {
+      for (j in 0 until model.columns.count()) {
+        rowsValues.add(getValueAt(j, i))
+      }
+    }
+  }
+
+  fun getValueAt(columnIndex: Int, rowIndex: Int): String {
+    return model.columns[columnIndex]!!.format(model.getValueAt(rowIndex, columnIndex))
   }
 }

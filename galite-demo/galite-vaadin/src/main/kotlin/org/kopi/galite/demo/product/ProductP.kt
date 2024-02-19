@@ -26,8 +26,8 @@ import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.form.Key
-import org.kopi.galite.visual.dsl.pivottable.PivotTable
 import org.kopi.galite.visual.dsl.pivottable.Dimension.Position
+import org.kopi.galite.visual.dsl.pivottable.PivotTable
 
 /**
  * Product Report
@@ -54,11 +54,11 @@ class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
     label = "Supplier"
     help = "The supplier"
   }
-  val tax = dimension(STRING(10), Position.ROW) {
+  val tax = dimension(Tax, Position.ROW) {
     label = "Tax"
     help = "The product tax name"
   }
-  val category = dimension(STRING(10), Position.ROW) {
+  val category = dimension(Category, Position.ROW) {
     label = "Category"
     help = "The product category"
   }
@@ -76,42 +76,11 @@ class ProductP : PivotTable(title = "Products", locale = Locale.UK) {
           this[product] = result[Product.description]
           this[department] = result[Product.department].orEmpty()
           this[supplier] = result[Product.supplier].orEmpty()
-          this[category] = decodeCategory(result[Product.category])
-          this[tax] = decodeTax(result[Product.taxName])
+          this[category] = result[Product.category]
+          this[tax] = result[Product.taxName]
           this[price] = result[Product.price]
         }
       }
-    }
-  }
-
-  /**
-   * Decode category code
-   * !!! FIXME : Fix pivot table to accept CodeDomain type and automatically convert a code to its value
-   */
-  fun decodeCategory(category: Int) : String {
-    return when (category) {
-      1 -> "shoes"
-      2 -> "shirts"
-      3 -> "glasses"
-      4 -> "pullovers"
-      5 -> "jeans"
-      else -> "UNKNOWN"
-    }
-  }
-
-  /**
-   * Decode Tax code
-   * !!! FIXME : Fix pivot table to accept CodeDomain type and automatically convert a code to its value
-   */
-  fun decodeTax(taxe: String) : String {
-    return when (taxe) {
-      "tax 0" -> "0%"
-      "tax 1" -> "19%"
-      "tax 2" -> "9%"
-      "tax 3" -> "13%"
-      "tax 4" -> "22%"
-      "tax 5" -> "11%"
-      else -> "UNKNOWN"
     }
   }
 }

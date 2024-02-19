@@ -21,7 +21,6 @@ package org.kopi.galite.visual.pivottable
 import java.io.Serializable
 
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.report.VReportRow
 
 class MPivotTable : Serializable {
 
@@ -81,4 +80,22 @@ class MPivotTable : Serializable {
    * @return    the desired row
    */
   fun getRow(row: Int): VPivotTableRow? = userRows!![row]
+
+  /**
+   * Returns an attribute value for a cell.
+   *
+   * @param    row        the index of the row whose value is to be looked up
+   * @param    column        the index of the column whose value is to be looked up (column of the model)
+   * @return    the value Object at the specified cell
+   */
+  fun getValueAt(row: Int, column: Int): Any? {
+    var x: Any? = null
+
+    try {
+      x = userRows?.get(row)!!.getValueAt(column)
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+    return x
+  }
 }
