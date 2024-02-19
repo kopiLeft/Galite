@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,7 @@ package org.kopi.galite.visual.dsl.chart
 import java.io.IOException
 import java.util.Locale
 
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.chart.CConstants
 import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.chart.VChartType
@@ -30,7 +31,6 @@ import org.kopi.galite.visual.dsl.common.LocalizationWriter
 import org.kopi.galite.visual.dsl.common.Trigger
 import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
@@ -64,7 +64,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
                                                     init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
-    val chartDimension = ChartDimension(domain, this, `access$sourceFile`)
+    val chartDimension = ChartDimension(domain, "DIMENSION", this, `access$sourceFile`)
     chartDimension.init()
     dimension = chartDimension
 
@@ -126,26 +126,6 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
   }
 
   /**
-   * Adds the default chart commands.
-   * TODO!
-   */
-  open fun addDefaultChartCommands() {
-    TODO("Add the above commands")
-    /*commands.add(Command("Quit", VConstants.MOD_ANY))
-    commands.add(Command("Print", VConstants.MOD_ANY))
-    commands.add(Command("PrintOptions", VConstants.MOD_ANY))
-    commands.add(Command("ExportPNG", VConstants.MOD_ANY))
-    commands.add(Command("ExportPDF", VConstants.MOD_ANY))
-    commands.add(Command("ExportJPEG", VConstants.MOD_ANY))
-    commands.add(Command("ColumnView", VConstants.MOD_ANY))
-    commands.add(Command("BarView", VConstants.MOD_ANY))
-    commands.add(Command("LineView", VConstants.MOD_ANY))
-    commands.add(Command("AreaView", VConstants.MOD_ANY))
-    commands.add(Command("PieView", VConstants.MOD_ANY))
-    commands.add(Command("Help", VConstants.MOD_ANY))*/
-  }
-
-  /**
    * Creates a chart measure, with the specified [domain], used to store values of measure values.
    *
    * @param domain the dimension domain.
@@ -156,7 +136,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
           init: ChartMeasure<T>.() -> Unit
   ): ChartMeasure<T> where T : Comparable<T>?, T : Number? {
     domain.kClass = T::class
-    val chartMeasure = ChartMeasure(domain, `access$sourceFile`)
+    val chartMeasure = ChartMeasure(domain, "MEASURE_${measures.size}", `access$sourceFile`)
     chartMeasure.init()
     addMeasure(chartMeasure)
 
@@ -169,9 +149,6 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     // MEASURE TRIGGERS
     val fieldTriggerArray = arrayOfNulls<Trigger>(CConstants.TRG_TYPES.size)
 
-    if(colorTrigger != null) {
-      fieldTriggerArray[CConstants.TRG_COLOR] = colorTrigger
-    }
     // TODO : Add field triggers here
     this@Chart.model.VKT_Measure_Triggers.add(fieldTriggerArray)
   }
@@ -181,7 +158,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     model.measures.add(chartMeasure.model)
   }
 
-  open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+  open fun getFields(): List<ChartField<*>> = (listOf(dimension) + measures).toMutableList()
 
 
   override fun addCommandTrigger() {
@@ -275,6 +252,7 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
       setTitle(title)
       help = this@Chart.help
       source = sourceFile
+      addDefaultChartCommands()
     }
   }
 

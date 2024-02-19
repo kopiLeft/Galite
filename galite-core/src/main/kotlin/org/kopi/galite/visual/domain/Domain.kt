@@ -30,7 +30,6 @@ import org.joda.time.DateTime
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
-import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.chart.*
 import org.kopi.galite.visual.dsl.chart.ChartDimension
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
@@ -196,11 +195,11 @@ open class Domain<T>(val width: Int? = null,
   /**
    * Builds the chart measure model
    */
-  open fun buildMeasureModel(measure: ChartMeasure<*>, color: VColor?): VMeasure {
+  open fun buildMeasureModel(measure: ChartMeasure<*>): VMeasure {
     return with(measure) {
       when (kClass) {
-        Int::class, Long::class -> VIntegerMeasure(ident, color)
-        BigDecimal::class -> VDecimalMeasure(ident, color, height!!)
+        Int::class, Long::class -> VIntegerMeasure(ident)
+        BigDecimal::class -> VDecimalMeasure(ident, height!!)
         else -> throw java.lang.RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
       }
     }

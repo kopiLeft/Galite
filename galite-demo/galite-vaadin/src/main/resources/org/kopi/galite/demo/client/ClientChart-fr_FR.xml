@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<chart title="superficie/population par ville">
+    <menu ident="Action" label="Action" />
+    <menu ident="File" label="Fichier" />
+
+    <actor ident="quit" label="Quitter" help="Ferme le graphique." />
+    <actor ident="help" label="Aide" help="Afficher l'aide." />
+    <actor ident="Bar view" label="Bar" help="Un graphique à barres (Bar)." />
+    <actor ident="Area view" label="Area" help="Un graphique en aires (Area)." />
+    <actor ident="Line view" label="Line" help="Un graphique en courbe (Line)." />
+
+    <field ident="DIMENSION" label="Ville" />
+    <field ident="MEASURE_0" label="Superficie (ha)" />
+    <field ident="MEASURE_1" label="Population" />
+</chart>

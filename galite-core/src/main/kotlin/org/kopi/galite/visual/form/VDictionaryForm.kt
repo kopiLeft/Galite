@@ -22,6 +22,7 @@ import org.kopi.galite.visual.MessageCode
 
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.VConstants.Companion.MOD_UPDATE
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
@@ -216,6 +217,23 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
       setWaitInfo(Message.getMessage("report_generation"))
       val report = reportBuilder()
       report.doNotModal()
+      unsetWaitInfo()
+    } catch (e: VNoRowException) {
+      unsetWaitInfo()
+      error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  /**
+   * Implements interface for COMMAND CreateChart
+   */
+  fun createChart(b: VBlock, chartBuilder: () -> VChart) {
+    b.validate()
+    try {
+      setWaitInfo(Message.getMessage("chart_generation"))
+      val chart = chartBuilder()
+      chart.doNotModal()
       unsetWaitInfo()
     } catch (e: VNoRowException) {
       unsetWaitInfo()

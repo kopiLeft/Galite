@@ -23,7 +23,6 @@ import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.chart.ChartMeasure
-import org.kopi.galite.visual.Color
 
 class MeasureTests : VApplicationTestBase() {
 
@@ -34,7 +33,6 @@ class MeasureTests : VApplicationTestBase() {
   fun testMeasure() {
     val measure1 = ChartMeasure(INT(10))
     measure1.label = "measure 1"
-    measure1.color = Color.RED
-    assertEquals(measure1.color.toString(), "RED")
+    assertEquals(measure1.label.toString(), "measure 1")
   }
 }

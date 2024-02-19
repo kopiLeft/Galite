@@ -18,8 +18,8 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.form.VConstants
 
 /**
  * Collects some constants for the chart implementation
@@ -48,7 +48,6 @@ interface CConstants : Constants {
     const val TRG_CHARTTYPE = 2
     const val TRG_INIT = 3
     const val TRG_FORMAT = 4
-    const val TRG_COLOR = 5
     const val TRG_CMDACCESS = 6
     const val TRG_VOID = VConstants.TRG_VOID
     const val TRG_OBJECT = VConstants.TRG_OBJECT
@@ -58,13 +57,7 @@ interface CConstants : Constants {
     // PREDEFINED COMMANDS
     // ---------------------------------------------------------------------
     const val CMD_QUIT = 0
-    const val CMD_PRINT = 1
-    const val CMD_PREVIEW = 2
-    const val CMD_EXPORT_CSV = 3
-    const val CMD_EXPORT_XLS = 4
-    const val CMD_EXPORT_PDF = 5
-    const val CMD_HELP = 6
-    const val CMD_EXPORT_XLSX = 7
+    const val CMD_HELP = 1
 
     // ---------------------------------------------------------------------
     // TRIGGER INFO
@@ -75,7 +68,6 @@ interface CConstants : Constants {
             "TRG_CHARTTYPE",
             "TRG_INIT",
             "TRG_FORMAT",
-            "TRG_COLOR",
             "TRG_CMDACCESS"
     )
     val TRG_TYPES = intArrayOf(
@@ -83,7 +75,6 @@ interface CConstants : Constants {
             TRG_VOID,
             TRG_OBJECT,
             TRG_VOID,
-            TRG_OBJECT,
             TRG_OBJECT,
             TRG_BOOLEAN
     )

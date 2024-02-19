@@ -19,21 +19,18 @@
 package org.kopi.galite.visual.chart
 
 import org.kopi.galite.visual.l10n.FieldLocalizer
-import org.kopi.galite.visual.VColor
 
 /**
  * Represents a code measure column.
  * @param ident   The column identifier.
- * @param color   The measure color.
  * @param type    The measure type.
  * @param source  The type localization source.
  * @param idents  The string representations.
  */
 abstract class VCodeMeasure protected constructor(ident: String,
-                                                  color: VColor?,
                                                   private val type: String,
                                                   private val source: String,
-                                                  private val idents: Array<String>) : VMeasure(ident, color) {
+                                                  private val idents: Array<String>) : VMeasure(ident) {
 
   protected var names: Array<String?>? = null // array of external representations
 

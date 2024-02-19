@@ -18,15 +18,12 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.VColor
-
 /**
  * Represents an integer measure.
  *
  * @param ident The measure identifier.
- * @param color The color to be used for the measure.
  */
-class VIntegerMeasure(ident: String, color: VColor?) : VMeasure(ident, color) {
+class VIntegerMeasure(ident: String) : VMeasure(ident) {
   override fun toNumber(value: Any?): Number? {
     return when (value) {
       null -> null

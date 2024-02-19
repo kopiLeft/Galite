@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,16 +26,4 @@ import com.github.appreciated.apexcharts.config.chart.Type
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.pie, title, dataSeries) {
-
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  override fun createChartData(name: String?) {
-    TODO()
-  }
-
-  override fun setColorsList(): Boolean {
-    return true
-  }
-}
+class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.PIE, title, dataSeries)

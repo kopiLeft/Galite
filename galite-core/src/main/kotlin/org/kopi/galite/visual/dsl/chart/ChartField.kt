@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@ import org.kopi.galite.visual.dsl.field.Field
 /**
  * A chart column.
  */
-abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>) : Field<T>(domain), Serializable {
+abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>, ident: String? = null) : Field<T>(domain, ident), Serializable {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

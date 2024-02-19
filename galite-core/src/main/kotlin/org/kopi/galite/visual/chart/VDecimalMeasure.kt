@@ -20,16 +20,13 @@ package org.kopi.galite.visual.chart
 
 import java.math.BigDecimal
 
-import org.kopi.galite.visual.VColor
-
 /**
  * Represents a decimal measure.
  *
  * @param ident The measure identifier.
- * @param color The measure color.
  * @param maxScale The max scale to be used.
  */
-class VDecimalMeasure(ident: String, color: VColor?, private val maxScale: Int) : VMeasure(ident, color) {
+class VDecimalMeasure(ident: String, private val maxScale: Int) : VMeasure(ident) {
 
   override fun toNumber(value: Any?): Number? {
     if (value == null) {

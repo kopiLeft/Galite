@@ -21,26 +21,22 @@ package org.kopi.galite.visual.chart
 import java.math.BigDecimal
 
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VColor
 
 /**
  * Represents a code decimal measure.
  *
  * @param ident The measure identifier.
- * @param color The measure color.
  * @param type The measure type.
  * @param source The localization source.
  * @param idents The code identifiers.
  * @param codes The decimal codes.
  */
 class VDecimalCodeMeasure(ident: String,
-                          color: VColor?,
                           type: String,
                           source: String,
                           idents: Array<String>,
                           private val codes: Array<BigDecimal?>)
            : VCodeMeasure(ident,
-                          color,
                           type,
                           source,
                           idents) {

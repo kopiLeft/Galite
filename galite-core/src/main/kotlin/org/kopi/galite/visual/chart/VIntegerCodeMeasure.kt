@@ -18,25 +18,21 @@
 
 package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.VColor
-
 /**
  * Represents an Integer code measure.
  *
  * @param ident The measure identifier.
- * @param color The color to be used.
  * @param type The localization type.
  * @param source The localization source.
  * @param idents The codes identifiers.
  * @param codes The integer codes.
  */
 class VIntegerCodeMeasure(ident: String,
-                          color: VColor?,
                           type: String,
                           source: String,
                           idents: Array<String>,
                           private val codes: Array<Int?>)
-  : VCodeMeasure(ident, color, type, source, idents) {
+  : VCodeMeasure(ident, type, source, idents) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------

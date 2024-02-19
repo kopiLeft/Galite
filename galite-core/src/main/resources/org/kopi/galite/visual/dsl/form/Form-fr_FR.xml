@@ -30,6 +30,7 @@
     <actor ident="CreateReport" label="Rapport" help="Crée le rapport." />
     <actor ident="CreateDynamicReport" label="Rapport Dyn" help="Crée le rapport dynamique." />
     <actor ident="CreatePivotTable" label="Table Pivot" help="Créer une table pivot." />
+    <actor ident="CreateChart" label="Graph." help="Créer une représentation graphique." />
     <actor ident="ShowHideFilter" label="Afficher/Cacher filtre" help="Afficher ou cacher le flitre du block" />
     <actor ident="Help" label="Aide" help="Affiche une aide sur le champ sélectionné." />
 </insert>
