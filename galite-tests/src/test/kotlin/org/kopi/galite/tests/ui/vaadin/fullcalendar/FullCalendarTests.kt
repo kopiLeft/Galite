@@ -27,7 +27,7 @@ import com.github.mvysny.kaributesting.v10._get
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
-import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.javatime.datetime
 
 import org.kopi.galite.testing.open
 import org.kopi.galite.tests.examples.initModules
@@ -107,8 +107,8 @@ class TasksForm : ReportSelectionForm(title = "Tasks", locale = Locale.UK) {
 object Task : Table("Task") {
   val id = integer("ID").autoIncrement()
   val date = date("DATE").nullable()
-  val from = timestamp("FROM")
-  val to = timestamp("TO")
+  val from = datetime("FROM")
+  val to = datetime("TO")
   val description1 = varchar("DESCRIPTION_1", 20)
   val description2 = varchar("DESCRIPTION_2", 20)
   val uc = integer("UC").autoIncrement()

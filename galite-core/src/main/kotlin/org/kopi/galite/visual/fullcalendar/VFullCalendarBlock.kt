@@ -18,8 +18,8 @@
 package org.kopi.galite.visual.fullcalendar
 
 import java.sql.SQLException
-import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.Temporal
 
@@ -233,8 +233,8 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
         VFullCalendarEntry(date, start, end, values)
       } else {
         val values = mutableMapOf<VField, Any?>()
-        lateinit var start: Instant
-        lateinit var end: Instant
+        lateinit var start: LocalDateTime
+        lateinit var end: LocalDateTime
 
         for (i in 0 until query_cnt) {
           val vField = query_tab[i]!!
@@ -242,10 +242,10 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
 
           when (vField) {
             fromField -> {
-              start = value as Instant
+              start = value as LocalDateTime
             }
             toField -> {
-              end = value as Instant
+              end = value as LocalDateTime
             }
             else -> values[vField] = value
           }

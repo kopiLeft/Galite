@@ -17,10 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.calendar
 
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 import org.kopi.galite.visual.fullcalendar.VFullCalendarBlock
 import org.kopi.galite.visual.fullcalendar.VFullCalendarEntry
@@ -110,8 +108,8 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
     val newEntries = (entries - currentEntries.toSet()).map { fcEntry ->
       val record = fcEntry.values[model.idField] as Int
       val entry = FullCalendarEntry(record, fcEntry)
-      val start = LocalDateTime.ofInstant(fcEntry.start, ZoneId.systemDefault())
-      val end = LocalDateTime.ofInstant(fcEntry.end, ZoneId.systemDefault())
+      val start = fcEntry.start
+      val end = fcEntry.end
 
       entry.title = fcEntry.description
       entry.setStart(start, calendar.timezone)
@@ -202,7 +200,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
           val end = it.endDateTime
 
           check(start, end)
-          model.openForEdit(start.toInstant(), end.toInstant())
+          model.openForEdit(start, end)
         }
       })
     }
@@ -229,9 +227,7 @@ open class DAbstractFullCalendar protected constructor(protected val model: VFul
   class FullCalendarEntry(val record: Int, val model: VFullCalendarEntry) : Entry() {
     val updatedModel: VFullCalendarEntry
       get() {
-        return model.copy(start.toInstant(), end.toInstant())
+        return model.copy(start, end)
       }
   }
 }
-
-fun LocalDateTime.toInstant(): Instant = Instant.from(this.atZone(ZoneId.systemDefault()))
