@@ -18,8 +18,9 @@
 package org.kopi.galite.visual.ui.vaadin.grid
 
 import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
+
+import org.kopi.galite.type.format
 
 /**
  * Server side implementation of an editor date field.
@@ -46,14 +47,13 @@ class GridEditorDateField : GridEditorTextField(10) {
    * @param s The date text.
    */
   private fun parseDate(s: String) {
-    var day = 0
     var month = 0
     var year = -2
     val tokens = s.split("[#./]".toRegex()).toTypedArray()
     if (tokens.isEmpty()) {
       throw InvalidEditorFieldException(this, "00003")
     }
-    day = stringToInt(tokens[0])
+    val day = stringToInt(tokens[0])
     if (tokens.size >= 2) {
       month = stringToInt(tokens[1])
     }
@@ -65,13 +65,13 @@ class GridEditorDateField : GridEditorTextField(10) {
     }
     when {
       month == 0 -> {
-        val now = Date()
-        month = now.month + 1
-        year = now.year + 1900
+        val now: LocalDate = LocalDate.now()
+        month = now.monthValue
+        year = now.year
       }
       year == -2 -> {
-        val now = Date()
-        year = now.year + 1900
+        val now: LocalDate = LocalDate.now()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -140,7 +140,6 @@ class GridEditorDateField : GridEditorTextField(10) {
    * @return The formatted date.
    */
   private fun format(year: Int, month: Int, day: Int): String {
-    return SimpleDateFormat("dd.MM.yyyy")
-      .format(Date(year - 1900, month - 1, day))
+    return LocalDate.of(year, month, day).format()
   }
 }

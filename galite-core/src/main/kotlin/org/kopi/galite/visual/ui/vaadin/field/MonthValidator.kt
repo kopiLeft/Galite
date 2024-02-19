@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import java.util.Date
+import java.time.LocalDate
 
 /**
  * Month validator.
@@ -55,7 +55,7 @@ class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
         // just the month, complete
         try {
           val month = text.toInt()
-          val year = Date().year + 1900
+          val year = LocalDate.now().year
           if (isMonth(month, year)) {
             field.value = toString(year, month)
           } else {
