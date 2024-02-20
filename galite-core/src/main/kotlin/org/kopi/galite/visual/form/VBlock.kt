@@ -86,6 +86,7 @@ abstract class VBlock(var title: String,
   /**
    * The sorted records array.
    */
+
   lateinit var sortedRecords: IntArray
     protected set
 
