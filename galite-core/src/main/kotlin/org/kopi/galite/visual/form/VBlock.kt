@@ -3291,7 +3291,6 @@ abstract class VBlock(var title: String,
       fillIdField(recno, id)
 
       if (!blockHasNoUcOrTsField()) {
-        assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
         ucField?.setInt(recno, 0)
         tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       }
@@ -3476,9 +3475,6 @@ abstract class VBlock(var title: String,
     if (!blockHasNoUcOrTsField()) {
       val table = tables[0]
       val value = idField.getInt(recno)
-
-      assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
-
       val ucColumn = if (ucField == null) {
         intLiteral(-1)
       } else {
