@@ -191,6 +191,12 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
       model.setAggregator(value)
     }
 
+  var customAggregators: Map<Map<String, String>,String>
+    get() = model.customAggregators
+    set(value) {
+      model.setCustomAggregators(value)
+    }
+
   var disabledRerenders: MutableList<String>
     get() = model.disabledRerenders
   set(value) {

@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.selectAll
 
 import org.vaadin.addons.componentfactory.PivotTable.Aggregator
+import org.vaadin.addons.componentfactory.PivotTable.FunctionName
 import org.vaadin.addons.componentfactory.PivotTable.Renderer
 
 import org.kopi.galite.demo.database.Client
@@ -98,6 +99,7 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
   val init = trigger(INIT) {
     defaultRenderer = Renderer.TABLE
     aggregator = Pair(Aggregator.SUM, price.label!!)
+    customAggregators = mapOf(mapOf(Aggregator.SUM to FunctionName.SUM,Aggregator.MAXIMUM to FunctionName.MAXIMUM) to price.label!!)
   }
 
   val purchases = Client.join(Purchase, JoinType.LEFT) {

@@ -56,6 +56,7 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
   private var pageTitle = ""
   var defaultRenderer = Renderer.TABLE  // Default pivot table type
   var aggregator = Pair(Aggregator.COUNT, "") // default Aggregator
+  var customAggregators : Map<Map<String, String>,String> = emptyMap() // default custom Aggregator
   var disabledRerenders = mutableListOf<String>()
   var interactive = Constants.MODE_INTERACTIVE
   val PIVOT_TABLE_Triggers = listOf(arrayOfNulls<Trigger>(Constants.TRG_TYPES.size))
@@ -89,6 +90,14 @@ abstract class VPivotTable internal constructor() : VWindow(), VConstants {
    */
   internal fun setAggregator(aggregate: Pair<String, String>) {
     aggregator = aggregate
+  }
+
+  /**
+   * Sets custom aggregators function of this pivot table model.
+   * @param customAggregator The pivot table aggregation function.
+   */
+  internal fun setCustomAggregators(customAggregator: Map<Map<String, String>,String>) {
+    customAggregators = customAggregator
   }
 
   /**
