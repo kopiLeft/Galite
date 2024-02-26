@@ -15,26 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.visual.ui.vaadin.common;
 
-package org.kopi.galite.visual.form
+import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.Tag;
 
-import java.awt.Color
-import java.io.Serializable
-import java.time.LocalDate
-
-import org.kopi.galite.visual.list.VListColumn
-import org.kopi.galite.visual.VExecFailedException
-
-interface PredefinedValueHandler : Serializable {
-
-  fun selectDefaultValue(): Boolean
-
-  fun selectFromList(list: Array<VListColumn?>, values: Array<Array<Any?>>, predefinedValues: Array<String>): String?
-
-  fun selectColor(color: Color?): Color?
-
-  fun selectDate(date: LocalDate): LocalDate
-
-  @Throws(VExecFailedException::class)
-  fun selectImage(): ByteArray?
+@Tag("input")
+class ColorPicker : AbstractSinglePropertyField<ColorPicker?, String?>("value", "", false) {
+  init {
+    getElement().setAttribute("type", "color")
+    // By default AbstractSinglePropertyField listens to a "value-changed" event,
+    // but input type=color fires "change"
+    setSynchronizedEvent("change")
+  }
 }

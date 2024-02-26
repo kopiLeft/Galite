@@ -21,10 +21,12 @@ import java.util.Locale
 import org.kopi.galite.demo.database.Bill
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
+import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 
@@ -42,16 +44,24 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
         BillR()
       }
     }
+
+    command(item = menuQuery) { recursiveQuery() }
+    command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
   }
 
   class BlockBill : Block("Bills", 1, 1) {
     val u = table(Bill)
     val v = table(Command)
 
+    val testColor = visit(domain = COLOR(10,20), position = at(1,2)) {
+      label =" Color"
+      help = "This is a test color field"
+      columns(u.color)
+    }
     val numBill = hidden(domain = INT(20)) {
       label = "Number"
       help = "The bill number"
-      columns(u.numBill)
+      columns(u.id)
     }
     val addressBill = visit(domain = STRING(30), position = at(1, 1)) {
       label = "Address"

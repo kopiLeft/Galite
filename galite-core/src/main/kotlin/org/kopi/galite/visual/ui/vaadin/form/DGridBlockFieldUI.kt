@@ -24,6 +24,7 @@ import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.ULabel
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VColorField
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.form.VImageField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
@@ -52,6 +53,10 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
                                                               model.align,
                                                               (model as VImageField).iconWidth,
                                                               model.iconHeight,
+                                                              model.options)
+        VField.MDL_FLD_COLOR -> field = DGridEditorColorField(this,
+                                                              label as? DGridEditorLabel,
+                                                              model.align,
                                                               model.options)
         VField.MDL_FLD_ACTOR -> field = DGridEditorActorField(this,
                                                               label as? DGridEditorLabel,

@@ -22,6 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
+import org.kopi.galite.type.Color
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
@@ -112,6 +113,11 @@ class DECIMAL(width: Int, scale: Int, init: Domain<BigDecimal>.() -> Unit = {}) 
     init()
   }
 }
+
+/**
+ * This Field type is used to show a color picked by the user.
+ */
+class COLOR(width: Int, height: Int): Domain<Color>(width, height)
 
 /**
  * Fraction numbers are [DECIMAL] numbers.

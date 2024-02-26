@@ -29,6 +29,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.*
@@ -337,11 +338,12 @@ fun addBills() {
 
 fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int) {
   Bill.insert {
-    it[numBill] = num
+    it[id] = num
     it[addressBill] = address
     it[dateBill] = date
     it[amountWithTaxes] = amount
     it[refCmd] = ref
+    it[color] = ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte()))
   }
 }
 

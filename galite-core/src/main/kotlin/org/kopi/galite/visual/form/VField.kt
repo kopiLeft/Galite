@@ -404,6 +404,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Validate the field, ie: get the last displayed value, check it and check mustfill
    */
   fun validate() {
+    println("------------- in validate ---------- ")
     if (isChanged) {
       if (isChangedUI) {
         modelNeedUpdate()
@@ -626,6 +627,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @exception VException      an exception is raised if text is bad
    */
   fun leave(check: Boolean) {
+    println("----------- in leave ------------ ")
     assert(this === block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     try {
       if (check && isChanged) {
@@ -867,6 +869,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     } else {
       val operand = getSql(block!!.activeRecord)
+
+      println("***** #### operand ***** ${operand.toString()}")
 
       if (operand is String && operand.indexOf('*') != -1) {
         val stringOperand = when (getSearchOperator()) {
@@ -1332,7 +1336,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getColor(): Color = getColor(block!!.currentRecord)
+  fun getColor(): Color? = getColor(block!!.currentRecord)
 
   /**
    * Returns the display representation of field value of the current record.
@@ -1477,7 +1481,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getColor(r: Int): Color {
+  open fun getColor(r: Int): Color? {
     throw InconsistencyException()
   }
 

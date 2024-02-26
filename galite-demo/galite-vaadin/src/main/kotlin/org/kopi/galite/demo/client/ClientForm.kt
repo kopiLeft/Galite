@@ -29,6 +29,7 @@ import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
@@ -203,6 +204,11 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       label = "Price"
       help = "The item price"
       columns(P.price)
+    }
+
+    val testColor = mustFill(domain = COLOR(1,1), position = at(1, 4)) {
+      label =" Color"
+      help ="This is a test color field"
     }
 
     init {

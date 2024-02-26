@@ -43,7 +43,7 @@ class VPredefinedValueHandler(model: VFieldUI,
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun selectColor(color: Color): Color? {
+  override fun selectColor(color: Color?): Color? {
     // no color selection
     return null
   }
