@@ -83,7 +83,7 @@ abstract class Migration {
    * Check ConnectionOptions
    */
   fun checkOptions(): Boolean {
-    return options.database != null && options.driver != null && options.username != null && options.password != null
+    return options.database != null && options.username != null && options.password != null
   }
 
   /**
@@ -92,7 +92,7 @@ abstract class Migration {
   open fun connection(processCommandLine: Boolean) : Connection {
     return if (processCommandLine) {
       Connection.createConnection(options.database!!,
-                                  options.driver!!,
+                                  options.driver,
                                   options.username!!,
                                   options.password!!,
                                   false,
