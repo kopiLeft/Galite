@@ -26,6 +26,17 @@ import java.util.TimerTask
  */
 open class Utils {
   companion object {
+
+    /**
+     * Converts a snake_case string to camelCase.
+     *
+     * @param input The snake_case string to convert.
+     * @return The camelCase version of the input string.
+     */
+    fun convertSnakeCaseToCamelCase(input: String): String {
+      return input.replace(Regex("_(.)")) { it.groupValues[1].uppercase() }
+    }
+
     /**
      * Returns a string representation of an integer, padding it
      * with leading zeroes to the specified length.
