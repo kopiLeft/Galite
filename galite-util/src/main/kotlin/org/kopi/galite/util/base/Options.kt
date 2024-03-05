@@ -19,6 +19,7 @@ package org.kopi.galite.util.base
 
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
+import kotlin.system.exitProcess
 
 /**
  * This class implements options for an entry point
@@ -34,6 +35,27 @@ abstract class Options(private val name: String?) {
    * The array of non-option arguments.
    */
   lateinit var nonOptions: Array<String?>
+
+  /**
+   * Parse the argument list
+   *
+   * @param        argv
+   * @param        options
+   * @return true if the command line is valid and all options are present
+   */
+  fun parseArguments(argv: Array<String>, options: Options): Boolean {
+    if (!parseCommandLine(argv)) {
+      return false
+    }
+
+    if (options.nonOptions.isEmpty() || options.nonOptions.size > 1) {
+      System.err.println("Invalid number of input options given")
+      options.help()
+      exitProcess(-1)
+    }
+
+    return true
+  }
 
   /**
    * Parses the command line and processes the arguments.
