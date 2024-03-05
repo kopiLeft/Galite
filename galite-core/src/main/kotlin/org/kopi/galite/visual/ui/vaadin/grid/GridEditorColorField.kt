@@ -17,12 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
-import com.vaadin.flow.component.AbstractField
 import org.kopi.galite.visual.VColor
-
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.notification.Notification
 import org.kopi.galite.visual.ui.vaadin.common.ColorPicker
+
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.Component
 
 /**
  * The server side implementation of a Color grid editor.
@@ -30,6 +29,10 @@ import org.kopi.galite.visual.ui.vaadin.common.ColorPicker
 class GridEditorColorField : GridEditorField<Any?>() {
 
   private val colorPicker = ColorPicker()
+
+  init {
+    colorPicker.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<ColorPicker?, String?>? -> }
+  }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
     colorPicker.value = newPresentationValue.toString()
@@ -39,9 +42,6 @@ class GridEditorColorField : GridEditorField<Any?>() {
 
   override fun initContent(): Component {
     colorPicker.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<ColorPicker?, String?>? ->
-      Notification.show("Color picked: " + colorPicker.value,
-                        5000,
-                        Notification.Position.MIDDLE)
     }
     return colorPicker
   }
@@ -56,5 +56,11 @@ class GridEditorColorField : GridEditorField<Any?>() {
 
   override fun setBlink(blink: Boolean) {}
 
-  override fun setColor(align: Int, foreground: VColor?, background: VColor?) {}
+  override fun setColor(align: Int, foreground: VColor?, background: VColor?) {
+    // can not set Color of a color field.
+  }
+
+  fun setData(color: String?) {
+    colorPicker.value = color?.let { "#$it" } ?: "#000000"
+  }
 }

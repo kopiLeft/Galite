@@ -16,26 +16,18 @@
  */
 package org.kopi.galite.type
 
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import java.util.*
+import java.util.Locale
 
-class Color(val width: Int, val height: Int, var value: ExposedBlob) : Type0<ExposedBlob> {
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+
+class Color(var value: ExposedBlob) : Type0<ExposedBlob> {
 
   /**
    * Compares two objects
    */
   override fun equals(other: Any?): Boolean {
-    return other is Image &&
-           width == other.width &&
-           height == other.height &&
+    return other is Color &&
            value == other.value
-  }
-
-  /**
-   * Format the object depending on the current language
-   */
-  override fun toString(): String {
-    return toString(Locale.GERMAN) // !!!
   }
 
   /**
@@ -43,12 +35,7 @@ class Color(val width: Int, val height: Int, var value: ExposedBlob) : Type0<Exp
    * @param    locale    the current language
    */
   override fun toString(locale: Locale): String {
-    val strBuilder = StringBuilder()
-    return strBuilder.append(width)
-      .append(',')
-      .append(height)
-      .append(',')
-      .append(value).toString()
+    return value.hexString()
   }
 
   /**
@@ -56,11 +43,10 @@ class Color(val width: Int, val height: Int, var value: ExposedBlob) : Type0<Exp
    */
   override fun toSql(): ExposedBlob = value
 
-  companion object {
-
-    /**
-     * Comment for `serialVersionUID`
-     */
-    private const val serialVersionUID = 1L
+  /**
+   * Generete the HashCode of the value of field.
+   */
+  override fun hashCode(): Int {
+    return value.hashCode()
   }
 }

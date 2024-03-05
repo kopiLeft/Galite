@@ -404,7 +404,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Validate the field, ie: get the last displayed value, check it and check mustfill
    */
   fun validate() {
-    println("------------- in validate ---------- ")
     if (isChanged) {
       if (isChangedUI) {
         modelNeedUpdate()
@@ -627,7 +626,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @exception VException      an exception is raised if text is bad
    */
   fun leave(check: Boolean) {
-    println("----------- in leave ------------ ")
     assert(this === block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     try {
       if (check && isChanged) {
@@ -869,8 +867,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     } else {
       val operand = getSql(block!!.activeRecord)
-
-      println("***** #### operand ***** ${operand.toString()}")
 
       if (operand is String && operand.indexOf('*') != -1) {
         val stringOperand = when (getSearchOperator()) {

@@ -32,7 +32,7 @@ import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
-class VColorField(val bufferSize: Int) : VField(2, 2) {
+class VColorField(val bufferSize: Int) : VField(1,1) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -220,11 +220,6 @@ class VColorField(val bufferSize: Int) : VField(2, 2) {
   // ----------------------------------------------------------------------
 
   /**
-   * Returns a string representation of a date value wrt the field type.
-   */
-  fun formatImage(value: Any): String = "image"
-
-  /**
    * autofill
    * @exception   org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
@@ -253,6 +248,9 @@ class VColorField(val bufferSize: Int) : VField(2, 2) {
     return byteArrayOf(red.toByte(), green.toByte(), blue.toByte())
   }
 
+  /**
+   * Convert a java.awt.Color to HexString
+   */
   fun colorToRgbString(c: Color?): String {
     val color = c ?: Color(0,0,0)
     val redHex = String.format("%02x", color.red)

@@ -17,11 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.awt.Color
+
 import org.kopi.galite.visual.form.VColorField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.field.ColorField
-import java.awt.Color
 
 class DColorField(model: VFieldUI,
                   label: DLabel?,
@@ -76,8 +77,6 @@ class DColorField(model: VFieldUI,
     val stringColor = s?.let { colorToRgbString(s) }
     BackgroundThreadHandler.access(currentUI) {
       field.setData(stringColor)
-      setBlink(false)
-      setBlink(true)
     }
     color = stringColor
   }

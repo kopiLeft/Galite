@@ -17,14 +17,17 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.awt.Color
+
+import org.kopi.galite.visual.form.VColorField
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorColorField
 
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorColorField
 
 class DGridEditorColorField(columnView: VFieldUI,
                             label: DGridEditorLabel?,
@@ -37,24 +40,28 @@ class DGridEditorColorField(columnView: VFieldUI,
 
   private var color: String? = null
 
+  init {
+    (editor as GridEditorColorField).addValueChangeListener { this }
+    (editor as GridEditorColorField).getContent().element.addEventListener("change") {
+      setColortoVField((editor as GridEditorColorField).value as String?)
+    }
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun updateText() {
-    // TODO
+    setObject((getModel() as VColorField).getColor(columnView.blockView.getRecordFromDisplayLine(position)))
   }
 
   override fun getObject(): Any? = color
 
-  fun setObject(s: Any?) {
+  fun setObject(s: Color?) {
+    val stringColor = s?.let { colorToRgbString(s) }
     access(currentUI) {
-      if (s != null) {
-        //editor.setImage(s as ByteArray?) TODO
-        setBlink(false)
-        setBlink(true)
-      }
+      (editor as GridEditorColorField).setData(stringColor)
     }
-    color = s as String?
+    color = stringColor
   }
 
   override fun createEditor(): GridEditorColorField = GridEditorColorField()
@@ -76,7 +83,39 @@ class DGridEditorColorField(columnView: VFieldUI,
     // Nothing to do
   }
 
-  /*override fun getEditor(): GridEditorImageField { TODO
-    return super.getEditor() as GridEditorImageField
-  }*/
+  fun setColortoVField(value: String?) {
+    getModel().isChangedUI = true
+    getModel().setColor(rgbStringToColor(value))
+  }
+
+  /**
+   * Convert RGB String to Java.awt.Color.
+   */
+  private fun rgbStringToColor(hexString: String?): Color {
+    // Remove the '#' from the beginning of the RGB string
+    val rgbString = if (hexString!!.startsWith("#")) hexString.substring(1) else hexString
+
+    // Split the RGB string into red, green, and blue components
+    val redHex = rgbString.substring(0, 2)
+    val greenHex = rgbString.substring(2, 4)
+    val blueHex = rgbString.substring(4, 6)
+
+    // Convert hex to decimal and create a Color object
+    val red = redHex.toInt(16)
+    val green = greenHex.toInt(16)
+    val blue = blueHex.toInt(16)
+
+    return Color(red, green, blue)
+  }
+
+  /**
+   * Convert a Java.awt.Color object to Hexadecimal String.
+   */
+  private fun colorToRgbString(color: Color): String {
+    val redHex = String.format("%02x", color.red)
+    val greenHex = String.format("%02x", color.green)
+    val blueHex = String.format("%02x", color.blue)
+
+    return "$redHex$greenHex$blueHex"
+  }
 }

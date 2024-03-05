@@ -17,10 +17,9 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.notification.Notification
-
 import org.kopi.galite.visual.ui.vaadin.common.ColorPicker
+
+import com.vaadin.flow.component.Component
 
 class ColorField : ObjectField<Any?>() {
 
@@ -31,9 +30,6 @@ class ColorField : ObjectField<Any?>() {
 
   init {
     colorPicker.addValueChangeListener { e: ComponentValueChangeEvent<ColorPicker?, String?>? ->
-      Notification.show("Color picked " + colorPicker.value,
-                        2000,
-                        Notification.Position.MIDDLE)
     }
     add(colorPicker)
   }
@@ -66,7 +62,7 @@ class ColorField : ObjectField<Any?>() {
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
-    TODO("Not yet implemented")
+    colorPicker.value = value as String
   }
 
   override fun setValue(value: Any?) {

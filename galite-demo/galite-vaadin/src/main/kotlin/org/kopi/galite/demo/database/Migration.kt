@@ -246,10 +246,10 @@ fun addClient(firstName: String,
 
 fun addProducts() {
   // This data is used in automated tests
-  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"))
-  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"))
-  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"))
-  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"))
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"), ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"), ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"), ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"), ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
   for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()
@@ -257,11 +257,13 @@ fun addProducts() {
     val gender = listOf("Men", "Women", "Children").random()
     val supplier = listOf("Supplier 0", "Supplier 1", "Supplier 2").random()
     val price = (50..500).random().toBigDecimal()
-    addProduct(description, category, tax, gender, supplier, price)
+    val color = ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte()))
+
+    addProduct(description, category, tax, gender, supplier, price, color)
   }
 }
 
-fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
+fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal, col: ExposedBlob) {
   Product.insert {
     it[Product.description] = description
     it[Product.department] = department
@@ -269,6 +271,7 @@ fun addProduct(description: String, category: Int, taxName: String, department: 
     it[Product.category] = category
     it[Product.taxName] = taxName
     it[Product.price] = price
+    it[Product.color] = col
   }
 }
 
@@ -330,20 +333,20 @@ fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null)
 }
 
 fun addBills() {
-  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0)
-  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1)
-  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2)
-  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3)
+  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
 }
 
-fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int) {
+fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int, col: ExposedBlob) {
   Bill.insert {
     it[id] = num
     it[addressBill] = address
     it[dateBill] = date
     it[amountWithTaxes] = amount
     it[refCmd] = ref
-    it[color] = ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte()))
+    it[color] = col
   }
 }
 

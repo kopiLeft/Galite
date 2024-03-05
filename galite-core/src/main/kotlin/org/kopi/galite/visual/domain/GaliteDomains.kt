@@ -117,7 +117,7 @@ class DECIMAL(width: Int, scale: Int, init: Domain<BigDecimal>.() -> Unit = {}) 
 /**
  * This Field type is used to show a color picked by the user.
  */
-class COLOR(width: Int, height: Int): Domain<Color>(width, height)
+class COLOR: Domain<Color>()
 
 /**
  * Fraction numbers are [DECIMAL] numbers.

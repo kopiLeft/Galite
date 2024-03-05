@@ -52,6 +52,7 @@ object Product : Table("PRODUCTS") {
   val taxName =                 varchar("TAX", 20).references(TaxRule.taxName)
   val price =                   decimal("UNIT_PRICE_EXCLUDING_VAT", 9, 3)
   val photo =                   blob("PHOTO").nullable()
+  val color =                   blob("COLOR")
 
   override val primaryKey = PrimaryKey(idPdt)
 }
@@ -96,12 +97,12 @@ object Command : Table("COMMANDS") {
 }
 
 object Bill : Table("BILLS") {
-  val id =                 integer("ID").autoIncrement("BILLS_ID_SEQ")
+  val id =                      integer("ID").autoIncrement("BILLS_ID_SEQ")
   val addressBill =             varchar("BILL_ADDRESS", 50)
   val dateBill =                date("BILL_DATE")
   val amountWithTaxes =         decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountWithTaxes)
   val refCmd =                  integer("COMMAND_REFERENCE").references(Command.numCmd)
-  val color =                  blob("COLOR").nullable()
+  val color =                   blob("COLOR").nullable()
 
   override val primaryKey = PrimaryKey(id)
 }

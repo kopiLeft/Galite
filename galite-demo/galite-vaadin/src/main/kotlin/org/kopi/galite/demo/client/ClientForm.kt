@@ -206,9 +206,10 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       columns(P.price)
     }
 
-    val testColor = mustFill(domain = COLOR(1,1), position = at(1, 4)) {
+    val testColor = mustFill(domain = COLOR(), position = at(1, 4)) {
       label =" Color"
       help ="This is a test color field"
+      columns(P.color)
     }
 
     init {

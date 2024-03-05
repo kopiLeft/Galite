@@ -53,7 +53,7 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
     val u = table(Bill)
     val v = table(Command)
 
-    val testColor = visit(domain = COLOR(10,20), position = at(1,2)) {
+    val testColor = visit(domain = COLOR(), position = at(1,2)) {
       label =" Color"
       help = "This is a test color field"
       columns(u.color)
