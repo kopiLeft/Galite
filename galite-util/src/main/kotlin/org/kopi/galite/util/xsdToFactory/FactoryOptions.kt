@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@ import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
 
 import org.kopi.galite.util.base.Options
-
 
 class FactoryOptions(var nom: String? = null,
                      var fpackage: String? = null,
@@ -46,10 +45,10 @@ class FactoryOptions(var nom: String? = null,
       val options = arrayOfNulls<String>(primitiveOptions.size + 9)
 
       System.arraycopy(primitiveOptions, 0, options, 0, primitiveOptions.size)
-      options[primitiveOptions.size + 1] = "  --name, -n<String>: Nom de la factoy à générer."
-      options[primitiveOptions.size + 2] = "  --fpackage, -p<String>: Package sous lequel on veut générer la factory."
-      options[primitiveOptions.size + 3] = "  --source, -s<String>: Répertoire binaire cible pour les fichiers .xsb."
-      options[primitiveOptions.size + 4] = "  --directory, -d<String>: Répertoire cible pour les fichiers de fabrique générés."
+      options[primitiveOptions.size + 1] = "  --name, -n<String>: Name of the generated factory."
+      options[primitiveOptions.size + 2] = "  --fpackage, -p<String>: The package of the factory class to be generated."
+      options[primitiveOptions.size + 3] = "  --source, -s<String>: Target directory for .xsd files."
+      options[primitiveOptions.size + 4] = "  --directory, -d<String>: Target directory for generated Factory files."
 
       return options
     }
@@ -73,31 +72,31 @@ class FactoryOptions(var nom: String? = null,
     }
 
   override fun usage() {
-    println("Usage: FactoryGenerator [-n nomFactory] [-p package] [-s dossierSource] [-d dossierSauvegarde] fichiers...")
+    println("Usage: FactoryGenerator [-n factoryName] [-p package] [-s source] [-d directory] fichiers...")
   }
 
   fun parseCommand(paramArrayOfString: Array<String>): Boolean {
     if (parseCommandLine(paramArrayOfString)) {
       if (fpackage == null) {
-        System.err.println("Pas de package mentionné pour le factory")
+        System.err.println("No package mensionned for the factory.")
         usage()
         printOptions()
 
         return false
       }
       if (nom == null) {
-        System.err.println("Pas de nom mentionné pour le factory")
+        System.err.println("No name mentionned for the factory.")
         usage()
         printOptions()
 
         return false
       }
       if (source == null) {
-        System.err.println("Pas de dossier source mentionné pour le factory")
+        System.err.println("No directory source mentionned for the .xsd files.")
         usage()
         printOptions()
       } else if (nonOptions.filter { it?.endsWith(".xsd") == true }.isEmpty()) {
-        System.err.println("Pas de fichier .xsd mentionnés pour le factory")
+        System.err.println("No .xsd files mentionned.")
         usage()
         printOptions()
 
