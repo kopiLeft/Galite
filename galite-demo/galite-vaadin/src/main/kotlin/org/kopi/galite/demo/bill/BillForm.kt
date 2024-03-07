@@ -16,11 +16,13 @@
  */
 package org.kopi.galite.demo.bill
 
+import java.awt.Color
 import java.util.Locale
 
 import org.kopi.galite.demo.database.Bill
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.DECIMAL
@@ -46,6 +48,12 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
     }
 
     command(item = menuQuery) { recursiveQuery() }
+    trigger(POSTQRY) {
+      val color: Color = testColor.value as Color? ?: Color.BLACK
+      val vColor = VColor(color.red, color.green, color.blue)
+
+      addressBill.vField.setColor(vColor, VColor.WHITE)
+    }
     command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
   }
 
