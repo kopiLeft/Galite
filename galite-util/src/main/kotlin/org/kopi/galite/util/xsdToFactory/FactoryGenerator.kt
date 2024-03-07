@@ -24,6 +24,7 @@ import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
 import org.kopi.galite.util.base.Utils
+import kotlin.math.absoluteValue
 
 object FactoryGenerator {
 
@@ -252,7 +253,7 @@ object FactoryGenerator {
    */
   private fun addSpecificElementProcessing(typeName: String) {
     importFactory.addAll(listOf("org.apache.xmlbeans.XmlObject", "$javaPackageName.${typeName}Document"))
-    val typeNameCC = Utils.convertSnakeCaseToCamelCase(typeName)
+    val typeNameCC = Utils.convertSnakeCaseToCamelCase(typeName).decapitalize()
     val className = "${typeName}Document.$typeName"
     val parameter = "${typeNameCC}s"
     val fonctionComment = "  /**\n" +
@@ -269,13 +270,13 @@ object FactoryGenerator {
     val createFonction = buildString {
       append("${" ".repeat(indentation)}fun create${typeName}($parameter: Array<XmlObject>): $className {\n")
       append("${" ".repeat(indentation * 2)}val new$typeName = $className.Factory.newInstance()\n\n")
-      append("${" ".repeat(indentation * 2)}$parameter.forEach { ${typeNameCC.decapitalize()} ->\n")
-      append("${" ".repeat(indentation * 3)}when($typeName) {\n")
+      append("${" ".repeat(indentation * 2)}$parameter.forEach { $typeNameCC ->\n")
+      append("${" ".repeat(indentation * 3)}when($typeNameCC) {\n")
       choiceAttributes.forEach { attribute ->
         val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attribute.getAttributeValue("name"))
 
         append(
-          "${" ".repeat(indentation * 4)}is ${String.format("%-20s", attributeNameCC)}-> new$typeName.ajouter($attributeNameCC = $typeNameCC)\n"
+          "${" ".repeat(indentation * 4)}is $attributeNameCC${" ".repeat((40 - attributeNameCC.length).absoluteValue)}-> new$typeName.ajouter($attributeNameCC = $typeNameCC)\n"
         )
       }
       append("${" ".repeat(indentation * 3)}}\n")
@@ -292,7 +293,7 @@ object FactoryGenerator {
       choiceAttributes.forEachIndexed { index, attribut ->
         val nomAttributCC = Utils.convertSnakeCaseToCamelCase(attribut.getAttributeValue("name"))
 
-        append("${" ".repeat(if (index == 0) 0 else indentation + fonctionDeclaration.length)}$nomAttributCC: ${nomAttributCC.capitalize()}? = null${if (index == choiceAttributes.size - 1) ")" else ","}\n")
+        append("${" ".repeat(if (index == 0) 0 else fonctionDeclaration.length)}$nomAttributCC: ${nomAttributCC.capitalize()}? = null${if (index == choiceAttributes.size - 1) ")" else ","}\n")
       }
       append("${" ".repeat(indentation)}{\n")
       choiceAttributes.forEach { attribute ->
