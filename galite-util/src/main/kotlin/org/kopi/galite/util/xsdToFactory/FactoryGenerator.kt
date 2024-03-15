@@ -52,7 +52,6 @@ object FactoryGenerator {
     xsdConfigFiles = factoryOptions.nonOptions.filter { it?.endsWith(".xsdconfig") == true }
   }
 
-
   /**
    * Get the namespace and the Java package name based on the provided targetNamespace or the xsdConfigFile.
    *
@@ -120,7 +119,7 @@ object FactoryGenerator {
     attributes.forEach {
       val attributeParent = it.parentElement
       val attributeNameCC = Utils.convertSnakeCaseToCamelCase(it.getAttributeValue("name")) +
-          if (attributeParent.getAttributeValue("maxOccurs") == "unbounded" || it.getAttributeValue("maxOccurs") == "unbounded") "Array" else ""
+        if (attributeParent.getAttributeValue("maxOccurs") == "unbounded" || it.getAttributeValue("maxOccurs") == "unbounded") "Array" else ""
 
       stringBuilderFactory.append("   * @param $attributeNameCC\n")
     }
@@ -197,11 +196,9 @@ object FactoryGenerator {
    * @param attributeType     The attribute's type.
    * @param conditionArray    The attribute's defaultValue.
    */
-  private fun getAttributeDefaultValue(attribute: Element, attributeType: String, defaultValue: String?): String {
+  private fun getAttributeDefaultValue(attribute: Element, attributeType: String, defaultValue: String?, parent: Element): String {
     return if ((attribute.getAttributeValue("use") != null && attribute.getAttributeValue("use") == "optional") || (attribute.getAttributeValue(
-        "minOccurs"
-      ) == "0")
-    )
+        "minOccurs") == "0") || (parent.getAttributeValue("minOccurs") == "0"))
       "? = ${if (defaultValue != null && attributeType == "BigDecimal") "BigDecimal${if (defaultValue == "0") ".ZERO" else if (defaultValue == "1") ".ONE" else "($defaultValue)"}" else defaultValue ?: "null"}"
     else ""
   }
@@ -227,7 +224,7 @@ object FactoryGenerator {
       val defaultValue = attribute.getAttributeValue("default")
       val attributeComment = "$attributeName ${attribute.name}" + if (conditionArrayAttribute) " Array" else ""
       val attributeType = getAttributeType(attributeTypeXSD, attributeNameCC, conditionArrayAttribute)
-      val attributeDefaultValue = getAttributeDefaultValue(attribute, attributeType, defaultValue)
+      val attributeDefaultValue = getAttributeDefaultValue(attribute, attributeType, defaultValue, attributeParent)
 
       if (index == attributes.size - 1) {
         stringBuilderFactory.append(
@@ -333,10 +330,10 @@ object FactoryGenerator {
       append("${indentation(2)}$parameter.forEach { $typeNameCC ->\n")
       append("${indentation(3)}when($typeNameCC) {\n")
       choiceAttributes.forEach { attribute ->
-        val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attribute.getAttributeValue("name")).capitalize()
+        val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attribute.getAttributeValue("name"))
 
         append(
-          "${indentation(4)}is $attributeNameCC${" ".repeat((40 - attributeNameCC.length).absoluteValue)}-> new$typeName.ajouter($attributeNameCC = $typeNameCC)\n"
+          "${indentation(4)}is ${attributeNameCC.capitalize()}${" ".repeat((40 - attributeNameCC.length).absoluteValue)}-> new$typeName.ajouter($attributeNameCC = $typeNameCC)\n"
         )
       }
       append("${indentation(3)}}\n")
@@ -465,6 +462,7 @@ object FactoryGenerator {
       "element" to rootNode.getChildren("element", rootNode.namespace)
     )
 
+    stringBuilderFactory.append("object ${factoryName}Factory {\n\n")
     for (type in types) {
       for (complexType in type.value) {
         val typeName = complexType.getAttributeValue("name").capitalize()
@@ -488,6 +486,8 @@ object FactoryGenerator {
         choiceAttributes.clear()
       }
     }
+    stringBuilderFactory.append("}")
+    if (stringBuilderDocumentFactory.isNotEmpty()) stringBuilderDocumentFactory.append("}")
   }
 
   /**
@@ -499,10 +499,7 @@ object FactoryGenerator {
     val rootNode = document.rootElement
 
     getNameSpace(rootNode.getAttributeValue("targetNamespace"))
-    stringBuilderFactory.append("object ${factoryName}Factory {\n\n")
     addFunctions(rootNode)
-    stringBuilderFactory.append("}")
-    if (stringBuilderDocumentFactory.isNotEmpty()) stringBuilderDocumentFactory.append("}")
     addImports()
     stringBuilderFactory.insert(0, "package $packageName\n\n")
     stringBuilderFactory.insert(0, factoryComment)
