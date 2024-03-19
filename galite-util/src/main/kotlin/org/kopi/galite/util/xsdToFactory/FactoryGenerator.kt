@@ -181,10 +181,7 @@ object FactoryGenerator {
       "long" -> "Long"
       "hexBinary", "base64Binary" -> "ByteArray"
       else -> {
-        if (conditionArray)
-          "Array<$xsdType>"
-        else
-          xsdType
+        if (conditionArray) "Array<$xsdType>" else xsdType
       }
     }
   }
@@ -272,7 +269,7 @@ object FactoryGenerator {
     }
     stringBuilderFactory.append(
       "\n${indentation(2)}return new$name\n" +
-          "${indentation(1)}}\n\n"
+      "${indentation(1)}}\n\n"
     )
   }
 
@@ -362,7 +359,7 @@ object FactoryGenerator {
         val attributeName = attribute.getAttributeValue("name")
         val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attributeName)
 
-        append("${indentation(2)}$attributeNameCC?.let { this.addNew$attributeName().set(it) }\n")
+        append("${indentation(2)}$attributeNameCC?.let { this.addNew${attributeName.capitalize()}.set(it) }\n")
       }
       append("${indentation(1)}}\n\n")
     }
