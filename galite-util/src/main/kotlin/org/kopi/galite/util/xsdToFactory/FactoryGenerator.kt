@@ -412,7 +412,7 @@ object FactoryGenerator {
                           "   *\n" +
                           "   * This is a complex type.\n" +
                           "   *\n" +
-                          "   * @param $typeNameCC\n" +
+                          "   * @param ${typeNameCC.decapitalize()}\n" +
                           "   * @return A new `$javaPackageName.$documentTypeName` XML instance.\n" +
                           "   */\n"
 
@@ -427,7 +427,7 @@ object FactoryGenerator {
       append("${indentation(1)}fun create$documentTypeName($typeNameCC: $documentTypeName.$nomType): $documentTypeName  // $typeNameCC element\n")
       append("${indentation(1)}{\n")
       append("${indentation(2)}val new$documentTypeName = $documentTypeName.Factory.newInstance()\n\n")
-      append("${indentation(2)}new$documentTypeName = $typeNameCC\n\n")
+      append("${indentation(2)}new$documentTypeName.$typeNameCC = $typeNameCC\n\n")
       append("${indentation(2)}return new$documentTypeName\n")
       append("${indentation(1)}}\n")
     }
@@ -447,7 +447,7 @@ object FactoryGenerator {
       stringBuilderDocumentFactory.append("object ${factoryName}DocumentFactory {\n\n")
     }
     addDocumentFactoryComment(typeNameCC, documentTypeName)
-    addDocumentFactoryFunction(typeNameCC, documentTypeName, nomType)
+    addDocumentFactoryFunction(typeNameCC.decapitalize(), documentTypeName, nomType)
   }
 
   /**
