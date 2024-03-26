@@ -28,6 +28,7 @@ import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
 import org.kopi.galite.util.base.Utils
 
+
 object FactoryGenerator {
 
   @JvmStatic
@@ -110,7 +111,7 @@ object FactoryGenerator {
     val className = if (type == "element") "${typeName}Document.$typeName" else typeName
 
     stringBuilderFactory.append(
-      "  /**\n" +
+      "\n  /**\n" +
           "   * An XML $typeName(@$nameSpace).\n" +
           "   *\n" +
           "   * This is a complex type.\n" +
@@ -223,6 +224,7 @@ object FactoryGenerator {
       val attributeType = getAttributeType(attributeTypeXSD, attributeNameCC, conditionArrayAttribute)
       val attributeDefaultValue = getAttributeDefaultValue(attribute, attributeType, defaultValue, attributeParent)
 
+      importFactory.add("$javaPackageName.$className")
       if (index == attributes.size - 1) {
         stringBuilderFactory.append(
           "${if (attributes.size == 1) "" else " ".repeat(indentationLength)}$specificAttributeName: $attributeType$attributeDefaultValue)  // $attributeName attribute\n" +
@@ -269,7 +271,7 @@ object FactoryGenerator {
     }
     stringBuilderFactory.append(
       "\n${indentation(2)}return new$name\n" +
-      "${indentation(1)}}\n\n"
+      "${indentation(1)}}\n"
     )
   }
 
@@ -359,7 +361,7 @@ object FactoryGenerator {
         val attributeName = attribute.getAttributeValue("name")
         val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attributeName)
 
-        append("${indentation(2)}$attributeNameCC?.let { this.addNew${attributeName.capitalize()}.set(it) }\n")
+        append("${indentation(2)}$attributeNameCC?.let { this.addNew${attributeName.capitalize()}().set(it) }\n")
       }
       append("${indentation(1)}}\n\n")
     }
@@ -444,8 +446,9 @@ object FactoryGenerator {
 
     importDocumentFactory.add("$javaPackageName.$documentTypeName")
     if (stringBuilderDocumentFactory.isEmpty()) {
-      stringBuilderDocumentFactory.append("object ${factoryName}DocumentFactory {\n\n")
+      stringBuilderDocumentFactory.append("\nobject ${factoryName}DocumentFactory {\n\n")
     }
+    importDocumentFactory.add("$javaPackageName.$documentTypeName")
     addDocumentFactoryComment(typeNameCC, documentTypeName)
     addDocumentFactoryFunction(typeNameCC.decapitalize(), documentTypeName, nomType)
   }

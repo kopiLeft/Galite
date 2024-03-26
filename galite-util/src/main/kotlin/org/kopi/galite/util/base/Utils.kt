@@ -33,8 +33,8 @@ open class Utils {
      * @param input The snake_case string to convert.
      * @return The camelCase version of the input string.
      */
-    fun convertSnakeCaseToCamelCase(input: String): String {
-      return input.replace(Regex("_(.)")) { it.groupValues[1].uppercase() }
+    fun convertSnakeCaseToCamelCase(input: String): String = input.replace(Regex("_(.)|(\\d)([a-zA-Z])")) {
+      if (it.groupValues[1].isNotEmpty()) it.groupValues[1].uppercase() else it.groupValues[2] + it.groupValues[3].uppercase()
     }
 
     /**
