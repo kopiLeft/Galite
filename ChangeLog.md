@@ -1,3 +1,10 @@
+# 1.5.2
+## What's Changed
+* Add factory generator using .xsd files by @MayssenGharbi [#622](https://github.com/kopiLeft/Galite/pull/622)
+* Make the option driver no longuer required when calling Migration.kt of galite-data by @sebai-dhia (APPS-0226)
+
+**Full Changelog**: [1.5.1 ... 1.5.2](https://github.com/kopiLeft/Galite/compare/1.5.1...1.5.2)
+
 # 1.5.1
 ## What's Changed
 * Fix fatal error linked to the management of temporal fields in Full Calendar component by @Iyedchaabane [#611](https://github.com/kopiLeft/Galite/pull/611)
