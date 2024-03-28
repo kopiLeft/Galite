@@ -17,12 +17,20 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import com.vaadin.flow.component.HasStyle
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VColorField
 import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+import java.awt.Color
 
 /**
  * Grid block data source item
  */
-data class GridBlockItem(val record: Int) {
+data class GridBlockItem(val record: Int,
+                         var foregroundColor: Color? = Color.BLACK,
+                         var backgroundColor: Color? = Color.WHITE) {
 
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -30,4 +38,22 @@ data class GridBlockItem(val record: Int) {
   fun getValue(field: VField): Any? {
     return field.getObject(record)
   }
+
+  fun setBackgroundColor(field: VField) {
+    backgroundColor = getColor(field)
+  }
+
+  fun setColor(model: VBlock, c: Color?) {
+    model.fields.forEach { it.setColor(record, VColor(0, 0, 0), VColor(c!!.red, c!!.green, c.blue)) }
+  }
+
+  fun getColor(field: VField): Color? {
+    return if (field is VColorField) {
+      field.getObject(record) as Color?
+    } else {
+      null
+    }
+  }
+
+  override fun toString(): String = "record : $record, foregroundColor : $foregroundColor, backgroundColor : $backgroundColor"
 }

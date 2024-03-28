@@ -109,6 +109,7 @@ abstract class DGridEditorField<T>(
   }
 
   override fun updateColor() {
+    println("----- GridEditorField ---------- in updateColor------ foreground : $foreground -------- background : $background ----")
     editor.setColor(getModel().align, foreground, background)
   }
 

@@ -147,6 +147,7 @@ open class DTextField(
   }
 
   override fun updateColor() {
+    println("----- DTextField ---------- in update color ------------ ")
     styleManager.createAndApplyStyle(field.inputField, getModel().align, foreground, background)
   }
 

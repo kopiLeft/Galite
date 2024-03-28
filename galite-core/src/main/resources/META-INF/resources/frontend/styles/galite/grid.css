@@ -254,3 +254,21 @@
 :host([theme~="grid-block"]) .active-item {
     padding: 0px !important;
 }
+
+/*!*.custom-style-for-property1 {*!*/
+/*!*    background-color: #3498db;*!*/
+
+/*!*}*!*/
+
+/*:host([theme~="grid-block"]) .dynamic-background {*/
+/*    background-color: var(--background-color) !important;*/
+/*}*/
+
+/*!* CSS *!*/
+/*.my-grid .vaadin-grid-cell-content {*/
+/*    background-color: var(--row-color);*/
+/*}*/
+
+[part="row"] .custom-background-color {
+    background-color: var(--custom-background-color);
+}

@@ -26,6 +26,7 @@ import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.BOOL
@@ -42,6 +43,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VBlock
+import java.awt.Color
 
 class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
@@ -49,9 +51,9 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     insertMenus()
     insertCommands()
 
-    trigger(INIT) {
-      salesBlock.setMode(Mode.INSERT)
-    }
+//    trigger(INIT) {
+//      salesBlock.setMode(Mode.INSERT)
+//    }
   }
 
   val list = actor(menu = actionMenu, label = "List", help = "Display List", ident = "list") {
@@ -206,9 +208,9 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       columns(P.price)
     }
 
-    val testColor = mustFill(domain = COLOR(), position = at(1, 4)) {
-      label =" Color"
-      help ="This is a test color field"
+    val color = visit(domain = COLOR(), position = at(2, 2)) {
+      label = "Color"
+      help = "Color"
       columns(P.color)
     }
 
@@ -220,6 +222,34 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
       command(item = list) { recursiveQuery() }
+
+      command(item = all) {
+        for (i in 0 until block.bufferSize) {
+          if (block.isRecordFilled(i)) {
+            for (f in salesBlock.fields) {
+              block.setColor(i, VColor.BLACK, VColor.CYAN)
+            }
+          }
+        }
+      }
+
+      command(item = nothing) {
+        for (i in 0 until block.bufferSize) {
+          if (block.isRecordFilled(i)) {
+            for (f in salesBlock.fields) {
+              block.setColor(i, VColor.BLACK, VColor.LIGHT_GRAY)
+            }
+          }
+        }
+      }
+    }
+
+    private fun colorier(rec: Int) {
+      if (block.isRecordFilled(rec)) {
+        for (f in block.fields) {
+          f.setColor(rec, VColor.BLACK, VColor.BLUE)
+        }
+      }
     }
   }
 

@@ -58,6 +58,7 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   override fun setBlink(blink: Boolean) {}
 
   override fun setColor(align: Int, foreground: VColor?, background: VColor?) {
+    println("----- GridEditorActorField ---------- in setColor------------ ")
     styleManager.createAndApplyStyle(this, align, foreground, background)
   }
 

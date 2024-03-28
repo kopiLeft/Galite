@@ -44,6 +44,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.component.grid.editor.EditorImpl
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
@@ -51,10 +52,18 @@ import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
+import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.form.VColorField
+import org.kopi.galite.visual.ui.vaadin.base.StyleManager
+import org.kopi.galite.visual.ui.vaadin.base.Utils
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
+import java.awt.Color
 
 /**
  * Grid based chart block implementation.
@@ -66,7 +75,9 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
   // DATA MEMBERS
   // --------------------------------------------------
   lateinit var grid: Grid<GridBlockItem>
-
+  protected val styleManager: StyleManager by lazy {
+    (ApplicationContext.applicationContext.getApplication() as VApplication).styleManager
+  }
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
     themeList.add("grid-block")
@@ -111,6 +122,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * Differently create fields for this block
    */
   override fun createFields() {
+    println("-----  DGridBlock   -----------createFields----------- ")
     super.createFields()
     grid = BlockGrid()
     editor = grid.editor
@@ -461,7 +473,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
     sortableHeaders = mutableMapOf()
     editor.binder = binder
-
+    println("*********************** in configure **************** before    grid.addItemClickListener ")
     grid.addItemClickListener {
       val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
       val item = it.item
@@ -477,6 +489,22 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }
     }
+    val items0 = mutableListOf<GridBlockItem>()
+
+    repeat(model.bufferSize) { record ->
+      var colorAtRecord = model.fields.filter { it is VColorField }.map { it.getObject(record) as Color? }.firstOrNull()
+      var item: GridBlockItem?
+      if (colorAtRecord != null ) {
+        item = GridBlockItem(record, backgroundColor = colorAtRecord)
+      } else {
+        item = GridBlockItem(record)
+      }
+      items0.add(item)
+    }
+    grid.setItems(items0)
+
+    println("------------------- Before loop and setting color  -------------------- ")
+    (grid.dataProvider as ListDataProvider).items.forEach { println(it) }
 
     for (i in 0 until model.getFieldCount()) {
       val field = model.fields[i]
@@ -486,9 +514,20 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
         if (columnView.hasDisplays()) {
           val label = columnView.editorField.label
-          val column = grid.addColumn { columnView.editorField.format(it.getValue(field)) }
+          val column = grid.addColumn { item ->
+            var colorAtRecord = model.fields.filter { it is VColorField }.map { it.getObject(item.record) as Color? }.firstOrNull()
+            if (colorAtRecord != null) {
+              val item1 = (grid.dataProvider as ListDataProvider).items.filter { it.record == item.record }.firstOrNull()
+              if (item1 != null) {
+                item1.backgroundColor = colorAtRecord
+                grid.dataProvider.refreshItem(item1)
+              }
+            }
+            columnView.editorField.format(item.getValue(field))
+          }
                   .setKey(i.toString())
                   .setHeader(label)
+
                   .setEditorComponent(columnView.editor)
                   .setResizable(true)
                   .setClassNameGenerator { item ->
@@ -498,6 +537,20 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
                       ""
                     }
                   }
+          grid.setClassNameGenerator { item ->
+            var colorAtRecord = model.fields.filter { it is VColorField }.map { it.getObject(item.record) as Color? }.firstOrNull()
+            println("${item.toString()}  - Color from fields of record :  ${colorAtRecord}")
+            if (colorAtRecord  != null && colorAtRecord == item.backgroundColor) {
+            grid.getElement().style.set("--custom-background-color", "rgb(${colorAtRecord!!.red}, ${colorAtRecord!!.green}, ${colorAtRecord!!.blue})")
+            grid.getElement().classList.add("custom-background-color")
+              "custom-background-color"
+            } else {
+              ""
+            }
+          }
+          println("------------------- Aprés setting color  -------------------- ")
+          (grid.dataProvider as ListDataProvider).items.forEach {  it -> println(it) }
+
 
           setAlignment(column, columnView.model.align)
 
@@ -529,22 +582,30 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
         }
       }
     }
-    val items = mutableListOf<GridBlockItem>()
-
-    repeat(model.bufferSize) {
-      items.add(GridBlockItem(it))
-    }
-    grid.setItems(items)
+//    val items = mutableListOf<GridBlockItem>()
+//
+////    repeat(model.bufferSize) { record ->
+////
+////      val item =GridBlockItem(record)
+////      items.add(item)
+////    }
+////    grid.setItems(items)
     deletedRecordsFilter = SerializablePredicate<GridBlockItem> { item ->
       !model.isRecordDeleted(item.record)
     }
     (grid.dataProvider as ListDataProvider).filter = deletedRecordsFilter
+
+    println("------------------- En fin -------------------- ")
+    (grid.dataProvider as ListDataProvider).items.forEach {  println(it) }
   }
+
+
 
   /**
    * Updates the grid editors access and content
    */
   protected fun updateEditors() {
+    println("----------------- updateEditors ---------------")
     for (columnView in columnViews) {
       if (columnView != null) {
         val rowController = columnView as DGridBlockFieldUI
@@ -614,6 +675,8 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
    * @param record The record number
    */
   fun editRecord(record: Int, force: Boolean = false) {
+    println("************ editRecord ***************** record: $record")
+
     if (::grid.isInitialized) {
       itemToBeEdited = GridBlockItem(record)
       access(currentUI) {
@@ -676,6 +739,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
       }
 
       override fun editItem(item: GridBlockItem) {
+        println("----- editItem ---------------------- ")
         if (!inDetailMode()) {
           updateEditors()
           doEditItem(item)
@@ -695,6 +759,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
        * issue : https://github.com/vaadin/flow-components/issues/1997
        */
       fun doEditItem(item: GridBlockItem) {
+        println("***** doEditItem ******* record of GridBlockItem : *** ${item.record}")
         itemToEdit = item
 
         if (editItemRequest == null) {

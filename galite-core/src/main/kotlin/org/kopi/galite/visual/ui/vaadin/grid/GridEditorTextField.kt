@@ -136,6 +136,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
   }
 
   override fun setColor(align: Int, foreground: VColor?, background: VColor?) {
+    println("----- GridEditorTextField ---------- in setColor------------")
     styleManager.createAndApplyStyle(this, null, foreground, background)
   }
 

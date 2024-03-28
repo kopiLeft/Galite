@@ -17,12 +17,19 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.StyleManager
+import org.kopi.galite.visual.ui.vaadin.visual.VApplication
 
 /**
  * Specific field handling for grid block
  */
 class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowController) {
+
+  protected val styleManager: StyleManager by lazy {
+    (ApplicationContext.applicationContext.getApplication() as VApplication).styleManager
+  }
 
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -74,14 +81,30 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
     }
   }
 
+//  fun colorChanged(r: Int) {
+//    val columns = blockView.grid.columns
+//    for ( i in 0 until  blockView.grid.columns.size) {
+//      val column =  columns[i]
+//
+//    }
+//  }
+
   override fun colorChanged(r: Int) {
+    println("----- DGridBlockFieldHandler -----------colorChanged------- record : $r---- editor: ${getCurrentDisplay()} ")
     if (blockView.model.isChart() && blockView.inDetailMode()) {
       super.colorChanged(r)
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
-
       if (editor != null && blockView.isEditorActive && blockView.editedRecord == r) {
         editor.updateColor()
+//        println("********* editor condition validated  ************")
+
+//        for (r in 0..<blockView.model.bufferSize) {
+//          if (blockView.model.isRecordFilled(r)) {
+////            styleManager.createAndApplyStyle(blockView.grid, model.align, model.getForeground(r), model.getBackground(r))
+//            blockView.model.fields[r].setColor(model.getForeground(r), model.getBackground(r))
+//          }
+//        }
       }
     }
   }
