@@ -34,7 +34,6 @@ object FactoryGenerator {
   fun main(args: Array<String>) {
     if (factoryOptions.parseCommand(args)) {
       generateFactories()
-      println("Process ended successfully.")
     }
   }
 
@@ -42,7 +41,7 @@ object FactoryGenerator {
    * Initialise variables
    */
   fun initialise() {
-    factoryName = factoryOptions.name!!
+    factoryName = factoryOptions.name!!.replaceFirstChar{ it.uppercaseChar() }
     factoryComment = "/*\n" +
                      " * Factory name: $factoryName\n" +
                      " *\n" +
@@ -62,8 +61,7 @@ object FactoryGenerator {
     if (xsdConfigFiles.isNotEmpty()) {
       xsdConfigFiles.forEach { xsdFile ->
         val file = xsdFile?.let { File(it) }
-        val builder = SAXBuilder()
-        val document: Document = builder.build(file)
+        val document: Document = SAXBuilder().build(file)
         val rootNode = document.rootElement
         val namespaceElement = rootNode.getChild("namespace", rootNode.namespace)
 
@@ -101,6 +99,17 @@ object FactoryGenerator {
   }
 
   /**
+   * Indicates if the element is an array attribute or not.
+   *
+   * @param attribute     The attribute's element.
+   */
+  private fun getConditionArrayAttribute(attribute: Element): Boolean {
+    return (attribute.parentElement.getAttributeValue("maxOccurs") != null &&
+      attribute.parentElement.getAttributeValue("maxOccurs") != "1") ||
+      (attribute.getAttributeValue("maxOccurs") != null && attribute.getAttributeValue("maxOccurs") != "1")
+  }
+
+  /**
    * Adds a comment to a fonction based on a list of attributes.
    *
    * @param typeName The name of the type.
@@ -117,25 +126,24 @@ object FactoryGenerator {
           "   *\n"
     )
     attributes.forEach {
-      val attributeParent = it.parentElement
       val attributeNameCC = Utils.convertSnakeCaseToCamelCase(it.getAttributeValue("name")) +
-        if ((attributeParent.getAttributeValue("maxOccurs") != null && attributeParent.getAttributeValue("maxOccurs") != "1") ||
-          (it.getAttributeValue("maxOccurs") != null && it.getAttributeValue("maxOccurs") != "1")) "Array" else ""
+        if (getConditionArrayAttribute(it)) "Array" else ""
 
       stringBuilderFactory.append("   * @param $attributeNameCC\n")
     }
     stringBuilderFactory.append(
       "   * @return A new `$javaPackageName.$className` XML instance\n" +
-          "   */\n"
+      "   */\n"
     )
   }
 
   /**
    * Get the attribute's type from its xsd type.
    *
-   * @param xsdType         The xsd type.
-   * @param attributeName   The attribute's name.
-   * @param conditionArray  The condition specifing if the attribute is an array.
+   * @param rootNode         The root node.
+   * @param attribute        The attribute as element.
+   * @param attributeName    The attribute's name.
+   * @param conditionArray   The condition specifing if the attribute is an array.
    */
   private fun getAttributeType(rootNode: Element, attribute: Element, attributeName: String, conditionArray: Boolean): String {
     var xsdType = attribute.getAttributeValue("type")?.split(":")?.last()
@@ -197,9 +205,10 @@ object FactoryGenerator {
   /**
    * Get the attribute's default value.
    *
-   * @param attribute         The xsd type.
+   * @param attribute         The attribute's element.
    * @param attributeType     The attribute's type.
-   * @param conditionArray    The attribute's defaultValue.
+   * @param defaultValue      The attribute's default value.
+   * @param parent            The attribute's parent element.
    */
   private fun getAttributeDefaultValue(attribute: Element, attributeType: String, defaultValue: String?, parent: Element): String {
     return if ((attribute.getAttributeValue("use") != null && attribute.getAttributeValue("use") == "optional") || (attribute.getAttributeValue(
@@ -212,6 +221,7 @@ object FactoryGenerator {
    * Adds parameters to a fonction based on a list of attributes.
    * Updates the importFactory and calendarAttributes lists based on the attribute types.
    *
+   * @param rootNode            The root node.
    * @param indentationLength   The number of spaces for indentation.
    * @param typeName            The name of the type.
    * @param type                The type of the parent element ("element" or "complexType").
@@ -223,8 +233,7 @@ object FactoryGenerator {
       val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attributeName)
       val attributeTypeXSD = attribute.getAttributeValue("type")?.split(":")?.last()
       val attributeParent = attribute.parentElement
-      val conditionArrayAttribute = (attributeParent.getAttributeValue("maxOccurs") != null && attributeParent.getAttributeValue("maxOccurs") != "1") ||
-        (attribute.getAttributeValue("maxOccurs") != null && attribute.getAttributeValue("maxOccurs") != "1")
+      val conditionArrayAttribute = getConditionArrayAttribute(attribute)
       val specificAttributeName = attributeNameCC + if (conditionArrayAttribute) "Array" else ""
       val defaultValue = attribute.getAttributeValue("default")
       val attributeComment = "$attributeName ${attribute.name}" + if (conditionArrayAttribute) " Array" else ""
@@ -266,8 +275,7 @@ object FactoryGenerator {
       val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attribute.getAttributeValue("name"))
       val parentAttribute = attribute.parentElement
       val arrayAttributeName = attributeNameCC +
-        if ((parentAttribute.getAttributeValue("maxOccurs") != null && parentAttribute.getAttributeValue("maxOccurs") != "1") ||
-          (attribute.getAttributeValue("maxOccurs") != null && attribute.getAttributeValue("maxOccurs") != "1")) "Array" else ""
+        if (getConditionArrayAttribute(attribute)) "Array" else ""
       val attributeUse = attribute.getAttributeValue("use")
       val calendarAttribute = if (attributeNameCC in calendarAttributes) ".toCalendar()" else ""
 
@@ -340,7 +348,7 @@ object FactoryGenerator {
         val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attribute.getAttributeValue("name"))
 
         append(
-          "${indentation(4)}is ${attributeNameCC.capitalize()}${" ".repeat((40 - attributeNameCC.length).absoluteValue)}-> new$typeName.add($attributeNameCC = $typeNameCC)\n"
+          "${indentation(4)}is ${attributeNameCC.replaceFirstChar{ it.uppercaseChar() }}${" ".repeat((40 - attributeNameCC.length).absoluteValue)}-> new$typeName.add($attributeNameCC = $typeNameCC)\n"
         )
       }
       append("${indentation(3)}}\n")
@@ -362,14 +370,14 @@ object FactoryGenerator {
       choiceAttributes.forEachIndexed { index, attribut ->
         val nomAttributeCC = Utils.convertSnakeCaseToCamelCase(attribut.getAttributeValue("name"))
 
-        append("${" ".repeat(if (index == 0) 0 else fonctionDeclaration.length)}$nomAttributeCC: ${nomAttributeCC.capitalize()}? = null${if (index == choiceAttributes.size - 1) ")" else ","}\n")
+        append("${" ".repeat(if (index == 0) 0 else fonctionDeclaration.length)}$nomAttributeCC: ${nomAttributeCC.replaceFirstChar{ it.uppercaseChar() }}? = null${if (index == choiceAttributes.size - 1) ")" else ","}\n")
       }
       append("${indentation(1)}{\n")
       choiceAttributes.forEach { attribute ->
         val attributeName = attribute.getAttributeValue("name")
         val attributeNameCC = Utils.convertSnakeCaseToCamelCase(attributeName)
 
-        append("${indentation(2)}$attributeNameCC?.let { this.addNew${attributeName.capitalize()}().set(it) }\n")
+        append("${indentation(2)}$attributeNameCC?.let { this.addNew${attributeName.replaceFirstChar{ it.uppercaseChar() }}().set(it) }\n")
       }
       append("${indentation(1)}}\n\n")
     }
@@ -403,7 +411,7 @@ object FactoryGenerator {
    */
   private fun addSpecificElementProcessing(typeName: String) {
     importFactory.addAll(listOf("org.apache.xmlbeans.XmlObject", "$javaPackageName.${typeName}Document"))
-    val typeNameCC = Utils.convertSnakeCaseToCamelCase(typeName).decapitalize()
+    val typeNameCC = Utils.convertSnakeCaseToCamelCase(typeName).replaceFirstChar{ it.lowercaseChar() }
     val className = "${typeName}Document.$typeName"
     val parameter = "${typeNameCC}s"
 
@@ -422,7 +430,7 @@ object FactoryGenerator {
                           "   *\n" +
                           "   * This is a complex type.\n" +
                           "   *\n" +
-                          "   * @param ${typeNameCC.decapitalize()}\n" +
+                          "   * @param ${typeNameCC.replaceFirstChar{ it.lowercaseChar() }}\n" +
                           "   * @return A new `$javaPackageName.$documentTypeName` XML instance.\n" +
                           "   */\n"
 
@@ -457,7 +465,7 @@ object FactoryGenerator {
       stringBuilderDocumentFactory.append("\nobject ${factoryName}DocumentFactory {\n\n")
     }
     addDocumentFactoryComment(typeNameCC, documentTypeName)
-    addDocumentFactoryFunction(typeNameCC.decapitalize(), documentTypeName, nomType, type)
+    addDocumentFactoryFunction(typeNameCC.replaceFirstChar{ it.lowercaseChar() }, documentTypeName, nomType, type)
   }
 
   /**
@@ -472,7 +480,7 @@ object FactoryGenerator {
     stringBuilderFactory.append("object ${factoryName}Factory {\n")
     for (type in types) {
       for (complexType in type.value) {
-        val typeName = complexType.getAttributeValue("name").capitalize()
+        val typeName = complexType.getAttributeValue("name").replaceFirstChar{ it.uppercaseChar() }
         val listAttributes: List<Element> = complexType.children
 
         getAttributes(listAttributes)
@@ -536,6 +544,7 @@ object FactoryGenerator {
         File(parentDirectoryName, nomFichierDocFactory).writeText(stringBuilderDocumentFactory.toString())
       }
     }
+    println("Factory ${factoryName}Factory.kt generated successfully.")
   }
 
   //--------------------------------------------------------------------------------------------
