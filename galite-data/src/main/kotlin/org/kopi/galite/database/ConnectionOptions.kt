@@ -23,7 +23,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   var lookupUserId = true
 
   @JvmField
-  var trace = 0
+  var trace: Int? = null
   var properties: Array<String?>? = null
 
   @JvmField
