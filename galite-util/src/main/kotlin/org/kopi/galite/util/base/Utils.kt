@@ -18,6 +18,8 @@
 
 package org.kopi.galite.util.base
 
+import java.io.File
+import java.net.URL
 import java.util.Timer
 import java.util.TimerTask
 
@@ -34,7 +36,7 @@ open class Utils {
      * @return The camelCase version of the input string.
      */
     fun convertSnakeCaseToCamelCase(input: String): String = input.replace(Regex("_(.)|(\\d)([a-zA-Z])")) {
-      if (it.groupValues[1].isNotEmpty()) it.groupValues[1].uppercase() else it.groupValues[2] + it.groupValues[3].uppercase()
+      if (it.groupValues[1].isNotEmpty()) it.groupValues[1].toUpperCase() else it.groupValues[2] + it.groupValues[3].toUpperCase()
     }
 
     /**
@@ -55,8 +57,10 @@ open class Utils {
      * @param            expression              The expression to verify
      * @exception        RuntimeException        the entire token reference
      */
-    @Deprecated("Use the verify with the error message",
-                ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
+    @Deprecated(
+      "Use the verify with the error message",
+      ReplaceWith("verify(expression = expression, errorMessage = errorMessage)")
+    )
     fun verify(expression: Boolean) {
       if (!expression) {
         throw InconsistencyException()
@@ -83,8 +87,10 @@ open class Utils {
      * "java/lang/System" and "out"
      */
     fun splitQualifiedName(name: String, separator: Char): Array<String> =
-            arrayOf(name.substringBeforeLast(separator, ""),
-                    name.substringAfterLast(separator))
+      arrayOf(
+        name.substringBeforeLast(separator, ""),
+        name.substringAfterLast(separator)
+      )
 
     /**
      * Splits a string like:
@@ -105,8 +111,10 @@ open class Utils {
      * - a specified index is beyond the limits of the input string
      */
     fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String =
-            baseString?.substring(beginIndex.coerceAtMost(baseString.length),
-                                  endIndex.coerceAtMost(baseString.length)).orEmpty()
+      baseString?.substring(
+        beginIndex.coerceAtMost(baseString.length),
+        endIndex.coerceAtMost(baseString.length)
+      ).orEmpty()
 
     /**
      * Creates a typed array from a list.

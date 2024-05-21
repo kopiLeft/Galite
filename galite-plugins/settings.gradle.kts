@@ -15,20 +15,5 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.kopi.galite.gradle.Versions
+rootProject.name = "galite-plugins"
 
-plugins {
-  kotlin("jvm") apply true
-}
-
-dependencies {
-  //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
-
-  // Javax dependencies
-  implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
-  implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
-  implementation("org.apache.xmlbeans", "xmlbeans", Versions.XML_BEANS)
-  //jdom2
-  implementation("org.jdom","jdom2","2.0.6")
-}

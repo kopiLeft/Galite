@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,20 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.kopi.galite.gradle.Versions
+package org.kopi.galite.plugin
 
-plugins {
-  kotlin("jvm") apply true
-}
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.register
 
-dependencies {
-  //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
-
-  // Javax dependencies
-  implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
-  implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
-  implementation("org.apache.xmlbeans", "xmlbeans", Versions.XML_BEANS)
-  //jdom2
-  implementation("org.jdom","jdom2","2.0.6")
+class FactoryGeneratorPlugin : Plugin<Project> {
+  override fun apply(project: Project) {
+    project.tasks.apply {
+      register("factoryGenerator", FactoryGeneratorTask::class)
+    }
+  }
 }

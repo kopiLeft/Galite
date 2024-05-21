@@ -37,39 +37,39 @@ open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options
 
   override fun processOption(code: Int, g: Getopt): Boolean {
     return when (code) {
-      'L'.code -> {
+      'L'.toInt() -> {
         localHost = getString(g, "")
         true
       }
-      'H'.code -> {
+      'H'.toInt() -> {
         printHost = getString(g, "")
         true
       }
-      'X'.code -> {
+      'X'.toInt() -> {
         proxyHost = getString(g, "")
         true
       }
-      'd'.code -> {
+      'd'.toInt() -> {
         remotePort = getInt(g, 0)
         true
       }
-      's'.code -> {
+      's'.toInt() -> {
         sourcePort = getInt(g, 0)
         true
       }
-      't'.code -> {
+      't'.toInt() -> {
         timeout = getInt(g, 0)
         true
       }
-      'B'.code -> {
+      'B'.toInt() -> {
         bindSourcePort = !false
         true
       }
-      'u'.code -> {
+      'u'.toInt() -> {
         user = getString(g, "")
         true
       }
-      'P'.code -> {
+      'P'.toInt() -> {
         queue = getString(g, "")
         true
       }
@@ -117,15 +117,15 @@ open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options
 
   companion object {
     private val LONGOPTS = arrayOf(
-            LongOpt("localHost", LongOpt.REQUIRED_ARGUMENT, null, 'L'.code),
-            LongOpt("printHost", LongOpt.REQUIRED_ARGUMENT, null, 'H'.code),
-            LongOpt("proxyHost", LongOpt.REQUIRED_ARGUMENT, null, 'X'.code),
-            LongOpt("remotePort", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
-            LongOpt("sourcePort", LongOpt.REQUIRED_ARGUMENT, null, 's'.code),
-            LongOpt("timeout", LongOpt.REQUIRED_ARGUMENT, null, 't'.code),
-            LongOpt("bindSourcePort", LongOpt.NO_ARGUMENT, null, 'B'.code),
-            LongOpt("user", LongOpt.REQUIRED_ARGUMENT, null, 'u'.code),
-            LongOpt("queue", LongOpt.REQUIRED_ARGUMENT, null, 'P'.code)
+            LongOpt("localHost", LongOpt.REQUIRED_ARGUMENT, null, 'L'.toInt()),
+            LongOpt("printHost", LongOpt.REQUIRED_ARGUMENT, null, 'H'.toInt()),
+            LongOpt("proxyHost", LongOpt.REQUIRED_ARGUMENT, null, 'X'.toInt()),
+            LongOpt("remotePort", LongOpt.REQUIRED_ARGUMENT, null, 'd'.toInt()),
+            LongOpt("sourcePort", LongOpt.REQUIRED_ARGUMENT, null, 's'.toInt()),
+            LongOpt("timeout", LongOpt.REQUIRED_ARGUMENT, null, 't'.toInt()),
+            LongOpt("bindSourcePort", LongOpt.NO_ARGUMENT, null, 'B'.toInt()),
+            LongOpt("user", LongOpt.REQUIRED_ARGUMENT, null, 'u'.toInt()),
+            LongOpt("queue", LongOpt.REQUIRED_ARGUMENT, null, 'P'.toInt())
     )
   }
 }
