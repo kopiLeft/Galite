@@ -18,6 +18,7 @@
 package org.kopi.galite.database
 
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlLogger
 import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -25,7 +26,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.database.installed.TransDB
 import org.kopi.galite.util.base.InconsistencyException
 
-abstract class Migration {
+abstract class Migration(private val logger: SqlLogger? = null) {
   /**
    * Execute command line
    */
@@ -100,7 +101,8 @@ abstract class Migration {
                                   options.trace,
                                   maxRetries = options.maxRetries,
                                   waitMin = options.waitMin,
-                                  waitMax = options.waitMax)
+                                  waitMax = options.waitMax,
+                                  logger = logger)
     } else {
       Connection.createConnection(Configuration.getString("database")!!,
                                   Configuration.getString("driver"),
@@ -111,7 +113,8 @@ abstract class Migration {
                                   Configuration.getString("trace")?.toInt(),
                                   maxRetries = Configuration.getString("maxRetries")?.toInt(),
                                   waitMin = Configuration.getString("waitMin")?.toLong(),
-                                  waitMax = Configuration.getString("waitMax")?.toLong())
+                                  waitMax = Configuration.getString("waitMax")?.toLong(),
+                                  logger = logger)
     }
   }
 
