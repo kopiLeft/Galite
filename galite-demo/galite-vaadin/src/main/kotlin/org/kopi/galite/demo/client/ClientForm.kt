@@ -26,6 +26,7 @@ import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.BOOL
@@ -133,6 +134,12 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     val PostqryTrigger = trigger(POSTQRY) {
       salesBlock.clientID[0] = clientID.value
       salesBlock.load()
+      colorier()
+      for (rec in 0 until salesBlock.block.bufferSize) {
+        if (salesBlock.block.isRecordFilled(rec)) {
+          salesBlock.colorier(rec)
+        }
+      }
     }
 
     /**
@@ -152,6 +159,14 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       }
 
       b.form.reset()
+    }
+
+    fun colorier() {
+      clientID.value?.let {
+        if (it == 1) {
+          name.setColor(VColor.CYAN, VColor.BLACK)
+        }
+      }
     }
 
     init {
@@ -213,6 +228,22 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
       command(item = list) { recursiveQuery() }
+    }
+
+    fun colorier(rec: Int) {
+      if (block.isRecordFilled(rec)) {
+        quantity[rec]?.let {
+          if (it > 2) {
+            println("Quantity = $it > 2")
+            quantity.setColor(rec, VColor.BLACK, VColor.MAGENTA)
+            quantity.vField.fireColorChanged(rec)
+          } else {
+            println("Quantity = $it <= 2")
+            quantity.setColor(rec, VColor.CYAN, VColor.BLACK)
+            quantity.vField.fireColorChanged(rec)
+          }
+        }
+      }
     }
   }
 
