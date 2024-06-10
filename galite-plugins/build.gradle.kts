@@ -21,6 +21,8 @@ plugins {
     id("maven-publish")
 }
 
+version = "1.1-026H-B"
+
 repositories {
     mavenCentral()
     mavenLocal()  // If you are using local Maven repository
@@ -50,7 +52,7 @@ publishing {
             from(components["java"])
             groupId = "org.kopi"
             artifactId = "factoryGenerator"
-            version = "1.1-026H"
+            version = "1.1-026H-B"
         }
     }
     repositories {

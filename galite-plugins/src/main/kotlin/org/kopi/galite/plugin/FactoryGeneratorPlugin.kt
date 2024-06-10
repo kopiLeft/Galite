@@ -24,8 +24,6 @@ import org.gradle.kotlin.dsl.register
 
 class FactoryGeneratorPlugin : Plugin<Project> {
   override fun apply(project: Project) {
-    project.tasks.apply {
-      register("factoryGenerator", FactoryGeneratorTask::class)
-    }
+    project.tasks.register<FactoryGeneratorTask>("factoryGenerator").get().exec()
   }
 }

@@ -22,23 +22,20 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStream
 import java.io.Writer
-import java.net.URI
 import java.net.URL
+import java.nio.file.Paths
 import java.util.*
 
 import org.apache.xmlbeans.*
 import org.apache.xmlbeans.impl.common.XmlErrorWatcher
 import org.apache.xmlbeans.impl.schema.PathResourceLoader
-import org.apache.xmlbeans.impl.schema.SchemaTypeSystemCompiler
 import org.apache.xmlbeans.impl.schema.SchemaTypeSystemImpl
 import org.apache.xmlbeans.impl.tool.CodeGenUtil
-import org.apache.xmlbeans.impl.util.FilerImpl
 
 import org.kopi.galite.util.xsdToFactory.options.FactoryGeneratorOptions
 import org.kopi.galite.util.xsdToFactory.parser.SchemaParser
 import org.kopi.galite.util.xsdToFactory.writer.FactoryCodePrinter
 import org.kopi.galite.util.xsdToFactory.utils.*
-import java.nio.file.Paths
 
 class FactoryGenerator {
 

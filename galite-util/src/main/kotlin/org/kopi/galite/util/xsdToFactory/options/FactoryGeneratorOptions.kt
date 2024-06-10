@@ -32,27 +32,27 @@ class FactoryGeneratorOptions(var name: String? = null,
 
   override fun processOption(code: Int, g: Getopt): Boolean {
     when (code) {
-      'n'.toInt() -> {
+      'n'.code -> {
         name = getString(g, "")
         return true
       }
-      'p'.toInt() -> {
+      'p'.code -> {
         fpackage = getString(g, "")
         return true
       }
-      's'.toInt() -> {
+      's'.code -> {
         source = getString(g, "")
         return true
       }
-      'd'.toInt() -> {
+      'd'.code -> {
         directory = getString(g, "")
         return true
       }
-      'c'.toInt() -> {
+      'c'.code -> {
         classpath = getString(g, "")
         return true
       }
-      'a'.toInt() -> {
+      'a'.code -> {
         getAbstract = true
         return true
       }
@@ -99,12 +99,12 @@ class FactoryGeneratorOptions(var name: String? = null,
 
   companion object {
     private val LONGOPTS = arrayOf(
-      LongOpt("name", LongOpt.NO_ARGUMENT, null, 'n'.toInt()),
-      LongOpt("fpackage", LongOpt.NO_ARGUMENT, null, 'p'.toInt()),
-      LongOpt("source", LongOpt.REQUIRED_ARGUMENT, null, 's'.toInt()),
-      LongOpt("directory", LongOpt.REQUIRED_ARGUMENT, null, 'd'.toInt()),
-      LongOpt("classpath", LongOpt.REQUIRED_ARGUMENT, null, 'c'.toInt()),
-      LongOpt("gabstract", LongOpt.NO_ARGUMENT, null, 'a'.toInt())
+      LongOpt("name", LongOpt.NO_ARGUMENT, null, 'n'.code),
+      LongOpt("fpackage", LongOpt.NO_ARGUMENT, null, 'p'.code),
+      LongOpt("source", LongOpt.REQUIRED_ARGUMENT, null, 's'.code),
+      LongOpt("directory", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
+      LongOpt("classpath", LongOpt.REQUIRED_ARGUMENT, null, 'c'.code),
+      LongOpt("gabstract", LongOpt.NO_ARGUMENT, null, 'a'.code)
     )
   }
 }

@@ -180,11 +180,11 @@ class FactoryCodePrinter: Constants {
         (if (!attribute.Required) "? = ${attribute.defaultValue}" else "") +
         (if (index == classFactory.attributes.size-1) ")" else ",")
 
-      emit("$indent$name: $type", true)
+      emit("$indent$name: $type  ${attribute.commentName}", true)
     }
     emit("${indentation(2)}: ${classFactory.className.capitalize()}", true)
     emit("${indentation(1)}{", true)
-    emit("${indentation(2)}val new${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
+    emit("${indentation(2)}val new${classFactory.className}: ${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
     classFactory.attributes.forEach{ attribute ->
       val name = attribute.name + if(attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
@@ -192,10 +192,10 @@ class FactoryCodePrinter: Constants {
       if(attribute.Required)
         emit("${indentation(2)}new${classFactory.className}.$name = $name$calendar", true)
       else
-        emit("${indentation(2)}$name?.let{ new${classFactory.className}.$name = $name$calendar }", true)
+        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $name$calendar }", true)
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
-    emit("${indentation(1)}}", true)
+    emit("${indentation(1)}}\n", true)
   }
 
   /**
@@ -219,7 +219,7 @@ class FactoryCodePrinter: Constants {
    * Adds the specific create function's body.
    */
   private fun addSpecificCreateFunction(classFactory: ClassFactory) {
-    emit("\n  /**", true)
+    emit("  /**", true)
     emit(classFactory.firstLigneComment, true)
     emit("   *", true)
     emit("   * This is a complex type.", true)
@@ -228,14 +228,14 @@ class FactoryCodePrinter: Constants {
     emit("   * @return A new `${classFactory.javaPackage}` XML instance", true)
     emit("   */", true)
     emit("${indentation(1)}fun create${classFactory.className}(${classFactory.className.decapitalize()}s: Array<XmlObject>): ${classFactory.className}Document.${classFactory.className} {", true)
-    emit("${indentation(2)}val new${classFactory.className} = ${classFactory.className}Document.${classFactory.className}.Factory.newInstance()", true)
+    emit("${indentation(2)}val new${classFactory.className} = ${classFactory.className}Document.${classFactory.className}.Factory.newInstance()\n", true)
     emit("${indentation(2)}${classFactory.className.decapitalize()}s.forEach { ${classFactory.className.decapitalize()} ->", true)
     emit("${indentation(3)}when(${classFactory.className.decapitalize()}) {", true)
     classFactory.attributes.forEach { attribute ->
       emit("${indentation(4)}is ${attribute.type}${" ".repeat((40 - attribute.type.length).absoluteValue)}-> new${classFactory.className}.add(${attribute.name} = ${classFactory.className.decapitalize()})", true)
     }
     emit("${indentation(3)}}", true)
-    emit("${indentation(2)}}", true)
+    emit("${indentation(2)}}\n", true)
     emit("${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
   }

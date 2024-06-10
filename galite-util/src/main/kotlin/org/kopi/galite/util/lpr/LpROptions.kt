@@ -39,55 +39,55 @@ class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(n
 
   override fun processOption(code: Int, g: Getopt): Boolean {
     return when (code) {
-      '#'.toInt() -> {
+      '#'.code -> {
         copies = getInt(g, 0)
         true
       }
-      'f'.toInt() -> {
+      'f'.code -> {
         filetype = getString(g, "")
         true
       }
-      'i'.toInt() -> {
+      'i'.code -> {
         indent = getInt(g, 8)
         true
       }
-      'J'.toInt() -> {
+      'J'.code -> {
         job = getString(g, "")
         true
       }
-      'm'.toInt() -> {
+      'm'.code -> {
         mail = !false
         true
       }
-      'b'.toInt() -> {
+      'b'.code -> {
         burst = !false
         true
       }
-      'r'.toInt() -> {
+      'r'.code -> {
         remove = !false
         true
       }
-      'D'.toInt() -> {
+      'D'.code -> {
         dataFirst = !false
         true
       }
-      'T'.toInt() -> {
+      'T'.code -> {
         title = getString(g, "")
         true
       }
-      't'.toInt() -> {
+      't'.code -> {
         tmpdir = getString(g, "")
         true
       }
-      'w'.toInt() -> {
+      'w'.code -> {
         width = getInt(g, 80)
         true
       }
-      'W'.toInt() -> {
+      'W'.code -> {
         windows = !false
         true
       }
-      'C'.toInt() -> {
+      'C'.code -> {
         printClass = getString(g, "")
         true
       }
@@ -139,19 +139,19 @@ class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(n
 
   companion object {
     private val LONGOPTS = arrayOf(
-            LongOpt("copies", LongOpt.REQUIRED_ARGUMENT, null, '#'.toInt()),
-            LongOpt("filetype", LongOpt.REQUIRED_ARGUMENT, null, 'f'.toInt()),
-            LongOpt("indent", LongOpt.OPTIONAL_ARGUMENT, null, 'i'.toInt()),
-            LongOpt("job", LongOpt.REQUIRED_ARGUMENT, null, 'J'.toInt()),
-            LongOpt("mail", LongOpt.NO_ARGUMENT, null, 'm'.toInt()),
-            LongOpt("burst", LongOpt.NO_ARGUMENT, null, 'b'.toInt()),
-            LongOpt("remove", LongOpt.NO_ARGUMENT, null, 'r'.toInt()),
-            LongOpt("dataFirst", LongOpt.NO_ARGUMENT, null, 'D'.toInt()),
-            LongOpt("title", LongOpt.REQUIRED_ARGUMENT, null, 'T'.toInt()),
-            LongOpt("tmpdir", LongOpt.REQUIRED_ARGUMENT, null, 't'.toInt()),
-            LongOpt("width", LongOpt.OPTIONAL_ARGUMENT, null, 'w'.toInt()),
-            LongOpt("windows", LongOpt.NO_ARGUMENT, null, 'W'.toInt()),
-            LongOpt("printClass", LongOpt.REQUIRED_ARGUMENT, null, 'C'.toInt())
+            LongOpt("copies", LongOpt.REQUIRED_ARGUMENT, null, '#'.code),
+            LongOpt("filetype", LongOpt.REQUIRED_ARGUMENT, null, 'f'.code),
+            LongOpt("indent", LongOpt.OPTIONAL_ARGUMENT, null, 'i'.code),
+            LongOpt("job", LongOpt.REQUIRED_ARGUMENT, null, 'J'.code),
+            LongOpt("mail", LongOpt.NO_ARGUMENT, null, 'm'.code),
+            LongOpt("burst", LongOpt.NO_ARGUMENT, null, 'b'.code),
+            LongOpt("remove", LongOpt.NO_ARGUMENT, null, 'r'.code),
+            LongOpt("dataFirst", LongOpt.NO_ARGUMENT, null, 'D'.code),
+            LongOpt("title", LongOpt.REQUIRED_ARGUMENT, null, 'T'.code),
+            LongOpt("tmpdir", LongOpt.REQUIRED_ARGUMENT, null, 't'.code),
+            LongOpt("width", LongOpt.OPTIONAL_ARGUMENT, null, 'w'.code),
+            LongOpt("windows", LongOpt.NO_ARGUMENT, null, 'W'.code),
+            LongOpt("printClass", LongOpt.REQUIRED_ARGUMENT, null, 'C'.code)
     )
   }
 }
