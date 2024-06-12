@@ -18,7 +18,7 @@
 plugins {
   `kotlin-dsl`
   id("java-gradle-plugin")
-  id("maven-publish")
+//  id("maven-publish")
 }
 
 version = "1.5.3"
@@ -46,6 +46,7 @@ gradlePlugin {
   }
 }
 
+/*
 publishing {
   publications {
     create<MavenPublication>("pluginGalite") {
@@ -67,3 +68,4 @@ publishing {
     }
   }
 }
+*/
