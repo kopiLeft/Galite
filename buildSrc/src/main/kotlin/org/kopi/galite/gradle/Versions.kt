@@ -30,7 +30,7 @@ object Versions {
   const val HYLAFAX = "1.0.0"
   const val GETOPT = "1.0.13"
   const val JDOM = "2.0.5"
-  const val APACHE_POI = "4.1.2"
+  const val APACHE_POI = "5.2.5"
   const val SLF4J = "1.7.30"
   const val APEX_CHARTS = "23.0.1"
   const val IRON_ICONS = "2.0.1"
@@ -42,4 +42,5 @@ object Versions {
   const val WYSIWYG_EJAVA = "2.0.1"
   const val KOTLINX_DATAFRAME = "0.8.0-rc-7"
   const val PIVOT_TABLE = "2.0.0"
+  const val XML_BEANS = "5.2.0"
 }

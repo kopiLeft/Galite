@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,16 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-data")
-include("galite-domain")
-include("galite-localizer")
-include("galite-util")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
-include("galite-plugins")
-include("galite-plugins:src:main")
-findProject(":galite-plugins:src:main")?.name = "main"
+package org.kopi.galite.plugin
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.register
+
+class FactoryGeneratorPlugin : Plugin<Project> {
+  // TODO: Review and ensure the proper functioning of the plugin declared below
+  override fun apply(project: Project) {
+    project.tasks.register<FactoryGeneratorTask>("factoryGenerator").get().exec()
+  }
+}

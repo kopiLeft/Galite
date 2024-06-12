@@ -28,6 +28,7 @@ dependencies {
   // Javax dependencies
   implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
   implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
+  implementation("org.apache.xmlbeans", "xmlbeans", Versions.XML_BEANS)
 
   //jdom2
   implementation("org.jdom","jdom2","2.0.6")

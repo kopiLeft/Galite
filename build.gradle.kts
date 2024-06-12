@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@ import org.kopi.galite.gradle.signPublication
 
 plugins {
   id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
+  id("maven-publish")
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
@@ -29,7 +30,7 @@ val releasableProjects = listOf(
   "galite-core",
   "galite-data",
   "galite-util",
-  "galite-testing",
+  "galite-testing"
 )
 
 subprojects {
