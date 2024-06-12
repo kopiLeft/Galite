@@ -23,6 +23,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
 
 class FactoryGeneratorPlugin : Plugin<Project> {
+  // TODO: Review and ensure the proper functioning of the plugin declared below
   override fun apply(project: Project) {
     project.tasks.register<FactoryGeneratorTask>("factoryGenerator").get().exec()
   }

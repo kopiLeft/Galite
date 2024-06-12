@@ -82,16 +82,14 @@ allprojects {
           pom {
             configureMavenCentralPom(project)
           }
-          //signPublication(project)
+          signPublication(project)
         }
       }
     }
   }
 }
 
-
-
-/*nexusPublishing {
+nexusPublishing {
   repositories {
     sonatype {
       nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
@@ -100,4 +98,4 @@ allprojects {
       password.set(System.getenv("SONATYPE_PASSWORD"))
     }
   }
-}*/
+}

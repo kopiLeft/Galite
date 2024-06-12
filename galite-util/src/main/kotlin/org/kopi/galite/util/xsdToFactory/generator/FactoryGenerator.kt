@@ -61,17 +61,15 @@ class FactoryGenerator {
 
     val start = System.currentTimeMillis()
 
-    val system = SchemaParser().parse(
-      params.xsdFiles,
-      params.wsdlFiles,
-      params.urlFiles,
-      params.configFiles,
-      cpResourceLoader,
-      errorListener as MutableCollection<XmlError>,
-      params.baseDir,
-      schemasDir,
-      params.classpath
-    )
+    val system = SchemaParser().parse(params.xsdFiles,
+                                      params.wsdlFiles,
+                                      params.urlFiles,
+                                      params.configFiles,
+                                      cpResourceLoader,
+                                      errorListener as MutableCollection<XmlError>,
+                                      params.baseDir,
+                                      schemasDir,
+                                      params.classpath)
 
     if (errorListener.hasError()) {
       println("FAILED TO BUILD SCHEMA")
