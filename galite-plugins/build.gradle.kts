@@ -21,7 +21,7 @@ plugins {
   id("maven-publish")
 }
 
-version = "1.5.2"
+version = "1.5.3"
 
 repositories {
   mavenCentral()
@@ -52,7 +52,7 @@ publishing {
       from(components["java"])
       groupId = "org.kopi"
       artifactId = "factoryGenerator"
-      version = "1.5.2"
+      version = "1.5.3"
     }
   }
   repositories {

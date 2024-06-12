@@ -1,3 +1,10 @@
+# 1.5.3
+## What's Changed
+* Generalize the galite factory generator by @MayssenGharbi in [#623](https://github.com/kopiLeft/Galite/pull/623)
+* Add SqlLogger to galite-data / Migration constructor by @mgrati in [#624](https://github.com/kopiLeft/Galite/pull/624)
+
+**Full Changelog**: [1.5.2 ... 1.5.3](https://github.com/kopiLeft/Galite/compare/1.5.2...1.5.3)
+
 # 1.5.2
 ## What's Changed
 * Add factory generator using .xsd files by @MayssenGharbi [#622](https://github.com/kopiLeft/Galite/pull/622)
