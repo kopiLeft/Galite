@@ -139,7 +139,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     formExample.salesBlock.editRecord(1)
 
     val block = formExample.salesBlock.findMultiBlock()
-    block.grid.expectRow(0, "", "", "", "", "", "", "", "", "", "", "Kotlin")
+    block.grid.expectRow(0, """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[text='Kotlin']""" )
   }
 
   companion object {

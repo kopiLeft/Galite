@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import java.awt.Color
 import java.util.stream.Stream
 
 import org.kopi.galite.visual.base.UComponent
@@ -496,22 +497,22 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
             // Create a div element and set its background and foreground colors
             val div = Div()
-            div.text = columnView.editorField.format(value).toString()
+            div.text = if (value is Color) "" else  columnView.editorField.format(value)?.toString() ?: ""
             backgroundColor?.let { div.style.set("background-color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
             foregroundColor?.let { div.style.set("color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
             div
           })
-                  .setKey(i.toString())
-                  .setHeader(label)
-                  .setEditorComponent(columnView.editor)
-                  .setResizable(true)
-                  .setClassNameGenerator { item ->
-                    if(editor.isOpen && editor.item == item) {
-                      "active-item"
-                    } else {
-                      ""
-                    }
-                  }
+            .setKey(i.toString())
+            .setHeader(label)
+            .setEditorComponent(columnView.editor)
+            .setResizable(true)
+            .setClassNameGenerator { item ->
+              if(editor.isOpen && editor.item == item) {
+                "active-item"
+              } else {
+                ""
+              }
+            }
 
           setAlignment(column, columnView.model.align)
 

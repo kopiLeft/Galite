@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -671,11 +671,11 @@ class CommandsFormTests : GaliteVUITestBase() {
     assertEquals("10", simpleField.value)
     assertEquals("center name", multipleField.value)
     multipleForm.block2.editRecord(1)
-    multipleBlock.grid.expectRow(0, "center name", "", "", "", "", "")
+    multipleBlock.grid.expectRow(0, """Div[text='center name']""","""Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""")
     multipleForm._break.triggerCommand()
     expectConfirmNotification(true)
     assertEquals("", simpleField.value)
-    multipleBlock.grid.expectRow(0, "", "", "", "", "", "")
+    multipleBlock.grid.expectRow(0, """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""")
   }
 
   companion object {

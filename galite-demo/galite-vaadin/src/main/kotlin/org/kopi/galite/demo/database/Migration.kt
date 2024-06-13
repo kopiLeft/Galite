@@ -246,10 +246,10 @@ fun addClient(firstName: String,
 
 fun addProducts() {
   // This data is used in automated tests
-  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("263"), ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte())))
-  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("314"), ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte())))
-  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("180"), ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte())))
-  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("65"),ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte())))
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"), ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 216.toByte())))
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"), ExposedBlob(byteArrayOf(216.toByte(), 52.toByte(), 200.toByte())))
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"), ExposedBlob(byteArrayOf(236.toByte(), 158.toByte(), 41.toByte())))
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"),ExposedBlob(byteArrayOf(255.toByte(), 102.toByte(), 102.toByte())))
   for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()

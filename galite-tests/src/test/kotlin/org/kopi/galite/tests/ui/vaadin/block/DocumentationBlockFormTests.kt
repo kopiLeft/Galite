@@ -301,7 +301,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
     val block = form.triggersMultiBlock.findMultiBlock()
     // PREREC : assert that PREREC trigger change the value of the first field when enter block
-    block.grid.expectRow(0, "PREREC Trigger", "", "")
+    block.grid.expectRow(0, """Div[text='PREREC Trigger']""",  """Div[]""",  """Div[]""")
   }
 
   @Test
@@ -313,7 +313,8 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
     val block = form.triggersMultiBlock.findMultiBlock()
     // POSTREC : assert that POSTREC trigger change the value of the second field
     // VALREC : enter block, then leave it and check valRecTrigger field
-    block.grid.expectRow(0, "PREREC Trigger", "POSTREC Trigger", "")
+
+    block.grid.expectRow(0,  """Div[text='PREREC Trigger']"""  , """Div[text='POSTREC Trigger']""", """Div[]""")
   }
 
   @Test
@@ -324,7 +325,7 @@ class DocumentationBlockFormTests : GaliteVUITestBase() {
 
     val block = form.triggersMultiBlock.findMultiBlock()
     // VALREC : enter block, then leave it and check valRecTrigger field
-    block.grid.expectRow(0, "PREREC Trigger", "POSTREC Trigger", "VALREC Trigger")
+    block.grid.expectRow(0, """Div[text='PREREC Trigger']"""  , """Div[text='POSTREC Trigger']""",  """Div[text='VALREC Trigger']""")
   }
 
   @Test

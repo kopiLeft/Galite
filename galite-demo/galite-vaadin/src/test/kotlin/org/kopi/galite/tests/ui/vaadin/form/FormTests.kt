@@ -109,12 +109,32 @@ class FormTests: GaliteVUITestBase() {
     clientForm.open()
     clientForm.list.triggerCommand()
     val block = clientForm.salesBlock.findMultiBlock()
-    val data = arrayOf(
-      arrayOf("1", "1", "description Product 0", "1", "263,00000"),
-      arrayOf("2", "2", "description Product 1", "1", "314,00000"),
-      arrayOf("3", "3", "description Product 2", "2", "180,00000"),
-      arrayOf("4", "4", "description Product 3", "3", "65,00000")
-    )
+    val data = arrayOf(arrayOf("""Div[text='1', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
+      """Div[text='1', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
+      """Div[text='description Product 0', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
+      """Div[text='1', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
+      """Div[text='100,00000', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
+      """Div[]"""),
+      arrayOf("""Div[text='2', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
+        """Div[text='2', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
+        """Div[text='description Product 1', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
+        """Div[text='1', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
+        """Div[text='200,00000', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
+        """Div[]"""),
+      arrayOf("""Div[text='3', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
+        """Div[text='3', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
+        """Div[text='description Product 2', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
+        """Div[text='2', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
+        """Div[text='300,00000', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
+        """Div[]"""),
+      arrayOf("""Div[text='4', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
+        """Div[text='4', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
+        """Div[text='description Product 3', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
+        """Div[text='3', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
+        """Div[text='400,00000', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
+      """Div[]"""))
+
+
 
     data.forEachIndexed { index, row ->
       block.grid.expectRow(index, *row)

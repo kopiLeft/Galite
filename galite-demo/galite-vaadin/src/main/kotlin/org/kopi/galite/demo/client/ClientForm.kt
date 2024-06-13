@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -181,7 +181,6 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       alias = clientsBlock.clientID
       columns(S.idClt)
     }
-
     val purchaseID = skipped(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The purchase id"
@@ -212,8 +211,9 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       help = "The item price"
       columns(P.price)
     }
-
-    val testColor = hidden(domain = COLOR()) {
+    val testColor = visit(domain = COLOR(), at(2,2)) {
+      label = "Color"
+      help = "Color field [for test purpose]"
       columns(P.color)
     }
 
