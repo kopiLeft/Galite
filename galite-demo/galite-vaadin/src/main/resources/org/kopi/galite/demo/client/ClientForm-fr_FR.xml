@@ -23,5 +23,6 @@
         <field ident="FLD_3" label="Description" help="La description du produit" />
         <field ident="FLD_4" label="Quantité" help="La quantité vendue" />
         <field ident="FLD_5" label="Prix" help="Le prix du produit" />
+        <field ident="FLD_6" label="Couleur" help="Le couleur de la ligne" />
     </block>
 </form>

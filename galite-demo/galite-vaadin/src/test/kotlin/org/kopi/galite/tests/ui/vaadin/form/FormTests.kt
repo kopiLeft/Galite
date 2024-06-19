@@ -109,32 +109,40 @@ class FormTests: GaliteVUITestBase() {
     clientForm.open()
     clientForm.list.triggerCommand()
     val block = clientForm.salesBlock.findMultiBlock()
-    val data = arrayOf(arrayOf("""Div[text='1', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
-      """Div[text='1', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
-      """Div[text='description Product 0', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
-      """Div[text='1', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
-      """Div[text='100,00000', @style='background-color:rgb(52, 178, 216);color:rgb(0, 0, 0)']""",
-      """Div[]"""),
-      arrayOf("""Div[text='2', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
-        """Div[text='2', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
-        """Div[text='description Product 1', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
-        """Div[text='1', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
-        """Div[text='200,00000', @style='background-color:rgb(216, 52, 200);color:rgb(0, 0, 0)']""",
-        """Div[]"""),
-      arrayOf("""Div[text='3', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
-        """Div[text='3', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
-        """Div[text='description Product 2', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
-        """Div[text='2', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
-        """Div[text='300,00000', @style='background-color:rgb(236, 158, 41);color:rgb(0, 0, 0)']""",
-        """Div[]"""),
-      arrayOf("""Div[text='4', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
-        """Div[text='4', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
-        """Div[text='description Product 3', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
-        """Div[text='3', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
-        """Div[text='400,00000', @style='background-color:rgb(255, 102, 102);color:rgb(0, 0, 0)']""",
-      """Div[]"""))
-
-
+    val data = arrayOf(
+      arrayOf(
+        "1".asDiv(arrayOf(52, 178, 216), arrayOf(0, 0, 0)),
+        "1".asDiv(arrayOf(52, 178, 216), arrayOf(0, 0, 0)),
+        "description Product 0".asDiv(arrayOf(52, 178, 216), arrayOf(0, 0, 0)),
+        "1".asDiv(arrayOf(52, 178, 216), arrayOf(0, 0, 0)),
+        "100,00000".asDiv(arrayOf(52, 178, 216), arrayOf(0, 0, 0)),
+        null.asDiv()
+      ),
+      arrayOf(
+        "2".asDiv(arrayOf(216, 52, 200), arrayOf(0, 0, 0)),
+        "2".asDiv(arrayOf(216, 52, 200), arrayOf(0, 0, 0)),
+        "description Product 1".asDiv(arrayOf(216, 52, 200), arrayOf(0, 0, 0)),
+        "1".asDiv(arrayOf(216, 52, 200), arrayOf(0, 0, 0)),
+        "200,00000".asDiv(arrayOf(216, 52, 200), arrayOf(0, 0, 0)),
+        null.asDiv()
+      ),
+      arrayOf(
+        "3".asDiv(arrayOf(236, 158, 41), arrayOf(0, 0, 0)),
+        "3".asDiv(arrayOf(236, 158, 41), arrayOf(0, 0, 0)),
+        "description Product 2".asDiv(arrayOf(236, 158, 41), arrayOf(0, 0, 0)),
+        "2".asDiv(arrayOf(236, 158, 41), arrayOf(0, 0, 0)),
+        "300,00000".asDiv(arrayOf(236, 158, 41), arrayOf(0, 0, 0)),
+        null.asDiv()
+      ),
+      arrayOf(
+        "4".asDiv(arrayOf(255, 102, 102), arrayOf(0, 0, 0)),
+        "4".asDiv(arrayOf(255, 102, 102), arrayOf(0, 0, 0)),
+        "description Product 3".asDiv(arrayOf(255, 102, 102), arrayOf(0, 0, 0)),
+        "3".asDiv(arrayOf(255, 102, 102), arrayOf(0, 0, 0)),
+        "400,00000".asDiv(arrayOf(255, 102, 102), arrayOf(0, 0, 0)),
+        null.asDiv()
+      )
+    )
 
     data.forEachIndexed { index, row ->
       block.grid.expectRow(index, *row)

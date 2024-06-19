@@ -665,17 +665,18 @@ class CommandsFormTests : GaliteVUITestBase() {
     val simpleField = multipleForm.block.trainingID.findField()
     val multipleField = multipleForm.block2.centerName.findField()
     val multipleBlock = multipleForm.block2.findMultiBlock()
+    val nullAsDiv = null.asDiv()
 
     multipleForm.block.trainingID.edit(10)
     multipleForm.block2.centerName.edit("center name")
     assertEquals("10", simpleField.value)
     assertEquals("center name", multipleField.value)
     multipleForm.block2.editRecord(1)
-    multipleBlock.grid.expectRow(0, """Div[text='center name']""","""Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""")
+    multipleBlock.grid.expectRow(0, "center name".asDiv(), nullAsDiv, nullAsDiv,nullAsDiv, nullAsDiv, nullAsDiv)
     multipleForm._break.triggerCommand()
     expectConfirmNotification(true)
     assertEquals("", simpleField.value)
-    multipleBlock.grid.expectRow(0, """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""")
+    multipleBlock.grid.expectRow(0, nullAsDiv, nullAsDiv, nullAsDiv, nullAsDiv, nullAsDiv, nullAsDiv)
   }
 
   companion object {

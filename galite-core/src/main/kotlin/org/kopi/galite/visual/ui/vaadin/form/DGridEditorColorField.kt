@@ -43,7 +43,7 @@ class DGridEditorColorField(columnView: VFieldUI,
   init {
     (editor as GridEditorColorField).addValueChangeListener { this }
     (editor as GridEditorColorField).getContent().element.addEventListener("change") {
-      setColortoVField((editor as GridEditorColorField).value as String?)
+      setColortoVField(((editor as GridEditorColorField).value as String?) ?: "#000000")
     }
   }
 
@@ -83,7 +83,7 @@ class DGridEditorColorField(columnView: VFieldUI,
     // Nothing to do
   }
 
-  fun setColortoVField(value: String?) {
+  private fun setColortoVField(value: String) {
     getModel().isChangedUI = true
     getModel().setColor(rgbStringToColor(value))
   }
@@ -91,9 +91,9 @@ class DGridEditorColorField(columnView: VFieldUI,
   /**
    * Convert RGB String to Java.awt.Color.
    */
-  private fun rgbStringToColor(hexString: String?): Color {
+  private fun rgbStringToColor(hexString: String): Color {
     // Remove the '#' from the beginning of the RGB string
-    val rgbString = if (hexString!!.startsWith("#")) hexString.substring(1) else hexString
+    val rgbString = if (hexString.startsWith("#")) hexString.substring(1) else hexString
 
     // Split the RGB string into red, green, and blue components
     val redHex = rgbString.substring(0, 2)

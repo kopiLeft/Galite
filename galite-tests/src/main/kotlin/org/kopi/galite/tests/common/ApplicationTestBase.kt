@@ -17,6 +17,7 @@
 
 package org.kopi.galite.tests.common
 
+import org.kopi.galite.tests.common.ApplicationTestBase.Companion.asDiv
 import org.kopi.galite.tests.database.DBSchemaTest
 import org.kopi.galite.visual.ui.vaadin.visual.VWindowController
 
@@ -28,5 +29,47 @@ open class ApplicationTestBase: DBSchemaTest() {
   companion object {
     // Use the same window controller for all tests to get all window builders available.
     val windowController = VWindowController()
+
+    /**
+     * Creates a Div as a string.
+     * @param background The background color to set to the div.
+     * @param foreground The foreground color to set to the div.
+     */
+    fun String?.asDiv(background: Array<Int>? = null, foreground: Array<Int>? = null): String {
+      // Start with the basic Div string
+      val divBuilder = StringBuilder("""Div[""")
+
+      // Add text if `this` is not null
+      if (this != null) {
+        divBuilder.append("""text='$this'""")
+      }
+
+      // Helper function to convert an array of integers to an RGB string
+      fun Array<Int>.toRgbString(): String {
+        return "rgb(${this.joinToString(", ")})"
+      }
+
+      // Add background color if provided
+      if (background != null) {
+        if (this != null) divBuilder.append(", ")
+        divBuilder.append("""@style='background-color:${background.toRgbString()}""")
+        if (foreground != null) divBuilder.append(";")
+      }
+
+      // Add foreground color if provided
+      if (foreground != null) {
+        if (background == null && this != null) divBuilder.append(", ")
+        if (background != null) divBuilder.append("color:${foreground.toRgbString()}'")
+        else divBuilder.append("""@style='color:${foreground.toRgbString()}'""")
+      } else if (background != null) {
+        divBuilder.append("'")
+      }
+
+      // Close the Div string
+      divBuilder.append("]")
+
+      // Return the constructed string
+      return divBuilder.toString()
+    }
   }
 }

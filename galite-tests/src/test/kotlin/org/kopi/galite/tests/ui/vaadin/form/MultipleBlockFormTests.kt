@@ -140,8 +140,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     val block = multipleForm.block2.findBlock() as DGridBlock
     val data = arrayOf(
-      arrayOf("""Div[text='Center 1']""", """Div[text='10,Rue Lac']""", """Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Megrine']""","""Div[text='2001']"""),
-      arrayOf("""Div[text='Center 2']""","""Div[text='14,Rue Mongi Slim']""","""Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Tunis']""", """Div[text='6000']""")
+      arrayOf("Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Megrine".asDiv(), "2001".asDiv()),
+      arrayOf("Center 2".asDiv(), "14,Rue Mongi Slim".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Tunis".asDiv(), "6000".asDiv()),
     )
 
     data.forEachIndexed { index, row ->
@@ -154,7 +154,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     waitAndRunUIQueue(500)
 
     block.grid.expect(arrayOf(
-      arrayOf("""Div[text='Center 2']""","""Div[text='14,Rue Mongi Slim']""","""Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Tunis']""", """Div[text='6000']""")
+      arrayOf("Center 2".asDiv(), "14,Rue Mongi Slim".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Tunis".asDiv(), "6000".asDiv()),
     ))
   }
 
@@ -170,10 +170,9 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val block = multipleForm.block2.findBlock() as DGridBlock
 
     assertEquals("1", field.value)
-    val div = Div()
     val data = arrayOf(
-      arrayOf("""Div[text='Center 1']""", """Div[text='10,Rue Lac']""", """Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Megrine']""","""Div[text='2001']"""),
-      arrayOf("""Div[text='Center 2']""","""Div[text='14,Rue Mongi Slim']""","""Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Tunis']""", """Div[text='6000']""")
+      arrayOf("Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Megrine".asDiv(), "2001".asDiv()),
+      arrayOf("Center 2".asDiv(), "14,Rue Mongi Slim".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Tunis".asDiv(), "6000".asDiv()),
     )
 
     data.forEachIndexed { index, row ->
@@ -198,12 +197,12 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val grid = _get<DListDialog>()._get<ListTable>()
 
     grid.expect(arrayOf(
-
-      arrayOf("""Div[text='Center 1']""",  """Div[text='training 1']""", """Div[text='Java']""", """Div[text='1.149,24000']""", """Div[text='yes']""","""Div[text='informations training 1']"""),
-      arrayOf("""Div[text='2']""", """Div[text='training 2']""", """Div[text='Galite']""", """Div[text='219,60000']""", """Div[text='yes']""", """Div[text='informations training 2']"""),
-      arrayOf("""Div[text='3']""", """Div[text='training 3']""", """Div[text='Kotlin']""", """Div[text='146,90000']""", """Div[text='yes']""", """Div[text='informations training 3']"""),
-      arrayOf("""Div[text='4']""", """Div[text='training 4']""", """Div[text='Galite']""", """Div[text='3.129,70000']""", """Div[text='yes']""", """Div[text='informations training 4']""")
-    ))
+      arrayOf("Center 1".asDiv(), "training 1".asDiv(), "Java".asDiv(), "1.149,24000".asDiv(), "yes".asDiv(), "informations training 1".asDiv()),
+      arrayOf("2".asDiv(), "training 2".asDiv(), "Galite".asDiv(), "219,60000".asDiv(), "yes".asDiv(), "informations training 2".asDiv()),
+      arrayOf("3".asDiv(), "training 3".asDiv(), "Kotlin".asDiv(), "146,90000".asDiv(), "yes".asDiv(), "informations training 3".asDiv()),
+      arrayOf("4".asDiv(), "training 4".asDiv(), "Galite".asDiv(), "3.129,70000".asDiv(), "yes".asDiv(), "informations training 4".asDiv()),
+      )
+    )
 
     // Choose third row
     grid.selectionModel.selectFromClient(grid.dataCommunicator.getItem(2))
@@ -216,9 +215,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     // Dialog is closed and row data are filled into the form
     assertFalse(listDialog.isOpened)
     assertEquals("3", field.value)
-    val data = arrayOf(
-      arrayOf("""Div[text='Center 3']""","""Div[text='10,Rue du Lac']""","""Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Mourouj']""", """Div[text='5003']""")
-    )
+    val data = arrayOf(arrayOf("Center 3".asDiv(), "10,Rue du Lac".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Mourouj".asDiv(), "5003".asDiv()))
 
     data.forEachIndexed { index, row ->
       block.grid.expectRow(index, *row)
@@ -244,9 +241,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     waitAndRunUIQueue(100)
 
     val block = form.block2.findBlock() as DGridBlock
-    var data = arrayOf(
-      arrayOf("""Div[text='Center 1']""", """Div[text='10,Rue Lac']""", """Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Megrine']""","""Div[text='2001']"""),
-      )
+    val nullAsDiv = null.asDiv()
+    var data = arrayOf(arrayOf("Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Megrine".asDiv(), "2001".asDiv()))
 
     data.forEachIndexed { index, row ->
       block.grid.expectRow(index, *row)
@@ -257,8 +253,8 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     // the added row will take the position of the current focused record
     assertEquals(0, block.editor.item.record)
     data = arrayOf(
-      arrayOf("""Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]""", """Div[]"""),
-      arrayOf("""Div[text='Center 1']""", """Div[text='10,Rue Lac']""", """Div[text='example@mail']""", """Div[text='Tunisia']""", """Div[text='Megrine']""","""Div[text='2001']"""),
+      arrayOf(nullAsDiv, nullAsDiv,nullAsDiv, nullAsDiv, nullAsDiv,nullAsDiv),
+      arrayOf("Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv(), "Tunisia".asDiv(), "Megrine".asDiv(), "2001".asDiv()),
     )
 
     data.forEachIndexed { index, row ->
@@ -291,11 +287,11 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
       multipleBlockSaveForm.saveBlock.triggerCommand()
       val block = multipleBlockSaveForm.multipleBlock.findBlock() as DGridBlock
       val data = arrayOf(
-        arrayOf("""Div[text='2']""", """Div[text='Center 1']""", """Div[text='new address']""","""Div[text='example@mail']"""),
-        arrayOf("""Div[text='1']""", """Div[text='Center 1']""", """Div[text='10,Rue Lac']""", """Div[text='example@mail']"""),
-        arrayOf("""Div[text='1']""", """Div[text='Center 2']""", """Div[text='14,Rue Mongi Slim']""", """Div[text='example@mail']"""),
-        arrayOf("""Div[text='3']""","""Div[text='Center 3']""", """Div[text='10,Rue du Lac']""", """Div[text='example@mail']"""),
-        arrayOf("""Div[text='4']""", """Div[text='Center 4']""", """Div[text='10,Rue du Lac']""", """Div[text='example@mail']""")
+        arrayOf("2".asDiv(), "Center 1".asDiv(), "new address".asDiv(), "example@mail".asDiv()),
+        arrayOf("1".asDiv(), "Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv()),
+        arrayOf("1".asDiv(), "Center 2".asDiv(), "14,Rue Mongi Slim".asDiv(), "example@mail".asDiv()),
+        arrayOf("3".asDiv(), "Center 3".asDiv(), "10,Rue du Lac".asDiv(), "example@mail".asDiv()),
+        arrayOf("4".asDiv(), "Center 4".asDiv(), "10,Rue du Lac".asDiv(), "example@mail".asDiv())
       )
 
       data.forEachIndexed { index, row ->
@@ -309,14 +305,14 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
       multipleBlockSaveForm.multipleBlock.block.activeRecord = 0
       multipleBlockSaveForm.multipleBlock.address.edit("10,Rue Lac")
       multipleBlockSaveForm.saveBlock.triggerCommand()
-      val newdata = arrayOf(
-        arrayOf("""Div[text='2']""", """Div[text='Center 1']""", """Div[text='10,Rue Lac']""","""Div[text='example@mail']"""),
-        arrayOf("""Div[text='1']""", """Div[text='Center 1']""", """Div[text='10,Rue Lac']""", """Div[text='example@mail']"""),
-        arrayOf("""Div[text='1']""", """Div[text='Center 2']""", """Div[text='14,Rue Mongi Slim']""", """Div[text='example@mail']"""),
-        arrayOf("""Div[text='3']""","""Div[text='Center 3']""", """Div[text='10,Rue du Lac']""", """Div[text='example@mail']"""),
-        arrayOf("""Div[text='4']""", """Div[text='Center 4']""", """Div[text='10,Rue du Lac']""", """Div[text='example@mail']""")
-      )
 
+      val newdata = arrayOf(
+        arrayOf("2".asDiv(), "Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv()),
+        arrayOf("1".asDiv(), "Center 1".asDiv(), "10,Rue Lac".asDiv(), "example@mail".asDiv()),
+        arrayOf("1".asDiv(), "Center 2".asDiv(), "14,Rue Mongi Slim".asDiv(), "example@mail".asDiv()),
+        arrayOf("3".asDiv(), "Center 3".asDiv(), "10,Rue du Lac".asDiv(), "example@mail".asDiv()),
+        arrayOf("4".asDiv(), "Center 4".asDiv(), "10,Rue du Lac".asDiv(), "example@mail".asDiv())
+      )
       newdata.forEachIndexed { index, row ->
         block.grid.expectRow(index, *row)
       }
