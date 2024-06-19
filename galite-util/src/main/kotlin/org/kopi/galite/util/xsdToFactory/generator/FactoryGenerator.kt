@@ -54,8 +54,6 @@ class FactoryGenerator {
 
     params.baseDir = params.baseDir ?: File(SystemProperties.getProperty("user.dir"))
     val cpResourceLoader = params.classpath?.let { PathResourceLoader(it) }
-    val schemasDir =
-      IOUtil.createDir(params.classesDir!!, "schema" + SchemaTypeSystemImpl.METADATA_PACKAGE_GEN + "/src")
     val errorListener = XmlErrorWatcher(params.errorListener)
     params.resourceLoader = cpResourceLoader
 
@@ -68,7 +66,6 @@ class FactoryGenerator {
                                       cpResourceLoader,
                                       errorListener as MutableCollection<XmlError>,
                                       params.baseDir,
-                                      schemasDir,
                                       params.classpath)
 
     if (errorListener.hasError()) {
@@ -123,7 +120,7 @@ class FactoryGenerator {
     }
 
     val finish = System.currentTimeMillis()
-    println("Time to generate factory classes code: " + ((finish - start).toDouble() / 1000.0) + " seconds")
+    println("\u001B[35mTime to generate factory classe(s) code: " + ((finish - start).toDouble() / 1000.0) + " seconds")
   }
 
   /**

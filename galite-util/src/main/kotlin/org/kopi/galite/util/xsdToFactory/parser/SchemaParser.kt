@@ -41,7 +41,6 @@ class SchemaParser {
 		        cpResourceLoader: ResourceLoader?,
 		        outerErrorListener: MutableCollection<XmlError>?,
 		        baseDir: File?,
-		        schemasDir: File?,
 		        classpath: Array<File>?): SchemaTypeSystem {
 		val errorListener = XmlErrorWatcher(outerErrorListener)
 		val state = StscState.start()
@@ -125,7 +124,6 @@ class SchemaParser {
 			options = opts
 			setErrorListener(errorListener)
 			isJavaize = true
-			this.schemasDir = schemasDir
 			baseDir?.let { baseURI = it.toURI() }
 		}
 
