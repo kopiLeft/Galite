@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,6 +52,10 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
                                                               model.align,
                                                               (model as VImageField).iconWidth,
                                                               model.iconHeight,
+                                                              model.options)
+        VField.MDL_FLD_COLOR -> field = DGridEditorColorField(this,
+                                                              label as? DGridEditorLabel,
+                                                              model.align,
                                                               model.options)
         VField.MDL_FLD_ACTOR -> field = DGridEditorActorField(this,
                                                               label as? DGridEditorLabel,

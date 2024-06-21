@@ -118,7 +118,7 @@ class BillR : Report("Bills_Report", locale = Locale.UK) {
     transaction {
       bills.forEach { result ->
         add {
-          this[numBill] = result[Bill.numBill]
+          this[numBill] = result[Bill.id]
           this[addressBill] = result[Bill.addressBill]
           this[dateBill] = result[Bill.dateBill]
           this[amountWithTaxes] = result[Bill.amountWithTaxes]

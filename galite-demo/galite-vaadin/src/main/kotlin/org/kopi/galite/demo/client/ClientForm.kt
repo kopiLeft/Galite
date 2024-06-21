@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,9 +26,11 @@ import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.BOOL
+import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.ListDomain
@@ -41,6 +43,7 @@ import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
 import org.kopi.galite.visual.dsl.form.Key
 import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VField
 
 class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
@@ -133,6 +136,11 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
     val PostqryTrigger = trigger(POSTQRY) {
       salesBlock.clientID[0] = clientID.value
       salesBlock.load()
+      for (rec in 0 until salesBlock.block.bufferSize) {
+        if (salesBlock.block.isRecordFilled(rec)) {
+          salesBlock.colorier(rec)
+        }
+      }
     }
 
     /**
@@ -173,7 +181,6 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       alias = clientsBlock.clientID
       columns(S.idClt)
     }
-
     val purchaseID = skipped(domain = INT(5), position = at(1, 1..2)) {
       label = "ID"
       help = "The purchase id"
@@ -204,6 +211,11 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       help = "The item price"
       columns(P.price)
     }
+    val testColor = visit(domain = COLOR, at(2,2)) {
+      label = "Color"
+      help = "Color field [for test purpose]"
+      columns(P.color)
+    }
 
     init {
       border = Border.LINE
@@ -213,6 +225,20 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
       command(item = list) { recursiveQuery() }
+    }
+
+    fun colorier(rec: Int) {
+      if (block.isRecordFilled(rec)) {
+        var backgroundColor = VColor.WHITE
+
+        testColor.vField.getColor(rec)?.let { backgroundColor = VColor(it.red, it.green, it.blue) }
+        for (field in block.fields) {
+          if (field.getType() != VField.MDL_FLD_COLOR) {
+            field.setColor(rec, VColor.BLACK, backgroundColor)
+            field.fireColorChanged(rec)
+          }
+        }
+      }
     }
   }
 

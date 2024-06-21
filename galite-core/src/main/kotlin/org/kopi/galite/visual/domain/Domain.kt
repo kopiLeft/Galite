@@ -27,6 +27,7 @@ import java.time.LocalTime
 import kotlin.reflect.KClass
 
 import org.joda.time.DateTime
+import org.kopi.galite.type.Color
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
@@ -148,6 +149,7 @@ open class Domain<T>(val width: Int? = null,
         org.joda.time.LocalTime::class, LocalTime::class -> VTimeField(block.buffer)
         Instant::class, LocalDateTime::class, DateTime::class -> VTimestampField(block.buffer, kClass)
         Image::class -> VImageField(block.buffer, width!!, height!!)
+        Color::class -> VColorField(block.buffer)
         else -> {
           if(this@Domain is TEXT) {
             VTextField(block.buffer,

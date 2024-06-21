@@ -22,6 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
+import org.kopi.galite.type.Color
 import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
@@ -124,6 +125,11 @@ class FRACTION(width: Int, init: Domain<BigDecimal>.() -> Unit = {}) : Domain<Bi
     init()
   }
 }
+
+/**
+ * This Field type is used to show a color picked by the user.
+ */
+object COLOR: Domain<Color>()
 
 /**
  * In a BOOL you have to assign a Boolean value to the item you have entered.

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,7 @@ import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
-class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
+class VColorField(val bufferSize: Int) : VField(1,1) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -146,7 +146,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  override fun getColor(r: Int): Color = getObject(r) as Color
+  override fun getColor(r: Int): Color? = getObject(r) as Color?
 
   /**
    * Returns the field value of the current record as an object
@@ -171,7 +171,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else "?"
+  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else colorToRgbString(value[r])
 
   /**
    * Copies the value of a record to another
@@ -196,12 +196,17 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   override fun hasLargeObject(r: Int): Boolean = value[r] != null
 
   /**
+   * Warning:	This method will become inaccessible to users in next release
+   */
+  override fun hasBinaryLargeObject(r: Int): Boolean = true
+
+  /**
    * Returns the SQL representation of field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun getLargeObject(r: Int): InputStream? {
     return value[r]?.let {
-      ByteArrayInputStream(getObjectImpl(r) as ByteArray?)
+      ByteArrayInputStream(getByteArrayFromColor(getObjectImpl(r) as Color) as ByteArray?)
     }
   }
 
@@ -213,11 +218,6 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
   // ----------------------------------------------------------------------
-
-  /**
-   * Returns a string representation of a date value wrt the field type.
-   */
-  fun formatImage(value: Any): String = "image"
 
   /**
    * autofill
@@ -234,5 +234,29 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   /**
    * Reformat a unsigned int from a byte
    */
-  private fun reformat(b: Byte): Int = if (b < 0) b + 255 else b.toInt()
+  private fun reformat(b: Byte): Int = if (b < 0) b + 256 else b.toInt()
+
+  /**
+   * Get byteArray from Color
+   */
+  fun getByteArrayFromColor(color: Color): ByteArray {
+    val rgb = color.rgb
+    val red = (rgb shr 16) and 0xFF
+    val green = (rgb shr 8) and 0xFF
+    val blue = rgb and 0xFF
+
+    return byteArrayOf(red.toByte(), green.toByte(), blue.toByte())
+  }
+
+  /**
+   * Convert a java.awt.Color to HexString
+   */
+  fun colorToRgbString(c: Color?): String {
+    val color = c ?: Color(0,0,0)
+    val redHex = String.format("%02x", color.red)
+    val greenHex = String.format("%02x", color.green)
+    val blueHex = String.format("%02x", color.blue)
+
+    return "$redHex$greenHex$blueHex"
+  }
 }

@@ -1332,7 +1332,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getColor(): Color = getColor(block!!.currentRecord)
+  fun getColor(): Color? = getColor(block!!.currentRecord)
 
   /**
    * Returns the display representation of field value of the current record.
@@ -1477,7 +1477,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getColor(r: Int): Color {
+  open fun getColor(r: Int): Color? {
     throw InconsistencyException()
   }
 

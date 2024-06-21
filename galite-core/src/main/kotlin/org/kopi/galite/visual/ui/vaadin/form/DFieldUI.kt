@@ -67,6 +67,8 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
       VField.MDL_FLD_IMAGE -> DImageField(this, label as? DLabel, model.align,
                                           0, (model as VImageField).iconWidth,
                                           model.iconHeight, detail)
+      VField.MDL_FLD_COLOR -> DColorField(this, label as? DLabel, model.align,
+                                          0, detail)
       VField.MDL_FLD_ACTOR -> DActorField(this, label as? DLabel, model.align,
                                           model.options, detail)
       else -> throw InconsistencyException("Type of model " + model.getType().toString() + " not supported.")
