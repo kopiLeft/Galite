@@ -47,7 +47,6 @@ subprojects {
     maven {
       url = uri("https://mvnrepository.com/artifact/org.vaadin.addons")
     }
-    mavenLocal()
   }
 
   dependencies {
@@ -81,9 +80,9 @@ allprojects {
           artifactId = project.name
           from(project.components["java"])
           pom {
-            name.set(project.name)
+            configureMavenCentralPom(project)
           }
-         // signPublication(project)
+          signPublication(project)
         }
       }
     }
