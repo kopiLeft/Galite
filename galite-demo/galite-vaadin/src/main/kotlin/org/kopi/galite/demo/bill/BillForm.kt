@@ -23,6 +23,7 @@ import org.kopi.galite.demo.database.Bill
 import org.kopi.galite.demo.database.Command
 import org.kopi.galite.demo.desktop.runForm
 import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.DATE
 import org.kopi.galite.visual.domain.DECIMAL
@@ -30,34 +31,43 @@ import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Block
-import org.kopi.galite.visual.dsl.form.DictionaryForm
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.Form
+import org.kopi.galite.visual.form.VBlock
 
-class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
-  val page = page("Bill")
+class BillForm : Form(title = "Bills", locale = Locale.UK) {
 
   init {
     insertMenus()
     insertCommands()
   }
 
-  val tb1 = page.insertBlock(BlockBill()) {
-    command(item = report) {
-      createReport {
-        BillR()
-      }
-    }
+  val tb1 = insertBlock(BlockBill()) {
+    options(BlockOption.NODETAIL)
 
-    command(item = menuQuery) { recursiveQuery() }
     trigger(POSTQRY) {
       val color: Color = testColor.value as Color? ?: Color.BLACK
       val vColor = VColor(color.red, color.green, color.blue)
 
       addressBill.vField.setColor(vColor, VColor.WHITE)
     }
-    command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
   }
 
-  class BlockBill : Block("Bills", 1, 1) {
+  inner class BlockBill : Block("Bills", 100, 10) {
+
+    init {
+      command(item = deleteLine) { effacerLigne(block) }
+      command(item = menuQuery, Mode.QUERY) {
+        transaction {
+          tb1.load()
+        }
+        setMode(Mode.UPDATE)
+      }
+      command(item = save, Mode.INSERT, Mode.UPDATE) {
+        save(block)
+      }
+    }
+
     val u = table(Bill)
     val v = table(Command)
 
@@ -90,6 +100,25 @@ class BillForm : DictionaryForm(title = "Bills", locale = Locale.UK) {
       label = "Command reference"
       help = "The command reference"
       columns(u.refCmd, v.numCmd)
+    }
+  }
+
+  private fun effacerLigne(b: VBlock) {
+    val rec: Int = b.activeRecord
+
+    if ( rec == -1) return
+    if (b.isRecordFilled(rec)) {
+      b.setRecordDeleted(rec, true)
+      transaction { b.refreshLookup(rec) }
+    }
+    b.form.gotoBlock(b)
+    b.gotoRecord(rec + 1)
+  }
+
+  fun save(b: VBlock) {
+    b.validate()
+    transaction {
+      tb1.save()
     }
   }
 }
