@@ -84,7 +84,7 @@ class FactoryCodePrinter: Constants {
             else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
 
           val attribute = Attribute(name = attributeName,
-                                    type = getKotlinTypeForProperty(propertie.type.fullJavaName),
+                                    type = getKotlinTypeForProperty(propertie.type),
                                     isList = propertie.extendsJavaArray(),
                                     defaultValue = propertie.defaultValue?.stringValue ?: "null",
                                     isElement = !propertie.isAttribute,
@@ -278,41 +278,44 @@ class FactoryCodePrinter: Constants {
   /**
    * Get the kotlin type of an xmlType entered as a string.
    */
-  private fun getKotlinTypeForProperty(type: String): String {
-    val xmlType = type.split(".").last().replace("$", ".")
+  private fun getKotlinTypeForProperty(type: SchemaType): String {
+
+    val xmlType = if (!type.isSimpleType || type.fullJavaName.startsWith("org.apache.xmlbeans"))
+      type.fullJavaName.split(".").last().replace("$", ".")
+    else type.baseType.name.localPart
 
     return when (xmlType) {
-      "XmlDate" -> {
+      "XmlDate", "date" -> {
         importFactory.addAll(listOf("java.time.LocalDate",
           "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
         "LocalDate"
       }
-      "XmlByte" -> "Byte"
-      "XmlHexBinary" -> "ByteArray"
-      "XmlTime" -> {
+      "XmlByte", "byte" -> "Byte"
+      "XmlHexBinary", "hexBinary" -> "ByteArray"
+      "XmlTime", "time" -> {
         importFactory.addAll(listOf("java.time.LocalTime",
           "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
         "LocalTime"
       }
-      "XmlDateTime" -> {
+      "XmlDateTime", "dateTime" -> {
         importFactory.addAll(listOf("java.time.LocalDateTime",
           "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
         "LocalDateTime"
       }
-      "XmlDuration" -> {
+      "XmlDuration", "duration" -> {
         importFactory.add("java.time.Duration")
         "Duration"
       }
-      "XmlDecimal" -> {
+      "XmlDecimal", "decimal" -> {
         importFactory.add("java.math.BigDecimal")
         "BigDecimal"
       }
-      "XmlInt" -> "Int"
-      "XmlString" -> "String"
-      "XmlBoolean" -> "Boolean"
-      "XmlLong" -> "Long"
-      "XmlShort" -> "Short"
-      "XmlDouble" -> "Double"
+      "XmlInt", "int" -> "Int"
+      "XmlString", "string" -> "String"
+      "XmlBoolean", "boolean" -> "Boolean"
+      "XmlLong", "long" -> "Long"
+      "XmlShort", "short" -> "Short"
+      "XmlDouble", "double" -> "Double"
       else -> xmlType
     }
 
