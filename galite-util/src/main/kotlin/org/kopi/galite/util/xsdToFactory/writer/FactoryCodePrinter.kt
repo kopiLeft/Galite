@@ -91,7 +91,10 @@ class FactoryCodePrinter: Constants {
                                     isCalendarAttribute = propertie.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
                                     Required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
                                       else !propertie.extendsJavaOption(),
-                                    commentName = "// $comment")
+                                    commentName = "// $comment",
+                                    simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
+                                      propertie.type.fullJavaName.split(".").last().replace("$", ".") else "",
+                                    hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
 
           if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
             attribute.defaultValue = getDefaultBigDecimal(attribute.defaultValue)
@@ -188,11 +191,13 @@ class FactoryCodePrinter: Constants {
     classFactory.attributes.forEach{ attribute ->
       val name = attribute.name + if(attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
+      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($name$calendar)" else
+        "$name$calendar"
 
       if(attribute.Required)
-        emit("${indentation(2)}new${classFactory.className}.$name = $name$calendar", true)
+        emit("${indentation(2)}new${classFactory.className}.$name = $value", true)
       else
-        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $name$calendar }", true)
+        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $value }", true)
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
@@ -510,7 +515,9 @@ data class Attribute(var name: String,
                      var isElement: Boolean,
                      var isCalendarAttribute: Boolean,
                      val Required: Boolean,
-                     var commentName: String = "")
+                     var commentName: String = "",
+                     val simpleType: String,
+                     val hasStringEnumValues: Boolean)
 
 /**
  * Represents a class factory.
