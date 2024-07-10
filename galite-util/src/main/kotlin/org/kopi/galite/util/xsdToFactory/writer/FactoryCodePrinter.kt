@@ -33,6 +33,7 @@ import org.apache.xmlbeans.impl.common.NameUtil
 
 import org.kopi.galite.util.xsdToFactory.utils.Constants
 import org.kopi.galite.util.xsdToFactory.utils.Factory
+import org.kopi.galite.util.xsdToFactory.parser.SchemaParser.Companion.getDigits
 
 class FactoryCodePrinter: Constants {
   private var writer: Writer? = null
@@ -311,9 +312,38 @@ class FactoryCodePrinter: Constants {
         importFactory.add("java.time.Duration")
         "Duration"
       }
-      "XmlDecimal", "decimal" -> {
+      "XmlDecimal" -> {
         importFactory.add("java.math.BigDecimal")
         "BigDecimal"
+      }
+      "decimal" -> {
+        val totalDigits = type.getDigits(SchemaType.FACET_TOTAL_DIGITS)
+        val fractionDigits = type.getDigits(SchemaType.FACET_FRACTION_DIGITS)
+
+        if (totalDigits == null && fractionDigits == null) {
+          importFactory.add("java.math.BigDecimal")
+          "BigDecimal"
+        } else if (fractionDigits == 0) {
+          when {
+            totalDigits == null -> {
+              importFactory.add("java.math.BigDecimal")
+              "BigDecimal"
+            }
+            totalDigits <= 9 -> {
+              "Int"
+            }
+            totalDigits <= 18 -> {
+              "Long"
+            }
+            else -> {
+              importFactory.add("java.math.BigInteger")
+              "BigInteger"
+            }
+          }
+        } else {
+          importFactory.add("java.math.BigDecimal")
+          "BigDecimal"
+        }
       }
       "XmlInt", "int" -> "Int"
       "XmlString", "string" -> "String"
@@ -323,7 +353,6 @@ class FactoryCodePrinter: Constants {
       "XmlDouble", "double" -> "Double"
       else -> xmlType
     }
-
   }
 
   /**

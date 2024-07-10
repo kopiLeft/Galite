@@ -120,6 +120,7 @@ class FactoryGenerator {
 
     factories.forEach {
       printFactory(it, params.srcDir, params.classesDir)
+      println("\u001B[32mFactory generated :  ${it.fullName}.kt")
     }
 
     val finish = System.currentTimeMillis()
