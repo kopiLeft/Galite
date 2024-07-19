@@ -972,8 +972,9 @@ abstract class VBlock(var title: String,
     var index = getFieldIndex(activeField)
     var target: VField? = null
     val old: VField? = activeField
-
+//    println("Before leave in gotoNextField function under VBlock")
     activeField!!.leave(true)
+//    println("After leave in gotoNextField function under VBlock")
 
     var i = 0
     while (target == null && i < fields.size) {

@@ -21,6 +21,7 @@ import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.KeyModifier
+import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 
 fun Component.addJSKeyDownListener(shortCuts: MutableMap<String, ShortcutAction<*>>) {
   val jsCall = """
@@ -48,9 +49,27 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
       val conditions = "$keyConditions $modifiersConditions"
 
       if (first) {
-        append("if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()}); event.preventDefault();}")
+        append("""
+          if ($conditions) {
+            console.log("Navigator Key: $navigatorKey");
+            console.log("Value: ",${inputValueExpression()});
+             console.log("Value of field       : ",this.value);
+            console.log("Value of inputElement: ", this.inputElement.value);
+            this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()});
+            event.preventDefault();
+          }
+        """.trimIndent())
       } else {
-        append("else if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()}); event.preventDefault();}")
+        append("""
+          else if ($conditions) {
+            console.log("Navigator Key: $navigatorKey");
+            console.log("Value: ",${inputValueExpression()});
+            console.log("Value of field       : ",this.value);
+            console.log("Value of inputElement: ", this.inputElement.value);
+            this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()});
+            event.preventDefault();
+          }
+        """.trimIndent())
       }
 
       first = false
@@ -62,6 +81,7 @@ fun Component.inputValueExpression(): String {
   return when (this) {
     is VTimeField -> "this.inputElement.value"
     is VTimeStampField -> "this.__datePicker.inputElement.value + ' ' + this.__timePicker.inputElement.value"
+    is VCodeField -> "this.inputElement.value"
     else -> "this.value"
   }
 }

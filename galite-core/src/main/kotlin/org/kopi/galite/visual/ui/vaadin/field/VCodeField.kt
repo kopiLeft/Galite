@@ -35,8 +35,14 @@ class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String
 
   init {
     internalField.setItems(Arrays.stream(enumerations))
-    internalField.isAutofocus = true
+//    internalField.isAutofocus = true
     element.themeList.add("galite-combobox")
+    internalField.addValueChangeListener {
+      println("ComboBox value changed: ${internalField.value}")
+//      val stackTrace = Thread.currentThread().stackTrace
+//      stackTrace.forEachIndexed {i,row-> println("Stack $i ---> $row") }
+
+    }
   }
 
 
