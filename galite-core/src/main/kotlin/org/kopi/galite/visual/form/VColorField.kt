@@ -26,7 +26,6 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.visual.list.VColorColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
@@ -110,8 +109,8 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    if (v is ByteArray) {
-      setColor(r, Color(reformat(v[0]), reformat(v[1]), reformat(v[2])))
+    if (v is Int) {
+      setColor(r, Color(v))
     } else {
       setColor(r, v as Color?)
     }
@@ -123,11 +122,8 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
    * @param    column       the column in the tuple
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
-    val bytes = when (val value = result[column]) {
-      is ExposedBlob -> {
-        value.bytes
-      }
-      is ByteArray -> {
+    val color = when (val value = result[column]) {
+      is Int -> {
         value
       }
       else -> {
@@ -135,7 +131,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
       }
     }
 
-    return Color(reformat(bytes[0]), reformat(bytes[1]), reformat(bytes[2]))
+    return Color(color)
   }
 
   /**
@@ -171,7 +167,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else colorToRgbString(value[r])
+  override fun getSqlImpl(r: Int): Int? = if (value[r] == null) null else value[r]!!.rgb
 
   /**
    * Copies the value of a record to another
@@ -198,7 +194,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
   /**
    * Warning:	This method will become inaccessible to users in next release
    */
-  override fun hasBinaryLargeObject(r: Int): Boolean = true
+  override fun hasBinaryLargeObject(r: Int): Boolean = false
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -232,11 +228,6 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
   }
 
   /**
-   * Reformat a unsigned int from a byte
-   */
-  private fun reformat(b: Byte): Int = if (b < 0) b + 256 else b.toInt()
-
-  /**
    * Get byteArray from Color
    */
   fun getByteArrayFromColor(color: Color): ByteArray {
@@ -246,17 +237,5 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
     val blue = rgb and 0xFF
 
     return byteArrayOf(red.toByte(), green.toByte(), blue.toByte())
-  }
-
-  /**
-   * Convert a java.awt.Color to HexString
-   */
-  fun colorToRgbString(c: Color?): String {
-    val color = c ?: Color(0,0,0)
-    val redHex = String.format("%02x", color.red)
-    val greenHex = String.format("%02x", color.green)
-    val blueHex = String.format("%02x", color.blue)
-
-    return "$redHex$greenHex$blueHex"
   }
 }

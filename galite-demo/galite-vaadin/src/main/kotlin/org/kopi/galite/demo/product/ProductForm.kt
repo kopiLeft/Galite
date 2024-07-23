@@ -21,6 +21,7 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.Sequence
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.DECIMAL
 import org.kopi.galite.visual.domain.IMAGE
@@ -53,6 +54,11 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
       label = "Description"
       help = "The product description"
       columns(u.description)
+    }
+    val testColor = visit(domain = COLOR, position = at(1,2)) {
+      label =" Color"
+      help = "This is a test color field"
+      columns(u.color)
     }
     val price = mustFill(domain = DECIMAL(20, 10), follow(description)) {
       label = "Price"
@@ -99,12 +105,11 @@ object Category : CodeDomain<Int>() {
 
 object Tax : CodeDomain<String>() {
   init {
-    "0%"  keyOf "tax 0"
-    "19%" keyOf "tax 1"
-    "9%" keyOf "tax 2"
-    "13%" keyOf "tax 3"
-    "22%" keyOf "tax 4"
-    "11%" keyOf "tax 5"
+    "19%"  keyOf "tax 1"
+    "22%"  keyOf "tax 2"
+    "13%"  keyOf "tax 3"
+    "9%"   keyOf "tax 4"
+    "20%"  keyOf "tax 5"
   }
 }
 

@@ -29,7 +29,6 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.*
@@ -246,10 +245,10 @@ fun addClient(firstName: String,
 
 fun addProducts() {
   // This data is used in automated tests
-  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"), ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 216.toByte())))
-  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"), ExposedBlob(byteArrayOf(216.toByte(), 52.toByte(), 200.toByte())))
-  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"), ExposedBlob(byteArrayOf(236.toByte(), 158.toByte(), 41.toByte())))
-  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"),ExposedBlob(byteArrayOf(255.toByte(), 102.toByte(), 102.toByte())))
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"), 3453656)
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"), 14169288)
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"), 15506985)
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"), 16737894)
   for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()
@@ -257,13 +256,13 @@ fun addProducts() {
     val gender = listOf("Men", "Women", "Children").random()
     val supplier = listOf("Supplier 0", "Supplier 1", "Supplier 2").random()
     val price = (50..500).random().toBigDecimal()
-    val color = ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte()))
+    val color = (Int.MIN_VALUE..Int.MAX_VALUE).random()
 
     addProduct(description, category, tax, gender, supplier, price, color)
   }
 }
 
-fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal, col: ExposedBlob) {
+fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal, col: Int) {
   Product.insert {
     it[Product.description] = description
     it[Product.department] = department
@@ -333,13 +332,13 @@ fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null)
 }
 
 fun addBills() {
-  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
-  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
-  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
-  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, 7652806)
+  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, 2662474)
+  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, 3502417)
+  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, 5281517)
 }
 
-fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int, col: ExposedBlob) {
+fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int, col: Int) {
   Bill.insert {
     it[id] = num
     it[addressBill] = address
