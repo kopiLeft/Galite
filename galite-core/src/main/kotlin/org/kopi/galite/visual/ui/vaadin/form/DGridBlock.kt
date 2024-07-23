@@ -47,6 +47,7 @@ import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.component.grid.editor.EditorImpl
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Input
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
@@ -59,6 +60,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
+import org.kopi.galite.visual.base.Utils
 
 /**
  * Grid based chart block implementation.
@@ -497,9 +499,17 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
             // Create a div element and set its background and foreground colors
             val div = Div()
-            div.text = if (value is Color) "" else  columnView.editorField.format(value)?.toString() ?: ""
-            backgroundColor?.let { div.style.set("background-color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
-            foregroundColor?.let { div.style.set("color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
+            if (value is Color) {
+              val input = Input()
+
+              input.type = "color"
+              input.value = "#" + Utils.colorToRgbString(value)
+              div.add(input)
+            } else {
+              div.text = columnView.editorField.format(value)?.toString() ?: ""
+              backgroundColor?.let { div.style.set("background-color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
+              foregroundColor?.let { div.style.set("color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
+            }
             div
           })
             .setKey(i.toString())

@@ -27,10 +27,11 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.base.Utils
 import org.kopi.galite.visual.list.VColorColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VlibProperties
 
 class VColorField(val bufferSize: Int) : VField(1,1) {
 
@@ -171,7 +172,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else colorToRgbString(value[r])
+  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else Utils.colorToRgbString(value[r])
 
   /**
    * Copies the value of a record to another
@@ -246,17 +247,5 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
     val blue = rgb and 0xFF
 
     return byteArrayOf(red.toByte(), green.toByte(), blue.toByte())
-  }
-
-  /**
-   * Convert a java.awt.Color to HexString
-   */
-  fun colorToRgbString(c: Color?): String {
-    val color = c ?: Color(0,0,0)
-    val redHex = String.format("%02x", color.red)
-    val greenHex = String.format("%02x", color.green)
-    val blueHex = String.format("%02x", color.blue)
-
-    return "$redHex$greenHex$blueHex"
   }
 }
