@@ -222,6 +222,10 @@ class SchemaParser {
 		private val COMPATIBILITY_CONFIG_URI = "http://www.bea.com/2002/09/xbean/config"
 		private val MAP_COMPATIBILITY_CONFIG_URIS: MutableMap<String?, String?>
 
+		fun SchemaType.getDigits(type: Int): Int? {
+			return this.getFacet(type)?.stringValue?.toIntOrNull()
+		}
+
 		init {
 			MAP_COMPATIBILITY_CONFIG_URIS = HashMap()
 			MAP_COMPATIBILITY_CONFIG_URIS[COMPATIBILITY_CONFIG_URI] = CONFIG_URI

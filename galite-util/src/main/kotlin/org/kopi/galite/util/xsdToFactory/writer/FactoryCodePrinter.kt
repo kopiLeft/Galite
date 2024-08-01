@@ -33,6 +33,7 @@ import org.apache.xmlbeans.impl.common.NameUtil
 
 import org.kopi.galite.util.xsdToFactory.utils.Constants
 import org.kopi.galite.util.xsdToFactory.utils.Factory
+import org.kopi.galite.util.xsdToFactory.parser.SchemaParser.Companion.getDigits
 
 class FactoryCodePrinter: Constants {
   private var writer: Writer? = null
@@ -84,14 +85,17 @@ class FactoryCodePrinter: Constants {
             else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
 
           val attribute = Attribute(name = attributeName,
-                                    type = getKotlinTypeForProperty(propertie.type.fullJavaName),
+                                    type = getKotlinTypeForProperty(propertie.type),
                                     isList = propertie.extendsJavaArray(),
                                     defaultValue = propertie.defaultValue?.stringValue ?: "null",
                                     isElement = !propertie.isAttribute,
                                     isCalendarAttribute = propertie.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
                                     Required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
                                       else !propertie.extendsJavaOption(),
-                                    commentName = "// $comment")
+                                    commentName = "// $comment",
+                                    simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
+                                      propertie.type.fullJavaName.split(".").last().replace("$", ".") else "",
+                                    hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
 
           if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
             attribute.defaultValue = getDefaultBigDecimal(attribute.defaultValue)
@@ -188,11 +192,13 @@ class FactoryCodePrinter: Constants {
     classFactory.attributes.forEach{ attribute ->
       val name = attribute.name + if(attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
+      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($name$calendar)" else
+        "$name$calendar"
 
       if(attribute.Required)
-        emit("${indentation(2)}new${classFactory.className}.$name = $name$calendar", true)
+        emit("${indentation(2)}new${classFactory.className}.$name = $value", true)
       else
-        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $name$calendar }", true)
+        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $value }", true)
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
@@ -278,28 +284,31 @@ class FactoryCodePrinter: Constants {
   /**
    * Get the kotlin type of an xmlType entered as a string.
    */
-  private fun getKotlinTypeForProperty(type: String): String {
-    val xmlType = type.split(".").last().replace("$", ".")
+  private fun getKotlinTypeForProperty(type: SchemaType): String {
+
+    val xmlType = if (!type.isSimpleType || type.fullJavaName.startsWith("org.apache.xmlbeans"))
+      type.fullJavaName.split(".").last().replace("$", ".")
+    else type.baseType.name.localPart
 
     return when (xmlType) {
-      "XmlDate" -> {
+      "XmlDate", "date" -> {
         importFactory.addAll(listOf("java.time.LocalDate",
           "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
         "LocalDate"
       }
-      "XmlByte" -> "Byte"
-      "XmlHexBinary" -> "ByteArray"
-      "XmlTime" -> {
+      "XmlByte", "byte" -> "Byte"
+      "XmlHexBinary", "hexBinary" -> "ByteArray"
+      "XmlTime", "time" -> {
         importFactory.addAll(listOf("java.time.LocalTime",
           "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
         "LocalTime"
       }
-      "XmlDateTime" -> {
+      "XmlDateTime", "dateTime" -> {
         importFactory.addAll(listOf("java.time.LocalDateTime",
           "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
         "LocalDateTime"
       }
-      "XmlDuration" -> {
+      "XmlDuration", "duration" -> {
         importFactory.add("java.time.Duration")
         "Duration"
       }
@@ -307,15 +316,43 @@ class FactoryCodePrinter: Constants {
         importFactory.add("java.math.BigDecimal")
         "BigDecimal"
       }
-      "XmlInt" -> "Int"
-      "XmlString" -> "String"
-      "XmlBoolean" -> "Boolean"
-      "XmlLong" -> "Long"
-      "XmlShort" -> "Short"
-      "XmlDouble" -> "Double"
+      "decimal" -> {
+        val totalDigits = type.getDigits(SchemaType.FACET_TOTAL_DIGITS)
+        val fractionDigits = type.getDigits(SchemaType.FACET_FRACTION_DIGITS)
+
+        if (totalDigits == null && fractionDigits == null) {
+          importFactory.add("java.math.BigDecimal")
+          "BigDecimal"
+        } else if (fractionDigits == 0) {
+          when {
+            totalDigits == null -> {
+              importFactory.add("java.math.BigDecimal")
+              "BigDecimal"
+            }
+            totalDigits <= 9 -> {
+              "Int"
+            }
+            totalDigits <= 18 -> {
+              "Long"
+            }
+            else -> {
+              importFactory.add("java.math.BigInteger")
+              "BigInteger"
+            }
+          }
+        } else {
+          importFactory.add("java.math.BigDecimal")
+          "BigDecimal"
+        }
+      }
+      "XmlInt", "int" -> "Int"
+      "XmlString", "string" -> "String"
+      "XmlBoolean", "boolean" -> "Boolean"
+      "XmlLong", "long" -> "Long"
+      "XmlShort", "short" -> "Short"
+      "XmlDouble", "double" -> "Double"
       else -> xmlType
     }
-
   }
 
   /**
@@ -507,7 +544,9 @@ data class Attribute(var name: String,
                      var isElement: Boolean,
                      var isCalendarAttribute: Boolean,
                      val Required: Boolean,
-                     var commentName: String = "")
+                     var commentName: String = "",
+                     val simpleType: String,
+                     val hasStringEnumValues: Boolean)
 
 /**
  * Represents a class factory.
