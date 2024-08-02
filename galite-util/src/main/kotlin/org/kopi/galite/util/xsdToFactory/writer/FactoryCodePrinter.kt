@@ -540,12 +540,12 @@ class FactoryCodePrinter: Constants {
  * @attribute isList Whether the attribute is a list.
  * @attribute defaultValue The default value of the attribute.
  * @attribute isElement Whether the attribute is an element.
- *  * @attribute isReserved Whether the attribute name is a reserved Kotlin worK.
+ * @attribute isReserved Whether the attribute name is a reserved Kotlin worK.
  * @attribute isCalendarAttribute Whether the attribute is a calendar attribute.
  * @attribute Required Whether the attribute is required.
  * @attribute commentName The comment name of the attribute.
- *  * @attribute simpleType The simple type of the attribute.
- *  * @attribute hasStringEnumValues Whether the attribute has string enumeration values or not.
+ * @attribute simpleType The simple type of the attribute.
+ * @attribute hasStringEnumValues Whether the attribute has string enumeration values or not.
  */
 data class Attribute(var name: String,
                      var type: String,
