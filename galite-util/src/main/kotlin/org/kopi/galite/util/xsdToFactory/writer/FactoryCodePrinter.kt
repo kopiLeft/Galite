@@ -155,6 +155,61 @@ class FactoryCodePrinter: Constants {
   }
 
   /**
+   *
+   * Add imports used by ToCalendar function.
+   */
+  private fun addToCalendarImports() {
+    importFactory.addAll(listOf("java.util.Calendar",
+                                "java.util.GregorianCalendar",
+                                "java.time.temporal.Temporal",
+                                "java.time.LocalDateTime",
+                                "java.time.LocalTime",
+                                "java.time.LocalDate"))
+  }
+
+  /**
+   *
+   * add ToCalendar function to the factory.
+   */
+  private fun addToCalendarFunction() {
+    emit("  /**\n" +
+        "   *\n" +
+        "   * Convert Temporal to Calendar.\n" +
+        "   */\n" +
+        "   @Throws(Exception::class)\n" +
+        "   private fun Temporal.toCalendar(): Calendar {\n" +
+        "     val calendar = GregorianCalendar()\n" +
+        "\n" +
+        "     calendar.clear()\n" +
+        "     when (this) {\n" +
+        "       is LocalDate     -> {\n" +
+        "         calendar[Calendar.YEAR] = this.year\n" +
+        "         calendar[Calendar.MONTH] = this.monthValue.minus(1)\n" +
+        "         calendar[Calendar.DAY_OF_MONTH] = this.dayOfMonth\n" +
+        "       }\n" +
+        "       is LocalTime     -> {\n" +
+        "         calendar[Calendar.HOUR_OF_DAY] = this.hour\n" +
+        "         calendar[Calendar.MINUTE] = this.minute\n" +
+        "         calendar[Calendar.SECOND] = this.second\n" +
+        "       }\n" +
+        "       is LocalDateTime -> {\n" +
+        "         calendar[Calendar.YEAR] = this.year\n" +
+        "         calendar[Calendar.MONTH] = this.monthValue.minus(1)\n" +
+        "         calendar[Calendar.DAY_OF_MONTH] = this.dayOfMonth\n" +
+        "         calendar[Calendar.HOUR_OF_DAY] = this.hour\n" +
+        "         calendar[Calendar.MINUTE] = this.minute\n" +
+        "         calendar[Calendar.SECOND] = this.second\n" +
+        "       }\n" +
+        "       else             -> {\n" +
+        "         // Ne rien faires\n" +
+        "       }\n" +
+        "     }\n" +
+        "\n" +
+        "     return calendar\n" +
+        "   }", true)
+  }
+
+  /**
    * Adds a comment to the create fonction.
    */
   private fun addCommentFunction(classFactory: ClassFactory) {
@@ -192,13 +247,19 @@ class FactoryCodePrinter: Constants {
     classFactory.attributes.forEach{ attribute ->
       val name = attribute.name + if(attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
-      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($name$calendar)" else
-        "$name$calendar"
+      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($name$calendar)" else "$name$calendar"
 
-      if(attribute.Required)
+      if(attribute.Required) {
         emit("${indentation(2)}new${classFactory.className}.$name = $value", true)
-      else
-        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $value }", true)
+      } else {
+        if(!"String".equals(attribute.type)) {
+          emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $value }", true)
+        } else {
+          emit("${indentation(2)}if (!$name.isNullOrBlank()) {", true)
+          emit("${indentation(3)}new${classFactory.className}.$name = $value", true)
+          emit("${indentation(2)}}", true)
+        }
+      }
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
@@ -208,6 +269,7 @@ class FactoryCodePrinter: Constants {
    * Adds import bloc to the beginning of the generated factory.
    */
   private fun printImports() {
+    addToCalendarImports()
     if (importFactory.isNotEmpty()) {
       val groupedPackages = importFactory.distinct()
         .sortedWith(compareBy({ it.startsWith("com") }, { it.startsWith("org") }, { it }))
@@ -292,20 +354,17 @@ class FactoryCodePrinter: Constants {
 
     return when (xmlType) {
       "XmlDate", "date" -> {
-        importFactory.addAll(listOf("java.time.LocalDate",
-          "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
+        importFactory.add("java.time.LocalDate")
         "LocalDate"
       }
       "XmlByte", "byte" -> "Byte"
       "XmlHexBinary", "hexBinary" -> "ByteArray"
       "XmlTime", "time" -> {
-        importFactory.addAll(listOf("java.time.LocalTime",
-          "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
+        importFactory.add("java.time.LocalTime")
         "LocalTime"
       }
       "XmlDateTime", "dateTime" -> {
-        importFactory.addAll(listOf("java.time.LocalDateTime",
-          "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
+        importFactory.add("java.time.LocalDateTime")
         "LocalDateTime"
       }
       "XmlDuration", "duration" -> {
@@ -369,6 +428,7 @@ class FactoryCodePrinter: Constants {
           addSpecificSizeFunction(it)
         }
       }
+      addToCalendarFunction()
       emit("}", false)
       classesFactory.clear()
       importFactory.clear()
