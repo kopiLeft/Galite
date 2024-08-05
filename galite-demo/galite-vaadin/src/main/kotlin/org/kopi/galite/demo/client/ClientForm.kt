@@ -38,6 +38,7 @@ import org.kopi.galite.visual.domain.STRING
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.BlockOption
 import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.FieldOption
@@ -148,6 +149,7 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
      */
     fun save(b: VBlock) {
       clientsBlock.block.validate()
+      salesBlock.block.validate()
 
       if (!salesBlock.isFilled()) {
         salesBlock.currentRecord = 0
@@ -174,8 +176,8 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
   }
 
   inner class Sales : Block("Sales", 10, 10) {
-    val S = table(Purchase)
     val P = table(Product)
+    val S = table(Purchase)
 
     val clientID = hidden(domain = INT(5)) {
       alias = clientsBlock.clientID
@@ -219,12 +221,26 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
 
     init {
       border = Border.LINE
+      options(BlockOption.NODETAIL)
 
       command(item = showHideFilter) { showHideFilter() }
       command(item = report) { createReport { ClientR() } }
       command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
       command(item = list) { recursiveQuery() }
+      command(item = save, Mode.QUERY, Mode.UPDATE, Mode.INSERT) { save(block) }
+    }
+
+    private fun save(b: VBlock) {
+      val rec: Int = b.activeRecord
+
+      b.validate()
+      transaction {
+        b.save()
+      }
+      b.refreshLookup(rec)
+      b.form.gotoBlock(b)
+      b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
     }
 
     fun colorier(rec: Int) {
