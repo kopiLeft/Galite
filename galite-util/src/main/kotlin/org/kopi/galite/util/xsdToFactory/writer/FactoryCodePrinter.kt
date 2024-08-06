@@ -31,6 +31,8 @@ import org.apache.xmlbeans.SchemaProperty
 import org.apache.xmlbeans.SchemaType
 import org.apache.xmlbeans.impl.common.NameUtil
 
+import org.kopi.galite.util.base.Utils
+import org.kopi.galite.util.base.Utils.Companion.nonKotlinKeyword
 import org.kopi.galite.util.xsdToFactory.utils.Constants
 import org.kopi.galite.util.xsdToFactory.utils.Factory
 import org.kopi.galite.util.xsdToFactory.parser.SchemaParser.Companion.getDigits
@@ -80,7 +82,7 @@ class FactoryCodePrinter: Constants {
                                          javaPackage = schemaType.fullJavaName.replace('$', '.'))
 
         properties.forEach { propertie ->
-          val attributeName = NameUtil.nonJavaKeyword(NameUtil.lowerCamelCase(propertie.javaPropertyName))
+          val attributeName = NameUtil.lowerCamelCase(propertie.javaPropertyName).nonKotlinKeyword()
           val comment = propertie.name.localPart + (if (propertie.isAttribute) " attribute"
             else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
 
@@ -89,6 +91,7 @@ class FactoryCodePrinter: Constants {
                                     isList = propertie.extendsJavaArray(),
                                     defaultValue = propertie.defaultValue?.stringValue ?: "null",
                                     isElement = !propertie.isAttribute,
+                                    isReserved = Utils.isKotlinReservedWord(NameUtil.lowerCamelCase(propertie.javaPropertyName)),
                                     isCalendarAttribute = propertie.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
                                     Required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
                                       else !propertie.extendsJavaOption(),
@@ -245,18 +248,23 @@ class FactoryCodePrinter: Constants {
     emit("${indentation(1)}{", true)
     emit("${indentation(2)}val new${classFactory.className}: ${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
     classFactory.attributes.forEach{ attribute ->
-      val name = attribute.name + if(attribute.isList) "Array" else ""
+      val parameterName = attribute.name + if (attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
-      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($name$calendar)" else "$name$calendar"
+      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar)" else "$parameterName$calendar"
 
+      val attributeName = when {
+        attribute.isReserved && !attribute.isList -> "`${parameterName.substring(1)}`"
+        attribute.isReserved && attribute.isList -> parameterName.substring(1)
+        else -> parameterName
+      }
       if(attribute.Required) {
-        emit("${indentation(2)}new${classFactory.className}.$name = $value", true)
+        emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
       } else {
         if(!"String".equals(attribute.type)) {
-          emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $value }", true)
+          emit("${indentation(2)}$parameterName?.let { new${classFactory.className}.$attributeName = $value }", true)
         } else {
-          emit("${indentation(2)}if (!$name.isNullOrBlank()) {", true)
-          emit("${indentation(3)}new${classFactory.className}.$name = $value", true)
+          emit("${indentation(2)}if (!$parameterName.isNullOrBlank()) {", true)
+          emit("${indentation(3)}new${classFactory.className}.$attributeName = $value", true)
           emit("${indentation(2)}}", true)
         }
       }
@@ -593,15 +601,19 @@ class FactoryCodePrinter: Constants {
  * @attribute isList Whether the attribute is a list.
  * @attribute defaultValue The default value of the attribute.
  * @attribute isElement Whether the attribute is an element.
+ * @attribute isReserved Whether the attribute name is a reserved Kotlin worK.
  * @attribute isCalendarAttribute Whether the attribute is a calendar attribute.
  * @attribute Required Whether the attribute is required.
  * @attribute commentName The comment name of the attribute.
+ * @attribute simpleType The simple type of the attribute.
+ * @attribute hasStringEnumValues Whether the attribute has string enumeration values or not.
  */
 data class Attribute(var name: String,
                      var type: String,
                      var isList: Boolean,
                      var defaultValue: String,
                      var isElement: Boolean,
+                     var isReserved: Boolean,
                      var isCalendarAttribute: Boolean,
                      val Required: Boolean,
                      var commentName: String = "",
