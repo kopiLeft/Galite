@@ -41,6 +41,7 @@ object Purchase: Table("PURCHASE") {
   val idClt =                   integer("CLIENT").references(Client.idClt)
   val idPdt =                   integer("PRODUCT").references(Product.idPdt)
   val quantity =                integer("QUANTITY")
+  val color =                   integer("COLOR")
 }
 
 object Product : Table("PRODUCTS") {
@@ -52,7 +53,6 @@ object Product : Table("PRODUCTS") {
   val taxName =                 varchar("TAX", 20).references(TaxRule.taxName)
   val price =                   decimal("UNIT_PRICE_EXCLUDING_VAT", 9, 3)
   val photo =                   blob("PHOTO").nullable()
-  val color =                   integer("COLOR").nullable()
 
   override val primaryKey = PrimaryKey(idPdt)
 }

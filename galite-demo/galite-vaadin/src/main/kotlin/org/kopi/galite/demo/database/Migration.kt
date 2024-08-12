@@ -245,10 +245,10 @@ fun addClient(firstName: String,
 
 fun addProducts() {
   // This data is used in automated tests
-  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"), 3453656)
-  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"), 14169288)
-  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"), 15506985)
-  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"), 16737894)
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"))
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"))
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"))
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"))
   for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()
@@ -256,13 +256,12 @@ fun addProducts() {
     val gender = listOf("Men", "Women", "Children").random()
     val supplier = listOf("Supplier 0", "Supplier 1", "Supplier 2").random()
     val price = (50..500).random().toBigDecimal()
-    val color = (Int.MIN_VALUE..Int.MAX_VALUE).random()
 
-    addProduct(description, category, tax, gender, supplier, price, color)
+    addProduct(description, category, tax, gender, supplier, price)
   }
 }
 
-fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal, col: Int) {
+fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
   Product.insert {
     it[Product.description] = description
     it[Product.department] = department
@@ -270,7 +269,6 @@ fun addProduct(description: String, category: Int, taxName: String, department: 
     it[Product.category] = category
     it[Product.taxName] = taxName
     it[Product.price] = price
-    it[Product.color] = col
   }
 }
 
@@ -293,6 +291,7 @@ fun addSale(client: Int, product: Int, qty: Int) {
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
+    it[color] = (Int.MIN_VALUE..Int.MAX_VALUE).random()
   }
 }
 
