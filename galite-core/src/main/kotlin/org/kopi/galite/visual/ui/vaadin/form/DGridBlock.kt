@@ -504,6 +504,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
               input.type = "color"
               input.value = "#" + Utils.colorToRgbString(value)
+              input.isReadOnly = true
               div.add(input)
             } else {
               div.text = columnView.editorField.format(value)?.toString() ?: ""

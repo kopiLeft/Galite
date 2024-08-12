@@ -246,10 +246,10 @@ fun addClient(firstName: String,
 
 fun addProducts() {
   // This data is used in automated tests
-  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"), ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 216.toByte())))
-  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"), ExposedBlob(byteArrayOf(216.toByte(), 52.toByte(), 200.toByte())))
-  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"), ExposedBlob(byteArrayOf(236.toByte(), 158.toByte(), 41.toByte())))
-  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"),ExposedBlob(byteArrayOf(255.toByte(), 102.toByte(), 102.toByte())))
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"))
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"))
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"))
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"))
   for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()
@@ -259,11 +259,11 @@ fun addProducts() {
     val price = (50..500).random().toBigDecimal()
     val color = ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte()))
 
-    addProduct(description, category, tax, gender, supplier, price, color)
+    addProduct(description, category, tax, gender, supplier, price)
   }
 }
 
-fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal, col: ExposedBlob) {
+fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
   Product.insert {
     it[Product.description] = description
     it[Product.department] = department
@@ -271,29 +271,29 @@ fun addProduct(description: String, category: Int, taxName: String, department: 
     it[Product.category] = category
     it[Product.taxName] = taxName
     it[Product.price] = price
-    it[Product.color] = col
   }
 }
 
 fun addSales() {
-  addSale(1, 1, 1)
-  addSale(1, 2, 1)
-  addSale(1, 3, 2)
-  addSale(1, 4, 3)
-  addSale(2, 1, 1)
-  addSale(2, 2, 2)
-  addSale(2, 3, 4)
-  addSale(3, 4, 2)
-  addSale(3, 1, 1)
-  addSale(3, 2, 3)
-  addSale(4, 2, 10)
+  addSale(1, 1, 1, ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 216.toByte())))
+  addSale(1, 2, 1, ExposedBlob(byteArrayOf(216.toByte(), 178.toByte(), 216.toByte())))
+  addSale(1, 3, 2, ExposedBlob(byteArrayOf(52.toByte(), 52.toByte(), 216.toByte())))
+  addSale(1, 4, 3, ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 200.toByte())))
+  addSale(2, 1, 1, ExposedBlob(byteArrayOf(236.toByte(), 102.toByte(), 216.toByte())))
+  addSale(2, 2, 2, ExposedBlob(byteArrayOf(102.toByte(), 178.toByte(), 216.toByte())))
+  addSale(2, 3, 4, ExposedBlob(byteArrayOf(200.toByte(), 155.toByte(), 14.toByte())))
+  addSale(3, 4, 2, ExposedBlob(byteArrayOf(52.toByte(), 158.toByte(), 158.toByte())))
+  addSale(3, 1, 1, ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 216.toByte())))
+  addSale(3, 2, 3, ExposedBlob(byteArrayOf(122.toByte(), 216.toByte(), 100.toByte())))
+  addSale(4, 2, 10, ExposedBlob(byteArrayOf(200.toByte(), 25.toByte(), 52.toByte())))
 }
 
-fun addSale(client: Int, product: Int, qty: Int) {
+fun addSale(client: Int, product: Int, qty: Int, col: ExposedBlob) {
   Purchase.insert {
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
+    it[color] = col
   }
 }
 
