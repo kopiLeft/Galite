@@ -51,6 +51,7 @@ object IOUtil {
    */
   @Throws(FileNotFoundException::class)
   fun createFactoryStream(baseDir: File, name: String, ext: String): OutputStream {
+    createDir(baseDir,null)
     val absolutePath = baseDir.absolutePath
     val factory = File("$absolutePath/$name.$ext")
 
