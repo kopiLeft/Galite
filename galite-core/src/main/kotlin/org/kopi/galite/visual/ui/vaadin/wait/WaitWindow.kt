@@ -22,6 +22,7 @@ import org.kopi.galite.visual.ui.vaadin.base.Styles
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.dialog.Dialog.OpenedChangeEvent
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -31,9 +32,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  */
 @CssImport.Container(value = [
   CssImport("./styles/galite/wait.css"),
-  CssImport("./styles/galite/wait.css" , themeFor = "vaadin-dialog-overlay")
+  CssImport("./styles/galite/wait.css", themeFor = "vaadin-dialog-overlay")
 ])
-class WaitWindow : VerticalLayout(), ComponentEventListener<Dialog.OpenedChangeEvent<Dialog>> {
+class WaitWindow : VerticalLayout(), ComponentEventListener<OpenedChangeEvent<Dialog>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -86,7 +87,7 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<Dialog.OpenedChangeE
    */
   val isOpened: Boolean get() = popup.isOpened
 
-  override fun onComponentEvent(event: Dialog.OpenedChangeEvent<Dialog>) {
+  override fun onComponentEvent(event: OpenedChangeEvent<Dialog>) {
     if(event.isOpened) {
       popup.element.style["cursor"] = "wait"
     } else {
