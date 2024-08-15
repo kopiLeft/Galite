@@ -41,6 +41,7 @@ import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
+import org.kopi.galite.type.Color
 import org.kopi.galite.type.Week
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
@@ -291,7 +292,7 @@ fun addSale(client: Int, product: Int, qty: Int) {
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
-    it[color] = (Int.MIN_VALUE..Int.MAX_VALUE).random()
+    it[color] = Color((Int.MIN_VALUE..Int.MAX_VALUE).random())
   }
 }
 
@@ -344,7 +345,7 @@ fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref:
     it[dateBill] = date
     it[amountWithTaxes] = amount
     it[refCmd] = ref
-    it[color] = col
+    it[color] = Color(col)
   }
 }
 

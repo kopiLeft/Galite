@@ -109,8 +109,8 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    if (v is Int) {
-      setColor(r, Color(v))
+    if (v is org.kopi.galite.type.Color) {
+      setColor(r, Color(v.value))
     } else {
       setColor(r, v as Color?)
     }
@@ -123,7 +123,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
    */
   override fun retrieveQuery(result: ResultRow, column: Column<*>): Any? {
     val color = when (val value = result[column]) {
-      is Int -> {
+      is org.kopi.galite.type.Color -> {
         value
       }
       else -> {
@@ -131,7 +131,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
       }
     }
 
-    return Color(color)
+    return color
   }
 
   /**
@@ -167,7 +167,7 @@ class VColorField(val bufferSize: Int) : VField(1,1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): Int? = if (value[r] == null) null else value[r]!!.rgb
+  override fun getSqlImpl(r: Int): org.kopi.galite.type.Color? = if (value[r] == null) null else org.kopi.galite.type.Color(value[r]!!.rgb)
 
   /**
    * Copies the value of a record to another
