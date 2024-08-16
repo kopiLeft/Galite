@@ -3,9 +3,10 @@
 <form title="Factures">
   <page ident="Id$0" title="Factures"/>
   <block name="BlockBill" title="Factures">
-    <field ident="FLD_1" label="Adresse" help="L'adresse de facturation" />
-    <field ident="FLD_2" label="Date" help="La date de facturation" />
-    <field ident="FLD_3" label="Montant" help="Le montant facturé" />
-    <field ident="FLD_4" label="Référence commande" help="La référence de la commande" />
+    <field ident="FLD_0" label="Couleur" help="Un champ couleur pour test" />
+    <field ident="FLD_2" label="Adresse" help="L'adresse de facturation" />
+    <field ident="FLD_3" label="Date" help="La date de facturation" />
+    <field ident="FLD_4" label="Montant" help="Le montant facturé" />
+    <field ident="FLD_5" label="Référence commande" help="La référence de la commande" />
   </block>
 </form>

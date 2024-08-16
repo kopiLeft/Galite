@@ -35,6 +35,7 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 
@@ -178,6 +179,7 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
     }
 
     init {
+      Border.LINE
       blockVisibility(Access.VISIT, Mode.QUERY)
       options(BlockOption.NODETAIL)
     }

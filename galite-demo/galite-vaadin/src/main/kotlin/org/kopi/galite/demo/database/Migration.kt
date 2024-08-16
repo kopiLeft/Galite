@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo.database
 
+import java.awt.Color.BLACK
+import java.awt.Color.WHITE
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -292,7 +294,7 @@ fun addSale(client: Int, product: Int, qty: Int) {
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
-    it[color] = Color((Int.MIN_VALUE..Int.MAX_VALUE).random())
+    it[color] = Color((BLACK.rgb..WHITE.rgb).random())
   }
 }
 
@@ -332,10 +334,10 @@ fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null)
 }
 
 fun addBills() {
-  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, 7652806)
-  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, 2662474)
-  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, 3502417)
-  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, 5281517)
+  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, java.awt.Color.LIGHT_GRAY.rgb)
+  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, java.awt.Color.MAGENTA.rgb)
+  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, java.awt.Color.ORANGE.rgb)
+  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, java.awt.Color.PINK.rgb)
 }
 
 fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int, col: Int) {
