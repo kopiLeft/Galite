@@ -20,13 +20,22 @@ import java.util.Locale
 
 import org.kopi.galite.demo.database.Client
 import org.kopi.galite.demo.database.Command
+import org.kopi.galite.demo.database.Purchase
 import org.kopi.galite.demo.desktop.runForm
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
 import org.kopi.galite.visual.dsl.common.Icon
 import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
+import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 
@@ -65,9 +74,15 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
     command(item = dynamicReport) {
       createDynamicReport()
     }
+    command(item = list) { recursiveQuery() }
+    command(item = save, Mode.INSERT, Mode.UPDATE) { save(block) }
   }
 
-  class BlockCommand : Block("Commands", 1, 10) {
+  val purchases = page.insertBlock(BlockPurchase()) {
+    command(item = deleteLine) { deleteLine(block) }
+  }
+
+  inner class BlockCommand : Block("Commands", 1, 10) {
     val u = table(Command)
     val v = table(Client)
 
@@ -101,6 +116,104 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
 
     init {
       blockVisibility(Access.VISIT, Mode.QUERY)
+    }
+
+    val PostqryTrigger = trigger(POSTQRY) {
+      purchases.idClt[0] = idClt.value
+      purchases.load()
+      for (rec in 0 until purchases.block.bufferSize) {
+        if (purchases.block.isRecordFilled(rec)) {
+          purchases.colorRecord(rec)
+        }
+      }
+    }
+
+    /**
+     * Save block
+     */
+    fun save(b: VBlock) {
+      tb1.block.validate()
+
+      if (!purchases.isFilled()) {
+        purchases.currentRecord = 0
+        throw VExecFailedException("Purchase block is empty.")
+      }
+
+      transaction {
+        tb1.block.save()
+        purchases.block.save()
+      }
+
+      b.form.reset()
+    }
+  }
+
+  inner class BlockPurchase : Block("Purchase", 10, 10) {
+    val u = table(Purchase)
+
+    val numPurchase = hidden(domain = INT(20)) {
+      label = "Number"
+      help = "The purchase number"
+      columns(u.id)
+    }
+    val idClt = mustFill(domain = INT(25), position = at(1, 1)) {
+      label = "Client ID"
+      help = "The client ID"
+      columns(u.idClt)
+    }
+    val idProduct = mustFill(domain = INT(20), position = at(2, 1)) {
+      label = "Product ID"
+      help = "The Product ID"
+      columns(u.idPdt)
+    }
+    val quantity = mustFill(domain = INT(7), position = at(4, 1)) {
+      label = "Quantity"
+      help = "quantity of the current purchase"
+      columns(u.quantity)
+    }
+
+    val color = mustFill(domain = COLOR, position = at(4, 1)) {
+      label = "color"
+      help = "color [for test purpose] "
+      columns(u.color)
+    }
+
+    init {
+      Border.LINE
+      blockVisibility(Access.VISIT, Mode.QUERY)
+      options(BlockOption.NODETAIL)
+    }
+
+    /**
+     * Delete line from no detail block.
+     */
+    fun deleteLine(b: VBlock) {
+      val rec: Int = b.activeRecord
+
+      if ( rec == -1) return
+      if (b.isRecordFilled(rec)) {
+        b.setRecordDeleted(rec, true)
+        transaction { b.refreshLookup(rec) }
+      }
+      b.form.gotoBlock(b)
+      b.gotoRecord(rec + 1)
+    }
+
+    /**
+     * Color record using color field.
+     */
+    fun colorRecord(rec: Int) {
+      if (block.isRecordFilled(rec)) {
+        var backgroundColor = VColor.WHITE
+
+        color.vField.getColor(rec)?.let { backgroundColor = VColor(it.red, it.green, it.blue) }
+        for (field in block.fields) {
+          if (field.getType() != VField.MDL_FLD_COLOR) {
+            field.setColor(rec, VColor.BLACK, backgroundColor)
+            field.fireColorChanged(rec)
+          }
+        }
+      }
     }
   }
 

@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo.database
 
+import java.awt.Color.BLACK
+import java.awt.Color.WHITE
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -29,7 +31,6 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.*
@@ -42,6 +43,7 @@ import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.tasks.TasksForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
+import org.kopi.galite.type.Color
 import org.kopi.galite.type.Week
 
 const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
@@ -246,10 +248,10 @@ fun addClient(firstName: String,
 
 fun addProducts() {
   // This data is used in automated tests
-  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"), ExposedBlob(byteArrayOf(52.toByte(), 178.toByte(), 216.toByte())))
-  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"), ExposedBlob(byteArrayOf(216.toByte(), 52.toByte(), 200.toByte())))
-  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"), ExposedBlob(byteArrayOf(236.toByte(), 158.toByte(), 41.toByte())))
-  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"),ExposedBlob(byteArrayOf(255.toByte(), 102.toByte(), 102.toByte())))
+  addProduct("description Product 0", 1, "tax 1", "Men", "Supplier 0", BigDecimal("100"))
+  addProduct("description Product 1", 2, "tax 2", "Men","Supplier 0", BigDecimal("200"))
+  addProduct("description Product 2", 3, "tax 2", "Women","Supplier 0", BigDecimal("300"))
+  addProduct("description Product 3", 1, "tax 3", "Children","Supplier 0", BigDecimal("400"))
   for (i in 4..499) {
     val description = "description Product $i"
     val category = (1..5).random()
@@ -257,13 +259,12 @@ fun addProducts() {
     val gender = listOf("Men", "Women", "Children").random()
     val supplier = listOf("Supplier 0", "Supplier 1", "Supplier 2").random()
     val price = (50..500).random().toBigDecimal()
-    val color = ExposedBlob(byteArrayOf((1..255).random().toByte(), (1..255).random().toByte(), (10..255).random().toByte()))
 
-    addProduct(description, category, tax, gender, supplier, price, color)
+    addProduct(description, category, tax, gender, supplier, price)
   }
 }
 
-fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal, col: ExposedBlob) {
+fun addProduct(description: String, category: Int, taxName: String, department: String, supplier: String, price: BigDecimal) {
   Product.insert {
     it[Product.description] = description
     it[Product.department] = department
@@ -271,7 +272,6 @@ fun addProduct(description: String, category: Int, taxName: String, department: 
     it[Product.category] = category
     it[Product.taxName] = taxName
     it[Product.price] = price
-    it[Product.color] = col
   }
 }
 
@@ -294,6 +294,7 @@ fun addSale(client: Int, product: Int, qty: Int) {
     it[idClt] = client
     it[idPdt] = product
     it[quantity] = qty
+    it[color] = Color((BLACK.rgb..WHITE.rgb).random())
   }
 }
 
@@ -333,20 +334,20 @@ fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null)
 }
 
 fun addBills() {
-  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
-  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
-  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
-  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, ExposedBlob(byteArrayOf(244.toByte(), 244.toByte(), 244.toByte())))
+  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), BigDecimal("3129.7"), 0, java.awt.Color.LIGHT_GRAY.rgb)
+  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), BigDecimal("1149.24"), 1, java.awt.Color.MAGENTA.rgb)
+  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), BigDecimal("219.6"), 2, java.awt.Color.ORANGE.rgb)
+  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), BigDecimal("146.9"), 3, java.awt.Color.PINK.rgb)
 }
 
-fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int, col: ExposedBlob) {
+fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int, col: Int) {
   Bill.insert {
     it[id] = num
     it[addressBill] = address
     it[dateBill] = date
     it[amountWithTaxes] = amount
     it[refCmd] = ref
-    it[color] = col
+    it[color] = Color(col)
   }
 }
 

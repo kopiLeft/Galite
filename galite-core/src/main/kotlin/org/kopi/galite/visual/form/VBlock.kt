@@ -3178,13 +3178,7 @@ abstract class VBlock(var title: String,
               if ((field.getSql(recno)) == null) {
                 conditions.add(Op.build { column.isNull() })
               } else {
-                if (field is VColorField) {
-                  if (field.getLargeObject(recno) != null) {
-                    conditions.add(Op.build { column eq ExposedBlob(field.getLargeObject(recno)!!.readBytes()) })
-                  }
-                } else {
-                  conditions.add(Op.build { column eq field.getSql(recno)!! })
-                }
+                conditions.add(Op.build { column eq field.getSql(recno)!! })
               }
             }
           }
