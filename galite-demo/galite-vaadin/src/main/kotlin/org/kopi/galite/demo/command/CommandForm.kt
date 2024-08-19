@@ -179,9 +179,9 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
     }
 
     init {
-      Border.LINE
       blockVisibility(Access.VISIT, Mode.QUERY)
       options(BlockOption.NODETAIL)
+      border = Border.LINE
     }
 
     /**
