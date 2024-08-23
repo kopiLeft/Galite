@@ -27,6 +27,7 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.visual.database.transaction
+import org.kopi.galite.visual.domain.BOOL
 import org.kopi.galite.visual.domain.COLOR
 import org.kopi.galite.visual.domain.CodeDomain
 import org.kopi.galite.visual.domain.INT
@@ -126,6 +127,7 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
           purchases.colorRecord(rec)
         }
       }
+      gotoBlock(purchases)
     }
 
     /**
@@ -156,23 +158,28 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
       help = "The purchase number"
       columns(u.id)
     }
-    val idClt = mustFill(domain = INT(25), position = at(1, 1)) {
+    val purchased = mustFill(domain = BOOL, position = at(1, 1)) {
+      label = "Purchased"
+      help = "The client ID"
+      columns(u.purchased)
+    }
+    val idClt = mustFill(domain = INT(25), position = at(2, 1)) {
       label = "Client ID"
       help = "The client ID"
       columns(u.idClt)
     }
-    val idProduct = mustFill(domain = INT(20), position = at(2, 1)) {
+    val idProduct = mustFill(domain = INT(20), position = at(3, 1)) {
       label = "Product ID"
       help = "The Product ID"
       columns(u.idPdt)
     }
-    val quantity = mustFill(domain = INT(7), position = at(4, 1)) {
+    val quantity = mustFill(domain = INT(7), position = at(5, 1)) {
       label = "Quantity"
       help = "quantity of the current purchase"
       columns(u.quantity)
     }
 
-    val color = mustFill(domain = COLOR, position = at(4, 1)) {
+    val color = mustFill(domain = COLOR, position = at(6, 1)) {
       label = "color"
       help = "color [for test purpose] "
       columns(u.color)
