@@ -72,7 +72,7 @@ class ChartSample: Chart(title = "Area/population per city",
     label = "dimension"
 
     format { value ->
-      value?.toUpperCase()
+      value?.uppercase()
     }
   }
 

@@ -89,13 +89,13 @@ class VReportTests: JApplicationTestBase() {
     var result = ""
 
     try {
-      val file = FileInputStream(file)
+      val stream = FileInputStream(file)
       val workbook = if(type == TYP_XLS) {
         //Create Workbook instance holding reference to .xls file
-        HSSFWorkbook(file) //xls
+        HSSFWorkbook(stream) //xls
       } else {
         //Create Workbook instance holding reference to .xlsx file
-        XSSFWorkbook(file) // xlsx
+        XSSFWorkbook(stream) // xlsx
       }
 
       //Get first/desired sheet from the workbook
@@ -118,7 +118,7 @@ class VReportTests: JApplicationTestBase() {
         }
         result += ""
       }
-      file.close()
+      stream.close()
     } catch (e: Exception) {
       e.printStackTrace()
     }
@@ -186,7 +186,7 @@ class VReportTests: JApplicationTestBase() {
       // Actor checks
       assertEquals(f12, model.actors[0])
       assertEquals(f12, model.actors[0])
-      assertEquals(-8, model.actors[0]!!.number)
+      assertEquals(-8, model.actors[0].number)
     }
   }
 

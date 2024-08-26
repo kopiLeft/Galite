@@ -108,7 +108,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.fieldsTypesBlock.string2.edit(text)
     form.fieldsTypesBlock.string3.click()
 
-    assertEquals(text.toUpperCase(), field._value)
+    assertEquals(text.uppercase(), field._value)
   }
 
   @Test
@@ -119,7 +119,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.fieldsTypesBlock.string3.edit(text)
     form.fieldsTypesBlock.string2.click()
 
-    assertEquals(text.toLowerCase(), field._value)
+    assertEquals(text.lowercase(), field._value)
   }
 
   @Test

@@ -107,7 +107,7 @@ open class Domain<T> {
     }
 
   /**
-   * Defines a [constraint] that the field value should verify. Otherwise an error [message] is displayed to the user.
+   * Defines a [constraint] that the field value should verify. Otherwise, an error [message] is displayed to the user.
    *
    * @param message the error message to display.
    * @param constraint the constraint that the field value should verify.

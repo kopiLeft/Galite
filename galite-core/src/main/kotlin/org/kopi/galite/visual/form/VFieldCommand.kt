@@ -49,18 +49,6 @@ class VFieldCommand(private val form: VForm,
    * You can use this method to perform any operation out of the UI event process
    *
    * @param    action        the action to perform.
-   * @param    block        This action should block the UI thread ?
-   */
-  @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action)"))
-  override fun performAction(action: Action, block: Boolean) {
-    form.performAsyncAction(action)
-  }
-
-  /**
-   * Performs the appropriate action asynchronously.
-   * You can use this method to perform any operation out of the UI event process
-   *
-   * @param    action        the action to perform.
    */
   override fun performAsyncAction(action: Action) {
     form.performAsyncAction(action)

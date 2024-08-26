@@ -48,7 +48,6 @@ class CommonDSLTests : VApplicationTestBase() {
                             override fun executeVoidTrigger(VKT_Type: Int) {}
                             override fun executeVoidTrigger(trigger: Trigger?) {}
                             override fun performAsyncAction(action: Action) {}
-                            override fun performAction(action: Action, block: Boolean) {}
                           }) {}
 
     assertEquals(MOD_ANY, command.mode) // default mode is MOD_ANY

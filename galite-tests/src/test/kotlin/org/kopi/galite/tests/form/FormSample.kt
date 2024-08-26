@@ -193,7 +193,7 @@ class TestBlock : Block("Test block", 1, 5) {
       FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
         override fun accept(pathname: File?): Boolean {
           return (pathname!!.isDirectory
-                  || pathname.name.toLowerCase().endsWith(".pdf"))
+                  || pathname.name.lowercase().endsWith(".pdf"))
         }
 
         override val description: String

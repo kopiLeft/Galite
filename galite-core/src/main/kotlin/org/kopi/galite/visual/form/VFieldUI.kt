@@ -642,18 +642,6 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
   // ---------------------------------------------------------------------
   // IMPLEMENTATION
   // ---------------------------------------------------------------------
-  /**
-   * Performs the appropriate action asynchronously.
-   * You can use this method to perform any operation out of the UI event process
-   *
-   * @param        action                the action to perform.
-   * @param        block                This action should block the UI thread ?
-   */
-  // USE METHOD IN FORM
-  @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action)"))
-  override fun performAction(action: Action, block: Boolean) {
-    blockView.getFormView().performAsyncAction(action)
-  }
 
   /**
    * Performs the appropriate action asynchronously.

@@ -135,7 +135,7 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
     help = "The name"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
     group = age
   }
@@ -146,7 +146,7 @@ class DocumentationReportR : Report(title = "Test Report", locale = Locale.UK) {
     help = "The last name"
     align = FieldAlignment.RIGHT
     format { value ->
-      value.toLowerCase()
+      value.lowercase()
     }
     group = age
   }

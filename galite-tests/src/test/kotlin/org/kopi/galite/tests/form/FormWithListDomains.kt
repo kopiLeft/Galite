@@ -66,10 +66,10 @@ class FormWithListDomains: Form(title = "form to test list domains", locale = Lo
 }
 
 class FileFilter : FileHandler.FileFilter {
-  override fun accept(f: File?): Boolean {
-    return (f!!.isDirectory
-            || f.name.toLowerCase().endsWith(".xls")
-            || f.name.toLowerCase().endsWith(".xlsx"))
+  override fun accept(pathname: File?): Boolean {
+    return (pathname!!.isDirectory
+            || pathname.name.lowercase().endsWith(".xls")
+            || pathname.name.lowercase().endsWith(".xlsx"))
   }
 
   override val description: String

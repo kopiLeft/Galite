@@ -78,13 +78,13 @@ open class JApplicationTestBase : ApplicationTestBase() {
                        maxRetries: Int?,
                        waitMin: Long?,
                        waitMax: Long?): Connection? {
-      val username = "admin"
-      val password = "admin"
+      val defaultUser = "admin"
+      val defaultPassword = "admin"
       return try {
         Connection.createConnection(url = database,
                                     driver = driver,
-                                    userName = username,
-                                    password = password,
+                                    userName = defaultUser,
+                                    password = defaultPassword,
                                     lookupUserId = true,
                                     schema = schema,
                                     maxRetries = maxRetries,
@@ -136,8 +136,8 @@ open class JApplicationTestBase : ApplicationTestBase() {
             return value.toInt()
           }
 
-          override fun getBooleanFor(var1: String): Boolean {
-            return java.lang.Boolean.valueOf(this.getStringFor(var1))
+          override fun getBooleanFor(key: String): Boolean {
+            return java.lang.Boolean.valueOf(this.getStringFor(key))
           }
 
           override fun isUnicodeDatabase(): Boolean = false

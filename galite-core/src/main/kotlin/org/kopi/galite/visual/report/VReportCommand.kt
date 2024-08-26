@@ -46,23 +46,6 @@ class VReportCommand(
    * You can use this method to perform any operation out of the UI event process
    *
    * @param    action        the action to perform.
-   * @param    block        This action should block the UI thread ?
-   */
-  @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action, block)"))
-  override fun performAction(action: Action, block: Boolean) {
-    report.performAsyncAction(action)
-    /*try {
-      executeVoidTrigger(getTrigger());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }*/
-  }
-
-  /**
-   * Performs the appropriate action asynchronously.
-   * You can use this method to perform any operation out of the UI event process
-   *
-   * @param    action        the action to perform.
    */
   override fun performAsyncAction(action: Action) {
     report.performAsyncAction(action)

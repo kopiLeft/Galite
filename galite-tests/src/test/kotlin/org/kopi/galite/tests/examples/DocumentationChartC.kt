@@ -102,7 +102,7 @@ class DocumentationChartC :  Chart(
     // test format trigger try to upperCase then to lowerCase
     // to test it remove month dimension and see the result
     format { value ->
-      value?.toUpperCase()
+      value?.uppercase()
     }
   }
 

@@ -191,7 +191,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     form.blockWithDifferentTypes.upperStringField.edit(input)
     form.blockWithDifferentTypes.decimalField.click()
-    assertEquals(input.toUpperCase(), fields[0]._text)
+    assertEquals(input.uppercase(), fields[0]._text)
   }
 
   @Test
@@ -201,7 +201,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     form.blockWithDifferentTypes.lowerStringField.edit(input)
     form.blockWithDifferentTypes.decimalField.click()
-    assertEquals(input.toLowerCase(), fields[2]._text)
+    assertEquals(input.lowercase(), fields[2]._text)
   }
 
   @Test
@@ -211,7 +211,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     form.blockWithDifferentTypes.nameStringField.edit(input)
     form.blockWithDifferentTypes.decimalField.click()
-    assertEquals(input.substring(0,1).toUpperCase() + input.substring(1), fields[1]._text)
+    assertEquals(input.substring(0,1).uppercase() + input.substring(1), fields[1]._text)
   }
 
   @Test

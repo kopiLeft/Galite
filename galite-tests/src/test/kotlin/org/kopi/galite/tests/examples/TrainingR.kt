@@ -133,7 +133,7 @@ class TrainingR : Report(title = "Clients_Report", locale = Locale.UK) {
     help = "The training name"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 

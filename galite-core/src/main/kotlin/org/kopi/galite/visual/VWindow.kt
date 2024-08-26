@@ -145,12 +145,6 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
     // nothing to do here
   }
 
-  @Deprecated("use method performAsyncAction",
-              ReplaceWith("performAsyncAction(action)"))
-  override fun performAction(action: Action, block: Boolean) {
-    performAsyncAction(action)
-  }
-
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
 

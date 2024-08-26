@@ -79,7 +79,7 @@ class VFieldTests : JApplicationTestBase() {
       }
     }
 
-    var listID: Int = -1
+    var listID: Int
     transaction {
       User.insert {
         it[id] = 1
