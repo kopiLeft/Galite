@@ -16,9 +16,9 @@
  */
 package org.kopi.galite.testing
 
+import com.github.mvysny.kaributesting.v10._expectEditableByUser
 import com.github.mvysny.kaributesting.v10._fireEvent
 import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10.checkEditableByUser
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.github.mvysny.kaributools._internalId
@@ -36,7 +36,7 @@ fun <T> Grid<T>.expect(data: Array<Array<String>>) {
 }
 
 fun DTable._clickCell(rowIndex: Int, columnIndex: Int, clickCount: Int, duration: Long = 100) {
-  checkEditableByUser()
+  _expectEditableByUser()
   val itemKey: String = dataCommunicator.keyMapper.key(_get(rowIndex))
   val column = columns[columnIndex]._internalId
   val event = ItemClickEvent(this, true, itemKey, column, -1, -1, -1, -1, clickCount, 0, false, false, false, false)

@@ -108,13 +108,13 @@ class GaliteApplication : JApplication(GaliteRegistry()) {
                      maxRetries: Int?,
                      waitMin: Long?,
                      waitMax: Long?): Connection? {
-    val username = "admin"
-    val password = "admin"
+    val defaultUser = "admin"
+    val defaultPassword = "admin"
     return try {
       Connection.createConnection(url = database,
                                   driver = driver,
-                                  userName = username,
-                                  password = password,
+                                  userName = defaultUser,
+                                  password = defaultPassword,
                                   lookupUserId = true,
                                   schema = schema,
                                   maxRetries = maxRetries,

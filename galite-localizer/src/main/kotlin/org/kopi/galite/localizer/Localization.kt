@@ -50,11 +50,11 @@ fun localizeWindows(url: String,
                     locale: Locale,
                     schema: String? = null,
                     output: String? = null) {
-  val dBConnection = Connection.createConnection(url, driver, userName, password, false, schema)
+  Connection.createConnection(url, driver, userName, password, false, schema)
   val modules = fetchModules()
   modules.forEach {
     if (it.objectName != null) {
-      val module = Class.forName(it.objectName).kotlin.objectInstance ?: Class.forName(it.objectName).newInstance()
+      val module = Class.forName(it.objectName).kotlin.objectInstance ?: Class.forName(it.objectName).getDeclaredConstructor().newInstance()
 
       if (module is Window) {
         localizeWindow(module, locale, output)

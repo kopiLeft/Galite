@@ -100,8 +100,8 @@ object ConfigurationManager : ApplicationConfiguration() {
     return value.toInt()
   }
 
-  override fun getBooleanFor(var1: String): Boolean {
-    return java.lang.Boolean.valueOf(this.getStringFor(var1))
+  override fun getBooleanFor(key: String): Boolean {
+    return java.lang.Boolean.valueOf(this.getStringFor(key))
   }
 
   override fun isUnicodeDatabase(): Boolean = false

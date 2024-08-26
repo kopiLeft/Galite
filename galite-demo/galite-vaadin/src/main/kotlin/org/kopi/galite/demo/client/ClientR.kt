@@ -110,7 +110,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     align = FieldAlignment.LEFT
     group = ageClt
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -119,7 +119,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     help = "The client last name"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -128,7 +128,7 @@ class ClientR : Report(title = "Clients_Report", locale = Locale.UK) {
     help = "The client address"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toLowerCase()
+      value.lowercase()
     }
   }
 

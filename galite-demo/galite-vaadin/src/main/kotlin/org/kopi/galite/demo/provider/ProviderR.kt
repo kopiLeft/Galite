@@ -78,7 +78,7 @@ class ProviderR : Report(title = "Providers_Report", locale = Locale.UK) {
     help = "The provider name"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
@@ -93,7 +93,7 @@ class ProviderR : Report(title = "Providers_Report", locale = Locale.UK) {
     help = "The provider description"
     align = FieldAlignment.LEFT
     format { value ->
-      value.toUpperCase()
+      value.uppercase()
     }
   }
 
