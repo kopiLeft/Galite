@@ -69,8 +69,8 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
   override val isNull: Boolean
     get() = image.isEmpty
 
-  override fun setValue(o: Any?) {
-    image.src = o as String?
+  override fun setValue(value: Any?) {
+    image.src = value as String?
   }
 
 

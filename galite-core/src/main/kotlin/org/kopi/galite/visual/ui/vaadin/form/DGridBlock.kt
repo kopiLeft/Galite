@@ -294,7 +294,7 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
     access(currentUI) {
       filterRow = grid.appendHeaderRow()
       filterRow.also { element.classList.add("block-filter") }
-      val filterFields = grid.columns.mapIndexed { index, column ->
+      val filterFields = grid.columns.mapIndexed { _, column ->
         val cell = filterRow!!.getCell(column)
         val filter = TextField()
         val search = Icon(VaadinIcon.SEARCH)

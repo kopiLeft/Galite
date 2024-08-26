@@ -101,13 +101,13 @@ class VIntegerField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val s = s as? String
+    val text = s as? String
 
-    if (s == "") {
+    if (text == "") {
       setNull(rec)
     } else {
       val v = try {
-        s!!.toInt()
+        text!!.toInt()
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -137,21 +137,21 @@ class VIntegerField(val bufferSize: Int,
    * Sets the field value of given record to a int value.
    */
   override fun setInt(r: Int, v: Int?) {
-    var v = v
+    var n = v
     if (isChangedUI
-            || value[r] == null && v != null
-            || value[r] != null && value[r] != v) {
+            || value[r] == null && n != null
+            || value[r] != null && value[r] != n) {
       // trails (backup) the record if necessary
       trail(r)
-      if (v == null) {
+      if (n == null) {
         value[r] = null
       } else {
-        if (v < minValue) {
-          v = minValue
-        } else if (v > maxValue) {
-          v = maxValue
+        if (n < minValue) {
+          n = minValue
+        } else if (n > maxValue) {
+          n = maxValue
         }
-        value[r] = v
+        value[r] = n
       }
       // inform that value has changed
       setChanged(r)

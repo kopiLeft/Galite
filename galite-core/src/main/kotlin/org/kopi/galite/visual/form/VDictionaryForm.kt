@@ -99,7 +99,7 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
       if (getBlock(0) == null) {
         gotoBlock(block!!)
       }
-      Commands.insertMode(block!!)
+      block!!.insertMode()
     } else if (editID != -1) {
       newRecord = true
       fetchBlockRecord(0, editID)

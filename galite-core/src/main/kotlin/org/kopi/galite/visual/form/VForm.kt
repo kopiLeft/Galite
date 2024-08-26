@@ -164,15 +164,6 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
 
   /**
    * implemented for compatibility with old gui
-   */
-  @Deprecated("")
-  fun executeAfterStart() {
-    //do nothing
-    // overridden in Buchen.vf in fibu
-  }
-
-  /**
-   * implemented for compatibility with old gui
    * used in tib/Artikel.vf
    */
   @Deprecated("")

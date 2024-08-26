@@ -77,12 +77,12 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val s = s as? String
+    val value = s as? String
 
-    if (s == "") {
+    if (value == "") {
       setNull(rec)
     } else {
-      val week = parseWeek(s)
+      val week = parseWeek(value)
 
       checkConstraint(week)
       setWeek(rec, week)

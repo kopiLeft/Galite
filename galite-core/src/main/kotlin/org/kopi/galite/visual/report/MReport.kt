@@ -97,7 +97,7 @@ class MReport : Constants, Serializable {
   }
 
   fun removeColumn(position: Int) {
-    var position = position
+    var pos = position
     val cols = arrayOfNulls<VReportColumn>(columns.size - 1)
     var hiddenColumns = 0
 
@@ -106,16 +106,16 @@ class MReport : Constants, Serializable {
         hiddenColumns += 1
       }
     }
-    position += hiddenColumns
-    // copy columns before position.
-    for (i in 0 until position) {
+    pos += hiddenColumns
+    // copy columns before pos.
+    for (i in 0 until pos) {
       cols[i] = columns[i]
     }
-    // copy columns after position.
-    for (i in position until columns.size - 1) {
+    // copy columns after pos.
+    for (i in pos until columns.size - 1) {
       cols[i] = columns[i + 1]
     }
-    position -= hiddenColumns
+    pos -= hiddenColumns
     columns = cols.clone().toMutableList()
     createAccessibleTab()
     val rows = arrayOfNulls<VBaseRow>(baseRows.size)
@@ -123,11 +123,11 @@ class MReport : Constants, Serializable {
     baseRows.forEachIndexed { index, element ->
       val data = arrayOfNulls<Any>(getAccessibleColumnCount())
 
-      for (j in 0 until position) {
+      for (j in 0 until pos) {
         data[j] = element!!.getValueAt(j)
       }
-      // skip position.
-      for (j in position until getAccessibleColumnCount()) {
+      // skip pos.
+      for (j in pos until getAccessibleColumnCount()) {
         data[j] = element!!.getValueAt(j + 1)
       }
       rows[index] = VBaseRow(data)
@@ -579,43 +579,43 @@ class MReport : Constants, Serializable {
   }
 
   private fun buildGroupingTree(tree: VReportRow, loRow: Int, hiRow: Int, start: Int) {
-    var loRow = loRow
-    var start = start
+    var lowRow = loRow
+    var startIndex = start
 
-    if (displayLevels[start] == 0) {    // even if the 0-index column is hidden, its displayLevels == 0
-      for (i in loRow..hiRow) {
+    if (displayLevels[startIndex] == 0) {    // even if the 0-index column is hidden, its displayLevels == 0
+      for (i in lowRow..hiRow) {
         tree.add(baseRows[i])
       }
     } else {
       // get the interval of columns at this level
-      var next: Int = start + 1
+      var next: Int = startIndex + 1
 
-      while (displayLevels[next] == displayLevels[start]) {
+      while (displayLevels[next] == displayLevels[startIndex]) {
         next++
       }
-      while (!accessibleColumns[start]!!.isVisible) {
+      while (!accessibleColumns[startIndex]!!.isVisible) {
         // to get the first visible column of this level
-        start++
+        startIndex++
       }
 
       do {
-        val value = baseRows[loRow]!!.getValueAt(displayOrder[start])
-        var split = loRow
+        val value = baseRows[lowRow]!!.getValueAt(displayOrder[startIndex])
+        var split = lowRow
 
-        while (split <= hiRow && (value == null && baseRows[split]!!.getValueAt(displayOrder[start]) == null
-                        || value != null && value == baseRows[split]!!.getValueAt(displayOrder[start]))) {
+        while (split <= hiRow && (value == null && baseRows[split]!!.getValueAt(displayOrder[startIndex]) == null
+                        || value != null && value == baseRows[split]!!.getValueAt(displayOrder[startIndex]))) {
           split += 1
         }
-        val newRow = VGroupRow(arrayOfNulls(getModelColumnCount()), displayLevels[start])
+        val newRow = VGroupRow(arrayOfNulls(getModelColumnCount()), displayLevels[startIndex])
 
         maxRowCount++
         for (i in 0 until next) {
-          newRow.setValueAt(displayOrder[i], baseRows[loRow]!!.getValueAt(displayOrder[i]))
+          newRow.setValueAt(displayOrder[i], baseRows[lowRow]!!.getValueAt(displayOrder[i]))
         }
-        buildGroupingTree(newRow, loRow, split - 1, next)
+        buildGroupingTree(newRow, lowRow, split - 1, next)
         tree.add(newRow)
-        loRow = split
-      } while (loRow <= hiRow)
+        lowRow = split
+      } while (lowRow <= hiRow)
     }
   }
 

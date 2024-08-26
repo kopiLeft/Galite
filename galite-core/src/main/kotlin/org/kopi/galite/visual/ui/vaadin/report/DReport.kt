@@ -135,25 +135,25 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun addColumn(position: Int) {
     accessAndPush(currentUI) {
-      var position = position
-      position = table.convertColumnIndexToView(position)
-      position += 1
+      var colPosition = position
+      colPosition = table.convertColumnIndexToView(colPosition)
+      colPosition += 1
       val headerLabel = "col" + model.getColumnCount()
       val span = VerticalLayout(Span(headerLabel))
-      model.addColumn(headerLabel, position)
+      model.addColumn(headerLabel, colPosition)
       val column = table.addColumn(model.getColumnCount() - 1)
       column.setHeader(span)
       column.flexGrow = 0
       addHeaderListeners(column, span)
-      // move last column to position.
+      // move last column to colPosition.
       val pos = IntArray(model.getAccessibleColumnCount())
-      for (i in 0 until position) {
+      for (i in 0 until colPosition) {
         pos[i] = model.getDisplayOrder(i)
       }
-      for (i in position + 1 until model.getAccessibleColumnCount()) {
+      for (i in colPosition + 1 until model.getAccessibleColumnCount()) {
         pos[i] = model.getDisplayOrder(i - 1)
       }
-      pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
+      pos[colPosition] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
       report.columnMoved(pos)
     }
   }

@@ -249,10 +249,10 @@ class VListDialog(list: Array<VListColumn?>,
     }
     if (columns[left]!!.isSortAscending) {
       // reverse sorting
-      for (i in 0 until count / 2) {
-        val tmp = translatedIdents[i]
-        translatedIdents[i] = translatedIdents[count - 1 - i]
-        translatedIdents[count - 1 - i] = tmp
+      for (k in 0 until count / 2) {
+        val tmp = translatedIdents[k]
+        translatedIdents[k] = translatedIdents[count - 1 - k]
+        translatedIdents[count - 1 - k] = tmp
       }
     }
   }

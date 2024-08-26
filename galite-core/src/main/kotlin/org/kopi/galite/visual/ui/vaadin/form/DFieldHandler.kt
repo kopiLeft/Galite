@@ -102,9 +102,9 @@ open class DFieldHandler internal constructor(rowController: VFieldUI) : Abstrac
     }
   }
 
-  override fun accessChanged(row: Int) {
-    if (getRowController().blockView.getDisplayLine(row) != -1) {
-      getRowController().fireAccessHasChanged(row)
+  override fun accessChanged(r: Int) {
+    if (getRowController().blockView.getDisplayLine(r) != -1) {
+      getRowController().fireAccessHasChanged(r)
     }
   }
 

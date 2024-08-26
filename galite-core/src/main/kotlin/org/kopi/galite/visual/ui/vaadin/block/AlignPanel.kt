@@ -136,12 +136,12 @@ class AlignPanel(var align: BlockAlignment?, private val targetBlockName: String
         TODO("Not supported yet")
       }
     } else {
-      val ori = ori as AbstractBlockLayout
+      val layout = ori as AbstractBlockLayout
 
       for (i in aligns!!.indices) {
         val align = aligns!![i]
         if (align.x != -1) {
-          val cell = ori.getCellAtOrNull(ori.rowCount - 1, align.x)
+          val cell = layout.getCellAtOrNull(layout.rowCount - 1, align.x)
 
           if (cell != null) {
             add(components!![i])

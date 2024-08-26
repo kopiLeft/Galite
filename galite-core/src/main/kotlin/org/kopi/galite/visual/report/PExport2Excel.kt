@@ -97,25 +97,25 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   override fun startGroup(subTitle: String?) {
-    var subTitle = subTitle
+    var subtitle = subTitle
 
-    if (subTitle == null) {
-      subTitle = title
+    if (subtitle == null) {
+      subtitle = title
     }
 
     // Sheet name cannot be blank, greater than 31 chars,
     // or contain any of /\*?[]
-    subTitle = subTitle.replace("/|\\\\|\\*|\\?|\\[|\\]".toRegex(), "")
-    if (subTitle.length > 31) {
-      subTitle = subTitle.substring(0, 28) + "..."
-    } else if (subTitle.isEmpty()) {
-      subTitle = " "
+    subtitle = subtitle.replace("/|\\\\|\\*|\\?|\\[|\\]".toRegex(), "")
+    if (subtitle.length > 31) {
+      subtitle = subtitle.substring(0, 28) + "..."
+    } else if (subtitle.isEmpty()) {
+      subtitle = " "
     }
     rowNumber = 0
     sheet = try {
-      workbook!!.createSheet(subTitle)
+      workbook!!.createSheet(subtitle)
     } catch (e: IllegalArgumentException) {
-      workbook!!.createSheet("" + subTitle.hashCode())
+      workbook!!.createSheet("" + subtitle.hashCode())
     }
     for (i in 0 until columnCount) {
       sheet!!.setColumnWidth(i, widths[i].toInt())
@@ -127,7 +127,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     val footer = sheet!!.footer
     val header = sheet!!.header
 
-    header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
+    header.left = title + "  " + getColumnLabel(0) + " : " + subtitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
     footer.right = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +

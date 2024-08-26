@@ -28,7 +28,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
   // IMPLEMENTATION
   // --------------------------------------------------
   override fun enter() {
-    if (blockView.model.isChart() && blockView.inDetailMode()) {
+    if (!blockView.model.noChart() && blockView.inDetailMode()) {
       super.enter()
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
@@ -43,7 +43,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
   }
 
   override fun leave() {
-    if (blockView.model.isChart() && blockView.inDetailMode()) {
+    if (!blockView.model.noChart() && blockView.inDetailMode()) {
       super.leave()
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
@@ -56,13 +56,13 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
 
   override fun searchOperatorChanged() {
     // not yet implemented for grid labels
-    if (blockView.model.isChart() && blockView.inDetailMode()) {
+    if (!blockView.model.noChart() && blockView.inDetailMode()) {
       super.searchOperatorChanged()
     }
   }
 
   override fun valueChanged(r: Int) {
-    if (blockView.model.isChart() && blockView.inDetailMode()) {
+    if (!blockView.model.noChart() && blockView.inDetailMode()) {
       super.valueChanged(r)
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
@@ -75,7 +75,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
   }
 
   override fun colorChanged(r: Int) {
-    if (blockView.model.isChart() && blockView.inDetailMode()) {
+    if (!blockView.model.noChart() && blockView.inDetailMode()) {
       super.colorChanged(r)
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
@@ -87,7 +87,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
   }
 
   override fun accessChanged(row: Int) {
-    if (blockView.model.isChart() && blockView.inDetailMode()) {
+    if (!blockView.model.noChart() && blockView.inDetailMode()) {
       super.accessChanged(row)
     } else {
       blockView.updateColumnAccess(model, row)

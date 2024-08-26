@@ -329,8 +329,8 @@ abstract class DField(internal var model: VFieldUI,
    * prepare a snapshot
    * @param fieldPos position of this field within block visible fields
    */
-  override fun prepareSnapshot(fieldPos: Int, activ: Boolean) {
-    label!!.prepareSnapshot(activ)
+  override fun prepareSnapshot(fieldPos: Int, active: Boolean) {
+    label!!.prepareSnapshot(active)
   }
 
   //-------------------------------------------------

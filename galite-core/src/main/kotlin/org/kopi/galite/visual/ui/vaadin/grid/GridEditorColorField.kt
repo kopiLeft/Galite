@@ -31,7 +31,7 @@ class GridEditorColorField : GridEditorField<Any?>() {
   private val colorPicker = ColorPicker()
 
   init {
-    colorPicker.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<ColorPicker?, String?>? -> }
+    colorPicker.addValueChangeListener { _: AbstractField.ComponentValueChangeEvent<ColorPicker?, String?>? -> }
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
@@ -41,7 +41,7 @@ class GridEditorColorField : GridEditorField<Any?>() {
   override fun getValue(): Any? = colorPicker.value
 
   override fun initContent(): Component {
-    colorPicker.addValueChangeListener { e: AbstractField.ComponentValueChangeEvent<ColorPicker?, String?>? -> }
+    colorPicker.addValueChangeListener { _: AbstractField.ComponentValueChangeEvent<ColorPicker?, String?>? -> }
     return colorPicker
   }
 

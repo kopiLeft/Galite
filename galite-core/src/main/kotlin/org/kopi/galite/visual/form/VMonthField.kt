@@ -81,16 +81,16 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    val s = (s as? String).orEmpty()
+    val value = (s as? String).orEmpty()
 
-    if (s == "") {
+    if (value == "") {
       setNull(rec)
     } else {
-      val month = if (s.indexOf(".") != -1 && s.indexOf(".") == s.lastIndexOf(".")) {
+      val month = if (value.indexOf(".") != -1 && value.indexOf(".") == value.lastIndexOf(".")) {
         // one "." and only one
         try {
-          val month = s.substring(0, s.indexOf(".")).toInt()
-          var year = s.substring(s.indexOf(".") + 1).toInt()
+          val month = value.substring(0, value.indexOf(".")).toInt()
+          var year = value.substring(value.indexOf(".") + 1).toInt()
 
           if (year < 50) {
             year += 2000
@@ -106,10 +106,10 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
         } catch (e: Exception) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
         }
-      } else if (s.indexOf(".") == -1) {
+      } else if (value.indexOf(".") == -1) {
         // just the month, complete
         try {
-          val month = s.toInt()
+          val month = value.toInt()
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {

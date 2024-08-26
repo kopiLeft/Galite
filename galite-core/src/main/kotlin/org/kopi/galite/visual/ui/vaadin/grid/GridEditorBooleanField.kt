@@ -170,12 +170,12 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     value = newPresentationValue
   }
 
-  override fun addFocusListener(function: () -> Unit) {
+  override fun addFocusListener(focusFunction: () -> Unit) {
     yes.addFocusListener {
-      function()
+      focusFunction()
     }
     no.addFocusListener {
-      function()
+      focusFunction()
     }
   }
 

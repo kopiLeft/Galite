@@ -92,7 +92,7 @@ class PExport2PDF(
     }
   }
 
-  override fun export(out: OutputStream) {
+  override fun export(stream: OutputStream) {
     try {
       val paper: PPaperType = PPaperType.getPaperTypeFromCode(printConfig.papertype)
       val paperSize = if (printConfig.paperlayout == "Landscape") {
@@ -129,14 +129,14 @@ class PExport2PDF(
         override fun onEndPage(writer: PdfWriter, document: Document) {
           try {
             val page: Rectangle = document.pageSize
-            val head: PdfPTable = createHeader()
+            val header: PdfPTable = createHeader()
 
-            head.totalWidth = (page.width - document.leftMargin() - document.rightMargin())
-            head.writeSelectedRows(0,
-                                   -1,
-                                   document.leftMargin(),
-                                   (page.height - document.topMargin()) + head.totalHeight + printConfig.headermargin,
-                                   writer.directContent)
+            header.totalWidth = (page.width - document.leftMargin() - document.rightMargin())
+            header.writeSelectedRows(0,
+                                     -1,
+                                     document.leftMargin(),
+                                     (page.height - document.topMargin()) + header.totalHeight + printConfig.headermargin,
+                                     writer.directContent)
           } catch (e: Exception) {
             throw ExceptionConverter(e)
           }
@@ -163,7 +163,7 @@ class PExport2PDF(
       exportData()
       document.add(datatable)
       document.close()
-      addFooter(tempFile, out)
+      addFooter(tempFile, stream)
     } catch (e: Exception) {
       throw InconsistencyException(e)
     }

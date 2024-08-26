@@ -320,8 +320,6 @@ public class DForm extends DWindow implements UForm, DPositionPanelListener {
 
         window.setBounds(rectangle);
         window.show();
-
-        getModel().executeAfterStart();
     }
 
     // ---------------------------------------------------------------------

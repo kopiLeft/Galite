@@ -190,7 +190,7 @@ open class DBlock(val parent: DForm,
    * If there is no current record, the first valid record is used
    */
   open fun refresh(force: Boolean) {
-    var redisplay = false
+    val redisplay: Boolean
     val recno: Int // row in view
 
     if (!model.isMulti()) {
@@ -247,15 +247,15 @@ open class DBlock(val parent: DForm,
         } while (displine >= model.displaySize)
 
         // scroll some more, if there are some (non deleted) records
-        var i = recno + 1
+        var n = recno + 1
         var scrollMore: Int = model.displaySize / 4
-        while (scrollMore > 0 && i < model.bufferSize) {
+        while (scrollMore > 0 && n < model.bufferSize) {
           // is there a non deleted record to see?
-          if (!model.isSortedRecordDeleted(i)) {
+          if (!model.isSortedRecordDeleted(n)) {
             sortedToprec += 1
             scrollMore--
           }
-          i++
+          n++
         }
         redisplay = true
       }
@@ -352,13 +352,13 @@ open class DBlock(val parent: DForm,
   fun setScrollPos(value: Int) {
     // Can not be called in event dispatch thread
     // Scrollbar timer is not stop if you click on one of the two buttons
-    var value = value
-    assert(value < model.bufferSize) //getRecordSize
-    if (sortedToprec != value) {
+    var position = value
+    assert(position < model.bufferSize) //getRecordSize
+    if (sortedToprec != position) {
       var recno = 0 //temp sortedToprec
-      while (value > 0) {
+      while (position > 0) {
         if (!model.isSortedRecordDeleted(recno)) {
-          value--
+          position--
         }
         recno++
       }

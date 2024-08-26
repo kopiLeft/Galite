@@ -181,8 +181,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
     dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean?) {
-        askAnswer = if (yes == true) {
+      override fun onClose(action: Boolean?) {
+        askAnswer = if (action == true) {
           MessageListener.AWR_YES
         } else {
           MessageListener.AWR_NO
@@ -228,8 +228,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
     dialog.yesIsDefault = false
     dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean?) {
-        if (yes == true) {
+      override fun onClose(action: Boolean?) {
+        if (action == true) {
           closeConnection()
           // show welcome screen
           gotoWelcomeView()

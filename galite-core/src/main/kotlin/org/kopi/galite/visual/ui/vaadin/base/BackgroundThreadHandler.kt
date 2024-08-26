@@ -42,12 +42,12 @@ object BackgroundThreadHandler {
       return
     }
 
-    val currentUI = currentUI ?: locateUI()
+    val ui = currentUI ?: locateUI()
 
-    if (currentUI == null) {
+    if (ui == null) {
       command()
     } else {
-      currentUI.access(command)
+      ui.access(command)
     }
   }
 
@@ -62,16 +62,16 @@ object BackgroundThreadHandler {
       return
     }
 
-    val currentUI = currentUI ?: locateUI()
+    val ui = currentUI ?: locateUI()
 
-    if (currentUI == null) {
+    if (ui == null) {
       command()
     } else {
-      currentUI.access {
+      ui.access {
         try {
           command()
         } finally {
-          currentUI.push()
+          ui.push()
         }
       }
     }
@@ -95,15 +95,13 @@ object BackgroundThreadHandler {
       return
     }
 
-    val currentUI = currentUI ?: locateUI()
+    val ui = currentUI ?: locateUI()
 
-    if (currentUI == null) {
+    if (ui == null) {
       command()
     } else {
       try {
-        currentUI
-          .access(command)
-          .get()
+        ui.access(command).get()
       } catch (executionException: ExecutionException) {
         executionException.cause?.let {
           throw it

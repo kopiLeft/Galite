@@ -107,16 +107,16 @@ class VFileHandler : FileHandler() {
    * @throws IOException    I/O errors.
    */
   internal fun createTempFile(directory: File?, defaultName: String?): File {
-    var directory = directory
+    var tempDirectory = directory
 
     // if parent directory does not exist, create file in java.io.tempdir directly.
-    if (directory != null && !directory.exists()) {
-      directory = null
+    if (tempDirectory != null && !tempDirectory.exists()) {
+      tempDirectory = null
     }
     // add a blank between the prefix and the random text
     val basename = ensurePrefixLength(getBaseFileName(defaultName)) + " "
     val extension = getExtension(defaultName)
-    return File.createTempFile(basename, extension, directory)
+    return File.createTempFile(basename, extension, tempDirectory)
   }
 
   /**

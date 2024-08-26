@@ -2148,12 +2148,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       }
 
-      val query = table.slice(columns).select(cond).orderBy(columns[0])
-
       while (true) {
         try {
           getForm().transaction {
-            query.forEach {
+            table.slice(columns).select(cond).orderBy(columns[0]).forEach {
               val columnsList = mutableListOf<String>()
 
               list!!.columns.forEach { column ->

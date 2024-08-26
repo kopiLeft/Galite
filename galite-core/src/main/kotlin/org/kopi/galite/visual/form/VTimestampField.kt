@@ -108,7 +108,7 @@ class VTimestampField(val bufferSize: Int, val kClass: KClass<*>? = null) : VFie
   private fun parseDate(s: String): String {
     var day = 0
     var month = 0
-    var year = -2
+    var year: Int
     val tokens = StringTokenizer(s, "/.#-")
 
     if (!tokens.hasMoreTokens()) {

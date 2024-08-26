@@ -18,22 +18,20 @@
 plugins {
   `kotlin-dsl`
   id("java-gradle-plugin")
-//  id("maven-publish")
 }
 
-version = "1.5.3"
+version = "1.5.4"
 
 repositories {
   mavenCentral()
-  mavenLocal()  // If you are using local Maven repository
 }
 
 dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", "1.0.13")
   implementation(kotlin("stdlib"))
-  implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.5.21")
-  implementation("org.jetbrains.kotlin:kotlin-sam-with-receiver:1.5.21")
+  implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.9.0")
+  implementation("org.jetbrains.kotlin:kotlin-sam-with-receiver:1.9.0")
 
 }
 

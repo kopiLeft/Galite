@@ -194,16 +194,16 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   }
 
   override fun setValue(text: String?) {
-    var text = text
+    var value = text
 
     // set only valid inputs
     //if (validationStrategy is NoeditValidator TODO
-    //  || validationStrategy!!.validate(text)
+    //  || validationStrategy!!.validate(value)
     //) {
-    if (text == null) {
-      text = "" // avoid NullPointerException
+    if (value == null) {
+      value = "" // avoid NullPointerException
     }
-    setPresentationValue(text)
+    setPresentationValue(value)
     //}
   }
 

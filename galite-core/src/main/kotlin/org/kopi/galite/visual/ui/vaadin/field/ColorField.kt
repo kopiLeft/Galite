@@ -29,7 +29,7 @@ class ColorField : ObjectField<Any?>() {
   private val colorPicker = ColorPicker()
 
   init {
-    colorPicker.addValueChangeListener { e: ComponentValueChangeEvent<ColorPicker?, String?>? -> }
+    colorPicker.addValueChangeListener { _: ComponentValueChangeEvent<ColorPicker?, String?>? -> }
     add(colorPicker)
   }
 

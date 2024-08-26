@@ -118,19 +118,19 @@ class StyleManager(val currentUI: UI) {
         else -> "left" // cell are left aligned by default;
       }
 
-    override fun equals(obj: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
       return when {
-        this === obj -> {
+        this === other -> {
           true
         }
-        obj is Styler -> {
-          component == obj.component
-                  && (align == obj.align)
-                  && Utils.equals(foreground, obj.foreground)
-                  && Utils.equals(background, obj.background)
+        other is Styler -> {
+          component == other.component
+                  && (align == other.align)
+                  && Utils.equals(foreground, other.foreground)
+                  && Utils.equals(background, other.background)
         }
         else -> {
-          super.equals(obj)
+          super.equals(other)
         }
       }
     }

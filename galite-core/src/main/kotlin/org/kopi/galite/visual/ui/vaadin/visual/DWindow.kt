@@ -38,7 +38,6 @@ import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
@@ -583,8 +582,8 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
 
       dialog.yesIsDefault = yesIsDefault
       dialog.addNotificationListener(object : NotificationListener {
-        override fun onClose(yes: Boolean?) {
-          value = if (yes == true) {
+        override fun onClose(action: Boolean?) {
+          value = if (action == true) {
             MessageListener.AWR_YES
           } else {
             MessageListener.AWR_NO

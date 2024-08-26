@@ -114,7 +114,7 @@ abstract class DGridEditorField<T>(
 
   var currentUI: UI? = null
 
-  override fun prepareSnapshot(fieldPos: Int, activ: Boolean) {}
+  override fun prepareSnapshot(fieldPos: Int, active: Boolean) {}
 
   /**
    * Sets the label alignment according to the editor alignment.

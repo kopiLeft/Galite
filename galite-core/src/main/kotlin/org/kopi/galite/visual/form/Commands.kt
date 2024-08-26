@@ -345,15 +345,6 @@ object Commands : VConstants {
   }
 
   /**
-   * Sets the block into insert mode.
-   * @exception        VException        an exception may occur during DB access
-   */
-  @Deprecated("Use VBlock.insertMode() instead", ReplaceWith("b.insertMode()"))
-  fun insertMode(b: VBlock) {
-    b.insertMode()
-  }
-
-  /**
    * Saves current block (insert or update)
    * @exception        VException        an exception may occur during DB access
    */

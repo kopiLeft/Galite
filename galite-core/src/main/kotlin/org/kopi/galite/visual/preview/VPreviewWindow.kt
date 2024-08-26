@@ -227,15 +227,15 @@ class VPreviewWindow : VWindow() {
   }
 
   fun zoom(ratio: Float) {
-    var ratio = ratio
-    if (height.coerceAtMost(width) * ratio < 50) {
-      ratio = 50 / height.coerceAtMost(width).toFloat()
+    var zoomRatio = ratio
+    if (height.coerceAtMost(width) * zoomRatio < 50) {
+      zoomRatio = 50 / height.coerceAtMost(width).toFloat()
     }
-    if (height.coerceAtLeast(width) * ratio > 3000) {
-      ratio = 3000 / height.coerceAtLeast(width).toFloat()
+    if (height.coerceAtLeast(width) * zoomRatio > 3000) {
+      zoomRatio = 3000 / height.coerceAtLeast(width).toFloat()
     }
-    width = (width * ratio).toInt()
-    height = (height * ratio).toInt()
+    width = (width * zoomRatio).toInt()
+    height = (height * zoomRatio).toInt()
     createImagesFromPostscript()
     fireZoomChanged()
   }

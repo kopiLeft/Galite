@@ -198,7 +198,6 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     for (i in 0 until blockcount) {
       vForm!!.getBlock(i).updateBlockAccess()
     }
-    vForm!!.executeAfterStart()
   }
 
   override fun onPageSelection(page: Int) {
@@ -344,8 +343,8 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
       }
     }
 
-    override fun blockViewModeLeaved(block: VBlock, actviceField: VField?) {}
-    override fun blockViewModeEntered(block: VBlock, actviceField: VField?) {}
+    override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {}
+    override fun blockViewModeEntered(block: VBlock, activeField: VField?) {}
     override fun validRecordNumberChanged() {}
     override fun recordInfoChanged(rec: Int, info: Int) {}
     override fun orderChanged() {}

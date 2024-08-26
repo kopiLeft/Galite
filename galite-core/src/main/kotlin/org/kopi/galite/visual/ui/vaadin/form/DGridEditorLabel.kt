@@ -53,8 +53,8 @@ class DGridEditorLabel(text: String?,
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-  override fun init(text: String?, tooltip: String?) {
-    this.tooltip = tooltip
+  override fun init(text: String?, help: String?) {
+    this.tooltip = help
     access(currentUI) {
       add(text.orEmpty())
       setDescription(Utils.createTooltip(tooltip))
@@ -93,13 +93,13 @@ class DGridEditorLabel(text: String?,
   /**
    * Builds full field description.
    * @param model The field model.
-   * @param tooltip The initial field tooltip.
+   * @param help The initial field tooltip.
    * @return The full field description.
    */
-  fun buildDescription(model: VFieldUI, tooltip: String?): String {
+  fun buildDescription(model: VFieldUI, help: String?): String {
     var description: String
     val commands = model.getAllCommands()
-    val tooltip = tooltip.orEmpty() // avoid writing null in help tooltip.
+    val tooltip = help.orEmpty() // avoid writing null in help tooltip.
 
     description = tooltip
     if (commands.isNotEmpty()) {

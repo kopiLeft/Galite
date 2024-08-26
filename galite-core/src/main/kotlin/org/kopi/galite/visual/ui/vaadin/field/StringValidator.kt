@@ -32,22 +32,22 @@ class StringValidator(
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun checkType(field: InputTextField<*>, text: String) {
-    var text: String? = text
-    if (text == null || "" == text) {
+    var value: String? = text
+    if (value == null || "" == value) {
       field.value = null
     } else {
       when (convertType) {
         TextField.ConvertType.NONE -> {
         }
-        TextField.ConvertType.UPPER -> text = text.uppercase()
-        TextField.ConvertType.LOWER -> text = text.lowercase()
-        TextField.ConvertType.NAME -> text = convertName(text)
+        TextField.ConvertType.UPPER -> value = value.uppercase()
+        TextField.ConvertType.LOWER -> value = value.lowercase()
+        TextField.ConvertType.NAME -> value = convertName(value)
         else -> throw RuntimeException()
       }
-      if (!checkText(text)) {
+      if (!checkText(value)) {
         throw CheckTypeException(field, "00013")
       }
-      field.value = text
+      field.value = value
     }
   }
 
@@ -76,7 +76,7 @@ class StringValidator(
    * @return `true` if the text is valid.
    */
   private fun checkText(text: String?): Boolean {
-    var end = 0
+    var end: Int
     end = textToModel(text, width, Int.MAX_VALUE, fixedNewLine).length
     return end <= width * height
   }

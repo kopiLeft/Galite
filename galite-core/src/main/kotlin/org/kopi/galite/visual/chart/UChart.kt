@@ -43,9 +43,9 @@ interface UChart : UWindow {
 
   /**
    * Sets the chart type representation.
-   * @param type The chart type view
+   * @param newType The chart type view
    */
-  fun setType(type: UChartType?)
+  fun setType(newType: UChartType?)
 
   /**
    * Returns the chart type.

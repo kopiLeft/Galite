@@ -43,19 +43,19 @@ class SingleComponentBlockLayout(override val block: Block) : SimpleBlockLayout(
           useAll: Boolean
   ) {
     // always put the component at the only available position
-    var x = x
-    var y = y
-    var width = width
-    if (x > 0) {
-      x = 0
+    var xPosition = x
+    var yPosition = y
+    var componentWidth = width
+    if (xPosition > 0) {
+      xPosition = 0
     }
-    if (y > 0) {
-      y = 0
+    if (yPosition > 0) {
+      yPosition = 0
     }
-    if (width > 1 || width < 0) {
-      width = 1
+    if (componentWidth > 1 || componentWidth < 0) {
+      componentWidth = 1
     }
-    super.addComponent(component, x, y, width, height, alignRight, useAll)
+    super.addComponent(component, xPosition, yPosition, componentWidth, height, alignRight, useAll)
   }
 
   override fun setBlockAlignment(original: Component, targetBlockName: String, targets: IntArray, isChart: Boolean) {

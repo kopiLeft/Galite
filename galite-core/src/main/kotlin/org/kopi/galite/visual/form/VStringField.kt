@@ -103,24 +103,24 @@ open class VStringField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    var s = s as? String
+    var value = s as? String
 
-    if (s == null || s == "") {
+    if (value == null || value == "") {
       setNull(rec)
     } else {
       when (convert and VConstants.FDO_CONVERT_MASK) {
         VConstants.FDO_CONVERT_NONE -> {
         }
-        VConstants.FDO_CONVERT_UPPER -> s = s.toUpperCase()
-        VConstants.FDO_CONVERT_LOWER -> s = s.toLowerCase()
-        VConstants.FDO_CONVERT_NAME -> s = convertName(s)
+        VConstants.FDO_CONVERT_UPPER -> value = value.uppercase()
+        VConstants.FDO_CONVERT_LOWER -> value = value.lowercase()
+        VConstants.FDO_CONVERT_NAME -> value = convertName(value)
         else -> throw InconsistencyException()
       }
-      if (!checkText(s)) {
+      if (!checkText(value)) {
         throw VExecFailedException()
       }
-      checkConstraint(s)
-      setString(rec, s)
+      checkConstraint(value)
+      setString(rec, value)
     }
   }
 
@@ -130,12 +130,12 @@ open class VStringField(val bufferSize: Int,
    * @param    source        the source text.
    */
   private fun convertName(source: String): String {
-    val chars = source.toLowerCase().toCharArray()
+    val chars = source.lowercase().toCharArray()
     var found = false
 
     for (i in chars.indices) {
       if (!found && chars[i].isLetter()) {
-        chars[i] = chars[i].toUpperCase()
+        chars[i] = chars[i].uppercaseChar()
         found = true
       } else if (chars[i].isWhitespace()) {
         found = false

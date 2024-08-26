@@ -102,7 +102,7 @@ class DImageField(
     image = s
   }
 
-  override fun setBlink(b: Boolean) {
+  override fun setBlink(blink: Boolean) {
     // TODO
   }
 
