@@ -71,19 +71,19 @@ class RootMenu(id: Int, name: String) {
                           root: Module,
                           force: Boolean,
                           isSuperUser: Boolean): DefaultMutableTreeNode? {
-    var force = force
+    var forceAccessibility = force
 
     if (root.accessibility == Module.ACS_TRUE || isSuperUser) {
-      force = true
+      forceAccessibility = true
     }
     return if (root.objectName != null) {
-      if (force) DefaultMutableTreeNode(root) else null
+      if (forceAccessibility) DefaultMutableTreeNode(root) else null
     } else {
       var self: DefaultMutableTreeNode? = null
 
       modules.forEach {
         if (it.parent == root.id) {
-          val node: DefaultMutableTreeNode? = createTree(modules, it, force, isSuperUser)
+          val node: DefaultMutableTreeNode? = createTree(modules, it, forceAccessibility, isSuperUser)
 
           if (node != null) {
             if (self == null) {

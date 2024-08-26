@@ -48,11 +48,11 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   /**
    * constructs an outer join tree.
    */
-  private fun getJoinCondition(rootTable: Table, table: Table, joinTables: Join): Join {
+  private fun getJoinCondition(rootTable: Table, table: Table, joinedTables: Join): Join {
     var field: VField
     var additionalConstraint: (SqlExpressionBuilder.() -> Op<Boolean>)? = null
     var condition: Op<Boolean>? = null
-    var joinTables = joinTables
+    var joinTables = joinedTables
 
     for (i in fields.indices) {
       if (isProcessedField(i)) {

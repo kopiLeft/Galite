@@ -392,19 +392,19 @@ class VDynamicReport(block: VBlock) : VReport() {
             if (!alreadyProtected) {
               block.form.handleAborted(e)
             } else {
-              throw e;
+              throw e
             }
           } catch (error: Error) {
             if (!alreadyProtected) {
               block.form.handleAborted(error)
             } else {
-              throw error;
+              throw error
             }
           } catch (rte: RuntimeException) {
             if (!alreadyProtected) {
               block.form.handleAborted(rte)
             } else {
-              throw rte;
+              throw rte
             }
           }
         }
@@ -471,9 +471,9 @@ class VDynamicReport(block: VBlock) : VReport() {
   }
 
   override fun addActors(actorDefs: Array<VActor>?) {
-    val actorDefs = actorDefs.orEmpty()
+    val actorDefinitions = actorDefs.orEmpty()
 
-    actors.addAll(actorDefs)
+    actors.addAll(actorDefinitions)
   }
 
   // ----------------------------------------------------------------------

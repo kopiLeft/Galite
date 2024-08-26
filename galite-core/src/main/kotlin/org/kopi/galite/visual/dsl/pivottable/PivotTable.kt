@@ -97,10 +97,10 @@ abstract class PivotTable(title: String, val help: String?, locale: Locale? = nu
 
     triggers.add(FormTrigger(event, Action(null, method)))
     // PIVOT TABLE TRIGGERS
-    triggers.forEach { trigger ->
+    triggers.forEach {
       for (i in VConstants.TRG_TYPES.indices) {
-        if (trigger.events shr i and 1 > 0) {
-          model.PIVOT_TABLE_Triggers[0][i] = trigger
+        if (it.events shr i and 1 > 0) {
+          model.PIVOT_TABLE_Triggers[0][i] = it
         }
       }
     }

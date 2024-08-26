@@ -670,14 +670,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param value the access value.
    */
   fun setAccess(at: Int, value: Int) {
-    var value = value
+    var accessValue = value
 
-    if (getDefaultAccess() < value) {
+    if (getDefaultAccess() < accessValue) {
       // access can never be higher than the default access
-      value = getDefaultAccess()
+      accessValue = getDefaultAccess()
     }
-    if (value != dynAccess[at]) {
-      dynAccess[at] = value
+    if (accessValue != dynAccess[at]) {
+      dynAccess[at] = accessValue
       fireAccessChanged(at)
     }
   }
@@ -2138,10 +2138,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       val cond = when (getAutocompleteType()) {
         VList.AUTOCOMPLETE_CONTAINS -> {
-          Op.build { condition like Utils.toSql("%" + query.toLowerCase() + "%") }
+          Op.build { condition like Utils.toSql("%" + query.lowercase() + "%") }
         }
         VList.AUTOCOMPLETE_STARTSWITH -> {
-          Op.build { condition like Utils.toSql(query.toLowerCase() + "%") }
+          Op.build { condition like Utils.toSql(query.lowercase() + "%") }
         }
         else -> {
           Op.build { condition eq Utils.toSql(query.toString()) }
@@ -2271,7 +2271,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       help.helpOnField(block!!.title,
                        block!!.getFieldPos(this),
                        label,
-                       lab ?: name,
+                       lab,
                        toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED ||
           access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED ||
@@ -2575,19 +2575,5 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         i -= 2
       }
     }
-  }
-
-  // ----------------------------------------------------------------------
-  // !!! Remove after merging the new MVC
-  // ----------------------------------------------------------------------
-
-  @Deprecated("")
-  inner class Compatible {
-    fun getDisplayedValue(trim: Boolean): Any? = this@VField.getDisplayedValue(trim)
-  }
-
-  @Deprecated("")
-  fun getUI(): Compatible {
-    return Compatible()
   }
 }

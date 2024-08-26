@@ -107,7 +107,7 @@ class OptUtils(paramArrayOfString: Array<String?>) : Constants {
     for (i in dirs.indices) {
       val file = dirs[i]
 
-      if (!file!!.isDirectory) {
+      if (!file.isDirectory) {
         files.add(file)
       } else {
         files.addAll(collectFiles(file.listFiles()))

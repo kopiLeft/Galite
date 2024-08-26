@@ -55,7 +55,6 @@ import org.kopi.galite.visual.VExecFailedException
  * @param        title                 the title of the block.
  * @param        buffer                the buffer size of this block.
  * @param        visible               the number of visible elements.
- * @param        form                  the form to which belongs the block.
  */
 open class Block(val title: String,
                  var buffer: Int,
@@ -535,7 +534,7 @@ open class Block(val title: String,
 
   var isDetailMode
     get() = block.isDetailMode
-    set(mode: Boolean) {
+    set(mode) {
       block.isDetailMode = mode
     }
 
@@ -610,18 +609,18 @@ open class Block(val title: String,
    * @param background The background color.
    */
   fun setColor(r: Int, foreground: Color?, background: Color?) {
-    val foreground = if(foreground == null) {
+    val fieldForeground = if (foreground == null) {
       null
     } else {
       VColor(foreground.red, foreground.green, foreground.blue)
     }
-    val background = if(background == null) {
+    val fieldBackground = if (background == null) {
       null
     } else {
       VColor(background.red, background.green, background.blue)
     }
 
-    block.setColor(r, foreground, background)
+    block.setColor(r, fieldForeground, fieldBackground)
   }
 
   /**

@@ -157,9 +157,9 @@ class VItemTree(rootName: String?,
   /**
    * Enables or disable the given actor
    */
-  override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    treeActors[actor]!!.handler = this
-    treeActors[actor]!!.isEnabled = enabled
+  override fun setActorEnabled(position: Int, enabled: Boolean) {
+    treeActors[position]!!.handler = this
+    treeActors[position]!!.isEnabled = enabled
   }
 
   /**
@@ -189,12 +189,12 @@ class VItemTree(rootName: String?,
   /**
    * Performs the appropriate action.
    *
-   * @param   key           the number of the actor.
+   * @param   VKT_Type           the number of the actor.
    */
-  override fun executeVoidTrigger(key: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
     val currentDisplay = getDisplay()
 
-    when (key) {
+    when (VKT_Type) {
       CMD_QUIT -> if (isChanged) {
         if (ask(Message.getMessage("confirm_quit"), false)) {
           currentDisplay.closeWindow()
@@ -227,9 +227,9 @@ class VItemTree(rootName: String?,
         itemTreeManager.save()
         unsetWaitInfo()
         isChanged = false
-        currentDisplay?.setTree()
+        currentDisplay.setTree()
       }
-      else -> super.executeVoidTrigger(key)
+      else -> super.executeVoidTrigger(VKT_Type)
     }
   }
 

@@ -140,7 +140,7 @@ class Module(val id: Int,
   companion object {
     fun getExecutable(objectName: String?): Executable {
       return try {
-        val instance = Class.forName(objectName).kotlin.objectInstance ?: Class.forName(objectName).newInstance()
+        val instance = Class.forName(objectName).kotlin.objectInstance ?: Class.forName(objectName).getDeclaredConstructor().newInstance()
         return if(instance is Window) {
           instance.model
         } else {

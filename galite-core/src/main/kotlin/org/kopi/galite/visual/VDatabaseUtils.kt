@@ -43,7 +43,7 @@ object VDatabaseUtils {
       ).select {
         References.reference eq queryTable.tableName
       }.orderBy(References.action to SortOrder.DESC)
-      val action = query1.forEach { query1Row ->
+      query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
           val column = integer(query1Row[References.column])
@@ -51,7 +51,7 @@ object VDatabaseUtils {
         when (query1Row[References.action][0]) {
           'R' -> transaction {
             val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
-            if (query2.toList()[1] != null) {
+            if (query2.toList().isNotEmpty()) {
               throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(query1Row[References.column],
                                                                                           query1Row[References.table])))
             }
@@ -85,7 +85,7 @@ object VDatabaseUtils {
       ).select {
         References.reference eq table
       }.orderBy(References.action to SortOrder.DESC)
-      val action = query1.forEach { query1Row ->
+      query1.forEach { query1Row ->
         val auxTable = object : Table(query1Row[References.table]) {
           var id = integer("ID")
           val column = integer(query1Row[References.column])
@@ -93,7 +93,7 @@ object VDatabaseUtils {
         when (query1Row[References.action][0]) {
           'R' -> transaction {
             val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
-            if (query2.toList()[1] != null) {
+            if (query2.toList().isNotEmpty()) {
               throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(query1Row[References.column],
                                                                                           query1Row[References.table])))
             }

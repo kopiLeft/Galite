@@ -206,8 +206,8 @@ open class LpR {
   /**
    * Sets the print class
    */
-  fun setPrintClass(printClass: String?) {
-    //options.printClass = printClass;
+  fun setPrintClass(printClass: String) {
+    options.printClass = printClass
   }
 
   /**
@@ -311,7 +311,7 @@ open class LpR {
   }
 
   private val jobID: String
-    private get() {
+    get() {
       Companion.jobID += 1
       return when {
         Companion.jobID < 10 -> {

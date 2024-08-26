@@ -53,20 +53,6 @@ open class Utils {
      * Check if an assertion is valid
      *
      * @param            expression              The expression to verify
-     * @exception        RuntimeException        the entire token reference
-     */
-    @Deprecated("Use the verify with the error message",
-      ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
-    fun verify(expression: Boolean) {
-      if (!expression) {
-        throw InconsistencyException()
-      }
-    }
-
-    /**
-     * Check if an assertion is valid
-     *
-     * @param            expression              The expression to verify
      * @param            errorMessage            The error message to show when [expression] is not valid
      * @exception        RuntimeException        the entire token reference
      */

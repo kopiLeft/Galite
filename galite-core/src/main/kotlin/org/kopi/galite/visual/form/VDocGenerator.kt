@@ -39,7 +39,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
                           blocks: List<VBlock>?,
                           title: String,
                           help: String?,
-                          code: String): String? {
+                          code: String): String {
     latexPrinter.println("\\section{$title}")
     latexPrinter.println("\\label{$code}")
     latexPrinter.println(help)
@@ -87,11 +87,11 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         break
       }
     }
-    if (countNNull == 0 && (commands == null || commands.isEmpty())) {
+    if (countNNull == 0 && commands.isNullOrEmpty()) {
       return
     }
     latexPrinter.uncheckedPrintln("\\begin{itemize}")
-    if (commands != null && commands.isNotEmpty()) {
+    if (!commands.isNullOrEmpty()) {
       var query = 0
       var update = 0
       var insert = 0
@@ -190,7 +190,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
                            help: String?) {
     latexPrinter.printItem(label)
     latexPrinter.println("\\index{$label}")
-    if (help != null && help.isNotEmpty()) {
+    if (!help.isNullOrEmpty()) {
       latexPrinter.println(help + "\\\\")
     } else {
       latexPrinter.println("...\\\\")
@@ -233,7 +233,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
    * printlns a compilation unit
    */
   override fun helpOnFieldCommand(commands: Array<VCommand>?) {
-    if (commands != null && commands.isNotEmpty()) {
+    if (!commands.isNullOrEmpty()) {
       sortCommands(commands)
       latexPrinter.println()
       latexPrinter.println("\\begin{description}")

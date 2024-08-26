@@ -266,7 +266,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     // 20021022 laurent : do the same for increment and decrement buttons ?
     if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
-            !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
+            model.block!!.noChart() && display != null && display!!.getAutofillButton() != null) {
       display!!.getAutofillButton()!!.setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
     }
   }
@@ -524,7 +524,7 @@ abstract class VFieldUI @JvmOverloads protected constructor(open val blockView: 
     get() = if (blockView.getDisplayLine() == -1) {
       null
     } else {
-      if (getBlock().isChart() && blockView.inDetailMode()) {
+      if (!getBlock().noChart() && blockView.inDetailMode()) {
         detailDisplay
       } else {
         if (!isDisplayInitialized) null else displays[blockView.getDisplayLine()]

@@ -18,13 +18,10 @@ package org.kopi.galite.visual.dsl.form
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 import org.kopi.galite.visual.domain.Domain
 import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VDateField
 import org.kopi.galite.visual.form.VForm
-import org.kopi.galite.visual.form.VTimeField
 import org.kopi.galite.visual.form.VTimestampField
 
 /**
@@ -35,95 +32,8 @@ import org.kopi.galite.visual.form.VTimestampField
  * @param        title                 the title of the block
  */
 open class FullCalendar(title: String) : Block(title, 1, 1) {
-
-  var dateField: FormField<*>? = null
-  var fromTimeField: FormField<*>? = null
-  var toTimeField: FormField<*>? = null
   var fromField: FormField<*>? = null
   var toField: FormField<*>? = null
-
-  /**
-   * Creates and returns a date mustfill field.
-   *
-   * @param init    initialization method to initialize the field.
-   * @return a date mustfill field.
-   */
-  @Deprecated("use from() and to() fields instead")
-  fun date(position: FormPosition, init: FormField<LocalDate>.() -> Unit): FormField<LocalDate> =
-    date(Domain(), position, init)
-
-  /**
-   * Creates and returns a date mustfill field.
-   *
-   * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
-   * @return a mustfill field.
-   */
-  @Deprecated("use from() and to() fields instead")
-  inline fun <reified T: LocalDate> date(domain: Domain<T>,
-                                         position: FormPosition,
-                                         init: FormField<T>.() -> Unit): FormField<T>
-  {
-    return mustFill(domain, position, init).also { field ->
-      dateField = field
-      block.dateField = field.vField as VDateField
-    }
-  }
-
-  /**
-   * Creates and returns a time mustfill field.
-   *
-   * @param init    initialization method to initialize the field.
-   * @return a mustfill field.
-   */
-  @Deprecated("use from() and to() fields instead")
-  fun fromTime(position: FormPosition, init: FormField<LocalTime>.() -> Unit): FormField<LocalTime> =
-    fromTime(Domain(), position, init)
-
-  /**
-   * Creates and returns a time mustfill field.
-   *
-   * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
-   * @return a mustfill field.
-   */
-  @Deprecated("use from() and to() fields instead")
-  inline fun <reified T: LocalTime> fromTime(domain: Domain<T>,
-                                             position: FormPosition,
-                                             init: FormField<T>.() -> Unit): FormField<T> {
-    return mustFill(domain, position, init).also { field ->
-      fromTimeField = field
-      block.fromTimeField = field.vField as VTimeField
-    }
-  }
-
-  /**
-   * Creates and returns a time mustfill field.
-   *
-   * @param init    initialization method to initialize the field.
-   * @return a mustfill field.
-   */
-  @Deprecated("use from() and to() fields instead")
-  fun toTime(position: FormPosition, init: FormField<LocalTime>.() -> Unit): FormField<LocalTime> =
-    toTime(Domain(), position, init)
-
-  /**
-   * Creates and returns a time mustfill field.
-   *
-   * @param domain  the domain of the field.
-   * @param init    initialization method to initialize the field.
-   * @return a mustfill field.
-   */
-  @Deprecated("use from() and to() fields instead")
-  inline fun <reified T: LocalTime> toTime(domain: Domain<T>,
-                                      position: FormPosition,
-                                      init: FormField<T>.() -> Unit): FormField<T> {
-
-    return mustFill(domain, position, init).also { field ->
-      toTimeField = field
-      block.toTimeField = field.vField as VTimeField
-    }
-  }
 
   /**
    * Creates and returns a Time mustfill field.
@@ -181,7 +91,6 @@ open class FullCalendar(title: String) : Block(title, 1, 1) {
 
   /**
    * Sets the block into insert mode.
-   * @exception        VException        an exception may occur during DB access
    */
   override fun insertMode() {
     block.insertMode()

@@ -201,7 +201,7 @@ abstract class VChart : VWindow(), CConstants {
     }
     // all commands are by default enabled
     activeCommands.clear()
-    commands?.forEachIndexed { i, it ->
+    commands.forEachIndexed { i, it ->
       when (it.getIdent()) {
         "BarView" -> {
           cmdBarView = it
@@ -317,9 +317,9 @@ abstract class VChart : VWindow(), CConstants {
    * Enables/disables the actor.
    */
   fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
-    var enable = enable
+    var enableCommand = enable
 
-    if (enable) {
+    if (enableCommand) {
       // we need to check if VKT_Commands_Triggers is not empty
       // ex : org.kopi.galite.visual.cross.VDynamicReport
       if (VKT_Commands_Triggers.isNotEmpty() && hasCommandTrigger(CConstants.TRG_CMDACCESS, index)) {
@@ -330,9 +330,9 @@ abstract class VChart : VWindow(), CConstants {
           // trigger call error ==> command is considered as active
           true
         }
-        enable = active
+        enableCommand = active
       }
-      command.setEnabled(enable)
+      command.setEnabled(enableCommand)
       activeCommands.add(command)
     } else {
       activeCommands.remove(command)

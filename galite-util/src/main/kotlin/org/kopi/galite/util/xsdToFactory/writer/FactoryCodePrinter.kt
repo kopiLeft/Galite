@@ -65,7 +65,7 @@ class FactoryCodePrinter: Constants {
    * @param factory The Factory object of the schema.
    * @param getAbstract If true, includes abstract types.
    */
-  fun extractClasseAttributes(factory: Factory, getAbstract: Boolean) {
+  private fun extractClasseAttributes(factory: Factory, getAbstract: Boolean) {
     val schemaTypes: Array<SchemaType> = factory.content
 
     for (schemaType in schemaTypes) {
@@ -93,7 +93,7 @@ class FactoryCodePrinter: Constants {
                                     isElement = !propertie.isAttribute,
                                     isReserved = Utils.isKotlinReservedWord(NameUtil.lowerCamelCase(propertie.javaPropertyName)),
                                     isCalendarAttribute = propertie.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
-                                    Required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
+                                    required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
                                       else !propertie.extendsJavaOption(),
                                     commentName = "// $comment",
                                     simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
@@ -213,7 +213,7 @@ class FactoryCodePrinter: Constants {
   }
 
   /**
-   * Adds a comment to the create fonction.
+   * Adds a comment to the function "create"
    */
   private fun addCommentFunction(classFactory: ClassFactory) {
     emit("  /**", true)
@@ -239,28 +239,28 @@ class FactoryCodePrinter: Constants {
       val type = (if (attribute.isList) "Array<" else "") +
         attribute.type +
         (if (attribute.isList) ">" else "") +
-        (if (!attribute.Required) "? = ${attribute.defaultValue}" else "") +
+        (if (!attribute.required) "? = ${attribute.defaultValue}" else "") +
         (if (index == classFactory.attributes.size-1) ")" else ",")
 
       emit("$indent$name: $type  ${attribute.commentName}", true)
     }
-    emit("${indentation(2)}: ${classFactory.className.capitalize()}", true)
+    emit("${indentation(2)}: ${classFactory.className.replaceFirstChar { it.uppercase() }}", true)
     emit("${indentation(1)}{", true)
     emit("${indentation(2)}val new${classFactory.className}: ${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
     classFactory.attributes.forEach{ attribute ->
       val parameterName = attribute.name + if (attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
-      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar)" else "$parameterName$calendar"
+      val value = if (attribute.hasStringEnumValues && attribute.simpleType.isNotEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar)" else "$parameterName$calendar"
 
       val attributeName = when {
         attribute.isReserved && !attribute.isList -> "`${parameterName.substring(1)}`"
         attribute.isReserved && attribute.isList -> parameterName.substring(1)
         else -> parameterName
       }
-      if(attribute.Required) {
+      if (attribute.required) {
         emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
       } else {
-        if(!"String".equals(attribute.type)) {
+        if("String" != attribute.type) {
           emit("${indentation(2)}$parameterName?.let { new${classFactory.className}.$attributeName = $value }", true)
         } else {
           emit("${indentation(2)}if (!$parameterName.isNullOrBlank()) {", true)
@@ -300,15 +300,15 @@ class FactoryCodePrinter: Constants {
     emit("   *", true)
     emit("   * This is a complex type.", true)
     emit("   *", true)
-    emit("   * @param ${classFactory.className.decapitalize()}s", true)
+    emit("   * @param ${classFactory.className.replaceFirstChar { it.lowercase() }}s", true)
     emit("   * @return A new `${classFactory.javaPackage}` XML instance", true)
     emit("   */", true)
-    emit("${indentation(1)}fun create${classFactory.className}(${classFactory.className.decapitalize()}s: Array<XmlObject>): ${classFactory.className}Document.${classFactory.className} {", true)
+    emit("${indentation(1)}fun create${classFactory.className}(${classFactory.className.replaceFirstChar { it.lowercase() }}s: Array<XmlObject>): ${classFactory.className}Document.${classFactory.className} {", true)
     emit("${indentation(2)}val new${classFactory.className} = ${classFactory.className}Document.${classFactory.className}.Factory.newInstance()\n", true)
-    emit("${indentation(2)}${classFactory.className.decapitalize()}s.forEach { ${classFactory.className.decapitalize()} ->", true)
-    emit("${indentation(3)}when(${classFactory.className.decapitalize()}) {", true)
+    emit("${indentation(2)}${classFactory.className.replaceFirstChar { it.lowercase() }}s.forEach { ${classFactory.className.replaceFirstChar { it.lowercase() }} ->", true)
+    emit("${indentation(3)}when(${classFactory.className.replaceFirstChar { it.lowercase() }}) {", true)
     classFactory.attributes.forEach { attribute ->
-      emit("${indentation(4)}is ${attribute.type}${" ".repeat((40 - attribute.type.length).absoluteValue)}-> new${classFactory.className}.add(${attribute.name} = ${classFactory.className.decapitalize()})", true)
+      emit("${indentation(4)}is ${attribute.type}${" ".repeat((40 - attribute.type.length).absoluteValue)}-> new${classFactory.className}.add(${attribute.name} = ${classFactory.className.replaceFirstChar { it.lowercase() }})", true)
     }
     emit("${indentation(3)}}", true)
     emit("${indentation(2)}}\n", true)
@@ -589,8 +589,8 @@ class FactoryCodePrinter: Constants {
 
   //  Variables
   val indentation = { repeat: Int -> " ".repeat(Constants.INDENTATION * repeat) }
-  val classesFactory: MutableList<ClassFactory> = mutableListOf()
-  val importFactory: MutableList<String> = mutableListOf()
+  private val classesFactory: MutableList<ClassFactory> = mutableListOf()
+  private val importFactory: MutableList<String> = mutableListOf()
 }
 
 /**
@@ -615,7 +615,7 @@ data class Attribute(var name: String,
                      var isElement: Boolean,
                      var isReserved: Boolean,
                      var isCalendarAttribute: Boolean,
-                     val Required: Boolean,
+                     val required: Boolean,
                      var commentName: String = "",
                      val simpleType: String,
                      val hasStringEnumValues: Boolean)

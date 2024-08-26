@@ -52,7 +52,7 @@ class VerifyConfiguration private constructor() {
       configurationError = true
     }
 
-    // check that -ea is on 
+    // check that -ea is on
     var isAssertOn = false
     assert(true.also { isAssertOn = it })
     writer.println(formatMessage("java called with option -ea", !isAssertOn))

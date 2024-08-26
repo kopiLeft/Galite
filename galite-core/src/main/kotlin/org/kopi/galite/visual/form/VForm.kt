@@ -753,20 +753,20 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
    * Enables the active commands or disable all commands.
    */
   override fun setCommandsEnabled(enable: Boolean) {
-    var enable = enable
-    super.setCommandsEnabled(enable)
+    var enableCommand = enable
+    super.setCommandsEnabled(enableCommand)
     // block-level commands
     blocks.forEach { block ->
-      if (!enable || block == activeBlock) {
+      if (!enableCommand || block == activeBlock) {
         // disable all commands
         // enable only the command of the currentblock
-        block.setCommandsEnabled(enable)
+        block.setCommandsEnabled(enableCommand)
       }
     }
     // form-level commands
     commands.forEachIndexed { index, command ->
       if (command.trigger != -1) {
-        if (enable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
+        if (enableCommand && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
           val active: Boolean = try {
             callTrigger(VConstants.TRG_CMDACCESS, index + 1) as Boolean
           } catch (e: VException) {
@@ -774,10 +774,10 @@ abstract class VForm protected constructor(source: String? = null) : VWindow(sou
             true
           }
           // The command is enabled if its access trigger returns <code>true</true>
-          enable = active
+          enableCommand = active
         }
       }
-      command.setEnabled(enable)
+      command.setEnabled(enableCommand)
     }
   }
 

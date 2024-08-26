@@ -321,7 +321,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
     }
     if (!hasModules) {
       error(MessageCode.getMessage("VIS-00042"))
-      throw InconsistencyException() //never accessed
+      throw InconsistencyException(MessageCode.getMessage("VIS-00042")) //never accessed
     }
     createTopLevelTree()
   }
@@ -596,7 +596,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
     try {
       transaction {
         if (menuTreeUser != null) {
-          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.orEmpty() }
+          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser }
           Favorites.deleteWhere {
             (Favorites.user eqSubQuery idSubQuery) and (Favorites.module eq id)
           }

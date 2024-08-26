@@ -37,8 +37,8 @@ import org.kopi.galite.visual.VlibProperties
  * @param    digits      The digits after dot
  * @param    maxScale    The maximum scale to be used for this field
  * @param    isFraction    is true if its is a isFraction field
- * @param    minval      The min permitted value
- * @param    maxval      The max permitted value
+ * @param    minValue      The min permitted value
+ * @param    maxValue      The max permitted value
  *
  */
 class VDecimalField(val bufferSize: Int,
@@ -83,12 +83,12 @@ class VDecimalField(val bufferSize: Int,
    * return the name of this field
    */
   override fun getTypeInformation(): String {
-    var min = minValue
-    var max = maxValue
+    var min: BigDecimal
+    var max: BigDecimal
     var nines: Long = 1
 
-    min = BigDecimal(Int.MIN_VALUE.toDouble())
-    max = BigDecimal(Int.MAX_VALUE.toDouble())
+    min = BigDecimal(Int.MIN_VALUE)
+    max = BigDecimal(Int.MAX_VALUE)
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
@@ -152,16 +152,16 @@ class VDecimalField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val value = s as? String
     val scale: Int = currentScale[rec]
 
-    if ((s == "")) {
+    if ((value == "")) {
       setNull(rec)
     } else {
       val v: BigDecimal?
       try {
-        v = scanDecimal(s)
+        v = scanDecimal(value)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -309,25 +309,25 @@ class VDecimalField(val bufferSize: Int,
    */
   override fun setDecimal(r: Int, v: BigDecimal?) {
     // trails (backup) the record if necessary
-    var v = v
+    var n = v
 
     if ((isChangedUI
-                    || (value[r] == null && v != null)
-                    || (value[r] != null && value[r] != v))) {
+                    || (value[r] == null && n != null)
+                    || (value[r] != null && value[r] != n))) {
       trail(r)
-      if (v != null) {
-        if (v.scale() != currentScale[r]) {
-          v = v.setScale(currentScale[r])
+      if (n != null) {
+        if (n.scale() != currentScale[r]) {
+          n = n.setScale(currentScale[r])
         }
-        if (v!!.compareTo(minValue) == -1) {
-          v = minValue
-        } else if (v.compareTo(maxValue) == 1) {
-          v = maxValue
+        if (n!!.compareTo(minValue) == -1) {
+          n = minValue
+        } else if (n.compareTo(maxValue) == 1) {
+          n = maxValue
         }
       }
 
       // set value in the defined row
-      value[r] = v
+      value[r] = n
       // inform that value has changed
       setChanged(r)
     }

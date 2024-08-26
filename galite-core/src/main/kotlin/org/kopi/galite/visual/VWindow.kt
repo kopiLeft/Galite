@@ -270,10 +270,10 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
    * add actors in menu
    */
   open fun addActors(actorDefs: Array<VActor>?) {
-    val actorDefs = actorDefs.orEmpty()
+    val actorDefinitions = actorDefs.orEmpty()
 
-    actors.addAll(actorDefs)
-    localizeActors(*actorDefs)
+    actors.addAll(actorDefinitions)
+    localizeActors(*actorDefinitions)
   }
 
   open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor

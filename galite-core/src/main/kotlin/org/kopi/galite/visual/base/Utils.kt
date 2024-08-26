@@ -18,13 +18,14 @@
 
 package org.kopi.galite.visual.base
 
+import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.DataInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileWriter
 import java.io.IOException
+import java.io.InputStreamReader
 import java.io.InputStream
 import java.io.PrintWriter
 import java.io.UnsupportedEncodingException

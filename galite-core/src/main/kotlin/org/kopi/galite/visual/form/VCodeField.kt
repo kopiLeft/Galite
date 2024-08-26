@@ -86,10 +86,10 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that text is valid (during typing)
    */
   override fun checkText(s: String): Boolean {
-    val s = s.lowercase()
+    val text = s.lowercase()
 
     for (i in labels.indices) {
-      if (labels[i].lowercase().startsWith(s)) {
+      if (labels[i].lowercase().startsWith(text)) {
         return true
       }
     }
@@ -101,9 +101,9 @@ abstract class VCodeField(val bufferSize: Int,
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, s: Any?) {
-    var s = s as? String
+    var text = s as? String
 
-    if (s == "") {
+    if (text == "") {
       setNull(rec)
     } else {
       /*
@@ -113,12 +113,12 @@ abstract class VCodeField(val bufferSize: Int,
        */
       var found = -1
 
-      s = s!!.lowercase()
+      text = text!!.lowercase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
-        if (labels[i].lowercase().startsWith(s)) {
-          if (labels[i].lowercase() == s) {
+        if (labels[i].lowercase().startsWith(text)) {
+          if (labels[i].lowercase() == text) {
             found = i
             break
           }
@@ -140,7 +140,7 @@ abstract class VCodeField(val bufferSize: Int,
 
           var count = 0
           labels.forEach { label ->
-            if (label.lowercase().startsWith(s)) {
+            if (label.lowercase().startsWith(text)) {
               count++
             }
           }
@@ -150,7 +150,7 @@ abstract class VCodeField(val bufferSize: Int,
           var j = 0
 
           while (i < labels.size) {
-            if (labels[i].lowercase().startsWith(s)) {
+            if (labels[i].lowercase().startsWith(text)) {
               codes[j] = codes[i]
               selectedToModel[j] = i
               j++
@@ -212,15 +212,15 @@ abstract class VCodeField(val bufferSize: Int,
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    var desc = desc
+    var descend = desc
 
-    desc = if (!getListColumn()!!.isSortAscending) desc else !desc
+    descend = if (!getListColumn()!!.isSortAscending) descend else !descend
     var pos = value[block!!.activeRecord]
 
-    if (pos == -1 && desc) {
+    if (pos == -1 && descend) {
       pos = labels.size
     }
-    pos += if (desc) -1 else 1
+    pos += if (descend) -1 else 1
     if (pos < 0 || pos >= labels.size) {
       throw VExecFailedException() // no message to display
     } else {
@@ -280,7 +280,6 @@ abstract class VCodeField(val bufferSize: Int,
     return value[r] == -1
   }
 
-  //deprecation
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
@@ -288,7 +287,6 @@ abstract class VCodeField(val bufferSize: Int,
     throw InconsistencyException()
   }
 
-  //deprecation
   /**
    * Returns the field value of given record as a boolean value.
    */
@@ -296,7 +294,6 @@ abstract class VCodeField(val bufferSize: Int,
     throw InconsistencyException()
   }
 
-  //deprecation
   /**
    * Returns the field value of given record as a int value.
    */

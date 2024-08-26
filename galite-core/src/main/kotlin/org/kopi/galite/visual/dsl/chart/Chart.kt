@@ -103,11 +103,10 @@ abstract class Chart(title: String, val help: String?, locale: Locale? = null) :
     triggers.add(trigger)
 
     // CHART TRIGGERS
-    triggers.forEach { trigger ->
-
+    triggers.forEach {
       for (i in VConstants.TRG_TYPES.indices) {
-        if (trigger.events shr i and 1 > 0) {
-          model.VKT_Chart_Triggers[0][i] = trigger
+        if (it.events shr i and 1 > 0) {
+          model.VKT_Chart_Triggers[0][i] = it
         }
       }
     }

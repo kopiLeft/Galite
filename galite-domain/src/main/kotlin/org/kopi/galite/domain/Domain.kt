@@ -100,7 +100,7 @@ open class Domain<T> {
   /**
    * Sets the maximum value of a number domain.
    */
-  public var Domain<BigDecimal>.scale : Int?
+  var Domain<BigDecimal>.scale : Int?
     get() = scale
     set(value) {
       scale = value

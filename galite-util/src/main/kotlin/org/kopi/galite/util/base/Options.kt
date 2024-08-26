@@ -61,15 +61,16 @@ abstract class Options(private val name: String?) {
   }
 
   /**
-   * @param        args                the command line arguments
+   * @param        code                the command line code
+   * @param        g                   the command line arguments
    */
   open fun processOption(code: Int, g: Getopt): Boolean {
     when (code) {
-      'h'.toInt() -> {
+      'h'.code -> {
         help()
         System.exit(0)
       }
-      'V'.toInt() -> {
+      'V'.code -> {
         version()
         System.exit(0)
       }
@@ -196,7 +197,7 @@ abstract class Options(private val name: String?) {
    */
   open val longOptions: Array<LongOpt?>
     get() = arrayOf(
-            LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'.toInt()),
-            LongOpt("version", LongOpt.NO_ARGUMENT, null, 'V'.toInt())
+            LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'.code),
+            LongOpt("version", LongOpt.NO_ARGUMENT, null, 'V'.code)
     )
 }

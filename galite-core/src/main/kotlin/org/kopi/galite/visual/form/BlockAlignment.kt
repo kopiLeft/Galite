@@ -31,12 +31,12 @@ class BlockAlignment(val block: VBlock?,
                      val targets: IntArray)
   : Serializable {
 
-  fun isChart(): Boolean = block != null && block.isChart()
+  fun isChart(): Boolean = block != null && !block.noChart()
 
   fun isAligned(x: Int): Boolean {
-    var x = x
-    x--
-    return x >= 0 && x < targets.size && targets[x] != -1
+    var n = x
+    n--
+    return n >= 0 && n < targets.size && targets[n] != -1
   }
 
   fun getTargetAt(x: Int): Int {

@@ -23,7 +23,6 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
 
-import org.kopi.galite.visual.l10n.LocalizationManager
 import org.kopi.galite.visual.dsl.common.Trigger
 
 /**

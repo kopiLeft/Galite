@@ -2301,7 +2301,7 @@ abstract class VBlock(var title: String,
    */
   fun singleMenuQuery(showSingleEntry: Boolean): Int {
     assert(!isMulti()) { "$name is a multi block" }
-    var dialog: VListDialog? = null
+    var dialog: VListDialog?
 
     try {
       while (true) {
@@ -3311,9 +3311,8 @@ abstract class VBlock(var title: String,
           }
         }
       }
-      val table = tables[0]
 
-      table.insert { table ->
+      tables[0].insert { table ->
         result.forEach {
           table[it.first] = it.second
         }
@@ -3341,8 +3340,8 @@ abstract class VBlock(var title: String,
   /**
    * fill the field holding the ID of the block's base table.
    */
-  protected fun fillIdField(recno: Int, id: Int) {
-    var id = id
+  protected fun fillIdField(recno: Int, ident: Int) {
+    var id = ident
     if (id == -1) {
       id = Utils.getNextTableId(tables[0], idFieldName, sequence)
     }
@@ -3399,9 +3398,8 @@ abstract class VBlock(var title: String,
           }
         }
       }
-      val table = tables[0]
 
-      table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
+      tables[0].update({ idColumn eq idField.getInt(recno)!! }) { table ->
         result.forEach {
           table[it.first] = it.second
         }
@@ -3447,7 +3445,7 @@ abstract class VBlock(var title: String,
         activeRecord = recno
         throw VExecFailedException(MessageCode.getMessage("VIS-00019"))
       }
-      VDatabaseUtils.checkForeignKeys_(id, tables!![0])
+      VDatabaseUtils.checkForeignKeys_(id, tables[0])
 
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
