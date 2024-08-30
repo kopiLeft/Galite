@@ -44,7 +44,6 @@ object Purchase: Table("PURCHASE") {
   val idPdt =                   integer("PRODUCT").references(Product.idPdt)
   val quantity =                integer("QUANTITY")
   val color =                   color("COLOR")
-  val purchased =               bool("PURCHASED")
 }
 
 object Product : Table("PRODUCTS") {

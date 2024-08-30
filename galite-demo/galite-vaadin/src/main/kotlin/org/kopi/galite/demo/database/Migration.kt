@@ -295,7 +295,6 @@ fun addSale(client: Int, product: Int, qty: Int) {
     it[idPdt] = product
     it[quantity] = qty
     it[color] = Color((BLACK.rgb..WHITE.rgb).random())
-    it[purchased] = false
   }
 }
 
