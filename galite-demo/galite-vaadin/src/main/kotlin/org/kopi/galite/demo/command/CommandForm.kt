@@ -172,7 +172,7 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
       columns(u.quantity)
     }
 
-    val color = mustFill(domain = COLOR, position = at(4, 1)) {
+    val color = mustFill(domain = COLOR, position = at(5, 1)) {
       label = "color"
       help = "color [for test purpose] "
       columns(u.color)

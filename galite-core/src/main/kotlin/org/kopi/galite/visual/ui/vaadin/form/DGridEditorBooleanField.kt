@@ -145,7 +145,7 @@ class DGridEditorBooleanField(
 
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
-      getModel().block!!.activeField = getModel()
+      getModel().block!!.gotoField(getModel())
     }
     val text = getModel().toText(event.value)
     if (getModel().checkText(text!!)) {
