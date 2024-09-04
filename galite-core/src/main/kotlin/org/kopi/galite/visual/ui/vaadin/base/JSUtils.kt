@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,12 +16,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
+import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.KeyModifier
-import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 
 fun Component.addJSKeyDownListener(shortCuts: MutableMap<String, ShortcutAction<*>>) {
   val jsCall = """

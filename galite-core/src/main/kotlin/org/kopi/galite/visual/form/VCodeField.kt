@@ -149,13 +149,12 @@ abstract class VCodeField(val bufferSize: Int,
           selectedToModel = IntArray(count)
           var j = 0
 
-          while (i < labels.size) {
+          for(i in labels.indices) {
             if (labels[i].lowercase().startsWith(s)) {
-              codes[j] = codes[i]
+              codes[j] = getCodes()[i]
               selectedToModel[j] = i
               j++
             }
-            i++
           }
 
           listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf(codes))
