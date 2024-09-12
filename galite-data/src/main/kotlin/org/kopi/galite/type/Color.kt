@@ -18,9 +18,7 @@ package org.kopi.galite.type
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-
-class Color(var value: ExposedBlob) : Type0<ExposedBlob> {
+class Color(var value: Int) : Type0<Int> {
 
   /**
    * Compares two objects
@@ -34,13 +32,13 @@ class Color(var value: ExposedBlob) : Type0<ExposedBlob> {
    * @param    locale    the current language
    */
   override fun toString(locale: Locale): String {
-    return value.hexString()
+    return value.toString()
   }
 
   /**
    * Represents the value in sql
    */
-  override fun toSql(): ExposedBlob = value
+  override fun toSql(): Int = value
 
   /**
    * Generete the HashCode of the value of field.

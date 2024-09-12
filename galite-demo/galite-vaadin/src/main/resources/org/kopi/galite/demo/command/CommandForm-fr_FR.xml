@@ -8,4 +8,10 @@
         <field ident="FLD_2" label="Méthode paiement" help="la méthode de paiement" />
         <field ident="FLD_3" label="Statut" help="Le statut de la commande" />
     </block>
+    <block name="BlockPurchase" title="Purchase">
+        <field ident="FLD_1" label="Client" help="L'identifiant du client" />
+        <field ident="FLD_2" label="Produit" help="L'identifiant du produit" />
+        <field ident="FLD_3" label="Quantité" help="La quantité du produit acheté" />
+        <field ident="FLD_4" label="Couleur" help="Champ couleur pour raison de test" />
+    </block>
 </form>
