@@ -56,7 +56,7 @@ class FactoryCodePrinter: Constants {
     extractClasseAttributes(factory, getAbstract)
     printTopComment(factory.name!!, factory.isPrintHeader!!)
     printPackage(factory.packageName!!)
-    printImports()
+    printImports(factory.packageName!!)
     printFactory(factory)
   }
 
@@ -87,7 +87,7 @@ class FactoryCodePrinter: Constants {
             else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
 
           val attribute = Attribute(name = attributeName,
-                                    type = getKotlinTypeForProperty(propertie.type),
+                                    type = getKotlinTypeForProperty(propertie.type,factory.packageName!!),
                                     isList = propertie.extendsJavaArray(),
                                     defaultValue = propertie.defaultValue?.stringValue ?: "null",
                                     isElement = !propertie.isAttribute,
@@ -99,6 +99,15 @@ class FactoryCodePrinter: Constants {
                                     simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
                                       propertie.type.fullJavaName.split(".").last().replace("$", ".") else "",
                                     hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
+
+          if (attribute.hasStringEnumValues){
+            val basePackagePath = if (!propertie.type.isSimpleType || !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
+              propertie.type.fullJavaName.substringBeforeLast(".")
+            else  null
+            val missedPath = "$basePackagePath.${attribute.simpleType}"
+            if (basePackagePath != null && !missedPath.startsWith(classeFactory.javaPackage))
+              importFactory.add(missedPath)
+          }
 
           if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
             attribute.defaultValue = getDefaultBigDecimal(attribute.defaultValue)
@@ -179,7 +188,7 @@ class FactoryCodePrinter: Constants {
         "   *\n" +
         "   * Convert Temporal to Calendar.\n" +
         "   */\n" +
-        "   @Throws(Exception::class)\n" +
+        "   @Throws(kotlin.Exception::class)\n" +
         "   private fun Temporal.toCalendar(): Calendar {\n" +
         "     val calendar = GregorianCalendar()\n" +
         "\n" +
@@ -239,19 +248,25 @@ class FactoryCodePrinter: Constants {
       val type = (if (attribute.isList) "Array<" else "") +
         attribute.type +
         (if (attribute.isList) ">" else "") +
-        (if (!attribute.Required) "? = ${attribute.defaultValue}" else "") +
+        (if (!attribute.Required) {
+          if (!"String".equals(attribute.type) || attribute.defaultValue=="null")
+            "? = ${attribute.defaultValue}" else "? = \"${attribute.defaultValue}\""
+        } else "") +
         (if (index == classFactory.attributes.size-1) ")" else ",")
 
       emit("$indent$name: $type  ${attribute.commentName}", true)
     }
-    emit("${indentation(2)}: ${classFactory.className.capitalize()}", true)
+
+    val missedPath = if(!importFactory.contains(classFactory.javaPackage)) classFactory.javaPackage.substringBeforeLast(".") + "." else ""
+
+    emit("${indentation(2)}: $missedPath${classFactory.className.capitalize()}", true)
     emit("${indentation(1)}{", true)
-    emit("${indentation(2)}val new${classFactory.className}: ${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
+    emit("${indentation(2)}val new${classFactory.className}: $missedPath${classFactory.className} = $missedPath${classFactory.className}.Factory.newInstance()\n", true)
     classFactory.attributes.forEach{ attribute ->
       val parameterName = attribute.name + if (attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
-      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar)" else "$parameterName$calendar"
-
+      val array = if (attribute.isList && attribute.type == "Int") ".toIntArray()" else ""
+      val value = if (attribute.hasStringEnumValues && attribute.simpleType.isNotEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar$array)" else "$parameterName$calendar$array"
       val attributeName = when {
         attribute.isReserved && !attribute.isList -> "`${parameterName.substring(1)}`"
         attribute.isReserved && attribute.isList -> parameterName.substring(1)
@@ -260,7 +275,7 @@ class FactoryCodePrinter: Constants {
       if(attribute.Required) {
         emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
       } else {
-        if(!"String".equals(attribute.type)) {
+        if(!"String".equals(attribute.type) || attribute.isList) {
           emit("${indentation(2)}$parameterName?.let { new${classFactory.className}.$attributeName = $value }", true)
         } else {
           emit("${indentation(2)}if (!$parameterName.isNullOrBlank()) {", true)
@@ -276,17 +291,47 @@ class FactoryCodePrinter: Constants {
   /**
    * Adds import bloc to the beginning of the generated factory.
    */
-  private fun printImports() {
+  private fun printImports(packageName: String) {
     addToCalendarImports()
     if (importFactory.isNotEmpty()) {
       val groupedPackages = importFactory.distinct()
         .sortedWith(compareBy({ it.startsWith("com") }, { it.startsWith("org") }, { it }))
         .groupBy { it.substringBeforeLast(".") }
-      var string = ""
+      val classNames = mutableSetOf<String>()
+      val filteredImports = mutableListOf<String>()
 
       groupedPackages.forEach { (_, subPackages) ->
-        string += "import " + subPackages.joinToString("\nimport ") + "\n"
+        subPackages.forEach { importPath ->
+          val className = importPath.split(".").last()
+          if (classNames.contains(className)) {
+            // Find all current imports for this class name
+            val currentImportsForClass = filteredImports.filter { it.endsWith(className) }
+
+            // Only handle conflict if there are multiple imports for the same class name
+            if (currentImportsForClass.size > 1) {
+              // Check if any current import matches the packageName
+              val matchingImports = currentImportsForClass.filter { it.startsWith(packageName) }
+
+              if (matchingImports.isNotEmpty()) {
+                // If there's a match with the package, remove all other paths and keep only the matching one
+                filteredImports.removeIf { it.endsWith(className) }
+                filteredImports.addAll(matchingImports)
+              } else {
+                // If no match, remove all imports with this class name
+                filteredImports.removeIf { it.endsWith(className) }
+              }
+            }
+          } else {
+            // No conflict, add the class name and import
+            classNames.add(className)
+            filteredImports.add(importPath)
+          }
+
+        }
       }
+      importFactory.clear()
+      importFactory.addAll(filteredImports)
+      val string = filteredImports.joinToString("\nimport ", prefix = "import ", postfix = "\n")
       emit(string, true)
     }
   }
@@ -354,11 +399,15 @@ class FactoryCodePrinter: Constants {
   /**
    * Get the kotlin type of an xmlType entered as a string.
    */
-  private fun getKotlinTypeForProperty(type: SchemaType): String {
-
+  private fun getKotlinTypeForProperty(type: SchemaType, rootPackageBase : String): String {
     val xmlType = if (!type.isSimpleType || type.fullJavaName.startsWith("org.apache.xmlbeans"))
       type.fullJavaName.split(".").last().replace("$", ".")
     else type.baseType.name.localPart
+
+    // the base path of the attribute
+    val relativePackageBase = if (!type.isSimpleType || !type.fullJavaName.startsWith("org.apache.xmlbeans"))
+      type.fullJavaName.substringBeforeLast(".")
+    else  null
 
     return when (xmlType) {
       "XmlDate", "date" -> {
@@ -418,7 +467,12 @@ class FactoryCodePrinter: Constants {
       "XmlLong", "long" -> "Long"
       "XmlShort", "short" -> "Short"
       "XmlDouble", "double" -> "Double"
-      else -> xmlType
+      else -> {
+        if (relativePackageBase != rootPackageBase) {
+          "$relativePackageBase.$xmlType"
+        }
+        else xmlType
+      }
     }
   }
 
@@ -601,7 +655,7 @@ class FactoryCodePrinter: Constants {
  * @attribute isList Whether the attribute is a list.
  * @attribute defaultValue The default value of the attribute.
  * @attribute isElement Whether the attribute is an element.
- * @attribute isReserved Whether the attribute name is a reserved Kotlin worK.
+ * @attribute isReserved Whether the attribute name is a reserved Kotlin word.
  * @attribute isCalendarAttribute Whether the attribute is a calendar attribute.
  * @attribute Required Whether the attribute is required.
  * @attribute commentName The comment name of the attribute.
