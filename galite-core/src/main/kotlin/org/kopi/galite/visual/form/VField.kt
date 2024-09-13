@@ -1703,9 +1703,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
-    println("The checklist function works here ")
     if (!getForm().forceCheckList()) {
-      println("Oracle doesn't force the value to be in the list")
       // Oracle doesn't force the value to be in the list
       return
     }
@@ -2547,7 +2545,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         i -= 2
       }
     }
-    Thread.sleep(6000)
     return value
   }
 

@@ -49,27 +49,9 @@ private fun Component.keysConditions(shortCuts: MutableMap<String, ShortcutActio
       val conditions = "$keyConditions $modifiersConditions"
 
       if (first) {
-        append("""
-          if ($conditions) {
-            console.log("Navigator Key: $navigatorKey");
-            console.log("Value: ",${inputValueExpression()});
-             console.log("Value of field       : ",this.value);
-            console.log("Value of inputElement: ", this.inputElement.value);
-            this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()});
-            event.preventDefault();
-          }
-        """.trimIndent())
+        append("if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()}); event.preventDefault();}")
       } else {
-        append("""
-          else if ($conditions) {
-            console.log("Navigator Key: $navigatorKey");
-            console.log("Value: ",${inputValueExpression()});
-            console.log("Value of field       : ",this.value);
-            console.log("Value of inputElement: ", this.inputElement.value);
-            this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()});
-            event.preventDefault();
-          }
-        """.trimIndent())
+        append("else if ($conditions) { this.${"$"}server.onKeyDown('$navigatorKey', ${inputValueExpression()}); event.preventDefault();}")
       }
 
       first = false
