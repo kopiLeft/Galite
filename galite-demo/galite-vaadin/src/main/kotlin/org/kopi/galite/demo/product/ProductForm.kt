@@ -81,6 +81,7 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
       command(item = insertMode, Mode.QUERY, Mode.UPDATE) { insertMode() }
       command(item = save, Mode.INSERT, Mode.UPDATE) { saveBlock() }
       command(item = chart) { createChart { ProductChart() } }
+      command(item = dashboard) { createDashboard { listOf(ProductChart(), ProductChart()) } }
       command(item = report) { createReport { ProductR() } }
       command(item = pivotTable) { createPivotTable { ProductP() } }
     }

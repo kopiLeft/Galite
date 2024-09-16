@@ -17,16 +17,15 @@
  */
 package org.kopi.galite.visual.ui.vaadin.chart
 
-import org.kopi.galite.visual.chart.ChartTypeFactory
-import org.kopi.galite.visual.chart.UChart
-import org.kopi.galite.visual.chart.UChartType
-import org.kopi.galite.visual.chart.VChart
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.VWindow
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.visual.chart.*
+import org.kopi.galite.visual.ui.vaadin.field.TextField
 
 /**
  * Creates a new chart view from its model.
@@ -37,7 +36,15 @@ class DChart(model: VWindow) : DWindow(model), UChart {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val content = HorizontalLayout()
+  private val content = Div().apply {
+    style.set("display", "grid")
+    style.set("grid-template-columns", "repeat(auto-fill, minmax(200px, 1fr))") // Flexible columns
+    style.set("grid-auto-rows", "minmax(150px, auto)") // Flexible rows with min height
+    style.set("gap", "10px") // Spacing between grid items
+    style.set("width", "100%")
+    style.set("height", "100vh") // Full viewport height
+  }
+
   private var type: UChartType? = null
 
   //---------------------------------------------------
@@ -69,9 +76,12 @@ class DChart(model: VWindow) : DWindow(model), UChart {
         content.remove(type as Component)
       }
       if (newType != null) {
-        type = newType
-        newType.build()
-        content.add(newType as Component)
+        for (i in 1..6) {
+          type = newType
+          newType.build()
+          content.add(newType as Component)
+        }
+
       }
     }
   }

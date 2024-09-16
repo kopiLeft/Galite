@@ -31,6 +31,7 @@
     <actor ident="CreateDynamicReport" label="Dyn. Report" help="Create dynamic report." />
     <actor ident="CreatePivotTable" label="Pivot Table" help="Create pivot table." />
     <actor ident="CreateChart" label="Chart" help="Create chart." />
+    <actor ident="CreateDashboard" label="Dashboard" help="Create CreateDashboard." />
     <actor ident="ShowHideFilter" label="Show/Hide filter" help="Show or hide block filters." />
     <actor ident="Help" label="Help" help="Show help for a selected field." />
 </insert>

@@ -126,6 +126,15 @@ abstract class DictionaryForm(title: String, locale: Locale? = null) : Form(titl
   }
 
   /**
+   * create a customized chart for this form
+   */
+  protected fun Block.createDashboard(chartbuilder: () -> List<Chart>) {
+    model.createDashboard(block) {
+      chartbuilder().map { it.model }
+    }
+  }
+
+  /**
    * create a report for this form
    */
   protected fun Block.createDynamicReport() {

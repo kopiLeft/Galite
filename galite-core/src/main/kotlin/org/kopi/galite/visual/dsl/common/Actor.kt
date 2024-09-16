@@ -170,6 +170,7 @@ enum class Icon(val iconName: String) {
   CONFIG("config"),
   CONVERT("convert"),
   CUT("cut"),
+  DASHBOARD("dashboard"),
   DELETE_LINE("deleteline"),
   DONE("done"),
   ERROR("error"),

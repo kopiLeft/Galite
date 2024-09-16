@@ -243,6 +243,23 @@ abstract class VDictionaryForm protected constructor(source: String? = null) : V
   }
 
   /**
+   * Implements interface for COMMAND CreateDashboard
+   */
+  fun createDashboard(b: VBlock, chartBuilder: () -> List<VChart>) {
+    b.validate()
+    try {
+      setWaitInfo(Message.getMessage("dashboard_generation"))
+      val multiChart = chartBuilder()
+      multiChart.forEach { it.doNotModal() }
+      unsetWaitInfo()
+    } catch (e: VNoRowException) {
+      unsetWaitInfo()
+      error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  /**
    * Implements interface for COMMAND CreatePivotTable
    */
   fun createPivotTable(b: VBlock, pivotTableBuilder: () -> VPivotTable) {

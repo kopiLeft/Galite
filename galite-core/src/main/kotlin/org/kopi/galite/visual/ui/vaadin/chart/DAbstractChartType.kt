@@ -31,6 +31,7 @@ import com.github.appreciated.apexcharts.config.subtitle.builder.StyleBuilder
 import com.github.appreciated.apexcharts.config.yaxis.builder.AxisBorderBuilder
 import com.github.appreciated.apexcharts.config.yaxis.builder.TitleBuilder
 import com.github.appreciated.apexcharts.helper.Series
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -41,7 +42,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 abstract class DAbstractChartType protected constructor(private val type: Type,
                                                         private val title: String?,
                                                         private val dataSeries: Array<VDataSeries>
-                                                        ) : HorizontalLayout(), UChartType {
+                                                        ) : Div(), UChartType {
 
   init {
     minWidth = "700px"

@@ -372,6 +372,7 @@ object Utils : Utils() {
     pngToIconMap["config"] = VaadinIcon.WRENCH
     pngToIconMap["convert"] = VaadinIcon.EXCHANGE
     pngToIconMap["cut"] = VaadinIcon.SCISSORS
+    pngToIconMap["dashboard"] = VaadinIcon.DASHBOARD
     pngToIconMap["deleteline"] = VaadinIcon.LIST_OL
     pngToIconMap["done"] = VaadinIcon.CHECK_SQUARE_O
     pngToIconMap["error"] = VaadinIcon.MINUS_CIRCLE

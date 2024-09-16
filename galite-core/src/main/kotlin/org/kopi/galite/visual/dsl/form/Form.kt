@@ -452,6 +452,8 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   open val chart by lazy { actor(CreateChart()) }
 
+  open val dashboard by lazy { actor(CreateDashboard()) }
+
   open val dynamicReport by lazy { actor(CreateDynamicReport()) }
 
   open val pivotTable by lazy { actor(CreatePivotTable()) }
@@ -715,6 +717,13 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     init {
       key = Key.F9
       icon = Icon.CHART_VIEW
+    }
+  }
+
+  class CreateDashboard: Actor(menu = ActionMenu(), label = "Dashboard", help = "Create Dashboard.", userActor = false) {
+    init {
+      key = Key.SHIFT_F10
+      icon = Icon.DASHBOARD
     }
   }
 
