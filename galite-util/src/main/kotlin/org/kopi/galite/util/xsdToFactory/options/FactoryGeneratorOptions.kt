@@ -28,7 +28,8 @@ class FactoryGeneratorOptions(var name: String? = null,
                               var source:String? = null,
                               var directory: String? = null,
                               var classpath: String? = null,
-                              var getAbstract: Boolean? = false): Options("generator") {
+                              var getAbstract: Boolean? = false,
+                              var lsdFactory: Boolean? = false): Options("generator") {
 
   override fun processOption(code: Int, g: Getopt): Boolean {
     when (code) {
@@ -56,6 +57,10 @@ class FactoryGeneratorOptions(var name: String? = null,
         getAbstract = true
         return true
       }
+      'l'.code -> {
+        lsdFactory = true
+        return true
+      }
       else -> return super.processOption(code, g)
     }
   }
@@ -71,12 +76,13 @@ class FactoryGeneratorOptions(var name: String? = null,
       total[parent.size + 3] = "  --directory, -d<String>: Target directory for generated Factory files."
       total[parent.size + 4] = "  --classpath, -c<String>: Classpath specifying classes to include during compilation. pathA;pathB;pathC — Class search path of directories and JAR files."
       total[parent.size + 5] = "  --getAbstract, -a<boolean>: Generate methods for abstract types"
+      total[parent.size + 6] = "  --lsdFactory, -a<boolean>: Generate methods for LSD Project"
 
       return total
     }
 
   override val shortOptions: String
-    get() = "n:p:s:d:c:b:a" + super.shortOptions
+    get() = "n:p:s:d:c:b:a:l" + super.shortOptions
 
   override fun version() {
     println("Version 1.0 released 10 Mai 2024")
@@ -104,7 +110,8 @@ class FactoryGeneratorOptions(var name: String? = null,
       LongOpt("source", LongOpt.REQUIRED_ARGUMENT, null, 's'.code),
       LongOpt("directory", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
       LongOpt("classpath", LongOpt.REQUIRED_ARGUMENT, null, 'c'.code),
-      LongOpt("gabstract", LongOpt.NO_ARGUMENT, null, 'a'.code)
+      LongOpt("getAbstract", LongOpt.NO_ARGUMENT, null, 'a'.code),
+      LongOpt("lsdFactory", LongOpt.NO_ARGUMENT, null, 'l'.code)
     )
   }
 }
