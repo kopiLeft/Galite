@@ -68,7 +68,7 @@ class FactoryGeneratorOptions(var name: String? = null,
   override val options: Array<String?>
     get() {
       val parent: Array<String?> = super.options
-      val total = arrayOfNulls<String>(parent.size + 6)
+      val total = arrayOfNulls<String>(parent.size + 7)
       System.arraycopy(parent, 0, total, 0, parent.size)
       total[parent.size + 0] = "  --name, -n<String>: The name of the factory class to be generated"
       total[parent.size + 1] = "  --fpackage, -p<String>: The package of the factory class to be generated"
@@ -76,7 +76,7 @@ class FactoryGeneratorOptions(var name: String? = null,
       total[parent.size + 3] = "  --directory, -d<String>: Target directory for generated Factory files."
       total[parent.size + 4] = "  --classpath, -c<String>: Classpath specifying classes to include during compilation. pathA;pathB;pathC — Class search path of directories and JAR files."
       total[parent.size + 5] = "  --getAbstract, -a<boolean>: Generate methods for abstract types"
-      total[parent.size + 6] = "  --lsdFactory, -a<boolean>: Generate methods for LSD Project"
+      total[parent.size + 6] = "  --lsdFactory, -l<boolean>: Generate methods for LSD Project"
 
       return total
     }

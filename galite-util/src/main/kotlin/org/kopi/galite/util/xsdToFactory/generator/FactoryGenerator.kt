@@ -183,7 +183,7 @@ class FactoryGenerator {
       factory.fileExtension
     )
     writer = IOUtil.getFactoryWriter(output)
-    printer.print(factory, writer, options.getAbstract!!, options.lsdFactory ?: false)
+    printer.print(factory, writer, options.getAbstract!!, options.lsdFactory!!)
     writer.close()
   }
 
