@@ -26,10 +26,10 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.list.VColorColumn
 import org.kopi.galite.visual.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VlibProperties
 
 class VColorField(val bufferSize: Int) : VField(1,1) {
 

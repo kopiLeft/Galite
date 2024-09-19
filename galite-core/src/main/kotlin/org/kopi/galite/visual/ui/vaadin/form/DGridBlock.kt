@@ -20,22 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.form
 import java.awt.Color
 import java.util.stream.Stream
 
-import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.form.Alignment
-import org.kopi.galite.visual.form.VActorField
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VBooleanField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
-import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VException
-
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnResizeEvent
@@ -47,6 +31,7 @@ import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.component.grid.editor.EditorImpl
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Input
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
@@ -59,6 +44,23 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
+
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.base.UComponent
+import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.form.Alignment
+import org.kopi.galite.visual.form.VActorField
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 
 /**
  * Grid based chart block implementation.
@@ -497,9 +499,18 @@ open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
 
             // Create a div element and set its background and foreground colors
             val div = Div()
-            div.text = if (value is Color) "" else  columnView.editorField.format(value)?.toString() ?: ""
-            backgroundColor?.let { div.style.set("background-color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
-            foregroundColor?.let { div.style.set("color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
+            if (value is Color) {
+              val input = Input()
+
+              input.type = "color"
+              input.value = "#" + Utils.colorToRgbString(value)
+              input.isReadOnly = true
+              div.add(input)
+            } else {
+              div.text = columnView.editorField.format(value)?.toString() ?: ""
+              backgroundColor?.let { div.style.set("background-color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
+              foregroundColor?.let { div.style.set("color", "rgb(${it.red}, ${it.green}, ${it.blue})") }
+            }
             div
           })
             .setKey(i.toString())

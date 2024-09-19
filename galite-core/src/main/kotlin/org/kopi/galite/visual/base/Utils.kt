@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.base
 
+import java.awt.Color
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
@@ -229,6 +230,18 @@ open class Utils : org.kopi.galite.util.base.Utils() {
       if (allowExplicitGcCall == true) {
         System.gc()
       }
+    }
+
+    /**
+     * Convert a java.awt.Color to HexString
+     */
+    fun colorToRgbString(c: Color?): String {
+      val color = c ?: Color(0,0,0)
+      val redHex = String.format("%02x", color.red)
+      val greenHex = String.format("%02x", color.green)
+      val blueHex = String.format("%02x", color.blue)
+
+      return "$redHex$greenHex$blueHex"
     }
 
     // ----------------------------------------------------------------------

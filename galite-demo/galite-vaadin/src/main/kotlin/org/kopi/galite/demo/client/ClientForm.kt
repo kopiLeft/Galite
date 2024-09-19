@@ -214,7 +214,8 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       command(item = report) { createReport { ClientR() } }
       command(item = pivotTable) { createPivotTable { ClientP() } }
       command(item = dynamicReport) { createDynamicReport() }
-      command(item = list) { recursiveQuery() } }
+      command(item = list) { recursiveQuery() }
+    }
   }
 
   object ClientID : ListDomain<Int>(30) {
