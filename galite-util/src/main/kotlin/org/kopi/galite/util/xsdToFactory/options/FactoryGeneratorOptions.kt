@@ -29,7 +29,7 @@ class FactoryGeneratorOptions(var name: String? = null,
                               var directory: String? = null,
                               var classpath: String? = null,
                               var getAbstract: Boolean? = false,
-                              var lsdFactory: Boolean? = false): Options("generator") {
+                              var keepEmptyStrings: Boolean? = false): Options("generator") {
 
   override fun processOption(code: Int, g: Getopt): Boolean {
     when (code) {
@@ -57,8 +57,8 @@ class FactoryGeneratorOptions(var name: String? = null,
         getAbstract = true
         return true
       }
-      'l'.code -> {
-        lsdFactory = true
+      'e'.code -> {
+        keepEmptyStrings = true
         return true
       }
       else -> return super.processOption(code, g)
@@ -76,13 +76,13 @@ class FactoryGeneratorOptions(var name: String? = null,
       total[parent.size + 3] = "  --directory, -d<String>: Target directory for generated Factory files."
       total[parent.size + 4] = "  --classpath, -c<String>: Classpath specifying classes to include during compilation. pathA;pathB;pathC — Class search path of directories and JAR files."
       total[parent.size + 5] = "  --getAbstract, -a<boolean>: Generate methods for abstract types"
-      total[parent.size + 6] = "  --lsdFactory, -l<boolean>: Generate methods for LSD Project"
+      total[parent.size + 6] = "  --keepEmptyStrings, -e<boolean>: Generate methods without checking for empty strings"
 
       return total
     }
 
   override val shortOptions: String
-    get() = "n:p:s:d:c:b:a:l" + super.shortOptions
+    get() = "n:p:s:d:c:b:a:e" + super.shortOptions
 
   override fun version() {
     println("Version 1.0 released 10 Mai 2024")
@@ -111,7 +111,7 @@ class FactoryGeneratorOptions(var name: String? = null,
       LongOpt("directory", LongOpt.REQUIRED_ARGUMENT, null, 'd'.code),
       LongOpt("classpath", LongOpt.REQUIRED_ARGUMENT, null, 'c'.code),
       LongOpt("getAbstract", LongOpt.NO_ARGUMENT, null, 'a'.code),
-      LongOpt("lsdFactory", LongOpt.NO_ARGUMENT, null, 'l'.code)
+      LongOpt("keepEmptyStrings", LongOpt.NO_ARGUMENT, null, 'e'.code)
     )
   }
 }
