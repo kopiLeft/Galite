@@ -1,3 +1,11 @@
+# 1.5.5
+## What's Changed
+* Feat: Add the possibility to keep empty strings in the generated xml using the Factory generation task by Galite by @yahiaoui97 in [#637](https://github.com/kopiLeft/Galite/pull/637)
+* Fix: Display color content in a no detail block by @achraf-dridi in [#630](https://github.com/kopiLeft/Galite/pull/630)
+* Fix: Ensure field validated when going from text field to boolean field in Galite forms by @achraf-dridi in [#633](https://github.com/kopiLeft/Galite/pull/630)
+
+**Full Changelog**: [1.5.4 ... 1.5.5](https://github.com/kopiLeft/Galite/compare/1.5.4...1.5.5)
+
 # 1.5.4
 ## What's Changed
 * Feat : Add color picker field to Galite : 
