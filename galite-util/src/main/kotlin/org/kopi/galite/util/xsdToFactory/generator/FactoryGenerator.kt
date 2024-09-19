@@ -29,7 +29,6 @@ import java.util.*
 import org.apache.xmlbeans.*
 import org.apache.xmlbeans.impl.common.XmlErrorWatcher
 import org.apache.xmlbeans.impl.schema.PathResourceLoader
-import org.apache.xmlbeans.impl.schema.SchemaTypeSystemImpl
 import org.apache.xmlbeans.impl.tool.CodeGenUtil
 
 import org.kopi.galite.util.xsdToFactory.options.FactoryGeneratorOptions
@@ -184,7 +183,7 @@ class FactoryGenerator {
       factory.fileExtension
     )
     writer = IOUtil.getFactoryWriter(output)
-    printer.print(factory, writer, options.getAbstract!!)
+    printer.print(factory, writer, options.getAbstract!!, options.keepEmptyStrings!!)
     writer.close()
   }
 

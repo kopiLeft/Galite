@@ -45,19 +45,21 @@ class FactoryCodePrinter: Constants {
    * @param factory The Factory object to print.
    * @param writer The Writer object to write the generated code.
    * @param getAbstract If true, includes abstract types.
+   * @param keepEmptyStrings If true, exclude the verification of empty strings.
    * @throws IOException If an I/O error occurs.
    */
   @Throws(IOException::class)
   fun print(factory: Factory,
             writer: Writer?,
-            getAbstract: Boolean) {
+            getAbstract: Boolean,
+            keepEmptyStrings: Boolean) {
     this.writer = writer
 
     extractClasseAttributes(factory, getAbstract)
     printTopComment(factory.name!!, factory.isPrintHeader!!)
     printPackage(factory.packageName!!)
     printImports()
-    printFactory(factory)
+    printFactory(factory, keepEmptyStrings)
   }
 
   /**
@@ -229,7 +231,7 @@ class FactoryCodePrinter: Constants {
   /**
    * Adds the body of the crate fonction.
    */
-  private fun addBodyFunction(classFactory: ClassFactory) {
+  private fun addBodyFunction(classFactory: ClassFactory, keepEmptyStrings: Boolean) {
     val functionDeclaration = "${indentation(1)}fun create${classFactory.className}("
 
     emit(functionDeclaration, false)
@@ -260,7 +262,7 @@ class FactoryCodePrinter: Constants {
       if(attribute.Required) {
         emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
       } else {
-        if(!"String".equals(attribute.type)) {
+        if(!"String".equals(attribute.type) || keepEmptyStrings) {
           emit("${indentation(2)}$parameterName?.let { new${classFactory.className}.$attributeName = $value }", true)
         } else {
           emit("${indentation(2)}if (!$parameterName.isNullOrBlank()) {", true)
@@ -425,11 +427,11 @@ class FactoryCodePrinter: Constants {
   /**
    * Prints the factory by creating static methods.
    */
-  private fun printFactory(factory: Factory) {
+  private fun printFactory(factory: Factory, keepEmptyStrings: Boolean) {
       startFactory(factory.fullName)
       classesFactory.forEach {
         addCommentFunction(it)
-        addBodyFunction(it)
+        addBodyFunction(it, keepEmptyStrings)
         if (it.hasChoiceBloc) {
           addSpecificCreateFunction(it)
           addSpecificAddFunction(it)
