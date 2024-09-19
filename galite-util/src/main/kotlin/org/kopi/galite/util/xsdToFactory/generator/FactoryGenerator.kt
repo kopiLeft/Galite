@@ -29,7 +29,6 @@ import java.util.*
 import org.apache.xmlbeans.*
 import org.apache.xmlbeans.impl.common.XmlErrorWatcher
 import org.apache.xmlbeans.impl.schema.PathResourceLoader
-import org.apache.xmlbeans.impl.schema.SchemaTypeSystemImpl
 import org.apache.xmlbeans.impl.tool.CodeGenUtil
 
 import org.kopi.galite.util.xsdToFactory.options.FactoryGeneratorOptions
@@ -54,8 +53,6 @@ class FactoryGenerator {
 
     params.baseDir = params.baseDir ?: File(SystemProperties.getProperty("user.dir"))
     val cpResourceLoader = params.classpath?.let { PathResourceLoader(it) }
-    val schemasDir =
-      IOUtil.createDir(params.classesDir!!, "schema" + SchemaTypeSystemImpl.METADATA_PACKAGE_GEN + "/src")
     val errorListener = XmlErrorWatcher(params.errorListener)
     params.resourceLoader = cpResourceLoader
 
@@ -68,7 +65,6 @@ class FactoryGenerator {
                                       cpResourceLoader,
                                       errorListener as MutableCollection<XmlError>,
                                       params.baseDir,
-                                      schemasDir,
                                       params.classpath)
 
     if (errorListener.hasError()) {
@@ -120,10 +116,11 @@ class FactoryGenerator {
 
     factories.forEach {
       printFactory(it, params.srcDir, params.classesDir)
+      println("\u001B[32mFactory generated :  ${it.fullName}.kt")
     }
 
     val finish = System.currentTimeMillis()
-    println("Time to generate factory classes code: " + ((finish - start).toDouble() / 1000.0) + " seconds")
+    println("\u001B[35mTime to generate factory classe(s) code: " + ((finish - start).toDouble() / 1000.0) + " seconds")
   }
 
   /**
@@ -186,7 +183,7 @@ class FactoryGenerator {
       factory.fileExtension
     )
     writer = IOUtil.getFactoryWriter(output)
-    printer.print(factory, writer, options.getAbstract!!)
+    printer.print(factory, writer, options.getAbstract!!, options.keepEmptyStrings!!)
     writer.close()
   }
 

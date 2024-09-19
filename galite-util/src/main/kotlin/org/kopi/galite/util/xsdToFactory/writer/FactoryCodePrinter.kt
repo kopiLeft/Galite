@@ -31,8 +31,11 @@ import org.apache.xmlbeans.SchemaProperty
 import org.apache.xmlbeans.SchemaType
 import org.apache.xmlbeans.impl.common.NameUtil
 
+import org.kopi.galite.util.base.Utils
+import org.kopi.galite.util.base.Utils.Companion.nonKotlinKeyword
 import org.kopi.galite.util.xsdToFactory.utils.Constants
 import org.kopi.galite.util.xsdToFactory.utils.Factory
+import org.kopi.galite.util.xsdToFactory.parser.SchemaParser.Companion.getDigits
 
 class FactoryCodePrinter: Constants {
   private var writer: Writer? = null
@@ -42,19 +45,21 @@ class FactoryCodePrinter: Constants {
    * @param factory The Factory object to print.
    * @param writer The Writer object to write the generated code.
    * @param getAbstract If true, includes abstract types.
+   * @param keepEmptyStrings If true, exclude the verification of empty strings.
    * @throws IOException If an I/O error occurs.
    */
   @Throws(IOException::class)
   fun print(factory: Factory,
             writer: Writer?,
-            getAbstract: Boolean) {
+            getAbstract: Boolean,
+            keepEmptyStrings: Boolean) {
     this.writer = writer
 
     extractClasseAttributes(factory, getAbstract)
     printTopComment(factory.name!!, factory.isPrintHeader!!)
     printPackage(factory.packageName!!)
     printImports()
-    printFactory(factory)
+    printFactory(factory, keepEmptyStrings)
   }
 
   /**
@@ -79,19 +84,23 @@ class FactoryCodePrinter: Constants {
                                          javaPackage = schemaType.fullJavaName.replace('$', '.'))
 
         properties.forEach { propertie ->
-          val attributeName = NameUtil.nonJavaKeyword(NameUtil.lowerCamelCase(propertie.javaPropertyName))
+          val attributeName = NameUtil.lowerCamelCase(propertie.javaPropertyName).nonKotlinKeyword()
           val comment = propertie.name.localPart + (if (propertie.isAttribute) " attribute"
             else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
 
           val attribute = Attribute(name = attributeName,
-                                    type = getKotlinTypeForProperty(propertie.type.fullJavaName),
+                                    type = getKotlinTypeForProperty(propertie.type),
                                     isList = propertie.extendsJavaArray(),
                                     defaultValue = propertie.defaultValue?.stringValue ?: "null",
                                     isElement = !propertie.isAttribute,
+                                    isReserved = Utils.isKotlinReservedWord(NameUtil.lowerCamelCase(propertie.javaPropertyName)),
                                     isCalendarAttribute = propertie.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
                                     Required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
                                       else !propertie.extendsJavaOption(),
-                                    commentName = "// $comment")
+                                    commentName = "// $comment",
+                                    simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
+                                      propertie.type.fullJavaName.split(".").last().replace("$", ".") else "",
+                                    hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
 
           if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
             attribute.defaultValue = getDefaultBigDecimal(attribute.defaultValue)
@@ -151,6 +160,61 @@ class FactoryCodePrinter: Constants {
   }
 
   /**
+   *
+   * Add imports used by ToCalendar function.
+   */
+  private fun addToCalendarImports() {
+    importFactory.addAll(listOf("java.util.Calendar",
+                                "java.util.GregorianCalendar",
+                                "java.time.temporal.Temporal",
+                                "java.time.LocalDateTime",
+                                "java.time.LocalTime",
+                                "java.time.LocalDate"))
+  }
+
+  /**
+   *
+   * add ToCalendar function to the factory.
+   */
+  private fun addToCalendarFunction() {
+    emit("  /**\n" +
+        "   *\n" +
+        "   * Convert Temporal to Calendar.\n" +
+        "   */\n" +
+        "   @Throws(Exception::class)\n" +
+        "   private fun Temporal.toCalendar(): Calendar {\n" +
+        "     val calendar = GregorianCalendar()\n" +
+        "\n" +
+        "     calendar.clear()\n" +
+        "     when (this) {\n" +
+        "       is LocalDate     -> {\n" +
+        "         calendar[Calendar.YEAR] = this.year\n" +
+        "         calendar[Calendar.MONTH] = this.monthValue.minus(1)\n" +
+        "         calendar[Calendar.DAY_OF_MONTH] = this.dayOfMonth\n" +
+        "       }\n" +
+        "       is LocalTime     -> {\n" +
+        "         calendar[Calendar.HOUR_OF_DAY] = this.hour\n" +
+        "         calendar[Calendar.MINUTE] = this.minute\n" +
+        "         calendar[Calendar.SECOND] = this.second\n" +
+        "       }\n" +
+        "       is LocalDateTime -> {\n" +
+        "         calendar[Calendar.YEAR] = this.year\n" +
+        "         calendar[Calendar.MONTH] = this.monthValue.minus(1)\n" +
+        "         calendar[Calendar.DAY_OF_MONTH] = this.dayOfMonth\n" +
+        "         calendar[Calendar.HOUR_OF_DAY] = this.hour\n" +
+        "         calendar[Calendar.MINUTE] = this.minute\n" +
+        "         calendar[Calendar.SECOND] = this.second\n" +
+        "       }\n" +
+        "       else             -> {\n" +
+        "         // Ne rien faires\n" +
+        "       }\n" +
+        "     }\n" +
+        "\n" +
+        "     return calendar\n" +
+        "   }", true)
+  }
+
+  /**
    * Adds a comment to the create fonction.
    */
   private fun addCommentFunction(classFactory: ClassFactory) {
@@ -167,7 +231,7 @@ class FactoryCodePrinter: Constants {
   /**
    * Adds the body of the crate fonction.
    */
-  private fun addBodyFunction(classFactory: ClassFactory) {
+  private fun addBodyFunction(classFactory: ClassFactory, keepEmptyStrings: Boolean) {
     val functionDeclaration = "${indentation(1)}fun create${classFactory.className}("
 
     emit(functionDeclaration, false)
@@ -186,13 +250,26 @@ class FactoryCodePrinter: Constants {
     emit("${indentation(1)}{", true)
     emit("${indentation(2)}val new${classFactory.className}: ${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
     classFactory.attributes.forEach{ attribute ->
-      val name = attribute.name + if(attribute.isList) "Array" else ""
+      val parameterName = attribute.name + if (attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
+      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar)" else "$parameterName$calendar"
 
-      if(attribute.Required)
-        emit("${indentation(2)}new${classFactory.className}.$name = $name$calendar", true)
-      else
-        emit("${indentation(2)}$name?.let { new${classFactory.className}.$name = $name$calendar }", true)
+      val attributeName = when {
+        attribute.isReserved && !attribute.isList -> "`${parameterName.substring(1)}`"
+        attribute.isReserved && attribute.isList -> parameterName.substring(1)
+        else -> parameterName
+      }
+      if(attribute.Required) {
+        emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
+      } else {
+        if(!"String".equals(attribute.type) || keepEmptyStrings) {
+          emit("${indentation(2)}$parameterName?.let { new${classFactory.className}.$attributeName = $value }", true)
+        } else {
+          emit("${indentation(2)}if (!$parameterName.isNullOrBlank()) {", true)
+          emit("${indentation(3)}new${classFactory.className}.$attributeName = $value", true)
+          emit("${indentation(2)}}", true)
+        }
+      }
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
@@ -202,6 +279,7 @@ class FactoryCodePrinter: Constants {
    * Adds import bloc to the beginning of the generated factory.
    */
   private fun printImports() {
+    addToCalendarImports()
     if (importFactory.isNotEmpty()) {
       val groupedPackages = importFactory.distinct()
         .sortedWith(compareBy({ it.startsWith("com") }, { it.startsWith("org") }, { it }))
@@ -278,28 +356,28 @@ class FactoryCodePrinter: Constants {
   /**
    * Get the kotlin type of an xmlType entered as a string.
    */
-  private fun getKotlinTypeForProperty(type: String): String {
-    val xmlType = type.split(".").last().replace("$", ".")
+  private fun getKotlinTypeForProperty(type: SchemaType): String {
+
+    val xmlType = if (!type.isSimpleType || type.fullJavaName.startsWith("org.apache.xmlbeans"))
+      type.fullJavaName.split(".").last().replace("$", ".")
+    else type.baseType.name.localPart
 
     return when (xmlType) {
-      "XmlDate" -> {
-        importFactory.addAll(listOf("java.time.LocalDate",
-          "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
+      "XmlDate", "date" -> {
+        importFactory.add("java.time.LocalDate")
         "LocalDate"
       }
-      "XmlByte" -> "Byte"
-      "XmlHexBinary" -> "ByteArray"
-      "XmlTime" -> {
-        importFactory.addAll(listOf("java.time.LocalTime",
-          "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
+      "XmlByte", "byte" -> "Byte"
+      "XmlHexBinary", "hexBinary" -> "ByteArray"
+      "XmlTime", "time" -> {
+        importFactory.add("java.time.LocalTime")
         "LocalTime"
       }
-      "XmlDateTime" -> {
-        importFactory.addAll(listOf("java.time.LocalDateTime",
-          "com.progmag.pdv.core.base.Utils.Companion.toCalendar"))
+      "XmlDateTime", "dateTime" -> {
+        importFactory.add("java.time.LocalDateTime")
         "LocalDateTime"
       }
-      "XmlDuration" -> {
+      "XmlDuration", "duration" -> {
         importFactory.add("java.time.Duration")
         "Duration"
       }
@@ -307,31 +385,60 @@ class FactoryCodePrinter: Constants {
         importFactory.add("java.math.BigDecimal")
         "BigDecimal"
       }
-      "XmlInt" -> "Int"
-      "XmlString" -> "String"
-      "XmlBoolean" -> "Boolean"
-      "XmlLong" -> "Long"
-      "XmlShort" -> "Short"
-      "XmlDouble" -> "Double"
+      "decimal" -> {
+        val totalDigits = type.getDigits(SchemaType.FACET_TOTAL_DIGITS)
+        val fractionDigits = type.getDigits(SchemaType.FACET_FRACTION_DIGITS)
+
+        if (totalDigits == null && fractionDigits == null) {
+          importFactory.add("java.math.BigDecimal")
+          "BigDecimal"
+        } else if (fractionDigits == 0) {
+          when {
+            totalDigits == null -> {
+              importFactory.add("java.math.BigDecimal")
+              "BigDecimal"
+            }
+            totalDigits <= 9 -> {
+              "Int"
+            }
+            totalDigits <= 18 -> {
+              "Long"
+            }
+            else -> {
+              importFactory.add("java.math.BigInteger")
+              "BigInteger"
+            }
+          }
+        } else {
+          importFactory.add("java.math.BigDecimal")
+          "BigDecimal"
+        }
+      }
+      "XmlInt", "int" -> "Int"
+      "XmlString", "string" -> "String"
+      "XmlBoolean", "boolean" -> "Boolean"
+      "XmlLong", "long" -> "Long"
+      "XmlShort", "short" -> "Short"
+      "XmlDouble", "double" -> "Double"
       else -> xmlType
     }
-
   }
 
   /**
    * Prints the factory by creating static methods.
    */
-  private fun printFactory(factory: Factory) {
+  private fun printFactory(factory: Factory, keepEmptyStrings: Boolean) {
       startFactory(factory.fullName)
       classesFactory.forEach {
         addCommentFunction(it)
-        addBodyFunction(it)
+        addBodyFunction(it, keepEmptyStrings)
         if (it.hasChoiceBloc) {
           addSpecificCreateFunction(it)
           addSpecificAddFunction(it)
           addSpecificSizeFunction(it)
         }
       }
+      addToCalendarFunction()
       emit("}", false)
       classesFactory.clear()
       importFactory.clear()
@@ -496,18 +603,24 @@ class FactoryCodePrinter: Constants {
  * @attribute isList Whether the attribute is a list.
  * @attribute defaultValue The default value of the attribute.
  * @attribute isElement Whether the attribute is an element.
+ * @attribute isReserved Whether the attribute name is a reserved Kotlin worK.
  * @attribute isCalendarAttribute Whether the attribute is a calendar attribute.
  * @attribute Required Whether the attribute is required.
  * @attribute commentName The comment name of the attribute.
+ * @attribute simpleType The simple type of the attribute.
+ * @attribute hasStringEnumValues Whether the attribute has string enumeration values or not.
  */
 data class Attribute(var name: String,
                      var type: String,
                      var isList: Boolean,
                      var defaultValue: String,
                      var isElement: Boolean,
+                     var isReserved: Boolean,
                      var isCalendarAttribute: Boolean,
                      val Required: Boolean,
-                     var commentName: String = "")
+                     var commentName: String = "",
+                     val simpleType: String,
+                     val hasStringEnumValues: Boolean)
 
 /**
  * Represents a class factory.

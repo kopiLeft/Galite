@@ -131,5 +131,28 @@ open class Utils {
         delay
       )
     }
+
+    /**
+     *
+     * Prepends an "x" to the string reserved kotlin word to avoid conflicts.
+     */
+    fun String.nonKotlinKeyword(): String {
+      return if (isKotlinReservedWord(this)) "x$this" else this
+    }
+
+    /**
+     *
+     * Verify if the passed word is a kotlin reserved word.
+     */
+    fun isKotlinReservedWord(word: String) : Boolean {
+      return kotlinReservedWords.contains(word)
+    }
+
+    // List of hard kotlin keywords
+    val kotlinReservedWords = listOf(
+      "as", "break", "class", "continue", "do", "else", "false", "for", "fun", "if", "in",
+      "interface", "is", "null", "object", "package", "return", "super", "this", "throw",
+      "true", "try", "typealias", "val", "var", "when", "while"
+    )
   }
 }

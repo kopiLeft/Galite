@@ -41,7 +41,6 @@ class SchemaParser {
 		        cpResourceLoader: ResourceLoader?,
 		        outerErrorListener: MutableCollection<XmlError>?,
 		        baseDir: File?,
-		        schemasDir: File?,
 		        classpath: Array<File>?): SchemaTypeSystem {
 		val errorListener = XmlErrorWatcher(outerErrorListener)
 		val state = StscState.start()
@@ -125,7 +124,6 @@ class SchemaParser {
 			options = opts
 			setErrorListener(errorListener)
 			isJavaize = true
-			this.schemasDir = schemasDir
 			baseDir?.let { baseURI = it.toURI() }
 		}
 
@@ -221,6 +219,10 @@ class SchemaParser {
 		private val CONFIG_URI = "http://xml.apache.org/xmlbeans/2004/02/xbean/config"
 		private val COMPATIBILITY_CONFIG_URI = "http://www.bea.com/2002/09/xbean/config"
 		private val MAP_COMPATIBILITY_CONFIG_URIS: MutableMap<String?, String?>
+
+		fun SchemaType.getDigits(type: Int): Int? {
+			return this.getFacet(type)?.stringValue?.toIntOrNull()
+		}
 
 		init {
 			MAP_COMPATIBILITY_CONFIG_URIS = HashMap()

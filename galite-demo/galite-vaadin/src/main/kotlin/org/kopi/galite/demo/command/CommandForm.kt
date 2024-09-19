@@ -35,6 +35,7 @@ import org.kopi.galite.visual.dsl.common.Mode
 import org.kopi.galite.visual.dsl.form.Access
 import org.kopi.galite.visual.dsl.form.Block
 import org.kopi.galite.visual.dsl.form.BlockOption
+import org.kopi.galite.visual.dsl.form.Border
 import org.kopi.galite.visual.dsl.form.DictionaryForm
 import org.kopi.galite.visual.dsl.form.Key
 
@@ -171,7 +172,7 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
       columns(u.quantity)
     }
 
-    val color = mustFill(domain = COLOR, position = at(4, 1)) {
+    val color = mustFill(domain = COLOR, position = at(5, 1)) {
       label = "color"
       help = "color [for test purpose] "
       columns(u.color)
@@ -180,6 +181,7 @@ class CommandForm : DictionaryForm(title = "Commands", locale = Locale.UK) {
     init {
       blockVisibility(Access.VISIT, Mode.QUERY)
       options(BlockOption.NODETAIL)
+      border = Border.LINE
     }
 
     /**

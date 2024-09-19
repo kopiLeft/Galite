@@ -20,6 +20,7 @@ package org.kopi.galite.database
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.vendors.currentDialect
+import org.kopi.galite.type.Color
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Week
 
@@ -36,6 +37,13 @@ fun Table.month(name: String) = registerColumn<Month>(name, MonthColumnType())
  * @param name the column name
  */
 fun Table.week(name: String) = registerColumn<Week>(name, WeekColumnType())
+
+/**
+ * Color column type.
+ *
+ * @param name the column name
+ */
+fun Table.color(name: String) = registerColumn<Color>(name, ColorColumnType())
 
 /**
  * Week column for storing weeks.
@@ -70,5 +78,27 @@ class MonthColumnType : ColumnType() {
   override fun valueToDB(value: Any?): Any? = when (value) {
     is Month -> value.toSql()
     else -> value
+  }
+}
+
+/**
+ * Color column for storing colors.
+ */
+class ColorColumnType : ColumnType() {
+  override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
+  override fun valueFromDB(value: Any): Color {
+    return when (value) {
+      is Int -> Color(value)
+      is Number -> valueFromDB(value.toInt())
+      is String -> valueFromDB(value.toInt())
+      else -> error("Unexpected value of type Color: $value of ${value::class.qualifiedName}")
+    }
+  }
+
+  override fun valueToDB(value: Any?): Any? {
+    return  when (value) {
+      is Color -> value.toSql()
+      else -> value
+    }
   }
 }

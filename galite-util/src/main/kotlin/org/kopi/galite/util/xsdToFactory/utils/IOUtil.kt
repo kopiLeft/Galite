@@ -19,6 +19,8 @@
 package org.kopi.galite.util.xsdToFactory.utils
 
 import java.io.*
+import java.nio.file.Paths
+import java.nio.file.Files
 
 import org.apache.xmlbeans.SystemProperties
 
@@ -52,6 +54,9 @@ object IOUtil {
     val absolutePath = baseDir.absolutePath
     val factory = File("$absolutePath/$name.$ext")
 
+    // Add destination directory if not exists
+    Files.createDirectories(Paths.get(absolutePath))
+
     return FileOutputStream(factory)
   }
 
@@ -60,7 +65,7 @@ object IOUtil {
    * @param output The output stream
    * @return The writer
    */
-  fun getFactoryWriter(output: OutputStream?): Writer {
+  fun getFactoryWriter(output: OutputStream): Writer {
     return PrintWriter(BufferedWriter(OutputStreamWriter(output)), true)
   }
 
@@ -70,7 +75,7 @@ object IOUtil {
    * @throws IOException
    */
   @Throws(IOException::class)
-  fun createTempdir(): File? {
+  fun createTempdir(): File {
     val tmpDirFile = File(SystemProperties.getProperty("java.io.tmpdir"))
 
     if (!tmpDirFile.exists()) {

@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual.base
 
+import java.awt.Color
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
@@ -36,7 +37,6 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
 import org.kopi.galite.util.base.InconsistencyException
-import java.awt.Color
 
 /**
  * loading of image

@@ -20,22 +20,6 @@ package org.kopi.galite.visual.ui.vaadin.form
 import java.awt.Color
 import java.util.stream.Stream
 
-import org.kopi.galite.visual.base.UComponent
-import org.kopi.galite.visual.form.Alignment
-import org.kopi.galite.visual.form.VActorField
-import org.kopi.galite.visual.form.VBlock
-import org.kopi.galite.visual.form.VBooleanField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VField
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
-import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VException
-
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnResizeEvent
@@ -60,7 +44,23 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableConsumer
 import com.vaadin.flow.function.SerializablePredicate
 import com.vaadin.flow.internal.ExecutionContext
+
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.base.UComponent
 import org.kopi.galite.visual.base.Utils
+import org.kopi.galite.visual.form.Alignment
+import org.kopi.galite.visual.form.VActorField
+import org.kopi.galite.visual.form.VBlock
+import org.kopi.galite.visual.form.VBooleanField
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VField
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.ui.vaadin.block.SingleComponentBlockLayout
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
 
 /**
  * Grid based chart block implementation.

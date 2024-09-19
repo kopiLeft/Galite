@@ -1,3 +1,17 @@
+# 1.5.4
+## What's Changed
+* Feat : Add color picker field to Galite : 
+  * Add a new field type "Color" to Galite by @achraf-dridi in [#625](https://github.com/kopiLeft/Galite/pull/625)
+  * Convert the value type of the color field to an integer instead of blob by @achraf-dridi in [#631](https://github.com/kopiLeft/Galite/pull/631)
+* Fix : Fix the found bugs in the module "Factory Generator" of Galite Utils 
+  * Fix generated classes in the event when the xsd contains attributes that are named as one of the hard keywords of Kotlin by @achraf-dridi in [#629](https://github.com/kopiLeft/Galite/pull/629)
+  * Avoid creating the schemaorg_apache_xmlbeans package containing copies of the *.xsd files by @yahiaoui97 [#628](https://github.com/kopiLeft/Galite/pull/628)
+  * Add toCalendar method in the generated factory classes by @achraf-dridi [#627](https://github.com/kopiLeft/Galite/pull/627)
+  * Add NullOrBlank verification on String parameters in the generated factory classes by @achraf-dridi [#627](https://github.com/kopiLeft/Galite/pull/627)
+  * Fix generated simple types attributes in the generated factory classes by @achraf-dridi [#626](https://github.com/kopiLeft/Galite/pull/626)
+
+**Full Changelog**: [1.5.3 ... 1.5.4](https://github.com/kopiLeft/Galite/compare/1.5.3...1.5.4)
+
 # 1.5.3
 ## What's Changed
 * Generalize the galite factory generator by @MayssenGharbi in [#623](https://github.com/kopiLeft/Galite/pull/623)
@@ -23,8 +37,8 @@
 
 # 1.5.0
 ## What's Changed
-* Upgrade Exposed version to 0.42.1 and Kotlin version to 1.9.0 by @mgrati and @achraf-debug in [#603](https://github.com/kopiLeft/Galite/pull/603)
-* Implement waitMin and waitMax params for retrying aborted transactions by @mgrati and @achraf-debug in [#603](https://github.com/kopiLeft/Galite/pull/603)
+* Upgrade Exposed version to 0.42.1 and Kotlin version to 1.9.0 by @mgrati and @achraf-dridi in [#603](https://github.com/kopiLeft/Galite/pull/603)
+* Implement waitMin and waitMax params for retrying aborted transactions by @mgrati and @achraf-dridi in [#603](https://github.com/kopiLeft/Galite/pull/603)
 * Use HikariCP pool connection for galite-data connections by @mgrati in [#613](https://github.com/kopiLeft/Galite/pull/613)
 * Fix : Fix unusual behaviour for applications with multiple connections by @mgrati in [#613](https://github.com/kopiLeft/Galite/pull/613)
 * Allow display of multi-line report rows by @MedAzizTousli in [#597](https://github.com/kopiLeft/Galite/pull/597)
@@ -47,7 +61,7 @@
 
 # 1.4.1
 ## What's Changed
-* Fix: Bug in DATETIME domain type: Change the return type to LocalDateTime for columns of type LocalDateTime when calling retrieveQuery by @achraf-debug [#602](https://github.com/kopiLeft/Galite/pull/602)
+* Fix: Bug in DATETIME domain type: Change the return type to LocalDateTime for columns of type LocalDateTime when calling retrieveQuery by @achraf-dridi [#602](https://github.com/kopiLeft/Galite/pull/602)
 
 **Full Changelog**: [1.4.0 ... 1.4.1](https://github.com/kopiLeft/Galite/compare/1.4.0...1.4.1)
 
@@ -55,14 +69,14 @@
 ## What's Changed
 * Upgrade Vaadin version from 22.0.14 to 23.3.8 by @MedAzizTousli in [#601](https://github.com/kopiLeft/Galite/pull/601)
 * Configure field height in dynamic report fields by @MedAzizTousli in [#599](https://github.com/kopiLeft/Galite/pull/599)
-* Configure defaultRepetitionAttempts when connecting to database by @achraf-debug [#595](https://github.com/kopiLeft/Galite/pull/595)
+* Configure defaultRepetitionAttempts when connecting to database by @achraf-dridi [#595](https://github.com/kopiLeft/Galite/pull/595)
 
 **Full Changelog**: [1.3.8 ... 1.4.0](https://github.com/kopiLeft/Galite/compare/1.3.8...1.4.0)
 
 # 1.3.8
 ## What's Changed
 * Add use of expressions with keyOf function in ListDomain by @yahiaoui97 [APPS-01LB]
-* Fix: Add support for java.time.LocalDateTime in addition to java.time.Instant in GaliteDomain timestamp fields by @achraf-debug [#593](https://github.com/kopiLeft/Galite/pull/593)
+* Fix: Add support for java.time.LocalDateTime in addition to java.time.Instant in GaliteDomain timestamp fields by @achraf-dridi [#593](https://github.com/kopiLeft/Galite/pull/593)
 
 **Full Changelog**: [1.3.7 ... 1.3.8](https://github.com/kopiLeft/Galite/compare/1.3.7...1.3.8)
 
@@ -87,8 +101,8 @@
 
 # 1.3.4
 ## What's Changed
-* Add support for types BigDecimal and Month in Galite ListDomain by @achraf-debug [#589](https://github.com/kopiLeft/Galite/pull/589)
-* Add ReportConfigurations table to be able to setup dynamic reports configuration by @achraf-debug [APPS-01F2]
+* Add support for types BigDecimal and Month in Galite ListDomain by @achraf-dridi [#589](https://github.com/kopiLeft/Galite/pull/589)
+* Add ReportConfigurations table to be able to setup dynamic reports configuration by @achraf-dridi [APPS-01F2]
 * Remove multi-block assertion when calling VBlock.setMode by @yahiaoui97 [APPS-01KN]
 
 **Full Changelog**: [1.3.3 ... 1.3.4](https://github.com/kopiLeft/Galite/compare/1.3.3...1.3.4)
