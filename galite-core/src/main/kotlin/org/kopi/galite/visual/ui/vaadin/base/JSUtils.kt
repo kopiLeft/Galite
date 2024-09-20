@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
+import org.kopi.galite.visual.ui.vaadin.field.VCodeField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeField
 import org.kopi.galite.visual.ui.vaadin.field.VTimeStampField
 
@@ -62,6 +63,7 @@ fun Component.inputValueExpression(): String {
   return when (this) {
     is VTimeField -> "this.inputElement.value"
     is VTimeStampField -> "this.__datePicker.inputElement.value + ' ' + this.__timePicker.inputElement.value"
+    is VCodeField -> "this.inputElement.value"
     else -> "this.value"
   }
 }
