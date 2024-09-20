@@ -239,13 +239,13 @@ class TextField(val model: VField,
    * @return The convert type for the string field.
    */
   private fun _getConvertType(): ConvertType =
-          when ((model as VStringField).getTypeOptions() and VConstants.FDO_CONVERT_MASK) {
-            VConstants.FDO_CONVERT_NONE -> ConvertType.NONE
-            VConstants.FDO_CONVERT_UPPER -> ConvertType.UPPER
-            VConstants.FDO_CONVERT_LOWER -> ConvertType.LOWER
-            VConstants.FDO_CONVERT_NAME -> ConvertType.NAME
-            else -> ConvertType.NONE
-          }
+    when ((model as VStringField).getTypeOptions() and VConstants.FDO_CONVERT_MASK) {
+      VConstants.FDO_CONVERT_NONE -> ConvertType.NONE
+      VConstants.FDO_CONVERT_UPPER -> ConvertType.UPPER
+      VConstants.FDO_CONVERT_LOWER -> ConvertType.LOWER
+      VConstants.FDO_CONVERT_NAME -> ConvertType.NAME
+      else -> ConvertType.NONE
+    }
 
   /**
    * Sets the validator of a text field.
@@ -267,8 +267,7 @@ class TextField(val model: VField,
       else -> AllowAllValidator(maxLength)
     }
 
-    bindingBuilder.withValidator(validator)
-            .bind({ TODO() }, { _, _ -> TODO() })
+    bindingBuilder.withValidator(validator).bind({ TODO() }, { _, _ -> TODO() })
 
     this.validator = validator
     field.setTextValidator(validator)

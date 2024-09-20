@@ -105,7 +105,7 @@ open class TextFieldNavigationHandler protected constructor(private val isMulti:
     addKeyNavigator(field, Key.ARROW_UP, KeyModifier.of("Control")) {
       field.connector.firePreviousEntry()
     }
-    if (!isMulti) {
+    if (!isMulti && field !is VCodeField) {
       // In multiline fields these keys are used for other stuff
       addKeyNavigator(field, Key.ARROW_UP) {
         field.fieldConnector.gotoPrevField()

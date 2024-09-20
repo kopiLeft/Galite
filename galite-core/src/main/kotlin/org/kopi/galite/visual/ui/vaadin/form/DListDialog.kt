@@ -39,8 +39,8 @@ import org.kopi.galite.visual.VlibProperties
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyDownEvent
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
-import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSingleSelectionModel
@@ -52,7 +52,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
  *
  * @param model The list dialog model.
  */
-class DListDialog(private val model: VListDialog) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
+class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifier, UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
 
   private var escaped = true
   private var doNewForm = false
@@ -325,29 +325,13 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), UListDialo
     val table = ListTable(model)
     super.table = table
     table.select(tableItems.first())
+    table.element.setAttribute("tabindex", "0")  // Make the element focusable
     (table.selectionModel as GridSingleSelectionModel).addSingleSelectionListener {
       if (it.isFromClient) {
         doSelectFromDialog(tableItems.indexOf(it.value ?: it.oldValue), false, false)
       }
     }
-    Shortcuts.addShortcutListener(this,
-                                  { _ ->
-                                    doSelectFromDialog(tableItems.indexOf(table.selectedItem), false, false)
-                                  },
-                                  Key.ENTER
-    )
-    Shortcuts.addShortcutListener(this,
-                                  { _ ->
-                                    table.select(nextItem)
-                                  },
-                                  Key.ARROW_DOWN
-    )
-    Shortcuts.addShortcutListener(this,
-                                  { _ ->
-                                    table.select(previousItem)
-                                  },
-                                  Key.ARROW_UP
-    )
+    table.addKeyDownListener(::onKeyDown)
     table.addColumnReorderListener {
       sort(it.columns)
     }
@@ -360,6 +344,7 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), UListDialo
   internal fun showDialogAndWait() {
     startAndWaitAndPush(lock, currentUI) {
       showListDialog()
+      table?.focus()
     }
   }
 
