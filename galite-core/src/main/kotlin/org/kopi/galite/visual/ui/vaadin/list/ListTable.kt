@@ -19,6 +19,8 @@ package org.kopi.galite.visual.ui.vaadin.list
 
 import org.kopi.galite.visual.form.VListDialog
 
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.Grid
@@ -83,6 +85,15 @@ class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
     (dataProvider as ListDataProvider).filter = ListFilter(filterFields, model, true, false)
 
     element.classList.add("filtered")
+  }
+
+  /**
+   * Adds a keydown listener to this component.
+   * @param listener
+   * @return a handle that can be used for removing the listener
+   */
+  fun addKeyDownListener(listener: ComponentEventListener<KeyDownEvent>) {
+    this.addListener(KeyDownEvent::class.java, listener)
   }
 
   /**
