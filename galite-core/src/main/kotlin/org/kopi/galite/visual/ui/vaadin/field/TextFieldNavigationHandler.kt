@@ -30,7 +30,7 @@ import com.vaadin.flow.component.UI
  *
  * @param isMulti is it a multiple line text field ?
  */
-open class TextFieldNavigationHandler protected constructor() {
+open class TextFieldNavigationHandler protected constructor(private val isMulti: Boolean) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -105,6 +105,18 @@ open class TextFieldNavigationHandler protected constructor() {
     addKeyNavigator(field, Key.ARROW_UP, KeyModifier.of("Control")) {
       field.connector.firePreviousEntry()
     }
+    if (!isMulti && field !is VCodeField) {
+      // In multiline fields these keys are used for other stuff
+      addKeyNavigator(field, Key.ARROW_UP) {
+        field.fieldConnector.gotoPrevField()
+      }
+      addKeyNavigator(field, Key.ARROW_DOWN) {
+        field.fieldConnector.gotoNextField()
+      }
+      addKeyNavigator(field, Key.ENTER) {
+        field.fieldConnector.gotoNextField()
+      }
+    }
   }
 
   /**
@@ -137,9 +149,10 @@ open class TextFieldNavigationHandler protected constructor() {
      * @return The navigation handler instance.
      */
     fun createNavigator(
-      field: InputTextField<*>
+      field: InputTextField<*>,
+      isMulti: Boolean
     ): TextFieldNavigationHandler {
-      val handler = TextFieldNavigationHandler()
+      val handler = TextFieldNavigationHandler(isMulti)
 
       handler.createNavigatorKeys(field)
       field.addJSKeyDownListener(field.keyNavigators)
