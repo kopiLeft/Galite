@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,6 @@ import com.vaadin.flow.data.provider.SortDirection
 
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
 import org.kopi.galite.testing._enter
@@ -289,7 +288,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.serialQuery.triggerCommand()
 
     transaction {
-      val data = TestTable.select { (TestTable.name like  "NA%") and (TestTable.lastName like  "last%") }.map {
+      val data = TestTable.selectAll().where { (TestTable.name like  "NA%") and (TestTable.lastName like  "last%") }.map {
         arrayOf(
           it[TestTable.name],
           it[TestTable.lastName]

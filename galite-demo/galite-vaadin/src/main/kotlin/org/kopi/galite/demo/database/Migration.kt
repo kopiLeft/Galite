@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.*
@@ -189,8 +189,8 @@ fun insertIntoUserRights(userName: String,
                          accessUser: Boolean) {
   UserRights.insert {
     it[ts] = 0
-    it[module] = Modules.slice(Modules.id).select { Modules.shortName eq moduleName }.single()[Modules.id]
-    it[user] = Users.slice(Users.id).select { Users.shortName eq userName }.single()[Users.id]
+    it[module] = Modules.select(Modules.id).where { Modules.shortName eq moduleName }.single()[Modules.id]
+    it[user] = Users.select(Users.id).where { Users.shortName eq userName }.single()[Users.id]
     it[access] = accessUser
   }
 }
@@ -208,7 +208,7 @@ fun insertIntoModule(shortname: String,
     it[uc] = 0
     it[ts] = 0
     it[shortName] = shortname
-    it[parent] = if (parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
+    it[parent] = if (parentName != "-1") Modules.selectAll().where { shortName eq parentName }.single()[id] else -1
     it[sourceName] = source
     it[priority] = priorityNumber
     it[objectName] = if (className != null) className.qualifiedName!! else null

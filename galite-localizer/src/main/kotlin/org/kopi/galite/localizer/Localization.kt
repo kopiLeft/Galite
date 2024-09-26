@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,6 @@ import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -79,14 +78,13 @@ private fun fetchModules(): MutableList<Module> {
   val localModules: ArrayList<Module> = ArrayList()
   var icon: String? = null
   val modulesQuery =
-    Modules.slice(Modules.id,
+    Modules.select(Modules.id,
                   Modules.parent,
                   Modules.shortName,
                   Modules.sourceName,
                   Modules.objectName,
                   Modules.priority,
                   Modules.symbol)
-      .selectAll()
       .orderBy(Modules.priority to SortOrder.DESC)
 
   transaction {
@@ -94,7 +92,7 @@ private fun fetchModules(): MutableList<Module> {
       if (it[Modules.symbol] != null && it[Modules.symbol] != 0) {
         val symbol = it[Modules.symbol] as Int
 
-        Symbols.select { Symbols.id eq symbol }.forEach { res ->
+        Symbols.selectAll().where { Symbols.id eq symbol }.forEach { res ->
           icon = res[Symbols.objectName]
         }
       }

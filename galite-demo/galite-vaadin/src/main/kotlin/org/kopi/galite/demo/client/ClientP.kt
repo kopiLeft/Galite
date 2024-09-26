@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -104,7 +104,7 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     Purchase.idClt eq Client.idClt
   }.join(Product, JoinType.LEFT) {
     Purchase.idPdt eq Product.idPdt
-  }.slice(
+  }.select(
     Client.firstNameClt,
     Client.lastNameClt,
     Client.ageClt,
@@ -115,7 +115,7 @@ class ClientP : PivotTable(title = "Clients_Pivot_Table", locale = Locale.UK) {
     Product.description,
     Purchase.quantity,
     Product.price
-  ).selectAll()
+  )
 
   init {
     transaction {

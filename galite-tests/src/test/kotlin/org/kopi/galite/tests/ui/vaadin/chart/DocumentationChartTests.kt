@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@ import org.junit.Test
 
 import com.github.mvysny.kaributesting.v10._expectOne
 
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 import org.kopi.galite.testing.expectInformationNotification
 import org.kopi.galite.testing.open
@@ -86,7 +86,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
 
     // check that INIT trigger insert value in tha database
     transaction {
-      val value = TestTriggers.select{TestTriggers.id eq 5 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where{TestTriggers.id eq 5 }.last()[TestTriggers.INS]
 
       assertEquals("INITCHART Trigger", value)
     }
@@ -99,7 +99,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
 
     // check that PRECHART trigger insert value in tha database
     transaction {
-      val value = TestTriggers.select{TestTriggers.id eq 6 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where{TestTriggers.id eq 6 }.last()[TestTriggers.INS]
 
       assertEquals("PRECHART Trigger", value)
     }
@@ -115,7 +115,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
 
     // check that POSTCHART trigger insert value in tha database
     transaction {
-      val value = TestTriggers.select{TestTriggers.id eq 7 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where{TestTriggers.id eq 7 }.last()[TestTriggers.INS]
 
       assertEquals("POSTCHART Trigger", value)
     }

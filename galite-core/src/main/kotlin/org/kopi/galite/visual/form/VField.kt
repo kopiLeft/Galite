@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,8 +46,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.wrap
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -278,6 +276,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   @Deprecated("use fetchColumn(table: Table)")
   fun fetchColumn(table: Int): Int {
+    println("In USE ****") //not working
     if (columns != null) {
       for (i in columns!!.indices) {
         if (columns!![i]!!._getTable() == table) {
@@ -412,6 +411,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       if (!isNull(block!!.activeRecord)) {
         callTrigger(VConstants.TRG_FORMAT)
       }
+      println("Start from here")
       checkList()
       try {
         if (!isNull(block!!.activeRecord)) {
@@ -1722,7 +1722,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             val table = evalListTable()
             val column = list!!.getColumn(0).column as ExpressionWithColumnType<Any?>
 
-            val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord) }
+            val query = table.select(intLiteral(1)).where { column eq getSql(block!!.activeRecord) }
 
             if (alreadyProtected) {
               exists = !query.empty()
@@ -1773,8 +1773,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         while (true) {
           try {
             val column = list!!.getColumn(0).column as ExpressionWithColumnType<String?>
-            val query = evalListTable().slice(column).select {
-              column.substring(1, getString(block!!.activeRecord)!!.length) eq getString(block!!.activeRecord)
+            val query = evalListTable().select(column).where {
+              column.substring(1, getString(block!!.activeRecord)!!.length) eq getString(block!!.activeRecord)!!
             }.orderBy(column)
 
             val transaction = TransactionManager.currentOrNull()
@@ -1837,7 +1837,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
 
           val column = list!!.getColumn(0).column as ExpressionWithColumnType<String>
-          val query = evalListTable().slice(columns).select {
+          val query = evalListTable().select(columns).where {
             column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
 
@@ -1871,7 +1871,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().transaction {
-            val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord) }
+            val query = table.select(idColumn).where { column eq getSql(block!!.activeRecord) }
 
             if (!query.empty()) {
               id = query.first()[idColumn]
@@ -1896,6 +1896,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   private fun displayQueryList(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
+    println("Displaying 66666666") //Not working
     val columnsList = columns.map { vListColumn ->
       vListColumn!!.column
     }
@@ -1986,7 +1987,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                 val column = list!!.getColumn(0).column!!
                 val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
-                table.slice(column).select { idColumn eq selected }.first()[column]
+                table.select(column).where { idColumn eq selected }.first()[column]
               }
               break
             } catch (e: SQLException) {
@@ -2040,9 +2041,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
 
     val query = if (searchCondition == null) {
-      evalListTable().slice(columns).selectAll().orderBy(list!!.getColumn(0).column!!)
+      evalListTable().select(columns).orderBy(list!!.getColumn(0).column!!)
     } else {
-      evalListTable().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
+      evalListTable().select(columns).where(searchCondition).orderBy(list!!.getColumn(0).column!!)
     }
 
     val result = displayQueryList(query, list!!.columns)
@@ -2074,9 +2075,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     val orderBy = if (desc) SortOrder.ASC else SortOrder.DESC
 
     val query = if (isNull(block!!.activeRecord)) {
-      table.slice(column!!).selectAll()
+      table.select(column!!)
     } else {
-      table.slice(column!!).select(condition).orderBy(column to orderBy)
+      table.select(column!!).where(condition).orderBy(column to orderBy)
     }
 
     while (true) {
@@ -2148,7 +2149,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       }
 
-      val query = table.slice(columns).select(cond).orderBy(columns[0])
+      val query = table.select(columns).where(cond).orderBy(columns[0])
 
       while (true) {
         try {
@@ -2237,7 +2238,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           result = getForm().transaction {
             val table = evalListTable()
             val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
-            val firstRecord = table.slice(list!!.getColumn(0).column!!).select {
+            val firstRecord = table.select(list!!.getColumn(0).column!!).where {
               idColumn eq id
             }.firstOrNull()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@ import java.time.LocalDateTime
 import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.nextIntVal
-import org.jetbrains.exposed.sql.select
 
 import org.kopi.galite.database.Modules
 import org.kopi.galite.database.ModulesId
@@ -65,7 +64,7 @@ abstract class TransDB(val module: String, val version: Int) {
       it[uc] = 0
       it[ts] = 0
       it[shortName] = menu
-      it[Modules.parent] = parentId ?: Modules.slice(id).select { shortName eq parent!! }.map { module -> module[id] }.first()
+      it[Modules.parent] = parentId ?: Modules.select(id).where { shortName eq parent!! }.map { module -> module[id] }.first()
       it[sourceName] = SOURCE
       it[Modules.priority] = priority
       it[Modules.objectName] = objectName

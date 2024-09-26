@@ -33,11 +33,9 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
 import org.kopi.galite.database.Users
-import org.kopi.galite.tests.database.connectToDatabase
 import org.kopi.galite.tests.examples.Center
 import org.kopi.galite.tests.examples.FormToTestSaveMultipleBlock
 import org.kopi.galite.tests.examples.Training
@@ -135,7 +133,7 @@ class VBlockTests : VApplicationTestBase() {
     transaction {
       initSampleFormTables()
       FormSample.tb1.block.load()
-      val query = User.slice(User.name, User.age).selectAll()
+      val query = User.select(User.name, User.age)
 
       FormSample.tb1.block.deleteRecord(0)
       val deleteRecordList = query.map {
@@ -440,7 +438,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.block.load()
       FormSample.tb1.block.fetchNextRecord(0)
 
-      val query = User.select { User.name.eq("AUDREY") and User.age.eq(26) }.single()
+      val query = User.selectAll().where { User.name.eq("AUDREY") and User.age.eq(26) }.single()
       val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
 
       assertEquals(
@@ -514,7 +512,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.setMode(Mode.UPDATE)
       FormSample.tb1.block.save()
 
-      val query = User.select { User.id eq 1 }.single()
+      val query = User.selectAll().where { User.id eq 1 }.single()
       val listInfoUser = listOf(query[User.id], query[User.name], query[User.age], query[User.job])
 
       assertEquals(
@@ -655,7 +653,7 @@ class VBlockTests : VApplicationTestBase() {
     val FormSample = FormSample()
     transaction {
       initSampleFormTables()
-      var count = User.select { User.id eq 1 }.count()
+      var count = User.selectAll().where { User.id eq 1 }.count()
 
       assertEquals(1, count)
 
@@ -669,7 +667,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.block.setRecordFetched(0, true)
       FormSample.tb1.block.delete()
 
-      count = User.select { User.id eq 1 }.count()
+      count = User.selectAll().where { User.id eq 1 }.count()
       assertEquals(0, count)
       SchemaUtils.drop(User)
     }
@@ -767,7 +765,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.age.value = 25
       FormSample.tb1.block.load()
 
-      val query = User.select { User.id eq 3 }.single()
+      val query = User.selectAll().where { User.id eq 3 }.single()
       val listInfoUser = listOf(query[User.id], query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
 
       assertEquals(listOf(FormSample.tb1.id.value,
@@ -849,7 +847,7 @@ class VBlockTests : VApplicationTestBase() {
       FormSample.tb1.id.value = 1
       FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
 
-      val query = User.select { User.name.eq("AUDREY") and User.age.eq(26) }.single()
+      val query = User.selectAll().where { User.name.eq("AUDREY") and User.age.eq(26) }.single()
       val listInfoUser = listOf(query[User.id], query[User.ts], query[User.uc], query[User.name], query[User.age], query[User.job])
 
       assertEquals(listOf(FormSample.tb1.id.value,

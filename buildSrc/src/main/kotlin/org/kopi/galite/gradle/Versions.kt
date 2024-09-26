@@ -21,7 +21,7 @@ object Versions {
   const val KARIBU_TESTING = "1.3.23"
   const val ENHANCED_DIALOG = "23.1.2"
 
-  const val EXPOSED = "0.42.1"
+  const val EXPOSED = "0.54.0"
   const val HIKARI = "5.1.0"
   const val H2 = "1.4.199"
   const val POSTGRES_NG = "0.8.6"
