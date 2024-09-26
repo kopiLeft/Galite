@@ -102,7 +102,7 @@ fun <V> V.runAfterGetValue(function: () -> Unit) where V : Component, V : HasVal
     this.element.executeJs("return $0.value")
       .then {
         // Synchronize with server side
-        this.value = it?.asString()
+        (this as? HasValue<*,String>)?.value = it?.asString()
         function()
       }
   }
