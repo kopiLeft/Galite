@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@ import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SqlLogger
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.exposedLogger
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.StatementContext
 import org.jetbrains.exposed.sql.statements.expandArgs
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -171,7 +170,7 @@ class Connection {
       } else {
         try {
           transaction(db = dbConnection) {
-            user = Users.slice(Users.id).select {
+            user = Users.select(Users.id).where {
               Users.shortName eq userName
             }.single()[Users.id]
           }
@@ -288,9 +287,9 @@ fun databaseConfig(schema: Schema? = null,
   sqlLogger = logger ?: Slf4jSqlInfoLogger(traceLevel)
   schema?.let { defaultSchema = it } // Feature added in https://github.com/JetBrains/Exposed/pull/1367
   defaultIsolationLevel = isolationLevel
-  defaultRepetitionAttempts = maxRetries ?: 0
-  defaultMinRepetitionDelay = waitMin ?: 0L
-  defaultMaxRepetitionDelay = waitMax ?: 0L
+  defaultMaxAttempts = maxRetries ?: 5
+  defaultMinRetryDelay = waitMin ?: 0L
+  defaultMaxRetryDelay = waitMax ?: 0L
 }
 
 class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
