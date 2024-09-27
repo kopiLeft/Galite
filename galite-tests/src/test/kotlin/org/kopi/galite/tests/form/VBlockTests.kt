@@ -873,7 +873,7 @@ class VBlockTests : VApplicationTestBase() {
       val vExecFailedException = assertThrows(VExecFailedException::class.java) {
         FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
       }
-      assertEquals("VIS-00016: No matching value in User.", vExecFailedException.message)
+      assertEquals("VIS-00016: No matching value in ${User.tableName}.", vExecFailedException.message)
       SchemaUtils.drop(User)
     }
   }
@@ -917,7 +917,7 @@ class VBlockTests : VApplicationTestBase() {
       val vExecFailedException = assertThrows(VExecFailedException::class.java) {
         FormSample.tb1.block.fetchLookup(FormSample.tb1.id.vField)
       }
-      assertEquals("VIS-00020: The value in User is not unique.", vExecFailedException.message)
+      assertEquals("VIS-00020: The value in ${User.tableName} is not unique.", vExecFailedException.message)
       SchemaUtils.drop(User)
     }
   }

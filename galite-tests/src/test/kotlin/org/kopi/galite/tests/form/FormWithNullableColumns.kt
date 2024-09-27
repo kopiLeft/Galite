@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,7 +42,7 @@ object Clients : Table() {
   override val primaryKey = PrimaryKey(id)
 }
 
-object Order : Table() {
+object Order : Table("ORDER") {
   val id = integer("ID")
   val uc = integer("UC")
   val ts = integer("TS")

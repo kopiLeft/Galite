@@ -1896,7 +1896,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   private fun displayQueryList(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
-    println("Displaying 66666666") //Not working
     val columnsList = columns.map { vListColumn ->
       vListColumn!!.column
     }
