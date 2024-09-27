@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,8 +40,6 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upperCase
@@ -1673,9 +1671,9 @@ abstract class VBlock(var title: String,
 
     // open database query, fetch tuples
     val query = if (condition != null) {
-      table!!.slice(columns).select(condition).orderBy(*orderBy.toTypedArray())
+      table!!.select(columns).where(condition).orderBy(*orderBy.toTypedArray())
     } else {
-      table!!.slice(columns).selectAll().orderBy(*orderBy.toTypedArray())
+      table!!.select(columns).orderBy(*orderBy.toTypedArray())
     }
 
     fetchCount = 0
@@ -1760,7 +1758,7 @@ abstract class VBlock(var title: String,
     }
 
     try {
-      val result = table!!.slice(columns).select(condition.compoundAnd()).single()
+      val result = table!!.select(columns).where(condition.compoundAnd()).single()
 
       /* set values */
       var j = 0
@@ -2266,7 +2264,7 @@ abstract class VBlock(var title: String,
     try {
       form.transaction {
         val condition: Op<Boolean> = conditions.compoundAnd()
-        val query = table.slice(columns).select(condition)
+        val query = table.select(columns).where(condition)
         val result = query.single()
         var j = 0
 
@@ -2448,9 +2446,9 @@ abstract class VBlock(var title: String,
     var rows = 0
 
     val query = if (conditions == null) {
-      tables!!.slice(columns).selectAll().orderBy(*orderBys.toTypedArray())
+      tables!!.select(columns).orderBy(*orderBys.toTypedArray())
     } else {
-      tables!!.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())
+      tables!!.select(columns).where(conditions).orderBy(*orderBys.toTypedArray())
     }
     for (result in query) {
       if (rows == fetchSize) {
@@ -3189,7 +3187,7 @@ abstract class VBlock(var title: String,
       }
 
       try {
-        val result = table.slice(columns).select(conditions.compoundAnd()).single()
+        val result = table.select(columns).where(conditions.compoundAnd()).single()
         var j = 0
 
         fields.forEach { field ->
@@ -3241,7 +3239,7 @@ abstract class VBlock(var title: String,
     }
 
     if (condition.isNotEmpty()) {
-      val result = tables[0].slice(idColumn).select { condition.compoundAnd() }
+      val result = tables[0].select(idColumn).where { condition.compoundAnd() }
       val resultCount = result.count()
 
       if (resultCount > 0) {
@@ -3487,7 +3485,7 @@ abstract class VBlock(var title: String,
         Column(table, "TS", IntegerColumnType())
       }
 
-      val query = table.slice(ucColumn, tsColumn).select { idColumn eq value!! }
+      val query = table.select(ucColumn, tsColumn).where { idColumn eq value!! }
 
       if (query.empty()) {
         activeRecord = recno

@@ -83,6 +83,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   addToJoinedTables(field.getColumn(tableColumn)!!.getTable())
                   joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
                                                field.getColumn(j)!!.column,
+                                               false,
                                                additionalConstraint)
                 }
                 if (j == field.getColumnCount() || field.getColumnCount() == 2) {
@@ -122,6 +123,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   addToJoinedTables(field.getColumn(j)!!.getTable())
                   joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
                                                field.getColumn(j)!!.column,
+                                               false,
                                                additionalConstraint)
                 }
                 if (j == field.getColumnCount() || field.getColumnCount() == 2) {

@@ -19,7 +19,6 @@ package org.kopi.galite.demo.product
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.visual.chart.VChartType
 import org.kopi.galite.visual.database.transaction
@@ -95,8 +94,7 @@ class ProductChart  : Chart(
 
   init {
     transaction {
-      val products = Product.slice(Product.category, Product.category.count())
-        .selectAll()
+      val products = Product.select(Product.category, Product.category.count())
         .groupBy(Product.category)
 
       products.forEach { result ->

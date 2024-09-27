@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,7 +62,10 @@ object Message {
   fun getMessage(source: String = VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE,
                  ident: String,
                  params: Any? = null): String {
-    val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+    val params = when (params) {
+      is Array<*> -> params.map { it }.toTypedArray() // Convert to Array<Any?>
+      else -> arrayOf(params)
+    }
 
     val manager = if (ApplicationContext.isApplicationContextInitialized) {
       ApplicationContext.getLocalizationManager()

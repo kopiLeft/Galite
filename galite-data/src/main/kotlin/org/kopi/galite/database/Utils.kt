@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,6 @@ import org.jetbrains.exposed.sql.NextVal
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal
-import org.jetbrains.exposed.sql.selectAll
 
 class Utils {
   companion object {
@@ -43,12 +42,12 @@ class Utils {
       return try {
         seqNextVal = (sequence ?: Sequence("${table.nameInDatabaseCase()}Id")).nextIntVal()
 
-        Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
+        Table.Dual.select(seqNextVal).single()[seqNextVal]
       } catch (e: SQLException) {
         try {
           seqNextVal = Sequence("${table.nameInDatabaseCase()}_${id}_seq").nextIntVal()
 
-          Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
+          Table.Dual.select(seqNextVal).single()[seqNextVal]
         } catch (e: SQLException) {
           throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()} : ${e.message}")
         }

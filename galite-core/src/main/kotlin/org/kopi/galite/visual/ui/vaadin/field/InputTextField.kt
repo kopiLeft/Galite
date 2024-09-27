@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -102,7 +102,8 @@ open class InputTextField<C> internal constructor(protected val internalField: C
   //---------------------------------------------------
 
   override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = newPresentationValue
+      // Cast content to AbstractField that can accept a String
+      (content as? AbstractField<*, String>)?.value = newPresentationValue
   }
 
   open fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT CLIENTS.ID, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -53,7 +53,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".CLIENT_ID, CLIENTS.\"NAME\", CLIENTS.MAIL, \"ORDER\".QUANTITY FROM CLIENTS" +
@@ -70,7 +70,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, PRODUCTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\"," +
@@ -89,7 +89,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, PRODUCTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\"," +
@@ -108,7 +108,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
      assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -127,7 +127,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
      assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -145,7 +145,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -165,7 +165,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -185,7 +185,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT CLIENTS.ID, ADRESS.ID, PRODUCTS.ID, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -204,7 +204,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT ADRESS.ID, CLIENTS.ID, \"ORDER\".PRODUCT_ID, CLIENTS.\"NAME\", CLIENTS.MAIL," +
@@ -221,7 +221,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT ADRESS.ID, \"ORDER\".CLIENT_ID " +
@@ -236,7 +236,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".CLIENT_ID, ADRESS.ID "  +
@@ -251,7 +251,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT ADRESS.CLIENT_ID, \"ORDER\".QUANTITY "  +
@@ -266,7 +266,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     val table = VBlockDefaultOuterJoin.getSearchTables(block.block)
     val columns = block.block.getSearchColumns()
-    val query = table!!.slice(columns).selectAll()
+    val query = table!!.select(columns)
 
     transaction {
       assertEquals("SELECT \"ORDER\".QUANTITY, ADRESS.CLIENT_ID "  +

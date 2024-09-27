@@ -28,7 +28,6 @@ import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.castTo
 import org.jetbrains.exposed.sql.countDistinct
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.tests.desktop.runForm
 import org.kopi.galite.database.Modules
@@ -107,7 +106,7 @@ class UsersListBlock : Block("UsersListBlock", 1, 1) {
 }
 
 class UsersList: ListDomain<Int>(20) {
-  override val table = query(Users.select { Users.id greater 0 })
+  override val table = query(Users.selectAll().where { Users.id greater 0 })
   override val access = { SomeDictionnaryForm() }
   val autoComplete = complete(AutoComplete.LEFT, 1)
 
@@ -150,10 +149,9 @@ object Names : ListDomain<String>(30) {
 }
 
 object AgesUsers : ListDomain<Int>(3) {
-  override val table = AgesUsers.query(User.slice(User.age.minus(1).alias("age"),
+  override val table = AgesUsers.query(User.select(User.age.minus(1).alias("age"),
                                                   User.name,
-                                                  User.id.castTo<String>(VarCharColumnType()).alias("id"))
-                                           .selectAll())
+                                                  User.id.castTo<String>(VarCharColumnType()).alias("id")))
 
   init {
     "age"   keyOf User.age

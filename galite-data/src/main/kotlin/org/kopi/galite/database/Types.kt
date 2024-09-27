@@ -48,7 +48,7 @@ fun Table.color(name: String) = registerColumn<Color>(name, ColorColumnType())
 /**
  * Week column for storing weeks.
  */
-class WeekColumnType : ColumnType() {
+class WeekColumnType : ColumnType<Week>() {
   override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
   override fun valueFromDB(value: Any): Week = when (value) {
     is Int -> Week(value / 100, value % 100)
@@ -57,7 +57,7 @@ class WeekColumnType : ColumnType() {
     else -> error("Unexpected value of type Week: $value of ${value::class.qualifiedName}")
   }
 
-  override fun valueToDB(value: Any?): Any? = when (value) {
+  override fun valueToDB(value: Week?): Any? = when (value) {
     is Week -> value.toSql()
     else -> value
   }
@@ -66,7 +66,7 @@ class WeekColumnType : ColumnType() {
 /**
  * Months column for storing months.
  */
-class MonthColumnType : ColumnType() {
+class MonthColumnType : ColumnType<Month>() {
   override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
   override fun valueFromDB(value: Any): Month = when (value) {
     is Int -> Month(value / 100, value % 100)
@@ -75,7 +75,7 @@ class MonthColumnType : ColumnType() {
     else -> error("Unexpected value of type Month: $value of ${value::class.qualifiedName}")
   }
 
-  override fun valueToDB(value: Any?): Any? = when (value) {
+  override fun valueToDB(value: Month?): Any? = when (value) {
     is Month -> value.toSql()
     else -> value
   }
@@ -84,7 +84,7 @@ class MonthColumnType : ColumnType() {
 /**
  * Color column for storing colors.
  */
-class ColorColumnType : ColumnType() {
+class ColorColumnType : ColumnType<Color>() {
   override fun sqlType(): String = currentDialect.dataTypeProvider.integerType()
   override fun valueFromDB(value: Any): Color {
     return when (value) {
@@ -95,7 +95,7 @@ class ColorColumnType : ColumnType() {
     }
   }
 
-  override fun valueToDB(value: Any?): Any? {
+  override fun valueToDB(value: Color?): Any? {
     return  when (value) {
       is Color -> value.toSql()
       else -> value

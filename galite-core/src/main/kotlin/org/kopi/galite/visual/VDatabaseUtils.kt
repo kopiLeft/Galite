@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,11 +36,11 @@ object VDatabaseUtils {
 
   fun checkForeignKeys_(id: Int, queryTable: Table){
     transaction {
-      val query1 = References.slice(
+      val query1 = References.select(
         References.table,
         References.column,
         References.action
-      ).select {
+      ).where {
         References.reference eq queryTable.tableName
       }.orderBy(References.action to SortOrder.DESC)
       val action = query1.forEach { query1Row ->
@@ -50,14 +50,14 @@ object VDatabaseUtils {
         }
         when (query1Row[References.action][0]) {
           'R' -> transaction {
-            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
+            val query2 = auxTable.select(auxTable.id).where { auxTable.column eq id }
             if (query2.toList()[1] != null) {
               throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(query1Row[References.column],
                                                                                           query1Row[References.table])))
             }
           }
           'C' -> transaction {
-            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
+            val query2 = auxTable.select(auxTable.id).where { auxTable.column eq id }
             query2.forEach {
               checkForeignKeys(it[auxTable.id], query1Row[References.table])
             }
@@ -78,11 +78,11 @@ object VDatabaseUtils {
   fun checkForeignKeys(id: Int, table: String) {
     // FIXME : this should be re-implemented
     transaction {
-      val query1 = References.slice(
+      val query1 = References.select(
         References.table,
         References.column,
         References.action
-      ).select {
+      ).where {
         References.reference eq table
       }.orderBy(References.action to SortOrder.DESC)
       val action = query1.forEach { query1Row ->
@@ -92,14 +92,14 @@ object VDatabaseUtils {
         }
         when (query1Row[References.action][0]) {
           'R' -> transaction {
-            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
+            val query2 = auxTable.select(auxTable.id).where { auxTable.column eq id }
             if (query2.toList()[1] != null) {
               throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(query1Row[References.column],
                                                                                           query1Row[References.table])))
             }
           }
           'C' -> transaction {
-            val query2 = auxTable.slice(auxTable.id).select { auxTable.column eq id }
+            val query2 = auxTable.select(auxTable.id).where { auxTable.column eq id }
             query2.forEach {
               checkForeignKeys(it[auxTable.id], query1Row[References.table])
             }
@@ -123,9 +123,9 @@ object VDatabaseUtils {
         var id = integer("ID")
       }
       val query = if (condition != null) {
-        auxTable.slice(auxTable.id).select { condition }.forUpdate()
+        auxTable.select(auxTable.id).where { condition }.forUpdate()
       } else {
-        auxTable.slice(auxTable.id).selectAll().forUpdate()
+        auxTable.select(auxTable.id).forUpdate()
       }
 
       query.forEach {

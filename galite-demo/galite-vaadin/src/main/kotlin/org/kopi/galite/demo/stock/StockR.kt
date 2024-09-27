@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,6 @@ package org.kopi.galite.demo.stock
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.selectAll
 
 import org.kopi.galite.demo.database.Product
 import org.kopi.galite.demo.database.Provider
@@ -94,8 +93,7 @@ class StockR : Report(title = "Stocks", locale = Locale.UK) {
 
   val stocks = Stock.join(Provider, JoinType.INNER, Stock.idStckProv, Provider.idProvider)
           .join(Product, JoinType.INNER, Stock.idStckProv, Product.idPdt)
-          .slice(Stock.minAlert, Product.description, Provider.nameProvider)
-          .selectAll()
+          .select(Stock.minAlert, Product.description, Provider.nameProvider)
 
   init {
     transaction {

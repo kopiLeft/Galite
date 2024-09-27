@@ -21,7 +21,7 @@ import org.kopi.galite.gradle.configureMavenCentralPom
 import org.kopi.galite.gradle.signPublication
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
+  id("org.jetbrains.kotlin.jvm") version "2.0.0" apply false
   id("maven-publish")
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }

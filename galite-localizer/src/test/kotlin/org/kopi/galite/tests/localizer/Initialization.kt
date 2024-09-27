@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.Modules
@@ -71,7 +71,7 @@ fun insertIntoModule(shortname: String,
     it[uc] = 0
     it[ts] = 0
     it[shortName] = shortname
-    it[parent] = if (parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
+    it[parent] = if (parentName != "-1") Modules.selectAll().where { shortName eq parentName }.single()[id] else -1
     it[sourceName] = source
     it[priority] = priorityNumber
     it[objectName] = if (className != null) className.qualifiedName!! else null
@@ -79,7 +79,7 @@ fun insertIntoModule(shortname: String,
   }
 }
 
-object User : Table() {
+object User : Table("USER") {
   val id = integer("ID")
   val uc = integer("UC")
   val ts = integer("TS")

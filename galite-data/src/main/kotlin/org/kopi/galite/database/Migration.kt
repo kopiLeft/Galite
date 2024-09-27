@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2023 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,6 @@ package org.kopi.galite.database
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlLogger
 import org.jetbrains.exposed.sql.exists
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.database.installed.TransDB
@@ -133,7 +132,7 @@ abstract class Migration(private val logger: SqlLogger? = null) {
   private fun loadModuleVersion(module: String): Int {
     return if (Versions.exists()) {
       // If table Versionen exists, return last saved value.
-      Versions.slice(Versions.number).select { Versions.packageName eq module }.orderBy(Versions.date, SortOrder.DESC).map {
+      Versions.select(Versions.number).where { Versions.packageName eq module }.orderBy(Versions.date, SortOrder.DESC).map {
         it[Versions.number]
       }.firstOrNull() ?: -1
     } else if (module == "galite") {

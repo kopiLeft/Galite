@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -88,7 +88,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
 
   companion object {
 
-    private val SELECT_MODULES = Modules.slice(
+    private val SELECT_MODULES = Modules.select(
       Modules.id,
       Modules.parent,
       Modules.shortName,
@@ -96,7 +96,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
       Modules.objectName,
       Modules.priority,
       Modules.symbol
-    ).selectAll().orderBy(Modules.priority to SortOrder.DESC)
+    ).orderBy(Modules.priority to SortOrder.DESC)
 
     const val CMD_QUIT = 0
     const val CMD_OPEN = 1
@@ -360,7 +360,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
         if (it[Modules.symbol] != null && it[Modules.symbol] != 0) {
           val symbol = it[Modules.symbol] as Int
 
-          Symbols.select { Symbols.id eq symbol }.forEach { res ->
+          Symbols.selectAll().where { Symbols.id eq symbol }.forEach { res ->
             icon = res[Symbols.objectName]
           }
         }
@@ -388,8 +388,8 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
           modules,
           Modules
             .innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module })
-            .slice(Modules.id, GroupRights.access, Modules.priority)
-            .select { GroupParties.user inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }) }
+            .select(Modules.id, GroupRights.access, Modules.priority)
+            .where { GroupParties.user inSubQuery (Groups.select(Groups.id).where { Groups.shortName eq groupName }) }
             .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
             .withDistinct()
         )
@@ -399,8 +399,8 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
           modules,
           Modules
             .innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module })
-            .slice(Modules.id, GroupRights.access, Modules.priority)
-            .select { GroupParties.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }) }
+            .select(Modules.id, GroupRights.access, Modules.priority)
+            .where { GroupParties.user inSubQuery (Users.select(Users.id).where { Users.shortName eq menuTreeUser }) }
             .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
             .withDistinct()
         )
@@ -410,8 +410,8 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
           modules,
           Modules
             .innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module })
-            .slice(Modules.id, GroupRights.access, Modules.priority)
-            .select { GroupParties.user eq getUserID() }
+            .select(Modules.id, GroupRights.access, Modules.priority)
+            .where { GroupParties.user eq getUserID() }
             .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
             .withDistinct()
         )
@@ -424,9 +424,9 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
       groupName != null -> {
         fetchRights(modules,
                     Modules.innerJoin(GroupRights, { id }, { module })
-                      .slice(Modules.id, GroupRights.access, Modules.priority)
-                      .select {
-                        (GroupRights.group inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
+                      .select(Modules.id, GroupRights.access, Modules.priority)
+                      .where {
+                        (GroupRights.group inSubQuery (Groups.select(Groups.id).where { Groups.shortName eq groupName }))
                       }
                       .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
                       .withDistinct())
@@ -434,9 +434,9 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
       menuTreeUser != null -> {
         fetchRights(modules,
                     Modules.innerJoin(GroupRights, { id }, { module })
-                      .slice(Modules.id, GroupRights.access, Modules.priority)
-                      .select {
-                        (GroupRights.group inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
+                      .select(Modules.id, GroupRights.access, Modules.priority)
+                      .where {
+                        (GroupRights.group inSubQuery (Users.select(Users.id).where { Users.shortName eq menuTreeUser }))
                       }
                       .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
                       .withDistinct())
@@ -444,8 +444,8 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
       else -> {
         fetchRights(modules,
                     Modules.innerJoin(GroupRights, { id }, { module })
-                      .slice(Modules.id, GroupRights.access, Modules.priority)
-                      .select { (GroupRights.group eq getUserID()) }
+                      .select(Modules.id, GroupRights.access, Modules.priority)
+                      .where { (GroupRights.group eq getUserID()) }
                       .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
                       .withDistinct())
       }
@@ -457,26 +457,26 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
       groupName != null -> {
         fetchRights(modules,
                     Modules.innerJoin(UserRights, { id }, { module })
-                      .slice(Modules.id, UserRights.access, Modules.priority)
-                      .select {
-                        (UserRights.user inSubQuery ( Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
+                      .select(Modules.id, UserRights.access, Modules.priority)
+                      .where {
+                        (UserRights.user inSubQuery ( Groups.select(Groups.id).where { Groups.shortName eq groupName }))
                       }
                       .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       menuTreeUser != null -> {
         fetchRights(modules,
                     Modules.innerJoin(UserRights, { id }, { module })
-                      .slice(Modules.id, UserRights.access, Modules.priority)
-                      .select {
-                        (UserRights.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
+                      .select(Modules.id, UserRights.access, Modules.priority)
+                      .where {
+                        (UserRights.user inSubQuery (Users.select(Users.id).where { Users.shortName eq menuTreeUser }))
                       }
                       .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       else -> {
         fetchRights(modules,
                     Modules.innerJoin(UserRights, { id }, { module })
-                      .slice(Modules.id, UserRights.access, Modules.priority)
-                      .select { UserRights.user eq getUserID() }
+                      .select(Modules.id, UserRights.access, Modules.priority)
+                      .where { UserRights.user eq getUserID() }
                       .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
     }
@@ -507,11 +507,11 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
   private fun fetchFavorites() {
     transaction {
       val query = if (isSuperUser && menuTreeUser != null) {
-        Favorites.slice(Favorites.module, Favorites.id).select {
-          Favorites.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
+        Favorites.select(Favorites.module, Favorites.id).where {
+          Favorites.user inSubQuery (Users.select(Users.id).where { Users.shortName eq menuTreeUser })
         }.orderBy(Favorites.id)
       } else {
-        Favorites.slice(Favorites.module, Favorites.id).select { Favorites.user eq getUserID() }.orderBy(Favorites.id)
+        Favorites.select(Favorites.module, Favorites.id).where { Favorites.user eq getUserID() }.orderBy(Favorites.id)
       }
       query.forEach {
         if (it[Favorites.module] != 0) {
@@ -572,7 +572,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
           Favorites.insert {
             it[this.id] = FavoritesId.nextIntVal()
             it[ts] = (System.currentTimeMillis() / 1000).toInt()
-            it[user] = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.toString() }
+            it[user] = Users.select(Users.id).where { Users.shortName eq menuTreeUser.toString() }
             it[module] = id
           }
         } else {
@@ -596,7 +596,7 @@ class VMenuTree constructor(ctxt: Connection? = ApplicationContext.getDBConnecti
     try {
       transaction {
         if (menuTreeUser != null) {
-          val idSubQuery = Users.slice(Users.id).select { Users.shortName eq menuTreeUser.orEmpty() }
+          val idSubQuery = Users.select(Users.id).where { Users.shortName eq menuTreeUser.orEmpty() }
           Favorites.deleteWhere {
             (Favorites.user eqSubQuery idSubQuery) and (Favorites.module eq id)
           }
