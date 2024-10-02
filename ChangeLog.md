@@ -1,3 +1,10 @@
+# 1.5.6
+## What's Changed
+* Fix : Allow LEFT JOIN for nullable fields with non nullable fields in Galite forms by @mgrati in [#640](https://github.com/kopiLeft/Galite/pull/640)
+* Fix : Fix autocomplete and popup navigation issues using Vaadin Flow ComboBox by @sebai-dhia in [#638](https://github.com/kopiLeft/Galite/pull/638)
+
+**Full Changelog**: [1.5.5 ... 1.5.6](https://github.com/kopiLeft/Galite/compare/1.5.5...1.5.6)
+
 # 1.5.5
 ## What's Changed
 * Feat: Add the possibility to keep empty strings in the generated xml using the Factory generation task by Galite by @yahiaoui97 in [#637](https://github.com/kopiLeft/Galite/pull/637)
