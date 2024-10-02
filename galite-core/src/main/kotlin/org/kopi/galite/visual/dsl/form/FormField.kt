@@ -175,10 +175,10 @@ open class FormField<T>(internal val block: Block,
   /** list of key columns */
   var keyColumns = mutableListOf<Column<*>>()
 
-  /** used for LEFT OUTER JOIN */
-  fun <T: Column<*>> nullable(column: T): T {
+  /** Used for LEFT OUTER JOIN */
+  fun <V: T?> nullable(column: Column<V>): Column<T> {
     nullableColumns.add(column)
-    return column
+    return column as Column<T>
   }
 
   /**
