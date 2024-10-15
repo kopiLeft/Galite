@@ -87,7 +87,7 @@ class FactoryCodePrinter: Constants {
             else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
 
           val attribute = Attribute(name = attributeName,
-                                    type = getKotlinTypeForProperty(propertie.type,factory.packageName!!),
+                                    type = getKotlinTypeForProperty(propertie.type, factory.packageName!!),
                                     isList = propertie.extendsJavaArray(),
                                     defaultValue = propertie.defaultValue?.stringValue ?: "null",
                                     isElement = !propertie.isAttribute,
@@ -239,6 +239,7 @@ class FactoryCodePrinter: Constants {
    * Adds the body of the crate fonction.
    */
   private fun addBodyFunction(classFactory: ClassFactory) {
+    val missedPath = if(!importFactory.contains(classFactory.javaPackage)) classFactory.javaPackage.substringBeforeLast(".") + "." else ""
     val functionDeclaration = "${indentation(1)}fun create${classFactory.className}("
 
     emit(functionDeclaration, false)
@@ -249,16 +250,13 @@ class FactoryCodePrinter: Constants {
         attribute.type +
         (if (attribute.isList) ">" else "") +
         (if (!attribute.Required) {
-          if (!"String".equals(attribute.type) || attribute.defaultValue=="null")
+          if (!"String".equals(attribute.type) || attribute.defaultValue == "null")
             "? = ${attribute.defaultValue}" else "? = \"${attribute.defaultValue}\""
         } else "") +
         (if (index == classFactory.attributes.size-1) ")" else ",")
 
       emit("$indent$name: $type  ${attribute.commentName}", true)
     }
-
-    val missedPath = if(!importFactory.contains(classFactory.javaPackage)) classFactory.javaPackage.substringBeforeLast(".") + "." else ""
-
     emit("${indentation(2)}: $missedPath${classFactory.className.capitalize()}", true)
     emit("${indentation(1)}{", true)
     emit("${indentation(2)}val new${classFactory.className}: $missedPath${classFactory.className} = $missedPath${classFactory.className}.Factory.newInstance()\n", true)
@@ -298,14 +296,13 @@ class FactoryCodePrinter: Constants {
         .sortedWith(compareBy({ it.startsWith("com") }, { it.startsWith("org") }, { it }))
         .groupBy { it.substringBeforeLast(".") }
       val classNames = mutableSetOf<String>()
-      val filteredImports = mutableListOf<String>()
-
+      importFactory.clear()
       groupedPackages.forEach { (_, subPackages) ->
         subPackages.forEach { importPath ->
           val className = importPath.split(".").last()
           if (classNames.contains(className)) {
             // Find all current imports for this class name
-            val currentImportsForClass = filteredImports.filter { it.endsWith(className) }
+            val currentImportsForClass = importFactory.filter { it.endsWith(className) }
 
             // Only handle conflict if there are multiple imports for the same class name
             if (currentImportsForClass.size > 1) {
@@ -314,24 +311,22 @@ class FactoryCodePrinter: Constants {
 
               if (matchingImports.isNotEmpty()) {
                 // If there's a match with the package, remove all other paths and keep only the matching one
-                filteredImports.removeIf { it.endsWith(className) }
-                filteredImports.addAll(matchingImports)
+                importFactory.removeIf { it.endsWith(className) }
+                importFactory.addAll(matchingImports)
               } else {
                 // If no match, remove all imports with this class name
-                filteredImports.removeIf { it.endsWith(className) }
+                importFactory.removeIf { it.endsWith(className) }
               }
             }
           } else {
             // No conflict, add the class name and import
             classNames.add(className)
-            filteredImports.add(importPath)
+            importFactory.add(importPath)
           }
 
         }
       }
-      importFactory.clear()
-      importFactory.addAll(filteredImports)
-      val string = filteredImports.joinToString("\nimport ", prefix = "import ", postfix = "\n")
+      val string = importFactory.joinToString("\nimport ", prefix = "import ", postfix = "\n")
       emit(string, true)
     }
   }
