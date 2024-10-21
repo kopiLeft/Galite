@@ -185,9 +185,9 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
     } else {
       val fromColumn = fromField!!.getColumn(0)!!.column
       val toColumn = toField!!.getColumn(0)!!.column
-      val firstDayOfWeek = java.sql.Timestamp.valueOf(week.getFirstDay().atStartOfDay())
+      val firstDayOfWeek = week.getFirstDay().atStartOfDay()
       val lastDay =  week.getLastDay()
-      val firstDayOfNextWeek = java.sql.Timestamp.valueOf(lastDay.plusDays(1).atStartOfDay())
+      val firstDayOfNextWeek = lastDay.plusDays(1).atStartOfDay()
 
       tables!!.select(columns)
         .where {

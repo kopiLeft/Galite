@@ -85,7 +85,7 @@ class DocumentationPivotTableTests : GaliteVUITestBase() {
 
     // check that INIT trigger insert value in tha database
     transaction {
-      val value = TestTriggers.selectAll().where{TestTriggers.id eq 5 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where { TestTriggers.id eq 5 }.last()[TestTriggers.INS]
 
       assertEquals("INIT Trigger", value)
     }

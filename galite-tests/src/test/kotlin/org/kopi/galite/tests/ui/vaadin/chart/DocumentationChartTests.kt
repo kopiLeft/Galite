@@ -86,7 +86,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
 
     // check that INIT trigger insert value in tha database
     transaction {
-      val value = TestTriggers.selectAll().where{TestTriggers.id eq 5 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where { TestTriggers.id eq 5 }.last()[TestTriggers.INS]
 
       assertEquals("INITCHART Trigger", value)
     }
@@ -99,7 +99,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
 
     // check that PRECHART trigger insert value in tha database
     transaction {
-      val value = TestTriggers.selectAll().where{TestTriggers.id eq 6 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where { TestTriggers.id eq 6 }.last()[TestTriggers.INS]
 
       assertEquals("PRECHART Trigger", value)
     }
@@ -115,7 +115,7 @@ class DocumentationChartTests : GaliteVUITestBase() {
 
     // check that POSTCHART trigger insert value in tha database
     transaction {
-      val value = TestTriggers.selectAll().where{TestTriggers.id eq 7 }.last()[TestTriggers.INS]
+      val value = TestTriggers.selectAll().where { TestTriggers.id eq 7 }.last()[TestTriggers.INS]
 
       assertEquals("POSTCHART Trigger", value)
     }
