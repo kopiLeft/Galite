@@ -100,15 +100,14 @@ class FactoryCodePrinter: Constants {
                                       propertie.type.fullJavaName.split(".").last().replace("$", ".") else "",
                                     hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
 
-          if (attribute.hasStringEnumValues){
-            val basePackagePath = if (!propertie.type.isSimpleType || !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
+          if (attribute.hasStringEnumValues) {
+            val basePackagePath = if (!propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
               propertie.type.fullJavaName.substringBeforeLast(".")
-            else  null
+            else Constants.EMPTY
             val missedPath = "$basePackagePath.${attribute.simpleType}"
-            if (basePackagePath != null && !missedPath.startsWith(classeFactory.javaPackage))
+            if (basePackagePath != Constants.EMPTY && !missedPath.startsWith(classeFactory.javaPackage))
               importFactory.add(missedPath)
           }
-
           if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
             attribute.defaultValue = getDefaultBigDecimal(attribute.defaultValue)
           classeFactory.attributes.add(attribute)
@@ -300,30 +299,11 @@ class FactoryCodePrinter: Constants {
       groupedPackages.forEach { (_, subPackages) ->
         subPackages.forEach { importPath ->
           val className = importPath.split(".").last()
-          if (classNames.contains(className)) {
-            // Find all current imports for this class name
-            val currentImportsForClass = importFactory.filter { it.endsWith(className) }
-
-            // Only handle conflict if there are multiple imports for the same class name
-            if (currentImportsForClass.size > 1) {
-              // Check if any current import matches the packageName
-              val matchingImports = currentImportsForClass.filter { it.startsWith(packageName) }
-
-              if (matchingImports.isNotEmpty()) {
-                // If there's a match with the package, remove all other paths and keep only the matching one
-                importFactory.removeIf { it.endsWith(className) }
-                importFactory.addAll(matchingImports)
-              } else {
-                // If no match, remove all imports with this class name
-                importFactory.removeIf { it.endsWith(className) }
-              }
-            }
-          } else {
+          if (!classNames.contains(className)) {
             // No conflict, add the class name and import
             classNames.add(className)
             importFactory.add(importPath)
           }
-
         }
       }
       val string = importFactory.joinToString("\nimport ", prefix = "import ", postfix = "\n")
@@ -402,7 +382,7 @@ class FactoryCodePrinter: Constants {
     // the base path of the attribute
     val relativePackageBase = if (!type.isSimpleType || !type.fullJavaName.startsWith("org.apache.xmlbeans"))
       type.fullJavaName.substringBeforeLast(".")
-    else  null
+    else  Constants.EMPTY
 
     return when (xmlType) {
       "XmlDate", "date" -> {

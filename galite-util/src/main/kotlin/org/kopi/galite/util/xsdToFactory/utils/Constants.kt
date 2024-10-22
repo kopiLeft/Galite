@@ -26,6 +26,7 @@ interface Constants {
     const val XSD_EXT = "xsd"
     const val WSDL_EXT = "wsdl"
     const val CONF_EXT = "xsdconfig"
+    const val EMPTY = ""
     const val INDENTATION: Int = 2
 
     /**
