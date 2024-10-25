@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.alias
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.targetTables
 import org.junit.Test
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
@@ -33,7 +33,7 @@ class FormWithListDomainsTests : JApplicationTestBase() {
   @Test
   fun formWithListDomainsTests() {
     val model = FormWithListDomains.userListBlock.user.vField
-    val query = Users.select { Users.id greater 0 }.alias("syn__0__")
+    val query = Users.selectAll().where { Users.id greater 0 }.alias("syn__0__")
 
     assertEquals(query.alias, (model.list!!.table() as QueryAlias).alias)
     assertEquals(query.columns, model.list!!.table().columns)

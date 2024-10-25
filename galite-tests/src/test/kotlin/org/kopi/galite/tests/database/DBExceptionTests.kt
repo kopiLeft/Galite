@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@ import org.junit.Test
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.tests.common.ApplicationTestBase
@@ -52,17 +52,17 @@ class DBExceptionTests : ApplicationTestBase() {
           it[title] = "b1"
         }
 
-        Book.select { Book.id eq 0 }.into {
+        Book.selectAll().where { Book.id eq 0 }.into {
           assertEquals(0, it[Book.id])
           assertEquals("b1", it[Book.title])
         }
 
         assertFailsWith<DBNoRowException> {
-          Book.select { Book.id eq 2 }.into {}
+          Book.selectAll().where { Book.id eq 2 }.into {}
         }
 
         assertFailsWith<DBTooManyRowsException> {
-          Book.select { Book.title eq "b1" }.into {}
+          Book.selectAll().where { Book.title eq "b1" }.into {}
         }
       } finally {
         SchemaUtils.drop(Book)

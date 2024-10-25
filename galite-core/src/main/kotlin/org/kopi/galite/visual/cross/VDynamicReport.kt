@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,8 +22,6 @@ import java.math.BigDecimal
 import java.sql.SQLException
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.visual.database.transaction
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VBooleanCodeField
@@ -349,9 +347,9 @@ class VDynamicReport(block: VBlock) : VReport() {
                 block.activeField = null
               }
               val query = if (searchCondition == null) {
-                searchTables!!.slice(searchColumns.toList()).selectAll()
+                searchTables!!.select(searchColumns.toList())
               } else {
-                searchTables!!.slice(searchColumns.toList()).select(searchCondition)
+                searchTables!!.select(searchColumns.toList()).where(searchCondition)
               }
               val iterator = query.iterator()
 

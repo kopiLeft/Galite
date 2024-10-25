@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,6 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.select
 import org.kopi.galite.visual.cross.VFullCalendarForm
 import org.kopi.galite.database.DBDeadLockException
 import org.kopi.galite.database.DBInterruptionException
@@ -180,18 +179,18 @@ abstract class VFullCalendarBlock(title: String, buffer: Int, visible: Int) : VB
       val lastDay =  week.getLastDay()
       lastDay.plusDays(1)
 
-      tables!!.slice(columns)
-        .select { (dateColumn greaterEq startDate) and (dateColumn less lastDay) }
+      tables!!.select(columns)
+        .where { (dateColumn greaterEq startDate) and (dateColumn less lastDay) }
         .orderBy(*orderBys.toTypedArray())
     } else {
       val fromColumn = fromField!!.getColumn(0)!!.column
       val toColumn = toField!!.getColumn(0)!!.column
-      val firstDayOfWeek = java.sql.Timestamp.valueOf(week.getFirstDay().atStartOfDay())
+      val firstDayOfWeek = week.getFirstDay().atStartOfDay()
       val lastDay =  week.getLastDay()
-      val firstDayOfNextWeek = java.sql.Timestamp.valueOf(lastDay.plusDays(1).atStartOfDay())
+      val firstDayOfNextWeek = lastDay.plusDays(1).atStartOfDay()
 
-      tables!!.slice(columns)
-        .select {
+      tables!!.select(columns)
+        .where {
           ((fromColumn greaterEq firstDayOfWeek) and (fromColumn less firstDayOfNextWeek)) or
                   ((toColumn greaterEq firstDayOfWeek) and (toColumn less firstDayOfNextWeek))
         }

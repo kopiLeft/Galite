@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@ import org.kopi.galite.visual.form.UField
 import org.kopi.galite.visual.form.VBlock
 import org.kopi.galite.visual.form.VField
 import org.kopi.galite.type.format
+import org.kopi.galite.visual.ui.vaadin.field.AbstractField
 import org.kopi.galite.visual.ui.vaadin.field.BooleanField
 import org.kopi.galite.visual.ui.vaadin.field.DatePickerLight
 import org.kopi.galite.visual.ui.vaadin.field.InputTextField
@@ -135,7 +136,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T?, mainWindow: MainWindow
       checkbox._value = true
     }
     else -> {
-      editorField._value = value
+      (editorField as  AbstractField<T>)._value = value
     }
   }
 

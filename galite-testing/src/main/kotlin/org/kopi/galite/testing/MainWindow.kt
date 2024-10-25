@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -77,8 +77,8 @@ fun Form.open(duration: Long? = null, menu: String? = null) {
 fun Form.lookupFormCaption(menu: String? = null): String {
   val sources = transaction {
     Modules
-      .slice(Modules.sourceName, Modules.shortName)
-      .select { Modules.objectName eq this@lookupFormCaption::class.qualifiedName }
+      .select(Modules.sourceName, Modules.shortName)
+      .where { Modules.objectName eq this@lookupFormCaption::class.qualifiedName }
       .map { it[Modules.sourceName] to it[Modules.shortName] }
   }
 
