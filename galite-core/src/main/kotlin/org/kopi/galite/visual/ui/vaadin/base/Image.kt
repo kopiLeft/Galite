@@ -18,22 +18,23 @@
 package org.kopi.galite.visual.ui.vaadin.base
 
 import org.kopi.galite.visual.base.Image
+import org.kopi.galite.visual.ui.vaadin.common.VImage
 
 /**
  * The vaadin implementation of an image model.
  *
  * @param resource The resource file attached to this image.
  */
-class Image(val resource: String) : Image {
+class Image(val resource: String = "image", val source: ByteArray? = null) : VImage(), Image {
   //---------------------------------------------------
   // IMAGE IMPLEMENTATION
   //---------------------------------------------------
 
-  override fun getWidth(): Int {
+  override fun getImageWidth(): Int {
     return -1
   }
 
-  override fun getHeight(): Int {
+  override fun getImageHeight(): Int {
     return -1
   }
 

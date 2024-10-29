@@ -37,7 +37,7 @@ class VColorColumn(title: String,
                 column,
                 table,
                 VConstants.ALG_LEFT,
-                7,
+                12,
                 sortAscending) {
 
   // --------------------------------------------------------------------
