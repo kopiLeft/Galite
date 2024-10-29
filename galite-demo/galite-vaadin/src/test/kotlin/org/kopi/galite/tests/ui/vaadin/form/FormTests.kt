@@ -110,10 +110,10 @@ class FormTests: GaliteVUITestBase() {
     clientForm.list.triggerCommand()
     val block = clientForm.salesBlock.findMultiBlock()
     val data = arrayOf(
-      arrayOf("1".asDiv(), "1".asDiv(), "description Product 0".asDiv(), "1".asDiv(), "100,00000".asDiv()),
-      arrayOf("2".asDiv(), "2".asDiv(), "description Product 1".asDiv(), "1".asDiv(), "200,00000".asDiv()),
-      arrayOf("3".asDiv(), "3".asDiv(), "description Product 2".asDiv(), "2".asDiv(), "300,00000".asDiv()),
-      arrayOf("4".asDiv(), "4".asDiv(), "description Product 3".asDiv(), "3".asDiv(), "400,00000".asDiv())
+      arrayOf("1".asDiv(), "1".asDiv(), "description Product 0".asDiv(), "1".asDiv(), "100,00000".asDiv(), null.asDiv()),
+      arrayOf("2".asDiv(), "2".asDiv(), "description Product 1".asDiv(), "1".asDiv(), "200,00000".asDiv(), null.asDiv()),
+      arrayOf("3".asDiv(), "3".asDiv(), "description Product 2".asDiv(), "2".asDiv(), "300,00000".asDiv(), null.asDiv()),
+      arrayOf("4".asDiv(), "4".asDiv(), "description Product 3".asDiv(), "3".asDiv(), "400,00000".asDiv(), null.asDiv())
     )
 
     data.forEachIndexed { index, row ->
