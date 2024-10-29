@@ -15,14 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.visual.form.UTextField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VFieldUI
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorBooleanField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+package org.kopi.galite.visual.ui.vaadin.form
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.HasValue
@@ -31,18 +25,24 @@ import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 
+import org.kopi.galite.visual.form.VConstants
+import org.kopi.galite.visual.form.VFieldUI
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorBooleanField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorField
+
 class DGridEditorBooleanField(
-        columnView: VFieldUI,
-        label: DGridEditorLabel?,
-        align: Int,
-        options: Int
+  columnView: VFieldUI,
+  label: DGridEditorLabel?,
+  align: Int,
+  options: Int
 ) : DGridEditorField<Boolean?>(columnView, label, align, options),
-      UTextField,
-        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<GridEditorField<Boolean?>, Boolean?>> {
+    HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<GridEditorField<Boolean?>, Boolean?>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+
   private var inside = false
   private var rendrerValue: Boolean? = null
 
@@ -51,6 +51,8 @@ class DGridEditorBooleanField(
   //---------------------------------------------------
   init {
     editor.addValueChangeListener(this)
+    editor.addFocusListener {}
+    (editor as GridEditorBooleanField).addBlurListener { onGotoNextField() }
   }
 
   //---------------------------------------------------
@@ -89,13 +91,13 @@ class DGridEditorBooleanField(
 
   override fun updateAccess() {
     super.updateAccess()
+    label!!.update(columnView, getBlockView().getRecordFromDisplayLine(position))
     access {
-      // editor.setLabel(label.text) TODO
       (editor as GridEditorBooleanField).mandatory = getAccess() == VConstants.ACS_MUSTFILL
     }
   }
 
-  override fun getObject(): String? = getText()
+  override fun getObject(): String? = getModel().toText(editor.value)
 
   override fun createEditor(): GridEditorField<Boolean?> {
     return GridEditorBooleanField(trueRepresentation, falseRepresentation)
@@ -116,27 +118,11 @@ class DGridEditorBooleanField(
 
   override fun format(input: Any?): Any? {
     return when (input) {
-      true -> {
-        trueRepresentation
-      }
-      false -> {
-        falseRepresentation
-      }
-      else -> {
-        input
-      }
+      true -> trueRepresentation
+      false -> falseRepresentation
+      else -> input
     }
   }
-
-  override fun getText(): String? = getModel().toText(editor.value)
-
-  override fun setHasCriticalValue(b: Boolean) {}
-
-  override fun addSelectionFocusListener() {}
-
-  override fun removeSelectionFocusListener() {}
-
-  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
   override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<Boolean?>, Boolean?>) {
     if (!event.isFromClient) {
@@ -163,22 +149,22 @@ class DGridEditorBooleanField(
    * Returns the true representation of this boolean field.
    * @return The true representation of this boolean field.
    */
-  internal val trueRepresentation: String?
+  private val trueRepresentation: String?
     get() = getModel().toText(true)
 
   /**
    * Returns the false representation of this boolean field.
    * @return The false representation of this boolean field.
    */
-  internal val falseRepresentation: String?
+  private val falseRepresentation: String?
     get() = getModel().toText(false)
 
   /**
    * Gets the focus to this field.
    */
-  internal fun enterMe() {
-    /*BackgroundThreadHandler.access(Runnable {  TODO
-      getEditor().focus()
-    })*/
+  private fun enterMe() {
+    access(currentUI) {
+      (editor as GridEditorBooleanField).setFocus(true)
+    }
   }
 }

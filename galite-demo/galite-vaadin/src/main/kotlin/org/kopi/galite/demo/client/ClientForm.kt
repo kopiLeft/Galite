@@ -205,6 +205,9 @@ class ClientForm : DictionaryForm(title = "Clients", locale = Locale.UK) {
       help = "The item price"
       columns(P.price)
     }
+    val act = visit(domain = BOOL, position = at(2, 2)) {
+      label = "Active ?"
+    }
 
     init {
       border = Border.LINE

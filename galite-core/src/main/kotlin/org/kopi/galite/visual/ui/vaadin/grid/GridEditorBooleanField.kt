@@ -21,9 +21,9 @@ import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.checkbox.Checkbox
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.checkbox.CheckboxGroup
 
 /**
  * An editor for boolean field.
@@ -38,52 +38,40 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  *
  * yes and no cannot be checked at the same time
  */
-class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: String?) : GridEditorField<Boolean?>() {
-  /**
-   * Sets the boolean field to be mandatory
-   * This will remove to choose the null option
-   * from the two check boxes
-   */
+class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresentation: String?) : GridEditorField<Boolean?>() {
+  // Sets the boolean field to be mandatory.
+  // This will remove to choose the null option from the two check boxes
   var mandatory = false
-
-  private var content: HorizontalLayout = HorizontalLayout()
-
-  private var yes: Checkbox = Checkbox()
-
-  private var no: Checkbox = Checkbox()
-
-  private var forceHiddenVisibility = false
+  // Variable to keep track of the last focused checkbox item
+  private var focusedIndex = 0
+  // Initialize the field checkboxGroup Component
+  private val checkboxGroup: FocusableCheckboxGroup<String> = FocusableCheckboxGroup<String>().apply {
+    label = null
+    // Define the items for true, false, and optionally an empty state
+    setItems(trueRepresentation.orEmpty(), falseRepresentation.orEmpty())
+    value = setOf() // Initialize with no selection
+    addValueChangeListener { event ->
+      // Ensure only one item is selected, or none at all
+      if (event.value.size > 1) {
+        // Keep only the last selected item
+        val lastSelected = event.value
+        lastSelected.remove(event.oldValue.iterator().next())
+        value = setOf(lastSelected.iterator().next())
+      } else if (event.value.isEmpty() && mandatory) {
+        // If mandatory, remove the null option choice
+        value = event.oldValue
+      }
+      // Update internal model and fire change event
+      setModelValue(getBooleanValue(value), true)
+    }
+  }
 
   init {
-    addClassNames(Styles.BOOLEAN_FIELD, "editor-field", "editor-booleanfield", "k-boolean-field-content")
-    yes.classNames.add("true")
-    no.classNames.add("false")
+    // Remove the "Yes" and "No" labels
+    checkboxGroup.setItemLabelGenerator { "" }
+    checkboxGroup.addClassNames(Styles.BOOLEAN_FIELD, "editor-field")
+
     setWidthFull()
-    setLabel(trueRepresentation, falseRepresentation)
-    content.add(yes)
-    content.add(no)
-    // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
-    // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
-    yes.addValueChangeListener(::onYesChange)
-    no.addValueChangeListener(::onNoChange)
-    yes.element.style["visibility"] = "hidden"
-    no.element.style["visibility"] = "hidden"
-    content.element.addEventListener("mouseover") {
-      isVisible = true
-    }
-
-    content.element.addEventListener("mouseout") {
-      if (value == null) {
-        isVisible = false
-      }
-    }
-
-    addFocusListener {
-      onFocus()
-    }
-    addBlurListener {
-      onBlur()
-    }
   }
 
   //---------------------------------------------------
@@ -103,6 +91,25 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   }
 
   /**
+   * Gets the field's boolean value
+   */
+  private fun getBooleanValue(selectedValues: Set<String>): Boolean? {
+    return when {
+      selectedValues.isEmpty()                    -> null
+      selectedValues.contains(trueRepresentation) -> true
+      selectedValues.contains(falseRepresentation) -> false
+      else -> null
+    }
+  }
+
+  /**
+   * Function to check if the last item is currently focused
+   */
+  private fun isLastItemFocused(currentIndex: Int, itemCount: Int = 2): Boolean {
+    return currentIndex == itemCount
+  }
+
+  /**
    * Sets the blink state of the boolean field.
    * @param blink The blink state.
    */
@@ -118,127 +125,76 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     // NOT SUPPORTED
   }
 
-  fun onBlur() {
-    if (value == null) {
-      isVisible = false
-    }
-  }
-
-  fun onFocus() {
-    isVisible = true
-  }
-
-  override fun setVisible(visible: Boolean) {
-    if (!forceHiddenVisibility && visible) {
-      yes.element.style["visibility"] = "visible"
-      no.element.style["visibility"] = "visible"
-      element.classList.add(Styles.BOOLEAN_FIELD + "-visible")
-    } else {
-      yes.element.style["visibility"] = "hidden"
-      no.element.style["visibility"] = "hidden"
-      element.classList.remove(Styles.BOOLEAN_FIELD + "-visible")
-    }
-  }
-
-  override fun isVisible(): Boolean =
-    yes.element.style["visibility"].equals("visible")
-            && no.element.style["visibility"].equals("visible")
-
   /**
-   * Sets the value of this boolean field.
-   * @param value The field value.
+   * Sets the component value from a boolean value
    */
   override fun setValue(value: Boolean?) {
-    when {
-      value == null -> {
-        yes.value = false
-        no.value = false
-      }
-      value -> {
-        yes.value = true
-        no.value = false
-      }
-      else -> {
-        yes.value = false
-        no.value = true
-      }
+    checkboxGroup.value = when (value) {
+      true -> setOf(trueRepresentation)
+      false -> setOf(falseRepresentation)
+      else -> emptySet()
     }
-    handleComponentVisibility()
   }
 
+  /**
+   * Updates the presentation of this field to display the provided value.
+   */
   override fun setPresentationValue(newPresentationValue: Boolean?) {
     value = newPresentationValue
   }
 
-  override fun addFocusListener(function: () -> Unit) {
-    yes.addFocusListener {
-      function()
-    }
-    no.addFocusListener {
-      function()
-    }
+  /**
+   * @return the field's checkbox group component
+   */
+  override fun initContent(): Component {
+    return checkboxGroup
   }
-
+  /**
+   * Enables the checkbox group component
+   */
   override fun setEnabled(enabled: Boolean) {
     super.setEnabled(enabled)
-    yes.isEnabled = enabled
-    no.isEnabled = enabled
-  }
-
-  override fun getValue(): Boolean? =
-    if (!yes.value && !no.value) {
-      null
-    } else {
-      yes.value
-    }
-
-  private fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    if (event.value) {
-      no.value = false
-    } else if (mandatory && !no.value) {
-      yes.value = true
-    }
-    if (value == true || value == null) {
-      setModelValue(value, event.isFromClient)
-    }
-    handleComponentVisibility()
-  }
-
-  private fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    if (event.value) {
-      yes.value = false
-    } else if (mandatory && !yes.value) {
-      no.value = true
-    }
-    if (value == false || value == null) {
-      setModelValue(value, event.isFromClient)
-    }
-    handleComponentVisibility()
+    checkboxGroup.isEnabled = enabled
   }
 
   /**
-   * Handles the component visibility according to its value.
+   * @return the boolean value represented by the field
    */
-  private fun handleComponentVisibility() {
-    isVisible = value != null
-  }
+  override fun getValue(): Boolean? = getBooleanValue(checkboxGroup.value)
 
-  /**
-   * Sets the tooltip of the checkbox buttons inside the boolean field.
-   *
-   * @param yes The localized label for true value.
-   * @param no The localized label for false value.
-   */
-  fun setLabel(yes: String?, no: String?) {
-    this.yes.element.setProperty("title", yes)
-    this.no.element.setProperty("title", no)
-  }
-
-  override fun initContent(): Component {
-    return content
-  }
 
   override fun doFocus() {
-    // DO NOTHING
+    checkboxGroup.focus()
+  }
+
+  /**
+   * Adds Custom focus listener for BooleanField
+   */
+  override fun addFocusListener(focusFunction: () -> Unit) {
+    checkboxGroup.element.addEventListener("focus") {
+      focusedIndex = 0
+      focusFunction()
+    }
+  }
+
+  /**
+   * Adds custom blur listener for BooleanField : the triggered function is only executed when leaving the field
+   */
+  fun addBlurListener(function: () -> Unit) {
+    checkboxGroup.element.addEventListener("focusout") {
+      if (isLastItemFocused(focusedIndex)) {
+        function()
+      } else {
+        focusedIndex++
+      }
+    }
+  }
+
+  // Inner class to encapsulate CheckboxGroup component and make it focusable
+  inner class FocusableCheckboxGroup<T> : CheckboxGroup<T>(), Focusable<CheckboxGroup<T>>, KeyNotifier {
+    init {
+      // Make the component part of the tab order by setting tab index
+      element.setAttribute("tabindex", "0")
+    }
   }
 }
