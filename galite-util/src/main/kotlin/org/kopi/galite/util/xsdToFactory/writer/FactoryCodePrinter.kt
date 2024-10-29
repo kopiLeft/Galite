@@ -299,8 +299,16 @@ class FactoryCodePrinter: Constants {
       groupedPackages.forEach { (_, subPackages) ->
         subPackages.forEach { importPath ->
           val className = importPath.split(".").last()
-          if (!classNames.contains(className)) {
-            // No conflict, add the class name and import
+          if (classNames.contains(className)) {
+            val currentImportForClass = importFactory.single { it.endsWith(className) }
+            val matchingImport = if (importPath.startsWith(packageName)) importPath
+                                 else if (currentImportForClass.startsWith(packageName)) currentImportForClass
+                                 else Constants.EMPTY
+            if (currentImportForClass != matchingImport || matchingImport.isEmpty()){
+              importFactory.removeIf { it == currentImportForClass }
+              importFactory.add(matchingImport)
+            }
+          } else {
             classNames.add(className)
             importFactory.add(importPath)
           }
