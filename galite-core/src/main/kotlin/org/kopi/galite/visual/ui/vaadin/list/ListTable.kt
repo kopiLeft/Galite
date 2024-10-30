@@ -17,7 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.list
 
+import java.io.ByteArrayInputStream
+
 import org.kopi.galite.visual.form.VListDialog
+import org.kopi.galite.visual.list.VImageColumn
+import org.kopi.galite.visual.ui.vaadin.base.Image
+import org.kopi.galite.visual.ui.vaadin.form.DImageField
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.KeyDownEvent
@@ -32,10 +37,6 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.kopi.galite.visual.list.VImageColumn
-import org.kopi.galite.visual.ui.vaadin.base.Image
-import org.kopi.galite.visual.ui.vaadin.form.DImageField
-import java.io.ByteArrayInputStream
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {

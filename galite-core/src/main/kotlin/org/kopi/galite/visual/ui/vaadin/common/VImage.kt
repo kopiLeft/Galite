@@ -17,10 +17,11 @@
  */
 package org.kopi.galite.visual.ui.vaadin.common
 
-import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.html.Image
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.html.Image
 
 /**
  * A widget that wraps image element.
