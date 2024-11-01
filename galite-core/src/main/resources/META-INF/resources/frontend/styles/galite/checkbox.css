@@ -30,6 +30,7 @@
 .k-boolean-field vaadin-checkbox:nth-child(2)::part(checkbox)::after {
     content: "✕"; /* Adds the 'x' mark to the second checkbox */
     font-size: 13px;
+    font-weight: bold;
     position: absolute;
     top: 0em;
     left: 0.09em;

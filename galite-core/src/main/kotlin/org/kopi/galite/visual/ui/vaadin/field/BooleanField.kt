@@ -86,7 +86,6 @@ class BooleanField(val trueRepresentation: String?, val falseRepresentation: Str
    */
   fun setFocus(focus: Boolean) {
     if (focus) {
-      focusedIndex = 0
       focus()
     } else {
       blur()
@@ -176,6 +175,7 @@ class BooleanField(val trueRepresentation: String?, val falseRepresentation: Str
    */
   override fun addFocusListener(function: () -> Unit) {
     checkboxGroup.element.addEventListener("focus") {
+      focusedIndex = 0
       function()
     }
   }

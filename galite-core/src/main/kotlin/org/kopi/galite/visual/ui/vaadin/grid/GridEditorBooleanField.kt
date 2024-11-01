@@ -162,7 +162,6 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
    */
   override fun getValue(): Boolean? = getBooleanValue(checkboxGroup.value)
 
-
   override fun doFocus() {
     checkboxGroup.focus()
   }
