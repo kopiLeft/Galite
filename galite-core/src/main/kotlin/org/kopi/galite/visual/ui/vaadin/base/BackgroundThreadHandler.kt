@@ -139,6 +139,7 @@ object BackgroundThreadHandler {
    * @param command   The command which accesses the UI.
    */
   fun startAndWaitAndPush(lock: Object, currentUI: UI? = null, command: () -> Unit) {
+    Thread.sleep(50)
     accessAndPush(currentUI = currentUI, command = command)
 
     synchronized(lock) {
