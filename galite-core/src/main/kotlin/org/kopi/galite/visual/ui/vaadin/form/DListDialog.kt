@@ -82,6 +82,8 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifie
     if (model.isTooManyRows) {
       handleTooManyRows()
     }
+//    println("WAITING ***********")
+//    Thread.sleep(500)
     prepareDialog() // prepares the dialog data.
     if (field != null) {
       // show the dialog beside the field.
@@ -322,6 +324,7 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifie
    * Prepares the dialog content.
    */
   private fun prepareDialog() {
+    println("INFO: We're inside the prepareDialog function <-------->")
     val table = ListTable(model)
     super.table = table
     table.select(tableItems.first())

@@ -1758,6 +1758,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
 
       if (!exists) {
+        println("WARNING: EROOR of Showing the Pop up")
+        Thread.sleep(500)
         throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
       }
       return
@@ -1916,6 +1918,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         list!!.action!!().model
       }
       else -> {
+        println("----> It's Happening")
         null // should never happen.
       }
     }
@@ -1963,9 +1966,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         if (lineCount == MAX_LINE_COUNT - 1) {
           getForm().notice(MessageCode.getMessage("VIS-00028"))
         }
+        println("lineCount = $lineCount")
+        println("SHOW_SINGLE_ENTRY = $SHOW_SINGLE_ENTRY")
         if (lineCount == 1 && !SHOW_SINGLE_ENTRY) {
           0
         } else {
+          println("WARNING : newForm nullability is ${newForm == null}")
           val ld = VListDialog(columns, lines, lineCount, newForm)
 
           ld.selectFromDialog(getForm(), null, this)

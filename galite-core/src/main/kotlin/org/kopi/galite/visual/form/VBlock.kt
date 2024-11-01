@@ -2306,10 +2306,15 @@ abstract class VBlock(var title: String,
     try {
       while (true) {
         try {
+          println("BEFORE First Try Block")
           dialog = form.transaction(Message.getMessage("searching_database")) {
             callProtectedTrigger(VConstants.TRG_PREQRY)
+            println("BEFORE buildQueryDialog")
             buildQueryDialog()
           }
+          println("AFTER buildQueryDialog")
+
+
           break
         } catch (e: VException) {
           try {

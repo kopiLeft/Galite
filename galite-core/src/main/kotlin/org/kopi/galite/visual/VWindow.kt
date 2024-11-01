@@ -184,19 +184,39 @@ abstract class VWindow(var source: String? = null, val dBConnection: Connection?
   fun error(message: String?) {
     var send = false
     val listeners = modelListener.listenerList
+    println("Total listeners: ${listeners.size}")
+
+    // Loop through the listeners in reverse order
     for (i in listeners.size - 2 downTo 0 step 2) {
+      // Log the listener class at the current index
+      println("Checking listener at index $i: ${listeners[i]::class.java.name}")
+
+      // Check if the current listener is of type MessageListener
       if (listeners[i] == MessageListener::class.java) {
-        (listeners[i + 1] as MessageListener).error(message)
-        send = true
+        println("Found MessageListener, sending error message")
+        try {
+          // Send the error message to the listener
+          (listeners[i + 1] as MessageListener).error(message)
+          send = true
+          println("Message sent to listener at index ${i + 1}.")
+        } catch (e: Exception) {
+          println("Error while sending message to listener: ${e.message}")
+        }
+        println("END of If")
       }
     }
+
+    // If no listener processed the message
     if (!send) {
-      // use a 'default listener' that the message is
-      // not lost (e.g .because this is happened in the
-      // constructor)
+      println("No MessageListener found. Using default listener.")
       ApplicationContext.applicationContext.getApplication().error(message)
+    } else {
+      println("Message successfully sent to a listener.")
     }
+
+    println("End of error method.")
   }
+
 
   /**
    * Displays a warning message.

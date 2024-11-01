@@ -58,7 +58,7 @@ object BackgroundThreadHandler {
   fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
     if (UI.getCurrent() != null) {
       command()
-
+println("COMMAND EXECUTED")
       return
     }
 
@@ -70,6 +70,7 @@ object BackgroundThreadHandler {
       currentUI.access {
         try {
           command()
+          println("Command access PASS")
         } finally {
           currentUI.push()
         }
@@ -96,6 +97,7 @@ object BackgroundThreadHandler {
     }
 
     val currentUI = currentUI ?: locateUI()
+    println("currentUI : ${currentUI == null}")
 
     if (currentUI == null) {
       command()
@@ -104,6 +106,7 @@ object BackgroundThreadHandler {
         currentUI
           .access(command)
           .get()
+        println("GET access PASS")
       } catch (executionException: ExecutionException) {
         executionException.cause?.let {
           throw it
@@ -139,11 +142,15 @@ object BackgroundThreadHandler {
    * @param command   The command which accesses the UI.
    */
   fun startAndWaitAndPush(lock: Object, currentUI: UI? = null, command: () -> Unit) {
+    Thread.sleep(50)
     accessAndPush(currentUI = currentUI, command = command)
-
+    println("AFTER accessAndPush")
     synchronized(lock) {
+      println("INSIDE synchronized(lock)")
       try {
+        println("BEFORE lock.wait()")
         lock.wait()
+        println("AFTER lock.wait()")
       } catch (e: InterruptedException) {
         e.printStackTrace()
       }
@@ -156,7 +163,10 @@ object BackgroundThreadHandler {
    */
   fun releaseLock(lock: Object) {
     synchronized(lock) {
+      println("BEFORE notify")
       lock.notifyAll()
+      println("AFTER notify")
+
     }
   }
 

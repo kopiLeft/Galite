@@ -177,7 +177,9 @@ object Commands : VConstants {
     b.validate()
     form.saveFilledField()
 
+    println("\nBEFORE singleMenuQuery")
     val id = b.singleMenuQuery(false)
+    println("AFTER singleMenuQuery (id= $id)")
 
     if (id != -1) {
       while (true) {

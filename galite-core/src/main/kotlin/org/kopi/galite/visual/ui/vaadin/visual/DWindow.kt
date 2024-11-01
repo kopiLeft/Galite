@@ -50,6 +50,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.locateUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findDialog
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
@@ -545,17 +546,27 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun error(message: String?) {
+      println("BEFORE ErrorNotification creation")
       val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this@DWindow)
+      println("VlibProperties.getString(\"Error\") : ${VlibProperties.getString("Error")}")
+      println("Message :$message")
+      println("notificationLocale: $notificationLocale")
       val lock = Object()
 
-      dialog.addNotificationListener(object : NotificationListener {
-        override fun onClose(action: Boolean?) {
-          application.windowError = null // remove any further error.
-          releaseLock(lock)
-        }
-      })
-      showNotification(dialog, lock)
+        println("BEFORE: dialog.addNotificationListener")
+        dialog.addNotificationListener(object : NotificationListener {
+          override fun onClose(action: Boolean?) {
+            println("Notification closed, releasing lock")
+            application.windowError = null
+            releaseLock(lock)
+          }
+        })
+
+        println("BEFORE: showNotification")
+        showNotification(dialog, lock)
+        println("AFTER: showNotification")
     }
+
 
     override fun warn(message: String) {
       val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale, this@DWindow)
@@ -603,9 +614,18 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
      * @param notification The notification to be shown
      */
     internal fun showNotification(notification: AbstractNotification, lock: Object) {
+      println("Inside showNotification")
+      println("currentUI is NUll ?:${currentUI == null}")
+//      println("WATING +++++++++++ ")
+//      Thread.sleep(500)
       startAndWaitAndPush(lock, currentUI) {
+        println("About to call notification.show()")
+        println("Notification state before show: isOpened: ${notification.isOpened}, isVisible: ${notification.isVisible}")
         notification.show()
+        println("Notification state after show: isOpened: ${notification.isOpened}, isVisible: ${notification.isVisible}")
+        println("UI is attached: ${currentUI?.isAttached}")
       }
+      println("End of showNotification")
     }
 
     //---------------------------------------
