@@ -98,6 +98,7 @@ class VListDialog(list: Array<VListColumn?>,
     isSkipFirstLine = skipFirstLine
     count = rows
     columns = list
+    println("count: $count, sizes: ${list.size}")
     sizes = IntArray(list.size)
     titles = arrayOfNulls(list.size)
 

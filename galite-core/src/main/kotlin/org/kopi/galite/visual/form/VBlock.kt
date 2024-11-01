@@ -2475,14 +2475,17 @@ abstract class VBlock(var title: String,
     }
 
     return if (rows == 0) {
+      println("rows == 0")
       null
     } else {
+      println("rows != 0  ($rows)")
       val cols = arrayOfNulls<VListColumn>(query_cnt)
 
       for (i in cols.indices) {
         cols[i] = query_tab[i]!!.getListColumn()
       }
       val dialog = VListDialog(cols, values, ids, rows)
+      println(toString())
       if (rows == fetchSize) {
         dialog.setTooManyRows()
       }
@@ -3791,8 +3794,8 @@ abstract class VBlock(var title: String,
       try {
         append("\n-----------------------------------------------\nBLOCK ")
         append(name)
-        append(" Shortcut: ")
-        append(shortcut)
+//        append(" Shortcut: ")
+//        append(shortcut)
         append(" Title: ")
         append(title)
         append("\n")
@@ -3830,7 +3833,7 @@ abstract class VBlock(var title: String,
           append(fields[i].toString())
         }
       } catch (e: Exception) {
-        append("Exception while retrieving bock information. \n")
+        append("Exception while retrieving bock information.: $e \n")
       }
     }
   }
