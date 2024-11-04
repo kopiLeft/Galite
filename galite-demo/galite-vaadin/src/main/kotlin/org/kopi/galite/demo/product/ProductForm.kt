@@ -52,28 +52,28 @@ class ProductForm : DictionaryForm(title = "Products", locale = Locale.UK) {
     val description = mustFill(domain = STRING(50), position = at(1, 1)) {
       label = "Description"
       help = "The product description"
-      columns(u.description){
+      columns(u.description) {
         priority = 4
       }
     }
     val price = mustFill(domain = DECIMAL(20, 10), follow(description)) {
       label = "Price"
       help = "The product unit price excluding VAT"
-      columns(u.price){
+      columns(u.price) {
         priority = 3
       }
     }
     val category = mustFill(domain = Category, position = at(2, 1)) {
       label = "Category"
       help = "The product category"
-      columns(u.category){
+      columns(u.category) {
         priority = 2
       }
     }
     val taxName = mustFill(domain = Tax, position = at(3, 1)) {
       label = "Tax"
       help = "The product tax name"
-      columns(u.taxName){
+      columns(u.taxName) {
         priority = 1
       }
     }
