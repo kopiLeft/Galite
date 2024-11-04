@@ -33,6 +33,7 @@ import org.apache.xmlbeans.impl.common.NameUtil
 
 import org.kopi.galite.util.base.Utils
 import org.kopi.galite.util.base.Utils.Companion.nonKotlinKeyword
+import org.kopi.galite.util.base.Utils.Companion.singleOrEmpty
 import org.kopi.galite.util.xsdToFactory.utils.Constants
 import org.kopi.galite.util.xsdToFactory.utils.Factory
 import org.kopi.galite.util.xsdToFactory.parser.SchemaParser.Companion.getDigits
@@ -295,16 +296,19 @@ class FactoryCodePrinter: Constants {
         .sortedWith(compareBy({ it.startsWith("com") }, { it.startsWith("org") }, { it }))
         .groupBy { it.substringBeforeLast(".") }
       val classNames = mutableSetOf<String>()
+
       importFactory.clear()
       groupedPackages.forEach { (_, subPackages) ->
         subPackages.forEach { importPath ->
           val className = importPath.split(".").last()
+
           if (classNames.contains(className)) {
             val currentImportForClass = importFactory.singleOrEmpty { it.endsWith(className) }
             val matchingImport = if (importPath.startsWith(packageName)) importPath
                                  else if (currentImportForClass.startsWith(packageName)) currentImportForClass
                                  else Constants.EMPTY
-            if (currentImportForClass != matchingImport || matchingImport.isEmpty()){
+
+            if (currentImportForClass != matchingImport || matchingImport.isEmpty()) {
               importFactory.removeIf { it == currentImportForClass }
               importFactory.add(matchingImport)
             }
@@ -622,20 +626,6 @@ class FactoryCodePrinter: Constants {
       }
     }
     return result.toString()
-  }
-
-  /**
-   * Returns a single element that matches the given predicate or a defined empty value if no matches are found
-   * or if multiple matches exist.
-   * @param predicate A function that defines the condition to be met for an element to be considered a match.
-   * @return The single matching element, or a predefined empty value if no matches are found or if there are multiple matches.
-   */
-  fun <T> Iterable<T>.singleOrEmpty(predicate: (T) -> Boolean): T {
-    val matches = this.filter(predicate)
-    return when {
-      matches.size == 1 -> matches.first()
-      else -> Constants.EMPTY as T
-    }
   }
 
   //  Variables

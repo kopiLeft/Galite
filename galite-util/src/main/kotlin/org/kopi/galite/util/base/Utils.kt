@@ -18,6 +18,7 @@
 
 package org.kopi.galite.util.base
 
+import org.kopi.galite.util.xsdToFactory.utils.Constants
 import java.util.Timer
 import java.util.TimerTask
 
@@ -146,6 +147,21 @@ open class Utils {
      */
     fun isKotlinReservedWord(word: String) : Boolean {
       return kotlinReservedWords.contains(word)
+    }
+
+    /**
+     * Returns a single element that matches the given predicate or a defined empty value if no matches are found
+     * or if multiple matches exist.
+     * @param predicate A function that defines the condition to be met for an element to be considered a match.
+     * @return The single matching element, or a predefined empty value if no matches are found or if there are multiple matches.
+     */
+    infix fun <T> Iterable<T>.singleOrEmpty(predicate: (T) -> Boolean): T {
+      val matches = this.filter(predicate)
+
+      return when {
+        matches.size == 1 -> matches.first()
+        else -> Constants.EMPTY as T
+      }
     }
 
     // List of hard kotlin keywords
