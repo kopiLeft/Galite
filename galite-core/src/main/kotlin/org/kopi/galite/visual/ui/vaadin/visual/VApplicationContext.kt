@@ -31,7 +31,7 @@ class VApplicationContext : ApplicationContext() {
   private var previewRunner: VPreviewRunner? = null
 
   override fun getApplication(): Application {
-    val ui = BackgroundThreadHandler.locateUI()
+    val ui = BackgroundThreadHandler.getUI()
 
     return if (ui == null) {
       VApplication.instance

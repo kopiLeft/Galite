@@ -38,7 +38,6 @@ import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
@@ -48,7 +47,6 @@ import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.locateUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findDialog
@@ -249,7 +247,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       val currentThread = Thread(actionRunner)
       // Force the current UI in case the thread is started before attaching the window to the UI.
       if (currentUI == null) {
-        currentUI = locateUI()
+        currentUI = BackgroundThreadHandler.getUI()
       }
       currentThread.start()
     }

@@ -145,7 +145,7 @@ class VWindowController : WindowController() {
   }
 
   private fun getApplication(): VApplication? {
-    val ui = BackgroundThreadHandler.locateUI()
+    val ui = BackgroundThreadHandler.getUI()
     return if (ui == null) {
       null
     } else {
