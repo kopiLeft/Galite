@@ -1,3 +1,10 @@
+# 1.5.7
+## What's Changed
+* Fix : Implement ImageHandler in Vaadin Flow to fix fatal error when loading an image list and show images on the list by @sebai-dhia in [#642](https://github.com/kopiLeft/Galite/pull/642)
+* Fix abnormal behavior of the list button and menu query in the ProductForm by @sebai-dhia in [#644](https://github.com/kopiLeft/Galite/pull/644)
+
+**Full Changelog**: [1.5.6 ... 1.5.7](https://github.com/kopiLeft/Galite/compare/1.5.6...1.5.7)
+
 # 1.5.6
 ## What's Changed
 * Fix : Allow LEFT JOIN for nullable fields with non nullable fields in Galite forms by @mgrati in [#640](https://github.com/kopiLeft/Galite/pull/640)
