@@ -18,13 +18,13 @@
 
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.visual.base.Image
+import org.kopi.galite.visual.ui.vaadin.base.Image
 import org.kopi.galite.visual.ImageHandler
 
 class VImageHandler : ImageHandler() {
   override fun getImage(image: String): Image? =  null
 
-  override fun getImage(image: ByteArray): Image? = null
+  override fun getImage(image: ByteArray): Image = Image(source = image)
 
   override fun getURL(image: String): String = "ui/vaadin/$image" // FIXME
 }
