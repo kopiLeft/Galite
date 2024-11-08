@@ -485,17 +485,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   private fun autoLeave() {
-    println("***************************************************")
-    println("THIS ====> $this")
-    println("THIS.block.activeField ====> " + this.block?.activeField)
-    println("***************************************************")
-    println("THIS.block.activeRecord ====>" + this.block?.activeRecord)
-    println("THIS.block.currentRecord ====>" + this.block?.currentRecord)
-
-    println("BLOCK.activeField ====>" + block!!.activeField)
-    println("BLOCK.activeRecord ====>" + block!!.activeRecord)
-    println("BLOCK.currentRecord ====>" + block!!.currentRecord)
-    println("--------------------------------------------------")
     assert(this == block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     if (!hasTrigger(VConstants.TRG_AUTOLEAVE)) {
       return
@@ -1668,8 +1657,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-        && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-        && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -2022,7 +2011,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   @Suppress("UNCHECKED_CAST")
-  /*internal*/ fun selectFromList(gotoNextField: Boolean) {
+          /*internal*/ fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<ExpressionWithColumnType<*>>()
 
     list!!.columns.forEach {
@@ -2280,13 +2269,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+        block!!.getFieldPos(this),
+        label,
+        lab ?: name,
+        toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED ||
-          access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED ||
-          access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED)
+        access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED ||
+        access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED)
       {
         helpOnType(help)
         help.helpOnFieldCommand(command)
@@ -2319,18 +2308,18 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     val modeDesc: String?
 
     if (access[VConstants.MOD_UPDATE] == VConstants.ACS_MUSTFILL
-            || access[VConstants.MOD_INSERT] == VConstants.ACS_MUSTFILL
-            || access[VConstants.MOD_QUERY] == VConstants.ACS_MUSTFILL) {
+      || access[VConstants.MOD_INSERT] == VConstants.ACS_MUSTFILL
+      || access[VConstants.MOD_QUERY] == VConstants.ACS_MUSTFILL) {
       modeName = VlibProperties.getString("mustfill")
       modeDesc = VlibProperties.getString("mustfill-long")
     } else if (access[VConstants.MOD_UPDATE] == VConstants.ACS_MUSTFILL
-            || access[VConstants.MOD_INSERT] == VConstants.ACS_VISIT
-            || access[VConstants.MOD_QUERY] == VConstants.ACS_VISIT) {
+      || access[VConstants.MOD_INSERT] == VConstants.ACS_VISIT
+      || access[VConstants.MOD_QUERY] == VConstants.ACS_VISIT) {
       modeName = VlibProperties.getString("visit")
       modeDesc = VlibProperties.getString("visit-long")
     } else if (access[VConstants.MOD_UPDATE] == VConstants.ACS_MUSTFILL
-            || access[VConstants.MOD_INSERT] == VConstants.ACS_SKIPPED
-            || access[VConstants.MOD_QUERY] == VConstants.ACS_SKIPPED) {
+      || access[VConstants.MOD_INSERT] == VConstants.ACS_SKIPPED
+      || access[VConstants.MOD_QUERY] == VConstants.ACS_SKIPPED) {
       modeName = VlibProperties.getString("skipped")
       modeDesc = VlibProperties.getString("skipped-long")
     } else {
@@ -2338,10 +2327,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+      modeDesc,
+      getTypeName(),
+      getTypeInformation(),
+      names)
   }
 
   /**

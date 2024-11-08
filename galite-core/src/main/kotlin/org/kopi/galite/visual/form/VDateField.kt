@@ -156,10 +156,8 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    */
   override fun setDate(r: Int, v: LocalDate?) {
     if (isChangedUI
-            || value[r] == null && v != null
-            || value[r] != null && value[r]!! != v) {
-      println("Condition Set it  Up")
-      //block!!.activeField = this
+      || value[r] == null && v != null
+      || value[r] != null && value[r]!! != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
