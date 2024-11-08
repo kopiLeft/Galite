@@ -17,10 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
-import org.kopi.galite.visual.form.ModelTransformer
-import org.kopi.galite.visual.form.UTextField
-import org.kopi.galite.visual.form.VConstants
-import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.Action
@@ -28,6 +24,9 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.contextmenu.ContextMenu
+import org.kopi.galite.visual.form.*
+import org.kopi.galite.visual.ui.vaadin.field.DateField
+import java.time.LocalDate
 
 /**
  * The `DTextField` is the vaadin implementation
@@ -274,11 +273,11 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toGui(modelTxt: String?): String? {
+    override fun toModel(modelTxt: String?): String? {
       return modelTxt
     }
 
-    override fun toModel(guiTxt: String?): String? {
+    override fun toGui(guiTxt: String?): String? {
       return guiTxt
     }
 

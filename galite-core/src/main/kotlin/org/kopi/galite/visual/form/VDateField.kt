@@ -158,6 +158,8 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r]!! != v) {
+      println("Condition Set it  Up")
+      //block!!.activeField = this
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row

@@ -17,30 +17,19 @@
  */
 package org.kopi.galite.visual.ui.vaadin.field
 
+import com.vaadin.flow.component.*
+import com.vaadin.flow.component.AbstractField
 import java.util.Optional
 
 import org.kopi.galite.type.format
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.ComponentEvent
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.DomEvent
-import com.vaadin.flow.component.EventData
-import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.ShortcutRegistration
-import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.shared.Registration
+import org.kopi.galite.visual.form.VField
 
 /**
  * A Date field.
@@ -53,8 +42,21 @@ class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
   }
 
   override fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>) {
+    // Capture stack trace for this event
+    Thread.dumpStack()
     internalField.picker.addValueChangeListener(listener)
     internalField.addValueChangeListener(listener)
+    internalField.addValueChangeListener{
+      this.focus()
+    }
+    internalField.picker.addOpenedChangeListener { event ->
+      if (event.isOpened) {
+        println("OpenedChangeListener: DatePicker opened")
+
+      } else {
+        println("OpenedChangeListener: DatePicker closed")
+      }
+    }
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

@@ -485,6 +485,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   private fun autoLeave() {
+    println("***************************************************")
+    println("THIS ====> $this")
+    println("THIS.block.activeField ====> " + this.block?.activeField)
+    println("***************************************************")
+    println("THIS.block.activeRecord ====>" + this.block?.activeRecord)
+    println("THIS.block.currentRecord ====>" + this.block?.currentRecord)
+
+    println("BLOCK.activeField ====>" + block!!.activeField)
+    println("BLOCK.activeRecord ====>" + block!!.activeRecord)
+    println("BLOCK.currentRecord ====>" + block!!.currentRecord)
+    println("--------------------------------------------------")
     assert(this == block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     if (!hasTrigger(VConstants.TRG_AUTOLEAVE)) {
       return
