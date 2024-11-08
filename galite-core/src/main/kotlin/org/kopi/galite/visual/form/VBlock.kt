@@ -2481,6 +2481,7 @@ abstract class VBlock(var title: String,
       if (rows == fetchSize) {
         dialog.setTooManyRows()
       }
+      println("!!!!!!!!!!!!!!!!!!! LIST DIALOG CREATED : $dialog")
       dialog
     }
   }

@@ -31,11 +31,20 @@ object BackgroundThreadHandler {
   private val uiThreadLocal = ThreadLocal<UI?>()
 
   /**
+   * If a current UI context is found, directly execute the command
+   */
+  private fun useCurrentUIContext(command: () -> Unit): Boolean {
+    return UI.getCurrent()?.let { command() ; true } ?: false
+  }
+
+  /**
    * Provides exclusive access to the UI from a background thread.
    * @param command The command to execute, which can access the UI.
    */
   fun access(currentUI: UI? = null, command: () -> Unit) {
-    val ui = currentUI ?: getUI()
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
     if (ui == null) {
       command()
     } else {
@@ -48,17 +57,44 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
-    val ui = currentUI ?: getUI()
-    ui?.session?.lock()
-    try {
-      ui?.access {
-        command()
+    println("!!!!!!!!!!!!!!!!!!!!!! ACCESS AND PUSH !!!!!!!!!!!!!!!!!!!!!!")
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
+    if (ui == null) {
+      command()
+    } else {
+      ui.access {
+        try {
+          command()
+        } finally {
+          ui.push()
+        }
+      }
+    }
+  }
+
+  /**
+   * Provides exclusive access to the UI and pushes an update.
+   * @param command The command to execute, which can access the UI.
+   */
+  fun accessAndWaitAndPush(currentUI: UI? = null, command: () -> Unit) {
+    println("!!!!!!!!!!!!!!!!!!!!!! ACCESS AND WAIT AND PUSH !!!!!!!!!!!!!!!!!!!!!!")
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
+    if (ui == null) {
+      command()
+    } else {
+      runCatching {
+        ui.access(command).get()
         ui.push()
-      } ?: command()
-    } catch (e: Exception) {
-      e.printStackTrace()
-    } finally {
-      ui?.session?.unlock()
+      }.onFailure {
+        (it as? ExecutionException)?.cause?.let { cause ->
+          cause.printStackTrace()
+          throw cause
+        }
+      }
     }
   }
 
@@ -67,7 +103,9 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun accessAndAwait(currentUI: UI? = null, command: () -> Unit) {
-    val ui = currentUI ?: getUI()
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
     if (ui == null) {
       command()
     } else {
@@ -105,7 +143,7 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun startAndWaitAndPush(lock: Object, currentUI: UI? = null, command: () -> Unit) {
-    accessAndPush(currentUI, command)
+    accessAndWaitAndPush(currentUI, command)
     synchronized(lock) {
       try {
         lock.wait()
@@ -146,5 +184,5 @@ object BackgroundThreadHandler {
   /**
    * Attempts to retrieve the current UI from `UI.getCurrent()` or the thread-local storage.
    */
-  fun getUI(): UI? = UI.getCurrent() ?: uiThreadLocal.get()
+  fun locateUI(): UI? = UI.getCurrent() ?: uiThreadLocal.get()
 }

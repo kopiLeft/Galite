@@ -247,7 +247,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       val currentThread = Thread(actionRunner)
       // Force the current UI in case the thread is started before attaching the window to the UI.
       if (currentUI == null) {
-        currentUI = BackgroundThreadHandler.getUI()
+        currentUI = BackgroundThreadHandler.locateUI()
       }
       currentThread.start()
     }

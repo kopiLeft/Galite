@@ -17,16 +17,6 @@
  */
 package org.kopi.galite.visual.ui.vaadin.visual
 
-import org.kopi.galite.visual.cross.VFullCalendarForm
-import org.kopi.galite.visual.dsl.common.Window
-import org.kopi.galite.visual.preview.VPreviewWindow
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
-import org.kopi.galite.visual.ui.vaadin.field.TextField
-import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
-import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VHelpViewer
@@ -34,6 +24,16 @@ import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.cross.VFullCalendarForm
+import org.kopi.galite.visual.dsl.common.Window
+import org.kopi.galite.visual.preview.VPreviewWindow
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.field.TextField
+import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 
 /**
  * The `VWindowController` is the vaadin implementation
@@ -132,7 +132,7 @@ class VWindowController : WindowController() {
           title: String,
   ) {
     val popup = PopupWindow(getApplication()?.mainWindow)
-    accessAndPush {
+    accessAndWaitAndPush {
       popup.isModal = false
       popup.setContent(view)
       popup.setCaption(title) // put popup title
@@ -145,7 +145,7 @@ class VWindowController : WindowController() {
   }
 
   private fun getApplication(): VApplication? {
-    val ui = BackgroundThreadHandler.getUI()
+    val ui = BackgroundThreadHandler.locateUI()
     return if (ui == null) {
       null
     } else {

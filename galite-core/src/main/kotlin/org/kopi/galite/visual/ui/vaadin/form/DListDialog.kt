@@ -82,7 +82,9 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifie
     if (model.isTooManyRows) {
       handleTooManyRows()
     }
+    println(">>>>>>>>>>>>>>>>>>>>>>>> BEGIN DISPLAY <<")
     prepareDialog() // prepares the dialog data.
+    println("DIALOG PREPARED")
     if (field != null) {
       // show the dialog beside the field.
       // otherwise show it centered.
@@ -92,7 +94,10 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifie
         //showRelativeTo((field as DGridEditorField<*>).getEditor()) TODO
       }
     }
+    println("BEFORE SHOW DIALOG AND WAIT")
     showDialogAndWait()
+    println("AFTER SHOW DIALOG AND WAIT")
+    println(">>>>>>>>>>>>>>>>>>>>>>>> END DISPLAY <<")
     return handleClientResponse()
   }
 
@@ -344,7 +349,9 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifie
   internal fun showDialogAndWait() {
     startAndWaitAndPush(lock, currentUI) {
       showListDialog()
+      println("BEFORE TABLE FOCUS")
       table?.focus()
+      println("AFTER TABLE FOCUS")
     }
   }
 

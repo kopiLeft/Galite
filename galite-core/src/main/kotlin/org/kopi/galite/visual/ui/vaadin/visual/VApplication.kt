@@ -63,6 +63,7 @@ import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.base.FontMetrics
 import org.kopi.galite.visual.ui.vaadin.base.StyleManager
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
@@ -212,7 +213,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param notification The notification to be shown
    */
   protected open fun showNotification(notification: AbstractNotification, lock: Object) {
-    BackgroundThreadHandler.startAndWaitAndPush(lock, currentUI) {
+    startAndWaitAndPush(lock, currentUI) {
       notification.show()
     }
   }
