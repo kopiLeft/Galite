@@ -29,7 +29,7 @@ import org.kopi.galite.visual.dsl.common.Window
 import org.kopi.galite.visual.preview.VPreviewWindow
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
-import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndWaitAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.ui.vaadin.grid.GridEditorTextField
@@ -132,7 +132,7 @@ class VWindowController : WindowController() {
           title: String,
   ) {
     val popup = PopupWindow(getApplication()?.mainWindow)
-    accessAndWaitAndPush {
+    accessAndPush {
       popup.isModal = false
       popup.setContent(view)
       popup.setCaption(title) // put popup title

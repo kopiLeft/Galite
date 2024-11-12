@@ -57,7 +57,6 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
-    println("!!!!!!!!!!!!!!!!!!!!!! ACCESS AND PUSH !!!!!!!!!!!!!!!!!!!!!!")
     if (useCurrentUIContext(command)) { return }
 
     val ui = currentUI ?: locateUI()
@@ -69,30 +68,6 @@ object BackgroundThreadHandler {
           command()
         } finally {
           ui.push()
-        }
-      }
-    }
-  }
-
-  /**
-   * Provides exclusive access to the UI and pushes an update.
-   * @param command The command to execute, which can access the UI.
-   */
-  fun accessAndWaitAndPush(currentUI: UI? = null, command: () -> Unit) {
-    println("!!!!!!!!!!!!!!!!!!!!!! ACCESS AND WAIT AND PUSH !!!!!!!!!!!!!!!!!!!!!!")
-    if (useCurrentUIContext(command)) { return }
-
-    val ui = currentUI ?: locateUI()
-    if (ui == null) {
-      command()
-    } else {
-      runCatching {
-        ui.access(command).get()
-        ui.push()
-      }.onFailure {
-        (it as? ExecutionException)?.cause?.let { cause ->
-          cause.printStackTrace()
-          throw cause
         }
       }
     }
@@ -143,7 +118,7 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun startAndWaitAndPush(lock: Object, currentUI: UI? = null, command: () -> Unit) {
-    accessAndWaitAndPush(currentUI, command)
+    accessAndPush(currentUI, command)
     synchronized(lock) {
       try {
         lock.wait()

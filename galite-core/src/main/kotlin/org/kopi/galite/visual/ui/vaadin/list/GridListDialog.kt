@@ -61,9 +61,7 @@ open class GridListDialog : Dialog(), HasEnabled, HasStyle {
 
   fun showListDialog() {
     // now show the list dialog
-    println("SHOW LIST DIALOG")
     super.open()
-    println("LIST DIALOG OPENED")
   }
 
   override fun open() {
