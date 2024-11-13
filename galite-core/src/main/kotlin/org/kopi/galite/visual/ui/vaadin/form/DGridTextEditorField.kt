@@ -93,6 +93,9 @@ class DGridTextEditorField(
 
   fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<String>, String>) {
     if (event.isFromClient) {
+      if (!getModel().hasFocus()) {
+        getModel().block!!.gotoField(getModel())
+      }
       checkText(event.value.toString(), true)
     }
   }
