@@ -47,6 +47,7 @@ import org.kopi.galite.visual.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.locateUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findDialog
@@ -247,7 +248,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       val currentThread = Thread(actionRunner)
       // Force the current UI in case the thread is started before attaching the window to the UI.
       if (currentUI == null) {
-        currentUI = BackgroundThreadHandler.getUI()
+        currentUI = locateUI()
       }
       currentThread.start()
     }
@@ -642,11 +643,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
           if (!waitIndicator.isOpened) {
             waitIndicator.show()
           }
-          doAfter(delay) {
-            access(currentUI) {
-              currentUI?.push()
-            }
-          }
+          currentUI?.push()
         }
       }
     }

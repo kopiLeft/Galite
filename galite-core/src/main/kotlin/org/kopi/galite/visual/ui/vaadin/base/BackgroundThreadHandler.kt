@@ -31,11 +31,20 @@ object BackgroundThreadHandler {
   private val uiThreadLocal = ThreadLocal<UI?>()
 
   /**
+   * If a current UI context is found, directly execute the command
+   */
+  private fun useCurrentUIContext(command: () -> Unit): Boolean {
+    return UI.getCurrent()?.let { command() ; true } ?: false
+  }
+
+  /**
    * Provides exclusive access to the UI from a background thread.
    * @param command The command to execute, which can access the UI.
    */
   fun access(currentUI: UI? = null, command: () -> Unit) {
-    val ui = currentUI ?: getUI()
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
     if (ui == null) {
       command()
     } else {
@@ -48,17 +57,19 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
-    val ui = currentUI ?: getUI()
-    ui?.session?.lock()
-    try {
-      ui?.access {
-        command()
-        ui.push()
-      } ?: command()
-    } catch (e: Exception) {
-      e.printStackTrace()
-    } finally {
-      ui?.session?.unlock()
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
+    if (ui == null) {
+      command()
+    } else {
+      ui.access {
+        try {
+          command()
+        } finally {
+          ui.push()
+        }
+      }
     }
   }
 
@@ -67,7 +78,9 @@ object BackgroundThreadHandler {
    * @param command The command to execute, which can access the UI.
    */
   fun accessAndAwait(currentUI: UI? = null, command: () -> Unit) {
-    val ui = currentUI ?: getUI()
+    if (useCurrentUIContext(command)) { return }
+
+    val ui = currentUI ?: locateUI()
     if (ui == null) {
       command()
     } else {
@@ -146,5 +159,5 @@ object BackgroundThreadHandler {
   /**
    * Attempts to retrieve the current UI from `UI.getCurrent()` or the thread-local storage.
    */
-  fun getUI(): UI? = UI.getCurrent() ?: uiThreadLocal.get()
+  fun locateUI(): UI? = UI.getCurrent() ?: uiThreadLocal.get()
 }
