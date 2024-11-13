@@ -73,8 +73,8 @@ open class DTextField(
 
     field.inputField.addTextValueChangeListener {
       if (it.isFromClient) {
-        if (getModel().getDataType() == LocalDate::class){
-          getModel().block!!.activeField = getModel()
+        if (!getModel().hasFocus()) {
+          getModel().block!!.gotoField(getModel())
         }
         valueChanged()
       }
@@ -117,12 +117,12 @@ open class DTextField(
                              align: Int): TextField {
 
     return TextField(getModel(),
-      noEcho,
-      scanner,
-      noEdit,
-      align,
-      model.hasAutofill(),
-      this)
+                     noEcho,
+                     scanner,
+                     noEdit,
+                     align,
+                     model.hasAutofill(),
+                     this)
   }
 
   // ----------------------------------------------------------------------
@@ -276,11 +276,11 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(modelTxt: String?): String? {
+    override fun toGui(modelTxt: String?): String? {
       return modelTxt
     }
 
-    override fun toGui(guiTxt: String?): String? {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 

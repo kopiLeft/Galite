@@ -82,7 +82,7 @@ allprojects {
           pom {
             configureMavenCentralPom(project)
           }
-//          signPublication(project)
+          signPublication(project)
         }
       }
     }

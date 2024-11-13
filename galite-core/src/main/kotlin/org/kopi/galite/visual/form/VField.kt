@@ -2011,7 +2011,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   @Suppress("UNCHECKED_CAST")
-          /*internal*/ fun selectFromList(gotoNextField: Boolean) {
+  /*internal*/ fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<ExpressionWithColumnType<*>>()
 
     list!!.columns.forEach {
@@ -2269,10 +2269,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-        block!!.getFieldPos(this),
-        label,
-        lab ?: name,
-        toolTip)
+                       block!!.getFieldPos(this),
+                       label,
+                lab ?: name,
+                       toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED ||
         access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED ||
         access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED)
@@ -2327,10 +2327,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-      modeDesc,
-      getTypeName(),
-      getTypeInformation(),
-      names)
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
   }
 
   /**
