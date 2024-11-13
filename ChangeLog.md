@@ -1,3 +1,13 @@
+# 1.5.8
+## What's Changed
+* Fix the following issues by @mgrati in [#646](https://github.com/kopiLeft/Galite/pull/646)
+  * Do not lose database connection when refreshing a galite application navigator tab.
+  * Minimize the number of actors called by the same keyboard shortcuts.
+  * Fix the issue of the random crash observed in galite applications when trying to open a list dialog.
+* Fix calendar picker component : Force applying the changes added by the date picker component to the galite field model by @sebai-dhia in [#645](https://github.com/kopiLeft/Galite/pull/645)
+
+**Full Changelog**: [1.5.7 ... 1.5.8](https://github.com/kopiLeft/Galite/compare/1.5.7...1.5.8)
+
 # 1.5.7
 ## What's Changed
 * Fix : Implement ImageHandler in Vaadin Flow to fix fatal error when loading an image list and show images on the list by @sebai-dhia in [#642](https://github.com/kopiLeft/Galite/pull/642)
