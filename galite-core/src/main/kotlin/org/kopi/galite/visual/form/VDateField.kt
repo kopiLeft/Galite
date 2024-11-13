@@ -155,9 +155,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * Sets the field value of given record to a date value.
    */
   override fun setDate(r: Int, v: LocalDate?) {
-    if (isChangedUI
-            || value[r] == null && v != null
-            || value[r] != null && value[r]!! != v) {
+    if (isChangedUI || value[r] == null && v != null || value[r] != null && value[r]!! != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
