@@ -17,13 +17,17 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
-import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.VColor
+import kotlin.streams.toList
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.checkbox.CheckboxGroup
+
+import org.kopi.galite.visual.ui.vaadin.base.Styles
+import org.kopi.galite.visual.VColor
 
 /**
  * An editor for boolean field.
@@ -95,10 +99,10 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
    */
   private fun getBooleanValue(selectedValues: Set<String>): Boolean? {
     return when {
-      selectedValues.isEmpty()                    -> null
-      selectedValues.contains(trueRepresentation) -> true
+      selectedValues.isEmpty()                     -> null
+      selectedValues.contains(trueRepresentation)  -> true
       selectedValues.contains(falseRepresentation) -> false
-      else -> null
+      else                                         -> null
     }
   }
 
@@ -177,14 +181,27 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
   }
 
   /**
-   * Adds custom blur listener for BooleanField : the triggered function is only executed when leaving the field
+   * Adds custom Key Down listener for BooleanField.
    */
-  fun addBlurListener(function: () -> Unit) {
-    checkboxGroup.element.addEventListener("focusout") {
-      if (isLastItemFocused(focusedIndex)) {
-        function()
-      } else {
-        focusedIndex++
+  fun addKeyDownListener(gotoNext: () -> Unit, gotoPrevious: () -> Unit) {
+    checkboxGroup.addKeyDownListener { event ->
+      val items = checkboxGroup.getChildren().toList() // Retrieve child components (checkboxes)
+
+      when (event.key) {
+        Key.TAB -> {
+          val modifier = event.modifiers.singleOrNull()
+
+          if (modifier != null && modifier.name == "SHIFT") {
+            if (focusedIndex <= 1) { gotoPrevious() } else { focusedIndex-- }
+          } else {
+            if (isLastItemFocused(focusedIndex)) { gotoNext() } else { focusedIndex++ }
+          }
+        }
+        Key.ENTER, Key.SPACE -> { // Change the value of the currently focused checkbox
+          val checkbox = items.getOrNull(focusedIndex - 1) as? Checkbox
+
+          checkbox?.value = !(checkbox?.value ?: false)
+        }
       }
     }
   }

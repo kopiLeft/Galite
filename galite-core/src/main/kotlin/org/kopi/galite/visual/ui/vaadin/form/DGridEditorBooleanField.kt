@@ -52,7 +52,8 @@ class DGridEditorBooleanField(
   init {
     editor.addValueChangeListener(this)
     editor.addFocusListener {}
-    (editor as GridEditorBooleanField).addBlurListener { onGotoNextField() }
+    (editor as GridEditorBooleanField).addKeyDownListener(gotoNext = { onGotoNextField() },
+                                                          gotoPrevious = { onGotoPrevField() })
   }
 
   //---------------------------------------------------
