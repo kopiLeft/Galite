@@ -132,9 +132,9 @@ class BooleanField(val trueRepresentation: String?, val falseRepresentation: Str
    */
   override fun setValue(value: Boolean?) {
     checkboxGroup.value = when (value) {
-      true -> setOf(trueRepresentation)
+      true  -> setOf(trueRepresentation)
       false -> setOf(falseRepresentation)
-      else -> emptySet()
+      else  -> emptySet()
     }
   }
 
