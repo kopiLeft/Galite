@@ -991,6 +991,8 @@ abstract class VBlock(var title: String,
     if (target == null) {
       old!!.enter()
       throw VExecFailedException()
+    } else if (target is VBooleanField) {
+      target.focusOnFirst = true
     }
     target.enter()
   }
@@ -1024,6 +1026,8 @@ abstract class VBlock(var title: String,
     if (target == null) {
       old!!.enter()
       throw VExecFailedException()
+    } else if (target is VBooleanField) {
+      target.focusOnFirst = false
     }
     target.enter()
   }

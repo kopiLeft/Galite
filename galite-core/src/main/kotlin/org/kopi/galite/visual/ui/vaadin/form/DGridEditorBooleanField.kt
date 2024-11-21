@@ -25,6 +25,7 @@ import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 
+import org.kopi.galite.visual.form.VBooleanField
 import org.kopi.galite.visual.form.VConstants
 import org.kopi.galite.visual.form.VFieldUI
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.access
@@ -51,7 +52,6 @@ class DGridEditorBooleanField(
   //---------------------------------------------------
   init {
     editor.addValueChangeListener(this)
-    editor.addFocusListener {}
     (editor as GridEditorBooleanField).addKeyDownListener(gotoNext = { onGotoNextField() },
                                                           gotoPrevious = { onGotoPrevField() })
   }
@@ -74,7 +74,7 @@ class DGridEditorBooleanField(
     } else {
       if (!inside) {
         inside = true
-        enterMe()
+        enterMe((getModel() as? VBooleanField)?.focusOnFirst ?: true)
         if (rendrerValue != null) {
           getModel().isChangedUI = true
           getModel().setBoolean(getBlockView().model.activeRecord, rendrerValue)
@@ -163,9 +163,9 @@ class DGridEditorBooleanField(
   /**
    * Gets the focus to this field.
    */
-  private fun enterMe() {
+  private fun enterMe(focusOnFirst: Boolean) {
     access(currentUI) {
-      (editor as GridEditorBooleanField).setFocus(true)
+      (editor as GridEditorBooleanField).setFocus(true, focusOnFirst)
     }
   }
 }
