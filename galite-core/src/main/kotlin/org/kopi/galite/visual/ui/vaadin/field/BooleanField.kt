@@ -181,7 +181,7 @@ class BooleanField(val trueRepresentation: String?, val falseRepresentation: Str
   /**
    * Adds Custom focus listener for BooleanField
    */
-  override fun addFocusListener(focusFunction: () -> Unit) {}
+  override fun addFocusListener(function: () -> Unit) {}
 
   /**
    * Adds custom Key Down listener for BooleanField.
@@ -213,7 +213,8 @@ class BooleanField(val trueRepresentation: String?, val falseRepresentation: Str
   inner class FocusableCheckboxGroup<T> : CheckboxGroup<T>(), Focusable<CheckboxGroup<T>>, KeyNotifier {
     init {
       // Make the component part of the tab order by setting tab index
-      element.setAttribute("tabindex", "0")
+      // set tabindex to -1 to make the container non-focusable
+      element.setAttribute("tabindex", "-1")
     }
   }
 }

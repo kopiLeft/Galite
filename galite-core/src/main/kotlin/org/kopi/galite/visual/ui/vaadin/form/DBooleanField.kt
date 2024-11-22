@@ -138,6 +138,8 @@ class DBooleanField(
 
   /**
    * Gets the focus to this field.
+   *
+   * @param focusOnFirst : Sets the focus on the first checkbox of the boolean field
    */
   private fun enterMe(focusOnFirst: Boolean) {
     access(currentUI) {
