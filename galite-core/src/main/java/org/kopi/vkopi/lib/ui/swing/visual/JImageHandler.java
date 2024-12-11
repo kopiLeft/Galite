@@ -102,14 +102,14 @@ public class JImageHandler extends ImageHandler {
     /**
      * 
      */
-    public int getWidth() {
+    public int getImageWidth() {
       return getIconWidth();
     }
 
     /**
      * 
      */
-    public int getHeight() {
+    public int getImageHeight() {
       return getIconHeight();
     }
 

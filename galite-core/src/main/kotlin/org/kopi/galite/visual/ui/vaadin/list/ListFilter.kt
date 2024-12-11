@@ -31,16 +31,20 @@ class ListFilter(private val filterFields: List<TextField>,
 
   override fun test(t: ListTable.ListDialogItem): Boolean {
     for (i in model.columns.indices) {
-      val filterString = if(ignoreCase) filterFields[i].value.lowercase(Locale.getDefault()) else filterFields[i].value
-      val value = if (ignoreCase) t.getValueAt(i).lowercase(Locale.getDefault()) else t.getValueAt(i)
+      val item = t.getValueAt(i)
 
-      if (onlyMatchPrefix) {
-        if (!value.startsWith(filterString)) {
-          return false
-        }
-      } else {
-        if (!value.contains(filterString)) {
-          return false
+      if (item is String) {
+        val filterString = if(ignoreCase) filterFields[i].value.lowercase(Locale.getDefault()) else filterFields[i].value
+        val value = if (ignoreCase) item.lowercase(Locale.getDefault()) else item
+
+        if (onlyMatchPrefix) {
+          if (!value.startsWith(filterString)) {
+            return false
+          }
+        } else {
+          if (!value.contains(filterString)) {
+            return false
+          }
         }
       }
     }

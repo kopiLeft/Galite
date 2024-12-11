@@ -1,3 +1,20 @@
+# 1.5.8
+## What's Changed
+* Fix the following issues by @mgrati in [#646](https://github.com/kopiLeft/Galite/pull/646)
+  * Do not lose database connection when refreshing a galite application navigator tab.
+  * Minimize the number of actors called by the same keyboard shortcuts.
+  * Fix the issue of the random crash observed in galite applications when trying to open a list dialog.
+* Fix calendar picker component : Force applying the changes added by the date picker component to the galite field model by @sebai-dhia in [#645](https://github.com/kopiLeft/Galite/pull/645)
+
+**Full Changelog**: [1.5.7 ... 1.5.8](https://github.com/kopiLeft/Galite/compare/1.5.7...1.5.8)
+
+# 1.5.7
+## What's Changed
+* Fix : Implement ImageHandler in Vaadin Flow to fix fatal error when loading an image list and show images on the list by @sebai-dhia in [#642](https://github.com/kopiLeft/Galite/pull/642)
+* Fix abnormal behavior of the list button and menu query in the ProductForm by @sebai-dhia in [#644](https://github.com/kopiLeft/Galite/pull/644)
+
+**Full Changelog**: [1.5.6 ... 1.5.7](https://github.com/kopiLeft/Galite/compare/1.5.6...1.5.7)
+
 # 1.5.6
 ## What's Changed
 * Fix : Allow LEFT JOIN for nullable fields with non nullable fields in Galite forms by @mgrati in [#640](https://github.com/kopiLeft/Galite/pull/640)
@@ -15,10 +32,10 @@
 
 # 1.5.4
 ## What's Changed
-* Feat : Add color picker field to Galite : 
+* Feat : Add color picker field to Galite :
   * Add a new field type "Color" to Galite by @achraf-dridi in [#625](https://github.com/kopiLeft/Galite/pull/625)
   * Convert the value type of the color field to an integer instead of blob by @achraf-dridi in [#631](https://github.com/kopiLeft/Galite/pull/631)
-* Fix : Fix the found bugs in the module "Factory Generator" of Galite Utils 
+* Fix : Fix the found bugs in the module "Factory Generator" of Galite Utils
   * Fix generated classes in the event when the xsd contains attributes that are named as one of the hard keywords of Kotlin by @achraf-dridi in [#629](https://github.com/kopiLeft/Galite/pull/629)
   * Avoid creating the schemaorg_apache_xmlbeans package containing copies of the *.xsd files by @yahiaoui97 [#628](https://github.com/kopiLeft/Galite/pull/628)
   * Add toCalendar method in the generated factory classes by @achraf-dridi [#627](https://github.com/kopiLeft/Galite/pull/627)

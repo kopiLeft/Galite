@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.visual.ui.vaadin.form
 
+import com.vaadin.flow.component.contextmenu.ContextMenu
+
 import org.kopi.galite.visual.form.ModelTransformer
 import org.kopi.galite.visual.form.UTextField
 import org.kopi.galite.visual.form.VConstants
@@ -26,8 +28,6 @@ import org.kopi.galite.visual.ui.vaadin.field.TextField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-
-import com.vaadin.flow.component.contextmenu.ContextMenu
 
 /**
  * The `DTextField` is the vaadin implementation
@@ -40,11 +40,11 @@ import com.vaadin.flow.component.contextmenu.ContextMenu
  * @param detail Does the field belongs to the detail view ?
  */
 open class DTextField(
-        model: VFieldUI,
-        label: DLabel?,
-        align: Int,
-        options: Int,
-        detail: Boolean,
+  model: VFieldUI,
+  label: DLabel?,
+  align: Int,
+  options: Int,
+  detail: Boolean,
 ) : DField(model, label, align, options, detail), UTextField {
 
   // --------------------------------------------------
@@ -60,13 +60,9 @@ open class DTextField(
   init {
     transformer = if (getModel().height == 1
             || !scanner && getModel().getTypeOptions() and VConstants.FDO_DYNAMIC_NL > 0) {
-      DefaultTransformer(getModel().width,
-                         getModel().height)
+      DefaultTransformer(getModel().width, getModel().height)
     } else if (!scanner) {
-      NewlineTransformer(
-        getModel().width,
-        getModel().height
-      )
+      NewlineTransformer(getModel().width, getModel().height)
     } else {
       ScannerTransformer(this)
     }
@@ -74,6 +70,9 @@ open class DTextField(
 
     field.inputField.addTextValueChangeListener {
       if (it.isFromClient) {
+        if (!getModel().hasFocus()) {
+          getModel().block!!.gotoField(getModel())
+        }
         valueChanged()
       }
     }
@@ -383,55 +382,55 @@ open class DTextField(
      * @return The converted string.
      */
     private fun convertToSingleLine(source: String?, col: Int, row: Int): String =
-            buildString {
-              val length = source!!.length
-              var start = 0
-              while (start < length) {
-                var index = source.indexOf('\n', start)
-                if (index - start < col && index != -1) {
-                  append(source.substring(start, index))
-                  for (j in index - start until col) {
-                    append(' ')
-                  }
-                  start = index + 1
-                  if (start == length) {
-                    // last line ends with a "new line" -> add an empty line
-                    for (j in 0 until col) {
-                      append(' ')
-                    }
-                  }
-                } else {
-                  if (start + col >= length) {
-                    append(source.substring(start, length))
-                    for (j in length until start + col) {
-                      append(' ')
-                    }
-                    start = length
-                  } else {
-                    // find white space to break line
-                    var i = start + col - 1
-                    while (i > start) {
-                      if (Character.isWhitespace(source[i])) {
-                        break
-                      }
-                      i--
-                    }
-                    index = if (i == start) {
-                      start + col
-                    } else {
-                      i + 1
-                    }
-                    append(source.substring(start, index))
-                    var j = (index - start) % col
-                    while (j != 0 && j < col) {
-                      append(' ')
-                      j++
-                    }
-                    start = index
-                  }
-                }
+      buildString {
+        val length = source!!.length
+        var start = 0
+        while (start < length) {
+          var index = source.indexOf('\n', start)
+          if (index - start < col && index != -1) {
+            append(source.substring(start, index))
+            for (j in index - start until col) {
+              append(' ')
+            }
+            start = index + 1
+            if (start == length) {
+              // last line ends with a "new line" -> add an empty line
+              for (j in 0 until col) {
+                append(' ')
               }
             }
+          } else {
+            if (start + col >= length) {
+              append(source.substring(start, length))
+              for (j in length until start + col) {
+                append(' ')
+              }
+              start = length
+            } else {
+              // find white space to break line
+              var i = start + col - 1
+              while (i > start) {
+                if (Character.isWhitespace(source[i])) {
+                  break
+                }
+                i--
+              }
+              index = if (i == start) {
+                start + col
+              } else {
+                i + 1
+              }
+              append(source.substring(start, index))
+              var j = (index - start) % col
+              while (j != 0 && j < col) {
+                append(' ')
+                j++
+              }
+              start = index
+            }
+          }
+        }
+      }
 
     /**
      * Converts a given string to a fixed line string.
