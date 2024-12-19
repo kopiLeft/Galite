@@ -21,13 +21,8 @@ package org.kopi.galite.database
 import java.sql.SQLException
 
 import com.zaxxer.hikari.HikariDataSource
+import org.jetbrains.exposed.sql.*
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.DatabaseConfig
-import org.jetbrains.exposed.sql.Schema
-import org.jetbrains.exposed.sql.SqlLogger
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.exposedLogger
 import org.jetbrains.exposed.sql.statements.StatementContext
 import org.jetbrains.exposed.sql.statements.expandArgs
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -276,6 +271,7 @@ class Connection {
                                    java.sql.Connection.TRANSACTION_SERIALIZABLE     to "TRANSACTION_SERIALIZABLE")
 }
 
+@OptIn(ExperimentalKeywordApi::class)
 fun databaseConfig(schema: Schema? = null,
                    traceLevel: Int? = null,
                    isolationLevel: Int = java.sql.Connection.TRANSACTION_SERIALIZABLE,
@@ -290,6 +286,7 @@ fun databaseConfig(schema: Schema? = null,
   defaultMaxAttempts = maxRetries ?: 5
   defaultMinRetryDelay = waitMin ?: 0L
   defaultMaxRetryDelay = waitMax ?: 0L
+  preserveKeywordCasing = false
 }
 
 class Slf4jSqlInfoLogger(private val traceLevel: Int? = null) : SqlLogger {
