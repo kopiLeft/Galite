@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,57 +15,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-plugins {
-  `kotlin-dsl`
-  id("java-gradle-plugin")
-//  id("maven-publish")
-}
+import org.kopi.galite.gradle._java
+import org.kopi.galite.gradle._publishing
+import org.kopi.galite.gradle.configureMavenCentralPom
+import org.kopi.galite.gradle.signPublication
 
-version = "1.5.3"
-
-repositories {
-  mavenCentral()
-  mavenLocal()  // If you are using local Maven repository
-}
-
-dependencies {
-  //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", "1.0.13")
-  implementation(kotlin("stdlib"))
-  implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.5.21")
-  implementation("org.jetbrains.kotlin:kotlin-sam-with-receiver:1.5.21")
-
-}
-
-gradlePlugin {
-  plugins {
-    register("customPlugin") {
-      id = "org.kopi.factoryGenerator"
-      implementationClass = "org.kopi.galite.plugin.FactoryGeneratorPlugin"
-    }
+subprojects {
+  apply(plugin = "java-library")
+  apply(plugin = "maven-publish")
+  apply(plugin = "signing")
+  _java {
+    withJavadocJar()
+    withSourcesJar()
   }
-}
 
-/*
-publishing {
-  publications {
-    create<MavenPublication>("pluginGalite") {
-      from(components["java"])
-      groupId = "org.kopi"
-      artifactId = "factoryGenerator"
-      version = "1.5.3"
-    }
-  }
-  repositories {
-    val publishDir = System.getenv("PUBLISH_DIR")
-
-    if(publishDir != null) {
-      mavenLocal {
-        name = "KopiMaven"
-        url = uri(publishDir)
-        isAllowInsecureProtocol = true
+  _publishing {
+    publications {
+      create<MavenPublication>("Galite") {
+        artifactId = project.name
+        from(project.components["java"])
+        pom {
+          configureMavenCentralPom(project)
+        }
+        signPublication(project)
       }
     }
   }
 }
-*/
