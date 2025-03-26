@@ -1,3 +1,11 @@
+# 1.5.9
+## What's Changed
+* Use Vaadin flow CheckboxGroup component for Boolean fields to simplify the field manipulation and fix the focus issues when using keyboard to browse a form's different fields by @mgrati in [#643](https://github.com/kopiLeft/Galite/pull/643)
+* Publish factory-generator plugin by @mgrati in [#647](https://github.com/kopiLeft/Galite/pull/647)
+* Allow the class 'Migration' of galite-data to use an already established Exposed connextion by @mgrati in [#648](https://github.com/kopiLeft/Galite/pull/648)
+
+**Full Changelog**: [1.5.8 ... 1.5.9](https://github.com/kopiLeft/Galite/compare/1.5.8...1.5.9)
+
 # 1.5.8
 ## What's Changed
 * Fix the following issues by @mgrati in [#646](https://github.com/kopiLeft/Galite/pull/646)
