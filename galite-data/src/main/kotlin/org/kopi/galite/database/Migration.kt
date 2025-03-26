@@ -55,7 +55,7 @@ abstract class Migration(private val logger: SqlLogger? = null) {
       for (transDB in TRANSDBS) {
         if (transDB.module != currentModule) {
           currentModule = transDB.module
-          transaction(db = dbConnection.dbConnection) {
+          transaction(db = dbConnection?.dbConnection) {
             currentVersion = loadModuleVersion(currentModule)
           }
           if (traceLog(processCommandLine)) println("Current version of module \"${transDB.module}\" = $currentVersion")
@@ -63,13 +63,13 @@ abstract class Migration(private val logger: SqlLogger? = null) {
 
         if (transDB.version > currentVersion) {
           if (traceLog(processCommandLine)) println("Executing transDB ${transDB.version} of module \"${transDB.module}\"")
-          transaction(db = dbConnection.dbConnection) {
+          transaction(db = dbConnection?.dbConnection) {
             transDB.run()
           }
         }
       }
     } finally {
-      dbConnection.poolConnection.close()
+      dbConnection?.poolConnection?.close()
     }
   }
 
@@ -90,7 +90,7 @@ abstract class Migration(private val logger: SqlLogger? = null) {
   /**
    * Database connection
    */
-  open fun connection(processCommandLine: Boolean) : Connection {
+  open fun connection(processCommandLine: Boolean) : Connection? {
     return if (processCommandLine) {
       Connection.createConnection(options.database!!,
                                   options.driver,
