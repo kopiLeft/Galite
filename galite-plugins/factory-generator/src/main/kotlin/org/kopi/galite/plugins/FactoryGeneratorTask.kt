@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,34 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.plugin
+package org.kopi.galite.plugins
 
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.the
 
 abstract class FactoryGeneratorTask : JavaExec() {
-  @Input
-  var namee = ""
-
-  @Input
-  var fpackage = ""
-
-  @OutputDirectory
-  var src = ""
-
-  @OutputDirectory
-  var directory = ""
-
-  @Input
-  var xsdFiles = ""
-
-  @Input
-  var getAbstract = false
-
-  @Input
-  var xsdConfigFile = ""
-
   init {
     description = "Task to generate factories from .xsd and .xsdConfig files"
     mainClass.set("org.kopi.galite.util.xsdToFactory.generator.FactoryGenerator")
@@ -51,29 +30,23 @@ abstract class FactoryGeneratorTask : JavaExec() {
 
   @TaskAction
   override fun exec() {
-    workingDir = project.file(src)
-    classpath = project.the<SourceSetContainer>()["main"].runtimeClasspath
+    val extension = project.extensions.getByType(FactoryGeneratorExtention::class.java)
+    if (extension.xsdFiles.isNotEmpty()) {
+      val argsList = listOf(
+        "-n", extension.classPrefix,
+        "-p", extension.packageName,
+        "-s", extension.src,
+        "-d", extension.destinationDirectory,
+        "-a", extension.getAbstract,
+        "", extension.xsdConfigFile,
+        "-e",
+        ""
+      ) + extension.xsdFiles.flatMap { listOf("", it) }
 
-    args(listOfArgs("-n", namee, "-p", fpackage, "-s", src, "-d", directory, "-a", getAbstract, xsdFiles, xsdConfigFile))
-
-    super.exec()
-  }
-}
-
-/**
- * returns a flat list of arguments.
- *
- * @param args program arguments
- */
-fun listOfArgs(vararg args: Any?): List<String> {
-  val flattenArgs = mutableListOf<String>()
-
-  args.forEach { arg ->
-    when (arg) {
-      is String? -> flattenArgs.add(arg.orEmpty())
-      is List<*>? -> arg.orEmpty().forEach { flattenArgs.add(it as String) }
+      workingDir = project.file(extension.src)
+      classpath = project.the<SourceSetContainer>()["main"].runtimeClasspath
+      args(*argsList.toTypedArray())
+      super.exec()
     }
   }
-
-  return flattenArgs
 }
