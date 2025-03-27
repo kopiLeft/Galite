@@ -15,29 +15,49 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.kopi.galite.gradle._java
-import org.kopi.galite.gradle._publishing
 import org.kopi.galite.gradle.configureMavenCentralPom
-import org.kopi.galite.gradle.signPublication
+
+plugins {
+  id("maven-publish")
+  id("signing")
+}
 
 subprojects {
   apply(plugin = "java-library")
   apply(plugin = "maven-publish")
   apply(plugin = "signing")
-  _java {
+
+  java {
     withJavadocJar()
     withSourcesJar()
   }
 
-  _publishing {
-    publications {
-      create<MavenPublication>("Galite") {
-        artifactId = project.name
-        from(project.components["java"])
-        pom {
-          configureMavenCentralPom(project)
+  project.plugins.withId("java-gradle-plugin") {
+    publishing {
+      publications {
+        create<MavenPublication>("pluginMaven") {
+          artifactId = project.name
+          pom {
+           configureMavenCentralPom(project)
+          }
+          signing {
+            useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PRIVATE_PASSWORD"))
+            sign(publishing.publications["pluginMaven"])
+          }
         }
-        signPublication(project)
+      }
+    }
+    afterEvaluate {
+      publishing {
+        publications.named<MavenPublication>("PluginMarkerMaven") {
+          pom {
+            configureMavenCentralPom(project)
+          }
+        }
+        signing {
+          useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PRIVATE_PASSWORD"))
+          sign(publishing.publications["PluginMarkerMaven"])
+        }
       }
     }
   }

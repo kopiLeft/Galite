@@ -15,7 +15,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 plugins {
   `kotlin-dsl`
   id("java-gradle-plugin")
@@ -23,7 +22,7 @@ plugins {
 
 gradlePlugin {
   plugins {
-    create("factoryGeneratorPlugin") {
+    create("") {
       id = "org.kopi.factory-generator" // Unique plugin ID
       implementationClass = "org.kopi.galite.plugins.FactoryGeneratorPlugin" // The main plugin class
     }
