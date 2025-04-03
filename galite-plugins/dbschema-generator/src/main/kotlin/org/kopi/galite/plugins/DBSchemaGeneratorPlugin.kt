@@ -28,6 +28,7 @@ import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 import org.kopi.galite.plugins.common.GradleExtensions
 import org.kopi.galite.plugins.generator.DBSchemaGenerator
@@ -42,15 +43,10 @@ class DBSchemaGeneratorPlugin : GradleExtensionsPlugin() {
     // Create and register extension
     project.extensions.create("dbSchemaGenerator", DBSchemaGeneratorExtension::class.java)
     project.tasks.apply {
-      register<DBSchemaGeneratorTask>("generateDBSchemas") {
-        dependsOn("compileKotlin")
-      }
-      named("compileGeneratedKotlin") {
+      register<DBSchemaGeneratorTask>("generateDBSchemas")
+      withType(KotlinCompile::class.java) {
         dependsOn("generateDBSchemas")
-      }
-      withType(Jar::class.java) {
-        dependsOn("compileGeneratedKotlin")
-        from(generatedSourceSet.output)
+        source(generatedSourceSet.allSource)
       }
       named("clean") {
         doLast {

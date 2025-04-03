@@ -44,7 +44,7 @@ object DBSchemaGenerator {
     // Initialize Reflections for the package where the objects are defined
     val reflections = Reflections(ConfigurationBuilder().forPackages(packageName).addScanners(Scanners.SubTypes))
 
-     // Get all public classes of type [org.jetbrains.exposed.sql.Table] in the specified package
+    // Get all public classes of type [org.jetbrains.exposed.sql.Table] in the specified package
     val tableClasses = reflections.getSubTypesOf(Table::class.java).filter {
       try {
         val kClass = it.kotlin

@@ -28,13 +28,15 @@ abstract class DBSchemaGeneratorTask : JavaExec() {
   init {
     description = "Generates DBSchema files"
     mainClass.set("org.kopi.galite.plugins.generator.DBSchemaGenerator")
-    classpath = project.the<SourceSetContainer>()["main"].runtimeClasspath
+    classpath = project.the<SourceSetContainer>()["main"].compileClasspath
   }
+
+  @OutputDirectory
+  val outputDirectory = project.layout.projectDirectory.dir(DBSchemaGenerator.GENERATED_KOTLIN_SRC)
 
   @TaskAction
   fun execute() {
     val extension = project.extensions.getByType(DBSchemaGeneratorExtension::class.java)
-    val outputDirectory = project.layout.projectDirectory.dir(DBSchemaGenerator.GENERATED_KOTLIN_SRC)
 
     if (extension.data.getOrElse(emptyList()).isEmpty()) {
       project.logger.lifecycle("No schemas defined for DBSchema generation.")
@@ -43,7 +45,7 @@ abstract class DBSchemaGeneratorTask : JavaExec() {
 
     extension.data.get().forEach { data ->
       val currentArgs = listOf(data.packageName, data.schemaName, outputDirectory.asFile.absolutePath)
-      project.logger.lifecycle("Running DBSchemaGenerator with arguments: ${currentArgs.joinToString()}")
+      project.logger.lifecycle("Running DBSchemaGenerator with arguments: $data")
 
       project.javaexec {
         mainClass.set("org.kopi.galite.plugins.generator.DBSchemaGenerator")

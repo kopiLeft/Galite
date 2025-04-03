@@ -27,8 +27,7 @@ import org.gradle.api.tasks.Input
 // Define extension for user configuration
 abstract class DBSchemaGeneratorExtension @Inject constructor(objectFactory: ObjectFactory) {
   @Input
-  val data: ListProperty<SchemaDefinition> = objectFactory.listProperty(SchemaDefinition::class.java)
+  val data: ListProperty<Schema> = objectFactory.listProperty(Schema::class.java)
 }
 
-data class SchemaDefinition(@Input val packageName: String,
-                            @Input val schemaName: String)
+data class Schema(@Input val packageName: String, @Input val schemaName: String)
