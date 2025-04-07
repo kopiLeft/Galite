@@ -1,3 +1,10 @@
+# 1.5.10
+## What's Changed
+* Feat: Add a new plugin dbschema-generator that can create database structure definition for a specific database schema by @mgrati in [#649](https://github.com/kopiLeft/Galite/pull/649)
+* Fix resetting boolean fields (CheckboxGroup fields) by @mgrati in [#650](https://github.com/kopiLeft/Galite/pull/650)
+
+**Full Changelog**: [1.5.9 ... 1.5.10](https://github.com/kopiLeft/Galite/compare/1.5.9...1.5.10)
+
 # 1.5.9
 ## What's Changed
 * Use Vaadin flow CheckboxGroup component for Boolean fields to simplify the field manipulation and fix the focus issues when using keyboard to browse a form's different fields by @mgrati in [#643](https://github.com/kopiLeft/Galite/pull/643)
