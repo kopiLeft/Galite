@@ -55,27 +55,13 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
     // Define the items for true, false, and optionally an empty state
     setItems(trueRepresentation.orEmpty(), falseRepresentation.orEmpty())
     value = setOf() // Initialize with no selection
-    addValueChangeListener { event ->
-      // Ensure only one item is selected, or none at all
-      if (event.value.size > 1) {
-        // Keep only the last selected item
-        val lastSelected = event.value
-        lastSelected.remove(event.oldValue.iterator().next())
-        value = setOf(lastSelected.iterator().next())
-      } else if (event.value.isEmpty() && mandatory) {
-        // If mandatory, remove the null option choice
-        value = event.oldValue
-      }
-      // Update internal model and fire change event
-      setModelValue(getBooleanValue(value), true)
-      (getChildren().toList().getOrNull(focusedIndex) as? Checkbox)?.focus()
-    }
   }
 
   init {
     // Remove the "Yes" and "No" labels
     checkboxGroup.setItemLabelGenerator { "" }
     checkboxGroup.addClassNames(Styles.BOOLEAN_FIELD, "editor-field")
+    checkboxGroup.addValueChangeListener(::onValueChange)
 
     setWidthFull()
   }
@@ -95,6 +81,27 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
     } else {
       blur()
     }
+  }
+
+  /**
+   * Ensure only one item is selected, or none at all when value changed
+   */
+  private fun onValueChange(event: com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent<CheckboxGroup<String>, MutableSet<String>>) {
+    if (event.isFromClient) {
+      // Ensure only one item is selected, or none at all
+      if (event.value.size > 1) {
+        // Keep only the last selected item
+        val lastSelected = event.value
+        lastSelected.remove(event.oldValue.iterator().next())
+        checkboxGroup.value = setOf(lastSelected.iterator().next())
+      } else if (event.value.isEmpty() && mandatory) {
+        // If mandatory, remove the null option choice
+        checkboxGroup.value = event.oldValue
+      }
+    }
+    // Update internal model and fire change event
+    setModelValue(getBooleanValue(checkboxGroup.value), event.isFromClient)
+    (checkboxGroup.getChildren().toList().getOrNull(focusedIndex) as? Checkbox)?.focus()
   }
 
   /**
@@ -129,10 +136,10 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
    * Sets the component value from a boolean value
    */
   override fun setValue(value: Boolean?) {
-    checkboxGroup.value = when (value) {
-      true -> setOf(trueRepresentation)
-      false -> setOf(falseRepresentation)
-      else -> emptySet()
+    when (value) {
+      true  -> checkboxGroup.setValue(setOf(trueRepresentation))
+      false -> checkboxGroup.setValue(setOf(falseRepresentation))
+      else  -> { checkboxGroup.deselectAll() ; checkboxGroup.clear() }
     }
   }
 
