@@ -27,6 +27,12 @@ subprojects {
   apply(plugin = "maven-publish")
   apply(plugin = "signing")
 
+  dependencies {
+    if (project.name != "common") {
+      api(project(":galite-plugins:common"))
+    }
+  }
+
   java {
     withJavadocJar()
     withSourcesJar()
@@ -38,7 +44,7 @@ subprojects {
         create<MavenPublication>("pluginMaven") {
           artifactId = project.name
           pom {
-           configureMavenCentralPom(project)
+            configureMavenCentralPom(project)
           }
           signing {
             useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PRIVATE_PASSWORD"))

@@ -18,17 +18,16 @@
 
 package org.kopi.galite.plugins
 
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.register
+import javax.inject.Inject
 
-import org.kopi.galite.plugins.common.GradleExtensionsPlugin
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.tasks.Input
 
-class FactoryGeneratorPlugin : GradleExtensionsPlugin() {
-  override fun apply(project: Project) {
-    super.apply(project)
-    project.extensions.create("factoryGenerator", FactoryGeneratorExtention::class.java)
-    project.tasks.apply {
-      register<FactoryGeneratorTask>("generateFactory")
-    }
-  }
+// Define extension for user configuration
+abstract class DBSchemaGeneratorExtension @Inject constructor(objectFactory: ObjectFactory) {
+  @Input
+  val data: ListProperty<Schema> = objectFactory.listProperty(Schema::class.java)
 }
+
+data class Schema(@Input val packageName: String, @Input val schemaName: String)

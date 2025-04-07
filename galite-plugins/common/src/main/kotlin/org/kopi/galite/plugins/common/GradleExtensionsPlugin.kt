@@ -16,19 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.plugins
+package org.kopi.galite.plugins.common
+
+import org.gradle.api.Plugin
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.register
 
-import org.kopi.galite.plugins.common.GradleExtensionsPlugin
+open class GradleExtensionsPlugin: Plugin<Project> {
 
-class FactoryGeneratorPlugin : GradleExtensionsPlugin() {
+  /**
+   * Register the [projectExtensions] extension function for use in the consuming project
+   */
   override fun apply(project: Project) {
-    super.apply(project)
-    project.extensions.create("factoryGenerator", FactoryGeneratorExtention::class.java)
-    project.tasks.apply {
-      register<FactoryGeneratorTask>("generateFactory")
-    }
+    project.extensions.create("projectExtensions", GradleExtensions::class.java, project)
   }
 }
