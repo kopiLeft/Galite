@@ -146,6 +146,8 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
    * Creates the navigation actions.
    */
   protected open fun createNavigationActions() {
+    addNavigationAction(Key.PAGE_DOWN) { dGridEditorField.onGotoNextRecord() }
+    addNavigationAction(Key.PAGE_UP) { dGridEditorField.onGotoPrevRecord() }
     addNavigationAction(Key.ENTER, KeyModifier.of("Control")) { dGridEditorField.onGotoNextRecord() }
     addNavigationAction(Key.ENTER, KeyModifier.of("Shift")) { dGridEditorField.onGotoNextBlock() }
     addNavigationAction(Key.KEY_D, KeyModifier.of("Control")) {

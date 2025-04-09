@@ -186,7 +186,12 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
   /**
    * Adds custom Key Down listener for BooleanField.
    */
-  fun addKeyDownListener(gotoNext: () -> Unit, gotoPrevious: () -> Unit) {
+  fun addKeyDownListener(
+    gotoNextField: () -> Unit,
+    gotoPreviousField: () -> Unit,
+    gotoNextRecord: () -> Unit,
+    gotoPreviousRecord: () -> Unit
+  ) {
     checkboxGroup.addKeyDownListener { event ->
       val items = checkboxGroup.getChildren().toList() // Retrieve child components (checkboxes)
 
@@ -195,9 +200,9 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
           val modifier = event.modifiers.singleOrNull()
 
           if (modifier != null && modifier.name == "SHIFT") {
-            if (focusedIndex <= 0) { gotoPrevious() } else { focusedIndex-- }
+            if (focusedIndex <= 0) { gotoPreviousField() } else { focusedIndex-- }
           } else {
-            if (focusedIndex >= 1) { gotoNext() } else { focusedIndex++ }
+            if (focusedIndex >= 1) { gotoNextField() } else { focusedIndex++ }
           }
         }
         Key.ENTER, Key.SPACE -> { // Change the value of the currently focused checkbox
@@ -205,6 +210,8 @@ class GridEditorBooleanField(val trueRepresentation: String?,val falseRepresenta
 
           checkbox?.value = !(checkbox?.value ?: false)
         }
+        Key.PAGE_DOWN -> { gotoNextRecord() }
+        Key.PAGE_UP -> { gotoPreviousRecord() }
       }
     }
   }
