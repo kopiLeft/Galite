@@ -52,8 +52,10 @@ class DGridEditorBooleanField(
   //---------------------------------------------------
   init {
     editor.addValueChangeListener(this)
-    (editor as GridEditorBooleanField).addKeyDownListener(gotoNext = { onGotoNextField() },
-                                                          gotoPrevious = { onGotoPrevField() })
+    (editor as GridEditorBooleanField).addKeyDownListener(gotoNextField = { onGotoNextField() },
+                                                          gotoPreviousField = { onGotoPrevField() },
+                                                          gotoNextRecord = { onGotoNextRecord() },
+                                                          gotoPreviousRecord = { onGotoPrevRecord() })
   }
 
   //---------------------------------------------------
