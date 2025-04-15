@@ -1,3 +1,12 @@
+# 1.5.11
+## What's Changed
+* Fix : Fix cast error in compareTo method of reports VTimestampColumn by @mgrati in [#654](https://github.com/kopiLeft/Galite/pull/654)
+* Fix : Fix the search for table sequences when named "tablename_idcolumn_seq" by @mgrati in [#653](https://github.com/kopiLeft/Galite/pull/653)
+* Fix : Add navigation with PAGE_UP / PAGE_DOWN to the grid block lines by @mgrati in [#651](https://github.com/kopiLeft/Galite/pull/651)
+* Feat : Include UNION and UNION ALL queries to be used with type ListDomain by @mgrati in [#652](https://github.com/kopiLeft/Galite/pull/652)
+
+**Full Changelog**: [1.5.10 ... 1.5.11](https://github.com/kopiLeft/Galite/compare/1.5.10...1.5.11)
+
 # 1.5.10
 ## What's Changed
 * Feat: Add a new plugin dbschema-generator that can create database structure definition for a specific database schema by @mgrati in [#649](https://github.com/kopiLeft/Galite/pull/649)
