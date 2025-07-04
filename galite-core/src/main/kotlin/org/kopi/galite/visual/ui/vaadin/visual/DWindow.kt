@@ -30,7 +30,6 @@ import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
 import com.vaadin.flow.server.VaadinSession
 
-import org.kopi.galite.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -626,13 +625,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // DATA MEMBERS
     //-----------------------------------------------------------
     private val waitIndicator = WaitWindow()
-    var delay: Long = 10
 
     //-----------------------------------------------------------
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
     /**
-     * Shows the wait indicator only if task takes more than some [delay].
+     * Shows the wait indicator.
      *
      * @param message message to show
      */
