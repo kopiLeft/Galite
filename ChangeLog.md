@@ -1,3 +1,10 @@
+# 1.5.12
+## What's Changed
+* Replace dependendency ("javax.mail", "mail", "1.4") (deprecated) by ("com.sun.mail", "javax.mail", "1.6.2")
+* Fix database record insertion in Galite forms when a field is referenced more than once [APPS-02N9]
+
+**Full Changelog**: [1.5.11 ... 1.5.12](https://github.com/kopiLeft/Galite/compare/1.5.11...1.5.12)
+
 # 1.5.11
 ## What's Changed
 * Fix : Fix cast error in compareTo method of reports VTimestampColumn by @mgrati in [#654](https://github.com/kopiLeft/Galite/pull/654)
