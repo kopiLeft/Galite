@@ -3305,7 +3305,7 @@ abstract class VBlock(var title: String,
         @Suppress("UNCHECKED_CAST")
         val column = field.lookupColumn(0) as? Column<Any?>
 
-        if (column != null) {
+        if (column != null  && result.none { it.first == column }) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
             if (field.getLargeObject(recno) != null) {
               result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readBytes()))
