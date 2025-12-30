@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,18 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.plugins
-
-import javax.inject.Inject
-
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.ListProperty
-import org.gradle.api.tasks.Input
-
-// Define extension for user configuration
-abstract class DBSchemaGeneratorExtension @Inject constructor(objectFactory: ObjectFactory) {
-  @Input
-  val data: ListProperty<Schema> = objectFactory.listProperty(Schema::class.java)
+plugins {
+  `kotlin-dsl`
+  id("java-gradle-plugin")
 }
 
-data class Schema(@Input val packageName: String, @Input val schemaName: String)
+gradlePlugin {
+  plugins {
+    create("") {
+      id = "org.kopi.galite-common-plugin" // Unique plugin ID
+      implementationClass = "org.kopi.galite.plugins.common.GradleExtensionsPlugin" // The main plugin class
+    }
+  }
+}

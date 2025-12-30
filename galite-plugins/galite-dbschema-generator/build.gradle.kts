@@ -15,16 +15,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import org.kopi.galite.gradle.Versions
+
 plugins {
   `kotlin-dsl`
   id("java-gradle-plugin")
 }
 
+dependencies {
+  api("org.reflections", "reflections", "0.10.2")
+  implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.9.0")
+  // Exposed dependency
+  implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
+  implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
+  implementation("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
+  implementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
+}
+
 gradlePlugin {
   plugins {
     create("") {
-      id = "org.kopi.factory-generator" // Unique plugin ID
-      implementationClass = "org.kopi.galite.plugins.FactoryGeneratorPlugin" // The main plugin class
+      id = "org.kopi.galite-dbschema-generator" // Unique plugin ID
+      implementationClass = "org.kopi.galite.plugins.DBSchemaGeneratorPlugin" // The main plugin class
     }
   }
 }

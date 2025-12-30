@@ -33,13 +33,14 @@ import org.reflections.util.ConfigurationBuilder
 object DBSchemaGenerator {
   @JvmStatic
   fun main(args: Array<String>) {
-    if (args.size != 3) {
+    if (args.size != 4) {
       return
     }
     val packageName = args[0]
     val schemaName = args[1]
-    val directory = args[2]
-    val generatedFile = File(createGeneratedPath(packageName, schemaName, directory))
+    val subFolder = args[2]
+    val directory = args[3]
+    val generatedFile = File(createGeneratedPath(packageName, schemaName, subFolder, directory))
 
     // Initialize Reflections for the package where the objects are defined
     val reflections = Reflections(ConfigurationBuilder().forPackages(packageName).addScanners(Scanners.SubTypes))
@@ -49,7 +50,7 @@ object DBSchemaGenerator {
       try {
         val kClass = it.kotlin
         kClass.visibility == kotlin.reflect.KVisibility.PUBLIC
-      } catch (e: Exception) {
+      } catch (_: Exception) {
         false
       }
     }
@@ -57,7 +58,7 @@ object DBSchemaGenerator {
     val generatedCode = buildString {
       addHeader()
       appendLine()
-      appendLine("package $packageName.$schemaName")
+      appendLine("package $packageName.$subFolder")
       appendLine()
       appendLine("import java.math.BigDecimal")
       appendLine()
@@ -106,10 +107,10 @@ object DBSchemaGenerator {
   /**
    * Create the generated class path
    */
-  private fun createGeneratedPath(packageName: String, schema: String, directory: String): String {
+  private fun createGeneratedPath(packageName: String, schema: String, subFoler: String, directory: String): String {
     return "$directory${File.separator}" +
         "${packageName.replace(".", File.separator)}${File.separator}" +
-        "$schema${File.separator}" +
+        "$subFoler${File.separator}" +
         "DBSchema${schema.uppercase()}.kt"
   }
 
