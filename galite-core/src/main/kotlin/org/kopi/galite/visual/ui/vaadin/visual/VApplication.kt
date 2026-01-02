@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,8 +18,12 @@
 package org.kopi.galite.visual.ui.vaadin.visual
 
 import java.sql.SQLException
+import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.CopyOnWriteArrayList
+
+import org.slf4j.LoggerFactory
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
@@ -33,6 +37,8 @@ import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.server.AppShellRegistry
 import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.ServiceInitEvent
+import com.vaadin.flow.server.SessionDestroyEvent
+import com.vaadin.flow.server.SessionInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
@@ -337,6 +343,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     if (dBConnection == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
     } else {
+      // Add initiated database connection to vaadin session attributes.
+      // This allows us to clean up / close opened database connections on session destroy event.
+      addConnectionToSession(dBConnection!!)
       // set query trace level
       setTraceLevel()
     }
@@ -393,6 +402,31 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       )
     } catch (e: PropertyException) {
       e.printStackTrace()
+    }
+  }
+
+  /**
+   * Add initiated connection on login to current vaadin session.
+   * This allows us to clean up / close opened connections on session destroy event.
+   *
+   * @param connection Database connection initiated on application login.
+   */
+  fun addConnectionToSession(connection: Connection) {
+    val session = VaadinSession.getCurrent()
+
+    session.lock()
+    try {
+      // Get the existing list, or create a new one if null
+      val connections = session.getAttribute("DB_CONNECTIONS") as? MutableList<Connection>
+        ?: CopyOnWriteArrayList<Connection>().also {
+          // CopyOnWriteArrayList is used to be thread-safe,
+          // since multiple tabs/requests may access the list concurrently.
+          session.setAttribute("DB_CONNECTIONS", it)
+        }
+      // Add the new connection to the session attribute.
+      connections.add(connection)
+    } finally {
+      session.unlock()
     }
   }
 
@@ -663,6 +697,8 @@ class GaliteAppShellConfigurator: AppShellConfigurator {
 }
 
 class ApplicationServiceInitListener: VaadinServiceInitListener {
+  private val logger = LoggerFactory.getLogger("vaadin.session.lifecycle")
+
   override fun serviceInit(event: ServiceInitEvent) {
     val context  = event.source.context
     val appShellRegistry = AppShellRegistry.getInstance(context)
@@ -677,6 +713,56 @@ class ApplicationServiceInitListener: VaadinServiceInitListener {
     event.source.addUIInitListener { uiInitEvent ->
       val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
       loadingIndicatorConfiguration.firstDelay = 1000
+    }
+
+    // Add logging when a new vaadin session is initiated.
+    event.source.addSessionInitListener(::onSessionInit)
+    // Close all database connections opened within the current vaadin session.
+    event.source.addSessionDestroyListener(::onSessionDestroy)
+  }
+
+  /**
+   * Trace the created session ID when a new vaadin session is initiated.
+   */
+  fun onSessionInit(event: SessionInitEvent) {
+    val session = event.session
+
+    // FIXME !!! This next line is only added for test purposes. It changes the session timeout to 5 minutes (default 30 minutes).
+    // FIXME !!! Must remove before merging to master.
+    session.session.maxInactiveInterval = 5 * 60
+
+    logger.info("${LocalDateTime.now()} - New Session [ID : ${session.session.id}] is created.")
+  }
+
+  /**
+   * Close all database connections opened within the current vaadin session if not already closed.
+   */
+  fun onSessionDestroy(event: SessionDestroyEvent) {
+    val session = event.session
+
+    session.lock()
+    try {
+      val connections = session.getAttribute("DB_CONNECTIONS") as? List<Connection>
+
+      connections?.forEach { connection ->
+        try {
+          // Close all opened connections in the current vaadin session.
+          if (!connection.poolConnection.isClosed) {
+            connection.poolConnection.close()
+            logger.info("${LocalDateTime.now()} - DB connection ${connection.poolConnection} closed " +
+                            "for session [ID : ${session.session.id}].")
+          }
+        } catch (ex: Exception) {
+          logger.warn("${LocalDateTime.now()} - Failed to close connection ${connection.poolConnection} " +
+                          "for session [ID : ${session.session.id}]", ex)
+        }
+      }
+      // Clear the "DB_CONNECTIONS" attribute.
+      session.setAttribute("DB_CONNECTIONS", null)
+      // Session destroyed.
+      logger.info("${LocalDateTime.now()} - Session [ID : ${session.session.id}] is destroyed.")
+    } finally {
+      session.unlock()
     }
   }
 }
