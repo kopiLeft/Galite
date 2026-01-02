@@ -38,7 +38,6 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
@@ -104,7 +103,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
     addLinksListeners()
     Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
     Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
-    addBeforeUnloadListener()
     instance = this
   }
 
@@ -241,88 +239,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
         showWindowsMenu()
       }
     }
-  }
-
-  /**
-   * Adds a detatch listener to be excecuted only when a window is closed or navigated away
-   */
-  fun addWindowDetachListener(onDetach: () -> Unit) {
-    addDetachListener {
-      isWindowActuallyClosing { isClosing ->
-        if (isClosing) {
-          println("The window is closing or navigating away.")
-          onDetach()
-        } else {
-          println("The window was refreshed.")
-        }
-      }
-    }
-  }
-
-  /**
-   * Determines if the window is actually closing (i.e., the user is closing a tab or
-   * navigating away) as opposed to simply refreshing the page.
-   *
-   * This method uses a `localStorage` flag, `pageReload`, that is set or removed by the
-   * `addBeforeUnloadListener` method. The logic works as follows:
-   *
-   * - If `pageReload` is found and set to `'true'`, it indicates that a page refresh
-   *   occurred. In this case, the method returns `false` to indicate that the window
-   *   is not actually closing.
-   * - If `pageReload` is not found, it suggests that the window is closing (either
-   *   a tab close or navigation away), so the method returns `true`.
-   *
-   * @param callback A lambda function to handle the result: `true` if the window is closing (not a refresh), `false` otherwise.
-   */
-  private fun isWindowActuallyClosing(callback: (Boolean) -> Unit) {
-    UI.getCurrent().page.executeJs("return localStorage.getItem('pageReload') === 'true';").then {
-      val isRefresh = it.asBoolean()
-
-      callback(!isRefresh)
-    }
-  }
-
-  /**
-   * Adds a JavaScript listener for the `beforeunload` event to detect when a page is
-   * refreshed or when a tab is being closed/navigated away from.
-   *
-   * This listener distinguishes between a page refresh (navigation type `1`) and other
-   * events such as closing the browser tab or navigating away. It uses `localStorage`
-   * to set a flag based on the detected action, which can be used server-side to infer
-   * user actions when combined with a Vaadin `DetachListener`.
-   *
-   * - On page refresh: A flag `pageReload` is set in the browser's `localStorage`.
-   * - On tab close or navigation away: The `pageReload` flag is removed from `localStorage`.
-   *
-   * Example Usage:
-   * This function is useful for determining whether to perform cleanup operations (like
-   * closing a database connection) only on tab close or navigation events but not on a refresh.
-   */
-  private fun addBeforeUnloadListener() {
-    UI.getCurrent().page.executeJs(
-      """
-        let isUnloading = false;
-
-        window.addEventListener('beforeunload', function(event) {
-            isUnloading = true;
-            // Save a flag to detect page reload
-            if (performance.navigation.type === 1) {
-                // Page refresh detected
-                localStorage.setItem('pageReload', 'true');
-            } else {
-                // Tab close or navigation away
-                localStorage.removeItem('pageReload');
-            }
-        });
-
-        // Use 'unload' event as a fallback for closing/navigating away cases
-        window.addEventListener('unload', function(event) {
-            if (!isUnloading) {
-                localStorage.removeItem('pageReload');
-            }
-        });
-        """
-    )
   }
 
   /**

@@ -252,10 +252,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
     mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
-    mainWindow!!.addWindowDetachListener {
-      //closing DB connection if the UI is closed after 3 heartbeats
-      closeConnection()
-    }
   }
 
   fun remove(mainWindow: MainWindow?) {
