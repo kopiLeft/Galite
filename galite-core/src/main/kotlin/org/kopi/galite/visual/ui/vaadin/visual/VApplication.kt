@@ -727,10 +727,6 @@ class ApplicationServiceInitListener: VaadinServiceInitListener {
   fun onSessionInit(event: SessionInitEvent) {
     val session = event.session
 
-    // FIXME !!! This next line is only added for test purposes. It changes the session timeout to 5 minutes (default 30 minutes).
-    // FIXME !!! Must remove before merging to master.
-    session.session.maxInactiveInterval = 5 * 60
-
     logger.info("${LocalDateTime.now()} - New Session [ID : ${session.session.id}] is created.")
   }
 
