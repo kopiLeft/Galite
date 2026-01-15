@@ -17,11 +17,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.main
 
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
-import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -33,7 +32,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * From this menu, the user can switch to another window.
  */
 @CssImport.Container(value = [
-  CssImport("./styles/galite/windows.css", themeFor = "vcf-enhanced-dialog-overlay"),
   CssImport("./styles/galite/windows.css")
 ])
 class VWindowsMenu : Dialog(), HasStyle {
@@ -50,7 +48,7 @@ class VWindowsMenu : Dialog(), HasStyle {
     val header = HorizontalLayout()
     val switch = HorizontalLayout(headerText, switchWindowIcon)
 
-    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    width = "500px"
     element.themeList.add("k-windowsMenu")
     header.className = "window-items-title"
     closeIcon.className = "close-icon"
@@ -62,8 +60,11 @@ class VWindowsMenu : Dialog(), HasStyle {
 
     header.add(switch)
     header.add(closeIcon)
-    setHeader(header)
-    setContent(items)
+    val layout = VerticalLayout()
+    layout.add(header, items)
+
+    // Ajoute le contenu dans le Dialog natif
+    add(layout)
   }
 
   /**

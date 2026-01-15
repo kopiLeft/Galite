@@ -37,7 +37,6 @@ import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.github.mvysny.kaributesting.v10.expectRow
 
-import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.grid.Grid
@@ -360,14 +359,14 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val windowsDiv = _get<Div> { id = "windows" }
 
     windowsDiv._click()
-    _expect<EnhancedDialog> {  }
+    _expect<Dialog> {  }
 
     val windowsContainer = _get<VerticalLayout> { classes = "window-items-container" }
     val windowsItems = windowsContainer._find<VWindowsMenuItem> { classes = "item" }
 
     assertEquals(2, windowsItems.size)
     windowsItems[0].click()
-    _expectNone<EnhancedDialog>()
+    _expectNone<Dialog>()
 
     var form = multipleForm.findForm()
     var visibleForm = _get<DForm> {  }
@@ -377,7 +376,7 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
 
     // get back to multipleBlockSaveForm
     windowsItems[1].click()
-    _expectNone<EnhancedDialog>()
+    _expectNone<Dialog>()
     form = multipleBlockSaveForm.findForm()
     visibleForm = _get<DForm> {  }
     assertEquals(form, visibleForm)

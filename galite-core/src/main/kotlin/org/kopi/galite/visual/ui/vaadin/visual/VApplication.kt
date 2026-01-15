@@ -227,6 +227,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                                      notificationLocale,
                                      mainWindow)
 
+    val lock = Object()
     dialog.yesIsDefault = false
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean?) {
@@ -236,9 +237,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
           gotoWelcomeView()
         }
         currentUI?.push()
+        BackgroundThreadHandler.releaseLock(lock)
       }
     })
-    showNotification(dialog)
+    showNotification(dialog, lock)
   }
 
   override fun startApplication() {

@@ -20,9 +20,9 @@ import org.kopi.galite.gradle.excludeWebJars
 
 plugins {
   kotlin("jvm") apply true
-  id("org.springframework.boot") version "2.7.14"
+  id("org.springframework.boot") version "3.5.3"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "23.3.8"
+  id("com.vaadin") version "24.3.20"
 }
 
 vaadin {
@@ -36,8 +36,11 @@ dependencies {
 
   implementation(kotlin("test-junit"))
 
+  implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
+
   implementation("com.vaadin", "vaadin-core") {
     excludeWebJars()
+    exclude(module = "vaadin-date-picker")
   }
   implementation("com.vaadin", "vaadin-spring-boot-starter") {
     excludeWebJars()
@@ -63,8 +66,11 @@ dependencies {
   testImplementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 
   // Vaadin addons dependency
-  testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
   testImplementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
+
+  testImplementation("com.vaadin:vaadin-testbench-junit5:24.3.0")
+  testImplementation("org.eclipse.jetty:jetty-servlet:11.0.20")
+  testImplementation("org.eclipse.jetty:jetty-server:11.0.20")
 
   // Pivot Table dependency
   implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)

@@ -32,15 +32,13 @@ dependencies {
     excludeWebJars()
     exclude("org.slf4j", "slf4j-ext")
   }
+
   // Vaadin addons
   // Wysiwyg-e Rich Text Editor component for Java
   implementation("org.vaadin.pekka", "wysiwyg_e-java", Versions.WYSIWYG_EJAVA)
-  // EnhancedDialog
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
+
   // Apex charts
   implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
-  // Iron Icons
-  implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
   //FullCalendar for Flow dependency
   implementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 
@@ -68,8 +66,7 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
-  // Compile only dependency for Vaadin servlet
-  compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
+  compileOnly("jakarta.servlet", "jakarta.servlet-api", "6.0.0")
 
   // Dataframe used in Pivot Table
   implementation("org.jetbrains.kotlinx", "dataframe", Versions.KOTLINX_DATAFRAME)

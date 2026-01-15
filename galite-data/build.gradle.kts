@@ -31,6 +31,7 @@ dependencies {
   api("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
   // HikariCP dependency : for pool connexion
   api("com.zaxxer", "HikariCP", Versions.HIKARI)
+  compileOnly("jakarta.servlet", "jakarta.servlet-api", "6.0.0")
 
   // getOpt dependency
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)

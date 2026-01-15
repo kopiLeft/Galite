@@ -20,10 +20,10 @@ package org.kopi.galite.visual.ui.vaadin.upload
 import org.kopi.galite.visual.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.visual.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.visual.ui.vaadin.base.VInputButton
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 import org.kopi.galite.visual.ui.vaadin.common.VSpan
 
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.NativeButton
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -49,8 +49,8 @@ class UploadDialog(val receiver: Receiver) : Dialog(), HasStyle {
     buttons.className = "k-upload-buttons"
     ok.style["cursor"] = "pointer"
     cancel.style["cursor"] = "pointer"
-    setHeader(title)
-    setFooter(buttons)
+    header.add(title)
+    footer.add(buttons)
     add(upload)
     addHandlers()
   }

@@ -30,8 +30,8 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
 
   init {
     wrappedField.pattern = "[0-9-]*"
-    wrappedField.isPreventInvalidInput = true
-    wrappedField.element.setProperty("min", minValue.toDouble())
+    wrappedField.setAllowedCharPattern("\\d")  // Par exemple, pour autoriser seulement les chiffres
+    wrappedField.setMaxLength(5)  // Limiter la longueur maximale    wrappedField.element.setProperty("min", minValue.toDouble())
     wrappedField.element.setProperty("max", maxValue.toDouble())
   }
 

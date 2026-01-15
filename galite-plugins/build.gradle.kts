@@ -31,6 +31,7 @@ subprojects {
     if (project.name != "common") {
       api(project(":galite-plugins:common"))
     }
+    compileOnly("jakarta.servlet", "jakarta.servlet-api", "6.0.0")
   }
 
   java {

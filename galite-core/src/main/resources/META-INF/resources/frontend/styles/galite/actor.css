@@ -42,10 +42,6 @@
     font-size: 12px;
 }
 
-::part(k-actor) {
-    background: var(--background-color);
-    color: #ffffff;
-}
 
 ::part(k-actor-disabled) {
     background: var(--background-color);
@@ -62,7 +58,7 @@
     cursor: pointer;
 }
 
-.k-window ::part(menu-bar-button) {
+.k-window vaadin-menu-bar-button {
     padding: 0;
     height: 42px;
     background: var(--background-color);
@@ -90,23 +86,6 @@
     padding: 0;
 }
 
-::part(rootNavigation-open) {
-    background: #ffffff;
-    color: var(--background-color);
-}
-
-/**
- * Change color of root menu button
- */
-::part(rootNavigation) {
-    color: #ffffff;
-    background: var(--background-color);
-}
-
-::part(rootNavigation):hover {
-    cursor: pointer;
-}
-
 .actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover {
     color: var(--background-color);
 }
@@ -126,8 +105,8 @@
     cursor: default;
 }
 
-.actor-navigationColumn > .actor-navigationItem > iron-icon,
-  .actor-navigationColumn > .actor-navigationItem-disabled > iron-icon {
+.actor-navigationColumn > .actor-navigationItem > vaadin-icon,
+  .actor-navigationColumn > .actor-navigationItem-disabled > vaadin-icon {
     width: 30px;
     font-size: 1.5em !important;
 }
@@ -157,7 +136,8 @@
 }
 
 .k-actor {
-    color: #676767;
+    background: var(--background-color);
+    color: #ffffff;
 }
 
 .k-actor:hover {
@@ -168,12 +148,12 @@ vaadin-button.k-actor::after, vaadin-button.k-actor::before {
     background: transparent;
 }
 
-.vaadin-menu-item:hover {
+vaadin-menu-item:hover {
     background: var(--background-hover-color);
     cursor: pointer;
 }
 
-.vaadin-menu-item:not(:last-child) {
+vaadin-menu-item:not(:last-child) {
     border-bottom: 1px solid #dadada;
 }
 

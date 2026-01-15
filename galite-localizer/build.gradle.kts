@@ -26,4 +26,6 @@ dependencies {
   implementation(project(":galite-core"))
   testImplementation(kotlin("test-junit"))
   testImplementation("com.h2database", "h2", Versions.H2)
+  compileOnly("jakarta.servlet", "jakarta.servlet-api", "6.0.0")
+
 }

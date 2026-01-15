@@ -19,7 +19,7 @@
 /**
  * List Dialog style
  */
-:host([theme="k-listdialog-container"]) [part="header-cell"] {
+vaadin-grid[theme~="k-listdialog-container"]::part(header-cell) {
     background-color: #f2f2f2;
     padding: 0 !important;
 }
@@ -31,19 +31,22 @@
 /**
  * List Table header styles
  */
-:host([theme="k-listdialog-table"]) [part~="cell"]:not(tr:nth-child(2) th) {
+vaadin-grid[theme~="k-listdialog-table"]::part(cell) {
     padding: 8px 12px 8px 12px !important;
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
 }
+vaadin-grid[theme~="k-listdialog-table"]::part(header-cell):nth-child(n+2) {
+    padding: 0px !important;
+}
 
 tr:nth-child(2) th {
     padding: 0px !important;
 }
 
-:host([theme="k-listdialog-table"]) [part~="cell"] :hover {
+vaadin-grid[theme~="k-listdialog-table"]::part(body-cell):hover {
     cursor: pointer;
 }
 
@@ -88,12 +91,12 @@ vaadin-grid-cell-content, .k-listdialog {
     --lumo-text-field-size: none;
 }
 
-:host([theme="k-listdialog-container"]) [part="header"] {
+vaadin-dialog-overlay[theme="k-listdialog-container"]::part(header) {
     padding: 0;
     border-bottom: 0;
 }
 
-:host([theme="k-listdialog-container"]) [part="dialog-content"] {
+vaadin-dialog-overlay[theme="k-listdialog-container"]::part(content) {
     padding: 0;
 }
 

@@ -17,9 +17,8 @@
 package org.kopi.galite.gradle
 
 object Versions {
-  const val VAADIN = "23.3.8"
-  const val KARIBU_TESTING = "1.3.23"
-  const val ENHANCED_DIALOG = "23.1.2"
+  const val VAADIN = "24.3.20"
+  const val KARIBU_TESTING = "2.1.0"
 
   const val EXPOSED = "0.42.1"
   const val HIKARI = "5.1.0"
@@ -31,16 +30,14 @@ object Versions {
   const val GETOPT = "1.0.13"
   const val JDOM = "2.0.5"
   const val APACHE_POI = "5.2.5"
-  const val SLF4J = "1.7.30"
+  const val SLF4J = "2.0.9"
   const val APEX_CHARTS = "23.0.1"
-  const val IRON_ICONS = "2.0.1"
-  const val JAVAX_SERVLET_API = "4.0.1"
   const val JAVAX_MAIL = "1.6.2"
   const val JAVAX_ACTIVATION = "1.1.1"
   const val FULL_CALENDAR = "3.1.0"
   const val JFREE_CHART = "1.0.19"
   const val WYSIWYG_EJAVA = "2.0.1"
   const val KOTLINX_DATAFRAME = "0.8.0-rc-7"
-  const val PIVOT_TABLE = "2.0.0"
+  const val PIVOT_TABLE = "2.1.2"
   const val XML_BEANS = "5.2.0"
 }

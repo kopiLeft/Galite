@@ -34,7 +34,9 @@ class VActorsRootNavigationItem : Button() {
   init {
     className = "actors-rootNavigationItem"
     element.setAttribute("part" ,"rootNavigation")
-   // rootIcon.addStyleDependentName("actors")
+    element.style["color"] = "#ffffff"
+    element.style["background"] = "var(--background-color)"
+    // rootIcon.addStyleDependentName("actors")
     icon = rootIcon
     menu.className = "actors-navigationMenu"
     this.addClickListener { onClick() }

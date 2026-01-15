@@ -72,6 +72,8 @@ object Styles {
   const val NOTIFICATION_MESSAGE =            "k-notification-message"
   const val NOTIFICATION_FILLER =             "k-notification-filler"
   const val NOTIFICATION_BUTTONS =            "k-notification-buttons"
+  const val NOTIFICATION_CONTENT =            "k-notification-content"
+  const val NOTIFICATION_ICON =               "k-notification-icon"
   const val PROGRESS_DIALOG =                 "k-progress"
   const val PROGRESS_TITLE =                  "k-progress-title"
   const val PROGRESS_MESSAGE =                "k-progress-message"

@@ -19,7 +19,6 @@ package org.kopi.galite.visual.ui.vaadin.actor
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 
-import com.flowingcode.vaadin.addons.ironicons.IronIconEnum
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -52,11 +51,11 @@ open class Actor(val caption: String?,
     super.setText(caption)
 
     if (icon != null) {
-      if (icon is VaadinIcon) {
-        super.setIcon(Icon(icon))
-      } else if (icon is IronIconEnum) {
-        super.setIcon(icon.create())
-      }
+        if (icon is VaadinIcon) {
+            super.setIcon(Icon(icon))
+        } else if (icon is Icon) {
+            super.setIcon(icon)
+        }
     }
   }
 }

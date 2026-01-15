@@ -39,7 +39,8 @@ class Page<T>(private var content: T) : Div() where T : Component, T : FlexCompo
 
   init {
     className = Styles.FORM_PAGE
-    content.className = Styles.FORM_PAGE_CONTENT
+    val styleClass: String = Styles.FORM_PAGE_CONTENT
+    content.setClassName(styleClass)
     add(scrollPanel)
   }
 

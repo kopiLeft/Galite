@@ -16,31 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-.k-popup-window~::part(dialog-content) {
+.k-popup-window~::part(content) {
     padding: 0;
-}
-
-.k-popup-window .enhanced-dialog-content .k-window {
-    padding: 0;
-}
-
-.k-popup-window #overlay {
-    --_enhanced-dialog-content-padding: 0;
-}
-
-.enhanced-dialog-content .k-window {
-    padding: 0;
-}
-
-.enhanced-dialog-content .k-window > div {
-    width: 100%;
-}
-
-.k-popup-window~::part(dialog-content) {
     overflow: hidden;
 }
 
-:host([theme~="v-dialog"]) [part="content"] {
+.k-popup-window~::part(header) {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    border-bottom: 1px solid var(--lumo-shade-10pct);
+}
+
+.k-popup-window~::part(footer) {
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    background-color: var(--lumo-primary-color-10pct);
+}
+
+:host([theme~="v-dialog"])::part(content) {
     padding: 0;
 }
 
@@ -48,8 +39,12 @@
     padding: 0;
 }
 
-#v-dialog-header, #v-dialog-footer {
+#v-dialog-header, #v-dialog-footer, #v-dialog-content {
     padding: var(--lumo-space-s) var(--lumo-space-l);
+}
+
+vaadin-dialog-overlay[theme="notification"]::part(header) {
+    padding: 0;
 }
 
 #v-dialog-header {
@@ -63,7 +58,7 @@
 /**
  * Form Style in Popup
  */
-.enhanced-dialog-content .k-window .k-form-page {
+.k-window .k-form-page {
     max-width: calc(100vw - 70px);
     padding: 0;
 }

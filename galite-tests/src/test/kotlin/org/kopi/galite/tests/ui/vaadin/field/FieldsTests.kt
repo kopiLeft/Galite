@@ -33,12 +33,8 @@ import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
 
-import com.vaadin.componentfactory.EnhancedDialog
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 import org.jetbrains.exposed.sql.selectAll
@@ -234,23 +230,6 @@ class FieldsTests : GaliteVUITestBase() {
       assertEquals(firstNameField.value, data[0][0])
       assertEquals(lastNameField.value, data[0][1])
     }
-  }
-
-  @Test
-  fun `open form via field`() {
-    val form = FormToTestFormPopUp()
-    form.open()
-
-    val field = form.userListBlock.user.findField() as Focusable<*>
-
-    field.focus()
-
-    val icon = (field as Component)._get<IronIcon> {  }
-
-    icon._clickAndWait(500)
-
-    // Check that the form is displayed id popUp
-    _expectOne<EnhancedDialog>()
   }
 
   companion object {

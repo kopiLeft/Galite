@@ -111,10 +111,3 @@ pre {
     font-style: normal !important;
     font-size: 18px !important;
 }
-
-/**
- * Remove gap from popup form
- */
-.enhanced-dialog-content .k-window {
-    gap: 0 !important;
-}

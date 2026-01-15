@@ -36,9 +36,10 @@ class GridEditorDecimalField(
 
   init {
     wrappedField.pattern = "[0-9-,.]*"
-    wrappedField.isPreventInvalidInput = true
-    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
+    wrappedField.setAllowedCharPattern("\\d")  // Par exemple, pour autoriser seulement les chiffres
+    wrappedField.setMaxLength(5)  // Limiter la longueur maximale    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
+    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
     if (dfs!!.decimalSeparator != '.') {
       wrappedField.element.executeJs(
         "addCheckDecimalListeners($0, $1);",

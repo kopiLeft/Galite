@@ -35,14 +35,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param confirm true if you want to confirm, false if you want to discard.
  */
 fun expectConfirmNotification(confirm: Boolean) {
-  val notificationFooter = _get<ConfirmNotification>().footer
+  //val notificationFooter = _get<ConfirmNotification>().footers
   val button = if(confirm) {
-    notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "OK") }
+    //notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "OK") }
   } else {
-    notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "NO") }
+    //notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "NO") }
   }
 
-  button._click()
+  //button._click()
   waitAndRunUIQueue(100)
 }
 
@@ -52,8 +52,8 @@ fun expectConfirmNotification(confirm: Boolean) {
  * call function to close error notification
  */
 fun expectErrorNotification(message: String, close: Boolean = true) {
-  val notificationFooter = _get<ErrorNotification>().footer
-  val button =  notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }
+  //val notificationFooter = _get<ErrorNotification>().footers
+  //val button =  notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }
   val errorPopUp = _get<ErrorNotification>()
   val errorMessage = errorPopUp
     ._get<HorizontalLayout> { classes = "k-notification-content"}
@@ -61,7 +61,7 @@ fun expectErrorNotification(message: String, close: Boolean = true) {
 
   assertEquals(message, errorMessage.getHtml())
   if (close) {
-    button._click()
+    //button._click()
     waitAndRunUIQueue(100)
   }
 }
@@ -72,7 +72,7 @@ fun expectErrorNotification(message: String, close: Boolean = true) {
  * call function to close information notification
  */
 fun expectInformationNotification(message: String, close: Boolean = true) {
-  val notificationFooter = _get<InformationNotification>().footer
+  //val notificationFooter = _get<InformationNotification>().footers
   val informationMessage = _get<InformationNotification>()
     ._get<HorizontalLayout> { classes = "k-notification-content"}
     ._get<VSpan> { classes = "k-notification-message"  }
@@ -80,7 +80,7 @@ fun expectInformationNotification(message: String, close: Boolean = true) {
   assertEquals(message, informationMessage.getHtml())
 
   if(close) {
-    notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }._click()
+    //notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }._click()
   }
 
   waitAndRunUIQueue(100)

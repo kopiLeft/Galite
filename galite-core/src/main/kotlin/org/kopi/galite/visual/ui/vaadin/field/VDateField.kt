@@ -72,7 +72,7 @@ class VDateField : InputTextField<DateField>(DateField()), KeyNotifier {
   CssImport(value = "./styles/galite/datepicker.css", themeFor = "vaadin-date-picker")
 ])
 class DateField: TextField() {
-  val picker = DatePicker()
+  val picker = DatePicker("select Date")
 
   init {
     picker.element.themeList.add("date-picker-suffix")
@@ -99,7 +99,8 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
     textField.className = "input"
     textField.suffixComponent = icon
     textField.isClearButtonVisible = true
-    textField.isPreventInvalidInput = true
+    textField.setAllowedCharPattern("\\d")  // Par exemple, pour autoriser seulement les chiffres
+    textField.setMaxLength(5)  // Limiter la longueur maximale    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
     textField.pattern = "[0-9/\\.]*"
     textField.maxLength = 10
 

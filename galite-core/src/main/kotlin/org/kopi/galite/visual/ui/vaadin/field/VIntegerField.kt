@@ -26,7 +26,8 @@ class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextFi
 
   init {
     internalField.pattern = "[0-9-]*"
-    internalField.isPreventInvalidInput = true
+    internalField.setAllowedCharPattern("\\d")  // Par exemple, pour autoriser seulement les chiffres
+    internalField.setMaxLength(5)  // Limiter la longueur maximale    val dfs = DecimalFormatSymbols.get(MainWindow.locale)
     internalField.element.setProperty("min", minval)
     internalField.element.setProperty("max", maxval)
     this.width = width.toString()

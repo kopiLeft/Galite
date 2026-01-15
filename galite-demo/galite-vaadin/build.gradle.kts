@@ -21,7 +21,7 @@ import org.kopi.galite.gradle.excludeWebJars
 plugins {
   kotlin("jvm") apply true
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "23.3.8"
+  id("com.vaadin") version "24.3.20"
   id("org.gretty") version "3.0.6"
   war
 }
@@ -55,8 +55,7 @@ dependencies {
 
   implementation("com.h2database", "h2", Versions.H2)
 
-  // EnhancedDialog dependency
-  testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
+  compileOnly("jakarta.servlet", "jakarta.servlet-api", "6.0.0")
 
   // Pivot Table dependency
   implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)

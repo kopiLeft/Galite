@@ -51,7 +51,7 @@ open class VUITestBase : VApplicationTestBase() {
   }
 }
 
-open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook by TestingLifecycleHookVaadin23_1(TestingLifecycleHook.default) {
+open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook by TestingLifecycleHookVaadin14Default() {
 
   init {
     testingLifecycleHook = this

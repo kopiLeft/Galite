@@ -41,6 +41,7 @@ open class VDialog(withHeader: Boolean, withFooter: Boolean) : Dialog() {
       dialogHeader.setId("v-dialog-header")
     }
 
+    dialogContent.setId("v-dialog-content")
     super.add(dialogContent)
 
     if(withFooter) {

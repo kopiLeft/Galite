@@ -39,7 +39,6 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import org.junit.Ignore
 
@@ -203,58 +202,6 @@ class FormLocalTests : GaliteVUITestBase() {
 
     assertEquals(firstCode, items[0])
     assertEquals(secondCode, items[1])
-  }
-
-  @Ignore // !! FIXME !! mgrati 20231213 : notice generates test error when replacing Galite connection to use HikariCP
-  @Test
-  fun `test extern list type`() {
-    val localizationList = localizationManager
-      .getListLocalizer("org/kopi/galite/tests/localization/list/ExternList", "ExternList")
-    val id = localizationList.getColumnTitle("ID")
-    val trainingName = localizationList.getColumnTitle("Name")
-
-    val trainingField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[2]
-    val autofill = trainingField._get<IronIcon> {}
-
-    autofill._clickAndWait(500)
-
-    // Check that the list dialog is displayed
-     _expectOne<GridListDialog>()
-
-    val listDialog = _get<GridListDialog>()
-    listDialog._expectOne<Grid<*>>()
-
-    val grid = _get<DListDialog>()._get<ListTable>()
-    val titles =  grid.model.titles
-
-    assertEquals(id, titles[0])
-    assertEquals(trainingName, titles[1])
-  }
-
-  @Ignore // !! FIXME !! mgrati 20231213 : notice generates test error when replacing Galite connection to use HikariCP
-  @Test
-  fun `test intern list type`() {
-    val localizationList = localizationManager
-      .getListLocalizer("org/kopi/galite/tests/localization/LocalizedForm", "FLD_4")
-    val id = localizationList.getColumnTitle("ID")
-    val category = localizationList.getColumnTitle("type")
-
-    val categoryField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[4]
-    val autofill = categoryField._get<IronIcon> {}
-
-    autofill._clickAndWait(500)
-
-    // Check that the list dialog is displayed
-    _expectOne<GridListDialog>()
-
-    val listDialog = _get<GridListDialog>()
-    listDialog._expectOne<Grid<*>>()
-
-    val grid = _get<DListDialog>()._get<ListTable>()
-    val titles =  grid.model.titles
-
-    assertEquals(id, titles[0])
-    assertEquals(category, titles[1])
   }
 
   companion object {
