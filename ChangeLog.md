@@ -1,3 +1,10 @@
+# 1.5.13
+## What's Changed
+* Rename galite-plugins modules and fix galite-dbschema-generator plugin by @mgrati in [#655](https://github.com/kopiLeft/Galite/pull/655)
+* Clear leaked database connections when closing tabs without explicity logging out of Galite web applications by @mgrati in [#656](https://github.com/kopiLeft/Galite/pull/656)
+
+**Full Changelog**: [1.5.12 ... 1.5.13](https://github.com/kopiLeft/Galite/compare/1.5.12...1.5.13)
+
 # 1.5.12
 ## What's Changed
 * Replace dependendency ("javax.mail", "mail", "1.4") (deprecated) by ("com.sun.mail", "javax.mail", "1.6.2")
