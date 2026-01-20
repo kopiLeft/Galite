@@ -1,8 +1,8 @@
-# dbschema-generator Gradle Plugin
+# galite-dbschema-generator Gradle Plugin
 
 ## Overview
 
-The `dbschema-generator` Gradle plugin is destined for Kotlin projects using JetBrains Exposed, in which the use of multiple database schemas is required. This plugin automates the creation of DBSchema.kt class, that copies already existing table declarations while applying a specific database schema name. The plugin dynamically compiles and integrates generated schema classes into the main source set, ensuring compatibility with existing application logic.
+The `galite-dbschema-generator` Gradle plugin is destined for Kotlin projects using JetBrains Exposed, in which the use of multiple database schemas is required. This plugin automates the creation of DBSchema.kt class, that copies already existing table declarations while applying a specific database schema name. The plugin dynamically compiles and integrates generated schema classes into the main source set, ensuring compatibility with existing application logic.
 
 ## Features
 
@@ -13,17 +13,17 @@ The `dbschema-generator` Gradle plugin is destined for Kotlin projects using Jet
 
 ## Installation
 
-To use `dbschema-generator` in your Gradle project, add the following to your `build.gradle.kts`:
+To use `galite-dbschema-generator` in your Gradle project, add the following to your `build.gradle.kts`:
 
 ```kotlin
 plugins {
-    id("com.kopileft.dbschema-generator") version "1.5.9"
+    id("org.kopi.galite-dbschema-generator") version "1.5.13"
 }
 ```
 
 ```kotlin
 dependencies {
-  implementation("org.kopi", "dbschema-generator", "1.5.9")
+  implementation("org.kopi", "galite-dbschema-generator", "1.5.13")
 }
 ```
 
@@ -35,7 +35,7 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
     maven {
-      url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+      url = uri("https://central.sonatype.com/repository/maven-snapshots/")
     }
   }
 }
@@ -53,14 +53,15 @@ By default, the plugin:
 To configure the `generateDBSchemas` task, we need to configure the project extension `dbSchemaGenerator` with the following information :
 - **packageName**: The package name of the existing table declarations. This package should be a priorly compiled package in the project's `compileClasspath`.
 - **schemaName**: The custom database schema name to be added to the table declarations.
+- **subFolder**: A custom sub-folder name to be added to the original table declarations package for the generated class. If not specified, the default sub-folder name is "generated".
 
 ```kotlin
 tasks {
   generateDBSchemas {
     doFirst {
       dbSchemaGenerator.data.set(listOf(
-        Schema(packageName = "com.progmag.pdv.dbschema", schemaName = "public"),
-        Schema(packageName = "com.progmag.pdv.dbschema", schemaName = "custom")
+        Schema(packageName = "com.progmag.galite.dbschema", schemaName = "public"),                      // The generated class will be in the package "com.progmag.galite.dbschema.generated"
+        Schema(packageName = "com.progmag.galite.dbschema", schemaName = "custom", subFolder = "custom") // The generated class will be in the package "com.progmag.galite.dbschema.custom"
       ))
     }
   }
@@ -80,7 +81,7 @@ To generate schema classes, run:
 The generated class will have the following path:
 
 ```kotlin
-"${packageName.replace(".", File.separator)}${File.separator}$schema${File.separator}DBSchema${schema.uppercase()}.kt"
+"${packageName.replace(".", File.separator)}${File.separator}$subFolder${File.separator}DBSchema${schema.uppercase()}.kt"
 ```
 
 

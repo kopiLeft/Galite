@@ -44,7 +44,7 @@ abstract class DBSchemaGeneratorTask : JavaExec() {
     }
 
     extension.data.get().forEach { data ->
-      val currentArgs = listOf(data.packageName, data.schemaName, outputDirectory.asFile.absolutePath)
+      val currentArgs = listOf(data.packageName, data.schemaName, data.subFolder, outputDirectory.asFile.absolutePath)
       project.logger.lifecycle("Running DBSchemaGenerator with arguments: $data")
 
       project.javaexec {

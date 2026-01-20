@@ -28,8 +28,8 @@ subprojects {
   apply(plugin = "signing")
 
   dependencies {
-    if (project.name != "common") {
-      api(project(":galite-plugins:common"))
+    if (project.name != "galite-common-plugin") {
+      api(project(":galite-plugins:galite-common-plugin"))
     }
   }
 
