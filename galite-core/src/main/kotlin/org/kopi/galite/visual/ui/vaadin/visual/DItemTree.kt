@@ -329,7 +329,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     // popupContent.setComponentAlignment(buttonsContainer, Alignment.MIDDLE_CENTER) TODO
     inputDialog = PopupWindow(findMainWindow())
     inputDialog!!.isModal = true
-    inputDialog!!.setContent(popupContent)
+    inputDialog!!.add(popupContent)
     inputDialog!!.className = "inputdialog"
   }
 

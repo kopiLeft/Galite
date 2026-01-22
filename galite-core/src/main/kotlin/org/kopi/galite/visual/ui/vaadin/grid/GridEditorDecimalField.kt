@@ -36,7 +36,6 @@ class GridEditorDecimalField(
 
   init {
     wrappedField.pattern = "[0-9-,.]*"
-    wrappedField.isPreventInvalidInput = true
     val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
     if (dfs!!.decimalSeparator != '.') {

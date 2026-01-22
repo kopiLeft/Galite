@@ -39,7 +39,6 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import org.junit.Ignore
 

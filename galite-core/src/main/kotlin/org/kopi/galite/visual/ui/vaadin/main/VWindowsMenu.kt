@@ -17,11 +17,10 @@
  */
 package org.kopi.galite.visual.ui.vaadin.main
 
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
-import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -33,7 +32,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * From this menu, the user can switch to another window.
  */
 @CssImport.Container(value = [
-  CssImport("./styles/galite/windows.css", themeFor = "vcf-enhanced-dialog-overlay"),
   CssImport("./styles/galite/windows.css")
 ])
 class VWindowsMenu : Dialog(), HasStyle {
@@ -47,23 +45,19 @@ class VWindowsMenu : Dialog(), HasStyle {
     // do not affect this menu
     val switchWindowIcon = VaadinIcon.BROWSER.create()
     val closeIcon = VaadinIcon.CLOSE_CIRCLE.create()
-    val header = HorizontalLayout()
+    //val header = HorizontalLayout()
     val switch = HorizontalLayout(headerText, switchWindowIcon)
 
-    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
     element.themeList.add("k-windowsMenu")
-    header.className = "window-items-title"
     closeIcon.className = "close-icon"
 
-    header.setFlexGrow(1.0, switch)
     closeIcon.addClickListener {
       close()
     }
 
     header.add(switch)
     header.add(closeIcon)
-    setHeader(header)
-    setContent(items)
+    add(items)
   }
 
   /**

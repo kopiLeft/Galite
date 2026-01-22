@@ -55,9 +55,6 @@ dependencies {
 
   implementation("com.h2database", "h2", Versions.H2)
 
-  // EnhancedDialog dependency
-  testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
-
   // Pivot Table dependency
   implementation("org.vaadin.addons.componentfactory", "pivottable-flow", Versions.PIVOT_TABLE)
 }

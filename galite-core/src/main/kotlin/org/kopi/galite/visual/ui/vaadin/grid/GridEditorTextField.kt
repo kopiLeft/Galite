@@ -25,12 +25,12 @@ import org.kopi.galite.visual.ui.vaadin.base.addJSKeyDownListener
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.form.VConstants
 
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
@@ -90,7 +90,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>(), JSKe
    * Sets this field to be an auto fill field
    */
   fun setAutofill() {
-    val autofillIcon = IronIcons.ARROW_DROP_DOWN.create()
+    val autofillIcon = VaadinIcon.ANGLE_DOWN.create()
     autofillIcon.addClickListener {
       dGridEditorField.onAutofill()
     }

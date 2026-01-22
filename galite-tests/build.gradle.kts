@@ -20,9 +20,9 @@ import org.kopi.galite.gradle.excludeWebJars
 
 plugins {
   kotlin("jvm") apply true
-  id("org.springframework.boot") version "2.7.14"
+  id("org.springframework.boot") version "3.5.3"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id("com.vaadin") version "23.3.8"
+  id("com.vaadin") version "24.3.20"
 }
 
 vaadin {
@@ -35,6 +35,8 @@ dependencies {
   implementation(project(":galite-testing"))
 
   implementation(kotlin("test-junit"))
+
+  implementation("jakarta.servlet", "jakarta.servlet-api", Versions.JAKARTA_SERVLET_API)
 
   implementation("com.vaadin", "vaadin-core") {
     excludeWebJars()
@@ -63,7 +65,6 @@ dependencies {
   testImplementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 
   // Vaadin addons dependency
-  testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
   testImplementation("org.vaadin.stefan", "fullcalendar2", Versions.FULL_CALENDAR)
 
   // Pivot Table dependency

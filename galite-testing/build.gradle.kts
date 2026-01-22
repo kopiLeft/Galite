@@ -34,7 +34,6 @@ dependencies {
 
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.KARIBU_TESTING)
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
 }
 
 dependencyManagement {
