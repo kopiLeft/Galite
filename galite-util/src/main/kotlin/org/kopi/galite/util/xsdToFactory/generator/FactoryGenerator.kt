@@ -300,9 +300,6 @@ class FactoryGenerator {
       if (instance.loadSchemaComponents(params)) {
         instance.generateClasses(params)
       }
-
-      val schemaDir = Paths.get("${instance.options.directory ?: instance.options.source}/schemaorg_apache_xmlbeans")
-      schemaDir.toFile().deleteRecursively()
     }
   }
 }
