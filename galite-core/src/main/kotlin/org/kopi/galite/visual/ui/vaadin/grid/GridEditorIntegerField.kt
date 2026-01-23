@@ -30,6 +30,7 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
 
   init {
     wrappedField.pattern = "[0-9-]*"
+    wrappedField.allowedCharPattern = "\\d"
     wrappedField.element.setProperty("min", minValue.toDouble())
     wrappedField.element.setProperty("max", maxValue.toDouble())
   }

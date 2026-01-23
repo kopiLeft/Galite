@@ -45,7 +45,6 @@ class VWindowsMenu : Dialog(), HasStyle {
     // do not affect this menu
     val switchWindowIcon = VaadinIcon.BROWSER.create()
     val closeIcon = VaadinIcon.CLOSE_CIRCLE.create()
-    //val header = HorizontalLayout()
     val switch = HorizontalLayout(headerText, switchWindowIcon)
 
     element.themeList.add("k-windowsMenu")

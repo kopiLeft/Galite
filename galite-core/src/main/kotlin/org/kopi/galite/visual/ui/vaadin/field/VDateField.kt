@@ -99,6 +99,7 @@ class DatePickerLight : AbstractField<TextField, String>(null), HasComponents,
     textField.className = "input"
     textField.suffixComponent = icon
     textField.isClearButtonVisible = true
+    textField.allowedCharPattern = "\\d"
     textField.pattern = "[0-9/\\.]*"
     textField.maxLength = 10
 
