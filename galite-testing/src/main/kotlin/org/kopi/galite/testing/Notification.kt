@@ -35,7 +35,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param confirm true if you want to confirm, false if you want to discard.
  */
 fun expectConfirmNotification(confirm: Boolean) {
-  val notificationFooter = _get<ConfirmNotification>().footer
+  val notificationFooter = _get<ConfirmNotification>()
   val button = if(confirm) {
     notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "OK") }
   } else {
@@ -52,7 +52,7 @@ fun expectConfirmNotification(confirm: Boolean) {
  * call function to close error notification
  */
 fun expectErrorNotification(message: String, close: Boolean = true) {
-  val notificationFooter = _get<ErrorNotification>().footer
+  val notificationFooter = _get<ErrorNotification>()
   val button =  notificationFooter._get<Button> { text = LocalizedProperties.getString(defaultLocale, "CLOSE") }
   val errorPopUp = _get<ErrorNotification>()
   val errorMessage = errorPopUp
@@ -72,7 +72,7 @@ fun expectErrorNotification(message: String, close: Boolean = true) {
  * call function to close information notification
  */
 fun expectInformationNotification(message: String, close: Boolean = true) {
-  val notificationFooter = _get<InformationNotification>().footer
+  val notificationFooter = _get<InformationNotification>()
   val informationMessage = _get<InformationNotification>()
     ._get<HorizontalLayout> { classes = "k-notification-content"}
     ._get<VSpan> { classes = "k-notification-message"  }

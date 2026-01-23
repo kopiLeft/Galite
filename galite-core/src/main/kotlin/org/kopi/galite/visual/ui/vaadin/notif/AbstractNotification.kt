@@ -63,7 +63,6 @@ abstract class AbstractNotification(title: String?,
   private var message = VSpan()
   protected var buttons = Div()
   internal var yesIsDefault = false
-  val footer = Div()
 
   init {
     element.classList.add("notification")
@@ -79,16 +78,15 @@ abstract class AbstractNotification(title: String?,
     this.title.className = "k-notification-title"
     this.content.className = "k-notification-content"
     content.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+    setNotificationMessage(message)
+    setButtons()
 
     header.add(this.title)
-    setNotificationMessage(message)
     icon.setSize("2.8em")
     icon.className = "k-notification-icon"
-    content.add(icon)
-    content.add(this.message)
-    add(content, footer)
+    content.add(icon, this.message)
     footer.add(buttons)
-    setButtons()
+    add(content)
   }
 
   /**
