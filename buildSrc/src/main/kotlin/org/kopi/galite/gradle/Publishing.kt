@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,20 +57,4 @@ fun MavenPom.configureMavenCentralPom(project: Project) {
     connection.set("scm:git:git://github.com/kopiLeft/Galite.git")
     developerConnection.set("scm:git:git@github.com:kopiLeft/Galite.git")
   }
-}
-
-fun MavenPublication.signPublication(project: Project) {
-  project.extensions.configure<SigningExtension>("signing") {
-    useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"),
-                       System.getenv("GPG_PRIVATE_PASSWORD"))
-    sign(this@signPublication)
-  }
-}
-
-fun Project._publishing(configure: PublishingExtension.() -> Unit) {
-  extensions.configure("publishing", configure)
-}
-
-fun Project._java(configure: JavaPluginExtension.() -> Unit) {
-  extensions.configure("java", configure)
 }

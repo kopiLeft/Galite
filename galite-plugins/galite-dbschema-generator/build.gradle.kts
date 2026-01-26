@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,7 @@ plugins {
 
 dependencies {
   api("org.reflections", "reflections", "0.10.2")
-  implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.9.0")
+  implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.9.20")
   // Exposed dependency
   implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
   implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)

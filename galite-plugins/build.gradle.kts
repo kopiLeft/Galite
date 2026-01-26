@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,17 +15,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import com.vanniktech.maven.publish.GradlePlugin
+import com.vanniktech.maven.publish.JavadocJar
 import org.kopi.galite.gradle.configureMavenCentralPom
 
 plugins {
-  id("maven-publish")
-  id("signing")
+  id("com.vanniktech.maven.publish")
 }
 
 subprojects {
-  apply(plugin = "java-library")
-  apply(plugin = "maven-publish")
-  apply(plugin = "signing")
+  apply(plugin = "java-gradle-plugin")
+  apply(plugin = "com.vanniktech.maven.publish")
 
   dependencies {
     if (project.name != "galite-common-plugin") {
@@ -33,38 +33,15 @@ subprojects {
     }
   }
 
-  java {
-    withJavadocJar()
-    withSourcesJar()
-  }
+  mavenPublishing {
+    publishToMavenCentral(automaticRelease = true)
 
-  project.plugins.withId("java-gradle-plugin") {
-    publishing {
-      publications {
-        create<MavenPublication>("pluginMaven") {
-          artifactId = project.name
-          pom {
-            configureMavenCentralPom(project)
-          }
-          signing {
-            useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PRIVATE_PASSWORD"))
-            sign(publishing.publications["pluginMaven"])
-          }
-        }
-      }
-    }
-    afterEvaluate {
-      publishing {
-        publications.named<MavenPublication>("PluginMarkerMaven") {
-          pom {
-            configureMavenCentralPom(project)
-          }
-        }
-        signing {
-          useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PRIVATE_PASSWORD"))
-          sign(publishing.publications["PluginMarkerMaven"])
-        }
-      }
+    signAllPublications()
+
+    configure(GradlePlugin(javadocJar = JavadocJar.Javadoc(), sourcesJar = true))
+
+    pom {
+      configureMavenCentralPom(project)
     }
   }
 }
