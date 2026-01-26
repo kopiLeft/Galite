@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,15 +15,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.kopi.galite.gradle._java
-import org.kopi.galite.gradle._publishing
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
 import org.kopi.galite.gradle.configureMavenCentralPom
-import org.kopi.galite.gradle.signPublication
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
-  id("maven-publish")
-  id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+  id("org.jetbrains.kotlin.jvm") version "1.9.20" apply false
+  id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
 val releasableProjects = listOf(
@@ -67,35 +65,15 @@ subprojects {
 allprojects {
   if (this.name in releasableProjects) {
     apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
-    _java {
-      withJavadocJar()
-      withSourcesJar()
-    }
+    apply(plugin = "com.vanniktech.maven.publish")
 
-    _publishing {
-      publications {
-        create<MavenPublication>("Galite") {
-          artifactId = project.name
-          from(project.components["java"])
-          pom {
-            configureMavenCentralPom(project)
-          }
-          signPublication(project)
-        }
+    mavenPublishing {
+      publishToMavenCentral(automaticRelease = true)
+      signAllPublications()
+      configure(JavaLibrary(sourcesJar = true, javadocJar = JavadocJar.Javadoc()))
+      pom {
+        configureMavenCentralPom(project)
       }
-    }
-  }
-}
-
-nexusPublishing {
-  repositories {
-    sonatype {
-      nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-      snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-      username.set(System.getenv("SONATYPE_USERNAME"))
-      password.set(System.getenv("SONATYPE_PASSWORD"))
     }
   }
 }

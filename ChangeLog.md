@@ -2,6 +2,7 @@
 ## What's Changed
 * Rename galite-plugins modules and fix galite-dbschema-generator plugin by @mgrati in [#655](https://github.com/kopiLeft/Galite/pull/655)
 * Clear leaked database connections when closing tabs without explicity logging out of Galite web applications by @mgrati in [#656](https://github.com/kopiLeft/Galite/pull/656)
+* Migrate to Vanniktech Maven Publish plugin to support the new Maven Central publication scheme by @mgrati in [#657](https://github.com/kopiLeft/Galite/pull/657)
 
 **Full Changelog**: [1.5.12 ... 1.5.13](https://github.com/kopiLeft/Galite/compare/1.5.12...1.5.13)
 
