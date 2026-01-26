@@ -129,25 +129,25 @@ object DBSchemaGenerator {
       is JavaLocalDateColumnType     -> "date(\"${column.name}\")"
       is JavaLocalTimeColumnType     -> "time(\"${column.name}\")"
       is JavaLocalDateTimeColumnType -> "datetime(\"${column.name}\")"
-      is BooleanColumnType -> "bool(\"${column.name}\")"
-      is IntegerColumnType -> "integer(\"${column.name}\")"
-      is LongColumnType  -> "long(\"${column.name}\")"
-      is ByteColumnType    -> "byte(\"${column.name}\")"
-      is ShortColumnType   -> "short(\"${column.name}\")"
-      is AutoIncColumnType     -> when(type.delegate) {
-        is LongColumnType            -> "long(\"${column.name}\").autoIncrement()"
-        else                         -> "integer(\"${column.name}\").autoIncrement()"
+      is BooleanColumnType           -> "bool(\"${column.name}\")"
+      is IntegerColumnType           -> "integer(\"${column.name}\")"
+      is LongColumnType              -> "long(\"${column.name}\")"
+      is ByteColumnType              -> "byte(\"${column.name}\")"
+      is ShortColumnType             -> "short(\"${column.name}\")"
+      is AutoIncColumnType           -> when (type.delegate) {
+        is LongColumnType -> "long(\"${column.name}\").autoIncrement()"
+        else              -> "integer(\"${column.name}\").autoIncrement()"
       }
-      is DecimalColumnType     -> "decimal(\"${column.name}\", ${type.precision}, ${type.scale})"
+      is DecimalColumnType           -> "decimal(\"${column.name}\", ${type.precision}, ${type.scale})"
       is BlobColumnType,
       is BinaryColumnType,
-      is BasicBinaryColumnType -> "blob(\"${column.name}\")"
-      is DoubleColumnType  -> "double(\"${column.name}\")"
-      is UUIDColumnType    -> "uuid(\"${column.name}\")"
-      is VarCharColumnType -> "varchar(\"${column.name}\", ${type.colLength})"
-      is TextColumnType    -> "text(\"${column.name}\")"
-      is CharColumnType    -> "char(\"${column.name}\", ${type.colLength})"
-      else                 -> "!!! FIXME !!!"
+      is BasicBinaryColumnType       -> "blob(\"${column.name}\")"
+      is DoubleColumnType            -> "double(\"${column.name}\")"
+      is UUIDColumnType              -> "uuid(\"${column.name}\")"
+      is VarCharColumnType           -> "varchar(\"${column.name}\", ${type.colLength})"
+      is TextColumnType              -> "text(\"${column.name}\")"
+      is CharacterColumnType         -> "char(\"${column.name}\")"
+      else                           -> "!!! FIXME !!!"
     }
     // Check nullable
     if (type.nullable) {
