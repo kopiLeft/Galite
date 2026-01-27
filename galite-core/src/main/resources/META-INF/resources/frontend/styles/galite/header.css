@@ -28,7 +28,7 @@
 
 #welcome_container {
     min-width: 270px;
-    max-width: 300px;
+    max-width: 360px;
     --lumo-font-size-m: 0.700rem;
 }
 
@@ -50,31 +50,9 @@
 }
 
 /**
- * Change the dots' style
- */
-#module_list::part(overflow-button) {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.800rem;
-    border-right: 1px solid #dadada;
-    border-radius: 0;
-    height: 61px;
-    background-color: var(--lumo-tint);
-    box-sizing: border-box;
-}
-
-/**
- * Change the dots' style when hovered
- */
-::part(overflow-button):hover {
-    background-color: var(--background-hover-color);
-}
-
-/**
  * Modules style
  */
-:host([theme~="module_list"]) [part~="menu-bar-button"] {
+vaadin-menu-bar-button[theme~="module_list"] {
     --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
@@ -93,22 +71,20 @@
     min-width: var(--lumo-size-m)
 }
 
-#welcome ::part(menu-bar-button) {
+#welcome vaadin-menu-bar-button {
     height : 60px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     background: var(--lumo-tint);
 }
 
-#welcome ::part(menu-bar-button):hover {
+#welcome vaadin-menu-bar-button:hover {
     background-color: var(--background-hover-color);
 }
 
 /**
  * modules submenu style
  */
-.vaadin-menu-item, .column-item-selector > .checkbox-selector {
-    color: #8f8f8f;
-    width: 100%;
+vaadin-menu-bar-item, .column-item-selector > .checkbox-selector {
     font-family: Arial, sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -127,11 +103,11 @@
     cursor: pointer;
 }
 
-#header ::part(menu-bar-button) {
+#header vaadin-menu-bar-button {
     cursor: pointer;
 }
 
-#header #welcome ::part(menu-bar-button) {
+#header #welcome vaadin-menu-bar-button {
     min-width: 0;
     padding: 18px 10px;
 }
