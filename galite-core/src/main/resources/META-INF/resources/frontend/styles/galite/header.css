@@ -63,7 +63,7 @@ vaadin-menu-bar-button[theme~="module_list"] {
     background: var(--lumo-tint);
 }
 
-:host([theme~="module_list"]) [part~="menu-bar-button"]:hover {
+#module_list vaadin-menu-bar-button:hover {
     background-color: var(--background-hover-color);
 }
 

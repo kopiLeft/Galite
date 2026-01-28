@@ -53,7 +53,7 @@
     cursor: pointer;
 }
 
-::part(k-actor):hover {
+#actors vaadin-button:hover {
     background: var(--actor-hover-color);
     cursor: pointer;
 }
@@ -162,3 +162,7 @@ vaadin-menu-item:not(:last-child) {
     font-size: 1em !important;
 }
 
+vaadin-button.actors-rootNavigationItem {
+    color: rgb(255, 255, 255);
+    background: var(--background-color);
+}
