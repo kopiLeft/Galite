@@ -546,8 +546,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.saveBlock.triggerCommand()
 
     // POSTUPD : click on list command then save command and assert that POSTUPD trigger show an Information Notification
-    // !! FIXME !! mgrati 20231213 : Generates test error when replacing Galite connection to use HikariCP
-    // expectInformationNotification("POSTUPD Trigger")
+    expectInformationNotification("POSTUPD Trigger")
 
     transaction {
       assertEquals("PREUPD Trigger", TestTriggers.selectAll().last()[TestTriggers.UPD])
