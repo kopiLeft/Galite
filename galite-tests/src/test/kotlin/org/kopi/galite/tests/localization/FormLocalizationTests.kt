@@ -20,7 +20,6 @@ import java.util.Locale
 
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.streams.toList
 
 import org.junit.After
 import org.junit.Before
@@ -39,6 +38,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.Icon as VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import org.junit.Ignore
 
@@ -204,7 +204,6 @@ class FormLocalTests : GaliteVUITestBase() {
     assertEquals(secondCode, items[1])
   }
 
-  @Ignore // !! FIXME !! mgrati 20231213 : notice generates test error when replacing Galite connection to use HikariCP
   @Test
   fun `test extern list type`() {
     val localizationList = localizationManager
@@ -213,7 +212,7 @@ class FormLocalTests : GaliteVUITestBase() {
     val trainingName = localizationList.getColumnTitle("Name")
 
     val trainingField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[2]
-    val autofill = trainingField._get<IronIcon> {}
+    val autofill = trainingField._get<VaadinIcon> {}
 
     autofill._clickAndWait(500)
 
@@ -230,7 +229,6 @@ class FormLocalTests : GaliteVUITestBase() {
     assertEquals(trainingName, titles[1])
   }
 
-  @Ignore // !! FIXME !! mgrati 20231213 : notice generates test error when replacing Galite connection to use HikariCP
   @Test
   fun `test intern list type`() {
     val localizationList = localizationManager
@@ -239,7 +237,7 @@ class FormLocalTests : GaliteVUITestBase() {
     val category = localizationList.getColumnTitle("type")
 
     val categoryField = _find<VerticalLayout> { classes = "k-block" }[0]._find<TextField> { classes = "k-textfield" }[4]
-    val autofill = categoryField._get<IronIcon> {}
+    val autofill = categoryField._get<VaadinIcon> {}
 
     autofill._clickAndWait(500)
 

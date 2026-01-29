@@ -63,7 +63,6 @@ class SimpleBlockTests: GaliteVUITestBase() {
     ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
-  @Ignore
   @Test
   fun `test field's values in simple-block are sent to the model`() {
     // Open the form

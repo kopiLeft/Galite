@@ -183,7 +183,6 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
    * click on queryMove commands,
    * check that first and second block contains data
    */
-  @Ignore
   @Test
   fun `test queryMove command`() {
     multipleForm.query.triggerCommand()
@@ -196,11 +195,11 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     val grid = _get<DListDialog>()._get<ListTable>()
 
     grid.expect(arrayOf(
-      arrayOf("Center 1".asDiv(), "training 1".asDiv(), "Java".asDiv(), "1.149,24000".asDiv(), "yes".asDiv(), "informations training 1".asDiv()),
-      arrayOf("2".asDiv(), "training 2".asDiv(), "Galite".asDiv(), "219,60000".asDiv(), "yes".asDiv(), "informations training 2".asDiv()),
-      arrayOf("3".asDiv(), "training 3".asDiv(), "Kotlin".asDiv(), "146,90000".asDiv(), "yes".asDiv(), "informations training 3".asDiv()),
-      arrayOf("4".asDiv(), "training 4".asDiv(), "Galite".asDiv(), "3.129,70000".asDiv(), "yes".asDiv(), "informations training 4".asDiv()),
-      )
+      arrayOf("1", "training 1", "Java", "1.149,24000", "yes", "informations training 1"),
+      arrayOf("2", "training 2", "Galite", "219,60000", "yes", "informations training 2"),
+      arrayOf("3", "training 3", "Kotlin", "146,90000", "yes", "informations training 3"),
+      arrayOf("4", "training 4", "Galite", "3.129,70000", "yes", "informations training 4"),
+    )
     )
 
     // Choose third row
@@ -221,7 +220,6 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     }
   }
 
-  @Ignore
   @Test
   fun `test add command`() {
     val form = MultipleBlockForm()

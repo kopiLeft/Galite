@@ -35,9 +35,10 @@ import com.github.mvysny.kaributesting.v10._text
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.Icon as VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 import org.jetbrains.exposed.sql.selectAll
@@ -244,7 +245,7 @@ class FieldsTests : GaliteVUITestBase() {
 
     field.focus()
 
-    val icon = (field as Component)._get<Icon> {  }
+    val icon = (field as Component)._get<VaadinIcon> {  }
 
     icon._clickAndWait(500)
 

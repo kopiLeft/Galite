@@ -61,7 +61,6 @@ class MultipleBlockTests: GaliteVUITestBase() {
     ApplicationContext.getDBConnection()?.poolConnection?.close()
   }
 
-  @Ignore
   @Test
   fun `test multiple-block data is sent to model after going to next record`() {
     // Open client form
