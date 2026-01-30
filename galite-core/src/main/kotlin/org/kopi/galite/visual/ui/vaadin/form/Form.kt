@@ -180,7 +180,7 @@ class Form(val pageCount: Int, val titles: List<String>) : Div(), PositionPanelL
     pages[i]!!.isVisible = true
     selectPage(i)
     if (tabPanel != null) {
-      tabPanel!!.getComponentAt(currentPage).element.classList.add("selected-tab")
+      tabPanel!!.getTabAt(currentPage).element.classList.add("selected-tab")
     }
   }
 

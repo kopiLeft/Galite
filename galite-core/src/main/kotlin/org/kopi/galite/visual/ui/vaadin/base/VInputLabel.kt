@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.base
 
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.NativeLabel
 
 /**
  * An input label component.
  */
-class VInputLabel(text: String? = "") : Label(text) {
+class VInputLabel(text: String? = "") : NativeLabel(text) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

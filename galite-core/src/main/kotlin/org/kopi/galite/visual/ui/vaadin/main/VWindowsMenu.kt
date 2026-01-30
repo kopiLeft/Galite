@@ -21,7 +21,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.NativeLabel
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -38,7 +38,7 @@ class VWindowsMenu : Dialog(), HasStyle {
 
   private val items = VerticalLayout()
   private val windowsItemsMap = mutableMapOf<Component, VWindowsMenuItem>()
-  private val headerText = Label()
+  private val headerText = NativeLabel()
 
   init {
     // Make sure that CSS styles specified for the default Menu classes

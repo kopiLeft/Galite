@@ -37,7 +37,7 @@ import org.kopi.galite.visual.VlibProperties
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.ItemClickEvent
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.NativeLabel
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
@@ -59,7 +59,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
   private var tree = Tree(model.root, model.isNoEdit(), model.isLocalised)
   private var inputDialog: PopupWindow? = null
   private lateinit var editTextField: TextField
-  private var errorLabel: Label? = null
+  private var errorLabel: NativeLabel? = null
   private var newItem = false
   private var localisation = false
 
@@ -305,7 +305,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     editTextField = TextField("")
     //editTextField.setWidth(180, Unit.PIXELS);
     editTextField.className = Styles.TEXT_INPUT
-    errorLabel = Label(MessageCode.getMessage("VIS-00020", getModel()!!.getTitle()))
+    errorLabel = NativeLabel(MessageCode.getMessage("VIS-00020", getModel()!!.getTitle()))
     errorLabel!!.isVisible = false
     errorLabel!!.addClassName("notificationlabel")
     popupContent.add(errorLabel)
