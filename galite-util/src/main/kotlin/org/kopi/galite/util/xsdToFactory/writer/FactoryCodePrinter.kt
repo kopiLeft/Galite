@@ -221,7 +221,7 @@ class FactoryCodePrinter: Constants {
     emit("   *", true)
     emit("   * This is a complex type.", true)
     emit("   *", true)
-    classFactory.attributes.forEach{ emit("   * @param ${it.name}", true) }
+    classFactory.attributes.forEach { emit("   * @param ${if (it.isList) "${it.name}Array" else it.name}", true) }
     emit("   * @return A new `${classFactory.javaPackage}` XML instance", true)
     emit("   */", true)
   }
