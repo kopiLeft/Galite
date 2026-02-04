@@ -20,6 +20,7 @@ package org.kopi.galite.util.xsdToFactory.writer
 
 import java.io.IOException
 import java.io.Writer
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.nio.charset.Charset
 
@@ -41,6 +42,7 @@ class FactoryCodePrinter: Constants {
 
   /**
    * Prints the factory code.
+   *
    * @param factory The Factory object to print.
    * @param writer The Writer object to write the generated code.
    * @param getAbstract If true, includes abstract types.
@@ -51,7 +53,8 @@ class FactoryCodePrinter: Constants {
   fun print(factory: Factory,
             writer: Writer?,
             getAbstract: Boolean,
-            keepEmptyStrings: Boolean) {
+            keepEmptyStrings: Boolean)
+  {
     this.writer = writer
 
     extractClasseAttributes(factory, getAbstract)
@@ -63,6 +66,7 @@ class FactoryCodePrinter: Constants {
 
   /**
    * Extracts class attributes from the factory schema.
+   *
    * @param factory The Factory object of the schema.
    * @param getAbstract If true, includes abstract types.
    */
@@ -77,54 +81,85 @@ class FactoryCodePrinter: Constants {
 
       if (properties.isNotEmpty()) {
         val classeFactory = ClassFactory(className = schemaType.shortJavaName,
-                                         returnType = schemaType.fullJavaName.split(".").last().replace('$', '.'),
-                                         hasChoiceBloc = hasChoiceBloc(schemaType),
+                                         hasChoiceElement = containsChoiceElement(schemaType),
                                          firstLigneComment = getFirstLigneComment(schemaType),
                                          javaPackage = schemaType.fullJavaName.replace('$', '.'))
 
-        properties.forEach { propertie ->
-          val attributeName = NameUtil.lowerCamelCase(propertie.javaPropertyName).nonKotlinKeyword()
-          val comment = propertie.name.localPart + (if (propertie.isAttribute) " attribute"
-            else " element" + (if (propertie.extendsJavaArray()) " Array" else ""))
+        properties.forEach { property ->
+          val attributeType = property.type.getKotlinType()
+          val attribute = Attribute(name = NameUtil.lowerCamelCase(property.javaPropertyName).nonKotlinKeyword(),
+                                    type = attributeType,
+                                    isList = property.extendsJavaArray(),
+                                    defaultValue = getDefaultValue(attributeType, property.defaultValue?.stringValue),
+                                    isElement = !property.isAttribute,
+                                    isReserved = Utils.isKotlinReservedWord(NameUtil.lowerCamelCase(property.javaPropertyName)),
+                                    isCalendarAttribute = property.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
+                                    required = property.isRequired(),
+                                    commentName = property.getAttributeComment(),
+                                    simpleType = property.type.getAttributeSimpleType(),
+                                    hasStringEnumValues = property.type.isSimpleType && property.type.hasStringEnumValues())
 
-          val attribute = Attribute(name = attributeName,
-                                    type = getKotlinTypeForProperty(propertie.type),
-                                    isList = propertie.extendsJavaArray(),
-                                    defaultValue = propertie.defaultValue?.stringValue ?: "null",
-                                    isElement = !propertie.isAttribute,
-                                    isReserved = Utils.isKotlinReservedWord(NameUtil.lowerCamelCase(propertie.javaPropertyName)),
-                                    isCalendarAttribute = propertie.javaTypeCode == SchemaProperty.JAVA_CALENDAR,
-                                    Required = if (!propertie.isAttribute) propertie.minOccurs != BigInteger.ZERO
-                                      else !propertie.extendsJavaOption(),
-                                    commentName = "// $comment",
-                                    simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
-                                      propertie.type.fullJavaName.replace("$", ".") else "",
-                                    hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
-
-          if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
-            attribute.defaultValue = getDefaultBigDecimal(attribute.defaultValue)
           classeFactory.attributes.add(attribute)
         }
         classesFactory.add(classeFactory)
-        if (classeFactory.hasChoiceBloc) importFactory.addAll(
-          listOf("org.apache.xmlbeans.XmlObject",
-          classeFactory.javaPackage.substringBeforeLast('.')))
+        if (classeFactory.hasChoiceElement) {
+          importFactory.add("org.apache.xmlbeans.XmlObject")
+          importFactory.add(classeFactory.javaPackage.substringBeforeLast('.'))
+        }
       }
     }
   }
 
   /**
-   * Converts a default value to a corresponding BigDecimal constant.
+   * Get the representation of a default value according to its type.
    *
+   * @param type The attribut type.
    * @param default The default value as a string.
-   * @return The BigDecimal representation of the default value.
+   *
+   * @return The representation of the default value.
    */
-  private fun getDefaultBigDecimal(default: String): String {
-    return when (default) {
-      "0" -> "BigDecimal.ZERO"
-      "1" -> "BigDecimal.ONE"
-      else -> "BigDecimal($default)"
+  private fun getDefaultValue(type:String, default: String?): String {
+    return default?.let {
+      when (type) {
+        String::class.java.simpleName -> "\"$it\""
+        BigDecimal::class.java.simpleName -> when (it) {
+          "0" -> "BigDecimal.ZERO"
+          "1" -> "BigDecimal.ONE"
+          else -> "BigDecimal(\"$it\")"
+        }
+        else -> it
+      }
+    } ?: "null"
+  }
+
+  /**
+   * Gets the full java class name of a schema type.
+   */
+  private fun SchemaType.getAttributeSimpleType(): String {
+    return if (this.isSimpleType && !this.fullJavaName.startsWith("org.apache.xmlbeans"))
+      this.fullJavaName.replace("$", ".")
+    else
+      ""
+  }
+
+  /**
+   * Check if a schema element is required
+   */
+  private fun SchemaProperty.isRequired(): Boolean {
+    return if (!this.isAttribute) this.minOccurs != BigInteger.ZERO else !this.extendsJavaOption()
+  }
+
+  /**
+   * Creates a comment for the schema attribute.
+   */
+  private fun SchemaProperty.getAttributeComment(): String {
+    val propertyTypeComment = if (this.isAttribute) {
+      "attribute"
+    } else {
+      "element${if (this.extendsJavaArray()) " Array" else ""}"
     }
+
+    return "// ${this.name.localPart} $propertyTypeComment"
   }
 
   /**
@@ -133,7 +168,7 @@ class FactoryCodePrinter: Constants {
    * @param schemaType The schema type to check.
    * @return True if the schema type contains a choice block, false otherwise.
    */
-  private fun hasChoiceBloc(schemaType: SchemaType): Boolean {
+  private fun containsChoiceElement(schemaType: SchemaType): Boolean {
     return containsChoice(schemaType.contentModel)
   }
 
@@ -256,7 +291,7 @@ class FactoryCodePrinter: Constants {
         attribute.isReserved && attribute.isList -> parameterName.substring(1)
         else -> parameterName
       }
-      if(attribute.Required) {
+      if (attribute.required) {
         emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
       } else {
         if (attribute.type != String::class.java.simpleName || attribute.isList || keepEmptyStrings) {
@@ -289,7 +324,7 @@ class FactoryCodePrinter: Constants {
       isArray -> "Array<$type>"
       else -> type
     }
-    val nullability = if (!Required) "? = $defaultValue" else ""
+    val nullability = if (!required) "? = $defaultValue" else ""
     val suffix = if (index == attributesSize - 1) ")" else ","
 
     return "$baseType$nullability$suffix"
@@ -329,15 +364,25 @@ class FactoryCodePrinter: Constants {
     emit("   *", true)
     emit("   * This is a complex type.", true)
     emit("   *", true)
-    emit("   * @param ${classFactory.className.decapitalize()}s", true)
+    emit("   * @param ${classFactory.className.replaceFirstChar { it.lowercase() }}s", true)
     emit("   * @return A new `${classFactory.javaPackage}` XML instance", true)
     emit("   */", true)
-    emit("${indentation(1)}fun create${classFactory.className}(${classFactory.className.decapitalize()}s: Array<XmlObject>): ${classFactory.className}Document.${classFactory.className} {", true)
-    emit("${indentation(2)}val new${classFactory.className} = ${classFactory.className}Document.${classFactory.className}.Factory.newInstance()\n", true)
-    emit("${indentation(2)}${classFactory.className.decapitalize()}s.forEach { ${classFactory.className.decapitalize()} ->", true)
-    emit("${indentation(3)}when(${classFactory.className.decapitalize()}) {", true)
+    emit(indentation(1) +
+             "fun create${classFactory.className}(${classFactory.className.replaceFirstChar { it.lowercase() }}s: Array<XmlObject>): " +
+             "${classFactory.className}Document.${classFactory.className} {",
+         true)
+    emit("${indentation(2)}val new${classFactory.className}" +
+             " = ${classFactory.className}Document.${classFactory.className}.Factory.newInstance()\n",
+         true)
+    emit("${indentation(2)}${classFactory.className.replaceFirstChar { it.lowercase() }}s.forEach { " +
+             "${classFactory.className.replaceFirstChar { it.lowercase() }} ->",
+         true)
+    emit("${indentation(3)}when(${classFactory.className.replaceFirstChar { it.lowercase() }}) {", true)
     classFactory.attributes.forEach { attribute ->
-      emit("${indentation(4)}is ${attribute.type}${" ".repeat((40 - attribute.type.length).absoluteValue)}-> new${classFactory.className}.add(${attribute.name} = ${classFactory.className.decapitalize()})", true)
+      emit("${indentation(4)}is ${attribute.type}${" ".repeat((40 - attribute.type.length).absoluteValue)}-> " +
+               "new${classFactory.className}.add(${attribute.name}" +
+               " = ${classFactory.className.replaceFirstChar { it.lowercase() }})",
+           true)
     }
     emit("${indentation(3)}}", true)
     emit("${indentation(2)}}\n", true)
@@ -381,78 +426,53 @@ class FactoryCodePrinter: Constants {
   }
 
   /**
-   * Get the kotlin type of an xmlType entered as a string.
+   * Get the kotlin type of SchemaType.
    */
-  private fun getKotlinTypeForProperty(type: SchemaType): String {
-    val xmlType = if (type.fullJavaName.startsWith("org.apache.xmlbeans"))
+  private fun SchemaType.getKotlinType(): String {
+    val xmlType = if (this.fullJavaName.startsWith("org.apache.xmlbeans"))
       // If the java class name of this type starts with org.apache.xmlbeans, keep only the class name
-      type.fullJavaName.split(".").last().replace("$", ".")
-    else if (!type.isSimpleType)
+      this.fullJavaName.split(".").last().replace("$", ".")
+    else if (!this.isSimpleType)
       // If this type is not a simple type (represented by a java class), keep the java class name in full.
-      type.fullJavaName.replace("$", ".")
+      this.fullJavaName.replace("$", ".")
     else
       // Otherwise, keep the base type name
-      type.baseType.name.localPart
+      this.baseType.name.localPart
 
     return when (xmlType) {
-      "XmlDate", "date" -> {
-        importFactory.add("java.time.LocalDate")
-        "LocalDate"
-      }
-      "XmlByte", "byte" -> "Byte"
+      "XmlDate", "date"           -> { importFactory.add("java.time.LocalDate") ; "LocalDate" }
+      "XmlByte", "byte"           -> "Byte"
       "XmlHexBinary", "hexBinary" -> "ByteArray"
-      "XmlTime", "time" -> {
-        importFactory.add("java.time.LocalTime")
-        "LocalTime"
-      }
-      "XmlDateTime", "dateTime" -> {
-        importFactory.add("java.time.LocalDateTime")
-        "LocalDateTime"
-      }
-      "XmlDuration", "duration" -> {
-        importFactory.add("java.time.Duration")
-        "Duration"
-      }
-      "XmlDecimal" -> {
-        importFactory.add("java.math.BigDecimal")
-        "BigDecimal"
-      }
-      "decimal" -> {
-        val totalDigits = type.getDigits(SchemaType.FACET_TOTAL_DIGITS)
-        val fractionDigits = type.getDigits(SchemaType.FACET_FRACTION_DIGITS)
+      "XmlTime", "time"           -> { importFactory.add("java.time.LocalTime") ; "LocalTime" }
+      "XmlDateTime", "dateTime"   -> { importFactory.add("java.time.LocalDateTime") ; "LocalDateTime" }
+      "XmlDuration", "duration"   -> { importFactory.add("java.time.Duration") ; "Duration" }
+      "XmlDecimal"                -> { importFactory.add("java.math.BigDecimal") ; "BigDecimal" }
+      "decimal"                   -> {
+        val totalDigits = this.getDigits(SchemaType.FACET_TOTAL_DIGITS)
+        val fractionDigits = this.getDigits(SchemaType.FACET_FRACTION_DIGITS)
 
         if (totalDigits == null && fractionDigits == null) {
           importFactory.add("java.math.BigDecimal")
           "BigDecimal"
         } else if (fractionDigits == 0) {
           when {
-            totalDigits == null -> {
-              importFactory.add("java.math.BigDecimal")
-              "BigDecimal"
-            }
-            totalDigits <= 9 -> {
-              "Int"
-            }
-            totalDigits <= 18 -> {
-              "Long"
-            }
-            else -> {
-              importFactory.add("java.math.BigInteger")
-              "BigInteger"
-            }
+            totalDigits == null -> { importFactory.add("java.math.BigDecimal") ; "BigDecimal" }
+            totalDigits <= 9    -> { "Int" }
+            totalDigits <= 18   -> { "Long" }
+            else                -> { importFactory.add("java.math.BigInteger") ; "BigInteger" }
           }
         } else {
           importFactory.add("java.math.BigDecimal")
           "BigDecimal"
         }
       }
-      "XmlInt", "int" -> "Int"
-      "XmlString", "string" -> "String"
-      "XmlBoolean", "boolean" -> "Boolean"
-      "XmlLong", "long" -> "Long"
-      "XmlShort", "short" -> "Short"
-      "XmlDouble", "double" -> "Double"
-      else -> xmlType
+      "XmlInt", "int"             -> "Int"
+      "XmlString", "string"       -> "String"
+      "XmlBoolean", "boolean"     -> "Boolean"
+      "XmlLong", "long"           -> "Long"
+      "XmlShort", "short"         -> "Short"
+      "XmlDouble", "double"       -> "Double"
+      else                        -> xmlType
     }
   }
 
@@ -464,7 +484,7 @@ class FactoryCodePrinter: Constants {
       classesFactory.forEach {
         addCommentFunction(it)
         addBodyFunction(it, keepEmptyStrings)
-        if (it.hasChoiceBloc) {
+        if (it.hasChoiceElement) {
           addSpecificCreateFunction(it)
           addSpecificAddFunction(it)
           addSpecificSizeFunction(it)
@@ -560,7 +580,7 @@ class FactoryCodePrinter: Constants {
   private fun emit(str: String, newLine: Boolean) {
     try {
       writer!!.write(str)
-    } catch (cce: CharacterCodingException) {
+    } catch (_: CharacterCodingException) {
       writer!!.write(makeSafe(str))
     }
 
@@ -649,7 +669,7 @@ data class Attribute(var name: String,
                      var isElement: Boolean,
                      var isReserved: Boolean,
                      var isCalendarAttribute: Boolean,
-                     val Required: Boolean,
+                     val required: Boolean,
                      var commentName: String = "",
                      val simpleType: String,
                      val hasStringEnumValues: Boolean)
@@ -658,15 +678,13 @@ data class Attribute(var name: String,
  * Represents a class factory.
  *
  * @attribute className The name of the class.
- * @attribute returnType The return type of the class.
  * @attribute attributes The list of attributes of the class.
- * @attribute hasChoiceBloc Whether the class has a choice bloc.
+ * @attribute hasChoiceElement Whether the class has a choice bloc.
  * @attribute firstLigneComment The first line comment of the class.
  * @attribute javaPackage The Java package of the class.
  */
 data class ClassFactory(var className: String = "",
-                        var returnType: String = "",
                         val attributes: MutableList<Attribute> = mutableListOf(),
-                        var hasChoiceBloc: Boolean = false,
+                        var hasChoiceElement: Boolean = false,
                         var firstLigneComment: String = "",
                         var javaPackage: String = "")

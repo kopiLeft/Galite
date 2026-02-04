@@ -61,6 +61,7 @@ abstract class FactoryGeneratorTask : JavaExec() {
 
         project.javaexec {
           workingDir = project.file(src)
+          mainClass.set("org.kopi.galite.util.xsdToFactory.generator.FactoryGenerator")
           classpath = project.the<SourceSetContainer>()["main"].runtimeClasspath
           args(*argsList.toTypedArray())
         }
