@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@ import java.io.IOException
 import java.io.Writer
 import java.math.BigInteger
 import java.nio.charset.Charset
-import java.util.*
 
 import kotlin.math.absoluteValue
 
@@ -99,7 +98,7 @@ class FactoryCodePrinter: Constants {
                                       else !propertie.extendsJavaOption(),
                                     commentName = "// $comment",
                                     simpleType = if (propertie.type.isSimpleType && !propertie.type.fullJavaName.startsWith("org.apache.xmlbeans"))
-                                      propertie.type.fullJavaName.split(".").last().replace("$", ".") else "",
+                                      propertie.type.fullJavaName.replace("$", ".") else "",
                                     hasStringEnumValues = propertie.type.isSimpleType && propertie.type.hasStringEnumValues())
 
           if (attribute.type == "BigDecimal" && attribute.defaultValue != "null")
