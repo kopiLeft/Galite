@@ -259,7 +259,7 @@ class FactoryCodePrinter: Constants {
       if(attribute.Required) {
         emit("${indentation(2)}new${classFactory.className}.$attributeName = $value", true)
       } else {
-        if(!"String".equals(attribute.type) || keepEmptyStrings) {
+        if (attribute.type != String::class.java.simpleName || attribute.isList || keepEmptyStrings) {
           emit("${indentation(2)}$parameterName?.let { new${classFactory.className}.$attributeName = $value }", true)
         } else {
           emit("${indentation(2)}if (!$parameterName.isNullOrBlank()) {", true)
