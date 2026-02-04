@@ -236,11 +236,7 @@ class FactoryCodePrinter: Constants {
     classFactory.attributes.forEachIndexed { index, attribute ->
       val indent = " ".repeat(if (index == 0) 0 else functionDeclaration.length)
       val name = attribute.name + (if (attribute.isList) "Array" else "")
-      val type = (if (attribute.isList) "Array<" else "") +
-        attribute.type +
-        (if (attribute.isList) ">" else "") +
-        (if (!attribute.Required) "? = ${attribute.defaultValue}" else "") +
-        (if (index == classFactory.attributes.size-1) ")" else ",")
+      val type = attribute.writeType(index, classFactory.attributes.size)
 
       emit("$indent$name: $type  ${attribute.commentName}", true)
     }
@@ -274,6 +270,29 @@ class FactoryCodePrinter: Constants {
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
+  }
+
+  /**
+   * Write the function attribute type.
+   *
+   * @param index The index of the attribute in the attributes' list.
+   * @param attributesSize The attribute list size.
+   *
+   * @return The attribute type representation in function declaration.
+   */
+  private fun Attribute.writeType(index: Int, attributesSize: Int): String {
+    val isIntArray = this.isList && this.type == "Int"
+    val isArray = this.isList && !isIntArray
+
+    val baseType = when {
+      isIntArray -> "IntArray"
+      isArray -> "Array<$type>"
+      else -> type
+    }
+    val nullability = if (!Required) "? = $defaultValue" else ""
+    val suffix = if (index == attributesSize - 1) ")" else ","
+
+    return "$baseType$nullability$suffix"
   }
 
   /**
