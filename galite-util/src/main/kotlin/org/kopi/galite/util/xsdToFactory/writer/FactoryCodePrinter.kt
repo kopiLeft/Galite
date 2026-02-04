@@ -106,7 +106,6 @@ class FactoryCodePrinter: Constants {
           classeFactory.attributes.add(attribute)
         }
         classesFactory.add(classeFactory)
-        importFactory.add(classeFactory.javaPackage)
         if (classeFactory.hasChoiceBloc) importFactory.addAll(
           listOf("org.apache.xmlbeans.XmlObject",
           classeFactory.javaPackage.substringBeforeLast('.')))
@@ -245,14 +244,17 @@ class FactoryCodePrinter: Constants {
 
       emit("$indent$name: $type  ${attribute.commentName}", true)
     }
-    emit("${indentation(2)}: ${classFactory.className.capitalize()}", true)
+    emit("${indentation(2)}: ${classFactory.javaPackage}", true)
     emit("${indentation(1)}{", true)
-    emit("${indentation(2)}val new${classFactory.className}: ${classFactory.className} = ${classFactory.className}.Factory.newInstance()\n", true)
-    classFactory.attributes.forEach{ attribute ->
+    emit("${indentation(2)}${classFactory.writeFactoryNewInstance()}", true)
+    classFactory.attributes.forEach { attribute ->
       val parameterName = attribute.name + if (attribute.isList) "Array" else ""
       val calendar = if (attribute.isCalendarAttribute) ".toCalendar()" else ""
-      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) attribute.simpleType + ".Enum.forString($parameterName$calendar)" else "$parameterName$calendar"
-
+      val value = if (attribute.hasStringEnumValues && !attribute.simpleType.isEmpty()) {
+        attribute.simpleType + ".Enum.forString($parameterName$calendar)"
+      } else {
+        "$parameterName$calendar"
+      }
       val attributeName = when {
         attribute.isReserved && !attribute.isList -> "`${parameterName.substring(1)}`"
         attribute.isReserved && attribute.isList -> parameterName.substring(1)
@@ -272,6 +274,13 @@ class FactoryCodePrinter: Constants {
     }
     emit("\n${indentation(2)}return new${classFactory.className}", true)
     emit("${indentation(1)}}\n", true)
+  }
+
+  /**
+   * Write the factory new instance declaration.
+   */
+  private fun ClassFactory.writeFactoryNewInstance(): String {
+    return "val new${this.className}: ${this.javaPackage} = ${this.javaPackage}.Factory.newInstance()\n"
   }
 
   /**
@@ -332,7 +341,7 @@ class FactoryCodePrinter: Constants {
     }
     emit("${indentation(1)}{", true)
     classFactory.attributes.forEach { attribute ->
-      emit("${indentation(2)}${attribute.name}?.let { this.addNew${attribute.type}().set(it) }", true)
+      emit("${indentation(2)}${attribute.name}?.let { this.addNew${attribute.type.substringAfterLast(".")}().set(it) }", true)
     }
     emit("${indentation(1)}}\n", true)
   }
@@ -356,10 +365,15 @@ class FactoryCodePrinter: Constants {
    * Get the kotlin type of an xmlType entered as a string.
    */
   private fun getKotlinTypeForProperty(type: SchemaType): String {
-
-    val xmlType = if (!type.isSimpleType || type.fullJavaName.startsWith("org.apache.xmlbeans"))
+    val xmlType = if (type.fullJavaName.startsWith("org.apache.xmlbeans"))
+      // If the java class name of this type starts with org.apache.xmlbeans, keep only the class name
       type.fullJavaName.split(".").last().replace("$", ".")
-    else type.baseType.name.localPart
+    else if (!type.isSimpleType)
+      // If this type is not a simple type (represented by a java class), keep the java class name in full.
+      type.fullJavaName.replace("$", ".")
+    else
+      // Otherwise, keep the base type name
+      type.baseType.name.localPart
 
     return when (xmlType) {
       "XmlDate", "date" -> {
