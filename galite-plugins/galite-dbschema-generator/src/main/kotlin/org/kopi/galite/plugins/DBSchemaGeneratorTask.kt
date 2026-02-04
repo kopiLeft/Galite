@@ -51,7 +51,7 @@ abstract class DBSchemaGeneratorTask : JavaExec() {
       project.javaexec {
         mainClass.set("org.kopi.galite.plugins.generator.DBSchemaGenerator")
         classpath = this@DBSchemaGeneratorTask.classpath
-        args = currentArgs
+        args(*currentArgs.toTypedArray())
       }
     }
   }
