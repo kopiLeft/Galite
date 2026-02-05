@@ -123,7 +123,6 @@ class ReportTests: GaliteVUITestBase() {
     assertTrue(anchor.href.endsWith(".xls"))
   }
 
-  @Ignore
   @Test
   fun `test export PDF`() {
     // Trigger the report command

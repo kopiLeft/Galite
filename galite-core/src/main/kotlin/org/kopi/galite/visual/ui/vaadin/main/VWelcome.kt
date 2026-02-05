@@ -19,7 +19,6 @@ package org.kopi.galite.visual.ui.vaadin.main
 
 import org.kopi.galite.visual.ui.vaadin.menu.ModuleList
 
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
@@ -45,7 +44,7 @@ class VWelcome : HorizontalLayout() {
   fun setUserMenu(menu: ModuleList) {
     userMenu = menu
     menu.setId("user_menu")
-    menu.rootMenuItem!!.setIcon(IronIcons.ACCOUNT_BOX.create())
+    menu.rootMenuItem!!.setIcon(VaadinIcon.USER.create())
     addComponentAsFirst(menu)
   }
 
@@ -77,7 +76,7 @@ class VWelcome : HorizontalLayout() {
   fun setBookmarksMenu(menu: ModuleList) {
     bookmarksMenu = menu
     menu.setId("bookmarks_menu")
-    menu.rootMenuItem!!.setIcon(IronIcons.STAR.create())
+    menu.rootMenuItem!!.setIcon(VaadinIcon.STAR.create())
     addComponentAtIndex(2, menu)
   }
 
@@ -88,7 +87,7 @@ class VWelcome : HorizontalLayout() {
   fun setWorkspaceContextItemMenu(menu: ModuleList) {
     workspaceContextMenu = menu
     menu.setId("wrkcontext_menu")
-    menu.rootMenuItem!!.setIcon(IronIcons.ROOM.create())
+    menu.rootMenuItem!!.setIcon(VaadinIcon.HOME.create())
     addComponentAtIndex(3, menu)
   }
 }

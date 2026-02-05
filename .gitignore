@@ -47,10 +47,11 @@ build
 **/.npmrc
 **/frontend/generated/*
 
-# Files by VAADIN 23
+# Files by VAADIN 24
 **/vite.config.ts
 **/vite.generated.ts
 **/.pnpmfile.cjs
+**/bundles/
 
 galite-demo/galite-vaadin/frontend/index.html
 galite-demo/galite-vaadin-spring/frontend/index.html

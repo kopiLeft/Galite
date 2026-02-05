@@ -18,9 +18,9 @@
 package org.kopi.galite.visual.ui.vaadin.progress
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Paragraph
@@ -77,8 +77,8 @@ open class ProgressDialog(title: String = "", message: String = "") : Dialog(), 
     content.add(this.message)
     content.add(bar)
     content.add(percentageLabel)
-    setHeader(this.title)
-    setContent(content)
+    header.add(this.title)
+    add(content)
   }
 
   //-------------------------------------------------

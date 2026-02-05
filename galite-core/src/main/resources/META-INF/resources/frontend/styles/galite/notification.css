@@ -24,21 +24,21 @@
     font-size: 1.1em !important;
 }
 
-.k-notification-title {
-    background: #f2f2f2;
-}
-
 .k-notification-content {
     padding: 14px 47px 25px 47px;
     color: #676767;
+    padding: var(--lumo-space-l);
 }
 
 .k-notification-icon {
+    width: 2.8em;
+    height: 2.8em;
     float: left;
     color: #e37e6a;
 }
 
 .k-notification-message {
+    white-space: nowrap;
     padding: 12px 0 16px 16px;
     text-align: center;
     font-size: 1.2em !important;
@@ -59,16 +59,18 @@
     min-width: 128px;
 }
 
-:host([theme~="notification"]) [part="header"] {
-    padding: 0;
+vaadin-dialog-overlay[theme~="notification"]::part(header) {
+    background: #f2f2f2;
+    padding: 0px;
 }
 
-:host([theme~="notification"]) [part="footer"] {
+vaadin-dialog-overlay[theme~="notification"]::part(footer) {
     background: transparent;
     padding-bottom: 25px;
+    justify-content: center;
 }
 
-:host([theme~="notification"]) [part="dialog-content"] {
+vaadin-dialog-overlay[theme~="notification"]::part(content) {
     overflow-x: auto;
 }
 

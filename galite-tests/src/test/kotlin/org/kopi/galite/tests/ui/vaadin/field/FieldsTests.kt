@@ -33,12 +33,12 @@ import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._text
 
-import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.IronIcon
+import com.vaadin.flow.component.icon.Icon as VaadinIcon
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 import org.jetbrains.exposed.sql.selectAll
@@ -245,12 +245,12 @@ class FieldsTests : GaliteVUITestBase() {
 
     field.focus()
 
-    val icon = (field as Component)._get<IronIcon> {  }
+    val icon = (field as Component)._get<VaadinIcon> {  }
 
     icon._clickAndWait(500)
 
     // Check that the form is displayed id popUp
-    _expectOne<EnhancedDialog>()
+    _expectOne<Dialog>()
   }
 
   companion object {

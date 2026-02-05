@@ -26,7 +26,7 @@ class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextFi
 
   init {
     internalField.pattern = "[0-9-]*"
-    internalField.isPreventInvalidInput = true
+    internalField.allowedCharPattern = "\\d"
     internalField.element.setProperty("min", minval)
     internalField.element.setProperty("max", maxval)
     this.width = width.toString()

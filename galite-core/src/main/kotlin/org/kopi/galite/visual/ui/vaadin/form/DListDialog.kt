@@ -418,6 +418,7 @@ class DListDialog(private val model: VListDialog) : GridListDialog(), KeyNotifie
   var currentUI: UI? = null
 
   override fun onAttach(attachEvent: AttachEvent) {
+    super.onAttach(attachEvent)
     currentUI = attachEvent.ui
   }
 

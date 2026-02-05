@@ -96,6 +96,9 @@ vaadin-grid-cell-content, .k-listdialog {
 :host([theme="k-listdialog-container"]) [part="dialog-content"] {
     padding: 0;
 }
+vaadin-dialog-overlay[theme~="k-listdialog-container"]::part(content) {
+    padding: 0;
+}
 
 #k-upload-content {
     position: relative;

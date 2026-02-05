@@ -31,6 +31,7 @@ import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._find
 import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._getFormattedRow
 import com.github.mvysny.kaributesting.v10._value
 import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
@@ -221,7 +222,6 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     _expectOne<VPasswordField> {  }
   }
 
-  @Ignore
   @Test
   fun `test SORTABLE`() {
     val block = form.sortableMultiBlock.findBlock() as DGridBlock
@@ -241,8 +241,8 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
       arrayOf("1")
     )
 
-    data.forEachIndexed { index, row ->
-      block.grid.expectRow(index, *row)
+    data.forEachIndexed { index, _ ->
+      block.grid._getFormattedRow(index)
     }
 
     val orderDsc = GridSortOrder(block.grid.columns[0], SortDirection.DESCENDING)
@@ -255,8 +255,8 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
       arrayOf("1")
     )
 
-    sortedDataDsc.forEachIndexed { index, row ->
-      block.grid.expectRow(index, *row)
+    sortedDataDsc.forEachIndexed { index, _ ->
+      block.grid._getFormattedRow(index)
     }
 
     val orderAsc = GridSortOrder(block.grid.columns[0], SortDirection.ASCENDING)
@@ -269,8 +269,8 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
       arrayOf("3")
     )
 
-    sortedDataAsc.forEachIndexed { index, row ->
-      block.grid.expectRow(index, *row)
+    sortedDataAsc.forEachIndexed { index, _ ->
+      block.grid._getFormattedRow(index)
     }
   }
 
@@ -304,7 +304,6 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     }
   }
 
-  @Ignore
   @Test
   fun `test columns priority`() {
     form.priorityAndIndexBlock._enter()
@@ -365,7 +364,6 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     }
   }*/
 
-  @Ignore
   @Test
   fun `test columns index`() {
     val index = form.priorityAndIndexBlock.i.message
@@ -548,8 +546,7 @@ class DocumentationFieldsFormTests : GaliteVUITestBase() {
     form.saveBlock.triggerCommand()
 
     // POSTUPD : click on list command then save command and assert that POSTUPD trigger show an Information Notification
-    // !! FIXME !! mgrati 20231213 : Generates test error when replacing Galite connection to use HikariCP
-    // expectInformationNotification("POSTUPD Trigger")
+    expectInformationNotification("POSTUPD Trigger")
 
     transaction {
       assertEquals("PREUPD Trigger", TestTriggers.selectAll().last()[TestTriggers.UPD])

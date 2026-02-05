@@ -396,7 +396,6 @@ class CommandsFormTests : GaliteVUITestBase() {
    * fill into form fields and click on saveBlock.
    * assert that new data is saved
    */
-  @Ignore
   @Test
   fun `test saveBlock command to save new record`() {
     transaction {
@@ -550,7 +549,6 @@ class CommandsFormTests : GaliteVUITestBase() {
    * click on the list command and check that list contains only records
    * with id < 3.
    */
-  @Ignore
   @Test
   fun `test search operator command`() {
     form.Operator.triggerCommand()

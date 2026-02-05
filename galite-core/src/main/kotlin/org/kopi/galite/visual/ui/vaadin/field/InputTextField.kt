@@ -46,9 +46,10 @@ import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.KeyUpEvent
+import com.vaadin.flow.component.shared.HasPrefix
+import com.vaadin.flow.component.shared.HasSuffix
 import com.vaadin.flow.component.textfield.Autocomplete
 import com.vaadin.flow.component.textfield.HasAutocomplete
-import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.dom.DomEvent
 
@@ -61,7 +62,7 @@ import com.vaadin.flow.dom.DomEvent
 open class InputTextField<C> internal constructor(protected val internalField: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
-      HasAutocomplete, HasPrefixAndSuffix, JSKeyDownHandler
+      HasAutocomplete, HasPrefix, HasSuffix, JSKeyDownHandler
         where C: AbstractField<*, out Any>, C: Focusable<*>
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler TODO*/ {
 

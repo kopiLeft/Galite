@@ -30,12 +30,12 @@ import org.kopi.galite.visual.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.visual.ui.vaadin.form.DTextField
 import org.kopi.galite.visual.ui.vaadin.form.KeyNavigator
 
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.JsModule
-import com.vaadin.flow.component.icon.IronIcon
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 
@@ -144,7 +144,7 @@ class TextField(val model: VField,
    */
   var validator: TextValidator? = null
 
-  private var autofill: IronIcon? = null
+  private var autofill: Icon? = null
 
   internal var lastCommunicatedValue = ""
 
@@ -164,7 +164,7 @@ class TextField(val model: VField,
     inputField.isEnabled = enabled
     add(inputField)
     if (hasAutofill && type != Type.DATE) {
-      autofill = IronIcons.ARROW_DROP_DOWN.create()
+      autofill = Icon(VaadinIcon.ANGLE_DOWN)
       autofill!!.addClickListener {
         fireAutofill()
       }

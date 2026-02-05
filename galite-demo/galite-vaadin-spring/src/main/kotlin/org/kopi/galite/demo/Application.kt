@@ -28,12 +28,13 @@ import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.Registry
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import com.vaadin.flow.router.Route
+import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-open class GShopApplication : SpringBootServletInitializer()
+@ComponentScan(basePackages = ["org.kopi.galite"])
+open class GShopApplication
 
 fun main(args: Array<String>) {
   connectToDatabase()

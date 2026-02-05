@@ -537,7 +537,8 @@ class DocumentationFieldsForm : DictionaryForm(title = "Form to test fields", lo
         this.value = "PREUPD Trigger"
       }
       trigger(POSTUPD) {
-        println("POSTUPD Trigger") // block.form.notice("POSTUPD Trigger") !! FIXME !! mgrati 20231213 : notice generates test error when replacing Galite connection to use HikariCP
+        println("POSTUPD Trigger")
+        block.form.notice("POSTUPD Trigger")
       }
     }
 

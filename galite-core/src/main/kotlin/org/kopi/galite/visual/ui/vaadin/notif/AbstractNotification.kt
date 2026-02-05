@@ -19,7 +19,6 @@ package org.kopi.galite.visual.ui.vaadin.notif
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
 import org.kopi.galite.visual.ui.vaadin.base.Utils.findMainWindow
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 import org.kopi.galite.visual.ui.vaadin.common.VSpan
 import org.kopi.galite.visual.ui.vaadin.window.Window
 
@@ -28,6 +27,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.icon.Icon
@@ -45,8 +45,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  */
 
 @CssImport.Container(value = [
-  CssImport("./styles/galite/notification.css"),
-  CssImport("./styles/galite/notification.css" , themeFor = "vcf-enhanced-dialog-overlay")
+  CssImport("./styles/galite/notification.css")
 ])
 abstract class AbstractNotification(title: String?,
                                     message: String?,
@@ -64,7 +63,6 @@ abstract class AbstractNotification(title: String?,
   private var message = VSpan()
   protected var buttons = Div()
   internal var yesIsDefault = false
-  val footer = Div()
 
   init {
     element.classList.add("notification")
@@ -80,17 +78,15 @@ abstract class AbstractNotification(title: String?,
     this.title.className = "k-notification-title"
     this.content.className = "k-notification-content"
     content.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-
-    setHeader(this.title)
     setNotificationMessage(message)
+    setButtons()
+
+    header.add(this.title)
     icon.setSize("2.8em")
     icon.className = "k-notification-icon"
-    content.add(icon)
-    content.add(this.message)
-    setContent(content)
+    content.add(icon, this.message)
     footer.add(buttons)
-    setButtons()
-    setFooter(footer)
+    add(content)
   }
 
   /**

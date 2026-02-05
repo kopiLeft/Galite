@@ -39,7 +39,7 @@ class Page<T>(private var content: T) : Div() where T : Component, T : FlexCompo
 
   init {
     className = Styles.FORM_PAGE
-    content.className = Styles.FORM_PAGE_CONTENT
+    content.setClassName(Styles.FORM_PAGE_CONTENT)
     add(scrollPanel)
   }
 

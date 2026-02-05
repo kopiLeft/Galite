@@ -16,23 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-.k-popup-window~::part(dialog-content) {
+.k-popup-window~::part(content) {
     padding: 0;
 }
 
-.k-popup-window .enhanced-dialog-content .k-window {
+.k-popup-window~::part(header) {
     padding: 0;
 }
 
-.k-popup-window #overlay {
-    --_enhanced-dialog-content-padding: 0;
-}
-
-.enhanced-dialog-content .k-window {
+.k-popup-window .k-window {
     padding: 0;
 }
 
-.enhanced-dialog-content .k-window > div {
+.k-window > div {
     width: 100%;
 }
 
@@ -58,12 +54,4 @@
 
 #v-dialog-footer {
     background-color: #d9f0f8;
-}
-
-/**
- * Form Style in Popup
- */
-.enhanced-dialog-content .k-window .k-form-page {
-    max-width: calc(100vw - 70px);
-    padding: 0;
 }

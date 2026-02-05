@@ -33,7 +33,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
   CssImport("./styles/galite/wait.css"),
   CssImport("./styles/galite/wait.css" , themeFor = "vaadin-dialog-overlay")
 ])
-class WaitWindow : VerticalLayout(), ComponentEventListener<Dialog.OpenedChangeEvent<Dialog>> {
+class WaitWindow : VerticalLayout(), ComponentEventListener<Dialog.OpenedChangeEvent> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -86,7 +86,7 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<Dialog.OpenedChangeE
    */
   val isOpened: Boolean get() = popup.isOpened
 
-  override fun onComponentEvent(event: Dialog.OpenedChangeEvent<Dialog>) {
+  override fun onComponentEvent(event: Dialog.OpenedChangeEvent) {
     if(event.isOpened) {
       popup.element.style["cursor"] = "wait"
     } else {

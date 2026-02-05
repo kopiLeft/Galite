@@ -209,7 +209,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param notification The notification to be shown
    */
   protected open fun showNotification(notification: AbstractNotification) {
-    accessAndPush(currentUI) {
+    access(currentUI) {
       notification.show()
     }
   }

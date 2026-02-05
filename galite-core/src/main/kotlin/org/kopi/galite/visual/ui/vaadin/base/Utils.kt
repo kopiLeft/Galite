@@ -26,12 +26,6 @@ import org.kopi.galite.visual.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ui.vaadin.window.Window
 import org.kopi.galite.visual.VColor
 
-import com.flowingcode.vaadin.addons.ironicons.AvIcons
-import com.flowingcode.vaadin.addons.ironicons.DeviceIcons
-import com.flowingcode.vaadin.addons.ironicons.EditorIcons
-import com.flowingcode.vaadin.addons.ironicons.FileIcons
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
-import com.flowingcode.vaadin.addons.ironicons.MapsIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -302,8 +296,8 @@ object Utils : Utils() {
     pngToIconMap["expanded"] = VaadinIcon.FOLDER_OPEN_O
     pngToIconMap["expanded_p"] = VaadinIcon.FOLDER_OPEN_O
     pngToIconMap["exportCsv"] = VaadinIcon.FILE_TEXT_O
-    pngToIconMap["exportPdf"] = FileIcons.PDF
-    pngToIconMap["exportXlsx"] = FileIcons.EXCEL
+    pngToIconMap["exportPdf"] = VaadinIcon.FILE_O
+    pngToIconMap["exportXlsx"] = VaadinIcon.FILE_TABLE
     pngToIconMap["foldColumn"] = VaadinIcon.FOLDER_O
     pngToIconMap["fold"] = VaadinIcon.FOLDER_O
     pngToIconMap["formula"] = VaadinIcon.CALC
@@ -323,12 +317,12 @@ object Utils : Utils() {
     pngToIconMap["preview"] = VaadinIcon.FILE_TEXT_O
     pngToIconMap["print"] = VaadinIcon.PRINT
     pngToIconMap["quit"] = VaadinIcon.POWER_OFF
-    pngToIconMap["save"] = IronIcons.SAVE
+    pngToIconMap["save"] = VaadinIcon.SAFE
     pngToIconMap["searchop"] = VaadinIcon.SEARCH
     pngToIconMap["search"] = VaadinIcon.FILE_SEARCH
     pngToIconMap["serialquery"] = VaadinIcon.RECORDS
-    pngToIconMap["serviceoff"] = DeviceIcons.SIGNAL_CELLULAR_OFF
-    pngToIconMap["serviceon"] = DeviceIcons.SIGNAL_CELLULAR_4_BAR
+    pngToIconMap["serviceoff"] = VaadinIcon.POWER_OFF
+    pngToIconMap["serviceon"] = VaadinIcon.SIGNAL
     pngToIconMap["store"] = VaadinIcon.BUILDING_O
     pngToIconMap["suggest"] = VaadinIcon.PHONE
     pngToIconMap["timeStamp"] = VaadinIcon.CLOCK
@@ -352,7 +346,7 @@ object Utils : Utils() {
     pngToIconMap["bar_chart"] = VaadinIcon.BAR_CHART
     pngToIconMap["bkup3"] = VaadinIcon.WARNING
     pngToIconMap["bkup"] = VaadinIcon.WARNING
-    pngToIconMap["block2"] = IronIcons.UNDO
+    pngToIconMap["block2"] = VaadinIcon.REFRESH
     pngToIconMap["board"] = VaadinIcon.COGS
     pngToIconMap["bold"] = VaadinIcon.BOLD
     pngToIconMap["bomb"] = VaadinIcon.BOMB
@@ -383,8 +377,8 @@ object Utils : Utils() {
     pngToIconMap["fax"] = VaadinIcon.PHONE
     pngToIconMap["fw"] = VaadinIcon.STEP_FORWARD
     pngToIconMap["gifIcon"] = VaadinIcon.FILE_PICTURE
-    pngToIconMap["green"] = MapsIcons.MAP
-    pngToIconMap["guide"] = IronIcons.HELP
+    pngToIconMap["green"] = VaadinIcon.MAP_MARKER
+    pngToIconMap["guide"] = VaadinIcon.QUESTION_CIRCLE_O
     pngToIconMap["ident"] = VaadinIcon.ARROWS_LONG_RIGHT
     pngToIconMap["index"] = VaadinIcon.BOOK
     pngToIconMap["interrupt"] = VaadinIcon.STOP
@@ -393,23 +387,23 @@ object Utils : Utils() {
     pngToIconMap["launch"] = VaadinIcon.ARROW_RIGHT
     pngToIconMap["line_chart"] = VaadinIcon.LINE_CHART
     pngToIconMap["lock"] = VaadinIcon.LOCK
-    pngToIconMap["login"] = IronIcons.ACCOUNT_CIRCLE
+    pngToIconMap["login"] = VaadinIcon.USER
     pngToIconMap["moneycheck"] = VaadinIcon.MONEY
     pngToIconMap["money"] = VaadinIcon.MONEY
-    pngToIconMap["notice"] = IronIcons.LIGHTBULB_OUTLINE
-    pngToIconMap["ofolder"] = IronIcons.FOLDER_OPEN
-    pngToIconMap["pageFirst"] = AvIcons.SKIP_PREVIOUS
-    pngToIconMap["pageLast"] = AvIcons.SKIP_NEXT
-    pngToIconMap["pageLeft"] = AvIcons.FAST_REWIND
-    pngToIconMap["pageRight"] = AvIcons.FAST_FORWARD
+    pngToIconMap["notice"] = VaadinIcon.LIGHTBULB
+    pngToIconMap["ofolder"] = VaadinIcon.FOLDER_OPEN_O
+    pngToIconMap["pageFirst"] = VaadinIcon.ANGLE_DOUBLE_LEFT
+    pngToIconMap["pageLast"] = VaadinIcon.ANGLE_DOUBLE_RIGHT
+    pngToIconMap["pageLeft"] = VaadinIcon.ANGLE_LEFT
+    pngToIconMap["pageRight"] = VaadinIcon.ANGLE_RIGHT
     pngToIconMap["password"] = VaadinIcon.PASSWORD
     pngToIconMap["paste"] = VaadinIcon.PASTE
     pngToIconMap["phone"] = VaadinIcon.PHONE
     pngToIconMap["pie_chart"] = VaadinIcon.PIE_CHART
     pngToIconMap["printoptions"] = VaadinIcon.WRENCH
     pngToIconMap["project"] = VaadinIcon.CUBES
-    pngToIconMap["red"] = MapsIcons.MAP
-    pngToIconMap["redo"] = IronIcons.REDO
+    pngToIconMap["red"] = VaadinIcon.MAP_MARKER
+    pngToIconMap["redo"] = VaadinIcon.ROTATE_RIGHT
     pngToIconMap["refresh"] = VaadinIcon.REFRESH
     pngToIconMap["reload"] = VaadinIcon.REFRESH
     pngToIconMap["report"] = VaadinIcon.TABLE
@@ -424,17 +418,17 @@ object Utils : Utils() {
     pngToIconMap["todo"] = VaadinIcon.TASKS
     pngToIconMap["top"] = VaadinIcon.BOOK
     pngToIconMap["underline"] = VaadinIcon.UNDERLINE
-    pngToIconMap["undo"] = IronIcons.UNDO
+    pngToIconMap["undo"] = VaadinIcon.ROTATE_LEFT
     pngToIconMap["unident"] = VaadinIcon.ARROW_CIRCLE_LEFT
     pngToIconMap["unstick"] = VaadinIcon.PIN
-    pngToIconMap["update"] = EditorIcons.MODE_EDIT
+    pngToIconMap["update"] = VaadinIcon.EDIT
     pngToIconMap["users"] = VaadinIcon.USERS
     pngToIconMap["utils"] = VaadinIcon.TOOLS
     pngToIconMap["validate"] = VaadinIcon.CHECK
-    pngToIconMap["wait"] = DeviceIcons.ACCESS_TIME
-    pngToIconMap["warning"] = IronIcons.WARNING
-    pngToIconMap["window"] = IronIcons.CHEVRON_RIGHT
-    pngToIconMap["yellow"] = MapsIcons.MAP
+    pngToIconMap["wait"] = VaadinIcon.CLOCK
+    pngToIconMap["warning"] = VaadinIcon.EXCLAMATION_CIRCLE
+    pngToIconMap["window"] = VaadinIcon.CHEVRON_RIGHT
+    pngToIconMap["yellow"] = VaadinIcon.MAP_MARKER
     pngToIconMap["zoomheight"] = VaadinIcon.VAADIN_H
     pngToIconMap["zoomminus"] = VaadinIcon.SEARCH_MINUS
     pngToIconMap["zoomoptimal"] = VaadinIcon.VAADIN_H

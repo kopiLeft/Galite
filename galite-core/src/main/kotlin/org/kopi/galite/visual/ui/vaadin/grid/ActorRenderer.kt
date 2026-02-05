@@ -17,14 +17,22 @@
  */
 package org.kopi.galite.visual.ui.vaadin.grid
 
+import com.vaadin.flow.data.provider.DataKeyMapper
 import com.vaadin.flow.data.renderer.ClickableRenderer
 import com.vaadin.flow.data.renderer.Renderer
+import com.vaadin.flow.dom.Element
+import com.vaadin.flow.data.renderer.Rendering
 import com.vaadin.flow.shared.Registration
 
 /**
  * An actor field renderer that uses the actor editor field widget to display.
  */
 open class ActorRenderer(caption: String?) : ClickableRenderer<String?>, Renderer<String?>() {
+
+  override fun render(root: Element?, keyMapper: DataKeyMapper<String?>?, item: String?): Rendering<String?>? {
+    TODO("Not yet implemented")
+  }
+
   override fun addItemClickListener(listener: ClickableRenderer.ItemClickListener<String?>?): Registration {
     TODO("Not yet implemented")
   }

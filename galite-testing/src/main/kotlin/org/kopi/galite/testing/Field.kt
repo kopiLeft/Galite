@@ -52,7 +52,6 @@ import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.grid.Grid
 
 /**
@@ -127,12 +126,7 @@ private fun <T> FormField<T>.editInSimpleBlock(value: T?, mainWindow: MainWindow
                            else (value as Instant).format("yyyy-MM-dd HH:mm:ss")
     }
     editorField is BooleanField -> {
-      val checkbox: Checkbox  = if (value == true) {
-        editorField._get { classes = "true" }
-      } else {
-        editorField._get { classes = "false" }
-      }
-      checkbox._value = true
+      editorField._value = value as Boolean
     }
     else -> {
       editorField._value = value

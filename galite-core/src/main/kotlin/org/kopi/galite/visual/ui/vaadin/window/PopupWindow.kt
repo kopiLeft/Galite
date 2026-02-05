@@ -18,12 +18,12 @@
 package org.kopi.galite.visual.ui.vaadin.window
 
 import org.kopi.galite.visual.ui.vaadin.base.Styles
-import org.kopi.galite.visual.ui.vaadin.common.Dialog
 import org.kopi.galite.visual.ui.vaadin.common.VSpan
 import org.kopi.galite.visual.ui.vaadin.main.MainWindow
 
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 
 /**
  * The popup window component.
@@ -41,7 +41,7 @@ class PopupWindow(val mainWindow: MainWindow?) : Dialog(), HasStyle {
     isResizable = false
     isCloseOnOutsideClick = false
     isCloseOnEsc = false
-    addToHeader(caption)
+    header.add(caption)
   }
   //---------------------------------------------------
   // IMPLEMENTATIONS

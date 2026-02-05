@@ -14,13 +14,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-import {LitElement, html} from 'lit-element';
-import '@vaadin/vaadin-date-picker/vaadin-date-picker-light.js';
-import '@vaadin/vaadin-text-field/vaadin-text-field.js';
+import {LitElement, html} from 'lit';
+import '@vaadin/date-picker/src/vaadin-date-picker-light.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { DatePickerLightElement } from '@vaadin/vaadin-date-picker/vaadin-date-picker-light.js';
 
-class DatePickerLight extends DatePickerLightElement {
+
+const VaadinDatePickerLight = customElements.get('vaadin-date-picker-light');
+
+class DatePickerLight extends VaadinDatePickerLight {
     constructor() {
         super();
 

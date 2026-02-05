@@ -35,7 +35,7 @@ class VDecimalField(col: Int,
   : InputTextField<TextField>(TextField()) {
   init {
     internalField.pattern = "[0-9-.,]*"
-    internalField.isPreventInvalidInput = true
+    internalField.allowedCharPattern = "\\d"
     val dfs = DecimalFormatSymbols.get(MainWindow.locale)
 
     if (dfs!!.decimalSeparator != '.') {
