@@ -57,8 +57,6 @@ abstract class FactoryGeneratorTask : JavaExec() {
           ""
         ) + factory.xsdFiles.flatMap { listOf("", it) }
 
-        project.logger.lifecycle("Running FactoryGenerator for files : ${factory.xsdFiles.joinToString()}, ${factory.xsdConfigFile}")
-
         project.javaexec {
           workingDir = project.file(src)
           mainClass.set("org.kopi.galite.util.xsdToFactory.generator.FactoryGenerator")
