@@ -28,6 +28,7 @@ class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
                                                          booleanNames,
                                                          booleanCodes,
                                                          true) {
+  var focusOnFirst = true
 
   /**
    * return the name of this field

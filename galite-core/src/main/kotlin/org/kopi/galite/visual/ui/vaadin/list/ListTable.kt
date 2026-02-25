@@ -17,7 +17,12 @@
  */
 package org.kopi.galite.visual.ui.vaadin.list
 
+import java.io.ByteArrayInputStream
+
 import org.kopi.galite.visual.form.VListDialog
+import org.kopi.galite.visual.list.VImageColumn
+import org.kopi.galite.visual.ui.vaadin.base.Image
+import org.kopi.galite.visual.ui.vaadin.form.DImageField
 
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.KeyDownEvent
@@ -30,6 +35,7 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.data.value.ValueChangeMode
 
 @CssImport("./styles/galite/list.css")
@@ -52,10 +58,31 @@ class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
 
   private fun buildColumns() {
     for(col in 0 until model.getColumnCount()) {
-      addColumn {
-        it.getValueAt(col)
-      }.setHeader(Span(model.getColumnName(col)))
-              .setKey(col.toString())
+      if (model.columns[col] is VImageColumn) {
+        addColumn(
+          ComponentRenderer { item: ListDialogItem ->
+            val image = (item.getValueAt(col) as? Image)
+
+            if (image != null) {
+              image.apply {
+                element.style["outline"] = "1px solid lightgreen"
+                width = "100px"
+                height = "100px"
+                setBorder(0)
+                element.setProperty("borderStyle", "none")
+                setSrc(DImageField.DynamicImageResource(createFileName("image")) { ByteArrayInputStream(image.source) })
+              }
+              image
+            } else {
+              Image()
+            }
+          }
+        ).setHeader(Span(model.getColumnName(col))).setKey(col.toString())
+      } else {
+        addColumn {
+          it.getValueAt(col)
+        }.setHeader(Span(model.getColumnName(col))).setKey(col.toString())
+      }
     }
   }
 
@@ -66,7 +93,7 @@ class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
     val filterRow = appendHeaderRow()
 
     filterRow.also { element.classList.add("list-filter") }
-    val filterFields = this.columns.mapIndexed { _, column ->
+    val filterFields = this.columns.mapIndexed { i, column ->
       val cell = filterRow.getCell(column)
       val filterField = TextField()
       val search = Icon(VaadinIcon.SEARCH)
@@ -74,11 +101,15 @@ class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
       filterField.setWidthFull()
       filterField.suffixComponent = search
       filterField.className = "filter-text"
-      filterField.addValueChangeListener {
-        (dataProvider as ListDataProvider).refreshAll()
-      }
+      if (this.model.columns[i] !is VImageColumn) {
+        filterField.addValueChangeListener {
+          (dataProvider as ListDataProvider).refreshAll()
+        }
 
-      filterField.valueChangeMode = ValueChangeMode.EAGER
+        filterField.valueChangeMode = ValueChangeMode.EAGER
+      } else {
+        filterField.isReadOnly = true
+      }
       cell.setComponent(filterField)
       filterField
     }
@@ -122,7 +153,11 @@ class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
     width = 0
     for (row in 0 until model.count) {
       val value = model.columns[col]!!.formatObject(model.getValueAt(row, col)).toString()
-      width = width.coerceAtLeast(value.length.coerceAtLeast(model.titles[col]!!.length))
+      width = if (model.columns[col]!! is VImageColumn) {
+        model.columns[col]!!.width
+      } else {
+        width.coerceAtLeast(value.length.coerceAtLeast(model.titles[col]!!.length))
+      }
     }
     return 8 * width
   }
@@ -150,8 +185,12 @@ class ListTable(val model: VListDialog) : Grid<ListTable.ListDialogItem>() {
      * @param o The object to be formatted.
      * @return The formatted property object.
      */
-    private fun formatObject(o: Any?, col: Int): String {
-      return model.columns[col]!!.formatObject(o).toString()
+    private fun formatObject(o: Any?, col: Int): Any?{
+      return if (model.columns[col]!!.formatObject(o) is Image) {
+        model.columns[col]!!.formatObject(o)
+      } else {
+        model.columns[col]!!.formatObject(o).toString()
+      }
     }
   }
 }

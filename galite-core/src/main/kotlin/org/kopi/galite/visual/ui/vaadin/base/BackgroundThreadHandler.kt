@@ -22,137 +22,116 @@ import java.util.concurrent.ExecutionException
 import com.vaadin.flow.component.UI
 
 /**
- * Collects some utilities for background threads in a vaadin application.
+ * Utility object for managing background threads in a Vaadin application.
  *
- *
- * Note that all performed background tasks are followed by an client UI update
- * using the push mechanism incorporated with vaadin.
- *
+ * Each background task is followed by a client UI update using Vaadin's push mechanism.
  */
 object BackgroundThreadHandler {
 
+  private val uiThreadLocal = ThreadLocal<UI?>()
+
   /**
-   * Exclusive access to the UI from a background thread to perform some updates.
-   * @param command the command which accesses the UI.
+   * If a current UI context is found, directly execute the command
+   */
+  private fun useCurrentUIContext(command: () -> Unit): Boolean {
+    return UI.getCurrent()?.let { command() ; true } ?: false
+  }
+
+  /**
+   * Provides exclusive access to the UI from a background thread.
+   * @param command The command to execute, which can access the UI.
    */
   fun access(currentUI: UI? = null, command: () -> Unit) {
-    if (UI.getCurrent() != null) {
-      command()
+    if (useCurrentUIContext(command)) { return }
 
-      return
-    }
-
-    val currentUI = currentUI ?: locateUI()
-
-    if (currentUI == null) {
+    val ui = currentUI ?: locateUI()
+    if (ui == null) {
       command()
     } else {
-      currentUI.access(command)
+      ui.access(command)
     }
   }
 
   /**
-   * Exclusive access to the UI from a background thread to perform some updates.
-   * @param command the command which accesses the UI.
+   * Provides exclusive access to the UI and pushes an update.
+   * @param command The command to execute, which can access the UI.
    */
   fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
-    if (UI.getCurrent() != null) {
-      command()
+    if (useCurrentUIContext(command)) { return }
 
-      return
-    }
-
-    val currentUI = currentUI ?: locateUI()
-
-    if (currentUI == null) {
+    val ui = currentUI ?: locateUI()
+    if (ui == null) {
       command()
     } else {
-      currentUI.access {
+      ui.access {
         try {
           command()
         } finally {
-          currentUI.push()
+          ui.push()
         }
       }
     }
   }
 
   /**
-   * Exclusive access to the UI from a background thread to perform some updates.
-   *
-   * This will awaits until computation completes.
-   *
-   * This method is used when you are creating a Vaadin component from a background thread. This will wait until
-   * initialization is finished to avoid NPE later.
-   *
-   *
-   * @param command the command which accesses the UI.
+   * Provides exclusive access to the UI, waits for the command to complete, and catches execution exceptions.
+   * @param command The command to execute, which can access the UI.
    */
   fun accessAndAwait(currentUI: UI? = null, command: () -> Unit) {
-    if (UI.getCurrent() != null) {
-      command()
+    if (useCurrentUIContext(command)) { return }
 
-      return
-    }
-
-    val currentUI = currentUI ?: locateUI()
-
-    if (currentUI == null) {
+    val ui = currentUI ?: locateUI()
+    if (ui == null) {
       command()
     } else {
-      try {
-        currentUI
-          .access(command)
-          .get()
-      } catch (executionException: ExecutionException) {
-        executionException.cause?.let {
-          throw it
+      runCatching {
+        ui.access(command).get()
+      }.onFailure {
+        (it as? ExecutionException)?.cause?.let { cause ->
+          cause.printStackTrace()
+          throw cause
         }
       }
     }
   }
 
   /**
-   * Starts a task asynchronously and blocks the current thread. The lock will be released
-   * if a notify signal is send to the blocking object.
-   *
-   * @param lock      The lock object.
-   * @param command   The command which accesses the UI.
+   * Starts a task asynchronously and blocks until notified.
+   * @param lock The lock object for synchronization.
+   * @param command The command to execute, which can access the UI.
    */
   fun startAndWait(lock: Object, currentUI: UI? = null, command: () -> Unit) {
-    access(currentUI = currentUI, command = command)
-
+    access(currentUI, command)
     synchronized(lock) {
       try {
         lock.wait()
       } catch (e: InterruptedException) {
+        Thread.currentThread().interrupt()
         e.printStackTrace()
       }
     }
   }
 
   /**
-   * Starts a task asynchronously and blocks the current thread. The lock will be released
-   * if a notify signal is send to the blocking object.
-   *
-   * @param lock      The lock object.
-   * @param command   The command which accesses the UI.
+   * Starts a task asynchronously with UI access and push, blocking until notified.
+   * @param lock The lock object for synchronization.
+   * @param command The command to execute, which can access the UI.
    */
   fun startAndWaitAndPush(lock: Object, currentUI: UI? = null, command: () -> Unit) {
-    accessAndPush(currentUI = currentUI, command = command)
-
+    accessAndPush(currentUI, command)
     synchronized(lock) {
       try {
         lock.wait()
       } catch (e: InterruptedException) {
+        Thread.currentThread().interrupt()
         e.printStackTrace()
       }
     }
   }
 
   /**
-   * Releases the lock based on an object.
-   * @param lock The lock object.
+   * Notifies all threads waiting on the provided lock.
+   * @param lock The lock object to release.
    */
   fun releaseLock(lock: Object) {
     synchronized(lock) {
@@ -160,20 +139,25 @@ object BackgroundThreadHandler {
     }
   }
 
+  /**
+   * Sets the UI in a thread-local variable for later retrieval.
+   * Useful for scenarios where `UI.getCurrent()` is null.
+   * @param ui The UI instance to set.
+   */
   fun setUI(ui: UI?) {
     uiThreadLocal.set(ui)
   }
 
+  /**
+   * Forces an immediate push of the current UI.
+   * @param ui The UI instance to push.
+   */
   fun updateUI(ui: UI?) {
-    ui?.accessSynchronously {
-      ui.push()
-    }
+    ui?.accessSynchronously { ui.push() }
   }
 
+  /**
+   * Attempts to retrieve the current UI from `UI.getCurrent()` or the thread-local storage.
+   */
   fun locateUI(): UI? = UI.getCurrent() ?: uiThreadLocal.get()
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val uiThreadLocal = ThreadLocal<UI?>()
 }

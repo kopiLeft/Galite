@@ -26,5 +26,6 @@ include("galite-tests")
 include("galite-demo:galite-vaadin")
 include("galite-demo:galite-vaadin-spring")
 include("galite-plugins")
-include("galite-plugins:src:main")
-findProject(":galite-plugins:src:main")?.name = "main"
+include("galite-plugins:galite-common-plugin")
+include("galite-plugins:galite-factory-generator")
+include("galite-plugins:galite-dbschema-generator")

@@ -17,13 +17,16 @@
  */
 package org.kopi.galite.visual.ui.vaadin.common
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.html.Image
 
 /**
  * A widget that wraps image element.
  */
-class VImage : Image(), Focusable<VImage> {
+open class VImage : Image(), Focusable<VImage> {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -41,4 +44,13 @@ class VImage : Image(), Focusable<VImage> {
    */
   val isEmpty: Boolean
     get() = src == null || "" == src
+
+  /**
+   * Creates the dynamic image name.
+   * @param baseName The base name.
+   * @return The dynamic image name.
+   */
+  fun createFileName(baseName: String): String =
+    baseName + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".png"
 }
+

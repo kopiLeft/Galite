@@ -555,21 +555,21 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   class Validate : Actor(menu = FileMenu(), label = "Validate", help = "Validate form informations.", userActor = false) {
     init {
-      key = Key.F8
+      key = Key.SHIFT_F1
       icon = Icon.VALIDATE
     }
   }
 
   class Print : Actor(menu = FileMenu(), label = "Print", help = "Print report.", userActor = false) {
     init {
-      key = Key.F6
+      key = Key.SHIFT_F7
       icon = Icon.PRINT
     }
   }
 
   class PrintLabel : Actor(menu = FileMenu(), label = "Label", help = "Print labels.", userActor = false) {
     init {
-      key = Key.F6
+      key = Key.SHIFT_F7
       icon = Icon.PRINT
     }
   }
@@ -588,7 +588,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
     }
   }
 
- inner class Autofill : DefaultActor(
+  inner class Autofill : DefaultActor(
     menu = EditMenu(), label = "Standard", help = "List possible values.", command = PredefinedCommand.AUTOFILL, userActor = false) {
     init {
       key = Key.F2
@@ -621,14 +621,14 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   class SearchOperator : Actor(menu = EditMenu(), label = "Condition", help = "Change search operator.", userActor = false) {
     init {
-      key = Key.F5
+      key = Key.SHIFT_F5
       icon = Icon.SEARCH_OP
     }
   }
 
   class ChangeBlock : Actor(menu = EditMenu(), label = "Block", help = "Moves cursor to another block.", userActor = false) {
     init {
-      key = Key.F8
+      key = Key.SHIFT_F8
       icon = Icon.BLOCK
     }
   }
@@ -636,7 +636,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
   class CopyDocument :
     Actor(menu = EditMenu(), label = "Copy", help = "Provide a copy of the currently called document.", userActor = false) {
     init {
-      key = Key.F4
+      key = Key.SHIFT_F10
       icon = Icon.COPY
     }
   }
@@ -664,7 +664,7 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   class Nothing : Actor(menu = EditMenu(), label = "Nothing", help = "Select nothing.", userActor = false) {
     init {
-      key = Key.F5
+      key = Key.SHIFT_F4
       icon = Icon.NOTHING
     }
   }
@@ -706,14 +706,14 @@ abstract class Form(title: String, locale: Locale? = null) : Window(title, local
 
   class CreateReport : Actor(menu = ActionMenu(), label = "Report", help = "Create report.", userActor = false) {
     init {
-      key = Key.F8
+      key = Key.F9
       icon = Icon.REPORT
     }
   }
 
   class CreateChart : Actor(menu = ActionMenu(), label = "Chart", help = "Create chart.", userActor = false) {
     init {
-      key = Key.F9
+      key = Key.SHIFT_F9
       icon = Icon.CHART_VIEW
     }
   }

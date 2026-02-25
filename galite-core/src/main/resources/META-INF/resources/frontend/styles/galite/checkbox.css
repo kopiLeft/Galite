@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Boolean field style
+/*
+ * Boolean field style for CheckboxGroup
  */
-.true::part(checkbox), .false::part(checkbox) {
+.k-boolean-field vaadin-checkbox::part(checkbox) {
     width: 1em;
     height: 1em;
     border-radius: 50%;
@@ -27,45 +27,21 @@
     font-size: 14px !important;
 }
 
-.true::part(checkbox)::after, .false::part(checkbox)::after {
-    border-width: 0.3em 0 0 0.3em;
-    transform-origin: -1px -0.5px
-}
-
-.false::part(checkbox)::after {
-    opacity: none;
-    transform: none;
+.k-boolean-field vaadin-checkbox:nth-child(2)::part(checkbox)::after {
+    content: "✕"; /* Adds the 'x' mark to the second checkbox */
     font-size: 13px;
     font-weight: bold;
     position: absolute;
     top: 0em;
     left: 0.09em;
-    box-sizing: border-box;
-    transform-origin: 0 0;
-    border-width: 0;
-    content: "\2715";
-    display: inline-block;
-    width: 0;
-    height: 0;
     color: white;
 }
 
-.multiple .k-boolean-field-content {
-    display: flex;
-    background-color: #ffffff;
-    align-items: center;
-    justify-content: center;
+.k-boolean-field-blink {
+  animation: blinkEffect 0.3s ease-in-out 2;
 }
 
-.editor-booleanfield, .k-boolean-field {
-    --lumo-primary-color: var(--background-color);
-}
-
-.k-boolean-field-content {
-    display: table;
-    border-bottom: 1px solid #dadada;
-}
-
-.k-boolean-field-content:focus-within {
-    border-bottom: 1px solid var(--background-color);
+@keyframes blinkEffect {
+  0%, 100% { background-color: inherit; }
+  50% { background-color: #ffdddd; }
 }

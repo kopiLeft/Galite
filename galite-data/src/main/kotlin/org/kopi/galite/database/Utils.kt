@@ -19,12 +19,15 @@
 package org.kopi.galite.database
 
 import java.sql.SQLException
+import java.util.UUID
 
 import org.jetbrains.exposed.sql.NextVal
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.nextIntVal
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 class Utils {
   companion object {
@@ -41,17 +44,37 @@ class Utils {
       var seqNextVal: NextVal<Int>
 
       return try {
-        seqNextVal = (sequence ?: Sequence("${table.nameInDatabaseCase()}Id")).nextIntVal()
-
-        Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
-      } catch (e: SQLException) {
-        try {
-          seqNextVal = Sequence("${table.nameInDatabaseCase()}_${id}_seq").nextIntVal()
+        TransactionManager.current().runWithSavepoint(UUID.randomUUID()) {
+          seqNextVal = (sequence ?: Sequence("${table.nameInDatabaseCase()}Id")).nextIntVal()
 
           Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
+        }
+      } catch (e: SQLException) {
+        try {
+          TransactionManager.current().runWithSavepoint(UUID.randomUUID()) {
+            seqNextVal = Sequence("${table.nameInDatabaseCase()}_${id}_seq").nextIntVal()
+
+            Table.Dual.slice(seqNextVal).selectAll().single()[seqNextVal]
+          }
         } catch (e: SQLException) {
           throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()} : ${e.message}")
         }
+      }
+    }
+
+    /**
+     * Run a transaction block with a savepoint : allow rollback to the added savepoint
+     */
+    fun <T> Transaction.runWithSavepoint(id: UUID, block: () -> T): T {
+      val savepoint = connection.setSavepoint("SAVE_POINT_$id")
+
+      return try {
+        block()
+      } catch (e: SQLException) {
+        connection.rollback(savepoint)
+        throw e
+      } finally {
+        connection.releaseSavepoint(savepoint)
       }
     }
 

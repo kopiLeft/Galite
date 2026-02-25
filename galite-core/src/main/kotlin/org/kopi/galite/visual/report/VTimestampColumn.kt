@@ -20,6 +20,7 @@ package org.kopi.galite.visual.report
 
 import java.time.Instant
 import java.time.LocalDateTime
+import org.joda.time.DateTime
 
 import org.kopi.galite.type.format
 import org.kopi.galite.util.base.InconsistencyException
@@ -57,7 +58,11 @@ class VTimestampColumn(ident: String?,
    * 0 if the two operands are equal
    */
   override fun compareTo(object1: Any, object2: Any): Int {
-    return (object1 as Instant).compareTo(object2 as Instant)
+    return when (object1) {
+      is LocalDateTime -> object1.compareTo(object2 as LocalDateTime)
+      is DateTime -> object1.compareTo(object2 as DateTime)
+      else -> (object1 as Instant).compareTo(object2 as Instant)
+    }
   }
 
   /**

@@ -991,6 +991,8 @@ abstract class VBlock(var title: String,
     if (target == null) {
       old!!.enter()
       throw VExecFailedException()
+    } else if (target is VBooleanField) {
+      target.focusOnFirst = true
     }
     target.enter()
   }
@@ -1024,6 +1026,8 @@ abstract class VBlock(var title: String,
     if (target == null) {
       old!!.enter()
       throw VExecFailedException()
+    } else if (target is VBooleanField) {
+      target.focusOnFirst = false
     }
     target.enter()
   }
@@ -3301,7 +3305,7 @@ abstract class VBlock(var title: String,
         @Suppress("UNCHECKED_CAST")
         val column = field.lookupColumn(0) as? Column<Any?>
 
-        if (column != null) {
+        if (column != null  && result.none { it.first == column }) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
             if (field.getLargeObject(recno) != null) {
               result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readBytes()))

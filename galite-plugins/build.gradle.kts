@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,57 +15,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import com.vanniktech.maven.publish.GradlePlugin
+import com.vanniktech.maven.publish.JavadocJar
+import org.kopi.galite.gradle.configureMavenCentralPom
+
 plugins {
-  `kotlin-dsl`
-  id("java-gradle-plugin")
-//  id("maven-publish")
+  id("com.vanniktech.maven.publish")
 }
 
-version = "1.5.3"
+subprojects {
+  apply(plugin = "java-gradle-plugin")
+  apply(plugin = "com.vanniktech.maven.publish")
 
-repositories {
-  mavenCentral()
-  mavenLocal()  // If you are using local Maven repository
-}
+  dependencies {
+    if (project.name != "galite-common-plugin") {
+      api(project(":galite-plugins:galite-common-plugin"))
+    }
+  }
 
-dependencies {
-  //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", "1.0.13")
-  implementation(kotlin("stdlib"))
-  implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.5.21")
-  implementation("org.jetbrains.kotlin:kotlin-sam-with-receiver:1.5.21")
+  mavenPublishing {
+    publishToMavenCentral(automaticRelease = true)
 
-}
+    signAllPublications()
 
-gradlePlugin {
-  plugins {
-    register("customPlugin") {
-      id = "org.kopi.factoryGenerator"
-      implementationClass = "org.kopi.galite.plugin.FactoryGeneratorPlugin"
+    configure(GradlePlugin(javadocJar = JavadocJar.Javadoc(), sourcesJar = true))
+
+    pom {
+      configureMavenCentralPom(project)
     }
   }
 }
-
-/*
-publishing {
-  publications {
-    create<MavenPublication>("pluginGalite") {
-      from(components["java"])
-      groupId = "org.kopi"
-      artifactId = "factoryGenerator"
-      version = "1.5.3"
-    }
-  }
-  repositories {
-    val publishDir = System.getenv("PUBLISH_DIR")
-
-    if(publishDir != null) {
-      mavenLocal {
-        name = "KopiMaven"
-        url = uri(publishDir)
-        isAllowInsecureProtocol = true
-      }
-    }
-  }
-}
-*/

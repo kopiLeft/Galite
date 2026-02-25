@@ -1,3 +1,59 @@
+# 1.5.13
+## What's Changed
+* Rename galite-plugins modules and fix galite-dbschema-generator plugin by @mgrati in [#655](https://github.com/kopiLeft/Galite/pull/655)
+* Clear leaked database connections when closing tabs without explicity logging out of Galite web applications by @mgrati in [#656](https://github.com/kopiLeft/Galite/pull/656)
+* Migrate to Vanniktech Maven Publish plugin to support the new Maven Central publication scheme by @mgrati in [#657](https://github.com/kopiLeft/Galite/pull/657)
+
+**Full Changelog**: [1.5.12 ... 1.5.13](https://github.com/kopiLeft/Galite/compare/1.5.12...1.5.13)
+
+# 1.5.12
+## What's Changed
+* Replace dependendency ("javax.mail", "mail", "1.4") (deprecated) by ("com.sun.mail", "javax.mail", "1.6.2")
+* Fix database record insertion in Galite forms when a field is referenced more than once [APPS-02N9]
+
+**Full Changelog**: [1.5.11 ... 1.5.12](https://github.com/kopiLeft/Galite/compare/1.5.11...1.5.12)
+
+# 1.5.11
+## What's Changed
+* Fix : Fix cast error in compareTo method of reports VTimestampColumn by @mgrati in [#654](https://github.com/kopiLeft/Galite/pull/654)
+* Fix : Fix the search for table sequences when named "tablename_idcolumn_seq" by @mgrati in [#653](https://github.com/kopiLeft/Galite/pull/653)
+* Fix : Add navigation with PAGE_UP / PAGE_DOWN to the grid block lines by @mgrati in [#651](https://github.com/kopiLeft/Galite/pull/651)
+* Feat : Include UNION and UNION ALL queries to be used with type ListDomain by @mgrati in [#652](https://github.com/kopiLeft/Galite/pull/652)
+
+**Full Changelog**: [1.5.10 ... 1.5.11](https://github.com/kopiLeft/Galite/compare/1.5.10...1.5.11)
+
+# 1.5.10
+## What's Changed
+* Feat: Add a new plugin dbschema-generator that can create database structure definition for a specific database schema by @mgrati in [#649](https://github.com/kopiLeft/Galite/pull/649)
+* Fix resetting boolean fields (CheckboxGroup fields) by @mgrati in [#650](https://github.com/kopiLeft/Galite/pull/650)
+
+**Full Changelog**: [1.5.9 ... 1.5.10](https://github.com/kopiLeft/Galite/compare/1.5.9...1.5.10)
+
+# 1.5.9
+## What's Changed
+* Use Vaadin flow CheckboxGroup component for Boolean fields to simplify the field manipulation and fix the focus issues when using keyboard to browse a form's different fields by @mgrati in [#643](https://github.com/kopiLeft/Galite/pull/643)
+* Publish factory-generator plugin by @mgrati in [#647](https://github.com/kopiLeft/Galite/pull/647)
+* Allow the class 'Migration' of galite-data to use an already established Exposed connextion by @mgrati in [#648](https://github.com/kopiLeft/Galite/pull/648)
+
+**Full Changelog**: [1.5.8 ... 1.5.9](https://github.com/kopiLeft/Galite/compare/1.5.8...1.5.9)
+
+# 1.5.8
+## What's Changed
+* Fix the following issues by @mgrati in [#646](https://github.com/kopiLeft/Galite/pull/646)
+  * Do not lose database connection when refreshing a galite application navigator tab.
+  * Minimize the number of actors called by the same keyboard shortcuts.
+  * Fix the issue of the random crash observed in galite applications when trying to open a list dialog.
+* Fix calendar picker component : Force applying the changes added by the date picker component to the galite field model by @sebai-dhia in [#645](https://github.com/kopiLeft/Galite/pull/645)
+
+**Full Changelog**: [1.5.7 ... 1.5.8](https://github.com/kopiLeft/Galite/compare/1.5.7...1.5.8)
+
+# 1.5.7
+## What's Changed
+* Fix : Implement ImageHandler in Vaadin Flow to fix fatal error when loading an image list and show images on the list by @sebai-dhia in [#642](https://github.com/kopiLeft/Galite/pull/642)
+* Fix abnormal behavior of the list button and menu query in the ProductForm by @sebai-dhia in [#644](https://github.com/kopiLeft/Galite/pull/644)
+
+**Full Changelog**: [1.5.6 ... 1.5.7](https://github.com/kopiLeft/Galite/compare/1.5.6...1.5.7)
+
 # 1.5.6
 ## What's Changed
 * Fix : Allow LEFT JOIN for nullable fields with non nullable fields in Galite forms by @mgrati in [#640](https://github.com/kopiLeft/Galite/pull/640)

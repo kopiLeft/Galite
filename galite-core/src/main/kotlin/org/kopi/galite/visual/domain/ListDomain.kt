@@ -17,6 +17,7 @@
 
 package org.kopi.galite.visual.domain
 
+import org.jetbrains.exposed.sql.AbstractQuery
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Query
@@ -151,7 +152,7 @@ abstract class ListDomain<T>(width: Int? = null,
    *
    * @param query the query
    */
-  fun query(query: Query): QueryAlias {
+  fun query(query: AbstractQuery<*>): QueryAlias {
     return query.alias("syn__0__")
   }
 

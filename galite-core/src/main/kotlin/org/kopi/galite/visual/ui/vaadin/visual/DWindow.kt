@@ -30,7 +30,6 @@ import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
 import com.vaadin.flow.server.VaadinSession
 
-import org.kopi.galite.util.base.Utils.Companion.doAfter
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -38,7 +37,6 @@ import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PropertyException
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
@@ -627,13 +625,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // DATA MEMBERS
     //-----------------------------------------------------------
     private val waitIndicator = WaitWindow()
-    var delay: Long = 10
 
     //-----------------------------------------------------------
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
     /**
-     * Shows the wait indicator only if task takes more than some [delay].
+     * Shows the wait indicator.
      *
      * @param message message to show
      */
@@ -644,11 +641,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
           if (!waitIndicator.isOpened) {
             waitIndicator.show()
           }
-          doAfter(delay) {
-            access(currentUI) {
-              currentUI?.push()
-            }
-          }
+          currentUI?.push()
         }
       }
     }

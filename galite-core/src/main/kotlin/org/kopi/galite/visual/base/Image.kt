@@ -30,13 +30,13 @@ interface Image : Serializable {
    * Returns the `Image` width
    * @return The image width
    */
-  fun getWidth(): Int
+  fun getImageWidth(): Int
 
   /**
    * Returns the `Image` height
    * @return The image height
    */
-  fun getHeight(): Int
+  fun getImageHeight(): Int
 
   /**
    * Returns the `Image` description

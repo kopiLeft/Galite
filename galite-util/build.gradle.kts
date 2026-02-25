@@ -26,7 +26,7 @@ dependencies {
   implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
   // Javax dependencies
-  implementation("javax.mail", "mail", Versions.JAVAX_MAIL)
+  implementation("com.sun.mail", "javax.mail", Versions.JAVAX_MAIL)
   implementation("javax.activation", "activation", Versions.JAVAX_ACTIVATION)
   implementation("org.apache.xmlbeans", "xmlbeans", Versions.XML_BEANS)
 
