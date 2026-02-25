@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.optionGenerator
+package org.kopi.galite.util.optgen
 
 import java.io.BufferedWriter
 import java.io.File
@@ -24,16 +24,13 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.PrintWriter
 import java.io.OutputStreamWriter
+
 import org.kopi.compiler.base.CompilerMessages.Companion.NO_INPUT_FILE
-import org.kopi.galite.util.optionGenerator.definition.DefinitionFile
-import org.kopi.galite.util.optionGenerator.options.OptgenOptions
-import org.kopi.galite.util.optionGenerator.utils.OptgenError
 
 /**
  * This class is the entry point for the Message generator.
  */
-class OptgenMain
-{
+class Main {
   /**
    * Runs a compilation session.
    *
@@ -165,7 +162,7 @@ class OptgenMain
      */
     @JvmStatic
     fun main(args: Array<String>) {
-      val success = OptgenMain().run(args)
+      val success = Main().run(args)
 
       System.exit(if (success) 0 else 1)
     }

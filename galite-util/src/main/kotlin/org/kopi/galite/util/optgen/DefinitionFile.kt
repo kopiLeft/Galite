@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2024 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2024 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,16 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.optionGenerator.definition
+package org.kopi.galite.util.optgen
 
 import java.io.File
 import java.io.PrintWriter
-import java.util.*
+import java.util.Hashtable
+
 import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.input.SAXBuilder
+
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.util.optionGenerator.utils.OptgenError
 
 internal class DefinitionFile(private val sourceFile: String,
                               private val fileHeader: String?,
