@@ -2,6 +2,7 @@
 package org.kopi.galite.database
 
 import org.kopi.galite.util.base.Options
+import org.kopi.galite.util.base.Utils
 
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
@@ -92,20 +93,19 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
     get() {
       val parent = super.options
       val total = arrayOfNulls<String>(parent.size + 11)
+
       System.arraycopy(parent, 0, total, 0, parent.size)
-      total[parent.size + 0] = "  --database, -b<String>: The URL of the database"
-      total[parent.size + 1] = "  --driver, -d<String>: The JDBC driver to use to access the database"
-      total[parent.size + 2] = "  --username, -u<String>: The username for the database"
-      total[parent.size + 3] = "  --password, -p<String>: The password for the database"
-      total[parent.size + 4] = "  --lookupUserId, -U:   Lookup user ID in database? [true]"
-      total[parent.size + 5] =
-        "  --trace, -t<int>:     Set the trace level to print database queries before execution (0: none, 1: all but FETCH, 2: all) [0]"
-      total[parent.size + 6] =
-        "  --properties, -q<String>: These properties override or complete the properties stored in the database."
-      total[parent.size + 7] = "  --schema, -s<String>: The current database schema to be set."
-      total[parent.size + 8] = "  --maxRetries, -r<Int>: Set the number of maximum retries if a transaction fails."
-      total[parent.size + 9] = "  --waitMin, -n<Long>: The minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted."
-      total[parent.size + 10] = "  --waitMax, -x<Long>: The maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted (it has to be greater or equal to waitMin)."
+      total[parent.size + 0] = "  --database, -b<String>:       The URL of the database"
+      total[parent.size + 1] = "  --driver, -d<String>:         The JDBC driver to use to access the database"
+      total[parent.size + 2] = "  --username, -u<String>:       The username for the database"
+      total[parent.size + 3] = "  --password, -p<String>:       The password for the database"
+      total[parent.size + 4] = "  --lookupUserId, -U:           Lookup user ID in database? [true]"
+      total[parent.size + 5] = "  --trace, -t<int>:             Set the trace level to print database queries before execution (0: none, 1: all but FETCH, 2: all) [0]"
+      total[parent.size + 6] = "  --properties, -q<String>:     These properties override or complete the properties stored in the database."
+      total[parent.size + 7] = "  --schema, -s<String>:         The current database schema to be set."
+      total[parent.size + 8] = "  --maxRetries, -r<Int>:        Set the number of maximum retries if a transaction fails."
+      total[parent.size + 9] = "  --waitMin, -n<Long>:          The minimum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted."
+      total[parent.size + 10] = "  --waitMax, -x<Long>:          The maximum number (inclusive) of milliseconds to wait before retrying a transaction after it has aborted (it has to be greater or equal to waitMin)."
 
       return total
     }
@@ -114,7 +114,9 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
     get() = "b:d:u:p:Ut::q:s:r:n:x:" + super.shortOptions
 
   public override fun version() {
-    println("Version 2.3B released 17 September 2007")
+    val releaseInfo = Utils.readReleaseInfo()
+
+    println("Version ${releaseInfo["version"]?.toString().orEmpty()} released at ${releaseInfo["releaseDate"]}")
   }
 
   public override fun usage() {

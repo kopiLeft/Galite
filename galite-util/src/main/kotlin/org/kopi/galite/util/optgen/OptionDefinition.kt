@@ -65,7 +65,7 @@ class OptionDefinition(private val longname: String,
    *
    * @param    out        the output stream
    */
-  fun printParseArgument(out: PrintWriter) {
+  fun printJavaParseArgument(out: PrintWriter) {
     out.print("    case \'")
     out.print(shortname)
     out.println("\':")
@@ -110,7 +110,7 @@ class OptionDefinition(private val longname: String,
    *
    * @param    out        the output stream
    */
-  fun printFields(out: PrintWriter) {
+  fun printJavaFields(out: PrintWriter) {
     out.print("  public ")
     out.print(if (!isMultiple) type else "$type[]")
     out.print(" ")
@@ -133,18 +133,10 @@ class OptionDefinition(private val longname: String,
    *
    * @param    out        the output stream
    */
-  fun printUsage(out: PrintWriter) {
-    val prefix = StringBuffer("\"  --")
+  fun printJavaUsage(out: PrintWriter) {
+    val prefix = "\"  --$longname, -$shortname${argument?.let { "<$type>" }.orEmpty()}: ".padEnd(33, ' ')
 
-    prefix.append(longname)
-    prefix.append(", -")
-    prefix.append(shortname)
-    if (argument != null) {
-      prefix.append("<$type>")
-    }
-    prefix.append(": ")
-    prefix.padEnd(25, ' ')
-    out.print(prefix.toString() + (help?.replace("\"".toRegex(), "\\\\\"") ?: ""))
+    out.print(prefix + (help?.replace("\"".toRegex(), "\\\\\"") ?: ""))
     if (defaultValue != "null") {
       out.print(" [")
       out.print(defaultValue)
@@ -158,7 +150,7 @@ class OptionDefinition(private val longname: String,
    *
    * @param    out        the output stream
    */
-  fun printLongOpts(out: PrintWriter) {
+  fun printJavaLongOpts(out: PrintWriter) {
     out.print("    new LongOpt(\"")
     out.print(longname)
     out.print("\", ")
@@ -179,8 +171,6 @@ class OptionDefinition(private val longname: String,
    */
   fun printShortOption(out: PrintWriter) {
     out.print(shortname)
-    if (argument != null) {
-      if (argument.isEmpty()) out.print(":") else out.print("::")
-    }
+    argument?.let { if (it.isEmpty()) out.print(":") else out.print("::") }
   }
 }

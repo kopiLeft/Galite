@@ -18,6 +18,7 @@
 
 package org.kopi.galite.util.base
 
+import java.util.Properties
 import java.util.Timer
 import java.util.TimerTask
 
@@ -138,6 +139,18 @@ open class Utils {
      */
     fun String.nonKotlinKeyword(): String {
       return if (isKotlinReservedWord(this)) "x$this" else this
+    }
+
+    /**
+     * Read generated release info file.
+     */
+    fun readReleaseInfo(): Properties {
+      val props = Properties()
+      val stream = object {}.javaClass.getResourceAsStream("/release.properties")
+
+      props.load(stream)
+
+      return props
     }
 
     /**

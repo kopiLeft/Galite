@@ -176,7 +176,7 @@ class Main {
     try {
       val out = PrintWriter(BufferedWriter(OutputStreamWriter(FileOutputStream(outputFile), "UTF-8")))
 
-      definition.printFile(out)
+      definition.printJavaFile(out)
 
       out.flush()
       out.close()

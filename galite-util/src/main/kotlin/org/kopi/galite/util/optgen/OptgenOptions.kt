@@ -18,12 +18,11 @@
 
 package org.kopi.galite.util.optgen
 
-import java.util.Properties
-
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
 
 import org.kopi.galite.util.base.Options
+import org.kopi.galite.util.base.Utils
 
 class OptgenOptions @JvmOverloads constructor(name: String = "Optgen") : Options(name) {
   /**
@@ -42,8 +41,8 @@ class OptgenOptions @JvmOverloads constructor(name: String = "Optgen") : Options
   /**
    * Print Optgen version and release date.
    */
-  public override fun version() {
-    val releaseInfo = readReleaseInfo()
+  override fun version() {
+    val releaseInfo = Utils.readReleaseInfo()
 
     println("Version ${releaseInfo["version"]?.toString().orEmpty()} released at ${releaseInfo["releaseDate"]}")
   }
@@ -88,22 +87,6 @@ class OptgenOptions @JvmOverloads constructor(name: String = "Optgen") : Options
 
       return total
     }
-
-  // --------------------------------------------------------------------
-  // OPERATIONS
-  // --------------------------------------------------------------------
-
-  /**
-   * Read generated release info file.
-   */
-  private fun readReleaseInfo(): Properties {
-    val props = Properties()
-    val stream = object {}.javaClass.getResourceAsStream("/release.properties")
-
-    props.load(stream)
-
-    return props
-  }
 
   // --------------------------------------------------------------------
   // DATA MEMBERS

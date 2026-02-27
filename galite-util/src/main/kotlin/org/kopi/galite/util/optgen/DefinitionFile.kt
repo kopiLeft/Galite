@@ -110,6 +110,13 @@ internal class DefinitionFile(private val sourceFile: String,
     return prefix
   }
 
+  val className: String
+    get() = "$packageName.${prefix}Options"
+
+  // --------------------------------------------------------------------
+  // CHECK OPERATIONS
+  // --------------------------------------------------------------------
+
   /**
    * Checks for duplicate identifiers.
    */
@@ -128,12 +135,16 @@ internal class DefinitionFile(private val sourceFile: String,
     definitions.forEach { it.checkShortcuts(shortcuts, sourceFile) }
   }
 
+  // --------------------------------------------------------------------
+  // PRINT OPERATIONS
+  // --------------------------------------------------------------------
+
   /**
-   * Generates the option parser.
+   * Generates the option parser in a java class.
    *
    * @param    out        the output stream
    */
-  fun printFile(out: PrintWriter) {
+  fun printJavaFile(out: PrintWriter) {
     if (!fileHeader.isNullOrBlank()) {
       out.println(fileHeader)
     }
@@ -161,7 +172,7 @@ internal class DefinitionFile(private val sourceFile: String,
 
     // FIELDS
     definitions.forEach {
-      it.printFields(out)
+      it.printJavaFields(out)
     }
 
     // PROCESSOPTION
@@ -169,7 +180,7 @@ internal class DefinitionFile(private val sourceFile: String,
     out.println("  public boolean processOption(int code, Getopt g) {")
     out.println("    switch (code) {")
     definitions.forEach {
-      it.printParseArgument(out)
+      it.printJavaParseArgument(out)
     }
     out.println("    default:")
     out.println("      return super.processOption(code, g);")
@@ -186,7 +197,7 @@ internal class DefinitionFile(private val sourceFile: String,
 
     definitions.forEachIndexed { index, definition ->
       out.print("    total[parent.length + $index] = ")
-      definition.printUsage(out)
+      definition.printJavaUsage(out)
       out.println(";")
     }
 
@@ -240,14 +251,11 @@ internal class DefinitionFile(private val sourceFile: String,
     out.println("  private static final LongOpt[] LONGOPTS = {")
     definitions.forEachIndexed { index, definition ->
       if (index != 0) { out.println(",") }
-      definition.printLongOpts(out)
+      definition.printJavaLongOpts(out)
     }
     out.println()
     out.println("  };")
 
     out.println("}")
   }
-
-  val className: String
-    get() = "$packageName.${prefix}Options"
 }
