@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,10 @@
 package org.kopi.galite.plugins.common
 
 import org.gradle.api.Plugin
-
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginExtension
+
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 open class GradleExtensionsPlugin: Plugin<Project> {
 
@@ -29,5 +31,30 @@ open class GradleExtensionsPlugin: Plugin<Project> {
    */
   override fun apply(project: Project) {
     project.extensions.create("projectExtensions", GradleExtensions::class.java, project)
+  }
+
+  /**
+   * Generate a custom directory to contain generated classes and attach it to the [main] source set.
+   */
+  protected fun createGeneratedSourceSet(project: Project) {
+    val kotlinExtension = project.extensions.getByType(KotlinJvmProjectExtension::class.java)
+    val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+
+    // Java
+    javaExtension.sourceSets.getByName("main") {
+      java.srcDir(GENERATED_JAVA_DIRECTORY)
+    }
+    // Kotlin
+    kotlinExtension.sourceSets.getByName("main") {
+      kotlin.srcDir(GENERATED_KOTLIN_DIRECTORY)
+    }
+
+    project.logger.lifecycle("Attached generated sources in $GENERATED_DIRECTORY to main")
+  }
+
+  companion object {
+    const val GENERATED_DIRECTORY = "src/generated"
+    const val GENERATED_KOTLIN_DIRECTORY = "src/generated/kotlin"
+    const val GENERATED_JAVA_DIRECTORY = "src/generated/java"
   }
 }

@@ -235,7 +235,4 @@ object DBSchemaGenerator {
     )
     this.appendLine()
   }
-
-  const val GENERATED_KOTLIN_SRC = "src/generated/kotlin"
-  const val GENERATED_SRC = "src/generated"
 }

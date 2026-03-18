@@ -24,7 +24,7 @@ plugins {
 
 dependencies {
   api("org.reflections", "reflections", "0.10.2")
-  implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.9.20")
+  implementation(kotlin("gradle-plugin", "1.9.20"))
   // Exposed dependency
   implementation("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
   implementation("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)

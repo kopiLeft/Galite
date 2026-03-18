@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,4 +27,8 @@ gradlePlugin {
       implementationClass = "org.kopi.galite.plugins.common.GradleExtensionsPlugin" // The main plugin class
     }
   }
+}
+
+dependencies {
+  implementation(kotlin("gradle-plugin", "1.9.20"))
 }

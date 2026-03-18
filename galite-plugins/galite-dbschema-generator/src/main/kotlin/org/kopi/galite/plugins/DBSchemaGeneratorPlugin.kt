@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,66 +19,33 @@
 package org.kopi.galite.plugins
 
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 import org.kopi.galite.plugins.common.GradleExtensions
-import org.kopi.galite.plugins.generator.DBSchemaGenerator
 import org.kopi.galite.plugins.common.GradleExtensionsPlugin
 
 class DBSchemaGeneratorPlugin : GradleExtensionsPlugin() {
   override fun apply(project: Project) {
     super.apply(project)
 
-    val generatedSourceSet = createGeneratedSourceSet(project)
-
+    createGeneratedSourceSet(project)
     // Create and register extension
     project.extensions.create("dbSchemaGenerator", DBSchemaGeneratorExtension::class.java)
     project.tasks.apply {
       register<DBSchemaGeneratorTask>("generateDBSchemas")
       withType(KotlinCompile::class.java) {
         dependsOn("generateDBSchemas")
-        source(generatedSourceSet.allSource)
       }
       named("clean") {
         doLast {
           project.extensions.getByType<GradleExtensions>().clean(
-            project.layout.projectDirectory.dir(DBSchemaGenerator.GENERATED_SRC).asFile.path
+            project.layout.projectDirectory.dir(GENERATED_DIRECTORY).asFile.path
           )
         }
       }
     }
-  }
-
-  /**
-   * Generate a custom source set to be compiled
-   */
-  private fun createGeneratedSourceSet(project: Project): SourceSet {
-    val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
-    val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-    val mainSourceSet = javaExtension.sourceSets.getByName("main")
-    // Create a new source set named "generated"
-    val generatedSourceSet = javaExtension.sourceSets.create("generated") {
-      // Add source directory for Kotlin
-      java.srcDir(DBSchemaGenerator.GENERATED_KOTLIN_SRC)
-    }
-
-    // Configure Kotlin sources
-    kotlinExtension.sourceSets.getByName("generated").apply {
-      kotlin.srcDir(DBSchemaGenerator.GENERATED_KOTLIN_SRC)
-    }
-
-    // Set classpath dependencies
-    generatedSourceSet.compileClasspath += mainSourceSet.compileClasspath
-    generatedSourceSet.runtimeClasspath += mainSourceSet.runtimeClasspath
-
-    project.logger.lifecycle("Generated Kotlin SourceSet created: ${generatedSourceSet.name}")
-
-    return generatedSourceSet
   }
 }

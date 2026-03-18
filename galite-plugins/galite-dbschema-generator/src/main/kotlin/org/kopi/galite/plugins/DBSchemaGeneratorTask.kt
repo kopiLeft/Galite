@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@ import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.the
 
+import org.kopi.galite.plugins.common.GradleExtensionsPlugin
 import org.kopi.galite.plugins.generator.DBSchemaGenerator
 
 abstract class DBSchemaGeneratorTask : JavaExec() {
@@ -32,7 +33,7 @@ abstract class DBSchemaGeneratorTask : JavaExec() {
   }
 
   @OutputDirectory
-  val outputDirectory = project.layout.projectDirectory.dir(DBSchemaGenerator.GENERATED_KOTLIN_SRC)
+  val outputDirectory = project.layout.projectDirectory.dir(GradleExtensionsPlugin.GENERATED_KOTLIN_DIRECTORY)
 
   @TaskAction
   fun execute() {
@@ -50,7 +51,7 @@ abstract class DBSchemaGeneratorTask : JavaExec() {
       project.javaexec {
         mainClass.set("org.kopi.galite.plugins.generator.DBSchemaGenerator")
         classpath = this@DBSchemaGeneratorTask.classpath
-        args = currentArgs
+        args(*currentArgs.toTypedArray())
       }
     }
   }
