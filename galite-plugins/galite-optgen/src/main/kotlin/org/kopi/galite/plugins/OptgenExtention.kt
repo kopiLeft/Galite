@@ -18,29 +18,21 @@
 
 package org.kopi.galite.plugins
 
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.register
+import javax.inject.Inject
 
-import org.kopi.galite.plugins.common.GaliteGradleExtensions
-import org.kopi.galite.plugins.common.GradleExtensionsPlugin
+import org.gradle.api.file.FileCollection
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
+import org.gradle.work.Incremental
 
-class FactoryGeneratorPlugin : GradleExtensionsPlugin() {
-  override fun apply(project: Project) {
-    super.apply(project)
-
-    createGeneratedSourceSet(project)
-
-    project.extensions.create("factoryGenerator", FactoryGeneratorExtention::class.java)
-    project.tasks.apply {
-      register<FactoryGeneratorTask>("generateFactory")
-      named("clean") {
-        doLast {
-          project.extensions.getByType<GaliteGradleExtensions>().clean(
-            project.layout.projectDirectory.dir(GENERATED_DIRECTORY).asFile.path
-          )
-        }
-      }
-    }
-  }
+open class OptgenExtention @Inject constructor(objectFactory: ObjectFactory) {
+  @Input
+  val parameters: ListProperty<OptionParam> = objectFactory.listProperty(OptionParam::class.java)
 }
+
+data class OptionParam(@Input
+                       var release:     String,         // The release version of the program
+                       @Incremental @InputFiles
+                       var optionFiles: FileCollection) // *Options.xml files to be parsed.

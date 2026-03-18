@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,7 @@
 
 package org.kopi.galite.util.base
 
+import java.util.Properties
 import java.util.Timer
 import java.util.TimerTask
 
@@ -138,6 +139,18 @@ open class Utils {
      */
     fun String.nonKotlinKeyword(): String {
       return if (isKotlinReservedWord(this)) "x$this" else this
+    }
+
+    /**
+     * Read generated release info file.
+     */
+    fun readReleaseInfo(): Properties {
+      val props = Properties()
+      val stream = object {}.javaClass.getResourceAsStream("/release.properties")
+
+      props.load(stream)
+
+      return props
     }
 
     /**

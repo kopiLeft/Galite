@@ -24,7 +24,7 @@ import org.gradle.kotlin.dsl.register
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-import org.kopi.galite.plugins.common.GradleExtensions
+import org.kopi.galite.plugins.common.GaliteGradleExtensions
 import org.kopi.galite.plugins.common.GradleExtensionsPlugin
 
 class DBSchemaGeneratorPlugin : GradleExtensionsPlugin() {
@@ -41,7 +41,7 @@ class DBSchemaGeneratorPlugin : GradleExtensionsPlugin() {
       }
       named("clean") {
         doLast {
-          project.extensions.getByType<GradleExtensions>().clean(
+          project.extensions.getByType<GaliteGradleExtensions>().clean(
             project.layout.projectDirectory.dir(GENERATED_DIRECTORY).asFile.path
           )
         }

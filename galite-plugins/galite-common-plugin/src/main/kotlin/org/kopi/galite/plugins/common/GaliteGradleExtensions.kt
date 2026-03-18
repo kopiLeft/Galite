@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 import org.gradle.api.Project
 
-open class GradleExtensions(private val project: Project) {
+open class GaliteGradleExtensions(private val project: Project) {
   /**
    * removes the file with name [fileName] existing in [folder]
    */

@@ -30,7 +30,8 @@ open class GradleExtensionsPlugin: Plugin<Project> {
    * Register the [projectExtensions] extension function for use in the consuming project
    */
   override fun apply(project: Project) {
-    project.extensions.create("projectExtensions", GradleExtensions::class.java, project)
+    val projectExtensions = project.extensions.findByType(GaliteGradleExtensions::class.java)
+        ?: project.extensions.create("projectExtensions", GaliteGradleExtensions::class.java)
   }
 
   /**

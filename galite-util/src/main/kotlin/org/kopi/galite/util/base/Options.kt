@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2022 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.kopi.galite.util.base
+
+import kotlin.system.exitProcess
 
 import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
@@ -43,6 +45,7 @@ abstract class Options(private val name: String?) {
    */
   fun parseCommandLine(argv: Array<String>): Boolean {
     val parser = Getopt(name, argv, shortOptions, longOptions, true)
+
     while (true) {
       val code = parser.getopt()
 
@@ -61,52 +64,36 @@ abstract class Options(private val name: String?) {
   }
 
   /**
-   * @param        args                the command line arguments
+   * @param        code                the argument short name.
+   * @param        g                   the parser class.
    */
   open fun processOption(code: Int, g: Getopt): Boolean {
     when (code) {
-      'h'.toInt() -> {
+      'h'.code -> {
         help()
-        System.exit(0)
+        exitProcess(0)
       }
-      'V'.toInt() -> {
+      'V'.code -> {
         version()
-        System.exit(0)
+        exitProcess(0)
       }
       else -> return false
     }
-    return true
   }
 
   open val options: Array<String?>
-    get() = arrayOf(
-            "  --help, -h:           Displays the help information",
-            "  --version, -V:        Prints out the version information"
-    )
+    get() = arrayOf("  --help, -h:                   Displays the help information",
+                    "  --version, -V:                Prints out the version information")
 
   /**
    * Prints the available options.
    */
   fun printOptions() {
-    val options = options
+    val sortedOptions = options.filterNotNull().sorted()
 
-    run {
-      var i = options.size
-      while (--i >= 0) {
-        for (j in 0 until i) {
-          if (options[j]!! > options[j + 1]!!) {
-            val tmp = options[j]
-            options[j] = options[j + 1]
-            options[j + 1] = tmp
-          }
-        }
-      }
-    }
     println()
     println("Here are the available options : ")
-    for (i in options.indices) {
-      println(options[i])
-    }
+    sortedOptions.forEach { println(it) }
   }
 
   /**
@@ -139,11 +126,10 @@ abstract class Options(private val name: String?) {
    */
   protected fun getInt(g: Getopt, defaultValue: Int): Int {
     return try {
-      if (g.optarg != null) g.optarg.toInt() else defaultValue
-    } catch (e: Exception) {
+      g.optarg?.toInt() ?: defaultValue
+    } catch (_: Exception) {
       System.err.println("malformed option: " + g.optarg)
-      System.exit(0)
-      1
+      exitProcess(0)
     }
   }
 
@@ -151,35 +137,21 @@ abstract class Options(private val name: String?) {
    * Processes a string argument.
    */
   protected fun getString(g: Getopt, defaultValue: String?): String? {
-    return if (g.optarg != null) g.optarg else defaultValue
+    return g.optarg ?: defaultValue
   }
 
+  /**
+   * Adds a string argument to the pre-existing argument list.
+   */
   protected fun addString(array: Array<String?>?, str: String?): Array<String?> {
-    return if (array == null) {
-      arrayOf(str)
-    } else {
-      val size = array.size
-      val newArray = arrayOfNulls<String>(size + 1)
-      for (i in 0 until size) {
-        newArray[i] = array[i]
-      }
-      newArray[size] = str
-      newArray
-    }
+    return (array ?: emptyArray()).plus(str)
   }
 
+  /**
+   * Adds an integer argument to the pre-existing argument list.
+   */
   protected fun addInt(array: IntArray?, value: Int): IntArray {
-    return if (array == null) {
-      intArrayOf(value)
-    } else {
-      val size = array.size
-      val newArray = IntArray(size + 1)
-      for (i in 0 until size) {
-        newArray[i] = array[i]
-      }
-      newArray[size] = value
-      newArray
-    }
+    return (array ?: intArrayOf()).plus(value)
   }
 
   // ----------------------------------------------------------------------
@@ -196,7 +168,7 @@ abstract class Options(private val name: String?) {
    */
   open val longOptions: Array<LongOpt?>
     get() = arrayOf(
-            LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'.toInt()),
-            LongOpt("version", LongOpt.NO_ARGUMENT, null, 'V'.toInt())
+            LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'.code),
+            LongOpt("version", LongOpt.NO_ARGUMENT, null, 'V'.code)
     )
 }
