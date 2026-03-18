@@ -44,7 +44,7 @@ class OptgenOptions @JvmOverloads constructor(name: String = "Optgen") : Options
   override fun version() {
     val releaseInfo = Utils.readReleaseInfo()
 
-    println("Version ${releaseInfo["version"]?.toString().orEmpty()} released at ${releaseInfo["releaseDate"]}")
+    println("Version ${releaseInfo["version"]?.toString().orEmpty()} released at ${releaseInfo["releaseDate"]?.toString().orEmpty()}.")
   }
 
   /***
@@ -63,7 +63,7 @@ class OptgenOptions @JvmOverloads constructor(name: String = "Optgen") : Options
       val total: Array<String?> = arrayOfNulls(parent.size + 1)
 
       System.arraycopy(parent, 0, total, 0, parent.size)
-      total[parent.size + 0] = "  --release, -r<String>: Sets the release version of the program"
+      total[parent.size + 0] = "  --release, -r<String>:        Sets the release version of the program"
 
       return total
     }

@@ -169,11 +169,14 @@ class Main {
    * Build the generated class file.
    */
   private fun buildInterfaceFile(): Boolean {
-    val prefix:         String  = definition.getPrefix()
-    val outputFile              = File(prefix + "Options.java")
-    var errorsFound             = false
+    val prefix:                 String  = definition.getPrefix()
+    val destinationDirectory:   String  = definition.getPackageName().replace(".", File.separator)
+    val outputFile:             File    = File(destinationDirectory + File.separator + prefix + "Options.java")
+    var errorsFound:            Boolean = false
 
     try {
+      outputFile.parentFile?.mkdirs()
+
       val out = PrintWriter(BufferedWriter(OutputStreamWriter(FileOutputStream(outputFile), "UTF-8")))
 
       definition.printJavaFile(out)

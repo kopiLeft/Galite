@@ -23,7 +23,6 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.the
 
 import org.kopi.galite.plugins.common.GradleExtensionsPlugin
-import org.kopi.galite.plugins.generator.DBSchemaGenerator
 
 abstract class DBSchemaGeneratorTask : JavaExec() {
   init {

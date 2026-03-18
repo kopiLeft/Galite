@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2022 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,18 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "galite"
-include("galite-core")
-include("galite-data")
-include("galite-domain")
-include("galite-localizer")
-include("galite-util")
-include("galite-testing")
-include("galite-tests")
-include("galite-demo:galite-vaadin")
-include("galite-demo:galite-vaadin-spring")
-include("galite-plugins")
-include("galite-plugins:galite-common-plugin")
-include("galite-plugins:galite-factory-generator")
-include("galite-plugins:galite-dbschema-generator")
-include("galite-plugins:galite-optgen")
+plugins {
+  `kotlin-dsl`
+  id("java-gradle-plugin")
+}
+
+gradlePlugin {
+  plugins {
+    create("") {
+      id = "org.kopi.galite-optgen" // Unique plugin ID
+      implementationClass = "org.kopi.galite.plugins.OptgenPlugin" // The main plugin class
+    }
+  }
+}

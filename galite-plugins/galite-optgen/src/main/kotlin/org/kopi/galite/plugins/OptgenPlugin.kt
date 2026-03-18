@@ -21,19 +21,19 @@ package org.kopi.galite.plugins
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
-
 import org.kopi.galite.plugins.common.GaliteGradleExtensions
+
 import org.kopi.galite.plugins.common.GradleExtensionsPlugin
 
-class FactoryGeneratorPlugin : GradleExtensionsPlugin() {
+class OptgenPlugin : GradleExtensionsPlugin() {
   override fun apply(project: Project) {
     super.apply(project)
 
     createGeneratedSourceSet(project)
 
-    project.extensions.create("factoryGenerator", FactoryGeneratorExtention::class.java)
+    project.extensions.create("optionGen", OptgenExtention::class.java)
     project.tasks.apply {
-      register<FactoryGeneratorTask>("generateFactory")
+      register<OptgenTask>("generateOptions")
       named("clean") {
         doLast {
           project.extensions.getByType<GaliteGradleExtensions>().clean(

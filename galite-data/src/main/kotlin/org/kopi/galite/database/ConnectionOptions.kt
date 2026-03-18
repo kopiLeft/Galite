@@ -116,7 +116,7 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   public override fun version() {
     val releaseInfo = Utils.readReleaseInfo()
 
-    println("Version ${releaseInfo["version"]?.toString().orEmpty()} released at ${releaseInfo["releaseDate"]}")
+    println("Version ${releaseInfo["version"]?.toString().orEmpty()} released at ${releaseInfo["releaseDate"]?.toString().orEmpty()}.")
   }
 
   public override fun usage() {

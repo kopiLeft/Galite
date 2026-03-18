@@ -110,6 +110,13 @@ internal class DefinitionFile(private val sourceFile: String,
     return prefix
   }
 
+  /**
+   * Returns the literal prefix
+   */
+  fun getPackageName(): String {
+    return packageName
+  }
+
   val className: String
     get() = "$packageName.${prefix}Options"
 
@@ -220,7 +227,7 @@ internal class DefinitionFile(private val sourceFile: String,
     out.println("\n")
     out.println("  public void version() {")
     out.print("    System.out.println(")
-    out.print(if (version == null) "" else "\"" + version + "\"")
+    out.print(if (version == null) "" else "\"Version $version.\"")
     out.println(");")
     out.println("  }")
 
