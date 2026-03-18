@@ -1,3 +1,12 @@
+# 1.5.14
+## What's Changed
+
+* Fix generating Char columns when executing galite-dbschema-generator plugin by @mgrati in [#658](https://github.com/kopiLeft/Galite/pull/658)
+* Fix build errors when generating classes using factory generator plugin by @mgrati in [#660](https://github.com/kopiLeft/Galite/pull/660)
+* Feat : Create galite-optgen-plugin : Transform Option.xml files to Options.java classes by @mgrati in [#662](https://github.com/kopiLeft/Galite/pull/662)
+
+**Full Changelog**: [1.5.13 ... 1.5.14](https://github.com/kopiLeft/Galite/compare/1.5.13...1.5.14)
+
 # 1.5.13
 ## What's Changed
 * Rename galite-plugins modules and fix galite-dbschema-generator plugin by @mgrati in [#655](https://github.com/kopiLeft/Galite/pull/655)
