@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,16 +19,28 @@
 package org.kopi.galite.plugins
 
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
+import org.kopi.galite.plugins.common.GradleExtensions
 
 import org.kopi.galite.plugins.common.GradleExtensionsPlugin
 
 class FactoryGeneratorPlugin : GradleExtensionsPlugin() {
   override fun apply(project: Project) {
     super.apply(project)
+
+    createGeneratedSourceSet(project)
+
     project.extensions.create("factoryGenerator", FactoryGeneratorExtention::class.java)
     project.tasks.apply {
       register<FactoryGeneratorTask>("generateFactory")
+      named("clean") {
+        doLast {
+          project.extensions.getByType<GradleExtensions>().clean(
+            project.layout.projectDirectory.dir(GENERATED_DIRECTORY).asFile.path
+          )
+        }
+      }
     }
   }
 }

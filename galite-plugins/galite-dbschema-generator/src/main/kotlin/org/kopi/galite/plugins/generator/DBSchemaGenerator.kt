@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013-2025 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2025 kopiRight Managed Solutions GmbH, Wien AT
+ * Copyright (c) 2013-2026 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2026 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -129,25 +129,25 @@ object DBSchemaGenerator {
       is JavaLocalDateColumnType     -> "date(\"${column.name}\")"
       is JavaLocalTimeColumnType     -> "time(\"${column.name}\")"
       is JavaLocalDateTimeColumnType -> "datetime(\"${column.name}\")"
-      is BooleanColumnType -> "bool(\"${column.name}\")"
-      is IntegerColumnType -> "integer(\"${column.name}\")"
-      is LongColumnType  -> "long(\"${column.name}\")"
-      is ByteColumnType    -> "byte(\"${column.name}\")"
-      is ShortColumnType   -> "short(\"${column.name}\")"
-      is AutoIncColumnType     -> when(type.delegate) {
-        is LongColumnType            -> "long(\"${column.name}\").autoIncrement()"
-        else                         -> "integer(\"${column.name}\").autoIncrement()"
+      is BooleanColumnType           -> "bool(\"${column.name}\")"
+      is IntegerColumnType           -> "integer(\"${column.name}\")"
+      is LongColumnType              -> "long(\"${column.name}\")"
+      is ByteColumnType              -> "byte(\"${column.name}\")"
+      is ShortColumnType             -> "short(\"${column.name}\")"
+      is AutoIncColumnType           -> when (type.delegate) {
+        is LongColumnType -> "long(\"${column.name}\").autoIncrement()"
+        else              -> "integer(\"${column.name}\").autoIncrement()"
       }
-      is DecimalColumnType     -> "decimal(\"${column.name}\", ${type.precision}, ${type.scale})"
+      is DecimalColumnType           -> "decimal(\"${column.name}\", ${type.precision}, ${type.scale})"
       is BlobColumnType,
       is BinaryColumnType,
-      is BasicBinaryColumnType -> "blob(\"${column.name}\")"
-      is DoubleColumnType  -> "double(\"${column.name}\")"
-      is UUIDColumnType    -> "uuid(\"${column.name}\")"
-      is VarCharColumnType -> "varchar(\"${column.name}\", ${type.colLength})"
-      is TextColumnType    -> "text(\"${column.name}\")"
-      is CharColumnType    -> "char(\"${column.name}\", ${type.colLength})"
-      else                 -> "!!! FIXME !!!"
+      is BasicBinaryColumnType       -> "blob(\"${column.name}\")"
+      is DoubleColumnType            -> "double(\"${column.name}\")"
+      is UUIDColumnType              -> "uuid(\"${column.name}\")"
+      is VarCharColumnType           -> "varchar(\"${column.name}\", ${type.colLength})"
+      is TextColumnType              -> "text(\"${column.name}\")"
+      is CharacterColumnType         -> "char(\"${column.name}\")"
+      else                           -> "!!! FIXME !!!"
     }
     // Check nullable
     if (type.nullable) {
@@ -235,7 +235,4 @@ object DBSchemaGenerator {
     )
     this.appendLine()
   }
-
-  const val GENERATED_KOTLIN_SRC = "src/generated/kotlin"
-  const val GENERATED_SRC = "src/generated"
 }
